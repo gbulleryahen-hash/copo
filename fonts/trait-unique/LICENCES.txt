@@ -1,0 +1,14 @@
+Polices à trait unique fournies avec COPO / Single-line fonts bundled with COPO
+Source du regroupement / collection source: https://github.com/msurguy/cnc-text-tool (docs/fonts)
+
+EMS (Evil Mad Scientist) — SIL Open Font License 1.1 — https://gitlab.com/oskay/svg-fonts — voir EMS/OFL.txt
+Cutlings (Ellen Wasbo) — SIL Open Font License 1.1 — http://cutlings.wasbo.net/ — voir OFL-Cutlings.txt
+    (sauf « Hershey Script 1-stroke smooth », dérivée des polices Hershey : licence Hershey ci-dessous)
+Relief SingleLine (The Relief SingleLine Project Authors) — SIL Open Font License 1.1 — https://github.com/isdat-type/Relief-SingleLine — voir Relief/OFL.txt
+Shriinivas (inkscapestrokefont) — SIL Open Font License 1.1 — https://github.com/Shriinivas/inkscapestrokefont — voir Shriinivas/OFL.txt
+Routed Gothic (Darren Embry, Reserved Font Name "Routed Gothic") — SIL Open Font License 1.1 — https://webonastick.com/routed-gothic/ — voir RoutedGothic/LICENSE.md
+
+Hershey (fichiers SVG préparés par Windell H. Oskay, evilmadscientist.com) — licence libre des polices Hershey :
+    - The Hershey Fonts were originally created by Dr. A. V. Hershey while working at the U. S. National Bureau of Standards.
+    - The format of the Font data in this distribution was originally created by James Hurt, Cognition, Inc., 900 Technology Park Drive, Billerica, MA 01821 (mit-eddie!ci-dandelion!hurt)
+    The font data may be converted into any other format EXCEPT the format distributed by the U.S. NTIS where each point is described in eight bytes as "xxx yyy:".

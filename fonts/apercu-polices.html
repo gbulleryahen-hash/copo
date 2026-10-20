@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Polices à trait unique</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Catalogue : barre de réglages collante, grille de cartes, un aperçu tracé par police */
+@font-face{font-family:"COPO Sans";font-weight:200 900;src:local("Source Sans 3"),url("../lib/fonts/SourceSans3.ttf") format("truetype")}
+@font-face{font-family:"COPO Mono";font-weight:100 800;src:local("JetBrains Mono"),url("../lib/fonts/JetBrainsMono.ttf") format("truetype")}
+:root{--bg:#f4f6f9;--card:#ffffff;--ink:#151922;--muted:#5d6676;--line:#dce1e9;--accent:#3560e6;--stroke:#1b2230;
+  --f-ui:"Source Sans 3","COPO Sans","Segoe UI",system-ui,sans-serif;--f-mono:"JetBrains Mono","COPO Mono",ui-monospace,Consolas,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#15171c;--card:#1d2027;--ink:#e6e9ef;--muted:#9aa3b3;--line:#2c323d;--accent:#7f9cff;--stroke:#e9edf5;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15171c;--card:#1d2027;--ink:#e6e9ef;--muted:#9aa3b3;--line:#2c323d;--accent:#7f9cff;--stroke:#e9edf5;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 var(--f-ui);padding-top:env(safe-area-inset-top,0px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--card)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+.in{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:8px;margin-right:auto}
+.brand svg{width:26px;height:26px;fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+h1{font-size:19px;margin:0;line-height:1.2}
+.ctl{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding-block:0 12px}
+label{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+input[type=text],select{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 9px}
+input[type=text]{width:min(340px,70vw)}
+input[type=range]{width:120px;accent-color:var(--accent)}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.lang button{font:600 12px var(--f-ui);border:0;background:transparent;color:var(--muted);padding:6px 10px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.count{font:500 12px var(--f-mono);color:var(--muted)}
+main{padding-block:20px 48px}
+.intro{max-width:72ch;margin:0 0 18px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px 12px;display:grid;gap:8px;min-width:0}
+.card h2{font-size:15px;margin:0;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.card h2 small{font:500 11.5px var(--f-mono);color:var(--muted)}
+.pv{color:var(--stroke);overflow:hidden;min-height:30px}
+.pv svg{display:block;max-width:100%;height:auto}
+.abc{color:var(--muted);overflow:hidden}
+.abc svg{display:block;max-width:100%;height:auto}
+.meta{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:7px}
+.empty{color:var(--muted)}
+footer{border-top:1px solid var(--line);padding-block:16px 28px;font-size:13px;color:var(--muted)}
+footer p{max-width:90ch;margin:0}
+@media print{header{position:static}.ctl,.lang{display:none}.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+  <div class="in top">
+    <div class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><h1 data-t="title">Polices à trait unique de COPO</h1></div>
+    <div class="lang" role="group" aria-label="Langue / Language"><button id="lFr" type="button" aria-pressed="true">FR</button><button id="lEn" type="button" aria-pressed="false">EN</button></div>
+  </div>
+  <div class="in ctl">
+    <label><span data-t="text">Texte</span><input type="text" id="txt" value="Atelier COPO 2026"></label>
+    <label><span data-t="size">Taille</span><input type="range" id="size" min="20" max="80" value="40"></label>
+    <label><span data-t="family">Famille</span><select id="grp"></select></label>
+    <span class="count" id="count"></span>
+  </div>
+</header>
+<main class="in">
+  <p class="intro" data-t="intro">Chaque lettre de ces polices est un simple trait : le texte se grave en une seule passe avec un profil « Sur la ligne », à la fraise en V ou avec une petite fraise droite. Dans COPO, elles sont proposées en tête de la liste des polices (onglet Dessin, bloc Texte).</p>
+  <div class="grid" id="grid"></div>
+</main>
+<footer class="in"><p data-t="foot">Licences : EMS, Cutlings, Relief SingleLine, Shriinivas et Routed Gothic — SIL Open Font License 1.1. Hershey — licence Hershey : les polices Hershey ont été créées par le Dr A. V. Hershey au U.S. National Bureau of Standards ; format des données créé par James Hurt (Cognition, Inc.). Détails dans trait-unique/LICENCES.txt. Sélection : github.com/msurguy/cnc-text-tool.</p></footer>
+<script src="polices-trait-unique.js"></script>
+<script>
+const NODE = (x, y, i = null, o = null, sm = false) => ({ x, y, i, o, sm });
+function parsePathNodes(d) {
+  const s = d || '', subs = []; let i = 0, cur = null, x = 0, y = 0, sx0 = 0, sy0 = 0, cmd = null, lastC = '', lcx = 0, lcy = 0, lqx = 0, lqy = 0;
+  const ws = () => { while (i < s.length && /[\s,]/.test(s[i])) i++; };
+  const num = () => { ws(); const m = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?/.exec(s.slice(i, i + 40)); if (!m) throw 0; i += m[0].length; return parseFloat(m[0]); };
+  const flag = () => { ws(); const ch = s[i]; if (ch !== '0' && ch !== '1') throw 0; i++; return ch === '1'; };
+  const ensure = () => { if (!cur) cur = { nodes: [NODE(x, y)], closed: false }; };
+  const last = () => cur.nodes[cur.nodes.length - 1];
+  const line = (px, py) => { ensure(); cur.nodes.push(NODE(px, py)); };
+  const cubic = (c1x, c1y, c2x, c2y, px, py) => { ensure(); const l = last(); l.o = [c1x - l.x, c1y - l.y]; cur.nodes.push(NODE(px, py, [c2x - px, c2y - py])); };
+  const arc = (rx, ry, phi, fa, fs, x2, y2) => {
+    if (!rx || !ry) { line(x2, y2); return; } rx = Math.abs(rx); ry = Math.abs(ry);
+    const p = phi * Math.PI / 180, cp = Math.cos(p), sp = Math.sin(p), dx = (x - x2) / 2, dy = (y - y2) / 2;
+    const x1p = cp * dx + sp * dy, y1p = -sp * dx + cp * dy; const lam = x1p * x1p / (rx * rx) + y1p * y1p / (ry * ry); if (lam > 1) { const q = Math.sqrt(lam); rx *= q; ry *= q; }
+    const nu = rx * rx * ry * ry - rx * rx * y1p * y1p - ry * ry * x1p * x1p, de = rx * rx * y1p * y1p + ry * ry * x1p * x1p;
+    let co = de ? Math.sqrt(Math.max(0, nu / de)) : 0; if (fa === fs) co = -co;
+    const cxp = co * rx * y1p / ry, cyp = -co * ry * x1p / rx, cx = cp * cxp - sp * cyp + (x + x2) / 2, cy = sp * cxp + cp * cyp + (y + y2) / 2;
+    const ang = (ux, uy, vx, vy) => Math.atan2(ux * vy - uy * vx, ux * vx + uy * vy);
+    const t1 = ang(1, 0, (x1p - cxp) / rx, (y1p - cyp) / ry); let dt = ang((x1p - cxp) / rx, (y1p - cyp) / ry, (-x1p - cxp) / rx, (-y1p - cyp) / ry);
+    if (!fs && dt > 0) dt -= 2 * Math.PI; else if (fs && dt < 0) dt += 2 * Math.PI;
+    const m = Math.max(1, Math.ceil(Math.abs(dt) / (Math.PI / 2) - 1e-9)), ph = dt / m, al = 4 / 3 * Math.tan(ph / 4);
+    const E = t => [cx + cp * rx * Math.cos(t) - sp * ry * Math.sin(t), cy + sp * rx * Math.cos(t) + cp * ry * Math.sin(t)];
+    const Ed = t => [-cp * rx * Math.sin(t) - sp * ry * Math.cos(t), -sp * rx * Math.sin(t) + cp * ry * Math.cos(t)];
+    for (let k = 0; k < m; k++) { const ta = t1 + ph * k, tb = ta + ph, A = E(ta), B = E(tb), da = Ed(ta), db = Ed(tb); cubic(A[0] + al * da[0], A[1] + al * da[1], B[0] - al * db[0], B[1] - al * db[1], k === m - 1 ? x2 : B[0], k === m - 1 ? y2 : B[1]); }
+  };
+  try {
+    while (true) {
+      ws(); if (i >= s.length) break;
+      if (/[a-zA-Z]/.test(s[i])) { cmd = s[i]; i++; } else if (!cmd) break;
+      const rel = cmd === cmd.toLowerCase(), C = cmd.toUpperCase();
+      if (C === 'M') { let nx = num(), ny = num(); if (rel) { nx += x; ny += y; } if (cur && cur.nodes.length > 1) subs.push(cur); x = nx; y = ny; sx0 = x; sy0 = y; cur = { nodes: [NODE(x, y)], closed: false }; cmd = rel ? 'l' : 'L'; lastC = 'M'; continue; }
+      if (C === 'Z') { if (cur) { const a = cur.nodes[0], b = last(); if (cur.nodes.length > 1 && Math.hypot(a.x - b.x, a.y - b.y) < 1e-6) { a.i = b.i; cur.nodes.pop(); } cur.closed = true; if (cur.nodes.length > 1) subs.push(cur); cur = null; } x = sx0; y = sy0; cmd = null; lastC = 'Z'; continue; }
+      if (C === 'L') { let nx = num(), ny = num(); if (rel) { nx += x; ny += y; } line(nx, ny); x = nx; y = ny; }
+      else if (C === 'H') { let nx = num(); if (rel) nx += x; line(nx, y); x = nx; }
+      else if (C === 'V') { let ny = num(); if (rel) ny += y; line(x, ny); y = ny; }
+      else if (C === 'C') { let a = num(), b = num(), c = num(), e = num(), f = num(), g = num(); if (rel) { a += x; b += y; c += x; e += y; f += x; g += y; } cubic(a, b, c, e, f, g); lcx = c; lcy = e; x = f; y = g; }
+      else if (C === 'S') { let c = num(), e = num(), f = num(), g = num(); if (rel) { c += x; e += y; f += x; g += y; } const r = lastC === 'C' || lastC === 'S'; cubic(r ? 2 * x - lcx : x, r ? 2 * y - lcy : y, c, e, f, g); lcx = c; lcy = e; x = f; y = g; }
+      else if (C === 'Q') { let a = num(), b = num(), f = num(), g = num(); if (rel) { a += x; b += y; f += x; g += y; } cubic(x + (a - x) * 2 / 3, y + (b - y) * 2 / 3, f + (a - f) * 2 / 3, g + (b - g) * 2 / 3, f, g); lqx = a; lqy = b; x = f; y = g; }
+      else if (C === 'T') { let f = num(), g = num(); if (rel) { f += x; g += y; } const r = lastC === 'Q' || lastC === 'T', a = r ? 2 * x - lqx : x, b = r ? 2 * y - lqy : y; cubic(x + (a - x) * 2 / 3, y + (b - y) * 2 / 3, f + (a - f) * 2 / 3, g + (b - g) * 2 / 3, f, g); lqx = a; lqy = b; x = f; y = g; }
+      else if (C === 'A') { const rx = num(), ry = num(), ph = num(), fa = flag(), fs = flag(); let f = num(), g = num(); if (rel) { f += x; g += y; } ensure(); arc(rx, ry, ph, fa, fs, f, g); x = f; y = g; }
+      else break;
+      lastC = C;
+    }
+  } catch (e) { }
+  if (cur && cur.nodes.length > 1) subs.push(cur);
+  return subs;
+}
+function svgFontFrom(data) {
+  const upm = +data.upm || 1000, G = new Map(), K = new Map(), dflt = +data.adv || upm / 2;
+  for (const ch in data.g) { const [adv, d] = data.g[ch]; G.set(ch, { u: ch, advanceWidth: adv == null ? dflt : +adv, d: d || '', _sub: null }); }
+  for (const [a, b, k] of data.k || []) K.set(a + '\u0000' + b, -k);
+  const sub = g => g._sub || (g._sub = (() => { if (!g.d) return []; try { return parsePathNodes(g.d); } catch (e) { return []; } })());
+  let cap = 0; const H = G.get('H') || G.get('I') || G.get('E'); if (H) for (const s of sub(H)) for (const n of s.nodes) cap = Math.max(cap, n.y);
+  if (!(cap > 0)) cap = +data.cap || upm * 0.7;
+  const space = G.get(' ') || { u: ' ', advanceWidth: dflt * 0.6, d: '' };
+  const gOf = ch => G.get(ch) || G.get(ch.normalize('NFD')[0]) || (/\s/.test(ch) ? space : { u: ch, advanceWidth: dflt, d: '' });
+  const cmdsOf = (g, x, y, sc, out) => {
+    for (const s of sub(g)) {
+      const N = s.nodes; if (!N.length) continue; out.push({ type: 'M', x: x + N[0].x * sc, y: y - N[0].y * sc });
+      const seg = (a, b) => { if (!a.o && !b.i) out.push({ type: 'L', x: x + b.x * sc, y: y - b.y * sc }); else out.push({ type: 'C', x1: x + (a.x + (a.o ? a.o[0] : 0)) * sc, y1: y - (a.y + (a.o ? a.o[1] : 0)) * sc, x2: x + (b.x + (b.i ? b.i[0] : 0)) * sc, y2: y - (b.y + (b.i ? b.i[1] : 0)) * sc, x: x + b.x * sc, y: y - b.y * sc }); };
+      for (let i = 1; i < N.length; i++) seg(N[i - 1], N[i]); if (s.closed) { if (N.length > 1) seg(N[N.length - 1], N[0]); out.push({ type: 'Z' }); }
+    }
+    return out;
+  };
+  const f = {
+    svg: true, singleLine: data.single !== false, unitsPerEm: upm, tables: { os2: { sCapHeight: cap } }, family: data.family,
+    stringToGlyphs: str => [...str].map(gOf),
+    getKerningValue: (a, b) => K.get(a.u + '\u0000' + b.u) || 0,
+    getPath(str, x, y, size) { const sc = size / upm, out = [], gl = f.stringToGlyphs(str); let cx = x; gl.forEach((g, i) => { cmdsOf(g, cx, y, sc, out); cx += (g.advanceWidth + (i < gl.length - 1 ? f.getKerningValue(g, gl[i + 1]) : 0)) * sc; }); return { commands: out }; }
+  };
+  for (const g of [...G.values(), space]) g.getPath = (x, y, size) => ({ commands: cmdsOf(g, x, y, size / upm, []) });
+  return f;
+}
+const T = {
+  fr: { title: 'Polices à trait unique de COPO', text: 'Texte', size: 'Taille', family: 'Famille', all: 'Toutes', glyphs: 'glyphes', none: 'Aucune police : le fichier polices-trait-unique.js est introuvable à côté de cette page.',
+    intro: 'Chaque lettre de ces polices est un simple trait : le texte se grave en une seule passe avec un profil « Sur la ligne », à la fraise en V ou avec une petite fraise droite. Dans COPO, elles sont proposées en tête de la liste des polices (onglet Dessin, bloc Texte).',
+    foot: 'Licences : EMS, Cutlings, Relief SingleLine, Shriinivas et Routed Gothic — SIL Open Font License 1.1. Hershey — licence Hershey : les polices Hershey ont été créées par le Dr A. V. Hershey au U.S. National Bureau of Standards ; format des données créé par James Hurt (Cognition, Inc.). Détails dans trait-unique/LICENCES.txt. Sélection : github.com/msurguy/cnc-text-tool.', fonts: 'polices' },
+  en: { title: 'COPO single-line fonts', text: 'Text', size: 'Size', family: 'Family', all: 'All', glyphs: 'glyphs', none: 'No fonts: the polices-trait-unique.js file was not found next to this page.',
+    intro: 'Each letter of these fonts is a single stroke: the text is engraved in one pass with an “On the line” profile, with a V-bit or a small end mill. In COPO, they are listed first in the font list (Drawing tab, Text block).',
+    foot: 'Licences: EMS, Cutlings, Relief SingleLine, Shriinivas and Routed Gothic — SIL Open Font License 1.1. Hershey — Hershey licence: the Hershey Fonts were originally created by Dr. A. V. Hershey while working at the U.S. National Bureau of Standards; the data format was originally created by James Hurt (Cognition, Inc.). Details in trait-unique/LICENCES.txt. Selection: github.com/msurguy/cnc-text-tool.', fonts: 'fonts' } };
+const LIC = { Hershey: 'Hershey', 'Routed Gothic': 'OFL 1.1' };
+let L = (() => { try { const v = localStorage.getItem('copo.lang'); if (v === 'fr' || v === 'en') return v; } catch (e) { } return /^fr/i.test(navigator.language || '') ? 'fr' : 'en'; })();
+const DATA = Array.isArray(window.COPO_SVG_FONTS) ? window.COPO_SVG_FONTS : [], FONTS = DATA.map(d => ({ d, f: null }));
+function path(font, txt, px) {
+  const cap = font.tables.os2.sCapHeight, size = px * 0.62 * font.unitsPerEm / cap, cm = font.getPath(txt, 2, px * 0.82, size).commands, n = v => v.toFixed(1); let d = '', x1 = 10;
+  for (const c of cm) { if (c.type === 'M') d += 'M' + n(c.x) + ' ' + n(c.y); else if (c.type === 'L') d += 'L' + n(c.x) + ' ' + n(c.y); else if (c.type === 'C') d += 'C' + n(c.x1) + ' ' + n(c.y1) + ' ' + n(c.x2) + ' ' + n(c.y2) + ' ' + n(c.x) + ' ' + n(c.y); else if (c.type === 'Z') d += 'Z'; if (c.x != null) x1 = Math.max(x1, c.x); }
+  return '<svg viewBox="0 0 ' + Math.ceil(x1 + 4) + ' ' + Math.round(px * 1.12) + '" width="' + Math.ceil(x1 + 4) + '" aria-hidden="true"><path d="' + d + '" fill="none" stroke="currentColor" stroke-width="' + Math.max(1, px / 26).toFixed(2) + '" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+function render() {
+  const grid = document.getElementById('grid'), txt = document.getElementById('txt').value || 'COPO', px = +document.getElementById('size').value, g = document.getElementById('grp').value;
+  const list = FONTS.filter(x => g === '*' || x.d.group === g);
+  document.getElementById('count').textContent = list.length + ' ' + T[L].fonts;
+  if (!DATA.length) { grid.innerHTML = '<p class="empty">' + T[L].none + '</p>'; return; }
+  grid.innerHTML = list.map((x, i) => '<article class="card"><h2>' + esc(x.d.family) + ' <small>' + esc(x.d.group) + '</small></h2><div class="pv" data-i="' + i + '"></div><div class="abc" data-a="' + i + '"></div><div class="meta"><span>' + Object.keys(x.d.g).length + ' ' + T[L].glyphs + '</span><span>' + (/Hershey/.test(x.d.family) || x.d.group === 'Hershey' ? 'Hershey' : 'OFL 1.1') + '</span></div></article>').join('');
+  list.forEach((x, i) => { const f = x.f || (x.f = svgFontFrom(x.d)); grid.querySelector('[data-i="' + i + '"]').innerHTML = path(f, txt, px); grid.querySelector('[data-a="' + i + '"]').innerHTML = path(f, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789', 16); });
+}
+function setLang(l) {
+  L = l; document.documentElement.lang = l; document.title = T[l].title; document.querySelectorAll('[data-t]').forEach(e => { e.textContent = T[l][e.dataset.t]; });
+  document.getElementById('lFr').setAttribute('aria-pressed', String(l === 'fr')); document.getElementById('lEn').setAttribute('aria-pressed', String(l === 'en'));
+  const sel = document.getElementById('grp'), cur = sel.value || '*', groups = [...new Set(DATA.map(d => d.group))];
+  sel.innerHTML = '<option value="*">' + T[l].all + '</option>' + groups.map(g => '<option value="' + esc(g) + '">' + esc(g) + '</option>').join(''); sel.value = cur; render();
+}
+document.getElementById('lFr').onclick = () => setLang('fr'); document.getElementById('lEn').onclick = () => setLang('en');
+document.getElementById('txt').addEventListener('input', render); document.getElementById('size').addEventListener('input', render); document.getElementById('grp').addEventListener('change', render);
+setLang(L);
+</script>
+</body>
+</html>

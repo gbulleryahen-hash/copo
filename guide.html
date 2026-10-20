@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Mode d'emploi COPO</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="COPO, FAO 2D pour CNC dans le navigateur : présentation et mode d'emploi / 2D CAM for CNC in the browser: overview and user guide.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+@font-face{font-family:"COPO Titre";font-weight:600;font-display:swap;src:local("Barlow Condensed SemiBold"),url("lib/fonts/BarlowCondensed-SemiBold.ttf") format("truetype")}
+@font-face{font-family:"COPO Titre";font-weight:700;font-display:swap;src:local("Barlow Condensed Bold"),url("lib/fonts/BarlowCondensed-Bold.ttf") format("truetype")}
+@font-face{font-family:"COPO Sans";font-style:normal;font-weight:200 900;font-display:swap;src:local("Source Sans 3"),url("lib/fonts/SourceSans3.ttf") format("truetype")}
+@font-face{font-family:"COPO Sans";font-style:italic;font-weight:200 900;font-display:swap;src:local("Source Sans 3 Italic"),url("lib/fonts/SourceSans3-Italic.ttf") format("truetype")}
+@font-face{font-family:"COPO Mono";font-weight:100 800;font-display:swap;src:local("JetBrains Mono"),url("lib/fonts/JetBrainsMono.ttf") format("truetype")}
+/* Mise en page : bandeau collant, sommaire latéral collant, colonne de lecture large pour les captures */
+:root{
+  --bg:#f4f6f9; --surface:#ffffff; --ink:#151922; --muted:#586172; --line:#dce1e9;
+  --accent:#3560e6; --accent-soft:#e7edfd; --chip:#b77a3e; --code-bg:#1b1f27; --code-ink:#dfe5f1;
+  --f-display:"Barlow Condensed","COPO Titre","Arial Narrow",Arial,sans-serif;
+  --f-body:"Source Sans 3","COPO Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono","COPO Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#14171c; --surface:#1c2027; --ink:#e6e9ef; --muted:#9aa3b3; --line:#2c323d;
+  --accent:#7f9cff; --accent-soft:#222b47; --chip:#dba56f; --code-bg:#0f1217; --code-ink:#dfe5f1; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#14171c; --surface:#1c2027; --ink:#e6e9ef; --muted:#9aa3b3; --line:#2c323d;
+  --accent:#7f9cff; --accent-soft:#222b47; --chip:#dba56f; --code-bg:#0f1217; --code-ink:#dfe5f1; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--f-body);margin:0}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.top-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:14px;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink)}
+.brand svg{width:30px;height:30px;fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.brand b{font:700 23px/1 var(--f-display);letter-spacing:.06em}
+.brand span{font-size:14px;color:var(--muted)}
+.lang{margin-left:auto;display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.lang button{font:600 13px var(--f-body);letter-spacing:.06em;padding:6px 12px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--accent);color:#fff}
+
+.wrap{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:220px minmax(0,1fr);gap:48px;padding-block:32px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.toc{position:sticky;top:84px;align-self:start;font-size:14.5px;max-height:calc(100vh - 100px);overflow:auto}
+.toc p{font:600 12px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.toc a{display:block;padding:4px 10px;border-left:2px solid var(--line);color:var(--ink);text-decoration:none}
+.toc a:hover{border-left-color:var(--accent);color:var(--accent)}
+main{min-width:0;max-width:900px}
+@media (max-width:980px){.wrap{grid-template-columns:minmax(0,1fr);gap:20px}.toc{position:static;max-height:none}.toc ol{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}}
+
+.hero{display:grid;gap:16px;margin-bottom:40px}
+.eyebrow{font:600 13px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--chip)}
+h1{font:700 clamp(40px,6vw,64px)/1 var(--f-display);letter-spacing:.01em;margin:0;text-wrap:balance}
+.lede{font-size:20px;line-height:1.5;max-width:62ch;margin:0;color:var(--ink)}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 0;padding:0;list-style:none}
+.meta li{font:500 13px var(--f-mono);padding:4px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:var(--surface)}
+
+h2{font:700 34px/1.1 var(--f-display);letter-spacing:.01em;margin:64px 0 14px;text-wrap:balance;scroll-margin-top:80px}
+h3{font:700 19px/1.3 var(--f-body);margin:28px 0 8px;text-wrap:balance}
+p,ul,ol{max-width:68ch}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin:3px 0}
+li::marker{color:var(--muted)}
+strong{font-weight:700}
+kbd{font:500 13px var(--f-mono);padding:1px 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;background:var(--surface);white-space:nowrap}
+code{font:500 14px var(--f-mono);background:var(--accent-soft);padding:1px 5px;border-radius:4px}
+.ui{font-weight:600}
+
+figure{margin:22px 0 26px}
+figure img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+figcaption{font-size:14.5px;color:var(--muted);margin-top:8px;max-width:76ch}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:700px){.duo{grid-template-columns:minmax(0,1fr)}}
+
+.features{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:18px 0;max-width:none}
+.features div{background:var(--surface);padding:16px 18px;min-width:0}
+.features b{display:block;font:700 20px/1.2 var(--f-display);letter-spacing:.02em;margin-bottom:4px}
+.features span{font-size:15px;color:var(--muted);line-height:1.5}
+
+.steps{counter-reset:s;list-style:none;padding:0;display:grid;gap:12px;max-width:none}
+.steps li{counter-increment:s;display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:0}
+.steps li::before{content:counter(s);font:700 26px/1 var(--f-display);color:var(--chip);border:2px solid currentColor;border-radius:50%;width:40px;height:40px;display:grid;place-items:center}
+.steps b{display:block;margin-bottom:2px}
+
+.tbl{overflow-x:auto;margin:14px 0 20px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 12.5px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td:first-child{white-space:nowrap}
+
+pre{background:var(--code-bg);color:var(--code-ink);font:400 13.5px/1.55 var(--f-mono);padding:14px 16px;border-radius:8px;overflow-x:auto;margin:12px 0 18px;max-width:100%}
+pre .c{color:#8fa1bf}
+.note{border-left:3px solid var(--chip);background:var(--surface);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0;max-width:72ch}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);margin-top:64px;padding-top:20px;font-size:14.5px;color:var(--muted)}
+footer p{max-width:none}
+
+@media print{
+  @page{size:A4;margin:16mm 14mm}
+  body{font-size:11pt;background:#fff;color:#111}
+  body::before,.top,.toc{display:none}
+  .wrap{display:block;padding:0;max-width:none}
+  main{max-width:none}
+  h2{break-after:avoid;margin-top:28pt;font-size:24pt}
+  h3{break-after:avoid}
+  figure,.steps li,.features div,pre,.tbl,.note{break-inside:avoid}
+  figure img{border-color:#ccc}
+  a{color:#1d47c8;text-decoration:none}
+  .pb{break-before:page}
+  .features,.tbl,.steps li,.note{background:#fff}
+  .features{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .duo{grid-template-columns:repeat(2,minmax(0,1fr))}
+  th{background:#f2f4f7}
+}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#top" aria-label="COPO">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg>
+      <b>COPO</b><span class="tag" data-fr="Mode d'emploi" data-en="User guide">Mode d'emploi</span>
+    </a>
+    <div class="lang" role="group" aria-label="Langue / Language">
+      <button id="bFr" type="button" data-l="fr" aria-pressed="true">FR</button>
+      <button id="bEn" type="button" data-l="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<!-- ======================================================= FRANÇAIS -->
+<div class="wrap" lang="fr" id="v-fr">
+  <nav class="toc" aria-label="Sommaire">
+    <p>Sommaire</p>
+    <ol>
+      <li><a href="#fr-bref">En bref</a></li>
+      <li><a href="#fr-etapes">Premier usinage</a></li>
+      <li><a href="#fr-interface">L'interface</a></li>
+      <li><a href="#fr-dessin">Dessiner</a></li>
+      <li><a href="#fr-brut">Onglet Projet</a></li>
+      <li><a href="#fr-outils">Outils</a></li>
+      <li><a href="#fr-parcours">Parcours d'outils</a></li>
+      <li><a href="#fr-texte">Texte et V-carving</a></li>
+      <li><a href="#fr-imbrication">Imbrication</a></li>
+      <li><a href="#fr-double">Double face</a></li>
+      <li><a href="#fr-3d">Aperçu 3D</a></li>
+      <li><a href="#fr-gcode">G-code</a></li>
+      <li><a href="#fr-installer">Installer et hors ligne</a></li>
+      <li><a href="#fr-raccourcis">Raccourcis</a></li>
+      <li><a href="#fr-licence">Licence</a></li>
+    </ol>
+  </nav>
+  <main>
+    <section class="hero" id="top">
+      <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
+      <h1>COPO</h1>
+      <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
+      <ul class="meta"><li>Version 1.0</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+    </section>
+    <figure><img src="img/fr-01-interface.webp" alt="Fenêtre de COPO avec le projet d'exemple : outils à gauche, plan de travail au centre, panneau Dessin à droite." width="1800" height="1125"><figcaption>Le projet d'exemple : le texte COPO en V-carving, un filet décoratif à la fraise hémisphérique, deux perçages au foret, un détourage avec ponts d'attache et deux poches sur la face 2. Les parcours s'affichent en couleur sur le brut.</figcaption></figure>
+
+    <h2 id="fr-bref" class="pb">En bref</h2>
+    <div class="features">
+      <div><b>Dessin vectoriel</b><span>Rectangle, ellipse, polygone, étoile, arc, plume Bézier, texte, nœuds, chanfreins, congés, booléens, calques, cotes.</span></div>
+      <div><b>Usinage 2D</b><span>Profil extérieur, intérieur ou sur la ligne, poche en anneaux ou en balayage, reprise de matière, perçage.</span></div>
+      <div><b>V-carving</b><span>Par axe médian, comme dans Aspire : la fraise remonte jusqu'à la pointe des coins.</span></div>
+      <div><b>Entrées d'outil</b><span>Rampe aller-retour, rampe continue, arc, arc en rampe, hélice. Surépaisseur et passe de finition.</span></div>
+      <div><b>Ponts d'attache</b><span>Répartis automatiquement ou placés à la main, plats ou triangulaires.</span></div>
+      <div><b>Imbrication</b><span>Place plusieurs pièces sur le panneau selon leur forme réelle, avec rotations.</span></div>
+      <div><b>Polices à trait unique</b><span>Une soixantaine fournies (Hershey, EMS, Relief…) pour graver vite en une seule passe.</span></div>
+      <div><b>Double face</b><span>Calques par face, retournement en X ou en Y, pause pour retourner la pièce.</span></div>
+      <div><b>Aperçu 3D</b><span>Simulation de l'enlèvement de matière, face 1 et face 2, avec lecture animée.</span></div>
+      <div><b>G-code</b><span>GRBL, GRBL avec changement manuel (G53), LinuxCNC / Mach3. Arcs G2/G3.</span></div>
+      <div><b>Fiche de gamme</b><span>Fiche d'atelier imprimable : vues 2D et 3D, origine, outils, parcours, vitesses, contrôles.</span></div>
+      <div><b>Millimètres ou pouces</b><span>Dessin, outils et avances en mm ou en pouces (fractions possibles), G-code en G21 ou G20.</span></div>
+      <div><b>Français et anglais</b><span>Interface et mode d'emploi dans les deux langues, au choix dans le menu Aide.</span></div>
+      <div><b>Logiciel libre</b><span>Licence GNU GPL v3 : utilisez, modifiez et partagez COPO librement.</span></div>
+    </div>
+
+    <h2 id="fr-etapes">Votre premier usinage en six étapes</h2>
+    <ol class="steps">
+      <li><div><b>Réglez le projet</b>Onglet <span class="ui">Projet</span> : dimensions et matière du brut, point d'origine X0 Y0, zéro Z (dessus du brut ou table), unités et machine.</div></li>
+      <li><div><b>Dessinez ou importez</b>Tracez avec les outils de gauche, importez un SVG (<span class="ui">Fichier › Importer un SVG…</span>) ou écrivez un texte.</div></li>
+      <li><div><b>Vérifiez vos outils</b>Onglet <span class="ui">Outils</span> : diamètre, vitesse de broche, avance, vitesse de descente, profondeur de passe et recouvrement de chaque fraise.</div></li>
+      <li><div><b>Créez les parcours</b>Sélectionnez les formes sur le plan, ouvrez l'onglet <span class="ui">Parcours</span>, choisissez Profil, Poche, V-carving ou Perçage, réglez puis cliquez sur <span class="ui">Calculer</span>.</div></li>
+      <li><div><b>Contrôlez en 3D</b><span class="ui">Affichage › Aperçu 3D de l'usinage</span> montre le brut usiné. Rejouez l'usinage pour repérer une erreur de profondeur ou d'outil.</div></li>
+      <li><div><b>Enregistrez le G-code</b>Onglet <span class="ui">G-code</span> : choisissez le post-processeur, puis <span class="ui">Enregistrer le G-code</span>. Faites toujours un passage à vide avant d'usiner.</div></li>
+    </ol>
+
+    <h2 id="fr-interface" class="pb">L'interface</h2>
+    <p>La fenêtre se lit de gauche à droite, dans l'ordre du travail.</p>
+    <ul>
+      <li><strong>Barre de menus</strong> : Fichier, Édition, Objet, Affichage, Usinage et Aide. Le menu Aide ouvre ce mode d'emploi, change la langue et affiche la licence.</li>
+      <li><strong>Outils de dessin</strong>, à gauche. Chaque outil a une lettre de raccourci, indiquée dans son infobulle.</li>
+      <li><strong>Barre d'options</strong>, au-dessus du plan : les réglages de l'outil actif (nombre de côtés d'un polygone, rayon d'un congé, saisie de coordonnées…).</li>
+      <li><strong>Plan de travail</strong> : le brut en beige, les règles en millimètres, la grille et l'origine (flèches X et Y).</li>
+      <li><strong>Panneau de droite</strong> en cinq onglets : <span class="ui">Projet</span>, <span class="ui">Dessin</span>, <span class="ui">Outils</span>, <span class="ui">Parcours</span> et <span class="ui">G-code</span>.</li>
+      <li><strong>Barre d'état</strong>, en bas : coordonnées du curseur par rapport à l'origine, grille, accrochage, affichage des parcours et de la matière enlevée.</li>
+    </ul>
+    <p>Une barre flottante apparaît sous la sélection : <span class="ui">Dupliquer</span>, <span class="ui">Grouper</span>, <span class="ui">Souder</span>, <span class="ui">Usiner…</span> et <span class="ui">Supprimer</span>. Le projet est enregistré automatiquement dans le navigateur ; <span class="ui">Fichier › Enregistrer le projet</span> en fait une copie dans un fichier.</p>
+
+    <h2 id="fr-dessin">Dessiner</h2>
+    <figure><img src="img/fr-02-noeuds.webp" alt="Édition des nœuds du filet décoratif, avec la barre d'options Lisse, Coin vif, Segment droit, Segment courbe." width="1800" height="1125" loading="lazy"><figcaption>L'outil Nœuds sur le filet décoratif : la barre d'options transforme un nœud en coin vif ou lisse, un segment en droite ou en courbe, et ajoute, supprime ou coupe un nœud.</figcaption></figure>
+    <h3>Formes et tracés</h3>
+    <ul>
+      <li><strong>Rectangle</strong> <kbd>R</kbd>, avec coins vifs, arrondis ou chanfreinés. <strong>Ellipse</strong> <kbd>E</kbd> (Maj : cercle) et <strong>Cercle par le centre</strong> <kbd>C</kbd>.</li>
+      <li><strong>Polygone et étoile</strong> <kbd>O</kbd> : nombre de côtés ou de branches, rayon intérieur.</li>
+      <li><strong>Plume</strong> <kbd>P</kbd> : clic pour un point anguleux, cliquer-glisser pour un point courbe, clic sur le premier point pour fermer, double-clic pour terminer. La barre d'options accepte des coordonnées absolues, relatives ou polaires : tapez les valeurs puis <kbd>Entrée</kbd>.</li>
+      <li><strong>Arc par 3 points</strong> <kbd>A</kbd> : départ, arrivée, puis le bombé.</li>
+      <li><strong>Nœuds</strong> <kbd>N</kbd> : déplacez nœuds et poignées, double-cliquez sur un segment pour ajouter un nœud, <kbd>Alt</kbd> en tirant une poignée pour la casser.</li>
+    </ul>
+    <h3>Modifier</h3>
+    <ul>
+      <li><strong>Chanfrein</strong> <kbd>K</kbd> et <strong>Congé</strong> <kbd>F</kbd> sur un coin, ou sur tous les coins vifs via le bloc <span class="ui">Coins</span>.</li>
+      <li><strong>Ajuster</strong> <kbd>X</kbd> supprime la portion de vecteur entre deux intersections ; <strong>Couper</strong> <kbd>U</kbd> coupe un vecteur à l'endroit cliqué.</li>
+      <li><strong>Souder, Soustraire, Intersection</strong> pour les opérations booléennes ; <strong>Joindre</strong> et <strong>Fermer</strong> pour les vecteurs ouverts ; <strong>Contour décalé</strong> intérieur ou extérieur.</li>
+      <li><strong>Aligner et répartir</strong> : un seul objet s'aligne sur le brut, plusieurs s'alignent entre eux.</li>
+      <li><strong>Copie en réseau</strong> en grille ou circulaire, <strong>miroirs</strong>, <strong>rotation</strong>, <strong>ordre de superposition</strong>.</li>
+      <li><strong>Position et taille exactes</strong> : bloc <span class="ui">Sélection</span>, avec un point de référence choisi parmi neuf (coins, milieux, centre).</li>
+    </ul>
+    <h3>Accrochage, repères et cotes</h3>
+    <p>L'accrochage aux objets repère les extrémités, milieux, intersections, centres et tangentes ; chacun se règle dans le menu <span class="ui">Affichage</span>. Glissez depuis une règle pour créer un repère magnétique. L'outil <strong>Mesurer</strong> <kbd>M</kbd> donne une distance et l'outil <strong>Cote</strong> <kbd>D</kbd> pose une cote qui reste sur le plan.</p>
+    <h3>Calques, images et fichiers</h3>
+    <ul>
+      <li><strong>Calques</strong> : couleur des traits, visibilité, verrou et face usinée (F1 dessus, F2 dessous).</li>
+      <li><strong>Images de référence</strong> (<span class="ui">Fichier › Insérer une image…</span> ou glisser-déposer) : déplacez, redimensionnez et pivotez avec les poignées pour dessiner par-dessus. Elles ne sont jamais usinées.</li>
+      <li><strong>SVG</strong> : import en millimètres avec courbes conservées ; export du dessin entier ou de la sélection.</li>
+    </ul>
+
+    <h2 id="fr-brut">Onglet Projet</h2>
+    <figure><img src="img/fr-10-projet.webp" alt="Onglet Projet : résumé, brut, origine, double face, unités et machine." width="1800" height="1125" loading="lazy"><figcaption>L'onglet Projet regroupe tout ce qui se règle au début d'un travail. Le résumé en haut permet de tout vérifier d'un coup d'œil.</figcaption></figure>
+    <p>L'onglet <span class="ui">Projet</span>, le premier du panneau de droite, s'ouvre tout seul quand vous créez un nouveau projet. Il contient :</p>
+    <ul>
+      <li><strong>Brut</strong> : largeur X, hauteur Y, épaisseur et matière (reprise par la fiche de gamme) ;</li>
+      <li><strong>Origine</strong> : le point X0 Y0 sur la grille de neuf points, un décalage X/Y pour la placer hors du brut, et le zéro Z sur le dessus du brut ou sur la table ;</li>
+      <li><strong>Double face</strong> : l'axe de retournement et les faces affichées ;</li>
+      <li><strong>Unités</strong> : millimètres ou pouces, unité d'avance ;</li>
+      <li><strong>Machine</strong> : post-processeur, vitesse des rapides, Z de sécurité et de dégagement, arcs G2/G3 et commentaires.</li>
+    </ul>
+    <p>Le point d'origine doit correspondre à l'endroit où vous faites X0 Y0 sur la machine. Le brut, l'origine et la matière sont enregistrés avec le projet ; les unités et la machine restent en mémoire dans le navigateur.</p>
+    <div class="note"><p>Exemple : avec l'origine au coin bas gauche, un carré dont le coin est à X0 Y0 sur le plan sera usiné à partir du coin bas gauche de votre panneau. La ligne sous la grille indique où tombe X0 Y0 du G-code.</p></div>
+
+    <h2 id="fr-outils">Bibliothèque d'outils</h2>
+    <figure><img src="img/fr-04-outils.webp" alt="Onglet Outils : liste des fraises et réglages de la fraise sélectionnée." width="1800" height="1125" loading="lazy"><figcaption>La bibliothèque est gardée dans le navigateur et reprise à chaque nouveau projet. Exportez-la en fichier pour la sauvegarder ou la partager.</figcaption></figure>
+    <div class="tbl"><table>
+      <thead><tr><th>Réglage</th><th>Rôle</th></tr></thead>
+      <tbody>
+        <tr><td>Type</td><td>Fraise droite, hémisphérique, en V (avec l'angle du V) ou foret (avec l'angle de pointe, 118° le plus souvent).</td></tr>
+        <tr><td>Diamètre</td><td>Sert au calcul des décalages et des poches.</td></tr>
+        <tr><td>Numéro d'outil (T)</td><td>Écrit dans le G-code LinuxCNC / Mach3 (<code>T2 M6</code>).</td></tr>
+        <tr><td>Vitesse de broche</td><td>En tr/min, écrite avec <code>M3</code>.</td></tr>
+        <tr><td>Avance, vitesse de descente</td><td>En mm/min, pour la coupe et pour la plongée ou la rampe.</td></tr>
+        <tr><td>Profondeur de passe</td><td>Profondeur maximale par passe ; un parcours peut l'écraser.</td></tr>
+        <tr><td>Recouvrement</td><td>Pourcentage du diamètre qui se recouvre entre deux passes de poche.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 id="fr-parcours" class="pb">Parcours d'outils</h2>
+    <figure><img src="img/fr-03-parcours.webp" alt="Formulaire de modification du parcours de détourage extérieur, avec ponts d'attache." width="1800" height="1125" loading="lazy"><figcaption>Cliquez un parcours dans la liste pour le modifier : son tracé est mis en évidence sur le plan. Le texte sous le formulaire résume ce que fera la machine.</figcaption></figure>
+    <h3>Les quatre types</h3>
+    <ul>
+      <li><strong>Profil</strong> : à l'extérieur (la pièce est conservée), à l'intérieur (le trou est évidé) ou sur la ligne. Sur une ligne ouverte, l'outil peut passer à gauche ou à droite du tracé, dans le sens où il a été dessiné.</li>
+      <li><strong>Poche</strong> : en <em>anneaux</em> parallèles au contour ou en <em>balayage</em> parallèle à l'angle choisi. La <em>reprise de matière</em> usine avec une fraise plus petite les coins qu'une grosse fraise n'a pas pu atteindre : gardez la même profondeur et placez ce parcours après la poche d'origine.</li>
+      <li><strong>V-carving</strong> : la fraise en V suit l'axe médian du tracé ; elle descend là où le trait est large et remonte jusqu'à la pointe des coins. Une profondeur maximale donne un fond plat.</li>
+      <li><strong>Perçage</strong> : un trou au centre de chaque forme fermée, avec débourrage et temporisation au fond. Les cercles plus grands que la fraise sont usinés en hélice au diamètre dessiné. Avec un foret, chaque trou est percé au diamètre du foret ; COPO indique la longueur de la pointe à ajouter pour un trou débouchant.</li>
+    </ul>
+    <h3>Passes, surépaisseur et sens de coupe</h3>
+    <p>La profondeur totale est répartie en passes de la profondeur choisie. Une <strong>surépaisseur</strong> laisse un peu de matière sur les parois pendant l'ébauche ; elle est retirée à la dernière passe ou par une passe de finition sur toute la hauteur. Le sens de coupe est <em>avalant</em> ou en <em>opposition</em>.</p>
+    <h3>Entrée de l'outil</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Entrée</th><th>Comportement</th></tr></thead>
+      <tbody>
+        <tr><td>Rampe aller-retour</td><td>L'outil descend en avançant, revient au départ à pleine profondeur puis fait le tour. Chaque passe commence et finit au même point. Réglage par défaut.</td></tr>
+        <tr><td>Rampe continue</td><td>L'outil descend en avançant et enchaîne le tour ; la portion de rampe est recoupée à la fin.</td></tr>
+        <tr><td>Arc tangent, arc en rampe</td><td>Entrée et sortie en arc sur le contour, pour éviter une marque sur la paroi finie.</td></tr>
+        <tr><td>Hélice</td><td>L'outil descend en spirale, idéal pour les poches et les trous.</td></tr>
+        <tr><td>Plongée droite</td><td>Descente verticale, pour les fraises qui coupent en bout ou le V-carving.</td></tr>
+      </tbody>
+    </table></div>
+    <h3>Ponts d'attache</h3>
+    <p>Les ponts maintiennent une pièce détourée jusqu'à la fin. Réglez leur nombre par contour, leur longueur et leur épaisseur, plats ou triangulaires (plus faciles à casser). <span class="ui">Placer à la main sur le plan…</span> permet d'ajouter un pont d'un clic sur le parcours, de le glisser ou de le retirer.</p>
+
+    <h2 id="fr-texte">Texte et V-carving</h2>
+    <div class="duo">
+      <figure><img src="img/fr-08-texte.webp" alt="Texte ATELIER COPO placé sur un arc, avec un parcours de V-carving." width="1800" height="1125" loading="lazy"><figcaption>Texte placé sur un arc, puis gravé en V-carving.</figcaption></figure>
+      <figure><img src="img/fr-09-apercu3d-texte.webp" alt="Aperçu 3D de l'enseigne gravée." width="1800" height="1125" loading="lazy"><figcaption>Le même travail dans l'aperçu 3D.</figcaption></figure>
+    </div>
+    <p>Choisissez une police dans la liste du bloc <span class="ui">Texte</span> : polices installées (Chrome et Edge) ou votre dossier de polices (<span class="ui">Fichier › Ouvrir un dossier de polices…</span>), avec aperçu. Prenez l'outil <strong>Texte</strong> <kbd>T</kbd> et cliquez sur le plan. En placement <span class="ui">Sur une courbe</span>, cliquez sur un contour : le texte s'y centre, au-dessus ou en dessous, avec l'espacement voulu. Le texte devient des vecteurs groupés, prêts pour le V-carving, la poche ou le profil.</p>
+
+    <h3>Polices à trait unique</h3>
+    <p>COPO est livré avec une soixantaine de <strong>polices à trait unique</strong> (Hershey, EMS, Cutlings, Relief SingleLine, Routed Gothic…), rangées dans le dossier <code>fonts/trait-unique</code> et proposées en tête de la liste des polices, avec aperçu. Chaque lettre y est un simple trait : le texte se grave en une seule passe avec un parcours <span class="ui">Profil</span> <span class="ui">Sur la ligne</span>, à la fraise en V ou avec une petite fraise droite. C'est le plus rapide pour les numéros de pièce, les plaques et les repères. Quand la sélection ne contient que des traits ouverts, <span class="ui">Usiner…</span> propose directement ce profil. Le catalogue <code>fonts/apercu-polices.html</code> (lien « Voir le catalogue des polices à trait unique » dans le bloc Texte) les montre toutes avec un aperçu de votre texte. Vous pouvez aussi ajouter vos propres polices SVG avec <span class="ui">Ajouter des polices…</span>.</p>
+    <h2 id="fr-imbrication">Imbrication</h2>
+    <figure><img src="img/fr-07-imbrication.webp" alt="Douze pièces imbriquées sur un panneau de 1000 × 600 mm, avec leurs parcours de détourage." width="1800" height="1125" loading="lazy"><figcaption>Quatre pièces en trois exemplaires sur un panneau de 1000 × 600 mm. Les L s'emboîtent, les copies reprennent les parcours des pièces d'origine.</figcaption></figure>
+    <p><span class="ui">Objet › Imbrication…</span> ouvre le bloc dans l'onglet Dessin. Sélectionnez les pièces (sans sélection, tout le dessin est pris) et réglez le nombre d'exemplaires, l'espacement, la marge du panneau, les rotations permises et la précision. COPO place les pièces selon leur forme réelle, les plus grandes d'abord, le plus en bas à gauche possible. Un groupe ou un texte reste d'un bloc. Les pièces qui ne tiennent pas restent sélectionnées et le taux d'occupation du panneau s'affiche.</p>
+    <div class="note"><p>Pour du détourage, prenez un espacement au moins égal au diamètre de la fraise. <kbd>Ctrl</kbd>+<kbd>Z</kbd> annule l'imbrication si le résultat ne convient pas.</p></div>
+
+    <h2 id="fr-double">Usinage double face</h2>
+    <ol>
+      <li>Mettez les vecteurs de la face du dessous sur un calque réglé sur <strong>F2</strong> (bouton F1/F2 dans la liste des calques). Dessinez-les vus du dessus, par transparence.</li>
+      <li>Choisissez le retournement : autour de l'axe X (haut ↔ bas) ou de l'axe Y (gauche ↔ droite).</li>
+      <li>Les parcours de la face 2 sont calculés sur la géométrie retournée ; le sens de coupe est conservé.</li>
+      <li>Dans le G-code, la face 1 est suivie d'une pause <code>M0</code> : retournez la pièce, refaites X0 Y0 Z0 au même point et relancez.</li>
+    </ol>
+    <p>L'aperçu 3D montre les deux faces ; l'option <span class="ui">Face 2 en haut</span> présente la pièce retournée.</p>
+
+    <h2 id="fr-3d">Aperçu 3D</h2>
+    <figure><img src="img/fr-06-apercu3d.webp" alt="Aperçu 3D du projet d'exemple usiné." width="1800" height="1125" loading="lazy"><figcaption>Glisser pour tourner, clic droit ou Maj pour déplacer, molette pour zoomer, double-clic pour recentrer.</figcaption></figure>
+    <p>L'aperçu simule l'enlèvement de matière dans l'épaisseur réelle du brut, y compris les trous débouchants. Le bouton <span class="ui">Lecture</span> rejoue l'usinage à la vitesse choisie, le curseur permet d'aller à n'importe quel instant. L'aperçu demande WebGL 2 (Chrome, Edge ou Firefox récents).</p>
+
+    <h2 id="fr-gcode" class="pb">G-code</h2>
+    <figure><img src="img/fr-05-gcode.webp" alt="Onglet G-code : faces à exporter et programme généré." width="1800" height="1125" loading="lazy"><figcaption>Les parcours sont écrits dans l'ordre de la liste ; un parcours masqué n'est pas exporté.</figcaption></figure>
+    <div class="tbl"><table>
+      <thead><tr><th>Post-processeur</th><th>Changement d'outil</th></tr></thead>
+      <tbody>
+        <tr><td>GRBL</td><td>Pause <code>M0</code> entre deux outils.</td></tr>
+        <tr><td>GRBL manuel</td><td>Avant chaque outil, y compris le premier : remontée <code>G53 G0 Z-10</code> (valeur réglable) et pause <code>M0</code>. Remontée en <code>G53</code> aussi à la fin du programme.</td></tr>
+        <tr><td>LinuxCNC / Mach3</td><td><code>T… M6</code> avec le numéro d'outil, arcs en <code>G91.1</code>.</td></tr>
+      </tbody>
+    </table></div>
+<pre><span class="c">(Mettre l'outil : Fraise droite 6 mm D6 - refaire le zero Z puis reprendre)</span>
+G21 G90 G17 G94
+G53 G0 Z-10
+M0
+S18000 M3
+G4 P3
+G0 X10 Y10
+G0 Z10
+…
+M5
+G53 G0 Z-10
+G0 X0 Y0
+M30</pre>
+    <p>Le post-processeur, la vitesse des rapides (pour l'estimation du temps), le Z de sécurité, le Z de dégagement, les commentaires et les arcs G2/G3 se règlent dans l'onglet Projet, bloc Machine. Le fichier est enregistré en <code>.txt</code> : renommez-le en <code>.nc</code> ou <code>.gcode</code> si votre logiciel de pilotage l'exige. UGS, Candle et bCNC lisent aussi les <code>.txt</code>.</p>
+    <div class="note"><p>Vérifiez toujours le G-code par un passage à vide, outil au-dessus du brut, avant d'usiner.</p></div>
+    <h3>Unités : millimètres ou pouces</h3>
+    <p>Dans l'onglet Projet, bloc Unités, choisissez les <span class="ui">Unités de longueur</span> (millimètres ou pouces) et les <span class="ui">Unités d'avance</span> (mm/min, mm/s ou in/min). Le choix s'applique partout : dessin, règles, grille (1/16, 1/8, 1/4 et 1 pouce), coordonnées, cotes, outils, parcours et fiche de gamme. En pouces, une option affiche les valeurs en fractions (au 1/64) et une autre écrit le G-code en pouces (<code>G20</code>) pour les contrôleurs réglés ainsi.</p>
+    <p>Le projet reste enregistré en millimètres : on peut changer d'unité à tout moment sans rien déformer, et un projet s'ouvre correctement chez quelqu'un qui travaille dans l'autre unité. Le choix est gardé en mémoire dans le navigateur.</p>
+    <h3>Fiche de gamme</h3>
+    <p>Le bouton <span class="ui">Fiche de gamme…</span> de l'onglet G-code (aussi dans le menu Usinage) prépare une fiche de réglage de deux pages pour l'atelier. Indiquez le nom de la pièce, la matière et vos remarques ; la fiche contient :</p>
+    <ul>
+      <li>le brut, l'origine X0 Y0, le zéro Z, le retournement et le post-processeur ;</li>
+      <li>un résumé : temps estimé, profondeur maximale, emprise usinée depuis l'origine, longueur de coupe et volume de matière enlevée ;</li>
+      <li>la vue 2D de chaque face avec les parcours, l'origine et les cotes du brut, et deux vues dimétriques de la simulation (face 1 et face 2) ;</li>
+      <li>l'ordre de montage des outils, puis le tableau des parcours : opération, outil, profondeur, passes, surépaisseur, entrée, ponts, avance, plongée et temps ;</li>
+      <li>les points de vigilance détectés (usinage qui traverse le brut, détourage sans ponts, passe trop profonde, usinage hors du brut, parcours masqués) ;</li>
+      <li>une liste de contrôle avant de lancer, une zone de remarques et des cases de visa.</li>
+    </ul>
+    <p>Imprimez-la ou enregistrez-la en PDF, ou gardez le fichier HTML avec le G-code. Les réglages de la fiche sont enregistrés avec le projet.</p>
+
+    <h2 id="fr-installer">Installer et utiliser hors ligne</h2>
+    <ul>
+      <li><strong>En ligne</strong> : ouvrez la page GitHub Pages du dépôt COPO. Rien à installer.</li>
+      <li><strong>Hors ligne</strong> : téléchargez le dossier complet de COPO (bouton « Code › Download ZIP » sur GitHub) et décompressez-le. Ouvrez <code>index.html</code> en double-cliquant : tout est déjà dans le dossier <code>lib</code> (bibliothèques de calcul et polices de l'interface) et dans le dossier <code>fonts</code>. Rien d'autre à installer ni à télécharger.</li>
+      <li><strong>Polices de l'interface</strong> : le dossier <code>lib/fonts</code> contient les polices de COPO (Source Sans 3, JetBrains Mono, Barlow Condensed). Hors ligne, l'interface, la fiche de gamme et ce mode d'emploi gardent ainsi le même aspect.</li>
+      <li><strong>Polices de gravure</strong> : rangez vos <code>.ttf</code>, <code>.otf</code> ou <code>.woff</code> dans un dossier <code>fonts</code> à côté de COPO.html et ouvrez-le une fois depuis le menu Fichier.</li>
+    </ul>
+    <p>COPO fonctionne sous Windows, macOS et Linux, dans Chrome, Edge ou Firefox récents. La liste des polices installées n'est disponible que dans Chrome et Edge.</p>
+
+    <h2 id="fr-raccourcis">Raccourcis clavier</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Touche</th><th>Action</th><th>Touche</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td><kbd>V</kbd></td><td>Sélection</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Y</kbd></td><td>Annuler / Rétablir</td></tr>
+        <tr><td><kbd>N</kbd></td><td>Nœuds</td><td><kbd>Ctrl</kbd>+<kbd>S</kbd> / <kbd>O</kbd></td><td>Enregistrer / Ouvrir un projet</td></tr>
+        <tr><td><kbd>H</kbd> ou <kbd>Espace</kbd></td><td>Déplacer la vue</td><td><kbd>Ctrl</kbd>+<kbd>D</kbd></td><td>Dupliquer</td></tr>
+        <tr><td><kbd>R</kbd> <kbd>E</kbd> <kbd>C</kbd></td><td>Rectangle, ellipse, cercle</td><td><kbd>Ctrl</kbd>+<kbd>A</kbd></td><td>Tout sélectionner</td></tr>
+        <tr><td><kbd>O</kbd></td><td>Polygone et étoile</td><td><kbd>Ctrl</kbd>+<kbd>G</kbd></td><td>Grouper (<kbd>Maj</kbd> : dégrouper)</td></tr>
+        <tr><td><kbd>P</kbd> <kbd>A</kbd> <kbd>T</kbd></td><td>Plume, arc, texte</td><td><kbd>Ctrl</kbd>+<kbd>]</kbd> / <kbd>[</kbd></td><td>Monter / descendre (<kbd>Maj</kbd> : premier plan / arrière-plan)</td></tr>
+        <tr><td><kbd>K</kbd> <kbd>F</kbd></td><td>Chanfrein, congé</td><td><kbd>Suppr</kbd></td><td>Supprimer la sélection ou le nœud</td></tr>
+        <tr><td><kbd>X</kbd> <kbd>U</kbd></td><td>Ajuster, couper</td><td>Flèches</td><td>Déplacer de 1 mm (<kbd>Maj</kbd> : 10 mm)</td></tr>
+        <tr><td><kbd>M</kbd> <kbd>D</kbd></td><td>Mesurer, coter</td><td><kbd>Échap</kbd></td><td>Annuler le tracé en cours, désélectionner</td></tr>
+      </tbody>
+    </table></div>
+    <p>Sur Mac, <kbd>Cmd</kbd> remplace <kbd>Ctrl</kbd>.</p>
+
+    <h2 id="fr-licence">Licence</h2>
+    <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
+    <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
+    <footer><p>COPO 1.0 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+  </main>
+</div>
+
+<!-- ======================================================= ENGLISH -->
+<div class="wrap" lang="en" id="v-en" hidden>
+  <nav class="toc" aria-label="Contents">
+    <p>Contents</p>
+    <ol>
+      <li><a href="#en-glance">At a glance</a></li>
+      <li><a href="#en-steps">First job</a></li>
+      <li><a href="#en-interface">The interface</a></li>
+      <li><a href="#en-drawing">Drawing</a></li>
+      <li><a href="#en-stock">Project tab</a></li>
+      <li><a href="#en-tools">Tools</a></li>
+      <li><a href="#en-toolpaths">Toolpaths</a></li>
+      <li><a href="#en-text">Text and V-carving</a></li>
+      <li><a href="#en-nesting">Nesting</a></li>
+      <li><a href="#en-double">Double-sided</a></li>
+      <li><a href="#en-3d">3D preview</a></li>
+      <li><a href="#en-gcode">G-code</a></li>
+      <li><a href="#en-install">Install and offline</a></li>
+      <li><a href="#en-shortcuts">Shortcuts</a></li>
+      <li><a href="#en-licence">Licence</a></li>
+    </ol>
+  </nav>
+  <main>
+    <section class="hero">
+      <span class="eyebrow">2D CAM for CNC · in the browser</span>
+      <h1>COPO</h1>
+      <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
+      <ul class="meta"><li>Version 1.0</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+    </section>
+    <figure><img src="img/en-01-interface.webp" alt="COPO window with the sample project: tools on the left, workspace in the middle, Drawing panel on the right." width="1800" height="1125"><figcaption>The sample project: COPO text V-carved, a decorative flourish with a ball nose bit, two drilled holes, a cut-out with tabs and two pockets on side 2. Toolpaths are shown in color on the stock.</figcaption></figure>
+
+    <h2 id="en-glance" class="pb">At a glance</h2>
+    <div class="features">
+      <div><b>Vector drawing</b><span>Rectangle, ellipse, polygon, star, arc, Bézier pen, text, nodes, chamfers, fillets, booleans, layers, dimensions.</span></div>
+      <div><b>2D machining</b><span>Outside, inside or on-the-line profile, ring or raster pocket, rest machining, drilling.</span></div>
+      <div><b>V-carving</b><span>Along the medial axis, like Aspire: the bit rises up to the tip of every corner.</span></div>
+      <div><b>Tool entries</b><span>Back-and-forth ramp, continuous ramp, arc, ramped arc, helix. Allowance and finishing pass.</span></div>
+      <div><b>Tabs</b><span>Spaced automatically or placed by hand, flat or triangular.</span></div>
+      <div><b>Nesting</b><span>Places several parts on the sheet following their true shape, with rotations.</span></div>
+      <div><b>Single-line fonts</b><span>About sixty included (Hershey, EMS, Relief…) for fast one-pass engraving.</span></div>
+      <div><b>Double-sided</b><span>Layers per side, flip around X or Y, pause to turn the part over.</span></div>
+      <div><b>3D preview</b><span>Material removal simulation, side 1 and side 2, with animated playback.</span></div>
+      <div><b>G-code</b><span>GRBL, GRBL with manual tool change (G53), LinuxCNC / Mach3. G2/G3 arcs.</span></div>
+      <div><b>Setup sheet</b><span>Printable workshop sheet: 2D and 3D views, origin, tools, toolpaths, speeds, checks.</span></div>
+      <div><b>Millimetres or inches</b><span>Drawing, tools and feeds in mm or inches (fractions available), G-code in G21 or G20.</span></div>
+      <div><b>French and English</b><span>Interface and user guide in both languages, chosen from the Help menu.</span></div>
+      <div><b>Free software</b><span>GNU GPL v3 licence: use, modify and share COPO freely.</span></div>
+    </div>
+
+    <h2 id="en-steps">Your first job in six steps</h2>
+    <ol class="steps">
+      <li><div><b>Set up the project</b><span class="ui">Project</span> tab: stock size and material, X0 Y0 origin point, Z zero (top of stock or table), units and machine.</div></li>
+      <li><div><b>Draw or import</b>Draw with the tools on the left, import an SVG (<span class="ui">File › Import an SVG…</span>) or type some text.</div></li>
+      <li><div><b>Check your tools</b><span class="ui">Tools</span> tab: diameter, spindle speed, feed rate, plunge rate, pass depth and stepover of each bit.</div></li>
+      <li><div><b>Create the toolpaths</b>Select shapes on the canvas, open the <span class="ui">Toolpaths</span> tab, choose Profile, Pocket, V-carving or Drilling, adjust, then click <span class="ui">Calculate</span>.</div></li>
+      <li><div><b>Check in 3D</b><span class="ui">View › 3D machining preview</span> shows the machined stock. Play the job back to spot a wrong depth or tool.</div></li>
+      <li><div><b>Save the G-code</b><span class="ui">G-code</span> tab: choose the post-processor, then <span class="ui">Save G-code</span>. Always do a dry run before cutting.</div></li>
+    </ol>
+
+    <h2 id="en-interface" class="pb">The interface</h2>
+    <p>The window reads from left to right, in the order you work.</p>
+    <ul>
+      <li><strong>Menu bar</strong>: File, Edit, Object, View, Machining and Help. The Help menu opens this guide, switches the language and shows the licence.</li>
+      <li><strong>Drawing tools</strong>, on the left. Each tool has a shortcut letter, shown in its tooltip.</li>
+      <li><strong>Options bar</strong>, above the canvas: the settings of the active tool (polygon sides, fillet radius, coordinate entry…).</li>
+      <li><strong>Workspace</strong>: the stock in beige, rulers in millimetres, the grid and the origin (X and Y arrows).</li>
+      <li><strong>Right panel</strong> with five tabs: <span class="ui">Project</span>, <span class="ui">Drawing</span>, <span class="ui">Tools</span>, <span class="ui">Toolpaths</span> and <span class="ui">G-code</span>.</li>
+      <li><strong>Status bar</strong>, at the bottom: cursor coordinates relative to the origin, grid, snapping, toolpath and removed-material display.</li>
+    </ul>
+    <p>A floating bar appears under the selection: <span class="ui">Duplicate</span>, <span class="ui">Group</span>, <span class="ui">Weld</span>, <span class="ui">Machine…</span> and <span class="ui">Delete</span>. The project is saved automatically in the browser; <span class="ui">File › Save project</span> writes a copy to a file.</p>
+
+    <h2 id="en-drawing">Drawing</h2>
+    <figure><img src="img/en-02-noeuds.webp" alt="Editing the nodes of the decorative flourish, with the options bar Smooth, Sharp corner, Straight segment, Curved segment." width="1800" height="1125" loading="lazy"><figcaption>The Nodes tool on the decorative flourish: the options bar turns a node into a sharp or smooth corner, a segment into a line or a curve, and adds, deletes or cuts a node.</figcaption></figure>
+    <h3>Shapes and paths</h3>
+    <ul>
+      <li><strong>Rectangle</strong> <kbd>R</kbd>, with sharp, rounded or chamfered corners. <strong>Ellipse</strong> <kbd>E</kbd> (Shift: circle) and <strong>Circle from center</strong> <kbd>C</kbd>.</li>
+      <li><strong>Polygon and star</strong> <kbd>O</kbd>: number of sides or points, inner radius.</li>
+      <li><strong>Pen</strong> <kbd>P</kbd>: click for a corner point, click-drag for a curve point, click the first point to close, double-click to finish. The options bar takes absolute, relative or polar coordinates: type the values then press <kbd>Enter</kbd>.</li>
+      <li><strong>3-point arc</strong> <kbd>A</kbd>: start, end, then the bulge.</li>
+      <li><strong>Nodes</strong> <kbd>N</kbd>: move nodes and handles, double-click a segment to add a node, <kbd>Alt</kbd> while dragging a handle to break it.</li>
+    </ul>
+    <h3>Editing</h3>
+    <ul>
+      <li><strong>Chamfer</strong> <kbd>K</kbd> and <strong>Fillet</strong> <kbd>F</kbd> on one corner, or on every sharp corner from the <span class="ui">Corners</span> block.</li>
+      <li><strong>Trim</strong> <kbd>X</kbd> deletes the part of a vector between two intersections; <strong>Cut</strong> <kbd>U</kbd> splits a vector where you click.</li>
+      <li><strong>Weld, Subtract, Intersect</strong> for boolean operations; <strong>Join</strong> and <strong>Close</strong> for open vectors; inside or outside <strong>Offset contour</strong>.</li>
+      <li><strong>Align and distribute</strong>: a single object aligns to the stock, several align to each other.</li>
+      <li><strong>Array copy</strong> in a grid or a circle, <strong>mirrors</strong>, <strong>rotation</strong>, <strong>stacking order</strong>.</li>
+      <li><strong>Exact position and size</strong>: <span class="ui">Selection</span> block, with a reference point chosen among nine (corners, middles, center).</li>
+    </ul>
+    <h3>Snapping, guides and dimensions</h3>
+    <p>Object snapping finds endpoints, midpoints, intersections, centers and tangents; each one can be turned on or off in the <span class="ui">View</span> menu. Drag from a ruler to create a magnetic guide. The <strong>Measure</strong> tool <kbd>M</kbd> gives a distance and the <strong>Dimension</strong> tool <kbd>D</kbd> places a dimension that stays on the canvas.</p>
+    <h3>Layers, images and files</h3>
+    <ul>
+      <li><strong>Layers</strong>: stroke color, visibility, lock and machined side (F1 top, F2 bottom).</li>
+      <li><strong>Reference images</strong> (<span class="ui">File › Insert an image…</span> or drag and drop): move, resize and rotate them with the handles to trace over them. They are never machined.</li>
+      <li><strong>SVG</strong>: import in millimetres with curves kept; export the whole drawing or the selection.</li>
+    </ul>
+
+    <h2 id="en-stock">Project tab</h2>
+    <figure><img src="img/en-10-projet.webp" alt="Project tab: summary, stock, origin, double-sided, units and machine." width="1800" height="1125" loading="lazy"><figcaption>The Project tab gathers everything you set at the start of a job. The summary at the top lets you check it all at a glance.</figcaption></figure>
+    <p>The <span class="ui">Project</span> tab, first in the right panel, opens by itself when you create a new project. It contains:</p>
+    <ul>
+      <li><strong>Stock</strong>: X width, Y height, thickness and material (used by the setup sheet);</li>
+      <li><strong>Origin</strong>: the X0 Y0 point on the nine-point grid, an X/Y offset to place it outside the stock, and Z zero on the top of the stock or on the table;</li>
+      <li><strong>Double-sided</strong>: the flip axis and the sides shown;</li>
+      <li><strong>Units</strong>: millimetres or inches, feed unit;</li>
+      <li><strong>Machine</strong>: post-processor, rapid speed, safe and clearance Z, G2/G3 arcs and comments.</li>
+    </ul>
+    <p>The origin point must match the point where you set X0 Y0 on the machine. Stock, origin and material are saved with the project; units and machine settings are remembered in the browser.</p>
+    <div class="note"><p>Example: with the origin at the bottom left corner, a square whose corner sits at X0 Y0 on the canvas is cut from the bottom left corner of your sheet. The line under the grid tells you where the G-code X0 Y0 falls.</p></div>
+
+    <h2 id="en-tools">Tool library</h2>
+    <figure><img src="img/en-04-outils.webp" alt="Tools tab: list of bits and settings of the selected bit." width="1800" height="1125" loading="lazy"><figcaption>The library is kept in the browser and reused in every new project. Export it to a file to back it up or share it.</figcaption></figure>
+    <div class="tbl"><table>
+      <thead><tr><th>Setting</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Type</td><td>End mill, ball nose, V-bit (with the V angle) or drill bit (with the point angle, usually 118°).</td></tr>
+        <tr><td>Diameter</td><td>Used to calculate offsets and pockets.</td></tr>
+        <tr><td>Tool number (T)</td><td>Written in LinuxCNC / Mach3 G-code (<code>T2 M6</code>).</td></tr>
+        <tr><td>Spindle speed</td><td>In rpm, written with <code>M3</code>.</td></tr>
+        <tr><td>Feed, plunge rate</td><td>In mm/min, for cutting and for plunging or ramping.</td></tr>
+        <tr><td>Pass depth</td><td>Maximum depth per pass; a toolpath can override it.</td></tr>
+        <tr><td>Stepover</td><td>Percentage of the diameter that overlaps between two pocket passes.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 id="en-toolpaths" class="pb">Toolpaths</h2>
+    <figure><img src="img/en-03-parcours.webp" alt="Edit form of the outside cut-out toolpath, with tabs." width="1800" height="1125" loading="lazy"><figcaption>Click a toolpath in the list to edit it: its path is highlighted on the canvas. The text under the form sums up what the machine will do.</figcaption></figure>
+    <h3>The four types</h3>
+    <ul>
+      <li><strong>Profile</strong>: outside (the part is kept), inside (the hole is cleared) or on the line. On an open line, the tool can run left or right of the path, in the direction it was drawn.</li>
+      <li><strong>Pocket</strong>: in <em>rings</em> parallel to the contour or as a <em>raster</em> at the chosen angle. <em>Rest machining</em> uses a smaller bit for the corners a larger bit could not reach: keep the same depth and place this toolpath after the original pocket.</li>
+      <li><strong>V-carving</strong>: the V-bit follows the medial axis of the path; it goes deeper where the stroke is wide and rises up to the tip of every corner. A maximum depth gives a flat bottom.</li>
+      <li><strong>Drilling</strong>: one hole at the center of each closed shape, with pecking and a dwell at the bottom. Circles larger than the bit are milled helically to the drawn diameter. With a drill bit, each hole is drilled at the bit diameter; COPO shows the tip length to add for a through hole.</li>
+    </ul>
+    <h3>Passes, allowance and cut direction</h3>
+    <p>The total depth is split into passes of the chosen depth. An <strong>allowance</strong> leaves a little material on the walls while roughing; it is removed on the last pass or by a full-depth finishing pass. The cut direction is <em>climb</em> or <em>conventional</em>.</p>
+    <h3>Tool entry</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Entry</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td>Back-and-forth ramp</td><td>The tool goes down while moving, returns to the start at full depth, then goes around. Each pass starts and ends at the same point. Default setting.</td></tr>
+        <tr><td>Continuous ramp</td><td>The tool goes down while moving and continues around; the ramp portion is recut at the end.</td></tr>
+        <tr><td>Tangent arc, ramped arc</td><td>Arc lead-in and lead-out on the contour, to avoid a mark on the finished wall.</td></tr>
+        <tr><td>Helix</td><td>The tool spirals down, ideal for pockets and holes.</td></tr>
+        <tr><td>Straight plunge</td><td>Vertical plunge, for center-cutting bits or V-carving.</td></tr>
+      </tbody>
+    </table></div>
+    <h3>Tabs</h3>
+    <p>Tabs hold a cut-out part until the end. Set their count per contour, length and thickness, flat or triangular (easier to break). <span class="ui">Place by hand on the canvas…</span> lets you add a tab with a click on the toolpath, drag it or remove it.</p>
+
+    <h2 id="en-text">Text and V-carving</h2>
+    <div class="duo">
+      <figure><img src="img/en-08-texte.webp" alt="ATELIER COPO text placed on an arc, with a V-carving toolpath." width="1800" height="1125" loading="lazy"><figcaption>Text placed on an arc, then V-carved.</figcaption></figure>
+      <figure><img src="img/en-09-apercu3d-texte.webp" alt="3D preview of the carved sign." width="1800" height="1125" loading="lazy"><figcaption>The same job in the 3D preview.</figcaption></figure>
+    </div>
+    <p>Choose a font in the <span class="ui">Text</span> block list: installed fonts (Chrome and Edge) or your fonts folder (<span class="ui">File › Open a fonts folder…</span>), with a preview. Take the <strong>Text</strong> tool <kbd>T</kbd> and click on the canvas. With <span class="ui">On a curve</span> placement, click a contour: the text centers on it, above or below, with the spacing you want. The text becomes grouped vectors, ready for V-carving, pocketing or profiling.</p>
+
+    <h3>Single-line fonts</h3>
+    <p>COPO comes with about sixty <strong>single-line fonts</strong> (Hershey, EMS, Cutlings, Relief SingleLine, Routed Gothic…), stored in the <code>fonts/trait-unique</code> folder and listed first in the font list, with a preview. Each letter is a single stroke: the text is engraved in one pass with a <span class="ui">Profile</span> <span class="ui">On the line</span> toolpath, with a V-bit or a small end mill. It is the fastest way to mark part numbers, plates and assembly marks. When the selection holds only open strokes, <span class="ui">Machine…</span> offers this profile directly. The <code>fonts/apercu-polices.html</code> catalogue (link “See the single-line font catalogue” in the Text block) shows them all with a preview of your text. You can also add your own SVG fonts with <span class="ui">Add fonts…</span>.</p>
+    <h2 id="en-nesting">Nesting</h2>
+    <figure><img src="img/en-07-imbrication.webp" alt="Twelve parts nested on a 1000 × 600 mm sheet, with their cut-out toolpaths." width="1800" height="1125" loading="lazy"><figcaption>Four parts in three copies on a 1000 × 600 mm sheet. The L shapes interlock and the copies join the toolpaths of the original parts.</figcaption></figure>
+    <p><span class="ui">Object › Nesting…</span> opens the block in the Drawing tab. Select the parts (with no selection, the whole drawing is used) and set the number of copies, the spacing, the sheet margin, the allowed rotations and the precision. COPO places the parts following their true shape, largest first, as far down and left as possible. A group or a text stays in one block. Parts that do not fit stay selected, and the sheet usage is shown.</p>
+    <div class="note"><p>For cut-outs, use a spacing at least equal to the bit diameter. <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes the nesting if you don't like the result.</p></div>
+
+    <h2 id="en-double">Double-sided machining</h2>
+    <ol>
+      <li>Put the vectors of the bottom side on a layer set to <strong>F2</strong> (F1/F2 button in the layer list). Draw them as seen from above, see-through.</li>
+      <li>Choose the flip: around the X axis (top ↔ bottom) or the Y axis (left ↔ right).</li>
+      <li>Side 2 toolpaths are calculated on the flipped geometry; the cut direction is kept.</li>
+      <li>In the G-code, side 1 is followed by an <code>M0</code> pause: turn the part over, set X0 Y0 Z0 again at the same point and resume.</li>
+    </ol>
+    <p>The 3D preview shows both sides; the <span class="ui">Side 2 up</span> option shows the part flipped.</p>
+
+    <h2 id="en-3d">3D preview</h2>
+    <figure><img src="img/en-06-apercu3d.webp" alt="3D preview of the machined sample project." width="1800" height="1125" loading="lazy"><figcaption>Drag to rotate, right-click or Shift to pan, wheel to zoom, double-click to recenter.</figcaption></figure>
+    <p>The preview simulates material removal through the real stock thickness, through-holes included. The <span class="ui">Play</span> button replays the job at the chosen speed and the slider jumps to any moment. The preview needs WebGL 2 (a recent Chrome, Edge or Firefox).</p>
+
+    <h2 id="en-gcode" class="pb">G-code</h2>
+    <figure><img src="img/en-05-gcode.webp" alt="G-code tab: sides to export and generated program." width="1800" height="1125" loading="lazy"><figcaption>Toolpaths are written in list order; a hidden toolpath is not exported.</figcaption></figure>
+    <div class="tbl"><table>
+      <thead><tr><th>Post-processor</th><th>Tool change</th></tr></thead>
+      <tbody>
+        <tr><td>GRBL</td><td><code>M0</code> pause between two tools.</td></tr>
+        <tr><td>GRBL manual</td><td>Before each tool, the first one included: retract with <code>G53 G0 Z-10</code> (adjustable) and <code>M0</code> pause. Also a <code>G53</code> retract at the end of the program.</td></tr>
+        <tr><td>LinuxCNC / Mach3</td><td><code>T… M6</code> with the tool number, arcs with <code>G91.1</code>.</td></tr>
+      </tbody>
+    </table></div>
+<pre><span class="c">(Load tool: End mill 6 mm D6 - set Z zero again then resume)</span>
+G21 G90 G17 G94
+G53 G0 Z-10
+M0
+S18000 M3
+G4 P3
+G0 X10 Y10
+G0 Z10
+…
+M5
+G53 G0 Z-10
+G0 X0 Y0
+M30</pre>
+    <p>The post-processor, rapid speed (for the time estimate), safe Z, clearance Z, comments and G2/G3 arcs are set in the Project tab, Machine block. The file is saved as <code>.txt</code>: rename it to <code>.nc</code> or <code>.gcode</code> if your control software requires it. UGS, Candle and bCNC also read <code>.txt</code> files.</p>
+    <div class="note"><p>Always check the G-code with a dry run, tool above the stock, before cutting.</p></div>
+    <h3>Units: millimetres or inches</h3>
+    <p>In the Project tab, Units block, choose the <span class="ui">Length units</span> (millimetres or inches) and the <span class="ui">Feed units</span> (mm/min, mm/s or in/min). The choice applies everywhere: drawing, rulers, grid (1/16, 1/8, 1/4 and 1 inch), coordinates, dimensions, tools, toolpaths and setup sheet. In inches, one option shows values as fractions (to 1/64) and another writes the G-code in inches (<code>G20</code>) for controllers set up that way.</p>
+    <p>The project is always saved in millimetres: you can switch units at any time without distorting anything, and a project opens correctly for someone working in the other unit. The choice is remembered in the browser.</p>
+    <h3>Setup sheet</h3>
+    <p>The <span class="ui">Setup sheet…</span> button in the G-code tab (also in the Machining menu) prepares a two-page setup sheet for the workshop. Enter the part name, the material and your notes; the sheet contains:</p>
+    <ul>
+      <li>the stock, X0 Y0 origin, Z zero, flip and post-processor;</li>
+      <li>a summary: estimated time, maximum depth, machined extent from the origin, cutting length and removed material volume;</li>
+      <li>the 2D view of each side with toolpaths, origin and stock dimensions, and two dimetric views of the simulation (side 1 and side 2);</li>
+      <li>the tool loading order, then the toolpath table: operation, tool, depth, passes, allowance, entry, tabs, feed, plunge and time;</li>
+      <li>the points to watch it detects (cut through the stock, cut-out without tabs, pass too deep, job outside the stock, hidden toolpaths);</li>
+      <li>a checklist before starting, a notes area and sign-off boxes.</li>
+    </ul>
+    <p>Print it or save it as a PDF, or keep the HTML file with the G-code. The sheet settings are saved with the project.</p>
+
+    <h2 id="en-install">Install and use offline</h2>
+    <ul>
+      <li><strong>Online</strong>: open the GitHub Pages site of the COPO repository. Nothing to install.</li>
+      <li><strong>Offline</strong>: download the complete COPO folder (“Code › Download ZIP” on GitHub) and unzip it. Open <code>index.html</code> with a double-click: everything is already in the <code>lib</code> folder (calculation libraries and interface fonts) and in the <code>fonts</code> folder. Nothing else to install or download.</li>
+      <li><strong>Interface fonts</strong>: the <code>lib/fonts</code> folder holds the COPO fonts (Source Sans 3, JetBrains Mono, Barlow Condensed). Offline, the interface, the setup sheet and this guide keep the same look.</li>
+      <li><strong>Engraving fonts</strong>: put your <code>.ttf</code>, <code>.otf</code> or <code>.woff</code> files in a <code>fonts</code> folder next to COPO.html and open it once from the File menu.</li>
+    </ul>
+    <p>COPO runs on Windows, macOS and Linux, in a recent Chrome, Edge or Firefox. The list of installed fonts is only available in Chrome and Edge.</p>
+
+    <h2 id="en-shortcuts">Keyboard shortcuts</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Key</th><th>Action</th><th>Key</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td><kbd>V</kbd></td><td>Select</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Y</kbd></td><td>Undo / Redo</td></tr>
+        <tr><td><kbd>N</kbd></td><td>Nodes</td><td><kbd>Ctrl</kbd>+<kbd>S</kbd> / <kbd>O</kbd></td><td>Save / Open a project</td></tr>
+        <tr><td><kbd>H</kbd> or <kbd>Space</kbd></td><td>Pan the view</td><td><kbd>Ctrl</kbd>+<kbd>D</kbd></td><td>Duplicate</td></tr>
+        <tr><td><kbd>R</kbd> <kbd>E</kbd> <kbd>C</kbd></td><td>Rectangle, ellipse, circle</td><td><kbd>Ctrl</kbd>+<kbd>A</kbd></td><td>Select all</td></tr>
+        <tr><td><kbd>O</kbd></td><td>Polygon and star</td><td><kbd>Ctrl</kbd>+<kbd>G</kbd></td><td>Group (<kbd>Shift</kbd>: ungroup)</td></tr>
+        <tr><td><kbd>P</kbd> <kbd>A</kbd> <kbd>T</kbd></td><td>Pen, arc, text</td><td><kbd>Ctrl</kbd>+<kbd>]</kbd> / <kbd>[</kbd></td><td>Forward / backward (<kbd>Shift</kbd>: front / back)</td></tr>
+        <tr><td><kbd>K</kbd> <kbd>F</kbd></td><td>Chamfer, fillet</td><td><kbd>Del</kbd></td><td>Delete the selection or node</td></tr>
+        <tr><td><kbd>X</kbd> <kbd>U</kbd></td><td>Trim, cut</td><td>Arrows</td><td>Move by 1 mm (<kbd>Shift</kbd>: 10 mm)</td></tr>
+        <tr><td><kbd>M</kbd> <kbd>D</kbd></td><td>Measure, dimension</td><td><kbd>Esc</kbd></td><td>Cancel the current path, deselect</td></tr>
+      </tbody>
+    </table></div>
+    <p>On a Mac, <kbd>Cmd</kbd> replaces <kbd>Ctrl</kbd>.</p>
+
+    <h2 id="en-licence">Licence</h2>
+    <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
+    <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
+    <footer><p>COPO 1.0 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  var get = function () { try { return localStorage.getItem('copo.guide.lang'); } catch (e) { return null; } };
+  var put = function (v) { try { localStorage.setItem('copo.guide.lang', v); } catch (e) { } };
+  function show(l) {
+    document.getElementById('v-fr').hidden = l !== 'fr';
+    document.getElementById('v-en').hidden = l !== 'en';
+    document.getElementById('bFr').setAttribute('aria-pressed', String(l === 'fr'));
+    document.getElementById('bEn').setAttribute('aria-pressed', String(l === 'en'));
+    document.documentElement.lang = l;
+    var t = document.querySelector('.brand .tag'); t.textContent = t.getAttribute('data-' + l);
+    document.title = l === 'fr' ? "Mode d'emploi COPO" : 'COPO User Guide';
+  }
+  var h = (location.hash || '').replace('#', '');
+  var start = /^(fr|en)(-|$)/.test(h) ? h.slice(0, 2) : (get() || (/^fr/i.test(navigator.language || '') ? 'fr' : 'en'));
+  show(start);
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.addEventListener('click', function () { var l = b.getAttribute('data-l'); show(l); put(l); window.scrollTo(0, 0); });
+  });
+})();
+</script>
+
+</body>
+</html>
