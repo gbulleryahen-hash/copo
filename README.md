@@ -7,7 +7,7 @@
 - **Mode d'emploi / User guide :** `guide.html` · PDF : `COPO-mode-emploi-FR.pdf`, `COPO-user-guide-EN.pdf`
 
 ## Fonctions / Features
-- Dessin : rectangle, ellipse, polygone/étoile, arc, plume (Bézier), texte (aussi sur une courbe), nœuds, chanfreins, congés, ajuster, couper, joindre, booléens, réseau, calques, repères, cotes, images de référence, import/export SVG
+- Dessin : rectangle, ellipse, polygone/étoile, arc, plume (Bézier), texte (aussi sur une courbe), nœuds, chanfreins, congés, ajuster, couper, joindre, booléens, réseau, calques, repères, cotes, images de référence, vectorisation d'image (contours), import/export SVG
 - Usinage : profil (extérieur, intérieur, sur la ligne, gauche/droite des lignes ouvertes), poche en anneaux ou en balayage, reprise de matière, V-carving par axe médian, perçage (débourrage, hélice)
 - Entrées en rampe aller-retour, rampe continue, arc, arc en rampe, hélice ; surépaisseur et passe de finition ; ponts d'attache automatiques ou manuels
 - Imbrication des pièces sur le panneau, usinage double face, aperçu 3D de l'usinage
