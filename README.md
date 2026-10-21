@@ -11,6 +11,7 @@
 - Usinage : profil (extérieur, intérieur, sur la ligne, gauche/droite des lignes ouvertes), poche en anneaux ou en balayage, reprise de matière, coins intérieurs en dogbone ou T-bone, V-carving par axe médian, perçage (débourrage, hélice)
 - Entrées en rampe aller-retour, rampe continue, arc, arc en rampe, hélice ; surépaisseur et passe de finition ; ponts d'attache automatiques ou manuels
 - Imbrication des pièces sur le panneau, usinage double face, aperçu 3D de l'usinage
+- Lutherie : générateur de touche de guitare (diapason, largeurs, frettes non traversantes, repères) et incrustation en V (inlay : poche femelle et pièce mâle)
 - Une soixantaine de polices à trait unique fournies (Hershey, EMS, Cutlings, Relief SingleLine, Routed Gothic), import de polices SVG ; catalogue avec aperçu : `fonts/apercu-polices.html`
 - G-code : GRBL, GRBL changement manuel (G53 + pause), Carbide Motion, Onefinity, LinuxCNC, Mach3/4, UCCNC, MASSO, post-processeur personnalisé ; arcs G2/G3
 - Fiche de gamme imprimable : vues 2D des faces, vues dimétriques de la simulation, origine, outils, parcours, vitesses, points de vigilance, liste de contrôle

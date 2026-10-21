@@ -159,6 +159,7 @@ footer p{max-width:none}
       <li><a href="#fr-outils">Outils</a></li>
       <li><a href="#fr-parcours">Parcours d'outils</a></li>
       <li><a href="#fr-texte">Texte et V-carving</a></li>
+      <li><a href="#fr-lutherie">Lutherie</a></li>
       <li><a href="#fr-imbrication">Imbrication</a></li>
       <li><a href="#fr-double">Double face</a></li>
       <li><a href="#fr-3d">Aperçu 3D</a></li>
@@ -312,10 +313,22 @@ footer p{max-width:none}
       <figure><img src="img/fr-08-texte.webp" alt="Texte ATELIER COPO placé sur un arc, avec un parcours de V-carving." width="1800" height="1125" loading="lazy"><figcaption>Texte placé sur un arc, puis gravé en V-carving.</figcaption></figure>
       <figure><img src="img/fr-09-apercu3d-texte.webp" alt="Aperçu 3D de l'enseigne gravée." width="1800" height="1125" loading="lazy"><figcaption>Le même travail dans l'aperçu 3D.</figcaption></figure>
     </div>
-    <p>Choisissez une police dans la liste du bloc <span class="ui">Texte</span> : polices installées (Chrome et Edge) ou votre dossier de polices (<span class="ui">Fichier › Ouvrir un dossier de polices…</span>), avec aperçu. Prenez l'outil <strong>Texte</strong> <kbd>T</kbd> et cliquez sur le plan. En placement <span class="ui">Sur une courbe</span>, cliquez sur un contour : le texte s'y centre, au-dessus ou en dessous, avec l'espacement voulu. Le texte devient des vecteurs groupés, prêts pour le V-carving, la poche ou le profil.</p>
+    <p>Choisissez une police dans la liste du bloc <span class="ui">Texte</span> : polices installées (Chrome et Edge) ou votre dossier de polices (<span class="ui">Fichier › Ouvrir un dossier de polices…</span>), avec aperçu. Deux cases en haut de la liste, <em>Polices de COPO</em> et <em>Polices de l'ordinateur</em>, raccourcissent la liste ; le choix est mémorisé. Prenez l'outil <strong>Texte</strong> <kbd>T</kbd> et cliquez sur le plan. En placement <span class="ui">Sur une courbe</span>, cliquez sur un contour : le texte s'y centre, au-dessus ou en dessous, avec l'espacement voulu. Le texte devient des vecteurs groupés, prêts pour le V-carving, la poche ou le profil.</p>
 
     <h3>Polices à trait unique</h3>
     <p>COPO est livré avec une soixantaine de <strong>polices à trait unique</strong> (Hershey, EMS, Cutlings, Relief SingleLine, Routed Gothic…), rangées dans le dossier <code>fonts/trait-unique</code> et proposées en tête de la liste des polices, avec aperçu. Chaque lettre y est un simple trait : le texte se grave en une seule passe avec un parcours <span class="ui">Profil</span> <span class="ui">Sur la ligne</span>, à la fraise en V ou avec une petite fraise droite. C'est le plus rapide pour les numéros de pièce, les plaques et les repères. Quand la sélection ne contient que des traits ouverts, <span class="ui">Usiner…</span> propose directement ce profil. Le catalogue <code>fonts/apercu-polices.html</code> (lien « Voir le catalogue des polices à trait unique » dans le bloc Texte) les montre toutes avec un aperçu de votre texte. Vous pouvez aussi ajouter vos propres polices SVG avec <span class="ui">Ajouter des polices…</span>.</p>
+    <h2 id="fr-lutherie">Lutherie : touche et incrustation</h2>
+    <h3>Touche de guitare</h3>
+    <p><span class="ui">Objet › Touche de guitare…</span> dessine la touche, le sillet à gauche, centrée sur le brut. Réglez le <strong>diapason</strong>, le <strong>nombre de frettes</strong>, la <strong>largeur au sillet</strong> et la seconde largeur, <em>à la 12e case</em> ou <em>au bout du diapason</em>, le dépassement après la dernière frette, les <strong>cases avec un repère</strong> et <strong>un double repère</strong> (listes de numéros) et le diamètre des repères. La <strong>distance frettes – bord</strong> arrête les traits de frettes avant le bord de la touche (0 = frettes traversantes). Les frettes sont placées par la règle des douze demi-tons : position = diapason − diapason / 2<sup>n/12</sup>. L'aperçu se met à jour en direct.</p>
+    <p>Le résultat forme trois groupes : le contour, les traits de frettes (traits ouverts, à usiner en profil <span class="ui">Sur la ligne</span> avec une fraise ou une lame de la largeur de la rainure) et les repères (cercles, en poche ou en perçage).</p>
+    <h3>Incrustation en V (inlay)</h3>
+    <p>Sélectionnez le motif (formes fermées), puis <span class="ui">Objet › Incrustation en V (inlay)…</span>. Choisissez la fraise en V, la <strong>profondeur de la poche femelle</strong>, le <strong>jeu pour la colle</strong> et la <strong>profondeur de coupe du mâle</strong>. COPO crée :</p>
+    <ul>
+      <li>un V-carving <em>femelle</em> du motif dans votre pièce ;</li>
+      <li>la pièce <em>mâle</em> : le motif en miroir entouré d'un cadre, sur le calque « Incrustation · mâle », avec un V-carving qui démarre à la profondeur de la poche moins le jeu. Son parcours est créé <em>masqué</em> : pour l'usiner dans le bois d'incrustation, affichez-le et masquez celui de la femelle avant d'enregistrer le G-code.</li>
+    </ul>
+    <p>Retournez le mâle, collez-le dans la femelle, puis rabotez ou poncez le surplus. Le réglage <span class="ui">Profondeur de départ</span> du V-carving est aussi disponible à la main dans le formulaire des parcours.</p>
+
     <h2 id="fr-imbrication">Imbrication</h2>
     <figure><img src="img/fr-07-imbrication.webp" alt="Douze pièces imbriquées sur un panneau de 1000 × 600 mm, avec leurs parcours de détourage." width="1800" height="1125" loading="lazy"><figcaption>Quatre pièces en trois exemplaires sur un panneau de 1000 × 600 mm. Les L s'emboîtent, les copies reprennent les parcours des pièces d'origine.</figcaption></figure>
     <p><span class="ui">Objet › Imbrication…</span> ouvre le bloc dans l'onglet Dessin. Sélectionnez les pièces (sans sélection, tout le dessin est pris) et réglez le nombre d'exemplaires, l'espacement, la marge du panneau, les rotations permises et la précision. COPO place les pièces selon leur forme réelle, les plus grandes d'abord, le plus en bas à gauche possible. Un groupe ou un texte reste d'un bloc. Les pièces qui ne tiennent pas restent sélectionnées et le taux d'occupation du panneau s'affiche.</p>
@@ -425,6 +438,7 @@ M30</pre>
       <li><a href="#en-tools">Tools</a></li>
       <li><a href="#en-toolpaths">Toolpaths</a></li>
       <li><a href="#en-text">Text and V-carving</a></li>
+      <li><a href="#en-lutherie">Lutherie</a></li>
       <li><a href="#en-nesting">Nesting</a></li>
       <li><a href="#en-double">Double-sided</a></li>
       <li><a href="#en-3d">3D preview</a></li>
@@ -578,10 +592,22 @@ M30</pre>
       <figure><img src="img/en-08-texte.webp" alt="ATELIER COPO text placed on an arc, with a V-carving toolpath." width="1800" height="1125" loading="lazy"><figcaption>Text placed on an arc, then V-carved.</figcaption></figure>
       <figure><img src="img/en-09-apercu3d-texte.webp" alt="3D preview of the carved sign." width="1800" height="1125" loading="lazy"><figcaption>The same job in the 3D preview.</figcaption></figure>
     </div>
-    <p>Choose a font in the <span class="ui">Text</span> block list: installed fonts (Chrome and Edge) or your fonts folder (<span class="ui">File › Open a fonts folder…</span>), with a preview. Take the <strong>Text</strong> tool <kbd>T</kbd> and click on the canvas. With <span class="ui">On a curve</span> placement, click a contour: the text centers on it, above or below, with the spacing you want. The text becomes grouped vectors, ready for V-carving, pocketing or profiling.</p>
+    <p>Choose a font in the <span class="ui">Text</span> block list: installed fonts (Chrome and Edge) or your fonts folder (<span class="ui">File › Open a fonts folder…</span>), with a preview. Two boxes at the top of the list, <em>COPO fonts</em> and <em>Computer fonts</em>, shorten the list; the choice is remembered. Take the <strong>Text</strong> tool <kbd>T</kbd> and click on the canvas. With <span class="ui">On a curve</span> placement, click a contour: the text centers on it, above or below, with the spacing you want. The text becomes grouped vectors, ready for V-carving, pocketing or profiling.</p>
 
     <h3>Single-line fonts</h3>
     <p>COPO comes with about sixty <strong>single-line fonts</strong> (Hershey, EMS, Cutlings, Relief SingleLine, Routed Gothic…), stored in the <code>fonts/trait-unique</code> folder and listed first in the font list, with a preview. Each letter is a single stroke: the text is engraved in one pass with a <span class="ui">Profile</span> <span class="ui">On the line</span> toolpath, with a V-bit or a small end mill. It is the fastest way to mark part numbers, plates and assembly marks. When the selection holds only open strokes, <span class="ui">Machine…</span> offers this profile directly. The <code>fonts/apercu-polices.html</code> catalogue (link “See the single-line font catalogue” in the Text block) shows them all with a preview of your text. You can also add your own SVG fonts with <span class="ui">Add fonts…</span>.</p>
+    <h2 id="en-lutherie">Lutherie: fretboard and inlay</h2>
+    <h3>Guitar fretboard</h3>
+    <p><span class="ui">Object › Guitar fretboard…</span> draws the fretboard, nut on the left, centred on the stock. Set the <strong>scale length</strong>, the <strong>number of frets</strong>, the <strong>width at the nut</strong> and the second width, <em>at the 12th fret</em> or <em>at the end of the scale</em>, the overhang after the last fret, the <strong>frets with a marker</strong> and <strong>a double marker</strong> (lists of numbers) and the marker diameter. The <strong>fret-to-edge distance</strong> stops the fret lines short of the board edge (0 = through frets). Frets follow the twelve-semitone rule: position = scale − scale / 2<sup>n/12</sup>. The preview updates live.</p>
+    <p>The result is three groups: the outline, the fret lines (open lines, to cut with an <span class="ui">On the line</span> profile and a bit or blade as wide as the slot) and the markers (circles, pocketed or drilled).</p>
+    <h3>V-carve inlay</h3>
+    <p>Select the design (closed shapes), then <span class="ui">Object › V-carve inlay…</span>. Choose the V-bit, the <strong>female pocket depth</strong>, the <strong>glue gap</strong> and the <strong>male cut depth</strong>. COPO creates:</p>
+    <ul>
+      <li>a <em>female</em> V-carving of the design in your part;</li>
+      <li>the <em>male</em> plug: the mirrored design inside a frame, on the “Inlay · male” layer, with a V-carving that starts at the pocket depth minus the gap. Its toolpath is created <em>hidden</em>: to cut it from the inlay wood, show it and hide the female one before saving the G-code.</li>
+    </ul>
+    <p>Flip the plug, glue it into the female pocket, then plane or sand off the excess. The V-carving <span class="ui">Start depth</span> setting is also available by hand in the toolpath form.</p>
+
     <h2 id="en-nesting">Nesting</h2>
     <figure><img src="img/en-07-imbrication.webp" alt="Twelve parts nested on a 1000 × 600 mm sheet, with their cut-out toolpaths." width="1800" height="1125" loading="lazy"><figcaption>Four parts in three copies on a 1000 × 600 mm sheet. The L shapes interlock and the copies join the toolpaths of the original parts.</figcaption></figure>
     <p><span class="ui">Object › Nesting…</span> opens the block in the Drawing tab. Select the parts (with no selection, the whole drawing is used) and set the number of copies, the spacing, the sheet margin, the allowed rotations and the precision. COPO places the parts following their true shape, largest first, as far down and left as possible. A group or a text stays in one block. Parts that do not fit stay selected, and the sheet usage is shown.</p>
