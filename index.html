@@ -57,7 +57,7 @@ button.danger{color:var(--danger)}
 button.armed{background:var(--danger);color:#fff;border-color:var(--danger)}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 /* work area */
-.work{display:grid;grid-template-columns:minmax(0,1fr) 352px;gap:10px;min-height:0}
+.work{display:grid;grid-template-columns:352px minmax(0,1fr);gap:10px;min-height:0}
 .palette{display:none!important;flex-direction:column;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:5px}
 .palette button{width:36px;height:36px;border:0;border-radius:var(--r);background:transparent;display:grid;place-items:center;position:relative;color:var(--ink)}
 .palette button svg{width:20px;height:20px}
@@ -299,7 +299,8 @@ label.inl input{width:70px}
 .work{gap:0}
 .palette{border-radius:0;border-width:0 1px 0 0;padding:6px 5px}
 .stage{border-radius:0;border-width:0}
-.panel{border-radius:0;border-width:0 0 0 1px}
+.panel{border-radius:0;border-width:0 1px 0 0}
+@media (min-width:921px){.panel{order:-1}}
 .tabs button{text-transform:none;letter-spacing:0;font:600 13.5px var(--f-ui)}
 .blk h3,details.blk>summary{text-transform:none;letter-spacing:0;font:600 13.5px var(--f-ui);color:var(--ink)}
 .optbar .tname{text-transform:none;letter-spacing:0;font:700 13px var(--f-ui)}
