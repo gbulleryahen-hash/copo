@@ -102,6 +102,20 @@ input[type=checkbox]{accent-color:var(--accent)}
 .row input[type=number]{width:72px}
 .hint{margin:0;font-size:12.5px;color:var(--muted);line-height:1.45}
 .chip{font:500 11px var(--f-mono);letter-spacing:0;text-transform:none;background:var(--accent-soft);color:var(--ink);padding:1px 7px;border-radius:999px}
+.figrow{display:grid;grid-template-columns:60px minmax(0,1fr);gap:10px;align-items:center}.figrow[hidden]{display:none}.figrow.nofig{grid-template-columns:minmax(0,1fr)}
+.ill{display:block;color:var(--muted);--ill-wood:rgb(196 160 112 / .26);--ill-wood2:rgb(196 160 112 / .42);--ill-tool:rgb(165 175 190 / .32)}
+.ill svg{display:block;width:100%;height:auto;overflow:visible}.ill-sm{width:56px;justify-self:start}
+.ill .st,.ill .sh{fill:var(--ill-wood);stroke:currentColor;stroke-width:1}.ill .st2{fill:var(--ill-wood2)}
+.ill .tl{fill:var(--ill-tool);stroke:currentColor;stroke-width:1}.ill .fl{fill:none;stroke:currentColor;stroke-width:.7;opacity:.55}
+.ill .ln{fill:none;stroke:currentColor;stroke-width:1}.ill .dl{fill:none;stroke:currentColor;stroke-width:.8;stroke-dasharray:3 2}
+.ill .dm{fill:none;stroke:var(--ink);stroke-width:.9;stroke-linejoin:round}
+.ill .ac{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}.ill .ad{fill:none;stroke:var(--accent);stroke-width:1.1;stroke-dasharray:3 2}
+.ill .aw,.ill .af{fill:var(--accent)}.ill .tc{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1}.ill .al{fill:var(--accent);opacity:.35}
+.ill .tb{stroke:currentColor;stroke-width:2.5}.ill .zz{stroke:var(--accent);stroke-width:2}.ill .tx{fill:var(--ink);font:600 7px var(--f-mono)}
+.bico{width:16px;height:16px;flex:none}.bico .bf{fill:var(--accent);opacity:.75}.bico .bo{fill:none;stroke:currentColor;stroke-width:1.6}.bico .bs{stroke-width:2}.bico .bd{stroke:var(--accent);stroke-dasharray:3 2}
+.seg.ico button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px 6px;line-height:1.15}
+.seg.ico svg{width:22px;height:22px;flex:none}.seg svg .sm{fill:none;stroke:currentColor;stroke-width:1.5}.seg svg .sp{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-dasharray:2.6 2}
+.seg button[aria-pressed="true"] svg .sp{stroke:currentColor}.seg svg .sp2{stroke-width:2.4}.seg svg .dt{fill:currentColor}
 .seg{display:flex;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--raised)}
 .seg button{flex:1;border:0;background:transparent;padding:6px 4px;font-weight:500;font-size:13px}
 .seg button+button{border-left:1px solid var(--line)}
@@ -405,11 +419,11 @@ label.inl input{width:70px}
       <div class="pane" data-pane="projet" hidden>
         <p class="pjsum" id="pjSum"></p>
         <section class="blk"><h3>Brut</h3>
-          <div class="g3">
+          <div class="figrow"><span class="ill" data-ill="stock"></span><div class="g3">
             <label>Largeur X<input data-u="len" type="number" id="stW" step="1" min="1"></label>
             <label>Hauteur Y<input data-u="len" type="number" id="stH" step="1" min="1"></label>
             <label>Épaisseur<input data-u="len" type="number" id="stT" step="0.1" min="0.1"></label>
-          </div>
+          </div></div>
           <label>Matière<input type="text" id="pjMat" placeholder="Contreplaqué bouleau 18 mm"></label>
         </section>
         <section class="blk"><h3>Origine</h3>
@@ -423,15 +437,16 @@ label.inl input{width:70px}
               <label>Décalage X (mm)<input data-u="len" type="number" id="stOX" step="0.1"></label>
               <label>Décalage Y (mm)<input data-u="len" type="number" id="stOY" step="0.1"></label>
               <label>Zéro Z<select id="stOZ"><option value="top">Dessus du brut</option><option value="bottom">Table (dessous)</option></select></label>
+              <span class="ill ill-sm" data-ill="zzero"></span>
             </div>
           </div>
           <p class="hint" id="originHint"></p>
         </section>
         <section class="blk"><h3>Double face</h3>
-          <div class="g2">
+          <div class="figrow"><span class="ill" data-ill="flip"></span><div class="g2">
             <label>Retournement (face 2)<select id="stFlip"><option value="x">Autour de l'axe X (haut ↔ bas)</option><option value="y">Autour de l'axe Y (gauche ↔ droite)</option></select></label>
             <label>Faces affichées<select id="faceView"><option value="all">Les deux faces</option><option value="1">Face 1 (dessus)</option><option value="2">Face 2 (dessous)</option></select></label>
-          </div>
+          </div></div>
           <p class="hint">Double face : mettez les vecteurs de la face du dessous sur un calque réglé sur F2 (bouton F1/F2 dans Calques). Dessinez-les vus du dessus, par transparence : COPO les retourne pour le G-code de la face 2.</p>
         </section>
         <section class="blk"><h3>Unités</h3>
@@ -465,7 +480,7 @@ label.inl input{width:70px}
         </section>
       </div>
       <div class="pane" data-pane="dessin">
-        <details class="blk" open><summary>Calques</summary>
+        <details class="blk"><summary>Calques</summary>
           <ul class="layers" id="layerList"></ul>
           <div class="row"><button data-act="layerAdd">Nouveau calque</button><button data-act="layerMove">Sélection → calque actif</button></div>
         </details>
@@ -517,7 +532,7 @@ label.inl input{width:70px}
 <div class="zrow" role="group" aria-label="Disposition"><button data-act="zFront" title="Premier plan (Ctrl+Maj+])"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 19V8M7 12l5-5 5 5M5 4h14"/></svg>Premier plan</button><button data-act="zUp" title="Monter (Ctrl+])"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 19V6M7 11l5-5 5 5"/></svg>Monter</button><button data-act="zDown" title="Descendre (Ctrl+[)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v13M7 13l5 5 5-5"/></svg>Descendre</button><button data-act="zBack" title="Arrière-plan (Ctrl+Maj+[)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v11M7 12l5 5 5-5M5 20h14"/></svg>Arrière-plan</button></div>
           <div class="row"><button data-act="group">Grouper</button><button data-act="ungroup">Dégrouper</button><button data-act="center">Centrer sur le brut</button><button data-act="dup">Dupliquer</button><button data-act="del" class="danger">Supprimer</button></div>
         </details>
-        <details class="blk" open><summary>Aligner et répartir</summary>
+        <details class="blk"><summary>Aligner et répartir</summary>
           <div class="iconrow">
             <button data-act="alignL" title="Aligner à gauche" aria-label="Aligner à gauche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 3v18"/><rect x="7" y="6" width="12" height="4"/><rect x="7" y="14" width="7" height="4"/></svg></button>
             <button data-act="alignCH" title="Centrer horizontalement" aria-label="Centrer horizontalement"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18"/><rect x="5" y="6" width="14" height="4"/><rect x="8" y="14" width="8" height="4"/></svg></button>
@@ -534,7 +549,7 @@ label.inl input{width:70px}
           </div>
           <p class="hint">« La sélection » : un seul objet s'aligne sur le brut, plusieurs s'alignent entre eux. « Le premier objet sélectionné » : il reste en place et les autres s'alignent sur lui ; Répartir les place à sa suite, dans l'ordre de sélection, avec l'espacement indiqué. Les groupes bougent d'un bloc.</p>
         </details>
-        <details class="blk" open><summary>Opérations</summary>
+        <details class="blk"><summary>Opérations</summary>
           <div class="row"><button data-act="boolU">Souder</button><button data-act="boolS">Soustraire</button><button data-act="boolI">Intersection</button></div>
           <p class="hint">Soustraire et Intersection partent de la première forme sélectionnée (ou de son groupe).</p>
           <div class="row"><button data-act="join">Joindre</button><button data-act="close">Fermer</button><label class="inl">Tolérance (mm)<input data-u="len" type="number" data-k="joinTol" step="0.1" min="0.001"></label></div>
@@ -628,16 +643,16 @@ label.inl input{width:70px}
           </div>
           <div class="seg" data-f="side" data-show="profile"><button value="out">Extérieur</button><button value="in">Intérieur</button><button value="on">Sur la ligne</button></div>
           <label data-show="profile" id="openSideRow">Lignes ouvertes<select data-f="openSide"><option value="on">Sur la ligne</option><option value="left">À gauche du tracé</option><option value="right">À droite du tracé</option></select></label>
-          <div class="g2">
+          <div class="figrow"><span class="ill" data-ill="depth"></span><div class="g2">
             <label><span id="depthLbl">Profondeur (mm)</span><input data-u="len" type="number" data-f="depth" step="0.1" min="0"></label>
             <label data-show="profile pocket">Profondeur de passe (mm)<input data-u="len" type="number" data-f="pass" step="0.1" min="0.05" placeholder="celle de l'outil"></label>
             <label data-show="vcarve">Précision du calcul (mm)<input data-u="len" type="number" data-f="vstep" step="0.05" min="0.05"></label>
             <label data-show="vcarve">Profondeur de départ (mm)<input data-u="len" type="number" data-f="vstart" step="0.1" min="0" placeholder="0"></label>
-          </div>
-          <div class="g2" data-show="pocket">
+          </div></div>
+          <div class="figrow" data-show="pocket"><span class="ill" data-ill="strat"></span><div class="g2">
             <label>Stratégie<select data-f="strategy"><option value="rings">Anneaux (contour parallèle)</option><option value="raster">Balayage parallèle</option></select></label>
             <label id="rasterAngRow">Angle du balayage (°)<input type="number" data-f="rasterAng" step="15"></label>
-          </div>
+          </div></div>
           <div data-show="pocket" class="tabbox">
             <label class="chk"><input type="checkbox" data-f="rest"> Reprise de matière (coins non atteints par une fraise plus grosse)</label>
             <label id="restRow">Fraise utilisée avant<select data-f="restTool" id="fRestTool"></select></label>
@@ -648,26 +663,26 @@ label.inl input{width:70px}
             <label>Débourrage (mm, 0 = sans)<input data-u="len" type="number" data-f="peck" step="0.5" min="0"></label>
             <label>Temporisation au fond (s)<input type="number" data-f="dwell" step="0.1" min="0"></label>
           </div>
-          <div class="g2" data-show="profile pocket" id="allowRow">
+          <div class="figrow" data-show="profile pocket" id="allowRow"><span class="ill" data-ill="allow"></span><div class="g2">
             <label>Surépaisseur (mm)<input data-u="len" type="number" data-f="allow" step="0.05" min="0"></label>
             <label>Retrait de la surépaisseur<select data-f="finish"><option value="last">À la dernière passe</option><option value="full">Passe de finition pleine hauteur</option></select></label>
-          </div>
-          <div class="g2">
+          </div></div>
+          <div class="figrow"><span class="ill" data-ill="dir"></span><div class="g2">
             <label data-show="profile pocket vcarve">Sens de coupe<select data-f="dir"><option value="climb">Avalant</option><option value="conv">Opposition</option></select></label>
             <label data-show="profile pocket">Entrée de l'outil<select data-f="entry"><option value="plunge">Plongée droite</option><option value="rampzz">Rampe aller-retour</option><option value="ramp">Rampe continue</option><option value="arc">Arc tangent</option><option value="arcramp">Arc en rampe</option><option value="helix">Hélice</option></select></label>
-          </div>
-          <div class="g2" data-show="profile pocket">
+          </div></div>
+          <div class="figrow" data-show="profile pocket"><span class="ill" data-ill="entry"></span><div class="g2">
             <label data-entry="ramp">Longueur de rampe (mm)<input data-u="len" type="number" data-f="rampLen" step="1" min="0"></label>
             <label data-entry="arc">Rayon de l'arc / de l'hélice (mm)<input data-u="len" type="number" data-f="arcR" step="0.5" min="0.1"></label>
             <label data-entry="helix">Descente par tour (mm)<input data-u="len" type="number" data-f="helixPitch" step="0.25" min="0.1"></label>
-          </div>
+          </div></div>
           <div data-show="profile" id="tabBox" class="tabbox">
             <label class="chk"><input type="checkbox" data-f="tabs"> Ponts d'attache (maintiennent la pièce détourée)</label>
-            <div class="g3" id="tabRow">
+            <div class="figrow" id="tabRow"><span class="ill" data-ill="tabs"></span><div class="g2">
               <label>Nombre par contour<input type="number" data-f="tabN" step="1" min="1"></label>
               <label>Longueur (mm)<input data-u="len" type="number" data-f="tabL" step="0.5" min="0"></label>
               <label>Épaisseur (mm)<input data-u="len" type="number" data-f="tabH" step="0.5" min="0.1"></label>
-            </div>
+            </div></div>
             <div class="row" id="tabEditRow"><button data-act="tabEdit">Placer à la main sur le plan…</button><button data-act="tabAuto">Répartition auto</button></div>
             <p class="hint" id="tabModeInfo"></p>
             <label id="tabShapeRow">Forme<select data-f="tabShape"><option value="rect">Plate</option><option value="tri">Triangulaire (plus facile à casser)</option></select></label>
@@ -684,10 +699,10 @@ label.inl input{width:70px}
         </section>
         <section class="blk" id="toolForm"><h3>Réglages de l'outil</h3>
           <label>Nom<input type="text" data-t="name"></label>
-          <div class="g2">
+          <div class="figrow"><span class="ill" data-ill="tool"></span><div class="g2">
             <label>Type<select data-t="type"><option value="flat">Fraise droite</option><option value="ball">Fraise hémisphérique</option><option value="v">Fraise en V</option><option value="drill">Foret</option></select></label>
             <label>Diamètre (mm)<input data-u="len" type="number" data-t="dia" step="0.01" min="0.1"></label>
-          </div>
+          </div></div>
           <div class="g2">
             <label data-tshow="v drill"><span id="tAngLbl">Angle du V (°)</span><input type="number" data-t="angle" step="1" min="10" max="170"></label>
             <label>Numéro d'outil (T)<input type="number" data-t="num" step="1" min="1"></label>
@@ -2227,7 +2242,7 @@ function pjSummary() {
   const el = document.getElementById('pjSum'); if (!el) return; const st = S.stock, M = S.machine, has2 = S.layers.some(l => l.face === 2);
   const post = tr(postOf(M).short);
   const f1 = v => LANG === 'fr' ? fr(v, 1) : v.toFixed(1); el.textContent = f1(st.w) + ' × ' + f1(st.h) + ' × ' + f1(st.t) + ' mm' + (S.meta && S.meta.material ? ' · ' + S.meta.material : '') + '\n' + tr('Origine') + ' : ' + tr(originLabel(st)) + ' · Z0 : ' + tr(st.originZ === 'bottom' ? 'table' : 'dessus du brut') + (has2 ? ' · ' + tr('double face') : '') + '\n' + post + ' · ' + UNIT.len + ' · ' + UNIT.feed;
-  el.style.whiteSpace = 'pre-line'; const m = document.getElementById('pjMat'); if (m && document.activeElement !== m) m.value = (S.meta && S.meta.material) || '';
+  illRefresh(); el.style.whiteSpace = 'pre-line'; const m = document.getElementById('pjMat'); if (m && document.activeElement !== m) m.value = (S.meta && S.meta.material) || '';
 }
 function setTab(t) { curTab = t; if (t === 'projet') pjSummary(); $$('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t)); $$('.pane').forEach(p => p.hidden = p.dataset.pane !== t); if (t === 'gcode') renderGcode(); if (t === 'parcours') renderForm(); }
 $$('.tabs button').forEach(b => b.onclick = () => setTab(b.dataset.tab));
@@ -3030,14 +3045,14 @@ function syncStock() {
   $$('#stOrigin button').forEach(b => b.setAttribute('aria-pressed', b.dataset.o === st.originXY));
   const o = originOf(st); $('#originHint').textContent = 'X0 Y0 du G-code : ' + originLabel(st) + ', soit à ' + fr(o[0]) + ' / ' + fr(o[1]) + ' mm du coin bas gauche du brut.';
 }
-$('#stFlip').onchange = e => { S.stock.flip = e.target.value; recomputeAll(); commit(false); };
+$('#stFlip').onchange = e => { S.stock.flip = e.target.value; illRefresh(); recomputeAll(); commit(false); };
 $('#faceView').onchange = e => { S.ui.faceView = e.target.value; snapVer++; for (const id of [...S.sel]) { const s = shapeById(id); if (s && !shown(s)) S.sel.delete(id); } renderSel(); draw(); };
 function originChanged() { syncStock(); commit(false); renderSel(); renderGuides(); draw(); gcDirty = true; if (curTab === 'gcode') renderGcode(); }
 $$('#stOrigin button').forEach(b => b.onclick = () => { S.stock.originXY = b.dataset.o; originChanged(); });
 $('#stOX').addEventListener('change', e => { S.stock.offX = +e.target.value || 0; originChanged(); });
 $('#stOY').addEventListener('change', e => { S.stock.offY = +e.target.value || 0; originChanged(); });
 [['#stW', 'w'], ['#stH', 'h'], ['#stT', 't']].forEach(([id, k]) => $(id).addEventListener('change', e => { const v = +e.target.value; if (v > 0) { S.stock[k] = v; originChanged(); } }));
-$('#stOZ').onchange = e => { S.stock.originZ = e.target.value; commit(false); gcDirty = true; };
+$('#stOZ').onchange = e => { S.stock.originZ = e.target.value; illRefresh(); commit(false); gcDirty = true; };
 function renderSel() {
   const ss = selShapes(), ids = ['#selX', '#selY', '#selW', '#selH']; $('#selCount').textContent = ss.length + (ss.length && units(ss).length !== ss.length ? ' · ' + units(ss).length + ' obj.' : '');
   if (!S.editTp) $('#tpApply').textContent = 'Calculer sur la sélection (' + S.sel.size + ')';
@@ -3394,6 +3409,100 @@ function act(a, btn) {
 // ---------- fichiers ----------
 let DL = null;
 (async () => { try { if (window.claude && window.claude.use) DL = await window.claude.use('downloads'); } catch { DL = null; } })();
+// ---------- schémas explicatifs (sobres, monochromes + couleur d'accent) ----------
+const SVG64 = b => '<svg viewBox="0 0 64 44" aria-hidden="true">' + b + '</svg>';
+const SVG24 = b => '<svg viewBox="0 0 24 24" aria-hidden="true">' + b + '</svg>';
+// double flèche de cote
+const DIM = (x1, y1, x2, y2) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 2.6, w = 1.6, head = (x, y, s) => { const c = Math.cos(a) * s, d = Math.sin(a) * s; return 'M' + (x - c * h - d * w).toFixed(1) + ' ' + (y - d * h + c * w).toFixed(1) + 'L' + x + ' ' + y + 'L' + (x - c * h + d * w).toFixed(1) + ' ' + (y - d * h - c * w).toFixed(1); }; return '<path class="dm" d="M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2 + head(x2, y2, 1) + head(x1, y1, -1) + '"/>'; };
+// flèche de sens sur une trajectoire
+const ARW = (x, y, ang) => { const c = Math.cos(ang), s = Math.sin(ang), p = (dx, dy) => (x + dx * c - dy * s).toFixed(1) + ' ' + (y + dx * s + dy * c).toFixed(1); return '<path class="aw" d="M' + p(-3.4, -2.6) + 'L' + p(1.4, 0) + 'L' + p(-3.4, 2.6) + 'z"/>'; };
+const FLUTE = (x0, x1, y0, y1) => { let d = ''; for (let y = y0 + 4; y < y1 - 1; y += 5) d += 'M' + x0 + ' ' + (y + 2) + 'L' + x1 + ' ' + (y - 1.5); return '<path class="fl" d="' + d + '"/>'; };
+const ICO = {
+  type_profile: SVG24('<rect class="sm" x="8" y="8" width="8" height="8"/><rect class="sp" x="4" y="4" width="16" height="16" rx="4"/>'),
+  type_pocket: SVG24('<rect class="sm" x="3.5" y="3.5" width="17" height="17" rx="1"/><rect class="sp" x="7" y="7" width="10" height="10"/><path class="sp" d="M10.5 10.5h3v3h-3z"/>'),
+  type_vcarve: SVG24('<path class="sm" d="M2 7h6l4 11 4-11h6"/><path class="sp" d="M12 18V3"/>'),
+  type_drill: SVG24('<circle class="sm" cx="7.5" cy="12" r="3.5"/><circle class="sm" cx="16.5" cy="12" r="3.5"/><circle class="dt" cx="7.5" cy="12" r="1"/><circle class="dt" cx="16.5" cy="12" r="1"/>'),
+  side_out: SVG24('<rect class="sm" x="8" y="8" width="8" height="8"/><rect class="sp" x="4" y="4" width="16" height="16" rx="4"/>'),
+  side_in: SVG24('<rect class="sm" x="4" y="4" width="16" height="16"/><rect class="sp" x="8" y="8" width="8" height="8" rx="1"/>'),
+  side_on: SVG24('<rect class="sm" x="5" y="5" width="14" height="14" style="opacity:.45"/><rect class="sp sp2" x="5" y="5" width="14" height="14"/>'),
+};
+const BICO = {
+  boolU: SVG24('<path class="bf" d="M3 3h11v5.2A7 7 0 1 1 8.2 14H3z"/>'),
+  boolS: SVG24('<path class="bf" d="M3 3h11v5.2A7 7 0 0 0 8.2 14H3z"/><circle class="bo" cx="15" cy="15" r="7"/>'),
+  boolI: SVG24('<rect class="bo" x="3" y="3" width="11" height="11"/><circle class="bo" cx="15" cy="15" r="7"/><path class="bf" d="M8.2 14A7 7 0 0 1 14 8.2V14z"/>'),
+  offset: SVG24('<rect class="bo bs" x="8" y="8" width="8" height="8"/><rect class="bo bd" x="3.5" y="3.5" width="17" height="17" rx="4"/>'),
+  join: SVG24('<path class="bo bs" d="M3 19l8-8M13 11l8-6"/><circle class="bf" cx="12" cy="11" r="2.2"/>'),
+  close: SVG24('<path class="bo bs" d="M5 18V6h14v12"/><path class="bo bd" d="M5 18h14"/>'),
+  chamferAll: SVG24('<path class="bo bs" d="M4 20V10l6-6h10"/>'),
+  filletAll: SVG24('<path class="bo bs" d="M4 20v-8a8 8 0 0 1 8-8h8"/>'),
+  group: SVG24('<rect class="bo bd" x="2.5" y="2.5" width="19" height="19" rx="2"/><rect class="bo bs" x="6" y="6" width="6" height="6"/><circle class="bo bs" cx="15.5" cy="15.5" r="3"/>'),
+  ungroup: SVG24('<rect class="bo bs" x="3" y="3" width="7" height="7"/><circle class="bo bs" cx="17" cy="17" r="3.5"/>'),
+};
+const ILL = {
+  depth(F) {
+    if (F.type === 'vcarve') {
+      const st = +F.vstart > 0;
+      return SVG64('<path class="st" d="M3 10h14l9 20h10l9-20h16v30H3z"/>' + (st ? '<path class="ad" d="M3 15h58"/>' : '') + DIM(54, 10, 54, 30) + '<path class="tl" d="M26 0h10v4l-5 12-5-12z"/>');
+    }
+    if (F.type === 'drill') {
+      const pk = +F.peck > 0;
+      return SVG64('<path class="st" d="M3 12h22v20l6 5 6-5V12h24v28H3z"/><path class="tl" d="M26 0h10v20l-5 4-5-4z"/>' + FLUTE(26, 36, 0, 20) + (pk ? '<path class="ac" d="M44 14v16"/>' + ARW(44, 30, Math.PI / 2) + '<path class="ac" d="M49 30V18"/>' + ARW(49, 18, -Math.PI / 2) : '') + DIM(57, 12, 57, 37));
+    }
+    return SVG64('<path class="st" d="M3 14h16v16h24V14h18v26H3z"/><path class="tl" d="M26 0h10v30H26z"/>' + FLUTE(26, 36, 12, 30) + '<path class="ad" d="M19 19.5h24M19 25h24"/>' + DIM(52, 14, 52, 30));
+  },
+  allow() { return SVG64('<path class="st" d="M3 6h25v34H3z"/><rect class="al" x="28" y="6" width="5" height="34"/><path class="tl" d="M33 0h12v34H33z"/>' + FLUTE(33, 45, 8, 34) + DIM(28, 3, 33, 3) + '<path class="ad" d="M28 6v34"/>'); },
+  strat(F) {
+    const climb = F.dir !== 'conv';
+    if (F.strategy === 'raster') { let d = 'M10 9'; for (let k = 0; k < 6; k++) { const y = 9 + k * 5.2; d += (k ? 'L' + (k % 2 ? 54 : 10) + ' ' + y.toFixed(1) : '') + 'L' + (k % 2 ? 10 : 54) + ' ' + y.toFixed(1); } return SVG64('<rect class="sh" x="5" y="4" width="54" height="36"/><path class="ac" d="' + d + '"/>' + ARW(32, 9, climb ? 0 : Math.PI) + '<circle class="tc" cx="54" cy="9" r="4"/>'); }
+    return SVG64('<rect class="sh" x="5" y="4" width="54" height="36"/><rect class="ac" x="9.5" y="8.5" width="45" height="27" rx="1.5"/><rect class="ac" x="16" y="15" width="32" height="14"/><path class="ac" d="M22.5 21.5h19"/>' + ARW(32, 8.5, climb ? 0 : Math.PI) + '<circle class="tc" cx="9.5" cy="8.5" r="4"/>');
+  },
+  dir(F) {
+    if (F.type !== 'profile') return '';
+    const climb = F.dir !== 'conv', side = F.side || 'out';
+    // avalant : matière à gauche du sens d'avance (broche en sens horaire)
+    const ccw = side === 'in' ? !climb : climb, sh = side === 'in' ? '<rect class="sh" x="8" y="5" width="48" height="34"/>' : '<rect class="sh" x="18" y="12" width="28" height="20"/>';
+    const p = side === 'in' ? '<rect class="ac" x="13" y="10" width="38" height="24" rx="1.5"/>' : side === 'on' ? '<rect class="ac" x="18" y="12" width="28" height="20"/>' : '<rect class="ac" x="12" y="6" width="40" height="32" rx="6"/>';
+    const ty = side === 'in' ? 10 : side === 'on' ? 12 : 6;
+    return SVG64(sh + p + ARW(32, ty, ccw ? Math.PI : 0) + '<circle class="tc" cx="' + (side === 'in' ? 13 : side === 'on' ? 18 : 15) + '" cy="' + (ty + (side === 'out' ? 1.5 : 0)) + '" r="3.6"/>');
+  },
+  entry(F) {
+    const base = '<path class="st" d="M3 12h58v28H3z"/><path class="dl" d="M3 31h58"/>';
+    switch (F.entry) {
+      case 'rampzz': return SVG64(base + '<path class="ac" d="M8 2v10l30 10-28 9h48"/>' + ARW(52, 31, 0));
+      case 'ramp': return SVG64(base + '<path class="ac" d="M8 2v10l32 19h18"/>' + ARW(52, 31, 0));
+      case 'arc': return SVG64('<rect class="sh" x="3" y="26" width="58" height="14"/><path class="dl" d="M3 26h58"/><path class="ac" d="M10 6a18 18 0 0 0 18 18h30"/>' + ARW(48, 24, 0) + '<circle class="tc" cx="10" cy="6" r="3"/>');
+      case 'arcramp': return SVG64('<rect class="sh" x="3" y="26" width="58" height="14"/><path class="dl" d="M3 26h58"/><path class="ac" d="M10 6a18 18 0 0 0 18 18h30" stroke-dasharray="4 2"/>' + ARW(48, 24, 0) + '<circle class="tc" cx="10" cy="6" r="3"/>');
+      case 'helix': return SVG64(base + '<path class="ac" d="M24 2v10c10 1.5 10 4 0 5s-10 4 0 5 10 4 0 5-10 3 0 4h32"/>' + ARW(52, 31, 0));
+      default: return SVG64(base + '<path class="ac" d="M10 2v29h48"/>' + ARW(10, 22, Math.PI / 2) + ARW(52, 31, 0));
+    }
+  },
+  tabs() { return SVG64('<path class="sh" d="M3 10h58v26H3z" stroke-dasharray="3 2"/><path class="st" d="M24 26h16v10H24z"/>' + DIM(24, 22, 40, 22) + DIM(45, 26, 45, 36)); },
+  stock() { return SVG64('<path class="st" d="M8 16l22-8 26 8-22 8z"/><path class="st" d="M8 16l26 8v12L8 28z"/><path class="st st2" d="M34 24l22-8v12l-22 8z"/><text class="tx" x="45" y="42">X</text><text class="tx" x="14" y="39">Y</text><text class="tx" x="1" y="25">Z</text>'); },
+  zzero() { const top = (S.stock.originZ || 'top') !== 'bottom'; return SVG64('<rect class="st" x="10" y="10" width="46" height="20"/><path class="tb" d="M4 34h56"/><path class="zz" d="M8 ' + (top ? 10 : 30) + 'h50"/><circle class="af" cx="10" cy="' + (top ? 10 : 30) + '" r="2.4"/><text class="tx" x="1" y="' + (top ? 8 : 41) + '">Z0</text>'); },
+  flip() { const y = (S.stock.flip || 'x') === 'y'; return SVG64('<rect class="st" x="12" y="8" width="40" height="28"/>' + (y ? '<path class="dl" d="M32 3v38"/><path class="ac" d="M20 22c0-8 24-8 24 0"/>' + ARW(44, 22, Math.PI / 2) : '<path class="dl" d="M7 22h50"/><path class="ac" d="M26 12c-8 0-8 20 0 20"/>' + ARW(26, 32, 0))); },
+  tool() {
+    const t = S.tools.find(x => x.id === S.toolSel); if (!t) return '';
+    const sh = '<path class="tl" d="M27 1h10v14H27z"/>';
+    if (t.type === 'ball') return SVG64(sh + '<path class="tl" d="M26 15h12v18a6 6 0 0 1-12 0z"/>' + FLUTE(26, 38, 15, 33) + DIM(26, 42, 38, 42));
+    if (t.type === 'v') return SVG64(sh + '<path class="tl" d="M24 15h16l-8 26z"/>' + '<path class="dl" d="M32 41v-14"/>' + '<path class="ln" d="M44 41a12 12 0 0 0-8-12"/>' + DIM(24, 12, 40, 12));
+    if (t.type === 'drill') return SVG64(sh + '<path class="tl" d="M27 15h10v20l-5 5-5-5z"/>' + FLUTE(27, 37, 15, 35) + DIM(27, 43, 37, 43));
+    return SVG64(sh + '<path class="tl" d="M26 15h12v24H26z"/>' + FLUTE(26, 38, 15, 39) + DIM(26, 42, 38, 42));
+  },
+};
+function illRefresh() {
+  const F = S.form || newForm();
+  document.querySelectorAll('[data-ill]').forEach(el => { const f = ILL[el.dataset.ill]; if (!f) return; const h = f(F) || ''; if (el._h !== h) { el.innerHTML = h; el._h = h; } el.style.display = h ? '' : 'none'; if (el.parentElement.classList.contains('figrow')) el.parentElement.classList.toggle('nofig', !h); });
+}
+function icoInit() {
+  document.querySelectorAll('[data-pane="dessin"] .row button[data-act]').forEach(b => { const ic = BICO[b.dataset.act]; if (ic && !b.querySelector('svg')) b.insertAdjacentHTML('afterbegin', ic.replace('<svg', '<svg class="bico"')); });
+  document.querySelectorAll('.seg[data-f="type"] button, .seg[data-f="side"] button').forEach(b => { const k = (b.parentElement.dataset.f === 'type' ? 'type_' : 'side_') + b.value; if (ICO[k] && !b.querySelector('svg')) { b.insertAdjacentHTML('afterbegin', ICO[k]); b.parentElement.classList.add('ico'); } });
+}
+// panneau Dessin : une seule section ouverte à la fois (accordéon)
+function accInit() {
+  const blocks = [...document.querySelectorAll('[data-pane="dessin"] > details.blk')];
+  blocks.forEach(d => d.addEventListener('toggle', () => { if (d.open) blocks.forEach(o => { if (o !== d && o.open) o.open = false; }); }));
+}
+
 // ---------- touche de guitare ----------
 const FB_DEF = () => ({ L: 648, N: 22, Wn: 43, ref: '12', Wr: 52, over: 6, m: 2, dots: '3, 5, 7, 9, 15, 17, 19, 21', dots2: '12, 24', dia: 6, scale: true });
 const FB_IDS = { L: '#fbL', N: '#fbN', Wn: '#fbWn', ref: '#fbRef', Wr: '#fbWr', over: '#fbOver', m: '#fbM', dots: '#fbDots', dots2: '#fbDots2', dia: '#fbDia', scale: '#fbScale' };
@@ -3608,6 +3717,7 @@ function renderForm() {
     if (F.allow > 0 && F.type !== 'vcarve' && !(F.type === 'pocket' && F.rest) && !(F.type === 'profile' && F.side === 'on')) h += F.finish === 'last' ? ' Surépaisseur retirée à la dernière passe.' : ' Surépaisseur retirée par une passe de finition sur toute la hauteur.';
   }
   $('#tpHint').textContent = h;
+  illRefresh();
 }
 $('#tpForm').addEventListener('click', e => { const b = e.target.closest('.seg button'); if (!b) return; const k = b.parentElement.dataset.f, F = S.form; const prev = F[k]; F[k] = b.value;
   if (k === 'type' && prev !== b.value) { const okT = t => b.value === 'vcarve' ? t.type === 'v' : b.value === 'drill' ? t.type === 'drill' : (t.type === 'flat' || t.type === 'ball'); const cur = S.tools.find(t => t.id === F.toolId); if (!cur || !okT(cur)) { const t = S.tools.find(okT) || (b.value === 'drill' ? S.tools.find(t => t.type === 'flat') : null); if (t) F.toolId = t.id; } if (b.value === 'vcarve') F.depth = 0; else if (!(+F.depth > 0)) F.depth = b.value === 'pocket' ? 4 : b.value === 'drill' ? 10 : 6; }
@@ -3642,7 +3752,7 @@ function renderTools() {
   const t = S.tools.find(x => x.id === S.toolSel); $('#toolForm').hidden = !t; if (!t) return;
   $$('[data-t]').forEach(el => { el.value = t[el.dataset.t]; });
   $$('[data-tshow]').forEach(el => el.style.visibility = el.dataset.tshow.split(' ').includes(t.type) ? 'visible' : 'hidden'); $('#tAngLbl').textContent = t.type === 'drill' ? 'Angle de pointe (°)' : 'Angle du V (°)';
-  $('#toolCalc').textContent = toolCalcText(t);
+  $('#toolCalc').textContent = toolCalcText(t); illRefresh();
 }
 let tT = 0;
 function toolsChanged(soft) { LS.set('copeau.tools', JSON.stringify(S.tools)); if (!soft) renderTools(); renderForm(); clearTimeout(tT); tT = setTimeout(() => { commit(false); recomputeAll(); }, soft ? 350 : 0); }
@@ -3650,6 +3760,7 @@ $('#toolForm').addEventListener('input', e => { const k = e.target.dataset.t; if
   const li = $('#toolList .toolitem.on'); if (li) li.querySelector('b').textContent = t.name;
   $$('[data-tshow]').forEach(el => el.style.visibility = el.dataset.tshow.split(' ').includes(t.type) ? 'visible' : 'hidden'); $('#tAngLbl').textContent = t.type === 'drill' ? 'Angle de pointe (°)' : 'Angle du V (°)'; $('#toolCalc').textContent = toolCalcText(t); });
 $('#toolForm').addEventListener('change', () => renderTools());
+$('#toolForm').addEventListener('input', () => illRefresh());
 
 // ---------- panneau G-code ----------
 $('#mTcZ').addEventListener('change', e => { const v = +e.target.value; if (!isFinite(v)) return; S.machine.tcZ = v; autosave(); gcDirty = true; renderGcode(); });
@@ -4305,7 +4416,7 @@ function loadSample() {
   let loaded = false; const saved = LS.get('copeau.project');
   if (saved) { try { const o = JSON.parse(saved); if (o.shapes && o.shapes.length) { restore(saved); hist = [snapState()]; hi = 0; S.form = newForm(); renderForm(); loaded = true; } } catch (e) { console.warn(e); } }
   if (!loaded) loadSample();
-  bindImgPanel(); loadImgData();
+  bindImgPanel(); loadImgData(); icoInit(); accInit();
   renderTools(); renderSel(); renderLayers(); renderGuides(); renderImgPanel(); trStart(); requestAnimationFrame(fit);
 })();
 </script>
