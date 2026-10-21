@@ -3636,7 +3636,7 @@ function dRefresh() {
 // ---------- fenêtres flottantes (réglages des parcours et des outils) ----------
 function fwOpen(id) {
   const w = $('#' + id); if (!w.hidden) return;
-  let pos = null; try { pos = JSON.parse(LS.get('copo.fwin.' + id) || 'null'); } catch { }
+  let pos = null; try { pos = JSON.parse(LS.get('copo.fwin2.' + id) || 'null'); } catch { }
   const pr = document.querySelector('.panel').getBoundingClientRect();
   w.hidden = false; const r = w.getBoundingClientRect();
   let x = pos ? pos.x : pr.right + 10, y = pos ? pos.y : pr.top + 4;
@@ -3647,7 +3647,7 @@ function fwClose(id) { const w = $('#' + id); if (w) w.hidden = true; }
 document.querySelectorAll('.fwin-head').forEach(h => h.addEventListener('pointerdown', e => {
   if (e.target.closest('button')) return; const w = h.parentElement, r = w.getBoundingClientRect(), dx = e.clientX - r.left, dy = e.clientY - r.top; h.setPointerCapture(e.pointerId);
   const mv = ev => { const x = Math.max(4, Math.min(ev.clientX - dx, innerWidth - r.width - 4)), y = Math.max(4, Math.min(ev.clientY - dy, innerHeight - 40)); w.style.left = x + 'px'; w.style.top = y + 'px'; };
-  const up = () => { h.removeEventListener('pointermove', mv); h.removeEventListener('pointerup', up); try { LS.set('copo.fwin.' + w.id, JSON.stringify({ x: parseFloat(w.style.left), y: parseFloat(w.style.top) })); } catch { } };
+  const up = () => { h.removeEventListener('pointermove', mv); h.removeEventListener('pointerup', up); try { LS.set('copo.fwin2.' + w.id, JSON.stringify({ x: parseFloat(w.style.left), y: parseFloat(w.style.top) })); } catch { } };
   h.addEventListener('pointermove', mv); h.addEventListener('pointerup', up);
 }));
 function tpNew(type) {
