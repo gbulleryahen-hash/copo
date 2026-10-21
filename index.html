@@ -75,8 +75,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .dsec{display:grid;gap:8px;padding:2px 0 12px}.dsec[hidden]{display:none}.dsec-h{margin:0;font:600 12px var(--f-head);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px}
 .dempty{margin:4px 0 12px}.dempty[hidden],.toolblk[hidden]{display:none}
 .layersblk{border-top:1px solid var(--line);margin-top:6px}
+.langsw{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;flex:none}.langsw button{background:transparent;border:0;padding:3px 10px;font:600 12px var(--f-ui);color:var(--muted);cursor:pointer}.langsw button.on{background:var(--accent);color:var(--accent-ink)}.langsw button:not(.on):hover{color:var(--ink)}
 .fwin{position:fixed;z-index:55;top:72px;left:390px;width:380px;max-width:calc(100vw - 16px);max-height:calc(100dvh - 90px);display:grid;grid-template-rows:auto minmax(0,1fr);background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 18px 44px rgb(0 0 0 / .45)}
-.fwin[hidden]{display:none}.fwin-head{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 10px;border-bottom:1px solid var(--line);cursor:move;user-select:none;touch-action:none}
+.fwin[hidden]{display:none}.fwin-wide{width:560px}.fwin-ico svg{width:18px;height:18px;display:block;fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.fwin-body.fb-card{max-width:none}.fwin-body .row{justify-content:flex-end}.fwin-head{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 10px;border-bottom:1px solid var(--line);cursor:move;user-select:none;touch-action:none}
 .fwin-head b{flex:1;font:600 14px var(--f-ui)}.fwin-head .grip{width:10px;height:16px;background:radial-gradient(circle,var(--muted) 1.2px,transparent 1.4px) 0 0/5px 5px;opacity:.7}
 .fwin-x{width:30px;height:30px}.fwin-x svg{width:16px;height:16px}.fwin-body{overflow:auto;padding:10px 14px 14px;display:grid;gap:10px;min-height:0}
 @media (max-width:920px){.fwin{left:8px!important;right:8px;top:auto!important;bottom:8px;width:auto;max-height:72dvh}}
@@ -381,7 +382,6 @@ label.inl input{width:70px}
       </div></div>
       <div class="menu"><button class="mtop" aria-expanded="false">Aide</button><div class="mdrop" hidden>
         <a class="mlink" id="guideLink" href="guide.html#fr" target="_blank" rel="noopener">Mode d'emploi</a>
-        <hr><button data-act="lang" data-lang="fr" data-notr title="Interface en français">Français</button><button data-act="lang" data-lang="en" data-notr title="Interface en anglais">English</button>
         <hr><button data-act="bugOpen">Signaler un bug…</button><a class="mlink" href="https://github.com/gbulleryahen-hash/copo/issues" target="_blank" rel="noopener">Suggestions et bugs connus</a>
         <hr><button data-act="about">À propos de COPO</button>
       </div></div>
@@ -392,6 +392,7 @@ label.inl input{width:70px}
       <button data-act="redo" title="Rétablir (Ctrl+Y)" aria-label="Rétablir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h3"/></svg></button>
     </div>
     <div class="topstats" id="topstats"></div>
+    <div class="langsw" role="group" aria-label="Langue / Language"><button data-act="lang" data-lang="fr" data-notr title="Interface en français">FR</button><button data-act="lang" data-lang="en" data-notr title="Interface in English">EN</button></div>
   </header>
   <div id="libErr" class="banner" hidden>La bibliothèque de calcul des décalages n'a pas pu se charger : rechargez la page.</div>
 
@@ -701,9 +702,10 @@ label.inl input{width:70px}
     <div class="row"><a class="btnlink" href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">Lire la licence</a><button data-act="aboutClose" class="primary">Fermer</button></div>
   </div>
 </div>
-<div class="about" id="fb" hidden role="dialog" aria-modal="true" aria-labelledby="fbT">
-  <div class="about-card bug-card fb-card">
-    <div class="about-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9l20-2v10L2 15z"/><path d="M7 8.5v7M11 8.1v7.8M14.5 7.8v8.4M17.5 7.5v9"/></svg><div><b id="fbT">Touche de guitare</b><span>Contour, traits de frettes et repères, centrés sur le brut, le sillet à gauche.</span></div></div>
+<div class="fwin fwin-wide" id="fb" hidden role="dialog" aria-labelledby="fbT">
+  <div class="fwin-head"><span class="grip" aria-hidden="true"></span><span class="fwin-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9l20-2v10L2 15z"/><path d="M7 8.5v7M11 8.1v7.8M14.5 7.8v8.4M17.5 7.5v9"/></svg></span><b id="fbT">Touche de guitare</b><button class="iconbtn fwin-x" data-act="fbClose" title="Fermer" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="fwin-body fb-card">
+    <p class="hint">Contour, traits de frettes et repères, centrés sur le brut, le sillet à gauche.</p>
     <div class="g2">
       <label>Diapason (mm)<input data-u="len" type="number" id="fbL" step="0.5" min="100"></label>
       <label>Nombre de frettes<input type="number" id="fbN" step="1" min="1" max="36"></label>
@@ -719,7 +721,7 @@ label.inl input{width:70px}
     <canvas id="fbCv" aria-label="Aperçu de la touche"></canvas>
     <p class="hint mono" id="fbInfo"></p>
     <p class="hint">Distance frettes – bord : 0 = frettes traversantes. Les frettes sont des traits ouverts (profil « Sur la ligne » avec une fraise ou une lame de l'épaisseur de la rainure), les repères des cercles (poche ou perçage). Contour, frettes, repères et trait du diapason forment des groupes séparés.</p>
-    <div class="row"><button data-act="fbReset">Valeurs par défaut</button><button data-act="fbClose">Annuler</button><button data-act="fbMake" class="primary">Créer la touche</button></div>
+    <div class="row"><button data-act="fbReset">Valeurs par défaut</button><button data-act="fbMake" class="primary">Créer la touche</button></div>
   </div>
 </div>
 <div class="fwin" id="tpWin" hidden role="dialog" aria-labelledby="tpFormTitle">
@@ -807,9 +809,10 @@ label.inl input{width:70px}
           </div>
         </section>
 </div>
-<div class="about" id="il" hidden role="dialog" aria-modal="true" aria-labelledby="ilT">
-  <div class="about-card bug-card fb-card">
-    <div class="about-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h7l2 4 2-4h7"/><path d="M3 17h7l2-4 2 4h7"/></svg><div><b id="ilT">Incrustation en V (inlay)</b><span>Crée la poche femelle dans votre pièce et la pièce mâle à découper dans le bois d'incrustation.</span></div></div>
+<div class="fwin fwin-wide" id="il" hidden role="dialog" aria-labelledby="ilT">
+  <div class="fwin-head"><span class="grip" aria-hidden="true"></span><span class="fwin-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h7l2 4 2-4h7"/><path d="M3 17h7l2-4 2 4h7"/></svg></span><b id="ilT">Incrustation en V (inlay)</b><button class="iconbtn fwin-x" data-act="ilClose" title="Fermer" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="fwin-body fb-card">
+    <p class="hint">Crée la poche femelle dans votre pièce et la pièce mâle à découper dans le bois d'incrustation.</p>
     <p class="hint" id="ilSel"></p>
     <div class="g2">
       <label>Fraise en V<select id="ilTool"></select></label>
@@ -819,7 +822,7 @@ label.inl input{width:70px}
     </div>
     <p class="hint mono" id="ilInfo"></p>
     <p class="hint">La pièce mâle est le motif en miroir, entouré d'un cadre, placée à droite du motif sur un calque à part. Son parcours est créé masqué : pour l'usiner, affichez-le (œil) et masquez celui de la femelle, puis enregistrez le G-code. Collez le mâle retourné dans la femelle, puis rabotez ou poncez le surplus.</p>
-    <div class="row"><button data-act="ilClose">Annuler</button><button data-act="ilMake" class="primary">Créer l'incrustation</button></div>
+    <div class="row"><button data-act="ilMake" class="primary">Créer l'incrustation</button></div>
   </div>
 </div>
 <div class="about" id="bug" hidden role="dialog" aria-modal="true" aria-labelledby="bugT">
@@ -3377,9 +3380,9 @@ function act(a, btn) {
     case 'bugOpen': bugOpen(); return;
     case 'fbOpen': fbOpen(); return;
     case 'ilOpen': ilOpen(); return;
-    case 'ilClose': $('#il').hidden = true; return;
+    case 'ilClose': fwClose('il'); return;
     case 'ilMake': ilMake(); return;
-    case 'fbClose': $('#fb').hidden = true; return;
+    case 'fbClose': fwClose('fb'); return;
     case 'fbReset': fbFill(FB_DEF()); fbDraw(); return;
     case 'fbMake': fbMake(); return;
     case 'bugClose': $('#bug').hidden = true; return;
@@ -3673,7 +3676,7 @@ function fbGeom(o) {
   return { L, N, xEnd, scale, wN: +o.Wn, wE: w(xEnd), w12: w(L / 2), outline: [[0, -o.Wn / 2], [xEnd, -w(xEnd) / 2], [xEnd, w(xEnd) / 2], [0, o.Wn / 2]], frets, dots, f12: fx(12) };
 }
 function fbValid(o) { return o.L >= 100 && o.N >= 1 && o.Wn > 5 && o.Wr > 5; }
-function fbOpen() { fbFill(fbLoad()); $('#fb').hidden = false; requestAnimationFrame(fbDraw); }
+function fbOpen() { fbFill(fbLoad()); fwOpen('fb'); requestAnimationFrame(fbDraw); }
 function fbDraw() {
   const o = fbRead(), cv2 = $('#fbCv'), info = $('#fbInfo'); if (!fbValid(o)) { info.textContent = tr('Vérifiez les valeurs.'); return; }
   const G = fbGeom(o), ext = G.scale ? Math.max(G.xEnd, G.L) : G.xEnd, W = Math.max(200, cv2.parentElement.clientWidth - 44), pad = 10, k = (W - 2 * pad) / ext, Hmax = Math.max(G.wN, G.wE, G.scale ? G.wN + 8 : 0, G.scale ? Math.abs(G.scale.tick[0][1]) * 2 : 0), H = Math.round(Hmax * k + 2 * pad);
@@ -3697,7 +3700,7 @@ function fbMake() {
   for (const f of G.frets) add(mkShape([NODE(...T(f.x, f.y0)), NODE(...T(f.x, f.y1))], false, { g: gF }));
   for (const d of G.dots) { const c = T(d.x, d.y), ns = arcNodes(c, d.r, 0, 2 * Math.PI); const l = ns.pop(); ns[0].i = l.i; ns.forEach(n => n.sm = true); add(mkShape(ns, true, { g: gD })); }
   if (G.scale) { const gS = uid(); for (const ln of [G.scale.line, G.scale.nut, G.scale.tick]) add(mkShape(ln.map(q => NODE(...T(q[0], q[1]))), false, { g: gS })); }
-  $('#fb').hidden = true; commit(); renderSel(); fit(); setTool('select');
+  fwClose('fb'); commit(); renderSel(); fit(); setTool('select');
   toast(trf(G.scale ? 'Touche créée : contour, {f} frettes, {d} repères et trait du diapason (quatre groupes).' : 'Touche créée : contour, {f} frettes, {d} repères (trois groupes).', { f: G.frets.length, d: G.dots.length }) + (G.xEnd > S.stock.w ? ' ' + tr('Elle dépasse du brut : agrandissez-le dans l’onglet Projet.') : ''));
 }
 Object.values(FB_IDS).forEach(id => { const el = document.querySelector(id); if (el) { el.addEventListener('input', () => fbDraw()); el.addEventListener('change', () => fbDraw()); } });
@@ -3710,7 +3713,7 @@ function ilOpen() {
   let o = { D: 4, gap: 1, F: 4 }; try { o = { ...o, ...JSON.parse(LS.get('copo.inlay') || '{}') }; } catch { }
   if (o.tool && vt.some(t => t.id === o.tool)) sel.value = o.tool;
   $('#ilD').value = o.D; $('#ilGap').value = o.gap; $('#ilF').value = o.F; $('#ilSel').textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ss.length });
-  $('#il').hidden = false; ilInfo();
+  fwOpen('il'); ilInfo();
 }
 function ilVals() { const tool = S.tools.find(t => t.id === $('#ilTool').value), D = +$('#ilD').value, gap = Math.max(0, +$('#ilGap').value || 0), F = +$('#ilF').value; return { tool, D, gap, F, S: D - gap }; }
 function ilCheck(v) {
@@ -3735,7 +3738,7 @@ function ilMake() {
   const mb = bbox(made), frame = mkShape(rectNodes(mb.x0 - margin, mb.y0 - margin, mb.x1 + margin, mb.y1 + margin), true, { layer: lay.id, g });
   const male = { id: uid(), name: tr('Incrustation · mâle (bois d’incrustation)'), type: 'vcarve', toolId: v.tool.id, shapeIds: [frame.id, ...made.map(x => x.id)], p: { ...nf0, depth: v.F, vstart: v.S }, visible: false, face: 1 };
   computeTP(fem); computeTP(male); S.tps.push(fem, male); S.sel.clear(); made.forEach(m => S.sel.add(m.id)); S.sel.add(frame.id);
-  $('#il').hidden = true; commit(); gcDirty = true; renderLayers(); renderTpList(); renderSel(); draw();
+  fwClose('il'); commit(); gcDirty = true; renderLayers(); renderTpList(); renderSel(); draw();
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------

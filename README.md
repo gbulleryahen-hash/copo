@@ -16,7 +16,7 @@
 - G-code : GRBL, GRBL changement manuel (G53 + pause), Carbide Motion, Onefinity, LinuxCNC, Mach3/4, UCCNC, MASSO, post-processeur personnalisé ; arcs G2/G3
 - Fiche de gamme imprimable : vues 2D des faces, vues dimétriques de la simulation, origine, outils, parcours, vitesses, points de vigilance, liste de contrôle
 - Unités en millimètres ou en pouces (fractions possibles), avances en mm/min, mm/s ou in/min, G-code G21 ou G20
-- Interface en français et en anglais (menu Aide)
+- Interface en français et en anglais (boutons FR / EN en haut à droite)
 
 ## Usage hors ligne / Offline use
 Téléchargez le dossier complet (« Code › Download ZIP »), décompressez-le et ouvrez `index.html` : tout est fourni, rien à installer.
