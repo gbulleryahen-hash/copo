@@ -7,12 +7,12 @@
 - **Mode d'emploi / User guide :** `guide.html` · PDF : `COPO-mode-emploi-FR.pdf`, `COPO-user-guide-EN.pdf`
 
 ## Fonctions / Features
-- Dessin : rectangle, ellipse, polygone/étoile, arc, plume (Bézier), texte (aussi sur une courbe), nœuds, chanfreins, congés, ajuster, couper, joindre, booléens, réseau, calques, repères, cotes, images de référence, vectorisation d'image (contours), import/export SVG
-- Usinage : profil (extérieur, intérieur, sur la ligne, gauche/droite des lignes ouvertes), poche en anneaux ou en balayage, reprise de matière, V-carving par axe médian, perçage (débourrage, hélice)
+- Dessin : rectangle, ellipse, polygone/étoile, arc, plume (Bézier), texte (aussi sur une courbe), nœuds, chanfreins, congés, ajuster, couper, joindre, booléens, réseau, calques, repères, cotes, images de référence, vectorisation d'image (contours), import/export SVG, import DXF (calques, blocs, splines)
+- Usinage : profil (extérieur, intérieur, sur la ligne, gauche/droite des lignes ouvertes), poche en anneaux ou en balayage, reprise de matière, coins intérieurs en dogbone ou T-bone, V-carving par axe médian, perçage (débourrage, hélice)
 - Entrées en rampe aller-retour, rampe continue, arc, arc en rampe, hélice ; surépaisseur et passe de finition ; ponts d'attache automatiques ou manuels
 - Imbrication des pièces sur le panneau, usinage double face, aperçu 3D de l'usinage
 - Une soixantaine de polices à trait unique fournies (Hershey, EMS, Cutlings, Relief SingleLine, Routed Gothic), import de polices SVG ; catalogue avec aperçu : `fonts/apercu-polices.html`
-- G-code GRBL, GRBL changement manuel (G53 + pause), LinuxCNC/Mach3, arcs G2/G3
+- G-code : GRBL, GRBL changement manuel (G53 + pause), Carbide Motion, Onefinity, LinuxCNC, Mach3/4, UCCNC, MASSO, post-processeur personnalisé ; arcs G2/G3
 - Fiche de gamme imprimable : vues 2D des faces, vues dimétriques de la simulation, origine, outils, parcours, vitesses, points de vigilance, liste de contrôle
 - Unités en millimètres ou en pouces (fractions possibles), avances en mm/min, mm/s ou in/min, G-code G21 ou G20
 - Interface en français et en anglais (menu Aide)

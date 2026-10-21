@@ -193,7 +193,7 @@ footer p{max-width:none}
       <div><b>Polices à trait unique</b><span>Une soixantaine fournies (Hershey, EMS, Relief…) pour graver vite en une seule passe.</span></div>
       <div><b>Double face</b><span>Calques par face, retournement en X ou en Y, pause pour retourner la pièce.</span></div>
       <div><b>Aperçu 3D</b><span>Simulation de l'enlèvement de matière, face 1 et face 2, avec lecture animée.</span></div>
-      <div><b>G-code</b><span>GRBL, GRBL avec changement manuel (G53), LinuxCNC / Mach3. Arcs G2/G3.</span></div>
+      <div><b>G-code</b><span>GRBL, GRBL manuel (G53), Carbide Motion, Onefinity, LinuxCNC, Mach3/4, UCCNC, MASSO ou post-processeur personnalisé. Arcs G2/G3.</span></div>
       <div><b>Fiche de gamme</b><span>Fiche d'atelier imprimable : vues 2D et 3D, origine, outils, parcours, vitesses, contrôles.</span></div>
       <div><b>Millimètres ou pouces</b><span>Dessin, outils et avances en mm ou en pouces (fractions possibles), G-code en G21 ou G20.</span></div>
       <div><b>Français et anglais</b><span>Interface et mode d'emploi dans les deux langues, au choix dans le menu Aide.</span></div>
@@ -203,7 +203,7 @@ footer p{max-width:none}
     <h2 id="fr-etapes">Votre premier usinage en six étapes</h2>
     <ol class="steps">
       <li><div><b>Réglez le projet</b>Onglet <span class="ui">Projet</span> : dimensions et matière du brut, point d'origine X0 Y0, zéro Z (dessus du brut ou table), unités et machine.</div></li>
-      <li><div><b>Dessinez ou importez</b>Tracez avec les outils de gauche, importez un SVG (<span class="ui">Fichier › Importer un SVG…</span>) ou écrivez un texte.</div></li>
+      <li><div><b>Dessinez ou importez</b>Tracez avec les outils de gauche, importez un SVG ou un DXF (<span class="ui">Fichier › Importer un SVG ou un DXF…</span>) ou écrivez un texte.</div></li>
       <li><div><b>Vérifiez vos outils</b>Onglet <span class="ui">Outils</span> : diamètre, vitesse de broche, avance, vitesse de descente, profondeur de passe et recouvrement de chaque fraise.</div></li>
       <li><div><b>Créez les parcours</b>Sélectionnez les formes sur le plan, ouvrez l'onglet <span class="ui">Parcours</span>, choisissez Profil, Poche, V-carving ou Perçage, réglez puis cliquez sur <span class="ui">Calculer</span>.</div></li>
       <li><div><b>Contrôlez en 3D</b><span class="ui">Affichage › Aperçu 3D de l'usinage</span> montre le brut usiné. Rejouez l'usinage pour repérer une erreur de profondeur ou d'outil.</div></li>
@@ -249,6 +249,7 @@ footer p{max-width:none}
       <li><strong>Images de référence</strong> (<span class="ui">Fichier › Insérer une image…</span> ou glisser-déposer) : déplacez, redimensionnez et pivotez avec les poignées pour dessiner par-dessus. Elles ne sont jamais usinées.</li>
       <li><strong>Vectoriser une image</strong> (panneau Dessin › Images, image sélectionnée) : COPO trace les contours de l'image. Réglez le <em>seuil</em> (ce qui est plus sombre devient la forme ; « Seuil automatique » le calcule pour vous) et le <em>lissage</em> (contours plus doux, petits détails retirés), cochez <em>Inverser</em> pour contourner les zones claires. L'aperçu se met à jour en direct ; <span class="ui">Créer les contours</span> ajoute des formes fermées et groupées à l'emplacement de l'image, prêtes pour une poche, un profil ou un V-carving. Une image nette et bien contrastée (logo, dessin au trait, silhouette) donne le meilleur résultat.</li>
       <li><strong>SVG</strong> : import en millimètres avec courbes conservées ; export du dessin entier ou de la sélection.</li>
+      <li><strong>DXF</strong> (texte/ASCII, toutes versions) : lignes, polylignes avec arcs, cercles, arcs, ellipses, splines et blocs. L'unité du fichier est respectée (mm, cm, pouces…) ; un fichier sans unité est lu en millimètres. Les segments qui se touchent sont reliés en contours, fermés quand c'est possible, et chaque calque DXF devient un calque COPO. Les textes, cotes, hachures et objets 3D sont ignorés (le message indique lesquels).</li>
     </ul>
 
     <h2 id="fr-brut">Onglet Projet</h2>
@@ -271,7 +272,7 @@ footer p{max-width:none}
       <tbody>
         <tr><td>Type</td><td>Fraise droite, hémisphérique, en V (avec l'angle du V) ou foret (avec l'angle de pointe, 118° le plus souvent).</td></tr>
         <tr><td>Diamètre</td><td>Sert au calcul des décalages et des poches.</td></tr>
-        <tr><td>Numéro d'outil (T)</td><td>Écrit dans le G-code LinuxCNC / Mach3 (<code>T2 M6</code>).</td></tr>
+        <tr><td>Numéro d'outil (T)</td><td>Écrit dans le G-code des post-processeurs à changement d'outil (<code>T2 M6</code>, <code>M6 T2</code>).</td></tr>
         <tr><td>Vitesse de broche</td><td>En tr/min, écrite avec <code>M3</code>.</td></tr>
         <tr><td>Avance, vitesse de descente</td><td>En mm/min, pour la coupe et pour la plongée ou la rampe.</td></tr>
         <tr><td>Profondeur de passe</td><td>Profondeur maximale par passe ; un parcours peut l'écraser.</td></tr>
@@ -290,6 +291,8 @@ footer p{max-width:none}
     </ul>
     <h3>Passes, surépaisseur et sens de coupe</h3>
     <p>La profondeur totale est répartie en passes de la profondeur choisie. Une <strong>surépaisseur</strong> laisse un peu de matière sur les parois pendant l'ébauche ; elle est retirée à la dernière passe ou par une passe de finition sur toute la hauteur. Le sens de coupe est <em>avalant</em> ou en <em>opposition</em>.</p>
+    <h3>Coins intérieurs : dogbone et T-bone</h3>
+    <p>Une fraise ronde laisse un arrondi de son rayon dans les coins intérieurs : un tenon à angles vifs n'entre pas dans la mortaise. Pour les profils (extérieur ou intérieur) et les poches, l'option <strong>Coins intérieurs</strong> propose : <em>Arrondis</em> (normal), <em>Dogbone</em> (la fraise plonge en diagonale jusqu'à toucher le coin vif) ou <em>T-bone</em> (le dégagement se fait le long du côté le plus long, moins visible sur la face). Seuls les coins que la fraise ne peut pas atteindre sont traités ; le nombre de dégagements s'affiche dans le résumé du parcours.</p>
     <h3>Entrée de l'outil</h3>
     <div class="tbl"><table>
       <thead><tr><th>Entrée</th><th>Comportement</th></tr></thead>
@@ -338,7 +341,9 @@ footer p{max-width:none}
       <tbody>
         <tr><td>GRBL</td><td>Pause <code>M0</code> entre deux outils.</td></tr>
         <tr><td>GRBL manuel</td><td>Avant chaque outil, y compris le premier : remontée <code>G53 G0 Z-10</code> (valeur réglable) et pause <code>M0</code>. Remontée en <code>G53</code> aussi à la fin du programme.</td></tr>
-        <tr><td>LinuxCNC / Mach3</td><td><code>T… M6</code> avec le numéro d'outil, arcs en <code>G91.1</code>.</td></tr>
+        <tr><td>Carbide Motion, Onefinity</td><td><code>M6 T…</code> : le logiciel de pilotage demande de changer l'outil.</td></tr>
+        <tr><td>LinuxCNC, Mach3/4, UCCNC, MASSO</td><td><code>T… M6</code> avec le numéro d'outil, en-tête <code>G40 G49 G80</code>, arcs en <code>G91.1</code>. Fichier <code>.ngc</code> (LinuxCNC), <code>.tap</code> (Mach, UCCNC) ou <code>.nc</code>.</td></tr>
+        <tr><td>Personnalisé</td><td>Vous écrivez l'en-tête, le changement d'outil et la fin du programme, avec des variables : <code>{UNITS}</code>, <code>{SAFEZ}</code>, <code>{TCZ}</code>, <code>{T}</code>, <code>{S}</code>, <code>{D}</code>, <code>{TOOL}</code>. Extension du fichier et <code>G91.1</code> au choix.</td></tr>
       </tbody>
     </table></div>
 <pre><span class="c">(Mettre l'outil : Fraise droite 6 mm D6 - refaire le zero Z puis reprendre)</span>
@@ -354,7 +359,7 @@ M5
 G53 G0 Z-10
 G0 X0 Y0
 M30</pre>
-    <p>Le post-processeur, la vitesse des rapides (pour l'estimation du temps), le Z de sécurité, le Z de dégagement, les commentaires et les arcs G2/G3 se règlent dans l'onglet Projet, bloc Machine. Le fichier est enregistré en <code>.txt</code> : renommez-le en <code>.nc</code> ou <code>.gcode</code> si votre logiciel de pilotage l'exige. UGS, Candle et bCNC lisent aussi les <code>.txt</code>.</p>
+    <p>Le post-processeur, la vitesse des rapides (pour l'estimation du temps), le Z de sécurité, le Z de dégagement, les commentaires et les arcs G2/G3 se règlent dans l'onglet Projet, bloc Machine. Le fichier prend l'extension attendue par le post-processeur (<code>.nc</code>, <code>.tap</code>, <code>.ngc</code>).</p>
     <div class="note"><p>Vérifiez toujours le G-code par un passage à vide, outil au-dessus du brut, avant d'usiner.</p></div>
     <h3>Unités : millimètres ou pouces</h3>
     <p>Dans l'onglet Projet, bloc Unités, choisissez les <span class="ui">Unités de longueur</span> (millimètres ou pouces) et les <span class="ui">Unités d'avance</span> (mm/min, mm/s ou in/min). Le choix s'applique partout : dessin, règles, grille (1/16, 1/8, 1/4 et 1 pouce), coordonnées, cotes, outils, parcours et fiche de gamme. En pouces, une option affiche les valeurs en fractions (au 1/64) et une autre écrit le G-code en pouces (<code>G20</code>) pour les contrôleurs réglés ainsi.</p>
@@ -454,7 +459,7 @@ M30</pre>
       <div><b>Single-line fonts</b><span>About sixty included (Hershey, EMS, Relief…) for fast one-pass engraving.</span></div>
       <div><b>Double-sided</b><span>Layers per side, flip around X or Y, pause to turn the part over.</span></div>
       <div><b>3D preview</b><span>Material removal simulation, side 1 and side 2, with animated playback.</span></div>
-      <div><b>G-code</b><span>GRBL, GRBL with manual tool change (G53), LinuxCNC / Mach3. G2/G3 arcs.</span></div>
+      <div><b>G-code</b><span>GRBL, manual GRBL (G53), Carbide Motion, Onefinity, LinuxCNC, Mach3/4, UCCNC, MASSO or a custom post-processor. G2/G3 arcs.</span></div>
       <div><b>Setup sheet</b><span>Printable workshop sheet: 2D and 3D views, origin, tools, toolpaths, speeds, checks.</span></div>
       <div><b>Millimetres or inches</b><span>Drawing, tools and feeds in mm or inches (fractions available), G-code in G21 or G20.</span></div>
       <div><b>French and English</b><span>Interface and user guide in both languages, chosen from the Help menu.</span></div>
@@ -464,7 +469,7 @@ M30</pre>
     <h2 id="en-steps">Your first job in six steps</h2>
     <ol class="steps">
       <li><div><b>Set up the project</b><span class="ui">Project</span> tab: stock size and material, X0 Y0 origin point, Z zero (top of stock or table), units and machine.</div></li>
-      <li><div><b>Draw or import</b>Draw with the tools on the left, import an SVG (<span class="ui">File › Import an SVG…</span>) or type some text.</div></li>
+      <li><div><b>Draw or import</b>Draw with the tools on the left, import an SVG or DXF (<span class="ui">File › Import an SVG or DXF…</span>) or type some text.</div></li>
       <li><div><b>Check your tools</b><span class="ui">Tools</span> tab: diameter, spindle speed, feed rate, plunge rate, pass depth and stepover of each bit.</div></li>
       <li><div><b>Create the toolpaths</b>Select shapes on the canvas, open the <span class="ui">Toolpaths</span> tab, choose Profile, Pocket, V-carving or Drilling, adjust, then click <span class="ui">Calculate</span>.</div></li>
       <li><div><b>Check in 3D</b><span class="ui">View › 3D machining preview</span> shows the machined stock. Play the job back to spot a wrong depth or tool.</div></li>
@@ -510,6 +515,7 @@ M30</pre>
       <li><strong>Reference images</strong> (<span class="ui">File › Insert an image…</span> or drag and drop): move, resize and rotate them with the handles to trace over them. They are never machined.</li>
       <li><strong>Vectorize an image</strong> (Drawing panel › Images, image selected): COPO traces the outlines of the image. Set the <em>threshold</em> (anything darker becomes the shape; “Auto threshold” works it out for you) and the <em>smoothing</em> (softer outlines, small details removed), tick <em>Invert</em> to outline light areas. The preview updates live; <span class="ui">Create outlines</span> adds closed, grouped shapes where the image is, ready for a pocket, a profile or V-carving. A sharp, high-contrast image (logo, line drawing, silhouette) gives the best result.</li>
       <li><strong>SVG</strong>: import in millimetres with curves kept; export the whole drawing or the selection.</li>
+      <li><strong>DXF</strong> (text/ASCII, any version): lines, polylines with arcs, circles, arcs, ellipses, splines and blocks. The file's unit is respected (mm, cm, inches…); a file without a unit is read as millimetres. Touching segments are joined into outlines, closed when possible, and each DXF layer becomes a COPO layer. Text, dimensions, hatches and 3D objects are skipped (the message says which).</li>
     </ul>
 
     <h2 id="en-stock">Project tab</h2>
@@ -532,7 +538,7 @@ M30</pre>
       <tbody>
         <tr><td>Type</td><td>End mill, ball nose, V-bit (with the V angle) or drill bit (with the point angle, usually 118°).</td></tr>
         <tr><td>Diameter</td><td>Used to calculate offsets and pockets.</td></tr>
-        <tr><td>Tool number (T)</td><td>Written in LinuxCNC / Mach3 G-code (<code>T2 M6</code>).</td></tr>
+        <tr><td>Tool number (T)</td><td>Written in the G-code of tool-change post-processors (<code>T2 M6</code>, <code>M6 T2</code>).</td></tr>
         <tr><td>Spindle speed</td><td>In rpm, written with <code>M3</code>.</td></tr>
         <tr><td>Feed, plunge rate</td><td>In mm/min, for cutting and for plunging or ramping.</td></tr>
         <tr><td>Pass depth</td><td>Maximum depth per pass; a toolpath can override it.</td></tr>
@@ -551,6 +557,8 @@ M30</pre>
     </ul>
     <h3>Passes, allowance and cut direction</h3>
     <p>The total depth is split into passes of the chosen depth. An <strong>allowance</strong> leaves a little material on the walls while roughing; it is removed on the last pass or by a full-depth finishing pass. The cut direction is <em>climb</em> or <em>conventional</em>.</p>
+    <h3>Inside corners: dogbone and T-bone</h3>
+    <p>A round bit leaves a fillet of its radius in inside corners, so a square tenon will not fit its mortise. For profiles (outside or inside) and pockets, the <strong>Inside corners</strong> option offers: <em>Rounded</em> (normal), <em>Dogbone</em> (the bit moves diagonally until it touches the sharp corner) or <em>T-bone</em> (the relief runs along the longer side, less visible on the face). Only the corners the bit cannot reach are processed; the number of reliefs is shown in the toolpath summary.</p>
     <h3>Tool entry</h3>
     <div class="tbl"><table>
       <thead><tr><th>Entry</th><th>Behaviour</th></tr></thead>
@@ -599,7 +607,9 @@ M30</pre>
       <tbody>
         <tr><td>GRBL</td><td><code>M0</code> pause between two tools.</td></tr>
         <tr><td>GRBL manual</td><td>Before each tool, the first one included: retract with <code>G53 G0 Z-10</code> (adjustable) and <code>M0</code> pause. Also a <code>G53</code> retract at the end of the program.</td></tr>
-        <tr><td>LinuxCNC / Mach3</td><td><code>T… M6</code> with the tool number, arcs with <code>G91.1</code>.</td></tr>
+        <tr><td>Carbide Motion, Onefinity</td><td><code>M6 T…</code>: the control software asks you to change the tool.</td></tr>
+        <tr><td>LinuxCNC, Mach3/4, UCCNC, MASSO</td><td><code>T… M6</code> with the tool number, <code>G40 G49 G80</code> header, arcs with <code>G91.1</code>. <code>.ngc</code> file (LinuxCNC), <code>.tap</code> (Mach, UCCNC) or <code>.nc</code>.</td></tr>
+        <tr><td>Custom</td><td>You write the header, tool change and program end, with variables: <code>{UNITS}</code>, <code>{SAFEZ}</code>, <code>{TCZ}</code>, <code>{T}</code>, <code>{S}</code>, <code>{D}</code>, <code>{TOOL}</code>. File extension and <code>G91.1</code> are up to you.</td></tr>
       </tbody>
     </table></div>
 <pre><span class="c">(Load tool: End mill 6 mm D6 - set Z zero again then resume)</span>
@@ -615,7 +625,7 @@ M5
 G53 G0 Z-10
 G0 X0 Y0
 M30</pre>
-    <p>The post-processor, rapid speed (for the time estimate), safe Z, clearance Z, comments and G2/G3 arcs are set in the Project tab, Machine block. The file is saved as <code>.txt</code>: rename it to <code>.nc</code> or <code>.gcode</code> if your control software requires it. UGS, Candle and bCNC also read <code>.txt</code> files.</p>
+    <p>The post-processor, rapid speed (for the time estimate), safe Z, clearance Z, comments and G2/G3 arcs are set in the Project tab, Machine block. The file gets the extension the post-processor expects (<code>.nc</code>, <code>.tap</code>, <code>.ngc</code>).</p>
     <div class="note"><p>Always check the G-code with a dry run, tool above the stock, before cutting.</p></div>
     <h3>Units: millimetres or inches</h3>
     <p>In the Project tab, Units block, choose the <span class="ui">Length units</span> (millimetres or inches) and the <span class="ui">Feed units</span> (mm/min, mm/s or in/min). The choice applies everywhere: drawing, rulers, grid (1/16, 1/8, 1/4 and 1 inch), coordinates, dimensions, tools, toolpaths and setup sheet. In inches, one option shows values as fractions (to 1/64) and another writes the G-code in inches (<code>G20</code>) for controllers set up that way.</p>
