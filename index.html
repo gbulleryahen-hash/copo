@@ -3639,7 +3639,7 @@ function fwOpen(id) {
   let pos = null; try { pos = JSON.parse(LS.get('copo.fwin.' + id) || 'null'); } catch { }
   const pr = document.querySelector('.panel').getBoundingClientRect();
   w.hidden = false; const r = w.getBoundingClientRect();
-  let x = pos ? pos.x : Math.max(pr.right + 14, innerWidth - r.width - 18), y = pos ? pos.y : 64;
+  let x = pos ? pos.x : pr.right + 10, y = pos ? pos.y : pr.top + 4;
   x = Math.max(4, Math.min(x, innerWidth - r.width - 4)); y = Math.max(4, Math.min(y, innerHeight - 80));
   w.style.left = x + 'px'; w.style.top = y + 'px';
 }
