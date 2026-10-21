@@ -257,6 +257,13 @@ footer p{max-width:none}
       <li><strong>DXF</strong> (texte/ASCII, toutes versions) : lignes, polylignes avec arcs, cercles, arcs, ellipses, splines et blocs. L'unité du fichier est respectée (mm, cm, pouces…) ; un fichier sans unité est lu en millimètres. Les segments qui se touchent sont reliés en contours, fermés quand c'est possible, et chaque calque DXF devient un calque COPO. Les textes, cotes, hachures et objets 3D sont ignorés (le message indique lesquels).</li>
     </ul>
 
+    <h3>Coins pour tenons et mortaises : dogbone et T-bone</h3>
+    <p>Une fraise ronde laisse un arrondi de son rayon dans les coins : un tenon à angles vifs n'entre pas dans la mortaise. Le dégagement se dessine sur la forme, coin par coin, pour ne le mettre que là où il faut. Prenez l'outil <strong>Dégagement</strong> <kbd>B</kbd> (sous Congé), choisissez <em>Dogbone</em> (la fraise va en diagonale toucher le coin vif) ou <em>T-bone</em> (le dégagement prolonge le côté le plus long, moins visible) et le <strong>diamètre de la fraise</strong>, puis cliquez près des coins à dégager. Le bloc <span class="ui">Coins</span> du panneau Dessin propose les mêmes réglages et <span class="ui">Dégager tous les coins</span> pour toutes les formes sélectionnées. Le dégagement ne se fait qu'entre deux segments droits ; son diamètre a 0,1 mm de plus que la fraise pour qu'elle passe sans forcer. Usinez ensuite la forme normalement (poche, profil intérieur ou extérieur) avec cette fraise.</p>
+    <div class="duo">
+      <figure><img src="img/coin-dogbone.webp" alt="Poche rectangulaire avec un dogbone dessiné à chaque coin et son parcours." width="810" height="465" loading="lazy"><figcaption><strong>Dogbone</strong> : un arc du diamètre de la fraise, en diagonale dans chaque coin.</figcaption></figure>
+      <figure><img src="img/coin-tbone.webp" alt="Poche rectangulaire avec un T-bone dessiné à chaque coin et son parcours." width="810" height="465" loading="lazy"><figcaption><strong>T-bone</strong> : l'arc prolonge le côté le plus long.</figcaption></figure>
+    </div>
+
     <h2 id="fr-brut">Onglet Projet</h2>
     <figure><img src="img/fr-10-projet.webp" alt="Onglet Projet : résumé, brut, origine, double face, unités et machine." width="1800" height="1125" loading="lazy"><figcaption>L'onglet Projet regroupe tout ce qui se règle au début d'un travail. Le résumé en haut permet de tout vérifier d'un coup d'œil.</figcaption></figure>
     <p>L'onglet <span class="ui">Projet</span>, le premier du panneau de droite, s'ouvre tout seul quand vous créez un nouveau projet. Il contient :</p>
@@ -296,12 +303,6 @@ footer p{max-width:none}
     </ul>
     <h3>Passes, surépaisseur et sens de coupe</h3>
     <p>La profondeur totale est répartie en passes de la profondeur choisie. Une <strong>surépaisseur</strong> laisse un peu de matière sur les parois pendant l'ébauche ; elle est retirée à la dernière passe ou par une passe de finition sur toute la hauteur. Le sens de coupe est <em>avalant</em> ou en <em>opposition</em>.</p>
-    <h3>Coins intérieurs : dogbone et T-bone</h3>
-    <p>Une fraise ronde laisse un arrondi de son rayon dans les coins intérieurs : un tenon à angles vifs n'entre pas dans la mortaise. Pour les profils (extérieur ou intérieur) et les poches, l'option <strong>Coins intérieurs</strong> propose : <em>Arrondis</em> (normal), <em>Dogbone</em> (la fraise plonge en diagonale jusqu'à toucher le coin vif) ou <em>T-bone</em> (le dégagement se fait le long du côté le plus long, moins visible sur la face). Seuls les coins que la fraise ne peut pas atteindre sont traités ; le nombre de dégagements s'affiche dans le résumé du parcours.</p>
-    <div class="duo">
-      <figure><img src="img/coin-dogbone.webp" alt="Profil intérieur d'un rectangle en dogbone : la trajectoire part en diagonale vers chaque coin." width="534" height="278" loading="lazy"><figcaption><strong>Dogbone</strong> : la fraise va en diagonale toucher chaque coin vif.</figcaption></figure>
-      <figure><img src="img/coin-tbone.webp" alt="Profil intérieur d'un rectangle en T-bone : la trajectoire prolonge le côté long dans chaque coin." width="649" height="305" loading="lazy"><figcaption><strong>T-bone</strong> : le dégagement prolonge le côté le plus long.</figcaption></figure>
-    </div>
     <h3>Entrée de l'outil</h3>
     <div class="tbl"><table>
       <thead><tr><th>Entrée</th><th>Comportement</th></tr></thead>
@@ -549,6 +550,13 @@ M30</pre>
       <li><strong>DXF</strong> (text/ASCII, any version): lines, polylines with arcs, circles, arcs, ellipses, splines and blocks. The file's unit is respected (mm, cm, inches…); a file without a unit is read as millimetres. Touching segments are joined into outlines, closed when possible, and each DXF layer becomes a COPO layer. Text, dimensions, hatches and 3D objects are skipped (the message says which).</li>
     </ul>
 
+    <h3>Corners for tenons and mortises: dogbone and T-bone</h3>
+    <p>A round bit leaves a fillet of its radius in corners, so a square tenon will not fit its mortise. The relief is drawn on the shape, corner by corner, so it only goes where it is needed. Take the <strong>Relief</strong> tool <kbd>B</kbd> (below Fillet), choose <em>Dogbone</em> (the bit moves diagonally to touch the sharp corner) or <em>T-bone</em> (the relief extends the longer side, less visible) and the <strong>bit diameter</strong>, then click near the corners to relieve. The <span class="ui">Corners</span> block of the Drawing panel offers the same settings and <span class="ui">Relieve all corners</span> for every selected shape. Relief only works between two straight segments; its diameter is 0.1 mm larger than the bit so it fits without forcing. Then machine the shape as usual (pocket, inside or outside profile) with that bit.</p>
+    <div class="duo">
+      <figure><img src="img/coin-dogbone.webp" alt="Rectangular pocket with a dogbone drawn in each corner and its toolpath." width="810" height="465" loading="lazy"><figcaption><strong>Dogbone</strong>: an arc the size of the bit, diagonally in each corner.</figcaption></figure>
+      <figure><img src="img/coin-tbone.webp" alt="Rectangular pocket with a T-bone drawn in each corner and its toolpath." width="810" height="465" loading="lazy"><figcaption><strong>T-bone</strong>: the arc extends the longer side.</figcaption></figure>
+    </div>
+
     <h2 id="en-stock">Project tab</h2>
     <figure><img src="img/en-10-projet.webp" alt="Project tab: summary, stock, origin, double-sided, units and machine." width="1800" height="1125" loading="lazy"><figcaption>The Project tab gathers everything you set at the start of a job. The summary at the top lets you check it all at a glance.</figcaption></figure>
     <p>The <span class="ui">Project</span> tab, first in the right panel, opens by itself when you create a new project. It contains:</p>
@@ -588,12 +596,6 @@ M30</pre>
     </ul>
     <h3>Passes, allowance and cut direction</h3>
     <p>The total depth is split into passes of the chosen depth. An <strong>allowance</strong> leaves a little material on the walls while roughing; it is removed on the last pass or by a full-depth finishing pass. The cut direction is <em>climb</em> or <em>conventional</em>.</p>
-    <h3>Inside corners: dogbone and T-bone</h3>
-    <p>A round bit leaves a fillet of its radius in inside corners, so a square tenon will not fit its mortise. For profiles (outside or inside) and pockets, the <strong>Inside corners</strong> option offers: <em>Rounded</em> (normal), <em>Dogbone</em> (the bit moves diagonally until it touches the sharp corner) or <em>T-bone</em> (the relief runs along the longer side, less visible on the face). Only the corners the bit cannot reach are processed; the number of reliefs is shown in the toolpath summary.</p>
-    <div class="duo">
-      <figure><img src="img/coin-dogbone.webp" alt="Inside profile of a rectangle with dogbones: the path goes diagonally into each corner." width="534" height="278" loading="lazy"><figcaption><strong>Dogbone</strong>: the bit moves diagonally to touch each sharp corner.</figcaption></figure>
-      <figure><img src="img/coin-tbone.webp" alt="Inside profile of a rectangle with T-bones: the path extends the long side into each corner." width="649" height="305" loading="lazy"><figcaption><strong>T-bone</strong>: the relief extends the longer side.</figcaption></figure>
-    </div>
     <h3>Tool entry</h3>
     <div class="tbl"><table>
       <thead><tr><th>Entry</th><th>Behaviour</th></tr></thead>
