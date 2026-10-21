@@ -60,6 +60,12 @@ main{min-width:0;max-width:900px}
 @media (max-width:980px){.wrap{grid-template-columns:minmax(0,1fr);gap:20px}.toc{position:static;max-height:none}.toc ol{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}}
 
 .hero{display:grid;gap:16px;margin-bottom:40px}
+.links{display:grid;gap:8px;margin:6px 0 0;max-width:62ch}
+.links a{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;padding:10px 14px;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;background:var(--surface);color:var(--ink);text-decoration:none}
+.links a:hover{border-color:var(--accent)}
+.links b{font:600 15px var(--f-body);min-width:12ch}
+.links span{font:500 14px var(--f-mono);color:var(--accent);overflow-wrap:anywhere}
+@media print{.links{grid-template-columns:1fr 1fr;max-width:none}.links a{padding:7px 10px;display:block}.links b{display:block;font-size:12px}.links span{font-size:11px}}
 .eyebrow{font:600 13px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--chip)}
 h1{font:700 clamp(40px,6vw,64px)/1 var(--f-display);letter-spacing:.01em;margin:0;text-wrap:balance}
 .lede{font-size:20px;line-height:1.5;max-width:62ch;margin:0;color:var(--ink)}
@@ -168,8 +174,12 @@ footer p{max-width:none}
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
       <ul class="meta"><li>Version 1.0</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <div class="links">
+        <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
+        <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
+      </div>
     </section>
-    <figure><img src="img/fr-01-interface.webp" alt="Fenêtre de COPO avec le projet d'exemple : outils à gauche, plan de travail au centre, panneau Dessin à droite." width="1800" height="1125"><figcaption>Le projet d'exemple : le texte COPO en V-carving, un filet décoratif à la fraise hémisphérique, deux perçages au foret, un détourage avec ponts d'attache et deux poches sur la face 2. Les parcours s'affichent en couleur sur le brut.</figcaption></figure>
+    <figure><img src="img/fr-01-interface.webp" alt="Fenêtre de COPO avec le projet d'exemple : outils à gauche, plan de travail au centre, panneau Dessin à droite." width="1800" height="1125"><figcaption>Le projet d'exemple : le texte COPO en V-carving, une phrase en police à trait unique sur une courbe, un filet décoratif à la fraise hémisphérique, deux perçages au foret, un détourage avec ponts d'attache et deux poches sur la face 2. Les parcours s'affichent en couleur sur le brut.</figcaption></figure>
 
     <h2 id="fr-bref" class="pb">En bref</h2>
     <div class="features">
@@ -226,7 +236,7 @@ footer p{max-width:none}
       <li><strong>Chanfrein</strong> <kbd>K</kbd> et <strong>Congé</strong> <kbd>F</kbd> sur un coin, ou sur tous les coins vifs via le bloc <span class="ui">Coins</span>.</li>
       <li><strong>Ajuster</strong> <kbd>X</kbd> supprime la portion de vecteur entre deux intersections ; <strong>Couper</strong> <kbd>U</kbd> coupe un vecteur à l'endroit cliqué.</li>
       <li><strong>Souder, Soustraire, Intersection</strong> pour les opérations booléennes ; <strong>Joindre</strong> et <strong>Fermer</strong> pour les vecteurs ouverts ; <strong>Contour décalé</strong> intérieur ou extérieur.</li>
-      <li><strong>Aligner et répartir</strong> : un seul objet s'aligne sur le brut, plusieurs s'alignent entre eux.</li>
+      <li><strong>Aligner et répartir</strong> : choisissez la référence dans « Aligner sur ». <em>La sélection</em> : un seul objet s'aligne sur le brut, plusieurs s'alignent entre eux. <em>Le premier objet sélectionné</em> : il ne bouge pas et les autres s'alignent sur lui ; Répartir les place à sa suite, dans l'ordre où vous les avez sélectionnés, avec l'espacement indiqué. <em>Le brut</em> : alignement sur les bords du brut, répartition sur toute sa largeur ou sa hauteur.</li>
       <li><strong>Copie en réseau</strong> en grille ou circulaire, <strong>miroirs</strong>, <strong>rotation</strong>, <strong>ordre de superposition</strong>.</li>
       <li><strong>Position et taille exactes</strong> : bloc <span class="ui">Sélection</span>, avec un point de référence choisi parmi neuf (coins, milieux, centre).</li>
     </ul>
@@ -420,8 +430,12 @@ M30</pre>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
       <ul class="meta"><li>Version 1.0</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <div class="links">
+        <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
+        <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
+      </div>
     </section>
-    <figure><img src="img/en-01-interface.webp" alt="COPO window with the sample project: tools on the left, workspace in the middle, Drawing panel on the right." width="1800" height="1125"><figcaption>The sample project: COPO text V-carved, a decorative flourish with a ball nose bit, two drilled holes, a cut-out with tabs and two pockets on side 2. Toolpaths are shown in color on the stock.</figcaption></figure>
+    <figure><img src="img/en-01-interface.webp" alt="COPO window with the sample project: tools on the left, workspace in the middle, Drawing panel on the right." width="1800" height="1125"><figcaption>The sample project: COPO text V-carved, a line of single-line text on a curve, a decorative flourish with a ball nose bit, two drilled holes, a cut-out with tabs and two pockets on side 2. Toolpaths are shown in color on the stock.</figcaption></figure>
 
     <h2 id="en-glance" class="pb">At a glance</h2>
     <div class="features">
@@ -478,7 +492,7 @@ M30</pre>
       <li><strong>Chamfer</strong> <kbd>K</kbd> and <strong>Fillet</strong> <kbd>F</kbd> on one corner, or on every sharp corner from the <span class="ui">Corners</span> block.</li>
       <li><strong>Trim</strong> <kbd>X</kbd> deletes the part of a vector between two intersections; <strong>Cut</strong> <kbd>U</kbd> splits a vector where you click.</li>
       <li><strong>Weld, Subtract, Intersect</strong> for boolean operations; <strong>Join</strong> and <strong>Close</strong> for open vectors; inside or outside <strong>Offset contour</strong>.</li>
-      <li><strong>Align and distribute</strong>: a single object aligns to the stock, several align to each other.</li>
+      <li><strong>Align and distribute</strong>: choose the reference in “Align to”. <em>The selection</em>: a single object aligns to the stock, several align to each other. <em>The first selected object</em>: it stays put and the others align to it; Distribute places them after it, in the order you selected them, with the given spacing. <em>The stock</em>: aligns to the stock edges and distributes across its full width or height.</li>
       <li><strong>Array copy</strong> in a grid or a circle, <strong>mirrors</strong>, <strong>rotation</strong>, <strong>stacking order</strong>.</li>
       <li><strong>Exact position and size</strong>: <span class="ui">Selection</span> block, with a reference point chosen among nine (corners, middles, center).</li>
     </ul>
