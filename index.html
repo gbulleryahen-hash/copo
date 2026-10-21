@@ -65,6 +65,16 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .palette button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
 .palette .psep{height:1px;background:var(--line);margin:3px 4px}
 .stage{display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:var(--panel);border:1px solid var(--line);border-radius:8px;min-width:0;min-height:0;overflow:hidden}
+.toolblk{position:sticky;top:0;z-index:3;box-shadow:0 6px 10px -8px rgb(0 0 0 / .5);display:grid;gap:8px;padding:10px 12px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;background:var(--raised);margin-bottom:6px}
+.tb-head{display:flex;align-items:center;gap:8px}.tb-head b{font:700 14px var(--f-ui)}.tb-eye{font-size:12px;color:var(--muted)}.tb-ico svg{width:20px;height:20px;display:block;color:var(--accent)}
+.tb-wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}.tb-wrap:has(.tb-body:empty){display:none}.tb-fig{width:64px}
+.tb-body{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:flex-end;min-width:0}.tb-body:empty{display:none}
+.tb-body label:not(.chk){display:grid;gap:3px;font-size:12.5px;color:var(--muted)}.tb-body input[type=number],.tb-body input[type=text]{width:96px}
+.tb-body .nebar,.tb-body .coordin{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:flex-end}.tb-body .nebar label.inl{display:flex;align-items:center;gap:5px}
+.tb-body button{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:5px 9px;color:var(--ink);cursor:pointer}.tb-body button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.tb-body .meas{font:500 13px var(--f-mono);color:var(--ink)}.tb-body .fp-mini{max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#toolBlk .hint{margin:0}
+.optbar[hidden]{display:none}.stage.nobar{grid-template-rows:minmax(0,1fr) auto}
 .optbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:7px 12px;border-bottom:1px solid var(--line);min-height:40px;font-size:13px}
 .optbar .tname{font:600 12px var(--f-head);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
 .optbar .hint{color:var(--muted)}
@@ -111,7 +121,7 @@ input[type=checkbox]{accent-color:var(--accent)}
 .ill .dm{fill:none;stroke:var(--ink);stroke-width:.9;stroke-linejoin:round}
 .ill .ac{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}.ill .ad{fill:none;stroke:var(--accent);stroke-width:1.1;stroke-dasharray:3 2}
 .ill .aw,.ill .af{fill:var(--accent)}.ill .tc{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1}.ill .al{fill:var(--accent);opacity:.35}
-.ill .tb{stroke:currentColor;stroke-width:2.5}.ill .zz{stroke:var(--accent);stroke-width:2}.ill .tx{fill:var(--ink);font:600 7px var(--f-mono)}
+.ill .tb{stroke:currentColor;stroke-width:2.5}.ill .vk{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round}.ill .hide{display:none}.ill .zz{stroke:var(--accent);stroke-width:2}.ill .tx{fill:var(--ink);font:600 7px var(--f-mono)}
 .bico{width:16px;height:16px;flex:none}.bico .bf{fill:var(--accent);opacity:.75}.bico .bo{fill:none;stroke:currentColor;stroke-width:1.6}.bico .bs{stroke-width:2}.bico .bd{stroke:var(--accent);stroke-dasharray:3 2}
 .seg.ico button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px 6px;line-height:1.15}
 .seg.ico svg{width:22px;height:22px;flex:none}.seg svg .sm{fill:none;stroke:currentColor;stroke-width:1.5}.seg svg .sp{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-dasharray:2.6 2}
@@ -480,6 +490,11 @@ label.inl input{width:70px}
         </section>
       </div>
       <div class="pane" data-pane="dessin">
+        <section class="blk toolblk" id="toolBlk" aria-live="polite">
+          <div class="tb-head"><span class="tb-ico" id="tbIco" aria-hidden="true"></span><span class="tb-eye">Outil</span><b id="tbName"></b></div>
+          <div class="tb-wrap"><div class="tb-body" id="tbBody"></div><span class="ill tb-fig" data-ill="curtool"></span></div>
+          <p class="hint" id="tbHint"></p>
+        </section>
         <details class="blk"><summary>Calques</summary>
           <ul class="layers" id="layerList"></ul>
           <div class="row"><button data-act="layerAdd">Nouveau calque</button><button data-act="layerMove">Sélection → calque actif</button></div>
@@ -2278,14 +2293,24 @@ function setTool(t) {
   if (t === 'chamfer') extra = '<label>Distance (mm)<input data-u="len" type="number" data-k="chamfer" step="0.5" min="0"></label>';
   if (t === 'fillet') extra = '<label>Rayon (mm)<input data-u="len" type="number" data-k="fillet" step="0.5" min="0"></label>';
   if (t === 'dogbone') extra = '<label>Type<select data-k="dogKind"><option value="dogbone">Dogbone</option><option value="tbone">T-bone</option></select></label><label>Diamètre de la fraise (mm)<input data-u="len" type="number" data-k="dogDia" step="0.1" min="0.1"></label>';
-  if (t === 'text') extra = '<label>Texte<input type="text" data-k="text" style="width:140px"></label><label>Hauteur (mm)<input data-u="len" type="number" data-k="textH" step="1" min="1"></label><label>Placement<select data-k="textMode"><option value="line">Ligne droite</option><option value="curve">Sur une courbe</option></select></label>' + (S.ui.textMode === 'curve' ? '<label>Côté<select data-k="textSide"><option value="up">Au-dessus</option><option value="down">En dessous</option></select></label><label>Espacement (mm)<input data-u="len" type="number" data-k="textSpace" step="0.5"></label>' : '') + '<button data-act="fpGoto" class="fp-mini">' + (S.font ? escHtml(S.fontLabel || 'Police') : 'Choisir une police…') + '</button>';
+  if (t === 'text') extra = '<label>Placement<select data-k="textMode"><option value="line">Ligne droite</option><option value="curve">Sur une courbe</option></select></label>' + (S.ui.textMode === 'curve' ? '<label>Côté<select data-k="textSide"><option value="up">Au-dessus</option><option value="down">En dessous</option></select></label><label>Espacement (mm)<input data-u="len" type="number" data-k="textSpace" step="0.5"></label>' : '') + '<button data-act="fpGoto" class="fp-mini">' + (S.font ? escHtml(S.fontLabel || 'Police') : 'Choisir une police…') + '</button>';
   if (t === 'poly') extra = '<span class="coordin"><select id="ciMode" aria-label="Mode de saisie"><option value="abs">Absolu</option><option value="rel">Relatif</option><option value="pol">Polaire</option></select><label><span id="ciL1">X</span><input data-u="len" type="number" id="ciA" step="0.1"></label><label><span id="ciL2">Y</span><input data-u="len" type="number" id="ciB" step="0.1"></label><button data-act="ciAdd" class="primary">Ajouter le point</button><button data-act="ciClose">Fermer</button><button data-act="ciEnd">Terminer</button></span>';
   if (t === 'nodes') extra = '<span class="nebar"><label class="inl">X<input data-u="len" type="number" id="neX" step="0.1"></label><label class="inl">Y<input data-u="len" type="number" id="neY" step="0.1"></label><button data-act="neSmooth">Lisse</button><button data-act="neCorner">Coin vif</button><button data-act="neLine">Segment droit</button><button data-act="neCurve">Segment courbe</button><button data-act="neAdd">Ajouter</button><button data-act="neDel">Supprimer</button><button data-act="neSplit">Couper</button><button data-act="neClose">Ouvrir / fermer</button></span>';
   if (t === 'measure') extra = '<span class="mono meas" id="measOut">Glissez sur le plan</span>';
   if (t === 'tabedit') extra = '<span class="mono meas" id="tabCount"></span><button data-act="tabDone" class="primary">Terminer</button>';
-  ob.innerHTML = '<span class="tname">' + TNAME[t] + '</span>' + extra + '<span class="hint">' + HINTS[t] + '</span>';
-  bindK(ob); if (t === 'tabedit') tabCountUi();
-  if (t === 'poly') { const m = $('#ciMode'); m.value = S.ui.ciMode || 'abs'; m.onchange = () => { S.ui.ciMode = m.value; ciLabels(); }; ciLabels(); ob.querySelectorAll('#ciA,#ciB').forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); if (e.target.id === 'ciA') { $('#ciB').focus(); $('#ciB').select(); } else act('ciAdd'); } })); }
+  // réglages de l'outil : en tête du panneau Dessin ; la barre au-dessus du plan ne sert plus qu'au placement des ponts
+  const inBar = t === 'tabedit', wasHidden = ob.hidden;
+  if (inBar) { ob.innerHTML = '<span class="tname">' + TNAME[t] + '</span>' + extra + '<span class="hint">' + HINTS[t] + '</span>'; ob.hidden = false; bindK(ob); tabCountUi(); }
+  else {
+    ob.hidden = true; ob.innerHTML = '';
+    const pb = document.querySelector('.palette button[data-tool="' + t + '"]'); $('#tbIco').innerHTML = pb ? (pb.querySelector('svg') || {}).outerHTML || '' : '';
+    $('#tbName').textContent = TNAME[t] || t; $('#tbBody').innerHTML = extra; $('#tbHint').textContent = HINTS[t] || ''; bindK($('#tbBody'));
+    if (!['select', 'pan'].includes(t)) { setTab('dessin'); if (t === 'text') { const d = $('#textBlk'); if (d) d.open = true; } else if (t === 'dim') { const d = [...document.querySelectorAll('[data-pane="dessin"] > details.blk')].find(x => /Repères|Guides/.test(x.querySelector('summary').textContent) || x.querySelector('[data-act="dimClear"]')); if (d) d.open = true; } }
+    illRefresh();
+  }
+  const stg = ob.closest('.stage'); if (stg) stg.classList.toggle('nobar', ob.hidden);
+  if (wasHidden !== ob.hidden) requestAnimationFrame(resize);
+  if (t === 'poly') { const m = $('#ciMode'); m.value = S.ui.ciMode || 'abs'; m.onchange = () => { S.ui.ciMode = m.value; ciLabels(); }; ciLabels(); document.querySelectorAll('#ciA,#ciB').forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); if (e.target.id === 'ciA') { $('#ciB').focus(); $('#ciB').select(); } else act('ciAdd'); } })); }
   if (t === 'nodes') { ['#neX', '#neY'].forEach(id => $(id).addEventListener('change', neFromInputs)); syncNe(); }
   hoverCorner = null; hoverEdge = null; cv.style.cursor = t === 'pan' ? 'grab' : (t === 'select' || t === 'nodes') ? 'default' : 'crosshair'; draw();
 }
@@ -2293,7 +2318,7 @@ $$('.palette button').forEach(b => b.onclick = () => setTool(b.dataset.tool));
 function bindK(root = document) { root.querySelectorAll('[data-k]').forEach(el => { if (el.type === 'checkbox') el.checked = !!S.ui[el.dataset.k]; else el.value = S.ui[el.dataset.k]; }); arrVis(); }
 function readK(el) { return el.type === 'checkbox' ? el.checked : el.type === 'number' ? +el.value : el.value; }
 document.addEventListener('input', e => { const k = e.target.dataset && e.target.dataset.k; if (!k) return; S.ui[k] = readK(e.target); $$('[data-k="' + k + '"]').forEach(o => { if (o !== e.target) { if (o.type === 'checkbox') o.checked = e.target.checked; else o.value = e.target.value; } }); if (k === 'arrMode') arrVis(); });
-document.addEventListener('change', e => { const k = e.target.dataset && e.target.dataset.k; if (k) { S.ui[k] = readK(e.target); if (k === 'textMode' && S.ui.tool === 'text') setTimeout(() => setTool('text'), 0); if (k === 'arrMode') arrVis(); } });
+document.addEventListener('change', e => { const k = e.target.dataset && e.target.dataset.k; if (k) { S.ui[k] = readK(e.target); if (typeof illRefresh === 'function') illRefresh(); if (k === 'textMode' && S.ui.tool === 'text') setTimeout(() => setTool('text'), 0); if (k === 'arrMode') arrVis(); } });
 function arrVis() { $$('[data-arr]').forEach(el => el.hidden = el.dataset.arr !== S.ui.arrMode); }
 
 // ---------- accrochage ----------
@@ -3438,7 +3463,17 @@ const BICO = {
   group: SVG24('<rect class="bo bd" x="2.5" y="2.5" width="19" height="19" rx="2"/><rect class="bo bs" x="6" y="6" width="6" height="6"/><circle class="bo bs" cx="15.5" cy="15.5" r="3"/>'),
   ungroup: SVG24('<rect class="bo bs" x="3" y="3" width="7" height="7"/><circle class="bo bs" cx="17" cy="17" r="3.5"/>'),
 };
+const CURFIG = {
+  chamfer: () => SVG64('<path class="dl" d="M10 22V10h12"/><path class="vk" d="M10 40V22l12-12h34"/>' + DIM(4, 22, 4, 40).replace('dm', 'dm hide') + DIM(14, 26, 26, 14)),
+  fillet: () => SVG64('<path class="dl" d="M10 26V10h16"/><path class="vk" d="M10 40V26a16 16 0 0 1 16-16h30"/><path class="dm" d="M26 26l-11.3-11.3"/><circle class="af" cx="26" cy="26" r="1.4"/>'),
+  dogbone: () => (S.ui.dogKind === 'tbone'
+    ? SVG64('<path class="dl" d="M10 24V10h10"/><circle class="tc" cx="10" cy="17" r="7"/><path class="vk" d="M10 40V24A7 7 0 0 1 10 10H56"/>')
+    : SVG64('<path class="dl" d="M10 20V10h10"/><circle class="tc" cx="14.95" cy="14.95" r="7"/><path class="vk" d="M10 40V19.9A7 7 0 1 1 19.9 10H56"/>')),
+  polygon: () => S.ui.polyStar ? SVG64('<path class="st" d="M32 3l6.2 12.6 13.8 2-10 9.8 2.4 13.8L32 34.7l-12.4 6.5 2.4-13.8-10-9.8 13.8-2z"/>') : SVG64('<path class="st" d="M32 3l17 9.8v19.6L32 42 15 32.4V12.8z"/>'),
+  rect: () => S.ui.rectCorner === 'fillet' ? SVG64('<rect class="st" x="8" y="8" width="48" height="30" rx="7"/>') : S.ui.rectCorner === 'chamfer' ? SVG64('<path class="st" d="M15 8h34l7 7v16l-7 7H15l-7-7V15z"/>') : SVG64('<rect class="st" x="8" y="8" width="48" height="30"/>'),
+};
 const ILL = {
+  curtool() { const f = CURFIG[S.ui.tool]; return f ? f() : ''; },
   depth(F) {
     if (F.type === 'vcarve') {
       const st = +F.vstart > 0;

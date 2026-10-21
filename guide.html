@@ -220,7 +220,7 @@ footer p{max-width:none}
     <ul>
       <li><strong>Barre de menus</strong> : Fichier, Édition, Objet, Affichage, Usinage et Aide. Le menu Aide ouvre ce mode d'emploi, change la langue et affiche la licence.</li>
       <li><strong>Outils de dessin</strong>, à gauche. Chaque outil a une lettre de raccourci, indiquée dans son infobulle.</li>
-      <li><strong>Barre d'options</strong>, au-dessus du plan : les réglages de l'outil actif (nombre de côtés d'un polygone, rayon d'un congé, saisie de coordonnées…).</li>
+      <li><strong>Outil actif</strong>, en tête de l'onglet Dessin : quand vous choisissez un outil à gauche, le panneau passe sur l'onglet Dessin et affiche ses réglages (nombre de côtés d'un polygone, rayon d'un congé, saisie de coordonnées, édition des nœuds…), une aide et un petit schéma. Ce bloc reste visible quand vous faites défiler le panneau. La barre au-dessus du plan n'apparaît plus que pour placer les ponts d'attache.</li>
       <li><strong>Plan de travail</strong> : le brut en beige, les règles en millimètres, la grille et l'origine (flèches X et Y).</li>
       <li><strong>Panneau de droite</strong> en cinq onglets : <span class="ui">Projet</span>, <span class="ui">Dessin</span>, <span class="ui">Outils</span>, <span class="ui">Parcours</span> et <span class="ui">G-code</span>. Dans l'onglet Dessin, une seule section est ouverte à la fois pour garder le panneau court. Dans les onglets Projet, Outils et Parcours, de petits schémas montrent ce que fait chaque réglage (profondeur, surépaisseur, sens de coupe, entrée de l'outil, ponts, forme de la fraise, zéro Z…) et se mettent à jour avec vos choix.</li>
       <li><strong>Barre d'état</strong>, en bas : coordonnées du curseur par rapport à l'origine, grille, accrochage, affichage des parcours et de la matière enlevée.</li>
@@ -228,12 +228,12 @@ footer p{max-width:none}
     <p>Une barre flottante apparaît sous la sélection : <span class="ui">Dupliquer</span>, <span class="ui">Grouper</span>, <span class="ui">Souder</span>, <span class="ui">Usiner…</span> et <span class="ui">Supprimer</span>. Le projet est enregistré automatiquement dans le navigateur ; <span class="ui">Fichier › Enregistrer le projet</span> en fait une copie dans un fichier.</p>
 
     <h2 id="fr-dessin">Dessiner</h2>
-    <figure><img src="img/fr-02-noeuds.webp" alt="Édition des nœuds du filet décoratif, avec la barre d'options Lisse, Coin vif, Segment droit, Segment courbe." width="1800" height="1125" loading="lazy"><figcaption>L'outil Nœuds sur le filet décoratif : la barre d'options transforme un nœud en coin vif ou lisse, un segment en droite ou en courbe, et ajoute, supprime ou coupe un nœud.</figcaption></figure>
+    <figure><img src="img/fr-02-noeuds.webp" alt="Édition des nœuds du filet décoratif, avec les boutons Lisse, Coin vif, Segment droit, Segment courbe." width="1800" height="1125" loading="lazy"><figcaption>L'outil Nœuds sur le filet décoratif : la barre d'options transforme un nœud en coin vif ou lisse, un segment en droite ou en courbe, et ajoute, supprime ou coupe un nœud.</figcaption></figure>
     <h3>Formes et tracés</h3>
     <ul>
       <li><strong>Rectangle</strong> <kbd>R</kbd>, avec coins vifs, arrondis ou chanfreinés. <strong>Ellipse</strong> <kbd>E</kbd> (Maj : cercle) et <strong>Cercle par le centre</strong> <kbd>C</kbd>.</li>
       <li><strong>Polygone et étoile</strong> <kbd>O</kbd> : nombre de côtés ou de branches, rayon intérieur.</li>
-      <li><strong>Plume</strong> <kbd>P</kbd> : clic pour un point anguleux, cliquer-glisser pour un point courbe, clic sur le premier point pour fermer, double-clic pour terminer. La barre d'options accepte des coordonnées absolues, relatives ou polaires : tapez les valeurs puis <kbd>Entrée</kbd>.</li>
+      <li><strong>Plume</strong> <kbd>P</kbd> : clic pour un point anguleux, cliquer-glisser pour un point courbe, clic sur le premier point pour fermer, double-clic pour terminer. Le bloc Outil actif accepte des coordonnées absolues, relatives ou polaires : tapez les valeurs puis <kbd>Entrée</kbd>.</li>
       <li><strong>Arc par 3 points</strong> <kbd>A</kbd> : départ, arrivée, puis le bombé.</li>
       <li><strong>Nœuds</strong> <kbd>N</kbd> : déplacez nœuds et poignées, double-cliquez sur un segment pour ajouter un nœud, <kbd>Alt</kbd> en tirant une poignée pour la casser.</li>
     </ul>
@@ -513,7 +513,7 @@ M30</pre>
     <ul>
       <li><strong>Menu bar</strong>: File, Edit, Object, View, Machining and Help. The Help menu opens this guide, switches the language and shows the licence.</li>
       <li><strong>Drawing tools</strong>, on the left. Each tool has a shortcut letter, shown in its tooltip.</li>
-      <li><strong>Options bar</strong>, above the canvas: the settings of the active tool (polygon sides, fillet radius, coordinate entry…).</li>
+      <li><strong>Active tool</strong>, at the top of the Drawing tab: when you pick a tool on the left, the panel switches to the Drawing tab and shows its settings (polygon sides, fillet radius, coordinate entry, node editing…), a hint and a small diagram. This block stays visible while you scroll the panel. The bar above the canvas now only appears when placing tabs.</li>
       <li><strong>Workspace</strong>: the stock in beige, rulers in millimetres, the grid and the origin (X and Y arrows).</li>
       <li><strong>Right panel</strong> with five tabs: <span class="ui">Project</span>, <span class="ui">Drawing</span>, <span class="ui">Tools</span>, <span class="ui">Toolpaths</span> and <span class="ui">G-code</span>. In the Drawing tab only one section is open at a time to keep the panel short. In the Project, Tools and Toolpaths tabs, small diagrams show what each setting does (depth, allowance, cut direction, tool entry, tabs, bit shape, Z zero…) and update with your choices.</li>
       <li><strong>Status bar</strong>, at the bottom: cursor coordinates relative to the origin, grid, snapping, toolpath and removed-material display.</li>
@@ -521,12 +521,12 @@ M30</pre>
     <p>A floating bar appears under the selection: <span class="ui">Duplicate</span>, <span class="ui">Group</span>, <span class="ui">Weld</span>, <span class="ui">Machine…</span> and <span class="ui">Delete</span>. The project is saved automatically in the browser; <span class="ui">File › Save project</span> writes a copy to a file.</p>
 
     <h2 id="en-drawing">Drawing</h2>
-    <figure><img src="img/en-02-noeuds.webp" alt="Editing the nodes of the decorative flourish, with the options bar Smooth, Sharp corner, Straight segment, Curved segment." width="1800" height="1125" loading="lazy"><figcaption>The Nodes tool on the decorative flourish: the options bar turns a node into a sharp or smooth corner, a segment into a line or a curve, and adds, deletes or cuts a node.</figcaption></figure>
+    <figure><img src="img/en-02-noeuds.webp" alt="Editing the nodes of the decorative flourish, with the Smooth, Sharp corner, Straight segment, Curved segment buttons." width="1800" height="1125" loading="lazy"><figcaption>The Nodes tool on the decorative flourish: the options bar turns a node into a sharp or smooth corner, a segment into a line or a curve, and adds, deletes or cuts a node.</figcaption></figure>
     <h3>Shapes and paths</h3>
     <ul>
       <li><strong>Rectangle</strong> <kbd>R</kbd>, with sharp, rounded or chamfered corners. <strong>Ellipse</strong> <kbd>E</kbd> (Shift: circle) and <strong>Circle from center</strong> <kbd>C</kbd>.</li>
       <li><strong>Polygon and star</strong> <kbd>O</kbd>: number of sides or points, inner radius.</li>
-      <li><strong>Pen</strong> <kbd>P</kbd>: click for a corner point, click-drag for a curve point, click the first point to close, double-click to finish. The options bar takes absolute, relative or polar coordinates: type the values then press <kbd>Enter</kbd>.</li>
+      <li><strong>Pen</strong> <kbd>P</kbd>: click for a corner point, click-drag for a curve point, click the first point to close, double-click to finish. The Active tool block takes absolute, relative or polar coordinates: type the values then press <kbd>Enter</kbd>.</li>
       <li><strong>3-point arc</strong> <kbd>A</kbd>: start, end, then the bulge.</li>
       <li><strong>Nodes</strong> <kbd>N</kbd>: move nodes and handles, double-click a segment to add a node, <kbd>Alt</kbd> while dragging a handle to break it.</li>
     </ul>
