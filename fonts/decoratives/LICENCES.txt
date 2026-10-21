@@ -1,0 +1,16 @@
+Polices décoratives fournies avec COPO / Decorative fonts bundled with COPO
+===========================================================================
+
+Alegreya (Juan Pablo del Peral, Huerta Tipográfica) ............ SIL Open Font License 1.1 (OFL-Alegreya.txt)
+Cinzel Decorative (Natanael Gama) .............................. SIL Open Font License 1.1 (OFL-CinzelDecorative.txt)
+Pirata One (Rodrigo Fuenzalida, Nicolás Massi) ................. SIL Open Font License 1.1 (OFL-PirataOne.txt)
+Chicle (Angélica Díaz, Omnibus-Type) ........................... SIL Open Font License 1.1 (OFL-Chicle.txt)
+Comic Neue (Craig Rozynski, Hrant Papazian) .................... SIL Open Font License 1.1 (OFL-ComicNeue.txt)
+Protest Riot (Octavio Pardo) ................................... SIL Open Font License 1.1 (OFL-ProtestRiot.txt)
+Great Vibes (Robert Leuschke, TypeSETit) ....................... SIL Open Font License 1.1 (OFL-GreatVibes.txt)
+Smokum (Font Diner) ............................................ Apache License 2.0 (LICENSE-Smokum-Apache-2.0.txt)
+URW Chancery (Z003 Medium Italic, URW++ / Artifex) ............. GNU AGPL 3.0 avec exception
+                                                                 (LICENSE-URWChancery.txt, COPYING-URWChancery-AGPL-3.0.txt)
+
+Sources : https://github.com/google/fonts et https://github.com/ArtifexSoftware/urw-base35-fonts
+Les fichiers sont fournis tels quels, sans modification. / Files are provided unmodified.
