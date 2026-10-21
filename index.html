@@ -3737,13 +3737,13 @@ function boxPanel(w, h, t, gap, E) {
   return out.filter((p, i) => { const a = out[(i - 1 + out.length) % out.length], b = out[(i + 1) % out.length]; return Math.abs((p[0] - a[0]) * (b[1] - a[1]) - (p[1] - a[1]) * (b[0] - a[0])) > 1e-9; });
 }
 function boxGeom(o) {
-  const t = o.t, nW = boxOdd(o.W, o.jw), nD = boxOdd(o.D, o.jw), nH = boxOdd(o.H, o.jw), tab = o.lid === 'tabbed', plain = [true], P = [];
-  const side = { bot: boxPat(nW, true), top: tab ? boxPat(nW, true) : plain, v: boxPat(nH, true) }, end = { bot: boxPat(nD, false), top: tab ? boxPat(nD, false) : plain, v: boxPat(nH, false) };
-  const base = [boxPat(nW, false), boxPat(nD, true), boxPat(nW, false), boxPat(nD, true)];
-  if (o.faces.bottom) P.push({ k: 'bottom', name: 'Fond de boîte', w: o.W, h: o.D, E: base });
-  if (o.faces.lid) P.push({ k: 'lid', name: 'Couvercle', w: o.W, h: o.D, E: tab ? base : [plain, plain, plain, plain] });
-  for (const k of ['s1', 's2']) if (o.faces[k]) P.push({ k, name: k === 's1' ? 'Côté 1' : 'Côté 2', w: o.W, h: o.H, E: [side.bot, side.v, side.top, side.v] });
-  for (const k of ['e1', 'e2']) if (o.faces[k]) P.push({ k, name: k === 'e1' ? 'Bout 1' : 'Bout 2', w: o.D, h: o.H, E: [end.bot, end.v, end.top, end.v] });
+  // un bord n'a de tenons que si le panneau qui s'y assemble est usiné ; sinon il reste droit
+  const t = o.t, f = o.faces, nW = boxOdd(o.W, o.jw), nD = boxOdd(o.D, o.jw), nH = boxOdd(o.H, o.jw), tab = o.lid === 'tabbed' && f.lid, plain = [true], P = [];
+  const J = (on, n, ends) => on ? boxPat(n, ends) : plain;
+  if (f.bottom) P.push({ k: 'bottom', name: 'Fond de boîte', w: o.W, h: o.D, E: [J(f.s1, nW, false), J(f.e2, nD, true), J(f.s2, nW, false), J(f.e1, nD, true)] });
+  if (f.lid) P.push({ k: 'lid', name: 'Couvercle', w: o.W, h: o.D, E: tab ? [J(f.s1, nW, false), J(f.e2, nD, true), J(f.s2, nW, false), J(f.e1, nD, true)] : [plain, plain, plain, plain] });
+  for (const k of ['s1', 's2']) if (f[k]) P.push({ k, name: k === 's1' ? 'Côté 1' : 'Côté 2', w: o.W, h: o.H, E: [J(f.bottom, nW, true), J(f.e2, nH, true), J(tab, nW, true), J(f.e1, nH, true)] });
+  for (const k of ['e1', 'e2']) if (f[k]) P.push({ k, name: k === 'e1' ? 'Bout 1' : 'Bout 2', w: o.D, h: o.H, E: [J(f.bottom, nD, false), J(f.s2, nH, false), J(tab, nD, false), J(f.s1, nH, false)] });
   for (const p of P) p.pts = boxPanel(p.w, p.h, t, o.gap, p.E);
   return { P, nW, nD, nH };
 }
