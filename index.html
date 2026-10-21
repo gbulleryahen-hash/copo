@@ -1178,11 +1178,19 @@ function emitLoop(mb, loop, zTop, z, o, cont) {
   for (let i = 1; i < P.length; i++) mb.g1(P[i][0], P[i][1], z, o.feed);
 }
 // Ligne ouverte : aller-retour à chaque profondeur, ou toujours dans le même sens (oneWay) pour respecter avalant/opposition
-function emitOpen(mb, path, levels, o, oneWay) {
-  let fwd = true; const ramp = (o.entry === 'ramp' || o.entry === 'rampzz' || o.entry === 'arcramp') && o.rampLen > 0.01;
+function emitOpen(mb, path, levels, o, oneWay, ref) {
+  let fwd = true; const useArc = oneWay && ref && (o.entry === 'arc' || o.entry === 'arcramp') && o.arcR > 0.01, ramp = !useArc && (o.entry === 'ramp' || o.entry === 'rampzz' || o.entry === 'arcramp') && o.rampLen > 0.01;
+  // entrée / sortie en arc tangent, côté matière enlevée (opposé à la ligne d'origine)
+  const arcEnds = P => { const R = o.arcR, n = P.length, d0 = nrm(sub(P[1], P[0])), dn = nrm(sub(P[n - 1], P[n - 2])), side = (q, d) => { let best = null, bd = Infinity; for (const r of ref) { const dd = hyp(r, q); if (dd < bd) { bd = dd; best = r; } } const c = d[0] * (best[1] - q[1]) - d[1] * (best[0] - q[0]); return c > 0 ? [d[1], -d[0]] : [-d[1], d[0]]; };
+    const w0 = side(P[0], d0), wn = side(P[n - 1], dn), C0 = [P[0][0] + w0[0] * R, P[0][1] + w0[1] * R], Cn = [P[n - 1][0] + wn[0] * R, P[n - 1][1] + wn[1] * R], N = 10;
+    const inA = [], outA = []; for (let k = 0; k <= N; k++) { const th = -Math.PI / 2 * (1 - k / N), c = Math.cos(th), sn = Math.sin(th); inA.push([C0[0] + R * (-c * w0[0] + sn * d0[0]), C0[1] + R * (-c * w0[1] + sn * d0[1])]); const th2 = Math.PI / 2 * k / N, c2 = Math.cos(th2), s2 = Math.sin(th2); outA.push([Cn[0] + R * (-c2 * wn[0] + s2 * dn[0]), Cn[1] + R * (-c2 * wn[1] + s2 * dn[1])]); }
+    return { inA, outA }; };
   const get = i => typeof path === 'function' ? path(i) : path;
   levels.forEach((z, i) => {
     const base = get(i), P = fwd ? base : base.slice().reverse(), c = cumLen(P), len = c[c.length - 1];
+    if (useArc) { const { inA, outA } = arcEnds(P), zTop = i ? levels[i - 1] : 0; if (mb.x !== null) mb.up(o.clearZ !== undefined ? o.clearZ : 2); mb.approach(inA[0][0], inA[0][1], zTop, o.plunge);
+      if (o.entry === 'arcramp') inA.forEach((q, k) => mb.g1(q[0], q[1], zTop + (z - zTop) * k / (inA.length - 1), o.feed)); else { mb.g1(inA[0][0], inA[0][1], z, o.plunge); for (const q of inA) mb.g1(q[0], q[1], z, o.feed); }
+      for (let k = 1; k < P.length; k++) mb.g1(P[k][0], P[k][1], z, o.feed); for (const q of outA) mb.g1(q[0], q[1], z, o.feed); return; }
     if (i === 0 || oneWay) mb.approach(P[0][0], P[0][1], i ? levels[i - 1] : 0, o.plunge);
     else if (Math.hypot(mb.x - P[0][0], mb.y - P[0][1]) > 1e-6) mb.g1(P[0][0], P[0][1], mb.z, o.feed);
     const z0 = mb.z;
@@ -1290,8 +1298,8 @@ function buildProfile(p, tool, shapes, M) {
       if (os === 'on') { emitOpen(mb, s.pts, levels, o); continue; }
       const nom = sideOffset(s.pts, R, os), rough = allowO > 0 ? sideOffset(s.pts, R + allowO, os) : nom, orient = l => ((os === 'left') === o.climb) ? l : l.slice().reverse();
       if (nom.gouge) warns.push('Une ligne ouverte a une courbe plus serrée que le rayon de l’outil de ce côté : risque d’entaille, vérifiez l’aperçu.');
-      emitOpen(mb, i => orient(allowO > 0 && !(p.finish === 'last' && i === lastL) ? rough : nom), levels, o, true);
-      if (allowO > 0 && p.finish === 'full') emitOpen(mb, () => orient(nom), [levels[lastL]], { ...o, entry: 'plunge' }, true);
+      emitOpen(mb, i => orient(allowO > 0 && !(p.finish === 'last' && i === lastL) ? rough : nom), levels, { ...o, clearZ: M.clearZ }, true, s.pts);
+      if (allowO > 0 && p.finish === 'full') emitOpen(mb, () => orient(nom), [levels[lastL]], { ...o, clearZ: M.clearZ, entry: o.entry === 'arc' || o.entry === 'arcramp' ? 'arc' : 'plunge' }, true, s.pts);
     }
   }
   let tabs = [];
