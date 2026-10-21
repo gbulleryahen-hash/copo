@@ -185,7 +185,7 @@ footer p{max-width:none}
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
       </div>
     </section>
-    <figure><img src="img/fr-01-interface.webp" alt="Fenêtre de COPO avec le projet d'exemple : outils à gauche, plan de travail au centre, panneau Dessin à droite." width="1800" height="1125"><figcaption>Le projet d'exemple : le texte COPO en V-carving, une phrase en police à trait unique sur une courbe, un filet décoratif à la fraise hémisphérique, deux perçages au foret, un détourage avec ponts d'attache et deux poches sur la face 2. Les parcours s'affichent en couleur sur le brut.</figcaption></figure>
+    <figure><img src="img/fr-01-interface.webp" alt="Fenêtre de COPO avec le projet d'exemple : plan de travail au centre, panneau Dessin à droite avec sa grille d'icônes." width="1800" height="1125"><figcaption>Le projet d'exemple : le texte COPO en V-carving, une phrase en police à trait unique sur une courbe, un filet décoratif à la fraise hémisphérique, deux perçages au foret, un détourage avec ponts d'attache et deux poches sur la face 2. Les parcours s'affichent en couleur sur le brut.</figcaption></figure>
 
     <h2 id="fr-bref" class="pb">En bref</h2>
     <div class="features">
@@ -208,7 +208,7 @@ footer p{max-width:none}
     <h2 id="fr-etapes">Votre premier usinage en six étapes</h2>
     <ol class="steps">
       <li><div><b>Réglez le projet</b>Onglet <span class="ui">Projet</span> : dimensions et matière du brut, point d'origine X0 Y0, zéro Z (dessus du brut ou table), unités et machine.</div></li>
-      <li><div><b>Dessinez ou importez</b>Tracez avec les outils de gauche, importez un SVG ou un DXF (<span class="ui">Fichier › Importer un SVG ou un DXF…</span>) ou écrivez un texte.</div></li>
+      <li><div><b>Dessinez ou importez</b>Tracez avec les icônes de l'onglet Dessin, importez un SVG ou un DXF (<span class="ui">Fichier › Importer un SVG ou un DXF…</span>) ou écrivez un texte.</div></li>
       <li><div><b>Vérifiez vos outils</b>Onglet <span class="ui">Outils</span> : diamètre, vitesse de broche, avance, vitesse de descente, profondeur de passe et recouvrement de chaque fraise.</div></li>
       <li><div><b>Créez les parcours</b>Sélectionnez les formes sur le plan, ouvrez l'onglet <span class="ui">Parcours</span>, choisissez Profil, Poche, V-carving ou Perçage, réglez puis cliquez sur <span class="ui">Calculer</span>.</div></li>
       <li><div><b>Contrôlez en 3D</b><span class="ui">Affichage › Aperçu 3D de l'usinage</span> montre le brut usiné. Rejouez l'usinage pour repérer une erreur de profondeur ou d'outil.</div></li>
@@ -219,10 +219,9 @@ footer p{max-width:none}
     <p>La fenêtre se lit de gauche à droite, dans l'ordre du travail.</p>
     <ul>
       <li><strong>Barre de menus</strong> : Fichier, Édition, Objet, Affichage, Usinage et Aide. Le menu Aide ouvre ce mode d'emploi, change la langue et affiche la licence.</li>
-      <li><strong>Outils de dessin</strong>, à gauche. Chaque outil a une lettre de raccourci, indiquée dans son infobulle.</li>
-      <li><strong>Outil actif</strong>, en tête de l'onglet Dessin : quand vous choisissez un outil à gauche, le panneau passe sur l'onglet Dessin et affiche ses réglages (nombre de côtés d'un polygone, rayon d'un congé, saisie de coordonnées, édition des nœuds…), une aide et un petit schéma. Ce bloc reste visible quand vous faites défiler le panneau. La barre au-dessus du plan n'apparaît plus que pour placer les ponts d'attache.</li>
+      <li><strong>Onglet Dessin</strong> : en haut, une grille d'icônes regroupe toutes les fonctions de dessin (Sélection, Combiner, Créer, Modifier, Disposer, Mesurer · Lutherie), avec une infobulle et une lettre de raccourci pour chacune. Juste en dessous s'affiche ce dont vous avez besoin : les réglages de l'outil choisi (avec une aide et un petit schéma), le formulaire de la fonction cliquée (Aligner, Copie en réseau, Imbrication, Images…), ou le bloc Sélection quand un objet est sélectionné. Les icônes grisées demandent d'abord une sélection. Les calques restent en bas. Échap referme la fonction ouverte.</li>
       <li><strong>Plan de travail</strong> : le brut en beige, les règles en millimètres, la grille et l'origine (flèches X et Y).</li>
-      <li><strong>Panneau de droite</strong> en cinq onglets : <span class="ui">Projet</span>, <span class="ui">Dessin</span>, <span class="ui">Outils</span>, <span class="ui">Parcours</span> et <span class="ui">G-code</span>. Dans l'onglet Dessin, une seule section est ouverte à la fois pour garder le panneau court. Dans les onglets Projet, Outils et Parcours, de petits schémas montrent ce que fait chaque réglage (profondeur, surépaisseur, sens de coupe, entrée de l'outil, ponts, forme de la fraise, zéro Z…) et se mettent à jour avec vos choix.</li>
+      <li><strong>Panneau de droite</strong> en cinq onglets : <span class="ui">Projet</span>, <span class="ui">Dessin</span>, <span class="ui">Outils</span>, <span class="ui">Parcours</span> et <span class="ui">G-code</span>. Dans les onglets Projet, Outils et Parcours, de petits schémas montrent ce que fait chaque réglage (profondeur, surépaisseur, sens de coupe, entrée de l'outil, ponts, forme de la fraise, zéro Z…) et se mettent à jour avec vos choix.</li>
       <li><strong>Barre d'état</strong>, en bas : coordonnées du curseur par rapport à l'origine, grille, accrochage, affichage des parcours et de la matière enlevée.</li>
     </ul>
     <p>Une barre flottante apparaît sous la sélection : <span class="ui">Dupliquer</span>, <span class="ui">Grouper</span>, <span class="ui">Souder</span>, <span class="ui">Usiner…</span> et <span class="ui">Supprimer</span>. Le projet est enregistré automatiquement dans le navigateur ; <span class="ui">Fichier › Enregistrer le projet</span> en fait une copie dans un fichier.</p>
@@ -233,7 +232,7 @@ footer p{max-width:none}
     <ul>
       <li><strong>Rectangle</strong> <kbd>R</kbd>, avec coins vifs, arrondis ou chanfreinés. <strong>Ellipse</strong> <kbd>E</kbd> (Maj : cercle) et <strong>Cercle par le centre</strong> <kbd>C</kbd>.</li>
       <li><strong>Polygone et étoile</strong> <kbd>O</kbd> : nombre de côtés ou de branches, rayon intérieur.</li>
-      <li><strong>Plume</strong> <kbd>P</kbd> : clic pour un point anguleux, cliquer-glisser pour un point courbe, clic sur le premier point pour fermer, double-clic pour terminer. Le bloc Outil actif accepte des coordonnées absolues, relatives ou polaires : tapez les valeurs puis <kbd>Entrée</kbd>.</li>
+      <li><strong>Plume</strong> <kbd>P</kbd> : clic pour un point anguleux, cliquer-glisser pour un point courbe, clic sur le premier point pour fermer, double-clic pour terminer. Les réglages de l'outil acceptent des coordonnées absolues, relatives ou polaires : tapez les valeurs puis <kbd>Entrée</kbd>.</li>
       <li><strong>Arc par 3 points</strong> <kbd>A</kbd> : départ, arrivée, puis le bombé.</li>
       <li><strong>Nœuds</strong> <kbd>N</kbd> : déplacez nœuds et poignées, double-cliquez sur un segment pour ajouter un nœud, <kbd>Alt</kbd> en tirant une poignée pour la casser.</li>
     </ul>
@@ -258,7 +257,7 @@ footer p{max-width:none}
     </ul>
 
     <h3>Coins pour tenons et mortaises : dogbone et T-bone</h3>
-    <p>Une fraise ronde laisse un arrondi de son rayon dans les coins : un tenon à angles vifs n'entre pas dans la mortaise. Le dégagement se dessine sur la forme, coin par coin, pour ne le mettre que là où il faut. Prenez l'outil <strong>Dégagement</strong> <kbd>B</kbd> (sous Congé), choisissez <em>Dogbone</em> (la fraise va en diagonale toucher le coin vif) ou <em>T-bone</em> (le dégagement prolonge le côté le plus long, moins visible) et le <strong>diamètre de la fraise</strong>, puis cliquez près des coins à dégager. Les mêmes réglages se trouvent dans le bloc <span class="ui">Coins</span> du panneau Dessin. Les coins se choisissent un par un, comme pour les chanfreins et les congés. Le dégagement ne se fait qu'entre deux segments droits ; son diamètre a 0,1 mm de plus que la fraise pour qu'elle passe sans forcer. Usinez ensuite la forme normalement (poche, profil intérieur ou extérieur) avec cette fraise.</p>
+    <p>Une fraise ronde laisse un arrondi de son rayon dans les coins : un tenon à angles vifs n'entre pas dans la mortaise. Le dégagement se dessine sur la forme, coin par coin, pour ne le mettre que là où il faut. Prenez l'outil <strong>Dégagement</strong> <kbd>B</kbd> (groupe Modifier), choisissez <em>Dogbone</em> (la fraise va en diagonale toucher le coin vif) ou <em>T-bone</em> (le dégagement prolonge le côté le plus long, moins visible) et le <strong>diamètre de la fraise</strong>, puis cliquez près des coins à dégager. Les mêmes réglages se trouvent dans le bloc <span class="ui">Coins</span> du panneau Dessin. Les coins se choisissent un par un, comme pour les chanfreins et les congés. Le dégagement ne se fait qu'entre deux segments droits ; son diamètre a 0,1 mm de plus que la fraise pour qu'elle passe sans forcer. Usinez ensuite la forme normalement (poche, profil intérieur ou extérieur) avec cette fraise.</p>
     <div class="duo">
       <figure><img src="img/coin-dogbone.webp" alt="Poche rectangulaire avec un dogbone dessiné à chaque coin et son parcours." width="810" height="465" loading="lazy"><figcaption><strong>Dogbone</strong> : un arc du diamètre de la fraise, en diagonale dans chaque coin.</figcaption></figure>
       <figure><img src="img/coin-tbone.webp" alt="Poche rectangulaire avec un T-bone dessiné à chaque coin et son parcours." width="810" height="465" loading="lazy"><figcaption><strong>T-bone</strong> : l'arc prolonge le côté le plus long.</figcaption></figure>
@@ -478,7 +477,7 @@ M30</pre>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
       </div>
     </section>
-    <figure><img src="img/en-01-interface.webp" alt="COPO window with the sample project: tools on the left, workspace in the middle, Drawing panel on the right." width="1800" height="1125"><figcaption>The sample project: COPO text V-carved, a line of single-line text on a curve, a decorative flourish with a ball nose bit, two drilled holes, a cut-out with tabs and two pockets on side 2. Toolpaths are shown in color on the stock.</figcaption></figure>
+    <figure><img src="img/en-01-interface.webp" alt="COPO window with the sample project: workspace in the middle, Drawing panel on the right with its grid of icons." width="1800" height="1125"><figcaption>The sample project: COPO text V-carved, a line of single-line text on a curve, a decorative flourish with a ball nose bit, two drilled holes, a cut-out with tabs and two pockets on side 2. Toolpaths are shown in color on the stock.</figcaption></figure>
 
     <h2 id="en-glance" class="pb">At a glance</h2>
     <div class="features">
@@ -501,7 +500,7 @@ M30</pre>
     <h2 id="en-steps">Your first job in six steps</h2>
     <ol class="steps">
       <li><div><b>Set up the project</b><span class="ui">Project</span> tab: stock size and material, X0 Y0 origin point, Z zero (top of stock or table), units and machine.</div></li>
-      <li><div><b>Draw or import</b>Draw with the tools on the left, import an SVG or DXF (<span class="ui">File › Import an SVG or DXF…</span>) or type some text.</div></li>
+      <li><div><b>Draw or import</b>Draw with the icons of the Drawing tab, import an SVG or DXF (<span class="ui">File › Import an SVG or DXF…</span>) or type some text.</div></li>
       <li><div><b>Check your tools</b><span class="ui">Tools</span> tab: diameter, spindle speed, feed rate, plunge rate, pass depth and stepover of each bit.</div></li>
       <li><div><b>Create the toolpaths</b>Select shapes on the canvas, open the <span class="ui">Toolpaths</span> tab, choose Profile, Pocket, V-carving or Drilling, adjust, then click <span class="ui">Calculate</span>.</div></li>
       <li><div><b>Check in 3D</b><span class="ui">View › 3D machining preview</span> shows the machined stock. Play the job back to spot a wrong depth or tool.</div></li>
@@ -512,10 +511,9 @@ M30</pre>
     <p>The window reads from left to right, in the order you work.</p>
     <ul>
       <li><strong>Menu bar</strong>: File, Edit, Object, View, Machining and Help. The Help menu opens this guide, switches the language and shows the licence.</li>
-      <li><strong>Drawing tools</strong>, on the left. Each tool has a shortcut letter, shown in its tooltip.</li>
-      <li><strong>Active tool</strong>, at the top of the Drawing tab: when you pick a tool on the left, the panel switches to the Drawing tab and shows its settings (polygon sides, fillet radius, coordinate entry, node editing…), a hint and a small diagram. This block stays visible while you scroll the panel. The bar above the canvas now only appears when placing tabs.</li>
+      <li><strong>Drawing tab</strong>: at the top, a grid of icons gathers every drawing function (Selection, Combine, Create, Modify, Arrange, Measure · Lutherie), each with a tooltip and a shortcut letter. Just below appears what you need: the settings of the chosen tool (with a hint and a small diagram), the form of the clicked function (Align, Array copy, Nesting, Images…), or the Selection block when an object is selected. Greyed icons need a selection first. Layers stay at the bottom. Esc closes the open function.</li>
       <li><strong>Workspace</strong>: the stock in beige, rulers in millimetres, the grid and the origin (X and Y arrows).</li>
-      <li><strong>Right panel</strong> with five tabs: <span class="ui">Project</span>, <span class="ui">Drawing</span>, <span class="ui">Tools</span>, <span class="ui">Toolpaths</span> and <span class="ui">G-code</span>. In the Drawing tab only one section is open at a time to keep the panel short. In the Project, Tools and Toolpaths tabs, small diagrams show what each setting does (depth, allowance, cut direction, tool entry, tabs, bit shape, Z zero…) and update with your choices.</li>
+      <li><strong>Right panel</strong> with five tabs: <span class="ui">Project</span>, <span class="ui">Drawing</span>, <span class="ui">Tools</span>, <span class="ui">Toolpaths</span> and <span class="ui">G-code</span>. In the Project, Tools and Toolpaths tabs, small diagrams show what each setting does (depth, allowance, cut direction, tool entry, tabs, bit shape, Z zero…) and update with your choices.</li>
       <li><strong>Status bar</strong>, at the bottom: cursor coordinates relative to the origin, grid, snapping, toolpath and removed-material display.</li>
     </ul>
     <p>A floating bar appears under the selection: <span class="ui">Duplicate</span>, <span class="ui">Group</span>, <span class="ui">Weld</span>, <span class="ui">Machine…</span> and <span class="ui">Delete</span>. The project is saved automatically in the browser; <span class="ui">File › Save project</span> writes a copy to a file.</p>
@@ -526,7 +524,7 @@ M30</pre>
     <ul>
       <li><strong>Rectangle</strong> <kbd>R</kbd>, with sharp, rounded or chamfered corners. <strong>Ellipse</strong> <kbd>E</kbd> (Shift: circle) and <strong>Circle from center</strong> <kbd>C</kbd>.</li>
       <li><strong>Polygon and star</strong> <kbd>O</kbd>: number of sides or points, inner radius.</li>
-      <li><strong>Pen</strong> <kbd>P</kbd>: click for a corner point, click-drag for a curve point, click the first point to close, double-click to finish. The Active tool block takes absolute, relative or polar coordinates: type the values then press <kbd>Enter</kbd>.</li>
+      <li><strong>Pen</strong> <kbd>P</kbd>: click for a corner point, click-drag for a curve point, click the first point to close, double-click to finish. The tool settings take absolute, relative or polar coordinates: type the values then press <kbd>Enter</kbd>.</li>
       <li><strong>3-point arc</strong> <kbd>A</kbd>: start, end, then the bulge.</li>
       <li><strong>Nodes</strong> <kbd>N</kbd>: move nodes and handles, double-click a segment to add a node, <kbd>Alt</kbd> while dragging a handle to break it.</li>
     </ul>
@@ -551,7 +549,7 @@ M30</pre>
     </ul>
 
     <h3>Corners for tenons and mortises: dogbone and T-bone</h3>
-    <p>A round bit leaves a fillet of its radius in corners, so a square tenon will not fit its mortise. The relief is drawn on the shape, corner by corner, so it only goes where it is needed. Take the <strong>Relief</strong> tool <kbd>B</kbd> (below Fillet), choose <em>Dogbone</em> (the bit moves diagonally to touch the sharp corner) or <em>T-bone</em> (the relief extends the longer side, less visible) and the <strong>bit diameter</strong>, then click near the corners to relieve. The same settings are in the <span class="ui">Corners</span> block of the Drawing panel. Corners are picked one by one, as for chamfers and fillets. Relief only works between two straight segments; its diameter is 0.1 mm larger than the bit so it fits without forcing. Then machine the shape as usual (pocket, inside or outside profile) with that bit.</p>
+    <p>A round bit leaves a fillet of its radius in corners, so a square tenon will not fit its mortise. The relief is drawn on the shape, corner by corner, so it only goes where it is needed. Take the <strong>Relief</strong> tool <kbd>B</kbd> (Modify group), choose <em>Dogbone</em> (the bit moves diagonally to touch the sharp corner) or <em>T-bone</em> (the relief extends the longer side, less visible) and the <strong>bit diameter</strong>, then click near the corners to relieve. The same settings are in the <span class="ui">Corners</span> block of the Drawing panel. Corners are picked one by one, as for chamfers and fillets. Relief only works between two straight segments; its diameter is 0.1 mm larger than the bit so it fits without forcing. Then machine the shape as usual (pocket, inside or outside profile) with that bit.</p>
     <div class="duo">
       <figure><img src="img/coin-dogbone.webp" alt="Rectangular pocket with a dogbone drawn in each corner and its toolpath." width="810" height="465" loading="lazy"><figcaption><strong>Dogbone</strong>: an arc the size of the bit, diagonally in each corner.</figcaption></figure>
       <figure><img src="img/coin-tbone.webp" alt="Rectangular pocket with a T-bone drawn in each corner and its toolpath." width="810" height="465" loading="lazy"><figcaption><strong>T-bone</strong>: the arc extends the longer side.</figcaption></figure>
