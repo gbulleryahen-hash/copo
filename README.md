@@ -8,6 +8,7 @@
 
 ## Fonctions / Features
 - Dessin : rectangle, ellipse, polygone/étoile, arc, plume (Bézier), texte (aussi sur une courbe), nœuds, chanfreins, congés, dégagements dogbone et T-bone, ajuster, couper, joindre, booléens, réseau, calques, repères, cotes, images de référence, vectorisation d'image (contours), import/export SVG, import DXF (calques, blocs, splines)
+- Bibliothèque d'outils façon Aspire : matériaux (bois tendre, bois dur, MDF, acrylique, PVC, aluminium, laiton), outils métriques et impériaux par type, réglages par matériau, avance par dent commentée, import des bibliothèques Aspire/VCarve (.vtdb)
 - Usinage : profil (extérieur, intérieur, sur la ligne, gauche/droite des lignes ouvertes), poche en anneaux ou en balayage, reprise de matière, V-carving par axe médian, perçage (débourrage, hélice)
 - Profondeur de départ (D) et de coupe (C) pour tous les parcours ; pendant l'édition d'un parcours, le reste du dessin est estompé et une ligne d'état indique les vecteurs sélectionnés
 - Règles d'accroche (Édition › Accroche…) : grille, repères, brut, rayon, points d'accroche sur les objets
