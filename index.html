@@ -1001,7 +1001,6 @@ label.inl input{width:70px}
     <label>Vitesse<select id="v3Speed"><option value="10">× 10</option><option value="50" selected>× 50</option><option value="200">× 200</option><option value="1000">× 1000</option></select></label>
     <label>Qualité<select id="v3Q"><option value="1">Normale</option><option value="2">Fine</option></select></label>
     <label>Vue<select id="v3Face"><option value="f1">Face 1 en haut</option><option value="f2">Face 2 en haut (pièce retournée)</option></select></label>
-    <button id="v3Under" title="Regarder la pièce par en dessous">Vue de dessous</button>
     <label class="chk"><input type="checkbox" id="v3Tool" checked> Outil</label>
     <label class="chk"><input type="checkbox" id="v3Draw"> Dessin</label>
     <label>Afficher<select id="v3Show"><option value="stock">Matière</option><option value="both">Matière + trajectoires</option><option value="paths">Trajectoires seules</option></select></label>
@@ -5279,7 +5278,6 @@ function v3Events(c) {
   $('#v3Show').onchange = () => { try { LS.set('copo.v3show', $('#v3Show').value); } catch { } v3Req(); };
   $('#v3One').onchange = () => { v3BuildPaths(); v3Req(); };
   $('#v3Face').onchange = () => v3Req();
-  $('#v3Under').onclick = () => { V3.pitch = V3.pitch > 0 ? -0.75 : 0.75; v3Req(); };
   $('#v3Reset').onclick = v3ResetView;
   $('#v3Close').onclick = v3Close;
   window.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#v3d').hidden) { e.stopPropagation(); v3Close(); } }, true);
