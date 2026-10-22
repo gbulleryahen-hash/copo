@@ -9,6 +9,8 @@
 ## Fonctions / Features
 - Dessin : rectangle, ellipse, polygone/étoile, arc, plume (Bézier), texte (aussi sur une courbe), nœuds, chanfreins, congés, dégagements dogbone et T-bone, ajuster, couper, joindre, booléens, réseau, calques, repères, cotes, images de référence, vectorisation d'image (contours), import/export SVG, import DXF (calques, blocs, splines)
 - Usinage : profil (extérieur, intérieur, sur la ligne, gauche/droite des lignes ouvertes), poche en anneaux ou en balayage, reprise de matière, V-carving par axe médian, perçage (débourrage, hélice)
+- Profondeur de départ (D) et de coupe (C) pour tous les parcours ; pendant l'édition d'un parcours, le reste du dessin est estompé et une ligne d'état indique les vecteurs sélectionnés
+- Règles d'accroche (Édition › Accroche…) : grille, repères, brut, rayon, points d'accroche sur les objets
 - Entrées en rampe aller-retour, rampe continue, arc, arc en rampe, hélice ; surépaisseur et passe de finition ; ponts d'attache automatiques ou manuels
 - Imbrication des pièces sur le panneau, usinage double face, aperçu 3D de l'usinage avec trajectoires en 3D
 - Lutherie : générateur de touche de guitare (diapason, largeurs, frettes non traversantes, repères) et incrustation en V (inlay : poche femelle et pièce mâle) ; boîte à entures (tenons droits, dogbones, couvercle plat ou à tenons)

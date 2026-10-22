@@ -247,7 +247,7 @@ footer p{max-width:none}
       <li><strong>Position et taille exactes</strong> : bloc <span class="ui">Sélection</span>, avec un point de référence choisi parmi neuf (coins, milieux, centre).</li>
     </ul>
     <h3>Accrochage, repères et cotes</h3>
-    <p>L'accrochage aux objets repère les extrémités, milieux, intersections, centres et tangentes ; chacun se règle dans le menu <span class="ui">Affichage</span>. Glissez depuis une règle pour créer un repère magnétique. L'outil <strong>Mesurer</strong> <kbd>M</kbd> donne une distance et l'outil <strong>Cote</strong> <kbd>D</kbd> pose une cote qui reste sur le plan.</p>
+    <p><span class="ui">Édition › Accroche…</span> ouvre la fenêtre <strong>Règles d'accroche</strong> : grille magnétique et son pas, <strong>repères</strong>, coins, milieux et centre du brut, rayon d'accroche (petit à grand), et accrochage aux objets avec ses cinq points (extrémités et nœuds, milieux, intersections, centres, tangentes). Ces réglages sont mémorisés. Glissez depuis une règle pour créer un repère : les points dessinés s'y accrochent, et en déplaçant une sélection, ses bords et son centre s'alignent sur les repères (et sur le brut si cette case est cochée). Un symbole orange au curseur indique l'accroche trouvée. <span class="ui">Affichage › Afficher la grille</span> montre ou cache la grille du plan. L'outil <strong>Mesurer</strong> <kbd>M</kbd> donne une distance et l'outil <strong>Cote</strong> <kbd>D</kbd> pose une cote qui reste sur le plan.</p>
     <h3>Calques, images et fichiers</h3>
     <ul>
       <li><strong>Calques</strong> : couleur des traits, visibilité, verrou et face usinée (F1 dessus, F2 dessous).</li>
@@ -296,6 +296,7 @@ footer p{max-width:none}
     <h2 id="fr-parcours" class="pb">Parcours d'outils</h2>
     <figure><img src="img/fr-03-parcours.webp" alt="Formulaire de modification du parcours de détourage extérieur, avec ponts d'attache." width="1800" height="1125" loading="lazy"><figcaption>Cliquez un parcours dans la liste pour le modifier : son tracé est mis en évidence sur le plan. Le texte sous le formulaire résume ce que fera la machine.</figcaption></figure>
     <p>En haut de l'onglet, les quatre boutons <span class="ui">Profil</span>, <span class="ui">Poche</span>, <span class="ui">V-carving</span> et <span class="ui">Perçage</span> créent un parcours : sélectionnez les formes sur le plan (même fenêtre ouverte), puis cliquez sur l'opération. Ses réglages s'ouvrent dans une fenêtre flottante, déplaçable par son titre ; COPO retient sa position. Cliquer un parcours de la liste ouvre la même fenêtre pour le modifier.</p>
+    <p>Tant que la fenêtre du parcours est ouverte, le reste du dessin et les autres parcours sont <strong>estompés</strong> : seuls les vecteurs sélectionnés et le parcours en cours ressortent. Tout redevient normal à la fermeture. Au bas de la fenêtre, une <strong>ligne d'état</strong> dit ce qui sera usiné, par exemple « 3 vecteurs sélectionnés (2 fermés, 1 ouvert) » ; elle passe en rouge s'il n'y a rien de sélectionné, et prévient quand une poche, un V-carving ou un perçage ignorera des vecteurs ouverts.</p>
     <h3>Les quatre types</h3>
     <ul>
       <li><strong>Profil</strong> : <em>Extérieur / droite</em> (la pièce est conservée), <em>Intérieur / gauche</em> (le trou est évidé) ou <em>Sur la ligne</em>. Sur une ligne ouverte, Extérieur fait passer l'outil à droite du tracé et Intérieur à gauche, dans le sens où il a été dessiné (Objet › Inverser le sens pour changer) ; « Sur la ligne » suit le trait ou passe à gauche ou à droite selon le réglage « Lignes ouvertes ». Sur une ligne ouverte décalée à droite ou à gauche, les entrées en rampe, en arc tangent et en arc en rampe s'appliquent aussi : l'arc entre et sort du côté de la matière enlevée.</li>
@@ -304,7 +305,8 @@ footer p{max-width:none}
       <li><strong>Perçage</strong> : un trou au centre de chaque forme fermée, avec débourrage et temporisation au fond. Les cercles plus grands que la fraise sont usinés en hélice au diamètre dessiné. Avec un foret, chaque trou est percé au diamètre du foret ; COPO indique la longueur de la pointe à ajouter pour un trou débouchant.</li>
     </ul>
     <h3>Passes, surépaisseur et sens de coupe</h3>
-    <p>La profondeur totale est répartie en passes de la profondeur choisie. Une <strong>surépaisseur</strong> laisse un peu de matière sur les parois pendant l'ébauche ; elle est retirée à la dernière passe ou par une passe de finition sur toute la hauteur. Le sens de coupe est <em>avalant</em> ou en <em>opposition</em>.</p>
+    <p><strong>Prof. départ (D)</strong> et <strong>Prof. coupe (C)</strong>, comme dans Aspire : l'usinage commence à la profondeur D sous la surface (par exemple au fond d'une poche déjà usinée) et descend de C à partir de là ; le fond est donc à D + C. Laissez D à 0 pour partir de la surface. En V-carving, la fraise calcule le motif comme si la surface était à D, ce qui sert notamment à l'incrustation. Le petit schéma à côté des champs rappelle ce que sont D et C.</p>
+    <p>La profondeur de coupe est répartie en passes de la profondeur choisie. Une <strong>surépaisseur</strong> laisse un peu de matière sur les parois pendant l'ébauche ; elle est retirée à la dernière passe ou par une passe de finition sur toute la hauteur. Le sens de coupe est <em>avalant</em> ou en <em>opposition</em>.</p>
     <h3>Entrée de l'outil</h3>
     <div class="tbl"><table>
       <thead><tr><th>Entrée</th><th>Comportement</th></tr></thead>
@@ -552,7 +554,7 @@ M30</pre>
       <li><strong>Exact position and size</strong>: <span class="ui">Selection</span> block, with a reference point chosen among nine (corners, middles, center).</li>
     </ul>
     <h3>Snapping, guides and dimensions</h3>
-    <p>Object snapping finds endpoints, midpoints, intersections, centers and tangents; each one can be turned on or off in the <span class="ui">View</span> menu. Drag from a ruler to create a magnetic guide. The <strong>Measure</strong> tool <kbd>M</kbd> gives a distance and the <strong>Dimension</strong> tool <kbd>D</kbd> places a dimension that stays on the canvas.</p>
+    <p><span class="ui">Edit › Snapping…</span> opens the <strong>Snap settings</strong> window: snap to grid and its spacing, <strong>guides</strong>, stock corners, midpoints and centre, snap radius (small to large), and object snapping with its five points (ends and nodes, midpoints, intersections, centres, tangents). These settings are remembered. Drag from a ruler to create a guide: drawn points snap to it, and when you move a selection its edges and centre line up with the guides (and with the stock if that box is ticked). An orange symbol at the cursor shows the snap found. <span class="ui">View › Show grid</span> shows or hides the canvas grid. The <strong>Measure</strong> tool <kbd>M</kbd> gives a distance and the <strong>Dimension</strong> tool <kbd>D</kbd> places a dimension that stays on the canvas.</p>
     <h3>Layers, images and files</h3>
     <ul>
       <li><strong>Layers</strong>: stroke color, visibility, lock and machined side (F1 top, F2 bottom).</li>
@@ -601,6 +603,7 @@ M30</pre>
     <h2 id="en-toolpaths" class="pb">Toolpaths</h2>
     <figure><img src="img/en-03-parcours.webp" alt="Edit form of the outside cut-out toolpath, with tabs." width="1800" height="1125" loading="lazy"><figcaption>Click a toolpath in the list to edit it: its path is highlighted on the canvas. The text under the form sums up what the machine will do.</figcaption></figure>
     <p>At the top of the tab, the four buttons <span class="ui">Profile</span>, <span class="ui">Pocket</span>, <span class="ui">V-carving</span> and <span class="ui">Drilling</span> create a toolpath: select the shapes on the canvas (even with the window open), then click the operation. Its settings open in a floating window you can move by its title; COPO remembers its position. Clicking a toolpath in the list opens the same window to edit it.</p>
+    <p>While the toolpath window is open, the rest of the drawing and the other toolpaths are <strong>dimmed</strong>: only the selected vectors and the current toolpath stand out. Everything returns to normal when the window closes. At the bottom of the window, a <strong>status line</strong> says what will be machined, for example “3 vectors selected (2 closed, 1 open)”; it turns red when nothing is selected, and warns when a pocket, V-carving or drilling will ignore open vectors.</p>
     <h3>The four types</h3>
     <ul>
       <li><strong>Profile</strong>: <em>Outside / right</em> (the part is kept), <em>Inside / left</em> (the hole is cleared) or <em>On the line</em>. On an open line, Outside runs the tool to the right of the path and Inside to the left, in its drawing direction (Object › Reverse direction to change it); “On the line” follows the stroke or runs left or right according to the “Open lines” setting. On an open line offset to the right or left, ramp, tangent arc and ramped arc entries apply too: the arc enters and leaves on the waste side.</li>
@@ -609,7 +612,8 @@ M30</pre>
       <li><strong>Drilling</strong>: one hole at the center of each closed shape, with pecking and a dwell at the bottom. Circles larger than the bit are milled helically to the drawn diameter. With a drill bit, each hole is drilled at the bit diameter; COPO shows the tip length to add for a through hole.</li>
     </ul>
     <h3>Passes, allowance and cut direction</h3>
-    <p>The total depth is split into passes of the chosen depth. An <strong>allowance</strong> leaves a little material on the walls while roughing; it is removed on the last pass or by a full-depth finishing pass. The cut direction is <em>climb</em> or <em>conventional</em>.</p>
+    <p><strong>Start depth (D)</strong> and <strong>Cut depth (C)</strong>, as in Aspire: machining starts at depth D below the surface (for example at the bottom of a pocket already cut) and goes down by C from there, so the bottom is at D + C. Leave D at 0 to start from the surface. In V-carving, the pattern is computed as if the surface were at D, which is what inlays use. The small diagram next to the fields shows what D and C are.</p>
+    <p>The cut depth is split into passes of the chosen depth. An <strong>allowance</strong> leaves a little material on the walls while roughing; it is removed on the last pass or by a full-depth finishing pass. The cut direction is <em>climb</em> or <em>conventional</em>.</p>
     <h3>Tool entry</h3>
     <div class="tbl"><table>
       <thead><tr><th>Entry</th><th>Behaviour</th></tr></thead>
