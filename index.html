@@ -1006,6 +1006,7 @@ Object.assign(I18N_EN, {"Cliquez une forme puis un nœud ou un segment · Maj+cl
 Object.assign(I18N_EN, {"Assemblage du dessus": "Top joint", "À entures (boîte fermée)": "Finger-jointed (closed box)", "Posé à plat (couvercle amovible)": "Laid flat (removable lid)", "Dessus": "Top", "Vérifiez les valeurs : dimensions supérieures à 3 × l’épaisseur, largeur des tenons d’au moins 1 mm.": "Check the values: dimensions greater than 3 × the thickness, finger width at least 1 mm.", "creux plus étroits que la fraise : augmentez la largeur des tenons": "slots narrower than the bit: increase the finger width"});
 Object.assign(I18N_EN, {"Groupes": "Groups", "Vecteurs": "Vectors", "Coins": "Corners", "Joindre et relier…": "Join and connect…", "Lisser (adapter des courbes)…": "Smooth (fit curves)…", "Contour décalé…": "Offset contour…", "Chanfrein (coin par coin)": "Chamfer (corner by corner)", "Congé (coin par coin)": "Fillet (corner by corner)", "Dégagement dogbone / T-bone": "Dogbone / T-bone relief", "Chanfreiner tous les coins": "Chamfer all corners", "Arrondir tous les coins": "Round all corners", "Aligner et répartir…": "Align and distribute…", "Rotation…": "Rotation…", "Copie en réseau…": "Array copy…"});
 Object.assign(I18N_EN, {"Enregistrer la fiche de gamme en PDF": "Save the setup sheet as PDF", "Enregistrer en PDF": "Save as PDF", "Imprimer": "Print", "Création du PDF…": "Creating the PDF…", "Bibliothèque PDF introuvable : placez lib/jspdf.umd.min.js à côté de COPO ou connectez-vous à Internet.": "PDF library not found: put lib/jspdf.umd.min.js next to COPO or connect to the Internet.", "Le PDF n’a pas pu être créé.": "The PDF could not be created.", "Utilisez « Imprimer » puis « Enregistrer au format PDF ».": "Use “Print” then “Save as PDF”."});
+Object.assign(I18N_EN, {"Clic : 1er point · clic : 2e point · clic : position de la cote · une extrémité accrochée à un nœud, un milieu ou un centre (point plein) suit l’objet": "Click: 1st point · click: 2nd point · click: dimension position · an end snapped to a node, midpoint or centre (solid dot) follows the object"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -2268,7 +2269,7 @@ function render() {
   drawXf(C);
   drawFitPrev(C);
   // cotes
-  for (const d of S.dims) drawDim(d, d.id === S.selDim ? C.acc : C.drawMuted, C.mono);
+  dimsSync(); for (const d of S.dims) drawDim(d, d.id === S.selDim ? C.acc : C.drawMuted, C.mono);
   // édition des nœuds
   if (S.ui.tool === 'nodes' && S.ne) drawNodeEdit(C);
   if (S.ui.tool === 'nodes') syncNe();
@@ -2332,6 +2333,18 @@ function drawTP(tp, col, active) {
   ctx.stroke(); ctx.restore();
 }
 // cotes
+// cotes associatives : une extrémité accrochée à un nœud, au milieu d'un segment ou au centre d'un arc suit l'objet
+let dimRefs = [];
+function snapRefOf(m) { if (!m || !m.ref || !m.ref.ids) return null; const r = m.ref; if (m.k === 'end' && r.ni !== undefined) return { sid: r.ids[0], k: 'end', i: r.ni }; if ((m.k === 'mid' || m.k === 'cen') && r.seg !== undefined) return { sid: r.ids[0], k: m.k, g: r.seg }; return null; }
+function refPt(r) {
+  const s = r && shapeById(r.sid); if (!s) return null;
+  if (r.k === 'end') { const n = s.nodes[r.i]; return n ? [n.x, n.y] : null; }
+  if (r.g >= nseg(s)) return null; const g = segOf(s, r.g);
+  if (r.k === 'mid') return bez(g, 0.5);
+  if (r.k === 'cen' && !g.line) { const c = circle3(g.p0, bez(g, 0.5), g.p3); return c ? c.C : null; }
+  return null;
+}
+function dimsSync() { for (const d of S.dims) { if (d.ra) { const q = refPt(d.ra); if (q) d.a = q; } if (d.rb) { const q = refPt(d.rb); if (q) d.b = q; } } }
 function dimGeom(d) { const v = nrm(sub(d.b, d.a)), nv = [-v[1], v[0]]; return { v, nv, A: [d.a[0] + nv[0] * d.off, d.a[1] + nv[1] * d.off], B: [d.b[0] + nv[0] * d.off, d.b[1] + nv[1] * d.off] }; }
 function drawDim(d, col, mono) {
   const { v, nv, A, B } = dimGeom(d), ext = Math.sign(d.off || 1) * 2 / S.view.s * 3;
@@ -2339,6 +2352,7 @@ function drawDim(d, col, mono) {
   ctx.beginPath(); ctx.moveTo(sx(d.a[0]), sy(d.a[1])); ctx.lineTo(sx(A[0] + nv[0] * ext), sy(A[1] + nv[1] * ext)); ctx.moveTo(sx(d.b[0]), sy(d.b[1])); ctx.lineTo(sx(B[0] + nv[0] * ext), sy(B[1] + nv[1] * ext)); ctx.moveTo(sx(A[0]), sy(A[1])); ctx.lineTo(sx(B[0]), sy(B[1])); ctx.stroke();
   const arrow = (P, dir) => { const X = sx(P[0]), Y = sy(P[1]), ang = Math.atan2(-dir[1], dir[0]); ctx.beginPath(); ctx.moveTo(X, Y); ctx.lineTo(X - 9 * Math.cos(ang - 0.3), Y - 9 * Math.sin(ang - 0.3)); ctx.lineTo(X - 9 * Math.cos(ang + 0.3), Y - 9 * Math.sin(ang + 0.3)); ctx.closePath(); ctx.fill(); };
   arrow(A, [-v[0], -v[1]]); arrow(B, v);
+  for (const [P, r] of [[d.a, d.ra], [d.b, d.rb]]) if (r) { ctx.beginPath(); ctx.arc(sx(P[0]), sy(P[1]), 2.6, 0, 7); ctx.fill(); }
   let ang = Math.atan2(-(B[1] - A[1]), B[0] - A[0]); if (ang > Math.PI / 2) ang -= Math.PI; if (ang < -Math.PI / 2) ang += Math.PI;
   ctx.translate((sx(A[0]) + sx(B[0])) / 2, (sy(A[1]) + sy(B[1])) / 2); ctx.rotate(ang); ctx.font = '500 12px ' + mono; ctx.textAlign = 'center';
   const t = UNIT.len === 'in' ? uTxt(hyp(d.a, d.b)) : fr(hyp(d.a, d.b)) + ' mm', w = ctx.measureText(t).width; ctx.fillStyle = tok('--stock'); ctx.fillRect(-w / 2 - 3, -17, w + 6, 14); ctx.fillStyle = col; ctx.fillText(t, 0, -6);
@@ -2446,7 +2460,7 @@ const HINTS = {
   trim: 'Cliquez sur la portion de vecteur à supprimer entre deux intersections',
   cut: 'Cliquez sur un vecteur pour le couper à cet endroit',
   tabedit: 'Clic sur le parcours : ajouter un pont · clic sur un pont : le retirer · glisser un pont : le déplacer le long du parcours · Échap ou Terminer pour finir',
-  measure: 'Glissez pour mesurer', dim: 'Clic : 1er point · clic : 2e point · clic : position de la cote',
+  measure: 'Glissez pour mesurer', dim: 'Clic : 1er point · clic : 2e point · clic : position de la cote · une extrémité accrochée à un nœud, un milieu ou un centre (point plein) suit l’objet',
 };
 const TNAME = { dogbone: 'Dégagement', select: 'Sélection', nodes: 'Nœuds', pan: 'Vue', rect: 'Rectangle', ellipse: 'Ellipse', circle: 'Cercle', polygon: 'Polygone', poly: 'Plume', arc: 'Arc', text: 'Texte', chamfer: 'Chanfrein', fillet: 'Congé', trim: 'Ajuster', cut: 'Couper', tabedit: 'Ponts', measure: 'Mesure', dim: 'Cote' };
 const DBL_TOOLS = ['select', 'pan', 'rect', 'ellipse', 'circle', 'polygon', 'arc', 'dim', 'measure'];
@@ -2510,11 +2524,11 @@ const snapOff = false;
 function buildSnapCache() {
   const vis = S.shapes.filter(shown), pts = [], arcs = [], seenC = new Set();
   for (const s of vis) {
-    if (s.nodes.length < 3000) for (const n of s.nodes) pts.push({ p: [n.x, n.y], k: 'end', ids: [s.id] });
+    if (s.nodes.length < 3000) s.nodes.forEach((n, ni) => pts.push({ p: [n.x, n.y], k: 'end', ids: [s.id], ni }));
     const ns = nseg(s);
     if (ns < 3000) for (let k = 0; k < ns; k++) {
-      const g = segOf(s, k); pts.push({ p: bez(g, 0.5), k: 'mid', ids: [s.id] });
-      if (!g.line) { const m = bez(g, 0.5), c = circle3(g.p0, m, g.p3); if (c && c.r < 5000) { const q1 = bez(g, 0.25), q3 = bez(g, 0.75), tol = 0.01 + c.r * 0.003; if (Math.abs(hyp(q1, c.C) - c.r) < tol && Math.abs(hyp(q3, c.C) - c.r) < tol) { arcs.push({ C: c.C, r: c.r, g, id: s.id }); const key = Math.round(c.C[0] * 50) + ',' + Math.round(c.C[1] * 50) + ',' + s.id; if (!seenC.has(key)) { seenC.add(key); pts.push({ p: c.C, k: 'cen', ids: [s.id] }); } } } }
+      const g = segOf(s, k); pts.push({ p: bez(g, 0.5), k: 'mid', ids: [s.id], seg: k });
+      if (!g.line) { const m = bez(g, 0.5), c = circle3(g.p0, m, g.p3); if (c && c.r < 5000) { const q1 = bez(g, 0.25), q3 = bez(g, 0.75), tol = 0.01 + c.r * 0.003; if (Math.abs(hyp(q1, c.C) - c.r) < tol && Math.abs(hyp(q3, c.C) - c.r) < tol) { arcs.push({ C: c.C, r: c.r, g, id: s.id }); const key = Math.round(c.C[0] * 50) + ',' + Math.round(c.C[1] * 50) + ',' + s.id; if (!seenC.has(key)) { seenC.add(key); pts.push({ p: c.C, k: 'cen', ids: [s.id], seg: k }); } } } }
     }
   }
   const bb = vis.map(s => bbOf(s.pts));
@@ -2537,11 +2551,11 @@ const snapTol = () => (+S.ui.snapR || 9) / S.view.s;
 function snap(p, excl) {
   snapMark = null; const tol = snapTol(); if (snapOff) return p.slice();
   const pen0 = { end: 0, int: 0.5, stk: 0.5, cen: 1, mid: 1.5, tan: 2 }; let best = null, bd = tol;
-  const consider = (q, k) => { if (SNAP_KEY[k] && S.ui[SNAP_KEY[k]] === false) return; const d = hyp(q, p) + pen0[k] / S.view.s; if (d < bd) { bd = d; best = { p: q, k }; } };
+  const consider = (q, k, ref) => { if (SNAP_KEY[k] && S.ui[SNAP_KEY[k]] === false) return; const d = hyp(q, p) + pen0[k] / S.view.s; if (d < bd) { bd = d; best = { p: q, k, ref: ref || null }; } };
   if (S.ui.snapStock) for (const q of stockPts()) consider(q, 'stk');
   if (S.ui.snapVert) {
     const C = getSnapCache();
-    for (const c of C.pts) { if (excl && c.ids.some(id => excl.has(id))) continue; if (Math.abs(c.p[0] - p[0]) > tol || Math.abs(c.p[1] - p[1]) > tol) continue; consider(c.p, c.k); }
+    for (const c of C.pts) { if (excl && c.ids.some(id => excl.has(id))) continue; if (Math.abs(c.p[0] - p[0]) > tol || Math.abs(c.p[1] - p[1]) > tol) continue; consider(c.p, c.k, c); }
     for (let i = 0; i < pen.length - 1; i++) consider([pen[i].x, pen[i].y], 'end');
     const F = snapFrom();
     if (F && S.ui.snapTan !== false) for (const a of C.arcs) {
@@ -2907,7 +2921,7 @@ cv.addEventListener('pointerdown', e => {
     const q = snap(p); arcSt.push(q);
     if (arcSt.length === 3) { const s = mkShape(arc3Nodes(arcSt[0], arcSt[1], arcSt[2]), false); arcSt = []; if (s) { S.sel.clear(); S.sel.add(s.id); renderSel(); commit(); } }
   } else if (t === 'dim') {
-    const q = snap(p); if (dimSt.length < 2) { if (dimSt.length === 1 && hyp(q, dimSt[0]) < 1e-6) return; dimSt.push(q); } else { const d = dimPreview(q); S.dims.push({ id: uid(), a: d.a, b: d.b, off: d.off }); dimSt = []; commit(false); }
+    const q = snap(p); if (dimSt.length < 2) { if (dimSt.length === 1 && hyp(q, dimSt[0]) < 1e-6) return; if (!dimSt.length) dimRefs = []; dimRefs[dimSt.length] = snapRefOf(snapMark); dimSt.push(q); } else { const d = dimPreview(q), nd = { id: uid(), a: d.a, b: d.b, off: d.off }; if (dimRefs[0]) nd.ra = dimRefs[0]; if (dimRefs[1]) nd.rb = dimRefs[1]; S.dims.push(nd); dimSt = []; dimRefs = []; commit(false); }
   } else if (t === 'measure') { const q = snap(p); S.measure = { a: q, b: q }; drag = { mode: 'measure' }; }
   else if (t === 'tabedit') tabDown(p);
   else if (t === 'text') {
