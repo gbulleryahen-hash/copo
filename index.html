@@ -986,6 +986,7 @@ Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the n
 Object.assign(I18N_EN, {"Accroche…": "Snapping…", "Afficher la grille": "Show grid", "Règles d’accroche": "Snap settings", "Repères": "Guides", "Repère": "Guide", "Coins, milieux et centre du brut": "Stock corners, midpoints and centre", "En déplaçant une sélection, ses bords et son centre s’alignent sur les repères et sur le brut.": "When you move a selection, its edges and centre line up with the guides and the stock.", "Rayon d’accroche": "Snap radius", "Petit": "Small", "Grand": "Large", "Extrémités et nœuds": "Ends and nodes", "Milieux des segments": "Segment midpoints", "Intersections": "Intersections", "Centres des arcs et cercles": "Arc and circle centres", "Tangentes": "Tangents", "Le symbole orange au curseur indique l’accroche trouvée.": "The orange symbol at the cursor shows the snap found.", "OK": "OK", "Prof. départ (D) (mm)": "Start depth (D) (mm)", "Prof. coupe (C) (mm)": "Cut depth (C) (mm)", "Prof. coupe max (C) (0 = illimitée)": "Max cut depth (C) (0 = unlimited)", "{n} vecteurs sélectionnés": "{n} vectors selected", "{n} vecteur sélectionné": "{n} vector selected", "{n} fermés": "{n} closed", "{n} fermé": "{n} closed", "{n} ouverts": "{n} open", "{n} ouvert": "{n} open", "Aucun vecteur sélectionné : cliquez sur le plan les formes à usiner (Maj pour en ajouter).": "No vector selected: click the shapes to machine on the plan (Shift to add more).", "Les vecteurs ouverts sont ignorés par ce parcours.": "Open vectors are ignored by this toolpath.", "Ce parcours demande des formes fermées.": "This toolpath needs closed shapes.", "départ à {d} mm": "start at {d} mm"});
 Object.assign(I18N_EN, {"Cliquez une seconde fois sur la sélection pour afficher les poignées : carrés pour redimensionner, ronds pour tourner (Maj : par pas de 15°), cercle orange = pivot déplaçable.": "Click the selection a second time to show the handles: squares to resize, circles to rotate (Shift: 15° steps), orange circle = movable pivot.", "Rotation": "Rotation", "Faites glisser le pivot (cercle orange) sur le plan : il s’accroche aux objets, aux repères et à la grille. Ou choisissez un point ci-dessous.": "Drag the pivot (orange circle) on the plan: it snaps to objects, guides and the grid. Or pick a point below.", "Pivot": "Pivot", "Type de rotation": "Rotation type", "Relative": "Relative", "Absolue": "Absolute", "Angle (°)": "Angle (°)", "Appliquer": "Apply", "Fermer": "Close", "Tourner de 90° dans le sens inverse des aiguilles d’une montre": "Rotate 90° counter-clockwise", "Tourner de 90° dans le sens des aiguilles d’une montre": "Rotate 90° clockwise", "Sélectionnez les objets à faire pivoter.": "Select the objects to rotate.", "Absolue : la sélection prend l’angle indiqué. Angle actuel : {a}.": "Absolute: the selection takes the given angle. Current angle: {a}.", "Relative : la sélection tourne de l’angle indiqué. Angle positif = sens inverse des aiguilles d’une montre.": "Relative: the selection turns by the given angle. Positive angle = counter-clockwise.", "Angle nul : rien à faire.": "Zero angle: nothing to do.", "Rotation de {a} appliquée.": "Rotated by {a}.", "Sélectionnez une forme.": "Select a shape."});
 Object.assign(I18N_EN, {"Plein écran": "Full screen", "Quitter le plein écran": "Exit full screen", "Quitter le plein écran (Échap)": "Exit full screen (Esc)", "Le plein écran n’est pas disponible ici.": "Full screen is not available here."});
+Object.assign(I18N_EN, {"Édition des nœuds : glissez les nœuds et les poignées. Clic droit ou Échap pour revenir à la sélection.": "Node editing: drag the nodes and handles. Right-click or Esc to go back to selection."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -2420,6 +2421,17 @@ const HINTS = {
   measure: 'Glissez pour mesurer', dim: 'Clic : 1er point · clic : 2e point · clic : position de la cote',
 };
 const TNAME = { dogbone: 'Dégagement', select: 'Sélection', nodes: 'Nœuds', pan: 'Vue', rect: 'Rectangle', ellipse: 'Ellipse', circle: 'Cercle', polygon: 'Polygone', poly: 'Plume', arc: 'Arc', text: 'Texte', chamfer: 'Chanfrein', fillet: 'Congé', trim: 'Ajuster', cut: 'Couper', tabedit: 'Ponts', measure: 'Mesure', dim: 'Cote' };
+const DBL_TOOLS = ['select', 'pan', 'rect', 'ellipse', 'circle', 'polygon', 'arc', 'dim', 'measure'];
+// clic droit : termine la ligne en cours, annule le tracé, revient à la sélection, puis désélectionne
+function rightClick() {
+  if (drag && drag.mode !== 'pan') { drag = null; draw(); }
+  if (pen.length) { finishPen(false); return; }
+  if (arcSt.length || dimSt.length) { arcSt = []; dimSt = []; draw(); return; }
+  if (S.ui.tool !== 'select') { setTool('select'); dRefresh(); draw(); return; }
+  if (xfOn()) { S.xf = false; draw(); return; }
+  if (S.ui.dsec) { S.ui.dsec = null; }
+  S.sel.clear(); S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } renderSel(); dRefresh(); draw();
+}
 function setTool(t) {
   if (pen.length && t !== 'poly') finishPen(false);
   arcSt = []; dimSt = []; if (t !== 'measure') S.measure = null;
@@ -2821,10 +2833,12 @@ function importDXF(text) {
 
 // ---------- souris / tactile ----------
 let drag = null, pen = [], arcSt = [], dimSt = [], hover = null, hoverCorner = null, hoverEdge = null; const pointers = new Map(); let pinch = null, spaceDown = false;
+let lastPtrType = 'mouse'; const downHist = [];
 const evPt = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
 const restCursor = () => S.ui.tool === 'pan' ? 'grab' : (S.ui.tool === 'select' || S.ui.tool === 'nodes') ? 'default' : 'crosshair';
 cv.addEventListener('pointerdown', e => {
-  cv.focus({ preventScroll: true }); cv.setPointerCapture(e.pointerId); const [X, Y] = evPt(e); pointers.set(e.pointerId, [X, Y]);
+  cv.focus({ preventScroll: true }); cv.setPointerCapture(e.pointerId); const [X, Y] = evPt(e); pointers.set(e.pointerId, [X, Y]); lastPtrType = e.pointerType;
+  if (e.button === 0) { downHist.push({ xf: xfOn(), key: selKey(), tool: S.ui.tool }); if (downHist.length > 3) downHist.shift(); }
   if (pointers.size === 2) { const [a, b] = [...pointers.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), c: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], s: S.view.s, ox: S.view.ox, oy: S.view.oy }; drag = null; return; }
   const p = [wx(X), wy(Y)], t = S.ui.tool;
   if (e.button === 1 || t === 'pan' || spaceDown) { drag = { mode: 'pan', X, Y, ox: S.view.ox, oy: S.view.oy }; cv.style.cursor = 'grabbing'; return; }
@@ -2974,10 +2988,22 @@ function endPointer(e) {
   else if (D.mode === 'measure') showMeasure();
   snapMark = null; draw();
 }
+cv.addEventListener('contextmenu', e => { e.preventDefault(); if (lastPtrType === 'touch' || pointers.size > 1) return; rightClick(); });
 cv.addEventListener('pointerup', endPointer); cv.addEventListener('pointercancel', endPointer);
 cv.addEventListener('pointerleave', () => { hover = null; if (!drag) { hoverCorner = null; hoverEdge = null; snapMark = null; draw(); } });
 cv.addEventListener('dblclick', e => {
   const [X, Y] = evPt(e), p = [wx(X), wy(Y)];
+  if (DBL_TOOLS.includes(S.ui.tool) && X > RB && Y > RB) {
+    const h = hitShape(p);
+    if (h) {
+      const first = downHist.length >= 2 ? downHist[downHist.length - 2] : null;
+      if (S.ui.tool === 'select' && first && first.tool === 'select' && first.xf && first.key.split(',').includes(h.id)) { S.sel.clear(); S.sel.add(h.id); S.xf = false; setTool('nodes'); renderSel(); dRefresh(); toast(tr('Édition des nœuds : glissez les nœuds et les poignées. Clic droit ou Échap pour revenir à la sélection.')); draw(); return; }
+      if (S.ui.tool !== 'select') setTool('select');
+      if (S.imgSel) { S.imgSel = null; renderImgPanel(); }
+      S.selDim = null; S.sel.clear(); groupIds(h).forEach(id => S.sel.add(id)); S.xf = true; S.xfKey = selKey(); drag = null;
+      renderSel(); dRefresh(); draw(); return;
+    }
+  }
   if (S.ui.tool === 'poly' && pen.length) { while (pen.length > 1 && Math.hypot(pen[pen.length - 1].x - pen[pen.length - 2].x, pen[pen.length - 1].y - pen[pen.length - 2].y) < 1e-6) pen.pop(); finishPen(false); return; }
   if (S.ui.tool === 'nodes' && S.ne) { const s = shapeById(S.ne.sid); if (s && edgeDist(s, p) < 7 / S.view.s) { const k = insertNode(s, paramAt(s, p).u); if (k >= 0) { S.ne.ni = k; S.ne.seg = null; commit(); draw(); } } }
 });
@@ -3251,7 +3277,7 @@ window.addEventListener('keydown', e => {
   if (k === 'Delete' || k === 'Backspace') { e.preventDefault(); if (S.imgSel && !S.sel.size) { imgAct('imgDel'); return; } if (S.ui.tool === 'nodes' && S.ne && S.ne.ni !== null) act('neDel'); else if (S.selDim) { S.dims = S.dims.filter(d => d.id !== S.selDim); S.selDim = null; commit(false); draw(); } else act('del'); return; }
   if (k === 'Escape' && S.ui.tool === 'tabedit') { setTool('select'); return; }
   if (k === 'Escape' && S.ui.dsec && S.ui.tool === 'select' && !S.sel.size) { S.ui.dsec = null; dRefresh(); return; }
-  if (k === 'Escape') { if (pen.length) { pen = []; } else if (arcSt.length || dimSt.length) { arcSt = []; dimSt = []; } else { S.sel.clear(); S.selDim = null; if (S.ne) S.ne = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } renderSel(); } draw(); return; }
+  if (k === 'Escape') { if (pen.length) { pen = []; } else if (arcSt.length || dimSt.length) { arcSt = []; dimSt = []; } else if (S.ui.tool === 'nodes') { setTool('select'); dRefresh(); } else { S.sel.clear(); S.selDim = null; if (S.ne) S.ne = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } renderSel(); } draw(); return; }
   if (k === 'Enter' && pen.length) { finishPen(false); return; }
   if (k.startsWith('Arrow') && S.imgSel && !S.sel.size) { e.preventDefault(); const d = UNIT.len === 'in' ? (e.shiftKey ? 6.35 : 1.5875) : (e.shiftKey ? 10 : 1); imgSet(im => { im.x += k === 'ArrowLeft' ? -d : k === 'ArrowRight' ? d : 0; im.y += k === 'ArrowDown' ? -d : k === 'ArrowUp' ? d : 0; }); return; }
   if (k.startsWith('Arrow') && S.sel.size) { e.preventDefault(); const d = UNIT.len === 'in' ? (e.shiftKey ? 6.35 : 1.5875) : (e.shiftKey ? 10 : 1); const dx = k === 'ArrowLeft' ? -d : k === 'ArrowRight' ? d : 0, dy = k === 'ArrowDown' ? -d : k === 'ArrowUp' ? d : 0; selShapes().forEach(s => transformShape(s, q => [q[0] + dx, q[1] + dy])); commit(); renderSel(); draw(); return; }
