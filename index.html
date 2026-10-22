@@ -4907,7 +4907,7 @@ function v3BuildPaths() {
   // dessin : vecteurs visibles, sur le dessus du brut (face 1) ou dessous (face 2)
   { const db = [], ink = hex3(tok('--draw')); let n1 = 0;
     for (const pass of [1, 2]) { if (pass === 2) n1 = db.length / 9; for (const sh of S.shapes) { if (!shown(sh) || sh.pts.length < 2 || (faceOf(sh) === 2) !== (pass === 2)) continue; const f2 = pass === 2, lc = layerOf(sh).color ? hex3(layerOf(sh).color) : ink, n = sh.pts.length, m = sh.closed ? n : n - 1;
-      const P = q => f2 ? [...flipPt(q), -S3.t] : [q[0], q[1], 0];
+      const P = q => [q[0], q[1], f2 ? -S3.t : 0]; // même repère que la simulation (coordonnées du plan)
       for (let i = 0; i < m; i++) { const a = P(sh.pts[i]), b = P(sh.pts[(i + 1) % n]); db.push(...a, ...lc, 0, 0, 0, ...b, ...lc, 0, 0, 0); } } }
     if (!V3.dvao) { V3.dvao = gl.createVertexArray(); V3.dvbo = gl.createBuffer(); }
     gl.bindVertexArray(V3.dvao); gl.bindBuffer(gl.ARRAY_BUFFER, V3.dvbo); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(db), gl.STATIC_DRAW);
