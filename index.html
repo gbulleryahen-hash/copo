@@ -2456,9 +2456,10 @@ const DBL_TOOLS = ['select', 'pan', 'rect', 'ellipse', 'circle', 'polygon', 'arc
 // clic droit : termine la ligne en cours, annule le tracé, revient à la sélection, puis désélectionne
 function rightClick() {
   if (drag && drag.mode !== 'pan') { drag = null; draw(); }
-  if (pen.length) { finishPen(false); return; }
-  if (arcSt.length || dimSt.length) { arcSt = []; dimSt = []; draw(); return; }
-  if (S.ui.tool !== 'select') { setTool('select'); dRefresh(); draw(); return; }
+  // un seul clic droit : termine le tracé en cours, revient à la sélection et désélectionne
+  if (pen.length) finishPen(false);
+  arcSt = []; dimSt = [];
+  if (S.ui.tool !== 'select') { setTool('select'); S.xf = false; S.sel.clear(); S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } renderSel(); dRefresh(); draw(); return; }
   if (xfOn()) { S.xf = false; draw(); return; }
   if (S.ui.dsec) { S.ui.dsec = null; }
   S.sel.clear(); S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } renderSel(); dRefresh(); draw();
@@ -3036,7 +3037,7 @@ function endPointer(e) {
   else if (D.mode === 'measure') showMeasure();
   snapMark = null; draw();
 }
-cv.addEventListener('contextmenu', e => { e.preventDefault(); if (lastPtrType === 'touch' || pointers.size > 1) return; rightClick(); });
+$('#cw').addEventListener('contextmenu', e => { if (e.target.closest('input, select, textarea')) return; e.preventDefault(); if (lastPtrType === 'touch' || pointers.size > 1) return; rightClick(); });
 cv.addEventListener('pointerup', endPointer); cv.addEventListener('pointercancel', endPointer);
 cv.addEventListener('pointerleave', () => { hover = null; if (!drag) { hoverCorner = null; hoverEdge = null; snapMark = null; draw(); } });
 cv.addEventListener('dblclick', e => {
