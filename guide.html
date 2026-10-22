@@ -213,7 +213,7 @@ footer p{max-width:none}
     <h2 id="fr-etapes">Votre premier usinage en six étapes</h2>
     <ol class="steps">
       <li><div><b>Réglez le projet</b>Onglet <span class="ui">Projet</span> : dimensions et matière du brut, point d'origine X0 Y0, zéro Z (dessus du brut ou table), unités et machine.</div></li>
-      <li><div><b>Dessinez ou importez</b>Tracez avec les icônes de l'onglet Dessin, importez un SVG ou un DXF (<span class="ui">Fichier › Importer un SVG ou un DXF…</span>) ou écrivez un texte.</div></li>
+      <li><div><b>Dessinez ou importez</b>Tracez avec les icônes de l'onglet Dessin, importez un SVG, un DXF ou une image (icône <span class="ui">Importer</span> du groupe Créer, ou menu Fichier) ou écrivez un texte.</div></li>
       <li><div><b>Vérifiez vos outils</b>Onglet <span class="ui">Outils</span> : diamètre, vitesse de broche, avance, vitesse de descente, profondeur de passe et recouvrement de chaque fraise.</div></li>
       <li><div><b>Créez les parcours</b>Sélectionnez les formes sur le plan, ouvrez l'onglet <span class="ui">Parcours</span>, choisissez Profil, Poche, V-carving ou Perçage, réglez puis cliquez sur <span class="ui">Calculer</span>.</div></li>
       <li><div><b>Contrôlez en 3D</b><span class="ui">Affichage › Aperçu 3D de l'usinage</span> montre le brut usiné. Rejouez l'usinage pour repérer une erreur de profondeur ou d'outil.</div></li>
@@ -259,8 +259,9 @@ footer p{max-width:none}
     <h3>Calques, images et fichiers</h3>
     <ul>
       <li><strong>Calques</strong> : couleur des traits, visibilité, verrou et face usinée (F1 dessus, F2 dessous).</li>
-      <li><strong>Images de référence</strong> (<span class="ui">Fichier › Insérer une image…</span> ou glisser-déposer) : déplacez, redimensionnez et pivotez avec les poignées pour dessiner par-dessus. Elles ne sont jamais usinées.</li>
+      <li><strong>Images de référence</strong> (icône <span class="ui">Importer</span> › Image, <span class="ui">Fichier › Insérer une image…</span> ou glisser-déposer) : déplacez, redimensionnez et pivotez avec les poignées pour dessiner par-dessus. Elles ne sont jamais usinées.</li>
       <li><strong>Vectoriser une image</strong> (panneau Dessin › Images, image sélectionnée) : COPO trace les contours de l'image. Réglez le <em>seuil</em> (ce qui est plus sombre devient la forme ; « Seuil automatique » le calcule pour vous) et le <em>lissage</em> (contours plus doux, petits détails retirés), cochez <em>Inverser</em> pour contourner les zones claires. L'aperçu se met à jour en direct ; <span class="ui">Créer les contours</span> ajoute des formes fermées et groupées à l'emplacement de l'image, prêtes pour une poche, un profil ou un V-carving. Une image nette et bien contrastée (logo, dessin au trait, silhouette) donne le meilleur résultat.</li>
+      <li><strong>Importer</strong> : l'icône <span class="ui">Importer</span> du groupe Créer ouvre un panneau à deux choix, <em>Vectoriel</em> (SVG, DXF) et <em>Image</em> (modèle à décalquer ou à vectoriser).</li>
       <li><strong>SVG</strong> : import en millimètres avec courbes conservées ; export du dessin entier ou de la sélection.</li>
       <li><strong>DXF</strong> (texte/ASCII, toutes versions) : lignes, polylignes avec arcs, cercles, arcs, ellipses, splines et blocs. L'unité du fichier est respectée (mm, cm, pouces…) ; un fichier sans unité est lu en millimètres. Les segments qui se touchent sont reliés en contours, fermés quand c'est possible, et chaque calque DXF devient un calque COPO. Les textes, cotes, hachures et objets 3D sont ignorés (le message indique lesquels).</li>
     </ul>
@@ -527,7 +528,7 @@ M30</pre>
     <h2 id="en-steps">Your first job in six steps</h2>
     <ol class="steps">
       <li><div><b>Set up the project</b><span class="ui">Project</span> tab: stock size and material, X0 Y0 origin point, Z zero (top of stock or table), units and machine.</div></li>
-      <li><div><b>Draw or import</b>Draw with the icons of the Drawing tab, import an SVG or DXF (<span class="ui">File › Import an SVG or DXF…</span>) or type some text.</div></li>
+      <li><div><b>Draw or import</b>Draw with the icons of the Drawing tab, import an SVG, a DXF or an image (the <span class="ui">Import</span> icon in the Create group, or the File menu) or type some text.</div></li>
       <li><div><b>Check your tools</b><span class="ui">Tools</span> tab: diameter, spindle speed, feed rate, plunge rate, pass depth and stepover of each bit.</div></li>
       <li><div><b>Create the toolpaths</b>Select shapes on the canvas, open the <span class="ui">Toolpaths</span> tab, choose Profile, Pocket, V-carving or Drilling, adjust, then click <span class="ui">Calculate</span>.</div></li>
       <li><div><b>Check in 3D</b><span class="ui">View › 3D machining preview</span> shows the machined stock. Play the job back to spot a wrong depth or tool.</div></li>
@@ -573,8 +574,9 @@ M30</pre>
     <h3>Layers, images and files</h3>
     <ul>
       <li><strong>Layers</strong>: stroke color, visibility, lock and machined side (F1 top, F2 bottom).</li>
-      <li><strong>Reference images</strong> (<span class="ui">File › Insert an image…</span> or drag and drop): move, resize and rotate them with the handles to trace over them. They are never machined.</li>
+      <li><strong>Reference images</strong> (<span class="ui">Import</span> icon › Image, <span class="ui">File › Insert an image…</span> or drag and drop): move, resize and rotate them with the handles to trace over them. They are never machined.</li>
       <li><strong>Vectorize an image</strong> (Drawing panel › Images, image selected): COPO traces the outlines of the image. Set the <em>threshold</em> (anything darker becomes the shape; “Auto threshold” works it out for you) and the <em>smoothing</em> (softer outlines, small details removed), tick <em>Invert</em> to outline light areas. The preview updates live; <span class="ui">Create outlines</span> adds closed, grouped shapes where the image is, ready for a pocket, a profile or V-carving. A sharp, high-contrast image (logo, line drawing, silhouette) gives the best result.</li>
+      <li><strong>Import</strong>: the <span class="ui">Import</span> icon in the Create group opens a panel with two choices, <em>Vector</em> (SVG, DXF) and <em>Image</em> (template to trace over or vectorize).</li>
       <li><strong>SVG</strong>: import in millimetres with curves kept; export the whole drawing or the selection.</li>
       <li><strong>DXF</strong> (text/ASCII, any version): lines, polylines with arcs, circles, arcs, ellipses, splines and blocks. The file's unit is respected (mm, cm, inches…); a file without a unit is read as millimetres. Touching segments are joined into outlines, closed when possible, and each DXF layer becomes a COPO layer. Text, dimensions, hatches and 3D objects are skipped (the message says which).</li>
     </ul>
