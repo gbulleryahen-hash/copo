@@ -297,7 +297,8 @@ footer p{max-width:none}
     <div class="tbl"><table>
       <thead><tr><th>Réglage</th><th>Rôle</th></tr></thead>
       <tbody>
-        <tr><td>Type</td><td>Fraise droite, hémisphérique, en V (angle du V), de gravure (angle et diamètre de pointe ; utilisée comme une fraise en V) ou foret (angle de pointe, 118° le plus souvent).</td></tr>
+        <tr><td>Type</td><td>Fraise droite, hémisphérique, en V (angle du V), de gravure conique à pointe plate (angle et diamètre de pointe), <strong>conique à bout sphérique</strong> ou foret (angle de pointe, 118° le plus souvent).</td></tr>
+        <tr><td>Fraise conique à bout sphérique</td><td>Définie comme sur sa boîte : <strong>diamètre de queue D</strong>, <strong>rayon en bout R</strong> et <strong>longueur d'usinage L</strong>. COPO en déduit l'angle de dépouille, celui du cône tangent à la bille qui atteint le diamètre D à la hauteur L : pour D 6, R 1, L 20, environ 5,99° (11,99° inclus). Les fraises de gravure et coniques sont utilisées comme des fraises en V de cet angle (V-carving, profil sur la ligne) ; la pointe arrondie ou plate n'est pas encore prise en compte dans la profondeur.</td></tr>
         <tr><td>Diamètre</td><td>Sert au calcul des décalages et des poches.</td></tr>
         <tr><td>Numéro d'outil (T)</td><td>Écrit dans le G-code des post-processeurs à changement d'outil (<code>T2 M6</code>, <code>M6 T2</code>).</td></tr>
         <tr><td>Vitesse de broche</td><td>En tr/min, écrite avec <code>M3</code>.</td></tr>
@@ -621,7 +622,8 @@ M30</pre>
     <div class="tbl"><table>
       <thead><tr><th>Setting</th><th>Purpose</th></tr></thead>
       <tbody>
-        <tr><td>Type</td><td>End mill, ball nose, V-bit (V angle), engraving bit (angle and tip diameter; used like a V-bit) or drill (point angle, usually 118°).</td></tr>
+        <tr><td>Type</td><td>End mill, ball nose, V-bit (V angle), tapered flat-tip engraving bit (angle and tip diameter), <strong>tapered ball-nose</strong> or drill (point angle, usually 118°).</td></tr>
+        <tr><td>Tapered ball-nose bit</td><td>Defined as on its box: <strong>shank diameter D</strong>, <strong>tip radius R</strong> and <strong>cutting length L</strong>. COPO derives the side angle, that of the cone tangent to the ball that reaches diameter D at height L: for D 6, R 1, L 20, about 5.99° (11.99° included). Engraving and tapered bits are used like V-bits of that angle (V-carving, on-the-line profile); the rounded or flat tip is not yet taken into account in the depth.</td></tr>
         <tr><td>Diameter</td><td>Used to calculate offsets and pockets.</td></tr>
         <tr><td>Tool number (T)</td><td>Written in the G-code of tool-change post-processors (<code>T2 M6</code>, <code>M6 T2</code>).</td></tr>
         <tr><td>Spindle speed</td><td>In rpm, written with <code>M3</code>.</td></tr>
