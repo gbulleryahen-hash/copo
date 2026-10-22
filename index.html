@@ -4671,7 +4671,7 @@ function libLinkProject() {
   if (added) libSave();
 }
 // compatibilité outil / type de parcours
-const libFits = (ft, t) => !ft || (ft === 'vcarve' ? (t.type === 'v' || t.type === 'engrave') : ft === 'drill' ? t.type !== 'engrave' : (t.type === 'flat' || t.type === 'ball' || t.type === 'v'));
+const libFits = (ft, t) => !ft || (ft === 'vcarve' ? (t.type === 'v' || t.type === 'engrave') : ft === 'drill' ? t.type !== 'engrave' : ft === 'profile' ? t.type !== 'drill' : (t.type === 'flat' || t.type === 'ball' || t.type === 'v'));
 const LIB_ICO = { flat: '<path d="M9 3h6v4H9zM10 7h4v14h-4z"/>', ball: '<path d="M9 3h6v4H9zM10 7h4v11a2 2 0 0 1-4 0z"/>', v: '<path d="M9 3h6v4H9zM9 7h6l-3 14z"/>', engrave: '<path d="M9 3h6v4H9zM9 7h6l-2 13h-2z"/>', drill: '<path d="M9 3h6v4H9zM10 7h4v11l-2 3-2-3z"/>' };
 const GRP_ICO = '<path d="M3 7h6l2 2h10v10H3z"/>';
 function libMatSync() { for (const id of ['#libMat', '#pjLibMat']) { const sel = $(id); if (!sel) continue; sel.innerHTML = ''; for (const m of LIB.materials) { const o = document.createElement('option'); o.value = m.id; o.textContent = tr(m.name); sel.appendChild(o); } sel.value = projMat(); } }
