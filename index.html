@@ -1007,6 +1007,7 @@ Object.assign(I18N_EN, {"Plein écran": "Full screen", "Quitter le plein écran"
 Object.assign(I18N_EN, {"Édition des nœuds : glissez les nœuds et les poignées. Clic droit ou Échap pour revenir à la sélection.": "Node editing: drag the nodes and handles. Right-click or Esc to go back to selection."});
 Object.assign(I18N_EN, {"Nombre de dents": "Number of flutes", "Avance par dent (mm)": "Feed per tooth (mm)", "dents": "flutes", "dent": "flute", "Foret : avance par tour {f} mm (vitesse de descente ÷ vitesse de broche).": "Drill: feed per revolution {f} mm (plunge rate ÷ spindle speed).", "Renseignez la vitesse de broche et le nombre de dents pour obtenir l’avance par dent.": "Enter the spindle speed and number of flutes to get the feed per tooth.", "faible : la fraise risque de frotter et de chauffer (brûlures, usure)": "low: the bit may rub and heat up (burn marks, wear)", "élevée : risque de casse ou de mauvais état de surface": "high: risk of breakage or poor finish", "dans la plage courante pour le bois": "within the usual range for wood", "{f} par dent — {s}. Repère indicatif pour le bois avec ce diamètre : {a} à {b} ; suivez en priorité les données du fabricant de la fraise.": "{f} per tooth — {s}. Rough guide for wood with this diameter: {a} to {b}; follow the bit maker’s data first."});
 Object.assign(I18N_EN, {"Relier les écarts par": "Bridge gaps with", "Une ligne droite": "A straight line", "Une courbe lisse": "A smooth curve", "Joindre relie bout à bout les vecteurs ouverts sélectionnés, en commençant par les extrémités les plus proches ; Fermer referme un vecteur ouvert. Les extrémités à moins de la tolérance sont fusionnées ; au-delà, l’écart est comblé par une ligne droite ou par une courbe lisse qui prolonge la direction des deux tracés.": "Join links the selected open vectors end to end, starting with the closest ends; Close closes an open vector. Ends closer than the tolerance are merged; beyond it, the gap is bridged by a straight line or by a smooth curve that continues the direction of both vectors.", "Lisser (adapter des courbes)": "Smooth (fit curves)", "Type d’ajustement": "Fitting type", "Arcs": "Arcs", "Courbes de Bézier": "Bézier curves", "Lignes droites": "Straight lines", "Garder les coins saillants": "Keep sharp corners", "Angle max (°)": "Max angle (°)", "Remplacer les vecteurs sélectionnés": "Replace the selected vectors", "Remplace les tracés à nombreux petits segments (vectorisation, DXF, import) par des arcs, des courbes de Bézier ou des lignes qui restent à moins de la tolérance du tracé d’origine. L’aperçu en pointillés orange montre le résultat. Un coin dont le changement de direction dépasse l’angle max reste un angle vif.": "Replaces vectors made of many small segments (tracing, DXF, import) with arcs, Bézier curves or lines that stay within the tolerance of the original. The dashed orange preview shows the result. A corner whose change of direction exceeds the max angle stays sharp.", "{s} vecteur(s) : {a} nœuds → {b} nœuds": "{s} vector(s): {a} nodes → {b} nodes", "Sélectionnez les vecteurs à lisser.": "Select the vectors to smooth.", "{n} vecteur(s) lissé(s).": "{n} vector(s) smoothed.", "Rien à lisser.": "Nothing to smooth.", "Joindre et relier des vecteurs": "Join and connect vectors"});
+Object.assign(I18N_EN, {"Cliquez une forme puis un nœud ou un segment · Maj+clic ou cadre : plusieurs nœuds · flèches : déplacer (Maj ×10, Alt ÷10) · Ctrl+A : tous · double-clic sur un segment : ajouter un nœud · Alt en tirant une poignée : la casser": "Click a shape then a node or segment · Shift+click or box: several nodes · arrows: move (Shift ×10, Alt ÷10) · Ctrl+A: all · double-click a segment: add a node · Alt while dragging a handle: break it"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -2276,7 +2277,7 @@ function render() {
   // aperçus en cours
   const D = drag;
   ctx.strokeStyle = C.acc; ctx.lineWidth = 1.6;
-  if (D && D.mode === 'band') { ctx.setLineDash([4, 3]); ctx.lineWidth = 1; ctx.strokeRect(Math.min(D.sx0, D.sx1) + 0.5, Math.min(D.sy0, D.sy1) + 0.5, Math.abs(D.sx1 - D.sx0), Math.abs(D.sy1 - D.sy0)); ctx.setLineDash([]); }
+  if (D && (D.mode === 'band' || D.mode === 'nband')) { ctx.setLineDash([4, 3]); ctx.lineWidth = 1; ctx.strokeRect(Math.min(D.sx0, D.sx1) + 0.5, Math.min(D.sy0, D.sy1) + 0.5, Math.abs(D.sx1 - D.sx0), Math.abs(D.sy1 - D.sy0)); ctx.setLineDash([]); }
   if (D && ['rect', 'ellipse', 'circle', 'polygon'].includes(D.mode)) { const tmp = previewShape(D); if (tmp) { pathOf(tmp.pts, true); ctx.stroke(); } }
   if (pen.length) { const tmp = refresh({ nodes: pen.map(cloneNode).concat(hover && !(D && D.mode === 'pen') ? [NODE(hover[0], hover[1])] : []), closed: false }); pathOf(tmp.pts, false); ctx.stroke(); ctx.fillStyle = C.acc; for (const n of pen) ctx.fillRect(sx(n.x) - 3, sy(n.y) - 3, 6, 6); }
   if (arcSt.length && hover) { const a = arcSt[0]; if (arcSt.length === 1) { pathOf([a, hover], false); ctx.stroke(); } else { const tmp = refresh({ nodes: arc3Nodes(a, arcSt[1], hover), closed: false }); pathOf(tmp.pts, false); ctx.stroke(); } ctx.fillStyle = C.acc; for (const p of arcSt) ctx.fillRect(sx(p[0]) - 3, sy(p[1]) - 3, 6, 6); }
@@ -2350,7 +2351,7 @@ function dimPreview(p) { const a = dimSt[0], b = dimSt[1], v = nrm(sub(b, a)), n
 function visibleHandles(s) {
   const n = s.nodes.length, ni = S.ne.ni, all = n <= 80, out = [];
   s.nodes.forEach((nd, i) => {
-    const near = ni !== null && (i === ni || i === (ni + 1) % n || i === (ni - 1 + n) % n);
+    const near = neSel().some(k => i === k || i === (k + 1) % n || i === (k - 1 + n) % n);
     if (!all && !near) return;
     if (nd.i) out.push({ i, w: 'i', p: [nd.x + nd.i[0], nd.y + nd.i[1]] });
     if (nd.o) out.push({ i, w: 'o', p: [nd.x + nd.o[0], nd.y + nd.o[1]] });
@@ -2362,7 +2363,8 @@ function drawNodeEdit(C) {
   if (S.ne.seg !== null) { const k = S.ne.seg, pts = s.pts.filter((_, j) => s.map[j] >= k - 1e-9 && s.map[j] <= k + 1 + 1e-9); const g = segOf(s, k); pts.push(g.p3); ctx.strokeStyle = C.danger; ctx.lineWidth = 3; pathOf(pts, false); ctx.stroke(); }
   ctx.lineWidth = 1; ctx.strokeStyle = C.drawMuted;
   for (const h of visibleHandles(s)) { const nd = s.nodes[h.i]; ctx.beginPath(); ctx.moveTo(sx(nd.x), sy(nd.y)); ctx.lineTo(sx(h.p[0]), sy(h.p[1])); ctx.stroke(); ctx.beginPath(); ctx.arc(sx(h.p[0]), sy(h.p[1]), 3.5, 0, 7); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.stroke(); }
-  s.nodes.forEach((nd, i) => { const X = sx(nd.x), Y = sy(nd.y), selN = i === S.ne.ni; ctx.fillStyle = selN ? C.acc : '#ffffff'; ctx.strokeStyle = C.acc; ctx.lineWidth = 1.5; ctx.beginPath(); if (nd.sm) ctx.arc(X, Y, 4.5, 0, 7); else ctx.rect(X - 4, Y - 4, 8, 8); ctx.fill(); ctx.stroke(); });
+  const neS = new Set(neSel());
+  s.nodes.forEach((nd, i) => { const X = sx(nd.x), Y = sy(nd.y), selN = neS.has(i); ctx.fillStyle = selN ? C.acc : '#ffffff'; ctx.strokeStyle = C.acc; ctx.lineWidth = 1.5; ctx.beginPath(); if (nd.sm) ctx.arc(X, Y, 4.5, 0, 7); else ctx.rect(X - 4, Y - 4, 8, 8); ctx.fill(); ctx.stroke(); });
 }
 function previewShape(D) {
   const a = D.p0, b = D.p1; if (!a || !b) return null; let nodes = null;
@@ -2434,7 +2436,7 @@ document.getElementById('pjMat').addEventListener('change', e => { S.meta = { ..
 // ---------- outils de dessin ----------
 const HINTS = {
   select: 'Clic : sélectionner (le groupe entier) · Maj+clic : ajouter · glisser : déplacer · cadre : sélection multiple · flèches : 1 mm (Maj : 10 mm)',
-  nodes: 'Cliquez une forme puis un nœud ou un segment · double-clic sur un segment : ajouter un nœud · Alt en tirant une poignée : la casser',
+  nodes: 'Cliquez une forme puis un nœud ou un segment · Maj+clic ou cadre : plusieurs nœuds · flèches : déplacer (Maj ×10, Alt ÷10) · Ctrl+A : tous · double-clic sur un segment : ajouter un nœud · Alt en tirant une poignée : la casser',
   pan: 'Glissez pour déplacer la vue · molette ou pincement : zoom',
   rect: 'Glissez pour tracer', ellipse: 'Glissez le cadre de l’ellipse · Maj : cercle', circle: 'Cliquez au centre puis glissez jusqu’au rayon',
   polygon: 'Cliquez au centre puis glissez : rayon et orientation',
@@ -2896,7 +2898,7 @@ cv.addEventListener('pointerdown', e => {
       else if (hi) { selectImg(hi.id); drag = { mode: 'imove', im: hi, off: [hi.x - p[0], hi.y - p[1]] }; }
       else { S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (!e.shiftKey) S.sel.clear(); renderSel(); drag = { mode: 'band', sx0: X, sy0: Y, sx1: X, sy1: Y }; }
     }
-  } else if (t === 'nodes') nodesDown(p, e);
+  } else if (t === 'nodes') nodesDown(p, e, X, Y);
   else if (['rect', 'ellipse', 'circle', 'polygon'].includes(t)) { const q = snap(p); drag = { mode: t, p0: q, p1: q, shift: e.shiftKey }; }
   else if (t === 'poly') {
     const q = snap(p);
@@ -2940,13 +2942,24 @@ cv.addEventListener('pointerdown', e => {
   }
   draw();
 });
-function nodesDown(p, e) {
+// nœuds sélectionnés (plusieurs avec Maj ou un cadre)
+function neSel() { const ne = S.ne; if (!ne) return []; if (ne.ms && ne.ms.size > 1) return [...ne.ms]; return ne.ni !== null && ne.ni !== undefined ? [ne.ni] : []; }
+function neSetSel(list, primary) { const ne = S.ne; if (!ne) return; ne.ms = new Set(list); ne.ni = list.length ? (primary !== undefined && list.includes(primary) ? primary : list[list.length - 1]) : null; ne.seg = null; }
+function neMove(dx, dy) { const s = S.ne && shapeById(S.ne.sid), L = neSel(); if (!s || !L.length) return false; for (const i of L) { const n = s.nodes[i]; if (n) { n.x += dx; n.y += dy; } } refresh(s); return true; }
+function nodesDown(p, e, X, Y) {
   const tol = 7 / S.view.s, s = S.ne && shapeById(S.ne.sid);
   if (s) {
     for (const h of visibleHandles(s)) if (hyp(h.p, p) < tol) { drag = { mode: 'handle', s, i: h.i, w: h.w, alt: e.altKey, moved: false }; return; }
     let bi = -1, bd = tol; s.nodes.forEach((n, i) => { const d = Math.hypot(n.x - p[0], n.y - p[1]); if (d < bd) { bd = d; bi = i; } });
-    if (bi >= 0) { S.ne.ni = bi; S.ne.seg = null; drag = { mode: 'node', s, i: bi, moved: false }; return; }
-    if (edgeDist(s, p) < tol) { const u = paramAt(s, p).u; S.ne.seg = Math.min(nseg(s) - 1, Math.floor(u)); S.ne.ni = null; return; }
+    if (bi >= 0) {
+      const cur = neSel();
+      if (e.shiftKey) { const set = new Set(cur); if (set.has(bi)) set.delete(bi); else set.add(bi); neSetSel([...set], set.has(bi) ? bi : undefined); draw(); return; }
+      if (!cur.includes(bi)) neSetSel([bi]); else S.ne.ni = bi;
+      const L = neSel(); drag = { mode: 'node', s, i: bi, ids: L, orig: L.map(i => [s.nodes[i].x, s.nodes[i].y]), p0: [s.nodes[bi].x, s.nodes[bi].y], moved: false }; return;
+    }
+    if (edgeDist(s, p) < tol) { const u = paramAt(s, p).u; S.ne.seg = Math.min(nseg(s) - 1, Math.floor(u)); S.ne.ni = null; S.ne.ms = null; return; }
+    const h0 = hitEdge(p, 7);
+    if (!h0 || h0.id === s.id) { drag = { mode: 'nband', sx0: X, sy0: Y, sx1: X, sy1: Y, add: e.shiftKey, s }; return; }
   }
   const h = hitShape(p);
   if (h) { S.ne = { sid: h.id, ni: null, seg: null }; S.sel.clear(); S.sel.add(h.id); renderSel(); }
@@ -2975,7 +2988,8 @@ cv.addEventListener('pointermove', e => {
     }
     if (D.mode === 'move') { const q = snap(p, S.sel); let dx = q[0] - D.p0[0], dy = q[1] - D.p0[1]; if (!snapMark || snapMark.k === 'gd') [dx, dy] = moveAlign(D.bb0, dx, dy); for (const [s, o] of D.orig) { s.nodes = o.map(cloneNode); transformShape(s, v => [v[0] + dx, v[1] + dy]); } if (D.piv0) PIV = { key: selKey(), p: [D.piv0[0] + dx, D.piv0[1] + dy] }; D.moved = D.moved || Math.abs(dx) + Math.abs(dy) > 1e-9; setCoords(q, 'Δ ' + fr(dx) + ' / ' + fr(dy)); draw(); return; }
     if (D.mode === 'band') { D.sx1 = X; D.sy1 = Y; draw(); return; }
-    if (D.mode === 'node') { const q = snap(p, new Set([D.s.id])), n = D.s.nodes[D.i]; n.x = q[0]; n.y = q[1]; refresh(D.s); D.moved = true; setCoords(q); draw(); return; }
+    if (D.mode === 'node') { const q = snap(p, new Set([D.s.id])), dx = q[0] - D.p0[0], dy = q[1] - D.p0[1]; D.ids.forEach((i, k) => { const n = D.s.nodes[i]; if (n) { n.x = D.orig[k][0] + dx; n.y = D.orig[k][1] + dy; } }); refresh(D.s); D.moved = true; setCoords(q, D.ids.length > 1 ? 'Δ ' + fr(dx) + ' / ' + fr(dy) : ''); draw(); return; }
+    if (D.mode === 'nband') { D.sx1 = X; D.sy1 = Y; draw(); return; }
     if (D.mode === 'handle') { const n = D.s.nodes[D.i], v = [p[0] - n.x, p[1] - n.y]; n[D.w] = v; const ow = D.w === 'i' ? 'o' : 'i'; if (n.sm && !D.alt && !e.altKey && n[ow]) { const L = Math.hypot(n[ow][0], n[ow][1]), u = nrm(v); n[ow] = [-u[0] * L, -u[1] * L]; } else if (e.altKey || D.alt) n.sm = false; refresh(D.s); D.moved = true; draw(); return; }
     if (D.mode === 'pen') { const v = [p[0] - D.p0[0], p[1] - D.p0[1]]; if (Math.hypot(v[0], v[1]) * S.view.s > 4) { D.node.o = v; D.node.i = [-v[0], -v[1]]; D.node.sm = true; } draw(); return; }
     if (D.mode === 'measure') { const q = snap(p); S.measure.b = q; showMeasure(); draw(); return; }
@@ -3007,6 +3021,11 @@ function endPointer(e) {
   else if (D.mode === 'tabdrag') { if (!D.moved) D.tp.p.tabPts.splice(D.idx, 1); tabChanged(D.tp); }
   else if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot') { if (D.moved) commit(false); renderImgPanel(); }
   else if (D.mode === 'node' || D.mode === 'handle') { if (D.moved) commit(); }
+  else if (D.mode === 'nband') {
+    if (Math.abs(D.sx1 - D.sx0) + Math.abs(D.sy1 - D.sy0) <= 4) { if (!D.add) { S.ne = null; S.sel.clear(); renderSel(); } }
+    else { const x0 = wx(Math.min(D.sx0, D.sx1)), x1 = wx(Math.max(D.sx0, D.sx1)), y0 = wy(Math.max(D.sy0, D.sy1)), y1 = wy(Math.min(D.sy0, D.sy1)); const inR = []; D.s.nodes.forEach((n, i) => { if (n.x >= x0 && n.x <= x1 && n.y >= y0 && n.y <= y1) inR.push(i); }); neSetSel(D.add ? [...new Set([...neSel(), ...inR])] : inR); }
+    syncNe();
+  }
   else if (D.mode === 'band') {
     const a = [wx(Math.min(D.sx0, D.sx1)), wy(Math.max(D.sy0, D.sy1))], b = [wx(Math.max(D.sx0, D.sx1)), wy(Math.min(D.sy0, D.sy1))];
     if (Math.abs(D.sx1 - D.sx0) + Math.abs(D.sy1 - D.sy0) > 4) for (const s of S.shapes) { if (!editable(s)) continue; const bb = bbox([s]); if (bb.x0 >= a[0] && bb.x1 <= b[0] && bb.y0 >= a[1] && bb.y1 <= b[1]) groupIds(s).forEach(id => S.sel.add(id)); }
@@ -3033,7 +3052,7 @@ cv.addEventListener('dblclick', e => {
     }
   }
   if (S.ui.tool === 'poly' && pen.length) { while (pen.length > 1 && Math.hypot(pen[pen.length - 1].x - pen[pen.length - 2].x, pen[pen.length - 1].y - pen[pen.length - 2].y) < 1e-6) pen.pop(); finishPen(false); return; }
-  if (S.ui.tool === 'nodes' && S.ne) { const s = shapeById(S.ne.sid); if (s && edgeDist(s, p) < 7 / S.view.s) { const k = insertNode(s, paramAt(s, p).u); if (k >= 0) { S.ne.ni = k; S.ne.seg = null; commit(); draw(); } } }
+  if (S.ui.tool === 'nodes' && S.ne) { const s = shapeById(S.ne.sid); if (s && edgeDist(s, p) < 7 / S.view.s) { const k = insertNode(s, paramAt(s, p).u); if (k >= 0) { S.ne.ni = k; S.ne.ms = null; S.ne.seg = null; commit(); draw(); } } }
 });
 cv.addEventListener('wheel', e => { e.preventDefault(); const [X, Y] = evPt(e); const f = Math.exp(-e.deltaY * 0.0015); const s = Math.max(0.05, Math.min(200, S.view.s * f)); const px = wx(X), py = wy(Y); S.view.s = s; S.view.ox = X - px * s; S.view.oy = Y + py * s; draw(); }, { passive: false });
 // ---------- polices SVG (polices à trait unique : Hershey, EMS, Relief, Routed Gothic…) ----------
@@ -3300,14 +3319,16 @@ window.addEventListener('keydown', e => {
   if (mod && (e.code === 'BracketLeft' || k === '[' || k === '{')) { e.preventDefault(); arrange(e.shiftKey ? 'zBack' : 'zDown'); return; }
   if (mod && (k === 's' || k === 'S')) { e.preventDefault(); act('save'); return; }
   if (mod && (k === 'o' || k === 'O')) { e.preventDefault(); act('open'); return; }
+  if (mod && (k === 'a' || k === 'A') && S.ui.tool === 'nodes' && S.ne && shapeById(S.ne.sid)) { e.preventDefault(); neSetSel(shapeById(S.ne.sid).nodes.map((_, i) => i)); syncNe(); draw(); return; }
   if (mod && (k === 'a' || k === 'A')) { e.preventDefault(); S.shapes.forEach(s => { if (editable(s)) S.sel.add(s.id); }); renderSel(); draw(); return; }
   if (k === ' ') { spaceDown = true; e.preventDefault(); return; }
-  if (k === 'Delete' || k === 'Backspace') { e.preventDefault(); if (S.imgSel && !S.sel.size) { imgAct('imgDel'); return; } if (S.ui.tool === 'nodes' && S.ne && S.ne.ni !== null) act('neDel'); else if (S.selDim) { S.dims = S.dims.filter(d => d.id !== S.selDim); S.selDim = null; commit(false); draw(); } else act('del'); return; }
+  if (k === 'Delete' || k === 'Backspace') { e.preventDefault(); if (S.imgSel && !S.sel.size) { imgAct('imgDel'); return; } if (S.ui.tool === 'nodes' && S.ne && neSel().length) act('neDel'); else if (S.selDim) { S.dims = S.dims.filter(d => d.id !== S.selDim); S.selDim = null; commit(false); draw(); } else act('del'); return; }
   if (k === 'Escape' && S.ui.tool === 'tabedit') { setTool('select'); return; }
   if (k === 'Escape' && S.ui.dsec && S.ui.tool === 'select' && !S.sel.size) { S.ui.dsec = null; dRefresh(); return; }
   if (k === 'Escape') { if (pen.length) { pen = []; } else if (arcSt.length || dimSt.length) { arcSt = []; dimSt = []; } else if (S.ui.tool === 'nodes') { setTool('select'); dRefresh(); } else { S.sel.clear(); S.selDim = null; if (S.ne) S.ne = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } renderSel(); } draw(); return; }
   if (k === 'Enter' && pen.length) { finishPen(false); return; }
   if (k.startsWith('Arrow') && S.imgSel && !S.sel.size) { e.preventDefault(); const d = UNIT.len === 'in' ? (e.shiftKey ? 6.35 : 1.5875) : (e.shiftKey ? 10 : 1); imgSet(im => { im.x += k === 'ArrowLeft' ? -d : k === 'ArrowRight' ? d : 0; im.y += k === 'ArrowDown' ? -d : k === 'ArrowUp' ? d : 0; }); return; }
+  if (k.startsWith('Arrow') && S.ui.tool === 'nodes' && neSel().length) { e.preventDefault(); const d = UNIT.len === 'in' ? (e.shiftKey ? 6.35 : 1.5875) : (e.shiftKey ? 10 : 1) / (e.altKey ? 10 : 1); if (neMove(k === 'ArrowLeft' ? -d : k === 'ArrowRight' ? d : 0, k === 'ArrowDown' ? -d : k === 'ArrowUp' ? d : 0)) { commit(); syncNe(); draw(); } return; }
   if (k.startsWith('Arrow') && S.sel.size) { e.preventDefault(); const d = UNIT.len === 'in' ? (e.shiftKey ? 6.35 : 1.5875) : (e.shiftKey ? 10 : 1); const dx = k === 'ArrowLeft' ? -d : k === 'ArrowRight' ? d : 0, dy = k === 'ArrowDown' ? -d : k === 'ArrowUp' ? d : 0; selShapes().forEach(s => transformShape(s, q => [q[0] + dx, q[1] + dy])); commit(); renderSel(); draw(); return; }
   if (mod) return;
   const map = { v: 'select', n: 'nodes', h: 'pan', r: 'rect', e: 'ellipse', c: 'circle', o: 'polygon', p: 'poly', a: 'arc', t: 'text', k: 'chamfer', f: 'fillet', b: 'dogbone', x: 'trim', u: 'cut', m: 'measure', d: 'dim' };
@@ -3665,17 +3686,20 @@ function act(a, btn) {
     case 'dimClear': S.dims = []; S.selDim = null; commit(false); draw(); return;
     // nœuds
     case 'neSmooth': case 'neCorner': case 'neDel': case 'neSplit': {
-      if (!nes || ne.ni === null) return toast('Sélectionnez un nœud avec l’outil Nœuds.');
-      const n = nes.nodes[ne.ni], N = nes.nodes.length;
-      if (a === 'neCorner') { n.sm = false; n.i = null; n.o = null; }
-      if (a === 'neSmooth') {
-        const prev = nes.closed || ne.ni > 0 ? nes.nodes[(ne.ni - 1 + N) % N] : null, next = nes.closed || ne.ni < N - 1 ? nes.nodes[(ne.ni + 1) % N] : null;
-        let dir; if (n.i && n.o) dir = nrm([n.o[0] - n.i[0], n.o[1] - n.i[1]]); else dir = nrm([(next || n).x - (prev || n).x, (next || n).y - (prev || n).y]);
-        const li = n.i ? Math.hypot(...n.i) : prev ? Math.hypot(n.x - prev.x, n.y - prev.y) / 3 : 0, lo = n.o ? Math.hypot(...n.o) : next ? Math.hypot(n.x - next.x, n.y - next.y) / 3 : 0;
-        n.i = prev ? [-dir[0] * li, -dir[1] * li] : null; n.o = next ? [dir[0] * lo, dir[1] * lo] : null; n.sm = true;
+      const L = neSel(); if (!nes || !L.length) return toast('Sélectionnez un nœud avec l’outil Nœuds.');
+      if (a === 'neSplit') { const pieces = cutPieces(nes, ne.ni !== null ? ne.ni : L[0]); if (!pieces) return toast('Impossible de couper à l’extrémité d’un vecteur ouvert.'); replaceShape(nes, pieces.map(nd => ({ nodes: nd, closed: false }))); commit(); renderSel(); draw(); return; }
+      if (a === 'neDel') { const N = nes.nodes.length, min = nes.closed ? 3 : 2; if (N - L.length < min) return toast('La forme doit garder au moins ' + min + ' nœuds.'); [...L].sort((x, y) => y - x).forEach(i => nes.nodes.splice(i, 1)); ne.ni = null; ne.ms = null; refresh(nes); commit(); syncNe(); draw(); return; }
+      const N = nes.nodes.length;
+      for (const idx of L) {
+        const n = nes.nodes[idx]; if (!n) continue;
+        if (a === 'neCorner') { n.sm = false; n.i = null; n.o = null; }
+        if (a === 'neSmooth') {
+          const prev = nes.closed || idx > 0 ? nes.nodes[(idx - 1 + N) % N] : null, next = nes.closed || idx < N - 1 ? nes.nodes[(idx + 1) % N] : null;
+          let dir; if (n.i && n.o) dir = nrm([n.o[0] - n.i[0], n.o[1] - n.i[1]]); else dir = nrm([(next || n).x - (prev || n).x, (next || n).y - (prev || n).y]);
+          const li = n.i ? Math.hypot(...n.i) : prev ? Math.hypot(n.x - prev.x, n.y - prev.y) / 3 : 0, lo = n.o ? Math.hypot(...n.o) : next ? Math.hypot(n.x - next.x, n.y - next.y) / 3 : 0;
+          n.i = prev ? [-dir[0] * li, -dir[1] * li] : null; n.o = next ? [dir[0] * lo, dir[1] * lo] : null; n.sm = true;
+        }
       }
-      if (a === 'neDel') { if (N <= (nes.closed ? 3 : 2)) return toast('La forme doit garder au moins ' + (nes.closed ? 3 : 2) + ' nœuds.'); nes.nodes.splice(ne.ni, 1); ne.ni = null; }
-      if (a === 'neSplit') { const pieces = cutPieces(nes, ne.ni); if (!pieces) return toast('Impossible de couper à l’extrémité d’un vecteur ouvert.'); replaceShape(nes, pieces.map(nd => ({ nodes: nd, closed: false }))); commit(); renderSel(); draw(); return; }
       refresh(nes); commit(); draw(); return;
     }
     case 'neLine': case 'neCurve': case 'neAdd': {
@@ -3684,7 +3708,7 @@ function act(a, btn) {
       const A = nes.nodes[k], B = nes.nodes[(k + 1) % nes.nodes.length];
       if (a === 'neLine') { A.o = null; B.i = null; A.sm = false; B.sm = false; }
       if (a === 'neCurve') { if (!A.o) A.o = [(B.x - A.x) / 3, (B.y - A.y) / 3]; if (!B.i) B.i = [(A.x - B.x) / 3, (A.y - B.y) / 3]; }
-      if (a === 'neAdd') { refresh(nes); const idx = insertNode(nes, k + 0.5); ne.ni = idx; ne.seg = null; commit(); draw(); return; }
+      if (a === 'neAdd') { refresh(nes); const idx = insertNode(nes, k + 0.5); ne.ni = idx; ne.ms = null; ne.seg = null; commit(); draw(); return; }
       refresh(nes); commit(); draw(); return;
     }
     case 'neClose': {
