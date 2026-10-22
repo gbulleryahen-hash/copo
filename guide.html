@@ -295,6 +295,8 @@ footer p{max-width:none}
         <tr><td>Numéro d'outil (T)</td><td>Écrit dans le G-code des post-processeurs à changement d'outil (<code>T2 M6</code>, <code>M6 T2</code>).</td></tr>
         <tr><td>Vitesse de broche</td><td>En tr/min, écrite avec <code>M3</code>.</td></tr>
         <tr><td>Avance, vitesse de descente</td><td>En mm/min, pour la coupe et pour la plongée ou la rampe.</td></tr>
+        <tr><td>Nombre de dents</td><td>Nombre de tranchants de la fraise (2 par défaut).</td></tr>
+        <tr><td>Avance par dent</td><td>Calculée : avance ÷ (vitesse de broche × nombre de dents). Saisissez-la pour recalculer l'avance. COPO indique si elle est faible (la fraise frotte et chauffe) ou élevée (risque de casse) par rapport à un repère pour le bois ; les données du fabricant priment. Pour un foret, COPO donne l'avance par tour.</td></tr>
         <tr><td>Profondeur de passe</td><td>Profondeur maximale par passe ; un parcours peut l'écraser.</td></tr>
         <tr><td>Recouvrement</td><td>Pourcentage du diamètre qui se recouvre entre deux passes de poche.</td></tr>
       </tbody>
@@ -605,6 +607,8 @@ M30</pre>
         <tr><td>Tool number (T)</td><td>Written in the G-code of tool-change post-processors (<code>T2 M6</code>, <code>M6 T2</code>).</td></tr>
         <tr><td>Spindle speed</td><td>In rpm, written with <code>M3</code>.</td></tr>
         <tr><td>Feed, plunge rate</td><td>In mm/min, for cutting and for plunging or ramping.</td></tr>
+        <tr><td>Number of flutes</td><td>Number of cutting edges of the bit (2 by default).</td></tr>
+        <tr><td>Feed per tooth</td><td>Calculated: feed ÷ (spindle speed × number of flutes). Type a value to recalculate the feed. COPO says whether it is low (the bit rubs and heats up) or high (risk of breakage) against a guide for wood; the bit maker’s data come first. For a drill, COPO gives the feed per revolution.</td></tr>
         <tr><td>Pass depth</td><td>Maximum depth per pass; a toolpath can override it.</td></tr>
         <tr><td>Stepover</td><td>Percentage of the diameter that overlaps between two pocket passes.</td></tr>
       </tbody>

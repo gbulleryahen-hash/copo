@@ -843,8 +843,13 @@ label.inl input{width:70px}
           </div>
           <div class="g2">
             <label>Vitesse de broche (tr/min)<input type="number" data-t="rpm" step="100" min="0"></label>
-            <label>Avance (mm/min)<input data-u="feed" type="number" data-t="feed" step="10" min="1"></label>
+            <label>Nombre de dents<input type="number" data-t="flutes" step="1" min="1" max="12"></label>
           </div>
+          <div class="g2">
+            <label>Avance (mm/min)<input data-u="feed" type="number" data-t="feed" step="10" min="1"></label>
+            <label data-tshow="flat ball v">Avance par dent (mm)<input data-u="len" type="number" id="tFz" step="0.005" min="0.001"></label>
+          </div>
+          <p class="hint" id="tFzHint"></p>
           <div class="g2">
             <label>Vitesse de descente (mm/min)<input data-u="feed" type="number" data-t="plunge" step="10" min="1"></label>
             <label>Profondeur de passe (mm)<input data-u="len" type="number" data-t="pass" step="0.1" min="0.05"></label>
@@ -987,6 +992,7 @@ Object.assign(I18N_EN, {"Accroche…": "Snapping…", "Afficher la grille": "Sho
 Object.assign(I18N_EN, {"Cliquez une seconde fois sur la sélection pour afficher les poignées : carrés pour redimensionner, ronds pour tourner (Maj : par pas de 15°), cercle orange = pivot déplaçable.": "Click the selection a second time to show the handles: squares to resize, circles to rotate (Shift: 15° steps), orange circle = movable pivot.", "Rotation": "Rotation", "Faites glisser le pivot (cercle orange) sur le plan : il s’accroche aux objets, aux repères et à la grille. Ou choisissez un point ci-dessous.": "Drag the pivot (orange circle) on the plan: it snaps to objects, guides and the grid. Or pick a point below.", "Pivot": "Pivot", "Type de rotation": "Rotation type", "Relative": "Relative", "Absolue": "Absolute", "Angle (°)": "Angle (°)", "Appliquer": "Apply", "Fermer": "Close", "Tourner de 90° dans le sens inverse des aiguilles d’une montre": "Rotate 90° counter-clockwise", "Tourner de 90° dans le sens des aiguilles d’une montre": "Rotate 90° clockwise", "Sélectionnez les objets à faire pivoter.": "Select the objects to rotate.", "Absolue : la sélection prend l’angle indiqué. Angle actuel : {a}.": "Absolute: the selection takes the given angle. Current angle: {a}.", "Relative : la sélection tourne de l’angle indiqué. Angle positif = sens inverse des aiguilles d’une montre.": "Relative: the selection turns by the given angle. Positive angle = counter-clockwise.", "Angle nul : rien à faire.": "Zero angle: nothing to do.", "Rotation de {a} appliquée.": "Rotated by {a}.", "Sélectionnez une forme.": "Select a shape."});
 Object.assign(I18N_EN, {"Plein écran": "Full screen", "Quitter le plein écran": "Exit full screen", "Quitter le plein écran (Échap)": "Exit full screen (Esc)", "Le plein écran n’est pas disponible ici.": "Full screen is not available here."});
 Object.assign(I18N_EN, {"Édition des nœuds : glissez les nœuds et les poignées. Clic droit ou Échap pour revenir à la sélection.": "Node editing: drag the nodes and handles. Right-click or Esc to go back to selection."});
+Object.assign(I18N_EN, {"Nombre de dents": "Number of flutes", "Avance par dent (mm)": "Feed per tooth (mm)", "dents": "flutes", "dent": "flute", "Foret : avance par tour {f} mm (vitesse de descente ÷ vitesse de broche).": "Drill: feed per revolution {f} mm (plunge rate ÷ spindle speed).", "Renseignez la vitesse de broche et le nombre de dents pour obtenir l’avance par dent.": "Enter the spindle speed and number of flutes to get the feed per tooth.", "faible : la fraise risque de frotter et de chauffer (brûlures, usure)": "low: the bit may rub and heat up (burn marks, wear)", "élevée : risque de casse ou de mauvais état de surface": "high: risk of breakage or poor finish", "dans la plage courante pour le bois": "within the usual range for wood", "{f} par dent — {s}. Repère indicatif pour le bois avec ce diamètre : {a} à {b} ; suivez en priorité les données du fabricant de la fraise.": "{f} per tooth — {s}. Rough guide for wood with this diameter: {a} to {b}; follow the bit maker’s data first."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -2136,12 +2142,12 @@ const LS = { get(k) { try { return localStorage.getItem(k); } catch { return nul
 const RB = 18; // largeur des règles en px
 
 const DEFAULT_TOOLS = () => [
-  { id: 't1', num: 1, name: tr('Fraise droite 3,175 mm'), type: 'flat', dia: 3.175, angle: 90, rpm: 18000, feed: 1200, plunge: 300, pass: 1.5, over: 40 },
-  { id: 't2', num: 2, name: tr('Fraise droite 6 mm'), type: 'flat', dia: 6, angle: 90, rpm: 18000, feed: 2000, plunge: 500, pass: 3, over: 40 },
-  { id: 't3', num: 3, name: tr('Fraise V 90° Ø12'), type: 'v', dia: 12, angle: 90, rpm: 18000, feed: 1500, plunge: 500, pass: 3, over: 20 },
-  { id: 't4', num: 4, name: tr('Fraise V 60° Ø6,35'), type: 'v', dia: 6.35, angle: 60, rpm: 18000, feed: 1200, plunge: 400, pass: 2, over: 20 },
-  { id: 't6', num: 6, name: tr('Foret 6 mm'), type: 'drill', dia: 6, angle: 118, rpm: 8000, feed: 1000, plunge: 400, pass: 3, over: 0 },
-  { id: 't5', num: 5, name: tr('Fraise hémisphérique 3 mm'), type: 'ball', dia: 3, angle: 90, rpm: 18000, feed: 1000, plunge: 300, pass: 1, over: 50 },
+  { id: 't1', num: 1, name: tr('Fraise droite 3,175 mm'), type: 'flat', dia: 3.175, flutes: 2, angle: 90, rpm: 18000, feed: 1200, plunge: 300, pass: 1.5, over: 40 },
+  { id: 't2', num: 2, name: tr('Fraise droite 6 mm'), type: 'flat', dia: 6, flutes: 2, angle: 90, rpm: 18000, feed: 2000, plunge: 500, pass: 3, over: 40 },
+  { id: 't3', num: 3, name: tr('Fraise V 90° Ø12'), type: 'v', dia: 12, flutes: 2, angle: 90, rpm: 18000, feed: 1500, plunge: 500, pass: 3, over: 20 },
+  { id: 't4', num: 4, name: tr('Fraise V 60° Ø6,35'), type: 'v', dia: 6.35, flutes: 2, angle: 60, rpm: 18000, feed: 1200, plunge: 400, pass: 2, over: 20 },
+  { id: 't6', num: 6, name: tr('Foret 6 mm'), type: 'drill', dia: 6, flutes: 2, angle: 118, rpm: 8000, feed: 1000, plunge: 400, pass: 3, over: 0 },
+  { id: 't5', num: 5, name: tr('Fraise hémisphérique 3 mm'), type: 'ball', dia: 3, flutes: 2, angle: 90, rpm: 18000, feed: 1000, plunge: 300, pass: 1, over: 50 },
 ];
 const DEFAULT_LAYERS = () => [{ id: 'l1', name: tr('Calque 1'), visible: true, locked: false }];
 const S = {
@@ -4256,6 +4262,17 @@ function applyForm() {
 }
 
 // ---------- panneau Outils ----------
+// avance par dent fz = avance / (vitesse × nombre de dents)
+const toolFz = t => (+t.rpm > 0 && +t.flutes > 0) ? (+t.feed || 0) / (+t.rpm * +t.flutes) : 0;
+function toolFzSync(t, keepInput) {
+  const fz = toolFz(t), inp = $('#tFz'), h = $('#tFzHint'); if (!inp || !h) return;
+  if (!keepInput) inp.value = fz > 0 ? +fz.toFixed(4) : '';
+  if (t.type === 'drill') { h.textContent = +t.rpm > 0 ? trf('Foret : avance par tour {f} mm (vitesse de descente ÷ vitesse de broche).', { f: uNum((+t.plunge || 0) / +t.rpm, 'len', 3) }) : ''; return; }
+  if (!(fz > 0)) { h.textContent = tr('Renseignez la vitesse de broche et le nombre de dents pour obtenir l’avance par dent.'); return; }
+  const lo = t.dia <= 3.5 ? 0.025 : t.dia <= 6.5 ? 0.05 : 0.08, hi = t.dia <= 3.5 ? 0.12 : t.dia <= 6.5 ? 0.25 : 0.4;
+  const st = fz < lo ? tr('faible : la fraise risque de frotter et de chauffer (brûlures, usure)') : fz > hi ? tr('élevée : risque de casse ou de mauvais état de surface') : tr('dans la plage courante pour le bois');
+  h.textContent = trf('{f} par dent — {s}. Repère indicatif pour le bois avec ce diamètre : {a} à {b} ; suivez en priorité les données du fabricant de la fraise.', { f: uNum(fz, 'len', 3) + ' ' + uLbl(), s: st, a: uNum(lo, 'len', 3), b: uNum(hi, 'len', 3) + ' ' + uLbl() });
+}
 function toolCalcText(t) { if (t.type === 'drill') return 'Longueur de pointe ' + fr(t.dia / 2 / Math.tan((+t.angle || 118) * Math.PI / 360)) + ' mm'; return t.type === 'v' ? 'Prof. max ' + fr(t.dia / 2 / Math.tan(t.angle * Math.PI / 360)) + ' mm' : 'Pas latéral ' + fr(t.dia * Math.max(0.05, 1 - t.over / 100)) + ' mm'; }
 function renderTools() {
   const ul = $('#toolList'); ul.innerHTML = '';
@@ -4263,13 +4280,14 @@ function renderTools() {
   for (const t of S.tools) {
     const li = document.createElement('li'); li.className = 'toolitem' + (t.id === S.toolSel ? ' on' : ''); li.tabIndex = 0;
     li.innerHTML = '<div style="min-width:0"><b></b><small></small></div><span class="chip mono"></span>';
-    li.querySelector('b').textContent = t.name; li.querySelector('small').textContent = TOOL_LBL[t.type] + ' · Ø ' + fr(t.dia) + ' mm' + (t.type === 'v' || t.type === 'drill' ? ' · ' + t.angle + '°' : '') + ' · ' + t.feed + ' mm/min';
+    li.querySelector('b').textContent = t.name; li.querySelector('small').textContent = TOOL_LBL[t.type] + ' · Ø ' + fr(t.dia) + ' mm' + (t.type === 'v' || t.type === 'drill' ? ' · ' + t.angle + '°' : '') + ' · ' + t.feed + ' mm/min' + (+t.flutes > 0 ? ' · ' + t.flutes + ' ' + tr(+t.flutes > 1 ? 'dents' : 'dent') : '');
     li.querySelector('.chip').textContent = 'T' + (t.num || '?');
     li.onclick = () => { S.toolSel = t.id; renderTools(); fwOpen('toolWin'); }; li.onkeydown = e => { if (e.key === 'Enter') li.click(); };
     ul.appendChild(li);
   }
   const t = S.tools.find(x => x.id === S.toolSel); $('#toolForm').hidden = !t; if (!t) return;
-  $$('[data-t]').forEach(el => { el.value = t[el.dataset.t]; });
+  if (!(+t.flutes > 0)) t.flutes = 2;
+  $$('[data-t]').forEach(el => { el.value = t[el.dataset.t]; }); toolFzSync(t);
   $$('[data-tshow]').forEach(el => el.style.visibility = el.dataset.tshow.split(' ').includes(t.type) ? 'visible' : 'hidden'); $('#tAngLbl').textContent = t.type === 'drill' ? 'Angle de pointe (°)' : 'Angle du V (°)';
   $('#toolCalc').textContent = toolCalcText(t); illRefresh();
 }
@@ -4277,7 +4295,8 @@ let tT = 0;
 function toolsChanged(soft) { LS.set('copeau.tools', JSON.stringify(S.tools)); if (!soft) renderTools(); renderForm(); clearTimeout(tT); tT = setTimeout(() => { commit(false); recomputeAll(); }, soft ? 350 : 0); }
 $('#toolForm').addEventListener('input', e => { const k = e.target.dataset.t; if (!k) return; const t = S.tools.find(x => x.id === S.toolSel); if (!t) return; t[k] = (k === 'name' || k === 'type') ? e.target.value : +e.target.value; toolsChanged(true);
   const li = $('#toolList .toolitem.on'); if (li) li.querySelector('b').textContent = t.name;
-  $$('[data-tshow]').forEach(el => el.style.visibility = el.dataset.tshow.split(' ').includes(t.type) ? 'visible' : 'hidden'); $('#tAngLbl').textContent = t.type === 'drill' ? 'Angle de pointe (°)' : 'Angle du V (°)'; $('#toolCalc').textContent = toolCalcText(t); });
+  $$('[data-tshow]').forEach(el => el.style.visibility = el.dataset.tshow.split(' ').includes(t.type) ? 'visible' : 'hidden'); $('#tAngLbl').textContent = t.type === 'drill' ? 'Angle de pointe (°)' : 'Angle du V (°)'; $('#toolCalc').textContent = toolCalcText(t); toolFzSync(t); });
+$('#tFz').addEventListener('input', e => { e.stopPropagation(); const t = S.tools.find(x => x.id === S.toolSel); const fz = +e.target.value; if (!t || !(fz > 0) || !(+t.rpm > 0) || !(+t.flutes > 0)) return; t.feed = Math.round(fz * t.rpm * t.flutes); const f = document.querySelector('#toolForm [data-t=feed]'); if (f) f.value = t.feed; toolFzSync(t, true); toolsChanged(true); });
 $('#toolForm').addEventListener('change', () => renderTools());
 $('#toolForm').addEventListener('input', () => illRefresh());
 
