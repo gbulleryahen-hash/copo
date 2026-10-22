@@ -364,7 +364,7 @@ label.inl input{width:70px}
         <button data-act="save">Enregistrer le projet<kbd>Ctrl+S</kbd></button>
         <hr><button data-act="imgInsert">Insérer une image…</button><button data-act="import">Importer un SVG ou un DXF…</button><button data-act="fontDir">Ouvrir un dossier de polices…</button>
         <hr><button data-act="svgAll">Exporter le dessin en SVG</button><button data-act="svgSel">Exporter la sélection en SVG</button>
-        <hr><button data-act="gcExport">Enregistrer le G-code</button><button data-act="sheet">Fiche de gamme…</button>
+        <hr><button data-act="gcExport">Enregistrer le G-code</button><button data-act="sheetPdf">Enregistrer la fiche de gamme en PDF</button>
       </div></div>
       <div class="menu"><button class="mtop" aria-expanded="false">Édition</button><div class="mdrop" hidden>
         <button data-act="undo">Annuler<kbd>Ctrl+Z</kbd></button><button data-act="redo">Rétablir<kbd>Ctrl+Y</kbd></button>
@@ -933,7 +933,8 @@ label.inl input{width:70px}
     <label>Matière<input type="text" id="shMat" placeholder="Contreplaqué bouleau 18 mm"></label>
     <label class="sh-notes">Remarques<textarea id="shNotes" rows="1" placeholder="Bridage, sens du fil, consignes…"></textarea></label>
     <button id="shRefresh" class="primary">Actualiser</button>
-    <button id="shPrint">Imprimer / PDF</button>
+    <button id="shPdf">Enregistrer en PDF</button>
+    <button id="shPrint">Imprimer</button>
     <button id="shSave">Enregistrer la fiche</button>
     <span id="shInfo" class="mono"></span>
     <button id="shClose">Fermer</button>
@@ -1004,6 +1005,7 @@ Object.assign(I18N_EN, {"Relier les écarts par": "Bridge gaps with", "Une ligne
 Object.assign(I18N_EN, {"Cliquez une forme puis un nœud ou un segment · Maj+clic ou cadre : plusieurs nœuds · flèches : déplacer (Maj ×10, Alt ÷10) · Ctrl+A : tous · double-clic sur un segment : ajouter un nœud · Alt en tirant une poignée : la casser": "Click a shape then a node or segment · Shift+click or box: several nodes · arrows: move (Shift ×10, Alt ÷10) · Ctrl+A: all · double-click a segment: add a node · Alt while dragging a handle: break it"});
 Object.assign(I18N_EN, {"Assemblage du dessus": "Top joint", "À entures (boîte fermée)": "Finger-jointed (closed box)", "Posé à plat (couvercle amovible)": "Laid flat (removable lid)", "Dessus": "Top", "Vérifiez les valeurs : dimensions supérieures à 3 × l’épaisseur, largeur des tenons d’au moins 1 mm.": "Check the values: dimensions greater than 3 × the thickness, finger width at least 1 mm.", "creux plus étroits que la fraise : augmentez la largeur des tenons": "slots narrower than the bit: increase the finger width"});
 Object.assign(I18N_EN, {"Groupes": "Groups", "Vecteurs": "Vectors", "Coins": "Corners", "Joindre et relier…": "Join and connect…", "Lisser (adapter des courbes)…": "Smooth (fit curves)…", "Contour décalé…": "Offset contour…", "Chanfrein (coin par coin)": "Chamfer (corner by corner)", "Congé (coin par coin)": "Fillet (corner by corner)", "Dégagement dogbone / T-bone": "Dogbone / T-bone relief", "Chanfreiner tous les coins": "Chamfer all corners", "Arrondir tous les coins": "Round all corners", "Aligner et répartir…": "Align and distribute…", "Rotation…": "Rotation…", "Copie en réseau…": "Array copy…"});
+Object.assign(I18N_EN, {"Enregistrer la fiche de gamme en PDF": "Save the setup sheet as PDF", "Enregistrer en PDF": "Save as PDF", "Imprimer": "Print", "Création du PDF…": "Creating the PDF…", "Bibliothèque PDF introuvable : placez lib/jspdf.umd.min.js à côté de COPO ou connectez-vous à Internet.": "PDF library not found: put lib/jspdf.umd.min.js next to COPO or connect to the Internet.", "Le PDF n’a pas pu être créé.": "The PDF could not be created.", "Utilisez « Imprimer » puis « Enregistrer au format PDF ».": "Use “Print” then “Save as PDF”."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -3619,6 +3621,7 @@ function act(a, btn) {
     case 'array': doArray(); return;
     case 'nest': doNest(); return;
     case 'sheet': sheetOpen(); return;
+    case 'sheetPdf': sheetPdf(); return;
     case 'lang': setLang(btn.dataset.lang); fsSync(); return;
     case 'about': $('#about').hidden = false; return;
     case 'bugOpen': bugOpen(); return;
@@ -4833,7 +4836,7 @@ function sheetHTML(meta) {
     + '.warn{border-left:3px solid #e8710a;background:#fff6ec;padding:6px 10px;margin:4px 0;break-inside:avoid}.ok{color:#188038}'
     + '.chk{list-style:none;padding:0;margin:0;columns:2;column-gap:20px}.chk li{padding:3px 0 3px 22px;position:relative;break-inside:avoid}.chk li::before{content:"";position:absolute;left:0;top:5px;width:12px;height:12px;border:1.5px solid #333;border-radius:2px}'
     + '.sign{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:10px}.sign div{border-top:1px solid #333;padding-top:3px;font-size:8.5pt;color:#555;height:34px}'
-    + '.notes{border:1px solid #ccc;border-radius:4px;padding:8px;min-height:50px;white-space:pre-wrap}.leg span{display:inline-block;width:14px;height:3px;vertical-align:middle;margin:0 4px 0 10px}'
+    + '.notes{border:1px solid #ccc;border-radius:4px;padding:8px;min-height:50px;white-space:pre-wrap;break-inside:avoid}.leg span{display:inline-block;width:14px;height:3px;vertical-align:middle;margin:0 4px 0 10px}'
     + '.pb{break-before:page}footer{margin-top:14px;font-size:8pt;color:#777;border-top:1px solid #ddd;padding-top:5px}'
     + '@media print{body{padding:0}}</style></head><body>';
   h += '<header><svg viewBox="0 0 32 32" fill="none" stroke="#3560e6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg>'
@@ -4882,6 +4885,59 @@ function sheetRefresh() {
   sheetLast = html; $('#shFrame').srcdoc = html; $('#shInfo').textContent = ''; $('#shFrame').title = tr('Aperçu de la fiche de gamme') + ' (' + Math.round(performance.now() - t0) + ' ms)';
 }
 let sheetLast = '';
+// ---------- fiche de gamme en PDF (A4, sans boîte d'impression) ----------
+function loadScript(src) { return new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = src; sc.onload = res; sc.onerror = rej; document.head.appendChild(sc); }); }
+async function jsPdfLib() {
+  if (window.jspdf && window.jspdf.jsPDF) return window.jspdf.jsPDF;
+  try { await loadScript('lib/jspdf.umd.min.js'); } catch (e) { }
+  if (!(window.jspdf && window.jspdf.jsPDF)) { try { await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js'); } catch (e) { } }
+  return window.jspdf && window.jspdf.jsPDF;
+}
+async function sheetPdf() {
+  if (!gcTps().length) { toast(tr('Aucun parcours à mettre dans la fiche : calculez d’abord un parcours.')); return; }
+  closeMenus && closeMenus();
+  if (!$('#sheet').hidden) S.meta = { name: $('#shName').value.trim(), material: $('#shMat').value.trim(), notes: $('#shNotes').value };
+  toast(tr('Création du PDF…'));
+  const JsPDF = await jsPdfLib(); if (!JsPDF) { toast(tr('Bibliothèque PDF introuvable : placez lib/jspdf.umd.min.js à côté de COPO ou connectez-vous à Internet.')); return; }
+  let html; try { html = sheetHTML(S.meta || {}); } catch (e) { console.error(e); toast(tr('La fiche n’a pas pu être créée.')); return; }
+  const MW = 186, MH = 273, MX = 12, MY = 12, scale = 2.4; let PX = 704, pageH = PX * MH / MW;
+  const fr0 = document.createElement('iframe'); fr0.setAttribute('aria-hidden', 'true'); fr0.style.cssText = 'position:fixed;left:-10000px;top:0;width:' + PX + 'px;height:1200px;border:0;visibility:hidden';
+  document.body.appendChild(fr0);
+  try {
+    await new Promise(res => { fr0.onload = res; fr0.srcdoc = html.replace('</head>', '<style>@page{margin:0}html,body{margin:0!important;padding:0!important;background:#fff!important}body,body *{font-family:Arial,"Liberation Sans",Helvetica,sans-serif!important}.mono,code,kbd{font-family:"Courier New","Liberation Mono",monospace!important}</style></head>'); });
+    const doc = fr0.contentDocument; await Promise.all([...doc.images].map(im => im.decode ? im.decode().catch(() => { }) : null)); if (doc.fonts && doc.fonts.ready) await doc.fonts.ready;
+    // contenu plus large que la page (grand tableau) : on le met à l'échelle comme le ferait l'impression
+    const wide = Math.ceil(doc.documentElement.scrollWidth); if (wide > PX) { PX = wide; pageH = PX * MH / MW; fr0.style.width = PX + 'px'; await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))); }
+    const total = Math.ceil(doc.documentElement.scrollHeight); fr0.style.height = total + 'px';
+    // coupures possibles : entre les blocs, jamais au milieu d'une ligne de tableau, d'un titre, d'une image ou d'un bloc « insécable »
+    const atoms = [], forced = []; const top = el => el.getBoundingClientRect().top + doc.defaultView.scrollY, bot = el => el.getBoundingClientRect().bottom + doc.defaultView.scrollY;
+    doc.querySelectorAll('body *').forEach(el => { const cs = doc.defaultView.getComputedStyle(el); if (cs.display === 'none') return; if (cs.breakBefore === 'page' || cs.pageBreakBefore === 'always') forced.push(top(el)); if (/^(TR|IMG|SVG|CANVAS|H1|H2|H3|H4|P|LI|FIGURE|CAPTION|THEAD)$/i.test(el.tagName) || cs.breakInside === 'avoid' || cs.pageBreakInside === 'avoid') { const a = top(el), b = bot(el); if (b - a > 1) atoms.push([a, b]); } if (cs.breakAfter === 'avoid' && el.nextElementSibling) { const nx = el.nextElementSibling, nb = Math.min(bot(nx), top(nx) + 120); atoms.push([top(el), nb]); } });
+    const okCut = y => !atoms.some(([a, b]) => a < y - 0.5 && b > y + 0.5 && b - a < pageH);
+    const cuts = [0]; let y0 = 0; forced.sort((a, b) => a - b);
+    while (y0 < total - 2) {
+      const f = forced.find(v => v > y0 + 20 && v <= y0 + pageH); if (f !== undefined) { cuts.push(f); y0 = f; continue; }
+      let y = Math.min(total, y0 + pageH); if (y < total) { let c = y; while (c > y0 + pageH * 0.4 && !okCut(c)) c -= 2; y = c > y0 + pageH * 0.4 ? c : y; }
+      cuts.push(y); y0 = y;
+    }
+    // rendu de la page entière dans une image SVG (foreignObject), puis découpe
+    const xml = new XMLSerializer().serializeToString(doc.documentElement);
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + PX + '" height="' + total + '"><foreignObject x="0" y="0" width="100%" height="100%">' + xml + '</foreignObject></svg>';
+    const img = new Image(); img.decoding = 'sync'; await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); });
+    const pdf = new JsPDF({ unit: 'mm', format: 'a4', compress: true });
+    for (let i = 0; i < cuts.length - 1; i++) {
+      const a = cuts[i], b = cuts[i + 1], h = b - a; if (h < 1) continue;
+      const c = document.createElement('canvas'); c.width = Math.round(PX * scale); c.height = Math.round(h * scale); const g = c.getContext('2d');
+      g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, a, PX, h, 0, 0, c.width, c.height);
+      if (i) pdf.addPage('a4');
+      pdf.addImage(c.toDataURL('image/jpeg', 0.9), 'JPEG', MX, MY, MW, h * MW / PX);
+    }
+    pdf.setProperties({ title: tr('Fiche de gamme') + ' — ' + ((S.meta && S.meta.name) || 'COPO'), creator: 'COPO' });
+    const nm = (S.meta && S.meta.name ? S.meta.name.replace(/[^\w\-]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() : 'copo') || 'copo';
+    await saveFile('fiche-' + nm + '.pdf', pdf.output('arraybuffer'), tr('Fiche de gamme'));
+  } catch (e) { console.error(e); toast(tr('Le PDF n’a pas pu être créé.') + ' ' + tr('Utilisez « Imprimer » puis « Enregistrer au format PDF ».')); }
+  finally { fr0.remove(); }
+}
+$('#shPdf').onclick = () => sheetPdf();
 function v3Open() {
   const tps = S.tps.filter(t => t.visible && !t.err && t.moves && t.moves.length);
   if (!tps.length) { toast('Aucun parcours à simuler : calculez d’abord un parcours.'); return; }

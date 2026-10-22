@@ -11,6 +11,9 @@ d3-delaunay.js — regroupement des sources officielles / bundle of the official
     delaunator 5.0.1 — ISC License — Copyright (c) 2021, Mapbox — https://github.com/mapbox/delaunator
     robust-predicates 3.0.2 — Unlicense (domaine public / public domain) — https://github.com/mourner/robust-predicates
 
+jspdf.umd.min.js — jsPDF 2.5.2 — James Hall, yWorks GmbH
+    MIT License — voir / see LICENSE-jspdf.txt — https://github.com/parallax/jsPDF
+
 fonts/ — polices de l'interface / interface fonts : Source Sans 3, JetBrains Mono, Barlow Condensed — SIL Open Font License 1.1 (voir fonts/OFL-*.txt)
 
 Licence ISC (d3-delaunay, delaunator) :

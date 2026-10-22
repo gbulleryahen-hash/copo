@@ -40,6 +40,7 @@ COPO is free software: you can redistribute it and/or modify it under the terms 
 Bibliothèques tierces / Third-party libraries, fournies dans / bundled in `lib/` (voir / see `lib/LICENCES.txt`) :
 - Clipper 6.4.2 — Angus Johnson — Boost Software License 1.0
 - opentype.js 1.3.4 — MIT License
+- jsPDF 2.5.2 (fiche de gamme en PDF / setup sheet as PDF) — MIT License
 - d3-delaunay 6.0.4 et / and delaunator 5.0.1 — ISC License ; robust-predicates 3.0.2 — Unlicense
 
 Polices à trait unique / Single-line fonts, dans / in `fonts/trait-unique` (regroupées par / collected by https://github.com/msurguy/cnc-text-tool) : EMS, Cutlings, Relief SingleLine, Shriinivas, Routed Gothic — SIL Open Font License 1.1 ; Hershey — licence Hershey (attribution au Dr A. V. Hershey, U.S. National Bureau of Standards). Voir / see `fonts/trait-unique/LICENCES.txt`.
