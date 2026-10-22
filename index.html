@@ -95,6 +95,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .libright{overflow:auto;padding:12px 16px;min-height:0}.libform{display:grid;gap:10px;max-width:640px}.libform[hidden]{display:none}.libform textarea{resize:vertical}
 .libest{margin:0;padding:6px 10px;border-radius:6px;background:color-mix(in srgb,#ff9f1c 18%,transparent);font-size:12.5px;color:var(--ink)}
 .libio{display:inline-flex;align-items:center;gap:6px}.libio svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.libcard{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;background:var(--raised);border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;cursor:pointer;color:var(--ink)}.libcard:hover{border-color:var(--accent)}.libcard .lc-ico svg{width:22px;height:22px;display:block;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.libcard b{display:block;font-weight:600}.libcard small{display:block;color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.libcard .lc-go{color:var(--muted);font-size:20px;line-height:1}
+.hint.warn{color:var(--ink);background:color-mix(in srgb,#ff9f1c 20%,transparent);border-left:3px solid #ff9f1c;padding:6px 10px;border-radius:4px}
 .libbtn{display:flex;align-items:center;gap:8px;margin-top:8px}.libbtn svg{width:18px;height:18px;fill:none;stroke:var(--accent);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .toolpick{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;text-align:left;padding:6px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--raised);color:var(--ink);cursor:pointer}.toolpick small{color:var(--accent);flex:none}.toolpick.bad{border-color:var(--danger)}.toolpick span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media (max-width:760px){.libbody{grid-template-columns:1fr;grid-template-rows:minmax(180px,40%) minmax(0,1fr)}.libleft{border-right:0;border-bottom:1px solid var(--line)}}
@@ -704,7 +706,9 @@ label.inl input{width:70px}
         <section class="blk"><h3>Nouveau parcours</h3>
           <div class="seg ico tpnew" id="tpNew"><button data-newtp="profile">Profil</button><button data-newtp="pocket">Poche</button><button data-newtp="vcarve">V-carving</button><button data-newtp="drill">Perçage</button></div>
           <p class="hint">Sélectionnez les formes sur le plan, puis choisissez l'opération : ses réglages s'ouvrent dans une fenêtre que vous pouvez déplacer.</p>
-          <button class="libbtn" data-act="libOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h4v5l-2 2-2-2z"/><path d="M9 10v11"/><path d="M15 3h3v9l-1.5 3-1.5-3z"/><path d="M16.5 15v6"/></svg>Bibliothèque d’outils…</button>
+        </section>
+        <section class="blk"><h3>Outils</h3>
+          <button type="button" class="libcard" data-act="libOpen"><span class="lc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h4v5l-2 2-2-2z"/><path d="M9 10v11"/><path d="M15 3h3v9l-1.5 3-1.5-3z"/><path d="M16.5 15v6"/></svg></span><span class="lc-t"><b>Bibliothèque d’outils</b><small id="libCardSub"></small></span><span class="lc-go" aria-hidden="true">›</span></button>
         </section>
         <section class="blk"><h3>Parcours d'outils</h3>
           <ul class="tplist" id="tpList"></ul>
@@ -1053,6 +1057,8 @@ Object.assign(I18N_EN, {"Matériau des outils": "Tool material", "Le matériau d
 Object.assign(I18N_EN, {"pour le laiton": "for brass", "pour l’aluminium": "for aluminium", "pour le bois et les plastiques": "for wood and plastics", "dans la plage courante": "within the usual range", "{f} par dent — {s}. Repère indicatif {w} avec ce diamètre et ce nombre de dents : {a} à {b} ; suivez en priorité les données du fabricant de la fraise.": "{f} per tooth — {s}. Rough guide {w} with this diameter and number of flutes: {a} to {b}; follow the bit maker’s data first."});
 Object.assign(I18N_EN, {"Exporter…": "Export…"});
 Object.assign(I18N_EN, {"pour les plastiques": "for plastics", "pour le bois et le MDF": "for wood and MDF", "Avance de travail maximale (mm/min)": "Maximum cutting feed (mm/min)", "Attention : l’avance dépasse l’avance maximale de la machine ({m} mm/min) ; les parcours la plafonneront.": "Warning: the feed exceeds the machine's maximum feed ({m} mm/min); toolpaths will cap it.", "{f} par dent — {s}. Repère pour une CNC de loisir {w} avec ce diamètre : {a} à {b} (machines rigides : 3 à 5 fois plus) ; suivez en priorité les données du fabricant de la fraise.": "{f} per tooth — {s}. Guide for a hobby CNC {w} with this diameter: {a} to {b} (rigid machines: 3 to 5 times more); follow the bit maker's data first.", "Valeurs de départ estimées pour une CNC de loisir (aluminium et laiton : milieu bas des plages hobby, environ 0,015 mm par dent à Ø 3 et 0,025 mm à Ø 6 en aluminium, laiton 20 % plus bas ; PVC : comme l’acrylique). Validez-les par un essai et corrigez-les : elles deviendront les vôtres.": "Estimated starting values for a hobby CNC (aluminium and brass: lower middle of the hobby ranges, about 0.015 mm per tooth at Ø 3 and 0.025 mm at Ø 6 in aluminium, brass 20% lower; PVC: like acrylic). Check them with a test cut and correct them: they will become yours."});
+Object.assign(I18N_EN, {"Matériau : {m} · {n} outil(s) utilisé(s) · {t} dans la bibliothèque": "Material: {m} · {n} tool(s) used · {t} in the library"});
+Object.assign(I18N_EN, {"{m} · {n} outil(s) utilisé(s)": "{m} · {n} tool(s) used"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4441,7 +4447,7 @@ $('#fFont').onchange = e => { const f = [...e.target.files]; e.target.value = ''
 $('#fFontDir').onchange = e => { const f = [...e.target.files]; e.target.value = ''; addFontFiles(f); };
 
 // ---------- panneau Parcours ----------
-function renderTpList() {
+function renderTpList() { if (typeof libCardSync === 'function') libCardSync();
   const ul = $('#tpList'); if (!S.tps.length) { ul.innerHTML = '<li class="empty">Aucun parcours. Sélectionnez des formes sur le plan, réglez le formulaire ci-dessous puis cliquez sur Calculer.</li>'; $('#tpTotal').textContent = ''; $('#topstats').textContent = ''; return; }
   ul.innerHTML = ''; let tot = 0;
   S.tps.forEach((tp, idx) => {
@@ -4537,7 +4543,7 @@ function applyForm() {
 // avance par dent fz = avance / (vitesse × nombre de dents)
 const toolFz = t => (+t.rpm > 0 && +t.flutes > 0) ? (+t.feed || 0) / (+t.rpm * +t.flutes) : 0;
 function toolFzSync(t, keepInput) {
-  const fz = toolFz(t), inp = $('#tFz'), h = $('#tFzHint'); if (!inp || !h) return;
+  const fz = toolFz(t), inp = $('#tFz'), h = $('#tFzHint'); if (!inp || !h) return; h.classList.remove('warn');
   if (!keepInput) inp.value = fz > 0 ? +fz.toFixed(4) : '';
   if (t.type === 'drill') { h.textContent = +t.rpm > 0 ? trf('Foret : avance par tour {f} mm (vitesse de descente ÷ vitesse de broche).', { f: uNum((+t.plunge || 0) / +t.rpm, 'len', 3) }) : ''; return; }
   if (!(fz > 0)) { h.textContent = tr('Renseignez la vitesse de broche et le nombre de dents pour obtenir l’avance par dent.'); return; }
@@ -4546,7 +4552,7 @@ function toolFzSync(t, keepInput) {
   let lo, hi, what;
   [lo, hi] = fzRange(mat, +t.dia || 0); what = tr(metal ? (mat === 'brass' ? 'pour le laiton' : 'pour l’aluminium') : (mat === 'acrylic' || mat === 'pvc') ? 'pour les plastiques' : 'pour le bois et le MDF');
   const st = fz < lo ? tr('faible : la fraise risque de frotter et de chauffer (brûlures, usure)') : fz > hi ? tr('élevée : risque de casse ou de mauvais état de surface') : tr('dans la plage courante');
-  const mx = (S.machine && +S.machine.maxFeed) || 0, cap = mx > 0 && +t.feed > mx ? ' ' + trf('Attention : l’avance dépasse l’avance maximale de la machine ({m} mm/min) ; les parcours la plafonneront.', { m: mx }) : '';
+  const mx = (S.machine && +S.machine.maxFeed) || 0; h.classList.toggle('warn', fz < lo || fz > hi || (mx > 0 && +t.feed > mx)); const cap = mx > 0 && +t.feed > mx ? ' ' + trf('Attention : l’avance dépasse l’avance maximale de la machine ({m} mm/min) ; les parcours la plafonneront.', { m: mx }) : '';
   h.textContent = trf('{f} par dent — {s}. Repère pour une CNC de loisir {w} avec ce diamètre : {a} à {b} (machines rigides : 3 à 5 fois plus) ; suivez en priorité les données du fabricant de la fraise.', { f: uNum(fz, 'len', 3) + ' ' + uLbl(), s: st, w: what, a: uNum(lo, 'len', 3), b: uNum(hi, 'len', 3) + ' ' + uLbl() }) + cap;
 }
 function toolCalcText(t) { if (t.type === 'drill') return 'Longueur de pointe ' + fr(t.dia / 2 / Math.tan((+t.angle || 118) * Math.PI / 360)) + ' mm'; return t.type === 'v' ? 'Prof. max ' + fr(t.dia / 2 / Math.tan(t.angle * Math.PI / 360)) + ' mm' : 'Pas latéral ' + fr(t.dia * Math.max(0.05, 1 - t.over / 100)) + ' mm'; }
@@ -4688,7 +4694,8 @@ function libLinkProject() {
 const libFits = (ft, t) => !ft || (ft === 'vcarve' ? (t.type === 'v' || t.type === 'engrave') : ft === 'drill' ? t.type !== 'engrave' : ft === 'profile' ? t.type !== 'drill' : (t.type === 'flat' || t.type === 'ball' || t.type === 'v'));
 const LIB_ICO = { flat: '<path d="M9 3h6v4H9zM10 7h4v14h-4z"/>', ball: '<path d="M9 3h6v4H9zM10 7h4v11a2 2 0 0 1-4 0z"/>', v: '<path d="M9 3h6v4H9zM9 7h6l-3 14z"/>', engrave: '<path d="M9 3h6v4H9zM9 7h6l-2 13h-2z"/>', drill: '<path d="M9 3h6v4H9zM10 7h4v11l-2 3-2-3z"/>' };
 const GRP_ICO = '<path d="M3 7h6l2 2h10v10H3z"/>';
-function libMatSync() { for (const id of ['#libMat', '#pjLibMat']) { const sel = $(id); if (!sel) continue; sel.innerHTML = ''; for (const m of LIB.materials) { const o = document.createElement('option'); o.value = m.id; o.textContent = tr(m.name); sel.appendChild(o); } sel.value = projMat(); } }
+function libCardSync() { const el = document.getElementById('libCardSub'); if (!el) return; const n = new Set(S.tps.map(t => t.toolId)).size; el.textContent = trf('{m} · {n} outil(s) utilisé(s)', { m: libMatName(projMat()), n }); }
+function libMatSync() { libCardSync(); for (const id of ['#libMat', '#pjLibMat']) { const sel = $(id); if (!sel) continue; sel.innerHTML = ''; for (const m of LIB.materials) { const o = document.createElement('option'); o.value = m.id; o.textContent = tr(m.name); sel.appendChild(o); } sel.value = projMat(); } }
 function libSetMat(id) { S.stock.mat = id; libMatSync(); libSyncProject(); commit(false); pjSummary(); libRender(); }
 function libRender() {
   const box = $('#lib'); if (!box || box.hidden) return; libMatSync();
