@@ -3985,7 +3985,7 @@ function fitShape(s, o) {
 let FITPREV = null, fitT = 0;
 const fitOpts = () => ({ type: S.ui.fitType || 'arc', tol: +S.ui.fitTol || 0.1, corner: S.ui.fitCorner !== false, ang: +S.ui.fitAng || 60 });
 function fitPreview() {
-  const sec = document.querySelector('[data-sec="fit"]'); if (!sec || sec.hidden) { if (FITPREV) { FITPREV = null; draw(); } return; }
+  const sec = document.querySelector('section.dsec[data-sec="fit"]'); if (!sec || sec.hidden) { if (FITPREV) { FITPREV = null; draw(); } return; }
   $$('#fitType button').forEach(b => b.setAttribute('aria-pressed', b.value === (S.ui.fitType || 'arc')));
   $('#fitAngRow').hidden = (S.ui.fitType || 'arc') === 'line' || S.ui.fitCorner === false; $('#fitCornerRow').hidden = (S.ui.fitType || 'arc') === 'line';
   const ss = selShapes(), o = fitOpts(); let n0 = 0, n1 = 0; FITPREV = [];
@@ -4008,7 +4008,7 @@ function drawFitPrev(C) {
   ctx.restore();
 }
 $$('#fitType button').forEach(b => b.onclick = () => { S.ui.fitType = b.value; fitPreview(); });
-document.querySelector('[data-sec="fit"]').addEventListener('input', fitSoon); document.querySelector('[data-sec="fit"]').addEventListener('change', fitSoon);
+document.querySelector('section.dsec[data-sec="fit"]').addEventListener('input', fitSoon); document.querySelector('section.dsec[data-sec="fit"]').addEventListener('change', fitSoon);
 function joinSync() { $$('#joinMode button').forEach(b => b.setAttribute('aria-pressed', b.value === (S.ui.joinMode || 'line'))); }
 $$('#joinMode button').forEach(b => b.onclick = () => { S.ui.joinMode = b.value; joinSync(); });
 // ---------- rotation : pivot et poignées de transformation ----------
@@ -4024,7 +4024,7 @@ function rotateSel(deg, piv) { const ss = selShapes(); if (!ss.length || !deg) r
 const selRot = () => { const ss = selShapes(); return ss.length ? (+ss[0].rot || 0) : 0; };
 const fDeg = v => (LANG === 'fr' ? fr(v, 2) : String(+v.toFixed(2))) + '°';
 function rotSync() {
-  const sec = document.querySelector('[data-sec="rotate"]'); if (!sec || sec.hidden) return;
+  const sec = document.querySelector('section.dsec[data-sec="rotate"]'); if (!sec || sec.hidden) return;
   const mode = S.ui.rotMode || 'rel', ss = selShapes(), P = pivotPt();
   $$('#rotMode button').forEach(b => b.setAttribute('aria-pressed', b.value === mode));
   $$('#rotAnchor button').forEach(b => { const on = !!(P && ss.length) && (() => { const q = anchorPt(bbox(ss), b.dataset.a); return Math.hypot(q[0] - P[0], q[1] - P[1]) < 1e-6; })(); b.setAttribute('aria-pressed', on); });
