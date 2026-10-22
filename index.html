@@ -1007,7 +1007,8 @@ Object.assign(I18N_EN, {"Assemblage du dessus": "Top joint", "À entures (boîte
 Object.assign(I18N_EN, {"Groupes": "Groups", "Vecteurs": "Vectors", "Coins": "Corners", "Joindre et relier…": "Join and connect…", "Lisser (adapter des courbes)…": "Smooth (fit curves)…", "Contour décalé…": "Offset contour…", "Chanfrein (coin par coin)": "Chamfer (corner by corner)", "Congé (coin par coin)": "Fillet (corner by corner)", "Dégagement dogbone / T-bone": "Dogbone / T-bone relief", "Chanfreiner tous les coins": "Chamfer all corners", "Arrondir tous les coins": "Round all corners", "Aligner et répartir…": "Align and distribute…", "Rotation…": "Rotation…", "Copie en réseau…": "Array copy…"});
 Object.assign(I18N_EN, {"Enregistrer la fiche de gamme en PDF": "Save the setup sheet as PDF", "Enregistrer en PDF": "Save as PDF", "Imprimer": "Print", "Création du PDF…": "Creating the PDF…", "Bibliothèque PDF introuvable : placez lib/jspdf.umd.min.js à côté de COPO ou connectez-vous à Internet.": "PDF library not found: put lib/jspdf.umd.min.js next to COPO or connect to the Internet.", "Le PDF n’a pas pu être créé.": "The PDF could not be created.", "Utilisez « Imprimer » puis « Enregistrer au format PDF ».": "Use “Print” then “Save as PDF”."});
 Object.assign(I18N_EN, {"Clic : 1er point · clic : 2e point · clic : position de la cote · une extrémité accrochée à un nœud, un milieu ou un centre (point plein) suit l’objet": "Click: 1st point · click: 2nd point · click: dimension position · an end snapped to a node, midpoint or centre (solid dot) follows the object"});
-Object.assign(I18N_EN, {"Segment supprimé : la ligne n’avait plus assez de nœuds et a été effacée.": "Segment deleted: the line had too few nodes left and was removed.", "Segment supprimé : la ligne est coupée en deux.": "Segment deleted: the line is split in two.", "Segment supprimé.": "Segment deleted.", "Sélectionnez un nœud ou un segment avec l’outil Nœuds.": "Select a node or a segment with the Nodes tool.", "Cliquez une forme puis un nœud ou un segment · Supprimer : le nœud ou le segment sélectionné · Maj+clic ou cadre : plusieurs nœuds · flèches : déplacer (Maj ×10, Alt ÷10) · Ctrl+A : tous · double-clic sur un segment : ajouter un nœud · Alt en tirant une poignée : la casser": "Click a shape then a node or segment · Delete: the selected node or segment · Shift+click or box: several nodes · arrows: move (Shift ×10, Alt ÷10) · Ctrl+A: all · double-click a segment: add a node · Alt while dragging a handle: break it"});
+Object.assign(I18N_EN, {"Segment supprimé : la ligne n’avait plus assez de nœuds et a été effacée.": "Segment deleted: the line had too few nodes left and was removed.", "Segment supprimé : la ligne est coupée en deux.": "Segment deleted: the line is split in two.", "Segment supprimé.": "Segment deleted.", "Sélectionnez un nœud ou un segment avec l’outil Nœuds.": "Select a node or a segment with the Nodes tool.", "Cliquez une forme puis un nœud ou un segment · rond : lisse, losange : brisé, carré : coin vif · Supprimer : le nœud ou le segment sélectionné · Maj+clic ou cadre : plusieurs nœuds · flèches : déplacer (Maj ×10, Alt ÷10) · Ctrl+A : tous · double-clic sur un segment : ajouter un nœud · Alt en tirant une poignée : la casser": "Click a shape then a node or segment · circle: smooth, diamond: cusp, square: sharp corner · Delete: the selected node or segment · Shift+click or box: several nodes · arrows: move (Shift ×10, Alt ÷10) · Ctrl+A: all · double-click a segment: add a node · Alt while dragging a handle: break it"});
+Object.assign(I18N_EN, {"Brisé": "Cusp"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -2377,7 +2378,7 @@ function drawNodeEdit(C) {
   ctx.lineWidth = 1; ctx.strokeStyle = C.drawMuted;
   for (const h of visibleHandles(s)) { const nd = s.nodes[h.i]; ctx.beginPath(); ctx.moveTo(sx(nd.x), sy(nd.y)); ctx.lineTo(sx(h.p[0]), sy(h.p[1])); ctx.stroke(); ctx.beginPath(); ctx.arc(sx(h.p[0]), sy(h.p[1]), 3.5, 0, 7); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.stroke(); }
   const neS = new Set(neSel());
-  s.nodes.forEach((nd, i) => { const X = sx(nd.x), Y = sy(nd.y), selN = neS.has(i); ctx.fillStyle = selN ? C.acc : '#ffffff'; ctx.strokeStyle = C.acc; ctx.lineWidth = 1.5; ctx.beginPath(); if (nd.sm) ctx.arc(X, Y, 4.5, 0, 7); else ctx.rect(X - 4, Y - 4, 8, 8); ctx.fill(); ctx.stroke(); });
+  s.nodes.forEach((nd, i) => { const X = sx(nd.x), Y = sy(nd.y), selN = neS.has(i); ctx.fillStyle = selN ? C.acc : '#ffffff'; ctx.strokeStyle = C.acc; ctx.lineWidth = 1.5; ctx.beginPath(); if (nd.sm) ctx.arc(X, Y, 4.5, 0, 7); else if (nd.i || nd.o) { ctx.moveTo(X, Y - 5.5); ctx.lineTo(X + 5.5, Y); ctx.lineTo(X, Y + 5.5); ctx.lineTo(X - 5.5, Y); ctx.closePath(); } else ctx.rect(X - 4, Y - 4, 8, 8); ctx.fill(); ctx.stroke(); });
 }
 function previewShape(D) {
   const a = D.p0, b = D.p1; if (!a || !b) return null; let nodes = null;
@@ -2449,7 +2450,7 @@ document.getElementById('pjMat').addEventListener('change', e => { S.meta = { ..
 // ---------- outils de dessin ----------
 const HINTS = {
   select: 'Clic : sélectionner (le groupe entier) · Maj+clic : ajouter · glisser : déplacer · cadre : sélection multiple · flèches : 1 mm (Maj : 10 mm)',
-  nodes: 'Cliquez une forme puis un nœud ou un segment · Supprimer : le nœud ou le segment sélectionné · Maj+clic ou cadre : plusieurs nœuds · flèches : déplacer (Maj ×10, Alt ÷10) · Ctrl+A : tous · double-clic sur un segment : ajouter un nœud · Alt en tirant une poignée : la casser',
+  nodes: 'Cliquez une forme puis un nœud ou un segment · rond : lisse, losange : brisé, carré : coin vif · Supprimer : le nœud ou le segment sélectionné · Maj+clic ou cadre : plusieurs nœuds · flèches : déplacer (Maj ×10, Alt ÷10) · Ctrl+A : tous · double-clic sur un segment : ajouter un nœud · Alt en tirant une poignée : la casser',
   pan: 'Glissez pour déplacer la vue · molette ou pincement : zoom',
   rect: 'Glissez pour tracer', ellipse: 'Glissez le cadre de l’ellipse · Maj : cercle', circle: 'Cliquez au centre puis glissez jusqu’au rayon',
   polygon: 'Cliquez au centre puis glissez : rayon et orientation',
@@ -2489,7 +2490,7 @@ function setTool(t) {
   if (t === 'dogbone') extra = '<label>Type<select data-k="dogKind"><option value="dogbone">Dogbone</option><option value="tbone">T-bone</option></select></label><label>Diamètre de la fraise (mm)<input data-u="len" type="number" data-k="dogDia" step="0.1" min="0.1"></label>';
   if (t === 'text') extra = '<label>Placement<select data-k="textMode"><option value="line">Ligne droite</option><option value="curve">Sur une courbe</option></select></label>' + (S.ui.textMode === 'curve' ? '<label>Côté<select data-k="textSide"><option value="up">Au-dessus</option><option value="down">En dessous</option></select></label><label>Espacement (mm)<input data-u="len" type="number" data-k="textSpace" step="0.5"></label>' : '') + '<button data-act="fpGoto" class="fp-mini">' + (S.font ? escHtml(S.fontLabel || 'Police') : 'Choisir une police…') + '</button>';
   if (t === 'poly') extra = '<span class="coordin"><select id="ciMode" aria-label="Mode de saisie"><option value="abs">Absolu</option><option value="rel">Relatif</option><option value="pol">Polaire</option></select><label><span id="ciL1">X</span><input data-u="len" type="number" id="ciA" step="0.1"></label><label><span id="ciL2">Y</span><input data-u="len" type="number" id="ciB" step="0.1"></label><button data-act="ciAdd" class="primary">Ajouter le point</button><button data-act="ciClose">Fermer</button><button data-act="ciEnd">Terminer</button></span>';
-  if (t === 'nodes') extra = '<span class="nebar"><label class="inl">X<input data-u="len" type="number" id="neX" step="0.1"></label><label class="inl">Y<input data-u="len" type="number" id="neY" step="0.1"></label><button data-act="neSmooth">Lisse</button><button data-act="neCorner">Coin vif</button><button data-act="neLine">Segment droit</button><button data-act="neCurve">Segment courbe</button><button data-act="neAdd">Ajouter</button><button data-act="neDel">Supprimer</button><button data-act="neSplit">Couper</button><button data-act="neClose">Ouvrir / fermer</button></span>';
+  if (t === 'nodes') extra = '<span class="nebar"><label class="inl">X<input data-u="len" type="number" id="neX" step="0.1"></label><label class="inl">Y<input data-u="len" type="number" id="neY" step="0.1"></label><button data-act="neSmooth">Lisse</button><button data-act="neCusp">Brisé</button><button data-act="neCorner">Coin vif</button><button data-act="neLine">Segment droit</button><button data-act="neCurve">Segment courbe</button><button data-act="neAdd">Ajouter</button><button data-act="neDel">Supprimer</button><button data-act="neSplit">Couper</button><button data-act="neClose">Ouvrir / fermer</button></span>';
   if (t === 'measure') extra = '<span class="mono meas" id="measOut">Glissez sur le plan</span>';
   if (t === 'tabedit') extra = '<span class="mono meas" id="tabCount"></span><button data-act="tabDone" class="primary">Terminer</button>';
   // réglages de l'outil : en tête du panneau Dessin ; la barre au-dessus du plan ne sert plus qu'au placement des ponts
@@ -3702,7 +3703,7 @@ function act(a, btn) {
     case 'guideClear': S.guides = { x: [], y: [] }; commit(false); renderGuides(); draw(); return;
     case 'dimClear': S.dims = []; S.selDim = null; commit(false); draw(); return;
     // nœuds
-    case 'neSmooth': case 'neCorner': case 'neDel': case 'neSplit': {
+    case 'neSmooth': case 'neCusp': case 'neCorner': case 'neDel': case 'neSplit': {
       const L = neSel();
       if (a === 'neDel' && nes && !L.length && ne.seg !== null && ne.seg !== undefined) { // supprimer le segment sélectionné
         const N = nes.nodes.map(cloneNode), n = N.length, k = ne.seg, pieces = [];
@@ -3719,6 +3720,10 @@ function act(a, btn) {
       for (const idx of L) {
         const n = nes.nodes[idx]; if (!n) continue;
         if (a === 'neCorner') { n.sm = false; n.i = null; n.o = null; }
+        if (a === 'neCusp') { // nœud brisé : deux poignées indépendantes
+          const prev = nes.closed || idx > 0 ? nes.nodes[(idx - 1 + N) % N] : null, next = nes.closed || idx < N - 1 ? nes.nodes[(idx + 1) % N] : null;
+          n.sm = false; if (!n.i && prev) n.i = [(prev.x - n.x) / 3, (prev.y - n.y) / 3]; if (!n.o && next) n.o = [(next.x - n.x) / 3, (next.y - n.y) / 3];
+        }
         if (a === 'neSmooth') {
           const prev = nes.closed || idx > 0 ? nes.nodes[(idx - 1 + N) % N] : null, next = nes.closed || idx < N - 1 ? nes.nodes[(idx + 1) % N] : null;
           let dir; if (n.i && n.o) dir = nrm([n.o[0] - n.i[0], n.o[1] - n.i[1]]); else dir = nrm([(next || n).x - (prev || n).x, (next || n).y - (prev || n).y]);
