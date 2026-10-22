@@ -560,9 +560,20 @@ label.inl input{width:70px}
           </div>
           <p class="hint" id="selHint"></p>
           <label class="chk"><input type="checkbox" id="selLock" checked> Garder les proportions</label>
-          <div class="row"><input type="number" id="rotA" value="90" step="1" aria-label="Angle en degrés"><button data-act="rotate">Pivoter de °</button><button data-act="mirH">Miroir ↔</button><button data-act="mirV">Miroir ↕</button></div>
-<div class="zrow" role="group" aria-label="Disposition"><button data-act="zFront" title="Premier plan (Ctrl+Maj+])"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 19V8M7 12l5-5 5 5M5 4h14"/></svg>Premier plan</button><button data-act="zUp" title="Monter (Ctrl+])"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 19V6M7 11l5-5 5 5"/></svg>Monter</button><button data-act="zDown" title="Descendre (Ctrl+[)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v13M7 13l5 5 5-5"/></svg>Descendre</button><button data-act="zBack" title="Arrière-plan (Ctrl+Maj+[)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v11M7 12l5 5 5-5M5 20h14"/></svg>Arrière-plan</button></div>
-          <div class="row"><button data-act="group">Grouper</button><button data-act="ungroup">Dégrouper</button><button data-act="center">Centrer sur le brut</button><button data-act="dup">Dupliquer</button><button data-act="del" class="danger">Supprimer</button></div>
+          <p class="hint">Cliquez une seconde fois sur la sélection pour afficher les poignées : carrés pour redimensionner, ronds pour tourner (Maj : par pas de 15°), cercle orange = pivot déplaçable.</p>
+          <div class="row"><button data-act="dup">Dupliquer</button><button data-act="del" class="danger">Supprimer</button></div>
+        </section>
+        <section class="dsec" data-sec="rotate" hidden><h3 class="dsec-h">Rotation</h3>
+          <p class="hint">Faites glisser le pivot (cercle orange) sur le plan : il s’accroche aux objets, aux repères et à la grille. Ou choisissez un point ci-dessous.</p>
+          <div class="orow">
+            <div class="ogrid sm" id="rotAnchor" role="group" aria-label="Pivot"><button data-a="tl" title="Coin haut gauche" aria-label="Coin haut gauche"></button><button data-a="tc" title="Milieu haut" aria-label="Milieu haut"></button><button data-a="tr" title="Coin haut droit" aria-label="Coin haut droit"></button><button data-a="ml" title="Milieu gauche" aria-label="Milieu gauche"></button><button data-a="mc" title="Centre" aria-label="Centre"></button><button data-a="mr" title="Milieu droit" aria-label="Milieu droit"></button><button data-a="bl" title="Coin bas gauche" aria-label="Coin bas gauche"></button><button data-a="bc" title="Milieu bas" aria-label="Milieu bas"></button><button data-a="br" title="Coin bas droit" aria-label="Coin bas droit"></button></div>
+            <div class="sfields"><label>X<input data-u="len" type="number" id="rotX" step="0.1"></label><label>Y<input data-u="len" type="number" id="rotY" step="0.1"></label></div>
+          </div>
+          <p class="sw-h">Type de rotation</p>
+          <div class="seg" id="rotMode"><button value="rel">Relative</button><button value="abs">Absolue</button></div>
+          <label>Angle (°)<input type="number" id="rotDeg" step="1" value="0"></label>
+          <p class="hint" id="rotInfo"></p>
+          <div class="row"><button data-act="rot90" data-q="90" title="Tourner de 90° dans le sens inverse des aiguilles d’une montre">↺ 90°</button><button data-act="rot90" data-q="-90" title="Tourner de 90° dans le sens des aiguilles d’une montre">↻ 90°</button><button data-act="rotApply" class="primary">Appliquer</button><button data-act="dsecClose">Fermer</button></div>
         </section>
         <section class="dsec" data-sec="align" hidden><h3 class="dsec-h">Aligner et répartir</h3>
           <div class="iconrow">
@@ -968,6 +979,7 @@ const I18N_EN = {"Filet décoratif": "Decorative flourish", "Perçages Ø4": "Ø
 Object.assign(I18N_EN, {"Aligner sur": "Align to", "La sélection": "The selection", "Le premier objet sélectionné": "The first selected object", "Le brut": "The stock", "Espacement (mm)": "Spacing (mm)", "Perçage": "Drilling", "« La sélection » : un seul objet s'aligne sur le brut, plusieurs s'alignent entre eux. « Le premier objet sélectionné » : il reste en place et les autres s'alignent sur lui ; Répartir les place à sa suite, dans l'ordre de sélection, avec l'espacement indiqué. Les groupes bougent d'un bloc.": "“The selection”: a single object aligns to the stock, several align with each other. “The first selected object”: it stays in place and the others align to it; Distribute places them after it, in selection order, with the given spacing. Groups move as one.", "Sélectionnez au moins deux objets : le premier sert de référence.": "Select at least two objects: the first one is the reference.", "Sélectionnez au moins deux objets : le premier sert de point de départ.": "Select at least two objects: the first one is the starting point.", "Les objets sont plus grands que le brut.": "The objects are larger than the stock.", "Profil sur la ligne 1": "On-line profile 1", "Profil sur la ligne 2": "On-line profile 2", "Poche 1": "Pocket 1", "F2 · Poche 2": "F2 · Pocket 2", "V-carving 2": "V-carving 2", "Foret 4 mm": "4 mm drill"});
 Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the nut / zero fret (mm)"});
 Object.assign(I18N_EN, {"Accroche…": "Snapping…", "Afficher la grille": "Show grid", "Règles d’accroche": "Snap settings", "Repères": "Guides", "Repère": "Guide", "Coins, milieux et centre du brut": "Stock corners, midpoints and centre", "En déplaçant une sélection, ses bords et son centre s’alignent sur les repères et sur le brut.": "When you move a selection, its edges and centre line up with the guides and the stock.", "Rayon d’accroche": "Snap radius", "Petit": "Small", "Grand": "Large", "Extrémités et nœuds": "Ends and nodes", "Milieux des segments": "Segment midpoints", "Intersections": "Intersections", "Centres des arcs et cercles": "Arc and circle centres", "Tangentes": "Tangents", "Le symbole orange au curseur indique l’accroche trouvée.": "The orange symbol at the cursor shows the snap found.", "OK": "OK", "Prof. départ (D) (mm)": "Start depth (D) (mm)", "Prof. coupe (C) (mm)": "Cut depth (C) (mm)", "Prof. coupe max (C) (0 = illimitée)": "Max cut depth (C) (0 = unlimited)", "{n} vecteurs sélectionnés": "{n} vectors selected", "{n} vecteur sélectionné": "{n} vector selected", "{n} fermés": "{n} closed", "{n} fermé": "{n} closed", "{n} ouverts": "{n} open", "{n} ouvert": "{n} open", "Aucun vecteur sélectionné : cliquez sur le plan les formes à usiner (Maj pour en ajouter).": "No vector selected: click the shapes to machine on the plan (Shift to add more).", "Les vecteurs ouverts sont ignorés par ce parcours.": "Open vectors are ignored by this toolpath.", "Ce parcours demande des formes fermées.": "This toolpath needs closed shapes.", "départ à {d} mm": "start at {d} mm"});
+Object.assign(I18N_EN, {"Cliquez une seconde fois sur la sélection pour afficher les poignées : carrés pour redimensionner, ronds pour tourner (Maj : par pas de 15°), cercle orange = pivot déplaçable.": "Click the selection a second time to show the handles: squares to resize, circles to rotate (Shift: 15° steps), orange circle = movable pivot.", "Rotation": "Rotation", "Faites glisser le pivot (cercle orange) sur le plan : il s’accroche aux objets, aux repères et à la grille. Ou choisissez un point ci-dessous.": "Drag the pivot (orange circle) on the plan: it snaps to objects, guides and the grid. Or pick a point below.", "Pivot": "Pivot", "Type de rotation": "Rotation type", "Relative": "Relative", "Absolue": "Absolute", "Angle (°)": "Angle (°)", "Appliquer": "Apply", "Fermer": "Close", "Tourner de 90° dans le sens inverse des aiguilles d’une montre": "Rotate 90° counter-clockwise", "Tourner de 90° dans le sens des aiguilles d’une montre": "Rotate 90° clockwise", "Sélectionnez les objets à faire pivoter.": "Select the objects to rotate.", "Absolue : la sélection prend l’angle indiqué. Angle actuel : {a}.": "Absolute: the selection takes the given angle. Current angle: {a}.", "Relative : la sélection tourne de l’angle indiqué. Angle positif = sens inverse des aiguilles d’une montre.": "Relative: the selection turns by the given angle. Positive angle = counter-clockwise.", "Angle nul : rien à faire.": "Zero angle: nothing to do.", "Rotation de {a} appliquée.": "Rotated by {a}.", "Sélectionnez une forme.": "Select a shape."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -2218,8 +2230,9 @@ function render() {
   }
   // cadre de sélection
   const ss = selShapes();
-  if (ss.length && S.ui.tool !== 'nodes' && !tpMode) { const b = bbox(ss); ctx.strokeStyle = C.acc; ctx.globalAlpha = 0.6; ctx.setLineDash([3, 3]); ctx.lineWidth = 1; ctx.strokeRect(sx(b.x0) - 4, sy(b.y1) - 4, b.w * S.view.s + 8, b.h * S.view.s + 8); ctx.setLineDash([]); ctx.globalAlpha = 1; const pa = anchorPt(b, S.ui.selAnchor), AX = sx(pa[0]), AY = sy(pa[1]); ctx.fillStyle = C.acc; ctx.beginPath(); ctx.moveTo(AX, AY - 6); ctx.lineTo(AX + 6, AY); ctx.lineTo(AX, AY + 6); ctx.lineTo(AX - 6, AY); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke(); }
+  if (ss.length && S.ui.tool !== 'nodes' && !tpMode && !xfOn()) { const b = bbox(ss); ctx.strokeStyle = C.acc; ctx.globalAlpha = 0.6; ctx.setLineDash([3, 3]); ctx.lineWidth = 1; ctx.strokeRect(sx(b.x0) - 4, sy(b.y1) - 4, b.w * S.view.s + 8, b.h * S.view.s + 8); ctx.setLineDash([]); ctx.globalAlpha = 1; const pa = anchorPt(b, S.ui.selAnchor), AX = sx(pa[0]), AY = sy(pa[1]); ctx.fillStyle = C.acc; ctx.beginPath(); ctx.moveTo(AX, AY - 6); ctx.lineTo(AX + 6, AY); ctx.lineTo(AX, AY + 6); ctx.lineTo(AX - 6, AY); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke(); }
   drawImgHandles(C);
+  drawXf(C);
   // cotes
   for (const d of S.dims) drawDim(d, d.id === S.selDim ? C.acc : C.drawMuted, C.mono);
   // édition des nœuds
@@ -2813,12 +2826,20 @@ cv.addEventListener('pointerdown', e => {
   if (X < RB || Y < RB) { if (X < RB && Y < RB) return; const axis = Y < RB ? 'y' : 'x'; S.guides[axis].push(axis === 'x' ? p[0] : p[1]); drag = { mode: 'guide', axis, i: S.guides[axis].length - 1 }; draw(); return; }
   if (t === 'select') {
     const ih = imgHandleAt(X, Y);
+    const xh = xfHandleAt(X, Y);
+    if (xh) {
+      const ss = selShapes(), orig = ss.map(s => [s, s.nodes.map(cloneNode), +s.rot || 0]), piv0 = PIV && PIV.key === selKey() ? PIV.p.slice() : null;
+      if (xh.k === 'p') drag = { mode: 'pivot', moved: false };
+      else if (xh.k === 'r') { const c = pivotPt().slice(); drag = { mode: 'srot', c, a0: Math.atan2(p[1] - c[1], p[0] - c[0]), orig, ang: 0, moved: false }; cv.style.cursor = 'grabbing'; }
+      else drag = { mode: 'sscale', h: xh, orig, piv0, moved: false };
+      draw(); return;
+    }
     if (ih) { const im = ih.im; drag = ih.kind === 'irot' ? { mode: 'irot', im, rot0: im.rot || 0, a0: Math.atan2(p[1] - im.y, p[0] - im.x) } : { mode: 'iscale', im, sgn: ih.sgn, anchor: ih.anchor, w0: im.w, h0: im.h }; draw(); return; }
     const h = hitShape(p);
     if (h) {
-      S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } const ids = groupIds(h);
+      S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } const ids = groupIds(h), wasSel = S.sel.has(h.id) && !e.shiftKey;
       if (e.shiftKey) { const has = S.sel.has(h.id); ids.forEach(id => has ? S.sel.delete(id) : S.sel.add(id)); } else if (!S.sel.has(h.id)) { S.sel.clear(); ids.forEach(id => S.sel.add(id)); }
-      renderSel(); drag = { mode: 'move', p0: snap(p, S.sel), bb0: bbox(selShapes()), orig: selShapes().map(s => [s, s.nodes.map(cloneNode)]), moved: false };
+      renderSel(); drag = { mode: 'move', p0: snap(p, S.sel), bb0: bbox(selShapes()), orig: selShapes().map(s => [s, s.nodes.map(cloneNode)]), moved: false, wasSel, piv0: PIV && PIV.key === selKey() ? PIV.p.slice() : null };
     } else {
       const dm = hitDim(p), gd = hitGuide(X, Y);
       const hi = !dm && !gd ? imgHit(p) : null;
@@ -2892,7 +2913,19 @@ cv.addEventListener('pointermove', e => {
     if (D.mode === 'guide') { const q = snap(p); S.guides[D.axis][D.i] = D.axis === 'x' ? q[0] : q[1]; setCoords(q, 'repère'); draw(); return; }
     if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot') { imgDragMove(D, p, e); return; }
     if (D.mode === 'tabdrag') { const pr = projectOnLoops(D.tp.loops, p); if (pr) { D.tp.p.tabPts[D.idx] = [pr.x, pr.y]; if (D.tp.tabs && D.tp.tabs[D.idx]) D.tp.tabs[D.idx] = { x: pr.x, y: pr.y, a: pr.a }; if (hyp(p, D.start) * S.view.s > 3) D.moved = true; draw(); } return; }
-    if (D.mode === 'move') { const q = snap(p, S.sel); let dx = q[0] - D.p0[0], dy = q[1] - D.p0[1]; if (!snapMark || snapMark.k === 'gd') [dx, dy] = moveAlign(D.bb0, dx, dy); for (const [s, o] of D.orig) { s.nodes = o.map(cloneNode); transformShape(s, v => [v[0] + dx, v[1] + dy]); } D.moved = D.moved || Math.abs(dx) + Math.abs(dy) > 1e-9; setCoords(q, 'Δ ' + fr(dx) + ' / ' + fr(dy)); draw(); return; }
+    if (D.mode === 'pivot') { const q = snap(p); PIV = { key: selKey(), p: q }; D.moved = true; const o = outXY(q[0], q[1]); setCoords(q, tr('Pivot') + ' ' + fr(o[0]) + ' / ' + fr(o[1])); rotSync(); draw(); return; }
+    if (D.mode === 'srot') { let ang = (Math.atan2(p[1] - D.c[1], p[0] - D.c[0]) - D.a0) * 180 / Math.PI; ang = normDeg(ang); if (e.shiftKey) ang = Math.round(ang / 15) * 15; const f = rotPts(D.c, ang); for (const [s, o] of D.orig) { s.nodes = o.map(cloneNode); transformShape(s, f); } D.ang = ang; D.moved = D.moved || Math.abs(ang) > 1e-9; setCoords(p, tr('Rotation') + ' ' + fDeg(ang)); draw(); return; }
+    if (D.mode === 'sscale') {
+      const h = D.h, q = snap(p, S.sel), ax = h.a[0], ay = h.a[1], dxw = h.w[0] - ax, dyw = h.w[1] - ay;
+      let kx = h.cx && Math.abs(dxw) > 1e-9 ? (q[0] - ax) / dxw : 1, ky = h.cy && Math.abs(dyw) > 1e-9 ? (q[1] - ay) / dyw : 1;
+      if (h.cx && h.cy && ($('#selLock').checked !== e.shiftKey)) { const m = Math.abs(kx) > Math.abs(ky) ? kx : ky; kx = ky = m; }
+      const cl = v => Math.abs(v) < 1e-3 ? (v < 0 ? -1e-3 : 1e-3) : v; kx = cl(kx); ky = cl(ky);
+      const f = v => [ax + (v[0] - ax) * kx, ay + (v[1] - ay) * ky];
+      for (const [s, o] of D.orig) { s.nodes = o.map(cloneNode); transformShape(s, f); }
+      if (D.piv0) PIV = { key: selKey(), p: f(D.piv0) };
+      D.moved = true; const b = bbox(selShapes()); setCoords(q, fr(b.w) + ' × ' + fr(b.h) + ' mm'); draw(); return;
+    }
+    if (D.mode === 'move') { const q = snap(p, S.sel); let dx = q[0] - D.p0[0], dy = q[1] - D.p0[1]; if (!snapMark || snapMark.k === 'gd') [dx, dy] = moveAlign(D.bb0, dx, dy); for (const [s, o] of D.orig) { s.nodes = o.map(cloneNode); transformShape(s, v => [v[0] + dx, v[1] + dy]); } if (D.piv0) PIV = { key: selKey(), p: [D.piv0[0] + dx, D.piv0[1] + dy] }; D.moved = D.moved || Math.abs(dx) + Math.abs(dy) > 1e-9; setCoords(q, 'Δ ' + fr(dx) + ' / ' + fr(dy)); draw(); return; }
     if (D.mode === 'band') { D.sx1 = X; D.sy1 = Y; draw(); return; }
     if (D.mode === 'node') { const q = snap(p, new Set([D.s.id])), n = D.s.nodes[D.i]; n.x = q[0]; n.y = q[1]; refresh(D.s); D.moved = true; setCoords(q); draw(); return; }
     if (D.mode === 'handle') { const n = D.s.nodes[D.i], v = [p[0] - n.x, p[1] - n.y]; n[D.w] = v; const ow = D.w === 'i' ? 'o' : 'i'; if (n.sm && !D.alt && !e.altKey && n[ow]) { const L = Math.hypot(n[ow][0], n[ow][1]), u = nrm(v); n[ow] = [-u[0] * L, -u[1] * L]; } else if (e.altKey || D.alt) n.sm = false; refresh(D.s); D.moved = true; draw(); return; }
@@ -2909,7 +2942,7 @@ cv.addEventListener('pointermove', e => {
   }
   if (t === 'chamfer' || t === 'fillet' || t === 'dogbone') { hoverCorner = findCorner(p); draw(); }
   if (t === 'trim') { const s = hitEdge(p, 8); hoverEdge = s ? edgePortion(s, p) : null; draw(); }
-  if (t === 'select' && !spaceDown) cv.style.cursor = imgCursor(X, Y) || 'default';
+  if (t === 'select' && !spaceDown) cv.style.cursor = xfCursor(X, Y) || imgCursor(X, Y) || 'default';
   if (snapMark) { snapMark = null; draw(); }
   setCoords(p);
 });
@@ -2919,7 +2952,10 @@ function endPointer(e) {
   const [X, Y] = evPt(e);
   if (D.mode === 'pan') cv.style.cursor = restCursor();
   else if (D.mode === 'guide') { if (X < RB || Y < RB || X > W || Y > H) S.guides[D.axis].splice(D.i, 1); renderGuides(); commit(false); }
-  else if (D.mode === 'move') { if (D.moved) { commit(); renderSel(); } }
+  else if (D.mode === 'move') { if (D.moved) { commit(); renderSel(); } else if (D.wasSel) { S.xf = !xfOn(); S.xfKey = selKey(); draw(); } }
+  else if (D.mode === 'pivot') { rotSync(); draw(); }
+  else if (D.mode === 'srot') { cv.style.cursor = 'grab'; if (D.moved) { for (const [s, , r0] of D.orig) s.rot = normDeg(r0 + D.ang); commit(); renderSel(); } }
+  else if (D.mode === 'sscale') { if (D.moved) { commit(); renderSel(); } }
   else if (D.mode === 'tabdrag') { if (!D.moved) D.tp.p.tabPts.splice(D.idx, 1); tabChanged(D.tp); }
   else if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot') { if (D.moved) commit(false); renderImgPanel(); }
   else if (D.mode === 'node' || D.mode === 'handle') { if (D.moved) commit(); }
@@ -3238,7 +3274,7 @@ $('#stOZ').onchange = e => { S.stock.originZ = e.target.value; illRefresh(); com
 function renderSel() {
   const ss = selShapes(), ids = ['#selX', '#selY', '#selW', '#selH']; $('#selCount').textContent = ss.length + (ss.length && units(ss).length !== ss.length ? ' · ' + units(ss).length + ' obj.' : '');
   if (!S.editTp) $('#tpApply').textContent = 'Calculer sur la sélection (' + S.sel.size + ')';
-  tpSelInfo(); draw();
+  tpSelInfo(); rotSync(); draw();
   $$('#selAnchor button').forEach(b => b.setAttribute('aria-pressed', b.dataset.a === S.ui.selAnchor));
   if (!ss.length) { ids.forEach(i => { $(i).value = ''; $(i).disabled = true; }); $('#selHint').textContent = ''; return; }
   ids.forEach(i => $(i).disabled = false); const b = bbox(ss), pa = anchorPt(b, S.ui.selAnchor), o = outXY(pa[0], pa[1]);
@@ -3444,8 +3480,8 @@ function placeCtx() {
   const gb = $('#cxGroup'); gb.hidden = !(oneGroup || us.length > 1); gb.dataset.act = oneGroup ? 'ungroup' : 'group'; gb.textContent = oneGroup ? 'Dégrouper' : 'Grouper';
   $('#cxWeld').hidden = ss.filter(s => s.closed).length < 2;
   bar.hidden = false; const bw = bar.offsetWidth || 360, bh = bar.offsetHeight || 40;
-  let X = (sx(b.x0) + sx(b.x1)) / 2, Y = sy(b.y0) + 16;
-  if (Y + bh > H - 8) Y = sy(b.y1) - bh - 16; X = Math.max(bw / 2 + RB + 6, Math.min(W - bw / 2 - 6, X)); Y = Math.max(RB + 6, Math.min(H - bh - 6, Y));
+  const gap = xfOn() ? 34 : 16; let X = (sx(b.x0) + sx(b.x1)) / 2, Y = sy(b.y0) + gap;
+  if (Y + bh > H - 8) Y = sy(b.y1) - bh - gap; X = Math.max(bw / 2 + RB + 6, Math.min(W - bw / 2 - 6, X)); Y = Math.max(RB + 6, Math.min(H - bh - 6, Y));
   bar.style.left = X + 'px'; bar.style.top = Y + 'px';
 }
 let newArm = 0;
@@ -3487,8 +3523,10 @@ function act(a, btn) {
     case 'del': if (!ss.length) return; { const ids = new Set(ss.map(s => s.id)); S.shapes = S.shapes.filter(s => !ids.has(s.id)); S.sel.clear(); S.ne = null; commit(); renderSel(); draw(); } return;
     case 'dup': { if (!ss.length) return; S.sel.clear(); copyShapes(ss, q => [q[0] + 10, q[1] - 10], new Map()).forEach(n => S.sel.add(n.id)); commit(); renderSel(); draw(); return; }
     case 'center': { if (!ss.length) return; const b = bbox(ss), dx = S.stock.w / 2 - (b.x0 + b.w / 2), dy = S.stock.h / 2 - (b.y0 + b.h / 2); ss.forEach(s => transformShape(s, q => [q[0] + dx, q[1] + dy])); commit(); renderSel(); draw(); return; }
-    case 'rotate': { if (!ss.length) return toast('Sélectionnez une forme.'); const b = bbox(ss), cx = b.x0 + b.w / 2, cy = b.y0 + b.h / 2, an = (+$('#rotA').value || 0) * Math.PI / 180, c = Math.cos(an), s = Math.sin(an); ss.forEach(o => transformShape(o, q => [cx + (q[0] - cx) * c - (q[1] - cy) * s, cy + (q[0] - cx) * s + (q[1] - cy) * c])); commit(); renderSel(); draw(); return; }
-    case 'mirH': case 'mirV': { if (!ss.length) return toast('Sélectionnez une forme.'); const b = bbox(ss), cx = b.x0 + b.w / 2, cy = b.y0 + b.h / 2; ss.forEach(o => transformShape(o, q => a === 'mirH' ? [2 * cx - q[0], q[1]] : [q[0], 2 * cy - q[1]])); commit(); renderSel(); draw(); return; }
+    case 'rotate': case 'rot90': { if (!ss.length) return toast(tr('Sélectionnez une forme.')); rotateSel(+(btn && btn.dataset.q) || 90); commit(); renderSel(); draw(); return; }
+    case 'rotApply': rotApply(); return;
+    case 'dsecClose': S.ui.dsec = null; dRefresh(); draw(); return;
+    case 'mirH': case 'mirV': { if (!ss.length) return toast('Sélectionnez une forme.'); const b = bbox(ss), cx = b.x0 + b.w / 2, cy = b.y0 + b.h / 2; ss.forEach(o => { transformShape(o, q => a === 'mirH' ? [2 * cx - q[0], q[1]] : [q[0], 2 * cy - q[1]]); if (o.rot) o.rot = normDeg(-o.rot); }); commit(); renderSel(); draw(); return; }
     case 'reverse': { if (!ss.length) return toast('Sélectionnez des vecteurs.'); ss.forEach(s => { s.nodes = reverseNodes(s.nodes); refresh(s); }); commit(); draw(); toast('Sens inversé.'); return; }
     case 'zFront': case 'zUp': case 'zDown': case 'zBack': arrange(a); return;
     case 'group': { if (ss.length < 2) return toast('Sélectionnez au moins deux vecteurs.'); const g = uid(); ss.forEach(s => s.g = g); commit(false); renderSel(); toast('Groupe créé (' + ss.length + ' vecteurs).'); return; }
@@ -3628,6 +3666,7 @@ const ICO = {
   side_on: SVG24('<rect class="sm" x="5" y="5" width="14" height="14" style="opacity:.45"/><rect class="sp sp2" x="5" y="5" width="14" height="14"/>'),
 };
 const BICO = {
+  rotate: SVG24('<rect class="bo" x="3.5" y="9.5" width="11" height="11" rx="1"/><path class="bo" d="M9.5 4.6a8.5 8.5 0 0 1 10.6 9.6"/><path class="bo" d="M17.4 12.2l2.7 2.6 2.4-2.9"/>'),
   boolU: SVG24('<path class="bf" d="M3 3h11v5.2A7 7 0 1 1 8.2 14H3z"/>'),
   boolS: SVG24('<path class="bf" d="M3 3h11v5.2A7 7 0 0 0 8.2 14H3z"/><circle class="bo" cx="15" cy="15" r="7"/>'),
   boolI: SVG24('<rect class="bo" x="3" y="3" width="11" height="11"/><circle class="bo" cx="15" cy="15" r="7"/><path class="bf" d="M8.2 14A7 7 0 0 1 14 8.2V14z"/>'),
@@ -3734,7 +3773,7 @@ const DGRID = [
   ['Combiner', [['a', 'boolU', 'Souder', 2], ['a', 'boolS', 'Soustraire (à partir de la première forme sélectionnée)', 2], ['a', 'boolI', 'Intersection (à partir de la première forme sélectionnée)', 2], ['a', 'group', 'Grouper (Ctrl+G)', 2], ['a', 'ungroup', 'Dégrouper (Ctrl+Maj+G)', 1]]],
   ['Créer', [['t', 'rect'], ['t', 'ellipse'], ['t', 'circle'], ['t', 'polygon'], ['t', 'poly'], ['t', 'arc'], ['t', 'text'], ['s', 'img', 'Images de référence et vectorisation']]],
   ['Modifier', [['t', 'chamfer'], ['t', 'fillet'], ['t', 'dogbone'], ['t', 'trim'], ['t', 'cut'], ['s', 'join', 'Joindre et fermer des vecteurs'], ['s', 'offset', 'Contour décalé']]],
-  ['Disposer', [['s', 'align', 'Aligner et répartir'], ['s', 'array', 'Copie en réseau'], ['s', 'nest', 'Imbrication'], ['a', 'center', 'Centrer sur le brut', 1], ['a', 'mirH', 'Miroir horizontal', 1], ['a', 'mirV', 'Miroir vertical', 1]]],
+  ['Disposer', [['s', 'align', 'Aligner et répartir'], ['s', 'rotate', 'Rotation'], ['s', 'array', 'Copie en réseau'], ['s', 'nest', 'Imbrication'], ['a', 'center', 'Centrer sur le brut', 1], ['a', 'mirH', 'Miroir horizontal', 1], ['a', 'mirV', 'Miroir vertical', 1]]],
   ['Mesurer', [['t', 'measure'], ['t', 'dim'], ['s', 'guides', 'Repères et cotes']]],
   ['Gadgets', [['a', 'fbOpen', 'Touche de guitare…', 0], ['a', 'ilOpen', 'Incrustation en V (inlay)…', 1], ['a', 'boxOpen', 'Boîte à entures…', 0]]],
 ];
@@ -3770,8 +3809,65 @@ function dRefresh() {
   pane.querySelectorAll('#dgrid [data-tool]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === t));
   pane.querySelectorAll('#dgrid [data-sec]').forEach(b => b.setAttribute('aria-pressed', !toolForm && b.dataset.sec === show && !!S.ui.dsec));
   pane.querySelectorAll('#dgrid [data-dact]').forEach(b => { b.disabled = n < +b.dataset.need; });
+  rotSync(); draw();
 }
 
+// ---------- rotation : pivot et poignées de transformation ----------
+const selKey = () => [...S.sel].sort().join(',');
+let PIV = null;
+const normDeg = a => { a = ((a % 360) + 540) % 360 - 180; return Math.abs(a) < 1e-9 ? 0 : +a.toFixed(6); };
+function pivotPt() { const ss = selShapes(); if (!ss.length) return null; if (PIV && PIV.key === selKey()) return PIV.p; const b = bbox(ss); return [(b.x0 + b.x1) / 2, (b.y0 + b.y1) / 2]; }
+function pivotSet(q) { PIV = { key: selKey(), p: q.slice() }; rotSync(); draw(); }
+const xfOn = () => !!S.xf && S.xfKey === selKey() && S.sel.size > 0;
+const pivotShown = () => S.ui.tool === 'select' && S.sel.size > 0 && !S.imgSel && $('#tpWin').hidden && (xfOn() || S.ui.dsec === 'rotate');
+function rotPts(c0, deg) { const an = deg * Math.PI / 180, c = Math.cos(an), sn = Math.sin(an); return q => [c0[0] + (q[0] - c0[0]) * c - (q[1] - c0[1]) * sn, c0[1] + (q[0] - c0[0]) * sn + (q[1] - c0[1]) * c]; }
+function rotateSel(deg, piv) { const ss = selShapes(); if (!ss.length || !deg) return; const f = rotPts(piv || pivotPt(), deg); ss.forEach(o => { transformShape(o, f); o.rot = normDeg((+o.rot || 0) + deg); }); }
+const selRot = () => { const ss = selShapes(); return ss.length ? (+ss[0].rot || 0) : 0; };
+const fDeg = v => (LANG === 'fr' ? fr(v, 2) : String(+v.toFixed(2))) + '°';
+function rotSync() {
+  const sec = document.querySelector('[data-sec="rotate"]'); if (!sec || sec.hidden) return;
+  const mode = S.ui.rotMode || 'rel', ss = selShapes(), P = pivotPt();
+  $$('#rotMode button').forEach(b => b.setAttribute('aria-pressed', b.value === mode));
+  $$('#rotAnchor button').forEach(b => { const on = !!(P && ss.length) && (() => { const q = anchorPt(bbox(ss), b.dataset.a); return Math.hypot(q[0] - P[0], q[1] - P[1]) < 1e-6; })(); b.setAttribute('aria-pressed', on); });
+  if (P) { const o = outXY(P[0], P[1]); if (document.activeElement !== $('#rotX')) $('#rotX').value = +o[0].toFixed(3); if (document.activeElement !== $('#rotY')) $('#rotY').value = +o[1].toFixed(3); } else { $('#rotX').value = ''; $('#rotY').value = ''; }
+  ['#rotX', '#rotY', '#rotDeg'].forEach(id => { $(id).disabled = !ss.length; });
+  $('#rotInfo').textContent = !ss.length ? tr('Sélectionnez les objets à faire pivoter.') : mode === 'abs' ? trf('Absolue : la sélection prend l’angle indiqué. Angle actuel : {a}.', { a: fDeg(selRot()) }) : tr('Relative : la sélection tourne de l’angle indiqué. Angle positif = sens inverse des aiguilles d’une montre.');
+}
+function rotApply() {
+  const ss = selShapes(); if (!ss.length) return toast(tr('Sélectionnez les objets à faire pivoter.'));
+  const deg = +$('#rotDeg').value || 0, d = (S.ui.rotMode || 'rel') === 'abs' ? normDeg(deg - selRot()) : deg;
+  if (Math.abs(d) < 1e-9) return toast(tr('Angle nul : rien à faire.'));
+  rotateSel(d); commit(); renderSel(); draw(); toast(trf('Rotation de {a} appliquée.', { a: fDeg(d) }));
+}
+$$('#rotMode button').forEach(b => b.onclick = () => { S.ui.rotMode = b.value; if (b.value === 'abs') $('#rotDeg').value = +selRot().toFixed(2); rotSync(); });
+$$('#rotAnchor button').forEach(b => b.onclick = () => { const ss = selShapes(); if (ss.length) pivotSet(anchorPt(bbox(ss), b.dataset.a)); });
+['#rotX', '#rotY'].forEach(id => $(id).addEventListener('change', () => { if (!S.sel.size) return; pivotSet(inXY(+$('#rotX').value || 0, +$('#rotY').value || 0)); }));
+$('#rotDeg').addEventListener('keydown', e => { if (e.key === 'Enter') rotApply(); });
+// poignées : 8 carrés (redimensionner) et 4 ronds (tourner) autour de la sélection
+function xfHandles() {
+  if (!xfOn() || !pivotShown()) return []; const b = bbox(selShapes()), H = [], pad = 7, rp = 18;
+  for (const cx of [-1, 0, 1]) for (const cy of [-1, 0, 1]) {
+    if (!cx && !cy) continue;
+    const wxp = cx < 0 ? b.x0 : cx > 0 ? b.x1 : (b.x0 + b.x1) / 2, wyp = cy < 0 ? b.y0 : cy > 0 ? b.y1 : (b.y0 + b.y1) / 2;
+    const ax = cx < 0 ? b.x1 : cx > 0 ? b.x0 : wxp, ay = cy < 0 ? b.y1 : cy > 0 ? b.y0 : wyp;
+    H.push({ k: 's', cx, cy, w: [wxp, wyp], a: [ax, ay], X: sx(wxp) + cx * pad, Y: sy(wyp) - cy * pad });
+    if (cx && cy) H.push({ k: 'r', cx, cy, X: sx(wxp) + cx * rp, Y: sy(wyp) - cy * rp });
+  }
+  return H;
+}
+function xfHandleAt(X, Y) { if (!pivotShown()) return null; const P = pivotPt(); if (P && Math.hypot(sx(P[0]) - X, sy(P[1]) - Y) < 9) return { k: 'p' }; let best = null, bd = 8; for (const h of xfHandles()) { const d = Math.hypot(h.X - X, h.Y - Y); if (d < bd) { bd = d; best = h; } } return best; }
+function xfCursor(X, Y) { const h = xfHandleAt(X, Y); if (!h) return null; if (h.k === 'p') return 'move'; if (h.k === 'r') return 'grab'; return !h.cx ? 'ns-resize' : !h.cy ? 'ew-resize' : h.cx * h.cy > 0 ? 'nesw-resize' : 'nwse-resize'; }
+function drawXf(C) {
+  if (!pivotShown()) return;
+  const hs = xfHandles();
+  if (hs.length) {
+    const b = bbox(selShapes()); ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1; ctx.setLineDash([4, 3]); ctx.strokeRect(sx(b.x0) - 7, sy(b.y1) - 7, b.w * S.view.s + 14, b.h * S.view.s + 14); ctx.setLineDash([]);
+    for (const h of hs) { ctx.beginPath(); if (h.k === 's') ctx.rect(h.X - 4.5, h.Y - 4.5, 9, 9); else ctx.arc(h.X, h.Y, 5, 0, 7); ctx.fillStyle = h.k === 's' ? C.panel : C.acc; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = C.acc; ctx.stroke(); }
+    ctx.restore();
+  }
+  const P = pivotPt(); if (!P) return; const X = sx(P[0]), Y = sy(P[1]);
+  ctx.save(); ctx.strokeStyle = '#ff9f1c'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(X, Y, 7, 0, 7); ctx.moveTo(X - 11, Y); ctx.lineTo(X + 11, Y); ctx.moveTo(X, Y - 11); ctx.lineTo(X, Y + 11); ctx.stroke(); ctx.restore();
+}
 // ---------- fenêtres flottantes (réglages des parcours et des outils) ----------
 function fwOpen(id) {
   const w = $('#' + id); if (!w.hidden) return;
