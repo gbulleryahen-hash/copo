@@ -1003,6 +1003,7 @@ label.inl input{width:70px}
     <label>Vue<select id="v3Face"><option value="f1">Face 1 en haut</option><option value="f2">Face 2 en haut (pièce retournée)</option></select></label>
     <button id="v3Under" title="Regarder la pièce par en dessous">Vue de dessous</button>
     <label class="chk"><input type="checkbox" id="v3Tool" checked> Outil</label>
+    <label class="chk"><input type="checkbox" id="v3Draw"> Dessin</label>
     <label>Afficher<select id="v3Show"><option value="stock">Matière</option><option value="both">Matière + trajectoires</option><option value="paths">Trajectoires seules</option></select></label>
     <label class="chk" id="v3OneRow"><input type="checkbox" id="v3One"> Parcours sélectionné seul</label>
     <button id="v3Reset">Recentrer</button>
@@ -4903,6 +4904,14 @@ function v3BuildPaths() {
   gl.bindVertexArray(V3.lvao); gl.bindBuffer(gl.ARRAY_BUFFER, V3.lvbo); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vb), gl.STATIC_DRAW);
   const Pg = V3.lprog, at = (nm, sz, off) => { const l = gl.getAttribLocation(Pg, nm); if (l < 0) return; gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, sz, gl.FLOAT, false, 36, off); };
   at('aP', 3, 0); at('aC', 3, 12); at('aT', 1, 24); at('aL', 1, 28); at('aR', 1, 32); gl.bindVertexArray(null); V3.nLines = vb.length / 9;
+  // dessin : vecteurs visibles, sur le dessus du brut (face 1) ou dessous (face 2)
+  { const db = [], ink = hex3(tok('--draw')); let n1 = 0;
+    for (const pass of [1, 2]) { if (pass === 2) n1 = db.length / 9; for (const sh of S.shapes) { if (!shown(sh) || sh.pts.length < 2 || (faceOf(sh) === 2) !== (pass === 2)) continue; const f2 = pass === 2, lc = layerOf(sh).color ? hex3(layerOf(sh).color) : ink, n = sh.pts.length, m = sh.closed ? n : n - 1;
+      const P = q => f2 ? [...flipPt(q), -S3.t] : [q[0], q[1], 0];
+      for (let i = 0; i < m; i++) { const a = P(sh.pts[i]), b = P(sh.pts[(i + 1) % n]); db.push(...a, ...lc, 0, 0, 0, ...b, ...lc, 0, 0, 0); } } }
+    if (!V3.dvao) { V3.dvao = gl.createVertexArray(); V3.dvbo = gl.createBuffer(); }
+    gl.bindVertexArray(V3.dvao); gl.bindBuffer(gl.ARRAY_BUFFER, V3.dvbo); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(db), gl.STATIC_DRAW);
+    at('aP', 3, 0); at('aC', 3, 12); at('aT', 1, 24); at('aL', 1, 28); at('aR', 1, 32); gl.bindVertexArray(null); V3.nDraw = db.length / 9; V3.nDraw1 = n1; }
   // cadre du brut (pour le mode « trajectoires seules »)
   const w = S3.w, h = S3.h, t = S3.t, E = [[0,0,0],[w,0,0],[w,h,0],[0,h,0],[0,0,-t],[w,0,-t],[w,h,-t],[0,h,-t]], ed = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]], g = [0.55, 0.55, 0.55], bb = [];
   for (const [p, q] of ed) bb.push(...E[p], ...g, 0, 0, 0, ...E[q], ...g, 0, 0, 0);
@@ -4978,6 +4987,12 @@ function v3Render() {
     gl.uniformMatrix4fv(lu('uMVP'), false, mvp); gl.uniformMatrix4fv(lu('uModel'), false, model); gl.uniform1f(lu('uLift'), show === 'both' ? 0.0015 : 0);
     if (show === 'paths') { gl.uniform1f(lu('uNow'), 1e12); gl.bindVertexArray(V3.bvao); gl.drawArrays(gl.LINES, 0, 24); }
     gl.uniform1f(lu('uNow'), V3.T + 1e-6); gl.bindVertexArray(V3.lvao); gl.drawArrays(gl.LINES, 0, V3.nLines); gl.bindVertexArray(null);
+  }
+  if ($('#v3Draw').checked && V3.dvao && V3.nDraw) {
+    gl.useProgram(V3.lprog); const lu = n => gl.getUniformLocation(V3.lprog, n);
+    gl.uniformMatrix4fv(lu('uMVP'), false, mvp); gl.uniformMatrix4fv(lu('uModel'), false, model); gl.uniform1f(lu('uLift'), 0.0003); gl.uniform1f(lu('uNow'), 1e12);
+    // seuls les vecteurs de la face tournée vers le haut sont visibles
+    gl.bindVertexArray(V3.dvao); if (flipV) gl.drawArrays(gl.LINES, V3.nDraw1, V3.nDraw - V3.nDraw1); else gl.drawArrays(gl.LINES, 0, V3.nDraw1); gl.bindVertexArray(null);
   }
   if ($('#v3Tool').checked && V3.cur && V3.cur.tool) {
     const m = v3ToolMesh(V3.cur.tool); gl.useProgram(V3.tprog); const t = n => gl.getUniformLocation(V3.tprog, n);
@@ -5259,6 +5274,8 @@ function v3Events(c) {
     if (k === 'ArrowRight') { e.preventDefault(); v3Step(1); } else if (k === 'ArrowLeft') { e.preventDefault(); v3Step(-1); } else if (k === 'Home') { e.preventDefault(); $('#v3First').click(); } else if (k === 'End') { e.preventDefault(); $('#v3Last').click(); } else if (k === ' ') { e.preventDefault(); $('#v3Play').click(); } }, true);
   $('#v3Q').onchange = () => v3Open();
   $('#v3Tool').onchange = () => v3Req();
+  try { $('#v3Draw').checked = LS.get('copo.v3draw') !== '0'; } catch { $('#v3Draw').checked = true; }
+  $('#v3Draw').onchange = e => { try { LS.set('copo.v3draw', e.target.checked ? '1' : '0'); } catch { } v3Req(); };
   $('#v3Show').onchange = () => { try { LS.set('copo.v3show', $('#v3Show').value); } catch { } v3Req(); };
   $('#v3One').onchange = () => { v3BuildPaths(); v3Req(); };
   $('#v3Face').onchange = () => v3Req();
