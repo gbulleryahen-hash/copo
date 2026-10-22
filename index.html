@@ -1,20 +1,23 @@
 <!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-</head>
-<body>
 <!-- COPO — FAO 2D pour CNC · Copyright (C) 2026 g.bulleryahen
      Logiciel libre : vous pouvez le redistribuer et/ou le modifier selon les termes de la
      GNU General Public License version 3 publiée par la Free Software Foundation.
      Il est distribué SANS AUCUNE GARANTIE. Voir le fichier LICENSE ou https://www.gnu.org/licenses/gpl-3.0.html -->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>COPO</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23262626%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%234f7cff%22%20stroke-width%3D%222.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2024h12%22/%3E%3Cpath%20d%3D%22M15%2024c4.5%200%208-2.4%208.8-6%20.8-3.7-1.6-7-5.2-7-3%200-5.2%202.4-4.8%205.1.3%202.3%202.5%203.6%204.5%202.8%201.7-.7%202.3-2.6%201.4-4%22/%3E%3Cpath%20d%3D%22M24%2024h5%22/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADiUlEQVR4nMRXXWxLYRh+zunvWq3WqrbaT7Oui58tyBBEiLhYhoQrrvxEJOIvwp07ggtuJFwgROJCkPi5EUNCQkJEkPmf0LV+Zuuszrau7Zyf1vud2mForVu3Pjfn/c73nvd9zve933POq8dv8Hq9DqPRuCuVSs2j4UyO49zIAyheJ12aKd5DURSPhEKh7oE5bsDw+XyNOp3uNJkejC6+KIqyKRAINGkEqqurG3iev4ExBJFYxkhwFRUVTrPZ/IrulWJs8SUej9fpac/XFyA5g4defJ2eln4eCgSWW0/XghFguRmBShQOlXoUGDzyAE5nhtlZq15zxYhWwF6xAq6pW2C0+0Aqh2RSRn/kOfo67iLScookUPlvDK6mpiaFHMHxBpTMPgCHd1VGn3jkBdoebIec6EDeCRRP3Qx33W7VluIdiLw9AzEaQlFxHezly2GyV6lzcr+A99eXIiXHMsbKuQb0llJMnL5DtcW+jwjeWgnh3VnEwg+ITCc+3d+GaPu9tK/ZCWfV6qzxciYwrmSxugUM4WeHoYjpD5tr2lZ45uxH+cITtPQ7IH9P33f617EqzR8B3mDV7MS355rNVoPBZKuEyTEFPcHL6tho9UBnKs4cDzlCEXs022gt12w50a7ZhqJJkBLhXw+lZOSNQPTzLSQVSbU9cw/BVtYAi3s+3DP2aD79wptBmpBKZiaQsw4kpV6Emw+itH4vjOPKULbg6KB5IXABUuwjbJ4l6lgRe5HMcgqGJUTdgfNUC3a4a3dSQaYLLJVU6DieRterY2oNWFyz0r7BK1kFadhK+K3lJHo/XIW1ZJG6xH3td5EUBZVY6ZxDmp/QejFrnBFJsZzopGq/pI2LXPUoqd8H83i/Ov76+iSkaCuGRMBgmQyDdTKGCna0eL0lHcRcrBZj0YRabb7nwzX00NtbJs7961kp1kai1faLgNFWBV9jE4YKpt1clvn41yfoen0c1SvuZPQJNDWSfLcObwv+TM40X4p9QrzrMaJtt5Hoekov5cVQwPn9/g76lE7KdQv0JhcUuY+SPaZjFv+nT6aYA1tADUuYEbhBBBpQABCBm0wJm1E4NPOSJJ0gJt0YY7CcLDdPjWKItmAjxhhEYAPLrepoJBJpcTgcj6hRYAJuw+iCNadrqC+8xgban4IgCO9tNtsZ6pBFYvedEaGVsSIP+Nme36d456g9XxsMBl8OzP0AAAD//4R9A+oAAAAGSURBVAMAdeFVyBDQYsQAAAAASUVORK5CYII=">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<meta name="theme-color" content="#262626">
+</head>
+<body>
 <style>
 @font-face{font-family:"COPO Sans";font-style:normal;font-weight:200 900;font-display:swap;src:local("Source Sans 3"),url("lib/fonts/SourceSans3.ttf") format("truetype")}
 @font-face{font-family:"COPO Sans";font-style:italic;font-weight:200 900;font-display:swap;src:local("Source Sans 3 Italic"),url("lib/fonts/SourceSans3-Italic.ttf") format("truetype")}
