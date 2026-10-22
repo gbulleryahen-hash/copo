@@ -4144,8 +4144,9 @@ function boxPanel(w, h, t, gap, E) {
   const edges = [{ L: w, P: (u, d) => [u, d] }, { L: h, P: (u, d) => [w - d, u] }, { L: w, P: (u, d) => [w - u, h - d] }, { L: h, P: (u, d) => [d, h - u] }];
   const dep = (k, i) => E[k][i] ? 0 : t, pts = [];
   for (let k = 0; k < 4; k++) {
-    const st = E[k], n = st.length, L = edges[k].L, seg = L / n, u0 = dep((k + 3) % 4, E[(k + 3) % 4].length - 1), u1 = L - dep((k + 1) % 4, 0);
-    const bnd = [0]; for (let i = 1; i < n; i++) { let b = i * seg; if (st[i - 1] !== st[i]) b += st[i - 1] ? -gap / 2 : gap / 2; bnd.push(b); } bnd.push(L);
+    // tenons répartis entre les coins (zone [t, L − t]) : le premier et le dernier couvrent le coin, même si les tenons sont plus étroits que l'épaisseur
+    const st = E[k], n = st.length, L = edges[k].L, seg = (L - 2 * t) / n, u0 = dep((k + 3) % 4, E[(k + 3) % 4].length - 1), u1 = L - dep((k + 1) % 4, 0);
+    const bnd = [0]; for (let i = 1; i < n; i++) { let b = t + i * seg; if (st[i - 1] !== st[i]) b += st[i - 1] ? -gap / 2 : gap / 2; bnd.push(b); } bnd.push(L);
     for (let i = 0; i < n; i++) { const a = Math.max(bnd[i], u0), b = Math.min(bnd[i + 1], u1); if (b <= a + 1e-9) continue; const d = dep(k, i); pts.push(edges[k].P(a, d), edges[k].P(b, d)); }
   }
   const out = []; for (const p of pts) { const q = out[out.length - 1]; if (!q || Math.hypot(p[0] - q[0], p[1] - q[1]) > 1e-6) out.push(p); }
@@ -4155,7 +4156,7 @@ function boxPanel(w, h, t, gap, E) {
 }
 function boxGeom(o) {
   // un bord n'a de tenons que si le panneau qui s'y assemble est usiné ; sinon il reste droit
-  const t = o.t, f = o.faces, nW = boxOdd(o.W, o.jw), nD = boxOdd(o.D, o.jw), nH = boxOdd(o.H, o.jw), tab = o.lid === 'tabbed' && f.lid, plain = [true], P = [];
+  const t = o.t, f = o.faces, nW = boxOdd(o.W - 2 * t, o.jw), nD = boxOdd(o.D - 2 * t, o.jw), nH = boxOdd(o.H - 2 * t, o.jw), tab = o.lid === 'tabbed' && f.lid, plain = [true], P = [];
   const J = (on, n, ends) => on ? boxPat(n, ends) : plain;
   if (f.bottom) P.push({ k: 'bottom', name: 'Fond de boîte', w: o.W, h: o.D, E: [J(f.s1, nW, false), J(f.e2, nD, true), J(f.s2, nW, false), J(f.e1, nD, true)] });
   if (f.lid) P.push({ k: 'lid', name: 'Couvercle', w: o.W, h: o.D, E: tab ? [J(f.s1, nW, false), J(f.e2, nD, true), J(f.s2, nW, false), J(f.e1, nD, true)] : [plain, plain, plain, plain] });
