@@ -744,7 +744,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.72</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.73</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1694,7 +1694,7 @@ function buildThread(p, tool, shapes, M) {
   const holes = shapes.filter(s => s.closed && s.pts.length > 2).map(s => { let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (const q of s.pts) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); } return { c: [(x0 + x1) / 2, (y0 + y1) / 2], d: Math.max(x1 - x0, y1 - y0) }; });
   if (!holes.length) throw new Error('Sélectionnez des cercles : chaque filetage est centré sur un cercle.');
   const mb = new MB(M), warns = [], n = Math.max(1, Math.min(10, Math.round(+p.thPasses || 1))), RH = p.thHand !== 'L', N = 36;
-  let g0 = null;
+  let g0 = null; const threads = [];
   for (const h of orderNN(holes, o => o.c)) {
     const G = threadGeo(p, tool, h.d); g0 = g0 || G; const [x, y] = h.c, P = G.P, sg = G.inner ? 1 : -1, up = G.inner === RH;
     if (G.inner && G.r0 < 0.05) throw new Error(trf('Fraise trop grosse : Ø{t} pour un taraudage Ø{d} au pas de {p} (perçage préalable Ø{a}).', { t: fr(tool.dia), d: fr(G.D), p: fr(P), a: fr(G.D1) }));
@@ -1702,7 +1702,7 @@ function buildThread(p, tool, shapes, M) {
     const turns = Math.ceil(depth / P) + 1, zLo = -depth, zHi = zLo + turns * P, zS = up ? zLo : zHi, zE = up ? zHi : zLo;
     const radii = []; for (let k = 1; k <= n; k++) radii.push(G.r0 + (G.rf - G.r0) * k / n);
     const out = G.r0 + 2; // extérieur : départ à 2 mm du Ø nominal
-    for (const r of radii) {
+    radii.forEach((r, ri) => {
       const fc = Math.max(10, Math.round(tool.feed * r / (G.inner ? r + G.rt : Math.max(0.1, r - G.rt)))); // avance au centre de l'outil, tranchant à l'avance de l'outil
       const zT = zS > 0 ? zS : 0;
       if (G.inner) { mb.approach(x, y, zT, tool.plunge); mb.g1(x, y, zS, tool.plunge); }
@@ -1711,19 +1711,21 @@ function buildThread(p, tool, shapes, M) {
       const rr = G.inner ? r / 2 : (out - r) / 2;
       if (G.inner) for (let i = 1; i <= 18; i++) { const t = Math.PI + Math.PI * i / 18; mb.g1(x + r / 2 + rr * Math.cos(t), y + rr * Math.sin(t), zS, fc); }
       else for (let i = 1; i <= 18; i++) { const t = Math.PI * i / 18; mb.g1(x + (r + out) / 2 + rr * Math.cos(t), y + rr * Math.sin(t), zS, fc); }
-      // hélice
-      for (let i = 1; i <= turns * N; i++) { const a = sg * 2 * Math.PI * i / N; mb.g1(x + r * Math.cos(a), y + r * Math.sin(a), zS + (zE - zS) * i / (turns * N), fc); }
+      // hélice (la dernière passe porte les repères de temps de l'aperçu 3D)
+      const last = ri === radii.length - 1, k = threads.length;
+      for (let i = 1; i <= turns * N; i++) { const a = sg * 2 * Math.PI * i / N; mb.g1(x + r * Math.cos(a), y + r * Math.sin(a), zS + (zE - zS) * i / (turns * N), fc); if (last && i === 1) mb.m[mb.m.length - 1].thS = k + 1; if (last && i === turns * N) mb.m[mb.m.length - 1].thE = k + 1; }
       // sortie tangente
       if (G.inner) for (let i = 1; i <= 18; i++) { const t = Math.PI * i / 18; mb.g1(x + r / 2 + rr * Math.cos(t), y + rr * Math.sin(t), zE, fc); }
       else for (let i = 1; i <= 18; i++) { const t = Math.PI + Math.PI * i / 18; mb.g1(x + (r + out) / 2 + rr * Math.cos(t), y + rr * Math.sin(t), zE, fc); }
       mb.up(M.clearZ);
-    }
+    });
+    threads.push({ c: [x, y], inner: G.inner, D: G.D, Dm: G.inner ? G.D1 : G.d3, P, zS, zE, zLo, sg, turns });
   }
   mb.up(M.safeZ);
   if (+tool.flen > 0 && depth > +tool.flen) warns.push(trf('Longueur filetée ({l} mm) plus grande que la longueur utile de la fraise ({f} mm).', { l: fr(depth, 1), f: fr(+tool.flen, 1) }));
   if (!g0.inner) warns.push(tr('Filetage extérieur : la matière autour de la vis doit être dégagée avant (poche), l’outil descend à côté du cylindre.'));
   const nm = (g0.D % 1 ? fr(g0.D, 1) : String(g0.D)) + ' × ' + String(+g0.P.toFixed(3)).replace('.', ',');
-  return { moves: mb.m, warns, info: holes.length + ' × ' + (g0.inner ? 'M' : 'vis M') + nm + (RH ? '' : ' ' + tr('à gauche')) + (g0.inner ? ' · ' + tr('perçage préalable') + ' Ø' + fr(g0.tap, 2).replace(/,?0+$/, '') : '') + (n > 1 ? ' · ' + n + ' ' + tr('passes') : '') };
+  return { moves: mb.m, warns, threads, info: holes.length + ' × ' + (g0.inner ? 'M' : 'vis M') + nm + (RH ? '' : ' ' + tr('à gauche')) + (g0.inner ? ' · ' + tr('perçage préalable') + ' Ø' + fr(g0.tap, 2).replace(/,?0+$/, '') : '') + (n > 1 ? ' · ' + n + ' ' + tr('passes') : '') };
 }
 
 // ---------- PERÇAGE ----------
@@ -2565,6 +2567,7 @@ function computeTP(tp) {
     tp.dmoves = f2 ? r.moves.map(m => { const q = flipPt([m.x, m.y]); return { ...m, x: q[0], y: q[1] }; }) : null;
     tp.loops = r.loops ? (f2 ? r.loops.map(l => l.map(q => flipPt(q))) : r.loops) : null;
     tp.holes = r.holes ? (f2 ? r.holes.map(q => flipPt(q)) : r.holes) : null;
+    tp.threads = r.threads ? r.threads.map(t => ({ ...t, c: f2 ? flipPt(t.c) : t.c, sg: f2 ? -t.sg : t.sg, zS: t.zS - z0, zE: t.zE - z0, zLo: t.zLo - z0 })) : null;
     tp.tabs = r.tabs && r.tabs.length ? (f2 ? r.tabs.map(t => { const q = flipPt([t.x, t.y]); return { x: q[0], y: q[1], a: S.stock.flip === 'y' ? Math.PI - t.a : -t.a }; }) : r.tabs) : null;
     tp.stats = moveStats(tp.moves, S.machine.rapid);
   } catch (e) { tp.err = e.message || String(e); tp.stats = { min: 0, cut: 0 }; }
@@ -4473,7 +4476,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.72', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.73', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -4931,18 +4934,20 @@ function toolKernel(tool, cx, cy) {
 function makeSim(stock, tps, tools, rapid, target) {
   const w = stock.w, h = stock.h, t = stock.t, cell = Math.max(0.12, Math.sqrt(w * h / target));
   const nx = Math.max(2, Math.round(w / cell) + 1), ny = Math.max(2, Math.round(h / cell) + 1), cx = w / (nx - 1), cy = h / (ny - 1);
-  const segs = [], cum = [], kern = new Map(); let T = 0;
+  const segs = [], cum = [], kern = new Map(), thr = []; let T = 0;
   for (const tp of tps) {
     const tool = tools.find(x => x.id === tp.toolId); if (!tool || !tp.moves) continue;
     if (!kern.has(tool.id)) kern.set(tool.id, toolKernel(tool, cx, cy));
     const K = kern.get(tool.id), face = tp.face === 2 ? 2 : 1; let p = null;
     for (const m of (tp.dmoves || tp.moves)) {
       if (m.g === 4) { T += (m.p || 0) / 60; continue; }
+      if (m.thS && tp.threads && tp.threads[m.thS - 1]) thr.push({ g: tp.threads[m.thS - 1], face, t0: T, t1: T });
       if (p) { const len = Math.hypot(m.x - p[0], m.y - p[1], m.z - p[2]), dt = len / (m.g === 0 ? rapid : (m.f || 1000)); segs.push({ a: p, b: [m.x, m.y, m.z], K, tool, g: m.g, face, tp: tp.id, type: tp.type }); T += dt; cum.push(T); }
+      if (m.thE && thr.length) thr[thr.length - 1].t1 = T;
       p = [m.x, m.y, m.z];
     }
   }
-  const B = new Float32Array(nx * ny); B.fill(-t); return { w, h, t, nx, ny, cx, cy, H: new Float32Array(nx * ny), B, floor: -t - 0.01, segs, cum, total: T, idx: 0, frac: 0, has2: segs.some(q => q.face === 2) };
+  const B = new Float32Array(nx * ny); B.fill(-t); return { w, h, t, nx, ny, cx, cy, H: new Float32Array(nx * ny), B, floor: -t - 0.01, segs, cum, thr, total: T, idx: 0, frac: 0, has2: segs.some(q => q.face === 2) };
 }
 function simStamp(S3, x, y, z, K, face) {
   const { nx, ny, cx, cy, H, B, floor, t } = S3, ci = Math.round(x / cx), cj = Math.round(y / cy), { di, dj, dz, n } = K;
@@ -5087,6 +5092,24 @@ function v3ToolMesh(tool) {
   const P = V3.tprog; let l = gl.getAttribLocation(P, 'aP'); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, 3, gl.FLOAT, false, 24, 0); l = gl.getAttribLocation(P, 'aN2'); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, 3, gl.FLOAT, false, 24, 12);
   gl.bindVertexArray(null); const m = { vao, n: vb.length / 6 }; V3.toolMesh.set(tool.id, m); return m;
 }
+function v3BuildThreads() {
+  const gl = V3.gl; for (const m of (V3.thrMesh || [])) gl.deleteVertexArray(m.vao); V3.thrMesh = [];
+  for (const T of (V3.S3.thr || [])) {
+    const g = T.g, rW = g.inner ? g.D / 2 : g.Dm / 2, rT = g.inner ? g.Dm / 2 : g.D / 2, a = 0.4375 * g.P, b = 0.125 * g.P, N = 48, n = g.turns * N, vb = [];
+    const clip = z => Math.max(g.zLo, Math.min(0, z));
+    const pt = (i, rr, dz) => { const th = g.sg * 2 * Math.PI * i / N, zc = g.zS + (g.zE - g.zS) * i / n + g.P / 2; return [g.c[0] + rr * Math.cos(th), g.c[1] + rr * Math.sin(th), clip(zc + dz)]; };
+    for (let i = 0; i < n; i++) {
+      const prof = [[rW, -a], [rT, -b], [rT, b], [rW, a]];
+      for (let k = 0; k < 3; k++) {
+        const A = pt(i, prof[k][0], prof[k][1]), B = pt(i + 1, prof[k][0], prof[k][1]), C = pt(i + 1, prof[k + 1][0], prof[k + 1][1]), D = pt(i, prof[k + 1][0], prof[k + 1][1]);
+        const nn = v3n(v3cross(v3sub(C, A), v3sub(B, A))); for (const q of [A, B, C, A, C, D]) vb.push(q[0], q[1], q[2], nn[0], nn[1], nn[2]);
+      }
+    }
+    const vao = gl.createVertexArray(), vbo = gl.createBuffer(); gl.bindVertexArray(vao); gl.bindBuffer(gl.ARRAY_BUFFER, vbo); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vb), gl.STATIC_DRAW);
+    const P = V3.tprog; let l = gl.getAttribLocation(P, 'aP'); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, 3, gl.FLOAT, false, 24, 0); l = gl.getAttribLocation(P, 'aN2'); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, 3, gl.FLOAT, false, 24, 12);
+    gl.bindVertexArray(null); V3.thrMesh.push({ vao, n: vb.length / 6, per: 18, steps: n, t0: T.t0, t1: T.t1, face: T.face });
+  }
+}
 function v3Render() {
   const gl = V3.gl, c = $('#v3c'), S3 = V3.S3; if (!gl || !S3) return;
   const dpr = window.devicePixelRatio || 1, W = Math.max(1, Math.round(c.clientWidth * dpr)), Hh = Math.max(1, Math.round(c.clientHeight * dpr));
@@ -5116,6 +5139,13 @@ function v3Render() {
     gl.uniformMatrix4fv(lu('uMVP'), false, mvp); gl.uniformMatrix4fv(lu('uModel'), false, model); gl.uniform1f(lu('uLift'), 0.0003); gl.uniform1f(lu('uNow'), 1e12);
     // seuls les vecteurs de la face tournée vers le haut sont visibles
     gl.bindVertexArray(V3.dvao); if (flipV) gl.drawArrays(gl.LINES, V3.nDraw1, V3.nDraw - V3.nDraw1); else gl.drawArrays(gl.LINES, 0, V3.nDraw1); gl.bindVertexArray(null);
+  }
+  if (show !== 'paths' && V3.thrMesh && V3.thrMesh.length) {
+    gl.useProgram(V3.tprog); const t = n => gl.getUniformLocation(V3.tprog, n), st = hex3(tok('--stock'));
+    gl.uniformMatrix4fv(t('uMVP'), false, mvp); gl.uniformMatrix4fv(t('uModel'), false, model); gl.uniform3fv(t('uL'), L); gl.uniform3fv(t('uC'), [st[0] * 0.92, st[1] * 0.9, st[2] * 0.86]);
+    for (const m of V3.thrMesh) { if (V3.T < m.t0) continue; const f = m.t1 > m.t0 ? Math.min(1, (V3.T - m.t0) / (m.t1 - m.t0)) : 1, cnt = Math.round(f * m.steps) * m.per; if (!cnt) continue;
+      gl.uniform1f(t('uTZ'), m.face === 2 ? -1 : 1); gl.uniform3fv(t('uOff'), m.face === 2 ? [0, 0, -S3.t] : [0, 0, 0]); gl.bindVertexArray(m.vao); gl.drawArrays(gl.TRIANGLES, 0, cnt); }
+    gl.bindVertexArray(null);
   }
   if ($('#v3Tool').checked && V3.cur && V3.cur.tool) {
     const m = v3ToolMesh(V3.cur.tool); gl.useProgram(V3.tprog); const t = n => gl.getUniformLocation(V3.tprog, n);
@@ -5417,7 +5447,7 @@ function v3Open() {
   closeMenus && closeMenus();
   const t0 = performance.now(), q = +$('#v3Q').value || 1;
   V3.S3 = makeSim(S.stock, tps, S.tools, S.machine.rapid, q === 2 ? 900000 : 300000); V3.toolMesh.clear();
-  v3BuildMesh(); v3BuildPaths(); v3ResetView(); V3.T = 0; V3.cur = simTo(V3.S3, V3.S3.total); V3.T = V3.S3.total; V3.dirty = true; v3Play(false); v3Ui(); v3Req();
+  v3BuildMesh(); v3BuildPaths(); v3BuildThreads(); v3ResetView(); V3.T = 0; V3.cur = simTo(V3.S3, V3.S3.total); V3.T = V3.S3.total; V3.dirty = true; v3Play(false); v3Ui(); v3Req();
   const ms = Math.round(performance.now() - t0); $('#v3Info').textContent = V3.S3.nx + ' × ' + V3.S3.ny + ' points · ' + fr(V3.S3.cx, 2) + ' mm · calcul ' + ms + ' ms';
 }
 function v3Close() { v3Play(false); $('#v3d').hidden = true; }
