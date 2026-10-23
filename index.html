@@ -802,7 +802,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.80</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.81</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -960,13 +960,13 @@ label.inl input{width:70px}
           <p class="sw-h">Géométrie</p>
           <label>Nom<input type="text" data-t="name"></label>
           <div class="figrow"><span class="ill" data-ill="tool"></span><div class="g2">
-            <label>Type<select data-t="type"><option value="flat">Fraise droite</option><option value="ball">Fraise hémisphérique</option><option value="v">Fraise en V</option><option value="engrave">Fraise de gravure (conique à pointe plate)</option><option value="taper">Fraise conique à bout sphérique</option><option value="drill">Foret</option><option value="thread">Fraise à fileter</option></select></label>
+            <label>Type<select data-t="type"><option value="flat">Fraise droite</option><option value="ball">Fraise hémisphérique</option><option value="v">Fraise en V</option><option value="engrave">Fraise de gravure (conique à pointe plate)</option><option value="engball">Fraise de gravure à bout rond (conique)</option><option value="taper">Fraise conique à bout sphérique</option><option value="drill">Foret</option><option value="thread">Fraise à fileter</option></select></label>
             <label><span id="tDiaLbl">Diamètre (mm)</span><input data-u="len" type="number" data-t="dia" step="0.01" min="0.1"></label>
           </div></div>
           <div class="g2">
-            <label data-tshow="v drill engrave thread"><span id="tAngLbl">Angle du V (°)</span><input type="number" data-t="angle" step="1" min="5" max="170"></label>
+            <label data-tshow="v drill engrave engball thread"><span id="tAngLbl">Angle du V (°)</span><input type="number" data-t="angle" step="1" min="5" max="170"></label>
             <label data-tshow="engrave">Diamètre de la pointe (mm)<input data-u="len" type="number" data-t="flat" step="0.01" min="0"></label>
-            <label data-tshow="taper">Rayon en bout R (mm)<input data-u="len" type="number" data-t="tipR" step="0.05" min="0.01"></label>
+            <label data-tshow="taper engball">Rayon en bout R (mm)<input data-u="len" type="number" data-t="tipR" step="0.05" min="0.01"></label>
             <label data-tshow="taper thread">Longueur d’usinage L (mm)<input data-u="len" type="number" data-t="flen" step="0.5" min="0.5"></label>
           </div>
           <div class="g2">
@@ -1167,6 +1167,7 @@ Object.assign(I18N_EN, {"Adoucissement": "Softening"});
 Object.assign(I18N_EN, {"Vecteur de profil": "Profile vector", "Vecteur 1": "Vector 1", "Vecteur 2": "Vector 2", "Vecteur 3": "Vector 3", "Sélectionnez deux rails et un vecteur de profil (vecteurs ouverts).": "Select two rails and a profile vector (open vectors).", "Sélectionnez d’abord sur le plan : une ou plusieurs formes fermées pour un dôme (les formes intérieures font des trous), un ou plusieurs vecteurs pour une extrusion, deux rails et un vecteur de profil (ouverts) pour un lissage : le profil dessiné donne la forme de la section, sa hauteur réelle donne l’épaisseur Z. La forme est copiée : modifier le dessin ensuite ne la change pas.": "First select on the workspace: one or more closed shapes for a dome (inner shapes make holes), one or more vectors for an extrusion, two rails and a profile vector (open) for a sweep: the drawn profile gives the section shape, its real height gives the Z height. The shape is copied: editing the drawing afterwards does not change it."});
 Object.assign(I18N_EN, {"Retourner le profil (échanger les deux rails)": "Flip the profile (swap the two rails)"});
 Object.assign(I18N_EN, {"Aucune limite sélectionnée : tout le relief sera usiné.": "No boundary selected: the whole relief will be machined.", "Calculer": "Calculate"});
+Object.assign(I18N_EN, {"Fraise de gravure à bout rond (conique)": "Round-tip engraving bit (conical)"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4149,7 +4150,7 @@ const ILL = {
   zzero() { const top = (S.stock.originZ || 'top') !== 'bottom'; return SVG64('<rect class="st" x="10" y="10" width="46" height="20"/><path class="tb" d="M4 34h56"/><path class="zz" d="M8 ' + (top ? 10 : 30) + 'h50"/><circle class="af" cx="10" cy="' + (top ? 10 : 30) + '" r="2.4"/><text class="tx" x="1" y="' + (top ? 8 : 41) + '">Z0</text>'); },
   flip() { const y = (S.stock.flip || 'x') === 'y'; return SVG64('<rect class="st" x="12" y="8" width="40" height="28"/>' + (y ? '<path class="dl" d="M32 3v38"/><path class="ac" d="M20 22c0-8 24-8 24 0"/>' + ARW(44, 22, Math.PI / 2) : '<path class="dl" d="M7 22h50"/><path class="ac" d="M26 12c-8 0-8 20 0 20"/>' + ARW(26, 32, 0))); },
   tool() {
-    const t0 = libTool(libSel); if (!t0 || $('#lib').hidden) return ''; const t = { ...t0, type: (t0.type === 'engrave' || t0.type === 'taper') ? 'v' : t0.type };
+    const t0 = libTool(libSel); if (!t0 || $('#lib').hidden) return ''; const t = { ...t0, type: (t0.type === 'engrave' || t0.type === 'taper' || t0.type === 'engball') ? 'v' : t0.type };
     const sh = '<path class="tl" d="M27 1h10v14H27z"/>';
     if (t.type === 'ball') return SVG64(sh + '<path class="tl" d="M26 15h12v18a6 6 0 0 1-12 0z"/>' + FLUTE(26, 38, 15, 33) + DIM(26, 42, 38, 42));
     if (t.type === 'v') return SVG64(sh + '<path class="tl" d="M24 15h16l-8 26z"/>' + '<path class="dl" d="M32 41v-14"/>' + '<path class="ln" d="M44 41a12 12 0 0 0-8-12"/>' + DIM(24, 12, 40, 12));
@@ -4621,7 +4622,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.80', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.81', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -4874,6 +4875,7 @@ function libToolName(t) {
   if (t.type === 'taper') { const f = v => String(+(+v || 0).toFixed(2)).replace('.', ','); return 'Fraise conique à bout sphérique (Ø ' + f(t.dia) + ' mm, R ' + f(t.tipR) + ' mm, L ' + f(t.flen) + ' mm)'; }
   const D = t.units === 'in' ? inchFrac(t.dia / 25.4) : String(+t.dia.toFixed(2)).replace('.', ',') + ' mm';
   return t.type === 'flat' ? 'Fraise droite (' + D + ')' : t.type === 'ball' ? 'Fraise hémisphérique (' + D + ')' : t.type === 'v' ? 'Fraise en V (' + (+t.angle.toFixed(1)) + '° - ' + D + ')'
+    : t.type === 'engball' ? 'Gravure bout rond (' + (+(t.angle / 2).toFixed(1)) + '°, R ' + String(+(+t.tipR || 0).toFixed(2)).replace('.', ',') + ' mm - ' + D + ')'
     : t.type === 'engrave' ? 'Gravure (' + (+(t.angle / 2).toFixed(1)) + '°, pointe ' + String(+(t.flat || 0).toFixed(2)).replace('.', ',') + ' mm - ' + D + ')' : t.type === 'drill' ? 'Foret (' + (+t.angle.toFixed(0)) + '° - ' + D + ')' : t.type === 'thread' ? 'Fraise à fileter (' + (+(t.angle || 60).toFixed(0)) + '° - ' + D + ')' : D;
 }
 // avance par dent « hobby » (machines légères à courroies, broche rapide), d'après les tableaux pour CNC de loisir
@@ -4894,7 +4896,7 @@ function libEstimate(t, mat, base) {
   const brass = mat === 'brass', bf = brass ? 0.8 : 1, ff = z === 1 ? 1.3 : z >= 3 ? 0.85 : 1;
   const lerp = (pts, x) => { if (x <= pts[0][0]) return pts[0][1]; for (let i = 1; i < pts.length; i++) if (x <= pts[i][0]) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; return y0 + (y1 - y0) * (x - x0) / (x1 - x0); } return pts[pts.length - 1][1]; };
   if (t.type === 'drill') { const rpm = rpmOf(brass ? 50 : 80), plunge = Math.round(0.01 * D * bf * rpm / 10) * 10; return { rpm, feed: plunge, plunge, pass: r2(D), step: 0, est: 1 }; }
-  if (t.type === 'v' || t.type === 'engrave') { const rpm = 18000, feed = Math.round(Math.min(600, 0.01 * bf * z * rpm) / 10) * 10; return { rpm, feed, plunge: Math.round(feed / 3 / 10) * 10, pass: 0.15, step: base.softwood ? base.softwood.step : r2(D * 0.1), est: 1 }; }
+  if (t.type === 'v' || t.type === 'engrave' || t.type === 'engball') { const rpm = 18000, feed = Math.round(Math.min(600, 0.01 * bf * z * rpm) / 10) * 10; return { rpm, feed, plunge: Math.round(feed / 3 / 10) * 10, pass: 0.15, step: base.softwood ? base.softwood.step : r2(D * 0.1), est: 1 }; }
   const rpm = rpmOf(brass ? 150 : 250), fz = lerp([[1, 0.005], [3, 0.015], [6, 0.025], [12, 0.04]], D) * bf * ff, feed = Math.round(Math.min(2000, fz * z * rpm) / 10) * 10;
   return { rpm, feed, plunge: Math.round(Math.min(300, feed / 3) / 10) * 10, pass: r2(D * (brass ? 0.08 : 0.1) * (t.type === 'ball' ? 0.8 : 1)), step: r2(D * 0.3), est: 1 };
 }
@@ -4939,6 +4941,12 @@ if (!LIB.thr) {
   LIB.tools.push({ id: 'thr-8', group: gid, order: 1, type: 'thread', units: 'mm', dia: 8, angle: 60, flat: 0, flen: 20, flutes: 3, num: num + 2, notes: 'Monodent, carbure : à partir du M10.', name: 'Fraise à fileter (60° - 8 mm)', cut: cut(900, 350) });
   LIB.thr = 1; try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { }
 }
+if (!LIB.engb) { // fraise de gravure à bout rond par défaut, dans le dossier Gravure métrique
+  const par = (LIB.groups.find(g => !g.parent && /m[ée]tri/i.test(g.name)) || {}).id, gid = (LIB.groups.find(g => g.parent === par && /gravure/i.test(g.name)) || LIB.groups.find(g => /gravure/i.test(g.name)) || {}).id || null;
+  const t = { id: 'engb-10-025', group: gid, order: 50, type: 'engball', units: 'mm', dia: 3.175, angle: 20, tipR: 0.25, flat: 0, flutes: 2, num: Math.max(0, ...LIB.tools.map(x => +x.num || 0)) + 1, notes: 'Conique 10° (20° inclus), bout rond R 0,25 mm, queue 3,175 mm.', cut: { softwood: { rpm: 18000, feed: 1000, plunge: 300, pass: 1, step: 0.3, est: 1 }, mdf: { rpm: 18000, feed: 1000, plunge: 300, pass: 1, step: 0.3, est: 1 }, hardwood: { rpm: 18000, feed: 750, plunge: 250, pass: 0.8, step: 0.3, est: 1 }, acrylic: { rpm: 16000, feed: 700, plunge: 200, pass: 0.5, step: 0.3, est: 1 }, pvc: { rpm: 16000, feed: 700, plunge: 200, pass: 0.5, step: 0.3, est: 1 } } };
+  t.name = libToolName(t); for (const m of ['softwood', 'hardwood', 'mdf', 'acrylic', 'alu', 'brass', 'pvc']) { const es = libEstimate(t, m, t.cut); if (es) t.cut[m] = es; }
+  LIB.tools.push(t); LIB.engb = 1; try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { }
+}
 function libSave() { try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { } }
 const projMat = () => (S.stock && LIB.materials.some(m => m.id === S.stock.mat)) ? S.stock.mat : (LIB.materials[0] || { id: 'softwood' }).id;
 const libMatName = id => { const m = LIB.materials.find(x => x.id === id); return m ? tr(m.name) : id; };
@@ -4948,7 +4956,7 @@ const pct = (a, b) => b > 0 ? Math.round(100 * a / b) : 0;
 function libCut(t, mat) { if (t.cut && t.cut[mat]) return { ...t.cut[mat], src: 'lib' }; const es = libEstimate(t, mat, t.cut || {}); if (es) return { ...es, src: 'est' }; const k = Object.keys(t.cut || {}); const c = t.cut.softwood || (k.length ? t.cut[k[0]] : null); return c ? { ...c, src: 'other' } : { rpm: 18000, feed: 1000, plunge: 300, pass: +(t.dia / 2).toFixed(2), step: +(t.dia * 0.4).toFixed(2), src: 'none' }; }
 function libFlat(t, mat) { const c = libCut(t, mat), step = +c.step || t.dia * 0.4; return { tipR: t.tipR || '', flen: t.flen || '', name: t.name, type: t.type, dia: t.dia, angle: t.angle || (t.type === 'drill' ? 118 : 90), flat: t.flat || 0, flutes: t.flutes || 2, num: t.num || '', notes: t.notes || '', rpm: c.rpm || 0, feed: c.feed || c.plunge || 0, plunge: c.plunge || Math.round((c.feed || 0) / 3), pass: c.pass || +(t.dia / 2).toFixed(2), step: +step.toFixed(3), stepPct: pct(step, t.dia), over: Math.max(0, Math.min(95, Math.round(100 * (1 - step / t.dia)))), src: c.src, est: !!c.est }; }
 // outil de la bibliothèque → outil du projet (copie des réglages pour le matériau du projet)
-function libProjVals(t, mat) { const f = libFlat(t, mat), mx = (S.machine && +S.machine.maxFeed) || Infinity; return { name: t.name, type: (t.type === 'engrave' || t.type === 'taper') ? 'v' : t.type, dia: t.dia, angle: t.angle || (t.type === 'drill' ? 118 : t.type === 'thread' ? 60 : 90), flen: +t.flen || 0, tipR: t.type === 'taper' ? +t.tipR || 0 : 0, flat: t.type === 'engrave' ? +t.flat || 0 : 0, flutes: f.flutes, rpm: f.rpm, feed: Math.min(f.feed, mx), plunge: Math.min(f.plunge, mx), pass: f.pass, over: f.over }; }
+function libProjVals(t, mat) { const f = libFlat(t, mat), mx = (S.machine && +S.machine.maxFeed) || Infinity; return { name: t.name, type: (t.type === 'engrave' || t.type === 'taper' || t.type === 'engball') ? 'v' : t.type, dia: t.dia, angle: t.angle || (t.type === 'drill' ? 118 : t.type === 'thread' ? 60 : 90), flen: +t.flen || 0, tipR: t.type === 'taper' || t.type === 'engball' ? +t.tipR || 0 : 0, flat: t.type === 'engrave' ? +t.flat || 0 : 0, flutes: f.flutes, rpm: f.rpm, feed: Math.min(f.feed, mx), plunge: Math.min(f.plunge, mx), pass: f.pass, over: f.over }; }
 function libToProject(t, mat) {
   let pt = S.tools.find(x => x.libId === t.id); const v = libProjVals(t, mat || projMat());
   if (!pt) { let num = +t.num || 1; while (S.tools.some(x => +x.num === num)) num++; pt = { id: uid(), libId: t.id, num, ...v }; S.tools.push(pt); } else Object.assign(pt, v);
@@ -4960,7 +4968,7 @@ function libLinkProject() {
   let added = 0;
   for (const pt of S.tools) {
     if (pt.libId && libTool(pt.libId)) continue;
-    const m = LIB.tools.find(t => (t.type === pt.type || (pt.type === 'v' && t.type === 'engrave')) && Math.abs(t.dia - pt.dia) < 0.01 && (pt.type === 'flat' || pt.type === 'ball' || Math.abs((t.angle || 0) - (pt.angle || 0)) < 0.5));
+    const m = LIB.tools.find(t => (t.type === pt.type || (pt.type === 'v' && (t.type === 'engrave' || t.type === 'engball'))) && Math.abs(t.dia - pt.dia) < 0.01 && (pt.type === 'flat' || pt.type === 'ball' || Math.abs((t.angle || 0) - (pt.angle || 0)) < 0.5));
     if (m) { pt.libId = m.id; continue; }
     let g = LIB.groups.find(x => x.id === 'g_proj'); if (!g) { g = { id: 'g_proj', name: 'Outils des projets', parent: null, order: 99 }; LIB.groups.push(g); }
     const step = pt.dia * Math.max(0.05, 1 - (+pt.over || 40) / 100), t = { id: 'u' + uid(), group: g.id, order: LIB.tools.length, type: pt.type, units: 'mm', dia: pt.dia, angle: pt.angle || 0, flat: 0, flutes: pt.flutes || 2, num: pt.num || null, notes: '', name: pt.name, cut: { [projMat()]: { rpm: pt.rpm, feed: pt.feed, plunge: pt.plunge, pass: pt.pass, step: +step.toFixed(3) } } };
@@ -4969,8 +4977,8 @@ function libLinkProject() {
   if (added) libSave();
 }
 // compatibilité outil / type de parcours
-const libFits = (ft, t) => !ft || (ft === 'thread' ? t.type === 'thread' : ft === 'relief' ? (t.type === 'flat' || t.type === 'ball' || t.type === 'v' || t.type === 'taper' || t.type === 'engrave') : t.type === 'thread' ? false : ft === 'vcarve' ? (t.type === 'v' || t.type === 'engrave' || t.type === 'taper') : ft === 'drill' ? (t.type !== 'engrave' && t.type !== 'taper') : ft === 'profile' ? t.type !== 'drill' : (t.type === 'flat' || t.type === 'ball' || t.type === 'v'));
-const LIB_ICO = { thread: '<path d="M9 3h6v4H9zM11 7h2v12h-2z"/><path d="M8 19l4-2 4 2-4 2z"/>', taper: '<path d="M9 3h6v4H9zM9 7h6l-2 12a1 1 0 0 1-2 0z"/>', flat: '<path d="M9 3h6v4H9zM10 7h4v14h-4z"/>', ball: '<path d="M9 3h6v4H9zM10 7h4v11a2 2 0 0 1-4 0z"/>', v: '<path d="M9 3h6v4H9zM9 7h6l-3 14z"/>', engrave: '<path d="M9 3h6v4H9zM9 7h6l-2 13h-2z"/>', drill: '<path d="M9 3h6v4H9zM10 7h4v11l-2 3-2-3z"/>' };
+const libFits = (ft, t) => !ft || (ft === 'thread' ? t.type === 'thread' : ft === 'relief' ? (t.type === 'flat' || t.type === 'ball' || t.type === 'v' || t.type === 'taper' || t.type === 'engrave' || t.type === 'engball') : t.type === 'thread' ? false : ft === 'vcarve' ? (t.type === 'v' || t.type === 'engrave' || t.type === 'taper' || t.type === 'engball') : ft === 'drill' ? (t.type !== 'engrave' && t.type !== 'taper') : ft === 'profile' ? t.type !== 'drill' : (t.type === 'flat' || t.type === 'ball' || t.type === 'v'));
+const LIB_ICO = { engball: '<path d="M9 3h6v4H9zM9 7h6l-2.2 11.5a.8.8 0 0 1-1.6 0z"/>', thread: '<path d="M9 3h6v4H9zM11 7h2v12h-2z"/><path d="M8 19l4-2 4 2-4 2z"/>', taper: '<path d="M9 3h6v4H9zM9 7h6l-2 12a1 1 0 0 1-2 0z"/>', flat: '<path d="M9 3h6v4H9zM10 7h4v14h-4z"/>', ball: '<path d="M9 3h6v4H9zM10 7h4v11a2 2 0 0 1-4 0z"/>', v: '<path d="M9 3h6v4H9zM9 7h6l-3 14z"/>', engrave: '<path d="M9 3h6v4H9zM9 7h6l-2 13h-2z"/>', drill: '<path d="M9 3h6v4H9zM10 7h4v11l-2 3-2-3z"/>' };
 const GRP_ICO = '<path d="M3 7h6l2 2h10v10H3z"/>';
 function libCardSync() { const el = document.getElementById('libCardSub'); if (!el) return; const n = new Set(S.tps.map(t => t.toolId)).size; el.textContent = trf('{m} · {n} outil(s) utilisé(s)', { m: libMatName(projMat()), n }); }
 function libMatSync() { libCardSync(); for (const id of ['#libMat', '#pjLibMat']) { const sel = $(id); if (!sel) continue; sel.innerHTML = ''; for (const m of LIB.materials) { const o = document.createElement('option'); o.value = m.id; o.textContent = tr(m.name); sel.appendChild(o); } sel.value = projMat(); } }
@@ -4995,7 +5003,7 @@ function libRender() {
     $('#tAngLbl').textContent = tr(t.type === 'drill' ? 'Angle de pointe (°)' : t.type === 'thread' ? 'Angle du filet (°)' : 'Angle du V (°)'); $('#tDiaLbl').textContent = tr(t.type === 'taper' ? 'Diamètre de queue D (mm)' : 'Diamètre (mm)');
     $('#libCutH').textContent = trf('Réglages de coupe — {m}', { m: libMatName(mat) });
     const est = $('#libEst'); est.hidden = f.src === 'lib' && !f.est; est.textContent = f.src === 'none' ? tr('Aucun réglage pour ce matériau : valeurs génériques, à adapter.') : f.src === 'other' ? tr('Pas de réglage pour ce matériau : valeurs reprises d’un autre matériau, à adapter.') : tr('Valeurs de départ estimées pour une CNC de loisir (milieu bas des plages hobby ; aluminium environ 0,015 mm par dent à Ø 3 et 0,025 mm à Ø 6, laiton 20 % plus bas ; PVC comme l’acrylique). Validez-les par un essai et corrigez-les : elles deviendront les vôtres.');
-    const flat = { ...f, type: (t.type === 'engrave' || t.type === 'taper') ? 'v' : t.type };
+    const flat = { ...f, type: (t.type === 'engrave' || t.type === 'taper' || t.type === 'engball') ? 'v' : t.type };
     toolFzSync(flat); $('#toolCalc').textContent = t.type === 'taper' ? (() => { const h = taperHalfAngle(t.dia, t.tipR, t.flen); return h > 0 ? trf('Angle déduit : {a}° de dépouille (angle inclus {b}°)', { a: fr(h, 2), b: fr(2 * h, 2) }) : tr('Vérifiez D, R et L : il faut D/2 > R et L > R.'); })() : toolCalcText(flat);
   }
   illRefresh();
