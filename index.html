@@ -529,7 +529,7 @@ label.inl input{width:70px}
           <label class="chk" id="uG20Row" hidden><input type="checkbox" id="mG20"> G-code en pouces (G20)</label>
           <label class="chk"><input type="checkbox" id="mComments" checked> Commentaires dans le programme</label>
           <label class="chk"><input type="checkbox" id="mArcs" checked> Arcs G2/G3 (fichier plus court, mouvement plus fluide)</label>
-          <label class="chk" id="mCycRow" hidden><input type="checkbox" id="mCyc" checked> Cycles de perçage G81/G82/G83 (le contrôleur gère les remontées)</label>
+          <label class="chk" id="mCycRow"><input type="checkbox" id="mCyc" checked> Cycles de perçage G81/G82/G83 (le contrôleur gère les remontées)</label>
         </section>
       </div>
       <div class="pane" data-pane="dessin">
@@ -741,7 +741,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.68</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.69</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1894,7 +1894,7 @@ function makeGcode(tps, tools, stock, M, faceMode) {
   if (M.arcs !== false && (CUS ? CP.g911 : PP.g911)) L.push('G91.1');
   if (!MAN && !CUS) L.push('G0 Z' + nx(M.safeZ + oz));
   let lastTool = null, curFace = null, flipTool = null, st = { g: null, x: null, y: null, z: null, f: null };
-  const CYC = !!PP.cyc && !CUS && M.cycles !== false; let inCyc = false, lastCy = null; const endCyc = () => { if (inCyc) { L.push('G80'); inCyc = false; lastCy = null; st.g = null; } };
+  const CYC = M.cycles === undefined ? !!PP.cyc : !!M.cycles; let inCyc = false, lastCy = null; const endCyc = () => { if (inCyc) { L.push('G80'); inCyc = false; lastCy = null; st.g = null; } };
   for (const tp of tps) {
     const tool = tools.find(t => t.id === tp.toolId); if (!tool || !tp.moves || !tp.moves.length) continue;
     const fc = tp.face === 2 ? 2 : 1;
@@ -4406,7 +4406,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.68', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.69', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -4822,9 +4822,9 @@ function syncMachine() {
 $('#gcFace').onchange = () => { gcDirty = true; renderGcode(); };
 [['#mcHead', 'head'], ['#mcTc', 'tc'], ['#mcFoot', 'foot'], ['#mcExt', 'ext'], ['#mcG911', 'g911']].forEach(([id, k]) => $(id).addEventListener('change', e => { S.machine.custom = { ...CUSTOM_POST(), ...(S.machine.custom || {}), [k]: e.target.type === 'checkbox' ? e.target.checked : (k === 'ext' ? e.target.value.replace(/[^\w]/g, '') || 'nc' : e.target.value) }; autosave(); gcDirty = true; renderGcode(); }));
 $('#mMaxFeed').addEventListener('change', e => { const v = +e.target.value; if (!(v > 0)) return; S.machine.maxFeed = v; autosave(); libSyncProject(); libRender(); gcDirty = true; });
-function cycSync() { const ok = !!postOf(S.machine).cyc; $('#mCycRow').hidden = !ok; $('#mCyc').checked = ok && S.machine.cycles !== false; }
+function cycSync() { $('#mCyc').checked = S.machine.cycles === undefined ? !!postOf(S.machine).cyc : !!S.machine.cycles; }
 $('#mCyc').onchange = e => { S.machine.cycles = e.target.checked; autosave(); gcDirty = true; renderGcode(); };
-$('#mPost').addEventListener('change', () => cycSync());
+$('#mPost').addEventListener('change', () => { delete S.machine.cycles; autosave(); cycSync(); gcDirty = true; renderGcode(); });
 $('#mArcs').onchange = e => { S.machine.arcs = e.target.checked; autosave(); gcDirty = true; renderGcode(); };
 $('#mComments').onchange = e => { S.machine.comments = e.target.checked; autosave(); gcDirty = true; renderGcode(); };
 function gcTps() { const m = $('#gcFace').value, all = S.tps.filter(t => t.visible && !t.err && t.moves && t.moves.length); const f1 = all.filter(t => t.face !== 2), f2 = all.filter(t => t.face === 2); return m === '1' ? f1 : m === '2' ? f2 : f1.concat(f2); }
