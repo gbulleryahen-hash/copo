@@ -141,6 +141,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;displa
 .tabs button:hover{color:var(--ink)}
 .tabs button span{overflow:hidden;text-overflow:ellipsis}
 .tabs button i{font:600 11px var(--f-ui);font-style:normal;letter-spacing:0;opacity:.65}
+.tabs button{gap:3px;padding-left:1px;padding-right:1px}.tabs button span{font-size:12.5px}
 .tabs button[aria-selected="true"]{background:var(--panel);color:var(--ink);border-color:var(--line);box-shadow:inset 0 1.5px 0 var(--accent)}
 .tabs button[aria-selected="true"] i{color:var(--accent);opacity:1}
 .pane{overflow:auto;padding:4px 14px 18px;min-height:0}
@@ -187,6 +188,7 @@ input[type=checkbox]{accent-color:var(--accent)}
 .tpitem small,.toolitem small{display:block;color:var(--muted);font-size:12px}
 .tpitem small.err{color:var(--danger)}
 .tpitem small.wrn{color:var(--warn)}
+.imgrow .relk{font:700 9.5px var(--f-mono);letter-spacing:.04em;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 4px;min-width:30px;text-align:center}
 .hint.fwarn{color:var(--warn)}
 .tpitem.off{opacity:.55}
 .iconbtn{border:0;background:transparent;width:28px;height:28px;border-radius:5px;display:grid;place-items:center;color:var(--muted)}
@@ -465,8 +467,9 @@ label.inl input{width:70px}
       <div class="tabs" role="tablist">
         <button role="tab" data-tab="projet" aria-selected="false"><i aria-hidden="true">1</i><span>Projet</span></button>
         <button role="tab" data-tab="dessin" aria-selected="true"><i aria-hidden="true">2</i><span>Dessin</span></button>
-        <button role="tab" data-tab="parcours" aria-selected="false"><i aria-hidden="true">3</i><span>Parcours</span></button>
-        <button role="tab" data-tab="gcode" aria-selected="false"><i aria-hidden="true">4</i><span>G-code</span></button>
+        <button role="tab" data-tab="relief" aria-selected="false"><i aria-hidden="true">3</i><span>Relief</span></button>
+        <button role="tab" data-tab="parcours" aria-selected="false"><i aria-hidden="true">4</i><span>Parcours</span></button>
+        <button role="tab" data-tab="gcode" aria-selected="false"><i aria-hidden="true">5</i><span>G-code</span></button>
       </div>
 
       <div class="pane" data-pane="projet" hidden>
@@ -711,6 +714,43 @@ label.inl input{width:70px}
           <div class="row"><button data-act="layerAdd">Nouveau calque</button><button data-act="layerMove">Sélection → calque actif</button></div>
         </details>
       </div>
+      <div class="pane" data-pane="relief" hidden>
+        <section class="blk"><h3>Importer un relief</h3>
+          <div class="impgrid">
+            <button data-act="relImg" class="impbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3.5 16c3-2 4-6 7-6s4 5 6.5 5 3-2 3.5-2.5"/></svg><b>Niveaux de gris</b><small>PNG, JPG : le clair est en haut</small></button>
+            <button data-act="relStl" class="impbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><b>Modèle 3D</b><small>STL : vu de dessus, à l’échelle</small></button>
+          </div>
+          <p class="hint">Le relief se creuse dans le brut depuis le dessus : son point le plus haut affleure la surface. Les éléments se combinent dans l’ordre de la liste.</p>
+        </section>
+        <section class="blk"><h3>Éléments du relief</h3>
+          <ul class="imglist" id="relList"></ul>
+          <div id="relProps" hidden>
+            <label>Nom<input type="text" id="rlName"></label>
+            <div class="g2">
+              <label>Centre X<input data-u="len" type="number" id="rlX" step="0.5"></label>
+              <label>Centre Y<input data-u="len" type="number" id="rlY" step="0.5"></label>
+              <label>Largeur<input data-u="len" type="number" id="rlW" step="0.5" min="1"></label>
+              <label>Hauteur<input data-u="len" type="number" id="rlH" step="0.5" min="1"></label>
+              <label>Angle (°)<input type="number" id="rlR" step="1"></label>
+              <label>Combinaison<select id="rlMode"><option value="add">Ajouter</option><option value="sub">Soustraire</option><option value="max">Garder le plus haut</option><option value="min">Garder le plus bas</option></select></label>
+              <label>Épaisseur du relief Z<input data-u="len" type="number" id="rlZ" step="0.5" min="0"></label>
+              <label>Décalage de la base Z<input data-u="len" type="number" id="rlZ0" step="0.5"></label>
+              <label>Lissage <span id="rlSv" class="mono"></span><input type="range" id="rlS" min="0" max="8" step="1"></label>
+              <label id="rlOrRow">Haut du modèle<select id="rlOr"><option value="z">+Z (dessus)</option><option value="-z">−Z (dessous)</option><option value="y">+Y</option><option value="-y">−Y</option><option value="x">+X</option><option value="-x">−X</option></select></label>
+            </div>
+            <label class="chk"><input type="checkbox" id="rlLock" checked> Garder les proportions (Z suit la taille)</label>
+            <label class="chk" id="rlInvRow"><input type="checkbox" id="rlInv"> Inverser (le foncé est en haut)</label>
+            <div class="row"><button data-act="relFit">Ajuster au brut</button><button data-act="relCenter">Centrer</button><button data-act="relRot0">Angle 0°</button><button data-act="relDel" class="danger">Retirer</button></div>
+            <p class="hint" id="rlInfo"></p>
+          </div>
+        </section>
+        <section class="blk"><h3>Affichage</h3>
+          <label class="chk"><input type="checkbox" id="relShow" checked> Afficher le relief sur le plan</label>
+          <label>Précision de l’aperçu 3D<select id="relRes"><option value="0.5">0,5 mm (rapide)</option><option value="0.3">0,3 mm</option><option value="0.2">0,2 mm</option><option value="0.12">0,12 mm (fine)</option></select></label>
+          <div class="row"><button data-act="relView" class="primary">Voir le relief en 3D</button></div>
+          <p class="hint" id="relSum"></p>
+        </section>
+      </div>
       <div class="pane" data-pane="parcours" hidden>
         <section class="blk"><h3>Nouveau parcours</h3>
           <div class="seg ico tpnew" id="tpNew"><button data-newtp="profile">Profil</button><button data-newtp="pocket">Poche</button><button data-newtp="vcarve">V-carving</button><button data-newtp="drill">Perçage</button><button data-newtp="thread">Filetage</button></div>
@@ -744,7 +784,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.74</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.75</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1045,6 +1085,8 @@ label.inl input{width:70px}
 <input type="file" id="fFont" accept=".ttf,.otf,.woff,.ttc,.svg" multiple hidden>
 <input type="file" id="fFontDir" webkitdirectory multiple hidden>
 <input type="file" id="fImg" accept="image/*" hidden>
+<input type="file" id="fRelImg" accept="image/*" hidden>
+<input type="file" id="fRelStl" accept=".stl,model/stl,application/sla" hidden>
 
 <!-- Bibliothèques : d'abord le dossier lib/ à côté du fichier (hors ligne), sinon Internet -->
 <script src="lib/clipper.js"></script>
@@ -1089,6 +1131,7 @@ Object.assign(I18N_EN, {"COPO est installé : les fichiers .copo s’ouvrent mai
 Object.assign(I18N_EN, {"Filetage": "Threading", "Fraise à fileter": "Thread mill", "Fraises à fileter": "Thread mills", "Intérieur (taraudage)": "Internal (tapped hole)", "Extérieur (vis)": "External (screw)", "Pas (mm)": "Pitch (mm)", "Diamètre nominal (mm, 0 = celui du cercle)": "Nominal diameter (mm, 0 = the circle's)", "Sens du filet": "Thread hand", "À droite (standard)": "Right-hand (standard)", "À gauche": "Left-hand", "Passes radiales": "Radial passes", "Choisissez une fraise à fileter (type « Fraise à fileter » dans la bibliothèque).": "Choose a thread mill (type “Thread mill” in the library).", "Indiquez la longueur filetée (profondeur de coupe).": "Enter the thread length (cut depth).", "Sélectionnez des cercles : chaque filetage est centré sur un cercle.": "Select circles: each thread is centered on a circle.", "Fraise trop grosse : Ø{t} pour un taraudage Ø{d} au pas de {p} (perçage préalable Ø{a}).": "Bit too large: Ø{t} for a Ø{d} tapped hole at {p} pitch (pre-drill Ø{a}).", "Diamètre de vis trop petit pour ce pas.": "Screw diameter too small for this pitch.", "Longueur filetée ({l} mm) plus grande que la longueur utile de la fraise ({f} mm).": "Thread length ({l} mm) longer than the bit's reach ({f} mm).", "Filetage extérieur : la matière autour de la vis doit être dégagée avant (poche), l’outil descend à côté du cylindre.": "External thread: material around the screw must be cleared first (pocket); the bit goes down beside the cylinder.", "perçage préalable": "pre-drill", "passes": "passes", "pas": "pitch", "M{d} × {p} : perçage préalable Ø{a} (fond de filet Ø{m}).": "M{d} × {p}: pre-drill Ø{a} (minor diameter Ø{m}).", "Vis Ø{d} × {p} : cylindre au Ø{d}, fond de filet Ø{m}.": "Screw Ø{d} × {p}: cylinder at Ø{d}, root diameter Ø{m}.", "Fraise trop grosse pour ce diamètre.": "Bit too large for this diameter.", "Sélectionnez un cercle ou indiquez le diamètre nominal.": "Select a circle or enter the nominal diameter.", "Angle du filet (°)": "Thread angle (°)", "Filetage à la fraise à fileter, centré sur chaque cercle sélectionné. Dessinez le cercle au diamètre nominal (8 pour M8) ou indiquez-le ci-dessus. ": "Thread milling with a thread mill, centered on each selected circle. Draw the circle at the nominal diameter (8 for M8) or enter it above. ", "Extérieur : l’outil tourne autour du cylindre en descendant (filet à droite) ; dégagez la matière autour avant.": "External: the bit circles the cylinder going down (right-hand thread); clear the material around it first.", "Intérieur : percez ou fraisez d’abord le trou au diamètre de perçage, l’outil remonte en hélice depuis le fond (filet à droite).": "Internal: drill or mill the hole at the tap-drill diameter first; the bit spirals up from the bottom (right-hand thread).", " Un tour d’hélice = un pas. L’avance de l’outil est celle du tranchant : COPO la corrige au centre de l’outil.": " One helix turn = one pitch. The tool feed is the cutting-edge feed: COPO corrects it at the tool center.", "Monodent, carbure : du M5 au M12 environ.": "Single-form, carbide: about M5 to M12.", "Monodent, carbure : à partir du M10.": "Single-form, carbide: M10 and up."});
 Object.assign(I18N_EN, {"Longueur filetée (C) (mm)": "Thread length (C) (mm)"});
 Object.assign(I18N_EN, {"Dessous": "Bottom", "Avant": "Front", "Arrière": "Back", "Droite": "Right", "Gauche": "Left", "Cube d’orientation : cliquez une face ou un coin": "View cube: click a face or a corner"});
+Object.assign(I18N_EN, {"Relief": "Relief", "Importer un relief": "Import a relief", "Niveaux de gris": "Grayscale", "PNG, JPG : le clair est en haut": "PNG, JPG: light is high", "Modèle 3D": "3D model", "STL : vu de dessus, à l’échelle": "STL: seen from above, to scale", "Le relief se creuse dans le brut depuis le dessus : son point le plus haut affleure la surface. Les éléments se combinent dans l’ordre de la liste.": "The relief is carved into the stock from the top: its highest point is flush with the surface. Items combine in list order.", "Éléments du relief": "Relief items", "Combinaison": "Combine", "Garder le plus haut": "Keep highest", "Garder le plus bas": "Keep lowest", "Épaisseur du relief Z": "Relief height Z", "Décalage de la base Z": "Base offset Z", "Haut du modèle": "Model top", "Garder les proportions (Z suit la taille)": "Keep proportions (Z follows size)", "Inverser (le foncé est en haut)": "Invert (dark is high)", "Afficher le relief sur le plan": "Show the relief on the workspace", "Précision de l’aperçu 3D": "3D preview resolution", "0,5 mm (rapide)": "0.5 mm (fast)", "0,3 mm": "0.3 mm", "0,2 mm": "0.2 mm", "0,12 mm (fine)": "0.12 mm (fine)", "Voir le relief en 3D": "View the relief in 3D", "Aucun relief : importez une image en niveaux de gris ou un fichier STL.": "No relief: import a grayscale image or an STL file.", "{n} élément(s) · profondeur du relief {d} mm (brut {t} mm).": "{n} item(s) · relief depth {d} mm (stock {t} mm).", "Le relief dépasse l’épaisseur du brut : il sera coupé au fond.": "The relief is deeper than the stock: it will be cut off at the bottom.", "Relief importé : réglez sa taille et son épaisseur Z.": "Relief imported: set its size and Z height.", "Image illisible.": "Unreadable image.", "Fichier STL illisible.": "Unreadable STL file.", "Lecture du STL…": "Reading the STL…", "STL importé : {n} triangles, {w} × {h} × {z} mm{k}.": "STL imported: {n} triangles, {w} × {h} × {z} mm{k}.", "(réduit à {p} % pour tenir dans le brut)": "(scaled to {p}% to fit the stock)", "Réimportez le STL pour changer son orientation (le maillage n’est plus en mémoire).": "Re-import the STL to change its orientation (the mesh is no longer in memory).", "Modèle STL {w} × {h} × {z} mm, {n} triangles.": "STL model {w} × {h} × {z} mm, {n} triangles.", "Grille source {a} × {b} points ({p} mm par point).": "Source grid {a} × {b} points ({p} mm per point).", "Données absentes : réimportez le fichier.": "Data missing: re-import the file.", "Aucun élément. Importez une image en niveaux de gris ou un modèle STL.": "No items. Import a grayscale image or an STL model.", "Aucun relief à afficher.": "No relief to show."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -2319,7 +2362,7 @@ const DEFAULT_LAYERS = () => [{ id: 'l1', name: tr('Calque 1'), visible: true, l
 const S = {
   stock: { w: 300, h: 200, t: 18, originXY: 'bl', originZ: 'top', offX: 0, offY: 0, mat: 'softwood' },
   shapes: [], sel: new Set(), tools: DEFAULT_TOOLS(), tps: [],
-  images: [], imgSel: null, layers: DEFAULT_LAYERS(), layerActive: 'l1', guides: { x: [], y: [] }, dims: [], selDim: null,
+  images: [], imgSel: null, relief: { items: [], show: true, res: 0.3 }, relSel: null, layers: DEFAULT_LAYERS(), layerActive: 'l1', guides: { x: [], y: [] }, dims: [], selDim: null,
   machine: { tcZ: -10, post: 'grbl', safeZ: 10, clearZ: 2, rapid: 3000, maxFeed: 2000, comments: true, arcs: true },
   ui: {
     tool: 'select', chamfer: 3, fillet: 5, offDist: 3, offSide: 'out', offSharp: true, offDel: false, text: 'COPO', textH: 30, showTP: true, showCut: true, showEnds: true, snapGrid: true, gridStep: 1, snapVert: true, snapEnd: true, snapMid: true, snapInt: true, snapCen: true, snapTan: true, textMode: 'line', textSide: 'up', textSpace: 0,
@@ -2388,6 +2431,7 @@ function render() {
   ctx.lineWidth = 2; ctx.strokeStyle = C.pf; ctx.beginPath(); ctx.moveTo(sx(Ox), sy(Oy)); ctx.lineTo(sx(Ox) + 28, sy(Oy)); ctx.stroke();
   ctx.strokeStyle = C.pk; ctx.beginPath(); ctx.moveTo(sx(Ox), sy(Oy)); ctx.lineTo(sx(Ox), sy(Oy) - 28); ctx.stroke();
   ctx.fillStyle = C.draw; ctx.font = '600 11px ' + C.mono; ctx.fillText('X', sx(Ox) + 31, sy(Oy) + 4); ctx.fillText('Y', sx(Ox) - 3, sy(Oy) - 32); ctx.beginPath(); ctx.arc(sx(Ox), sy(Oy), 4, 0, 7); ctx.fillStyle = C.acc; ctx.fill();
+  drawRelief(C);
   drawImages(C);
   // repères
   ctx.strokeStyle = C.guide; ctx.lineWidth = 1; ctx.setLineDash([6, 4]); ctx.beginPath();
@@ -2534,12 +2578,13 @@ function previewShape(D) {
 
 // ---------- historique ----------
 let hist = [], hi = -1;
-const snapState = () => JSON.stringify({ meta: S.meta || {}, stock: S.stock, shapes: S.shapes.map(({ pts, map, ...r }) => r), tps: S.tps.map(tpDef), tools: S.tools, layers: S.layers, layerActive: S.layerActive, guides: S.guides, dims: S.dims, images: S.images });
+const snapState = () => JSON.stringify({ meta: S.meta || {}, stock: S.stock, shapes: S.shapes.map(({ pts, map, ...r }) => r), tps: S.tps.map(tpDef), tools: S.tools, layers: S.layers, layerActive: S.layerActive, guides: S.guides, dims: S.dims, images: S.images, relief: S.relief });
 function tpDef(t) { return { id: t.id, name: t.name, type: t.type, toolId: t.toolId, shapeIds: t.shapeIds, p: t.p, visible: t.visible, face: t.face === 2 ? 2 : 1 }; }
 function commit(recompute = true) { snapVer++; const s = snapState(); if (hist[hi] === s) return; hist = hist.slice(0, hi + 1); hist.push(s); if (hist.length > 120) hist.shift(); hi = hist.length - 1; if (recompute) recomputeAll(); autosave(); }
 function restore(s) {
   const o = JSON.parse(s); S.meta = o.meta || {}; S.stock = { offX: 0, offY: 0, ...o.stock }; S.stock.originXY = originKey(S.stock); S.layers = o.layers && o.layers.length ? o.layers : DEFAULT_LAYERS(); S.layerActive = S.layers.find(l => l.id === o.layerActive) ? o.layerActive : S.layers[0].id;
   S.shapes = (o.shapes || []).map(migrateShape); if (o.tools && o.tools.length) S.tools = o.tools; S.tps = (o.tps || []).map(t => ({ ...t }));
+  S.relief = o.relief && Array.isArray(o.relief.items) ? { show: true, res: 0.3, ...o.relief, items: o.relief.items.map(i => ({ ...i })) } : { items: [], show: true, res: 0.3 }; if (S.relSel && !S.relief.items.some(i => i.id === S.relSel)) S.relSel = null; relDirty = true; if (typeof relPanel === 'function') relPanel();
   S.guides = o.guides || { x: [], y: [] }; S.dims = o.dims || []; S.images = (o.images || []).map(i => ({ ...i })); if (S.imgSel && !imgById(S.imgSel)) S.imgSel = null; if (typeof renderImgPanel === 'function') renderImgPanel();
   for (const id of [...S.sel]) if (!shapeById(id)) S.sel.delete(id); if (S.ne && !shapeById(S.ne.sid)) S.ne = null;
   if (typeof libLinkProject === 'function') libLinkProject(); syncStock(); recomputeAll(); renderTools(); renderSel(); renderLayers(); renderGuides(); autosave();
@@ -2586,7 +2631,7 @@ function pjSummary() {
   const f1 = v => LANG === 'fr' ? fr(v, 1) : v.toFixed(1); el.textContent = f1(st.w) + ' × ' + f1(st.h) + ' × ' + f1(st.t) + ' mm' + (S.meta && S.meta.material ? ' · ' + S.meta.material : '') + '\n' + tr('Origine') + ' : ' + tr(originLabel(st)) + ' · Z0 : ' + tr(st.originZ === 'bottom' ? 'table' : 'dessus du brut') + (has2 ? ' · ' + tr('double face') : '') + '\n' + post + ' · ' + UNIT.len + ' · ' + UNIT.feed;
   illRefresh(); el.style.whiteSpace = 'pre-line'; if (typeof libMatSync === 'function') libMatSync(); const m = document.getElementById('pjMat'); if (m && document.activeElement !== m) m.value = (S.meta && S.meta.material) || '';
 }
-function setTab(t) { if (t !== 'parcours' && S.ui.tool !== 'tabedit') fwClose('tpWin'); if (t !== 'outils') fwClose('toolWin'); curTab = t; if (t === 'projet') pjSummary(); $$('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t)); $$('.pane').forEach(p => p.hidden = p.dataset.pane !== t); if (t === 'gcode') renderGcode(); if (t === 'parcours') renderForm(); }
+function setTab(t) { if (t !== 'parcours' && S.ui.tool !== 'tabedit') fwClose('tpWin'); if (t !== 'outils') fwClose('toolWin'); curTab = t; if (t === 'projet') pjSummary(); $$('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t)); $$('.pane').forEach(p => p.hidden = p.dataset.pane !== t); if (t === 'gcode') renderGcode(); if (t === 'parcours') renderForm(); if (t === 'relief') relPanel(); draw(); }
 $$('.tabs button').forEach(b => b.onclick = () => setTab(b.dataset.tab));
 document.querySelector('[data-pane="projet"]').addEventListener('change', () => setTimeout(pjSummary, 0));
 document.getElementById('pjMat').addEventListener('change', e => { S.meta = { ...(S.meta || {}), material: e.target.value.trim() }; commit(false); pjSummary(); });
@@ -3726,7 +3771,7 @@ function placeCtx() {
 }
 let newArm = 0;
 function act(a, btn) {
-  if (a.startsWith('img') && imgAct(a)) return;
+  if ((a.startsWith('img') || a.startsWith('rel')) && imgAct(a)) return;
   const ss = selShapes(), ne = S.ne, nes = ne && shapeById(ne.sid);
   switch (a) {
     case 'new': {
@@ -3767,7 +3812,7 @@ function act(a, btn) {
     case 'font': $('#fFont').click(); return;
     case 'fontDir': $('#fFontDir').click(); return;
     case 'ufClear': { const b = $('#ufClear'); if (Date.now() - ufArm > 3000) { ufArm = Date.now(); b.textContent = 'Vider ?'; b.classList.add('armed'); setTimeout(() => { b.textContent = 'Vider'; b.classList.remove('armed'); }, 3000); return; } ufArm = 0; b.textContent = 'Vider'; b.classList.remove('armed'); idbClear().catch(() => { }); UF = UF.filter(u => u.src !== 'idb'); updateUFCount(); if (!$('#fpPop').hidden) fpOpen(true); toast('Dossier de polices vidé (les fichiers sur votre ordinateur ne sont pas touchés).'); return; }
-    case 'save': { const o = JSON.parse(snapState()); const d = {}; for (const im of S.images) if (imgData[im.id]) d[im.id] = imgData[im.id]; if (Object.keys(d).length) o.imgData = d; saveFile(projFileName(), JSON.stringify(o), 'Projet COPO'); return; }
+    case 'save': { const o = JSON.parse(snapState()); const d = {}; for (const im of S.images) if (imgData[im.id]) d[im.id] = imgData[im.id]; if (Object.keys(d).length) o.imgData = d; { const rd = {}; for (const it of S.relief.items) if (relGrid[it.id]) rd[it.id] = relPack(relGrid[it.id]); if (Object.keys(rd).length) o.relData = rd; } saveFile(projFileName(), JSON.stringify(o), 'Projet COPO'); return; }
     case 'undo': undo(); return;
     case 'redo': redo(); return;
     case 'fit': fit(); return;
@@ -4478,7 +4523,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.74', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.75', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -4541,7 +4586,7 @@ $('#dlgClose').onclick = () => { $('#dlg').hidden = true; };
 $('#dlgCopy').onclick = () => copyText($('#dlgText'));
 function copyText(ta) { const v = ta.value; const fb = () => { ta.focus(); ta.select(); try { document.execCommand('copy'); toast('Copié.'); } catch { toast('Sélection prête : copiez avec Ctrl+C.'); } }; if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(v).then(() => toast('Copié dans le presse-papiers.'), fb); else fb(); }
 function readFile(input, cb, binary) { input.onchange = () => { const f = input.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { try { cb(r.result, f); } catch (e) { toast(e.message || 'Fichier illisible.'); } input.value = ''; }; binary ? r.readAsArrayBuffer(f) : r.readAsText(f); }; }
-function openProjectText(txt) { const o = JSON.parse(txt); if (!o.shapes || !o.stock) throw new Error('Ce fichier n’est pas un projet COPO.'); if (o.imgData) { for (const [k, v] of Object.entries(o.imgData)) { imgData[k] = v; IMG.delete(k); idbPutImg(k, v).catch(() => { }); } delete o.imgData; txt = JSON.stringify(o); } S.imgSel = null; hist = []; hi = -1; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; restore(txt); commit(false); S.form = newForm(); renderForm(); fit(); toast('Projet ouvert.'); }
+function openProjectText(txt) { const o = JSON.parse(txt); if (!o.shapes || !o.stock) throw new Error('Ce fichier n’est pas un projet COPO.'); if (o.imgData) { for (const [k, v] of Object.entries(o.imgData)) { imgData[k] = v; IMG.delete(k); idbPutImg(k, v).catch(() => { }); } delete o.imgData; txt = JSON.stringify(o); } if (o.relData) { for (const [k, v] of Object.entries(o.relData)) { relGrid[k] = relUnpack(v); relSm.delete(k); idbPutImg('rel_' + k, v).catch(() => { }); } delete o.relData; txt = JSON.stringify(o); } S.imgSel = null; hist = []; hi = -1; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; restore(txt); commit(false); S.form = newForm(); renderForm(); fit(); toast('Projet ouvert.'); }
 readFile($('#fOpen'), txt => openProjectText(txt));
 // application installée : un double-clic sur un fichier .copo l'ouvre ici
 if ('launchQueue' in window) launchQueue.setConsumer(async lp => { const h = lp.files && lp.files[0]; if (!h) return; try { openProjectText(await (await h.getFile()).text()); } catch (e) { toast(e.message || 'Fichier illisible.'); } });
@@ -5577,6 +5622,148 @@ function renderImgPanel(soft) {
     ul.appendChild(li);
   }
 }
+// ---------- RELIEF (modélisation 2,5D : carte des hauteurs) ----------
+// chaque élément garde sa grille source (Uint16 : 0 = vide, 1..65535 = hauteur 0..1), posée dans un cadre x, y, w, h, rot comme une image
+var relGrid = {}, relMesh = {}, relSm = new Map(), relDirty = true, relCache = null;
+var relCur = () => S.relSel && S.relief.items.find(i => i.id === S.relSel);
+function relPack(g) { const b = new Uint8Array(g.d.buffer, g.d.byteOffset, g.d.byteLength); let s = ''; for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000)); return { nx: g.nx, ny: g.ny, b64: btoa(s) }; }
+function relUnpack(o) { if (!o || !o.b64) return null; const s = atob(o.b64), b = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) b[i] = s.charCodeAt(i); return { nx: o.nx, ny: o.ny, d: new Uint16Array(b.buffer) }; }
+function relStore(id, g) { relGrid[id] = g; relSm.delete(id); idbPutImg('rel_' + id, relPack(g)).catch(() => { }); }
+// grille lissée (flou en boîte, 2 passes), en Float32 avec NaN pour le vide
+function relSrc(it) {
+  const g = relGrid[it.id]; if (!g) return null; const k = it.id + ':' + (it.smooth || 0); if (relSm.has(it.id) && relSm.get(it.id).k === k) return relSm.get(it.id).f;
+  const { nx, ny, d } = g, f = new Float32Array(nx * ny); for (let i = 0; i < f.length; i++) f[i] = d[i] ? (d[i] - 1) / 65534 : NaN;
+  const r = Math.round(it.smooth || 0);
+  if (r > 0) { const tmp = new Float32Array(f.length); for (let pass = 0; pass < 2; pass++) for (const [A, B, n, m, sa, sb] of [[f, tmp, nx, ny, 1, nx], [tmp, f, ny, nx, nx, 1]]) for (let j = 0; j < m; j++) { const o = j * sb; for (let i = 0; i < n; i++) { let s = 0, c = 0; for (let q = Math.max(0, i - r); q <= Math.min(n - 1, i + r); q++) { const v = A[o + q * sa]; if (v === v) { s += v; c++; } } B[o + i * sa] = A[o + i * sa] === A[o + i * sa] ? s / c : NaN; } } }
+  relSm.set(it.id, { k, f }); return f;
+}
+function relSample(f, nx, ny, u, v) { // u, v dans [0,1] ; bilinéaire, NaN si vide au plus proche
+  const X = u * (nx - 1), Y = v * (ny - 1); if (X < 0 || Y < 0 || X > nx - 1 || Y > ny - 1) return NaN;
+  const i = Math.min(nx - 2, Math.floor(X)), j = Math.min(ny - 2, Math.floor(Y)), a = X - i, b = Y - j, q = j * nx + i;
+  const p00 = f[q], p10 = f[q + 1], p01 = f[q + nx], p11 = f[q + nx + 1];
+  if (p00 === p00 && p10 === p10 && p01 === p01 && p11 === p11) return (p00 * (1 - a) + p10 * a) * (1 - b) + (p01 * (1 - a) + p11 * a) * b;
+  const n = [[p00, (1 - a) * (1 - b)], [p10, a * (1 - b)], [p01, (1 - a) * b], [p11, a * b]].sort((x, y) => y[1] - x[1])[0][0]; return n;
+}
+// composition sur le brut : H (mm, au-dessus de la base 0), grille de pas « cell »
+function reliefCompose(cell) {
+  const st = S.stock, nx = Math.max(2, Math.round(st.w / cell) + 1), ny = Math.max(2, Math.round(st.h / cell) + 1), cx = st.w / (nx - 1), cy = st.h / (ny - 1), H = new Float32Array(nx * ny);
+  for (const it of S.relief.items) {
+    if (!it.visible) continue; const f = relSrc(it), g = relGrid[it.id]; if (!f) continue;
+    const r = (it.rot || 0) * Math.PI / 180, cs = Math.cos(r), sn = Math.sin(r), hw = it.w / 2, hh = it.h / 2, ex = Math.abs(cs) * hw + Math.abs(sn) * hh, ey = Math.abs(sn) * hw + Math.abs(cs) * hh;
+    const i0 = Math.max(0, Math.floor((it.x - ex) / cx)), i1 = Math.min(nx - 1, Math.ceil((it.x + ex) / cx)), j0 = Math.max(0, Math.floor((it.y - ey) / cy)), j1 = Math.min(ny - 1, Math.ceil((it.y + ey) / cy));
+    const zH = +it.zH || 0, z0 = +it.z0 || 0, inv = !!it.invert, mode = it.mode || 'add';
+    for (let j = j0; j <= j1; j++) { const dy = j * cy - it.y; for (let i = i0; i <= i1; i++) { const dx = i * cx - it.x, lu = dx * cs + dy * sn, lv = -dx * sn + dy * cs; if (Math.abs(lu) > hw || Math.abs(lv) > hh) continue;
+      const v = relSample(f, g.nx, g.ny, lu / it.w + 0.5, 0.5 - lv / it.h); if (v !== v) continue; const h = z0 + zH * (inv ? 1 - v : v), q = j * nx + i;
+      H[q] = mode === 'sub' ? H[q] - h : mode === 'max' ? Math.max(H[q], h) : mode === 'min' ? Math.min(H[q], h) : H[q] + h; } }
+  }
+  let mx = -Infinity, mn = Infinity; for (let i = 0; i < H.length; i++) { if (H[i] > mx) mx = H[i]; if (H[i] < mn) mn = H[i]; }
+  return { nx, ny, cx, cy, H, max: mx, min: mn };
+}
+// aperçu 2D : ombrage sous le dessin
+function drawRelief(C) {
+  if (!S.relief || !S.relief.show || !S.relief.items.some(i => i.visible && relGrid[i.id])) return;
+  if (relDirty || !relCache) {
+    const st = S.stock, R = reliefCompose(Math.max(st.w, st.h) / 700), { nx, ny, cx, cy, H, max, min } = R, cv = relCache && relCache.cv || document.createElement('canvas'); cv.width = nx; cv.height = ny;
+    const g = cv.getContext('2d'), im = g.createImageData(nx, ny), span = Math.max(1e-6, max - min), L = v3n([-0.5, 0.6, 0.62]);
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, hx = (H[j * nx + Math.min(nx - 1, i + 1)] - H[j * nx + Math.max(0, i - 1)]) / (2 * cx), hy = (H[Math.min(ny - 1, j + 1) * nx + i] - H[Math.max(0, j - 1) * nx + i]) / (2 * cy), n = v3n([-hx, -hy, 1]);
+      const sh = Math.max(0, n[0] * L[0] + n[1] * L[1] + n[2] * L[2]), lv = 0.35 + 0.65 * (H[q] - min) / span, c = Math.round(255 * Math.min(1, 0.25 + 0.75 * sh) * (0.55 + 0.45 * lv)), o = ((ny - 1 - j) * nx + i) * 4;
+      im.data[o] = c; im.data[o + 1] = Math.round(c * 0.96); im.data[o + 2] = Math.round(c * 0.9); im.data[o + 3] = H[q] !== 0 ? 235 : 0; }
+    g.putImageData(im, 0, 0); relCache = { cv, R }; relDirty = false; relSummary();
+  }
+  ctx.save(); ctx.imageSmoothingEnabled = true; ctx.drawImage(relCache.cv, sx(0), sy(S.stock.h), S.stock.w * S.view.s, S.stock.h * S.view.s); ctx.restore();
+  const it = curTab === 'relief' && relCur(); if (it) { const f = imgFrame(it), cs = f.corners.map(q => [sx(q[0]), sy(q[1])]); ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]); ctx.beginPath(); cs.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.stroke(); ctx.restore(); }
+}
+function relSummary() { const el = $('#relSum'); if (!el) return; const R = relCache && relCache.R, n = S.relief.items.length; if (!n || !R) { el.textContent = n ? '' : tr('Aucun relief : importez une image en niveaux de gris ou un fichier STL.'); return; } const dep = R.max - R.min; el.textContent = trf('{n} élément(s) · profondeur du relief {d} mm (brut {t} mm).', { n, d: fr(dep, 2), t: fr(S.stock.t, 1) }) + (dep > S.stock.t ? ' ' + tr('Le relief dépasse l’épaisseur du brut : il sera coupé au fond.') : ''); }
+function relAdd(it, g) { it.id = 'r' + Math.random().toString(36).slice(2, 9); relStore(it.id, g); S.relief.items.push(it); S.relSel = it.id; relDirty = true; commit(false); relPanel(); setTab('relief'); draw(); }
+function relSet(fn) { const it = relCur(); if (!it) return; fn(it); relDirty = true; commit(false); relPanel(true); draw(); }
+// image en niveaux de gris (le côté le plus long ramené à 1024 points)
+function relImportImage(file) {
+  const url = URL.createObjectURL(file), im = new Image();
+  im.onload = () => { const k = Math.min(1, 1024 / Math.max(im.naturalWidth, im.naturalHeight)), nx = Math.max(2, Math.round(im.naturalWidth * k)), ny = Math.max(2, Math.round(im.naturalHeight * k)), cv = document.createElement('canvas'); cv.width = nx; cv.height = ny; const g = cv.getContext('2d'); g.drawImage(im, 0, 0, nx, ny); const px = g.getImageData(0, 0, nx, ny).data, d = new Uint16Array(nx * ny);
+    for (let i = 0; i < nx * ny; i++) { const a = px[i * 4 + 3]; d[i] = a < 128 ? 0 : 1 + Math.round((0.2126 * px[i * 4] + 0.7152 * px[i * 4 + 1] + 0.0722 * px[i * 4 + 2]) / 255 * 65534); }
+    URL.revokeObjectURL(url); const st = S.stock, ar = nx / ny, w = Math.min(st.w * 0.8, st.h * 0.8 * ar);
+    relAdd({ kind: 'image', name: file.name.replace(/\.[^.]+$/, ''), x: st.w / 2, y: st.h / 2, w, h: w / ar, rot: 0, zH: Math.min(5, st.t / 2), z0: 0, invert: false, smooth: 1, mode: 'add', visible: true }, { nx, ny, d }); toast(tr('Relief importé : réglez sa taille et son épaisseur Z.')); };
+  im.onerror = () => { URL.revokeObjectURL(url); toast(tr('Image illisible.')); }; im.src = url;
+}
+// STL binaire ou texte -> triangles (Float32, 9 valeurs par triangle)
+function stlParse(buf) {
+  const dv = new DataView(buf), n = buf.byteLength >= 84 ? dv.getUint32(80, true) : 0;
+  if (n && 84 + n * 50 === buf.byteLength) { const T = new Float32Array(n * 9); for (let t = 0; t < n; t++) { const o = 84 + t * 50 + 12; for (let k = 0; k < 9; k++) T[t * 9 + k] = dv.getFloat32(o + k * 4, true); } return T; }
+  const txt = new TextDecoder().decode(new Uint8Array(buf)), re = /vertex\s+([-+\d.eE]+)\s+([-+\d.eE]+)\s+([-+\d.eE]+)/g, v = []; let m; while ((m = re.exec(txt))) v.push(+m[1], +m[2], +m[3]);
+  if (v.length < 9) throw new Error(tr('Fichier STL illisible.')); return new Float32Array(v.slice(0, v.length - v.length % 9));
+}
+var STL_OR = { z: (x, y, z) => [x, y, z], '-z': (x, y, z) => [x, -y, -z], y: (x, y, z) => [x, -z, y], '-y': (x, y, z) => [x, z, -y], x: (x, y, z) => [y, z, x], '-x': (x, y, z) => [y, -z, -x] };
+// rastérisation vue de dessus : tampon de profondeur (on garde le Z le plus haut)
+function stlRaster(T, orient) {
+  const f = STL_OR[orient] || STL_OR.z, n = T.length / 9, P = new Float32Array(T.length); let x0 = Infinity, y0 = Infinity, z0 = Infinity, x1 = -Infinity, y1 = -Infinity, z1 = -Infinity;
+  for (let i = 0; i < n * 3; i++) { const q = f(T[i * 3], T[i * 3 + 1], T[i * 3 + 2]); P[i * 3] = q[0]; P[i * 3 + 1] = q[1]; P[i * 3 + 2] = q[2]; if (q[0] < x0) x0 = q[0]; if (q[0] > x1) x1 = q[0]; if (q[1] < y0) y0 = q[1]; if (q[1] > y1) y1 = q[1]; if (q[2] < z0) z0 = q[2]; if (q[2] > z1) z1 = q[2]; }
+  const W = x1 - x0, Hh = y1 - y0, Z = Math.max(1e-6, z1 - z0), c = Math.max(W, Hh) / 1023 || 1, nx = Math.max(2, Math.round(W / c) + 1), ny = Math.max(2, Math.round(Hh / c) + 1), zb = new Float32Array(nx * ny).fill(-Infinity);
+  for (let t = 0; t < n; t++) { const o = t * 9, ax = (P[o] - x0) / c, ay = (y1 - P[o + 1]) / c, az = P[o + 2], bx = (P[o + 3] - x0) / c, by = (y1 - P[o + 4]) / c, bz = P[o + 5], qx = (P[o + 6] - x0) / c, qy = (y1 - P[o + 7]) / c, qz = P[o + 8];
+    const den = (by - qy) * (ax - qx) + (qx - bx) * (ay - qy); if (Math.abs(den) < 1e-12) continue;
+    const i0 = Math.max(0, Math.ceil(Math.min(ax, bx, qx) - 1e-9)), i1 = Math.min(nx - 1, Math.floor(Math.max(ax, bx, qx) + 1e-9)), j0 = Math.max(0, Math.ceil(Math.min(ay, by, qy) - 1e-9)), j1 = Math.min(ny - 1, Math.floor(Math.max(ay, by, qy) + 1e-9));
+    for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) { const l1 = ((by - qy) * (i - qx) + (qx - bx) * (j - qy)) / den, l2 = ((qy - ay) * (i - qx) + (ax - qx) * (j - qy)) / den, l3 = 1 - l1 - l2; if (l1 < -1e-6 || l2 < -1e-6 || l3 < -1e-6) continue; const z = l1 * az + l2 * bz + l3 * qz, q = j * nx + i; if (z > zb[q]) zb[q] = z; } }
+  const d = new Uint16Array(nx * ny); for (let i = 0; i < d.length; i++) d[i] = zb[i] === -Infinity ? 0 : 1 + Math.round((zb[i] - z0) / Z * 65534);
+  return { g: { nx, ny, d }, W, H: Hh, Z, tris: n };
+}
+function relImportStl(file) {
+  toast(tr('Lecture du STL…')); file.arrayBuffer().then(buf => { setTimeout(() => { try {
+    const T = stlParse(buf), R = stlRaster(T, 'z'), st = S.stock, k = Math.min(1, st.w * 0.9 / R.W, st.h * 0.9 / R.H), zH = Math.min(R.Z * k, st.t);
+    const it = { kind: 'stl', name: file.name.replace(/\.[^.]+$/, ''), x: st.w / 2, y: st.h / 2, w: R.W * k, h: R.H * k, rot: 0, zH, z0: 0, invert: false, smooth: 0, mode: 'add', visible: true, orient: 'z', nat: [R.W, R.H, R.Z], tris: R.tris };
+    relAdd(it, R.g); relMesh[it.id] = T; idbPutImg('relm_' + it.id, T).catch(() => { });
+    toast(trf('STL importé : {n} triangles, {w} × {h} × {z} mm{k}.', { n: R.tris.toLocaleString(), w: fr(R.W, 1), h: fr(R.H, 1), z: fr(R.Z, 1), k: k < 1 ? ' ' + trf('(réduit à {p} % pour tenir dans le brut)', { p: Math.round(k * 100) }) : '' }));
+  } catch (e) { toast(e.message || tr('Fichier STL illisible.')); } }, 30); });
+}
+function relReorient(it, o) {
+  const T = relMesh[it.id]; if (!T) { toast(tr('Réimportez le STL pour changer son orientation (le maillage n’est plus en mémoire).')); relPanel(true); return; }
+  const R = stlRaster(T, o), k = it.w / (it.nat ? it.nat[0] : R.W); it.orient = o; it.nat = [R.W, R.H, R.Z]; it.h = R.H * k; it.zH = Math.min(R.Z * k, S.stock.t); relStore(it.id, R.g); relDirty = true; commit(false); relPanel(); draw();
+}
+function relPanel(soft) {
+  const ul = $('#relList'), box = $('#relProps'); if (!ul) return; const it = relCur(); box.hidden = !it;
+  if (it) {
+    const o = outXY(it.x, it.y), set = (id, v) => { const el = $(id); if (document.activeElement !== el) el.value = v; };
+    set('#rlName', it.name); set('#rlX', +o[0].toFixed(2)); set('#rlY', +o[1].toFixed(2)); set('#rlW', +it.w.toFixed(2)); set('#rlH', +it.h.toFixed(2)); set('#rlR', +(it.rot || 0).toFixed(1)); set('#rlZ', +(+it.zH).toFixed(2)); set('#rlZ0', +(+it.z0 || 0).toFixed(2)); set('#rlS', it.smooth || 0); $('#rlSv').textContent = it.smooth || 0; $('#rlMode').value = it.mode || 'add'; $('#rlInv').checked = !!it.invert;
+    $('#rlOrRow').hidden = it.kind !== 'stl'; $('#rlInvRow').hidden = it.kind === 'stl'; if (it.kind === 'stl') $('#rlOr').value = it.orient || 'z'; const g = relGrid[it.id];
+    $('#rlInfo').textContent = (it.kind === 'stl' ? trf('Modèle STL {w} × {h} × {z} mm, {n} triangles.', { w: fr(it.nat[0], 1), h: fr(it.nat[1], 1), z: fr(it.nat[2], 1), n: (it.tris || 0).toLocaleString() }) + ' ' : '') + (g ? trf('Grille source {a} × {b} points ({p} mm par point).', { a: g.nx, b: g.ny, p: fr(it.w / (g.nx - 1), 2) }) : tr('Données absentes : réimportez le fichier.'));
+  }
+  $('#relShow').checked = S.relief.show !== false; $('#relRes').value = String(S.relief.res || 0.3);
+  if (soft) return; relSummary();
+  ul.innerHTML = ''; if (!S.relief.items.length) { ul.innerHTML = '<li class="hint">' + tr('Aucun élément. Importez une image en niveaux de gris ou un modèle STL.') + '</li>'; return; }
+  S.relief.items.forEach((x, k) => {
+    const li = document.createElement('li'); li.className = 'imgrow' + (x.id === S.relSel ? ' on' : '');
+    li.innerHTML = '<span class="relk"></span><span></span><button class="iconbtn" data-i="up" title="' + tr('Monter') + '" aria-label="' + tr('Monter') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 14l5-5 5 5"/></svg></button><button class="iconbtn" data-i="vis" title="' + tr(x.visible ? 'Masquer' : 'Afficher') + '" aria-label="' + tr('Visibilité') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/>' + (x.visible ? '<circle cx="12" cy="12" r="3"/>' : '<path d="M4 20L20 4"/>') + '</svg></button>';
+    li.querySelector('.relk').textContent = x.kind === 'stl' ? 'STL' : 'IMG'; li.children[1].textContent = x.name + ' · ' + tr({ add: 'Ajouter', sub: 'Soustraire', max: 'Garder le plus haut', min: 'Garder le plus bas' }[x.mode || 'add']);
+    li.onclick = e => { const b = e.target.closest('[data-i]'); if (b) { e.stopPropagation(); if (b.dataset.i === 'vis') x.visible = !x.visible; else if (k > 0) { const A = S.relief.items; [A[k - 1], A[k]] = [A[k], A[k - 1]]; } relDirty = true; commit(false); relPanel(); draw(); return; } S.relSel = x.id; relPanel(); draw(); };
+    ul.appendChild(li);
+  });
+}
+function bindRelPanel() {
+  const num = id => parseFloat(String($(id).value).replace(',', '.'));
+  $('#fRelImg').onchange = e => { const f = e.target.files[0]; e.target.value = ''; if (f) relImportImage(f); };
+  $('#fRelStl').onchange = e => { const f = e.target.files[0]; e.target.value = ''; if (f) relImportStl(f); };
+  $('#rlName').onchange = () => relSet(i => { i.name = $('#rlName').value.trim() || i.name; });
+  $('#rlX').onchange = $('#rlY').onchange = () => relSet(i => { const q = inXY(isFinite(num('#rlX')) ? num('#rlX') : 0, isFinite(num('#rlY')) ? num('#rlY') : 0); i.x = q[0]; i.y = q[1]; });
+  $('#rlW').onchange = () => relSet(i => { const v = num('#rlW'); if (!(v > 0)) return; if ($('#rlLock').checked) { i.h *= v / i.w; i.zH *= v / i.w; } i.w = v; });
+  $('#rlH').onchange = () => relSet(i => { const v = num('#rlH'); if (!(v > 0)) return; if ($('#rlLock').checked) { i.w *= v / i.h; i.zH *= v / i.h; } i.h = v; });
+  $('#rlR').onchange = () => relSet(i => { const v = num('#rlR'); if (isFinite(v)) i.rot = v; });
+  $('#rlZ').onchange = () => relSet(i => { const v = num('#rlZ'); if (v >= 0) i.zH = v; });
+  $('#rlZ0').onchange = () => relSet(i => { const v = num('#rlZ0'); if (isFinite(v)) i.z0 = v; });
+  $('#rlS').oninput = () => { $('#rlSv').textContent = $('#rlS').value; }; $('#rlS').onchange = () => relSet(i => { i.smooth = +$('#rlS').value; });
+  $('#rlMode').onchange = () => relSet(i => { i.mode = $('#rlMode').value; }); $('#rlInv').onchange = () => relSet(i => { i.invert = $('#rlInv').checked; });
+  $('#rlOr').onchange = () => { const it = relCur(); if (it) relReorient(it, $('#rlOr').value); };
+  $('#relShow').onchange = () => { S.relief.show = $('#relShow').checked; commit(false); draw(); };
+  $('#relRes').onchange = () => { S.relief.res = +$('#relRes').value; commit(false); };
+}
+// aperçu 3D du relief seul : le brut est creusé depuis le dessus, le point le plus haut à la surface
+function relView3d() {
+  if (!S.relief.items.some(i => i.visible && relGrid[i.id])) { toast(tr('Aucun relief à afficher.')); return; }
+  $('#v3d').hidden = false; if (!v3Init()) { $('#v3d').hidden = true; toast('L’aperçu 3D demande WebGL 2, absent de ce navigateur. Essayez Chrome, Edge ou Firefox récents.'); return; }
+  const st = S.stock, t0 = performance.now(), cell = Math.max(+S.relief.res || 0.3, Math.sqrt(st.w * st.h / 1200000)), R = reliefCompose(cell), H = R.H;
+  for (let i = 0; i < H.length; i++) H[i] = Math.max(-st.t - 0.01, Math.min(0, H[i] - R.max));
+  const B = new Float32Array(R.nx * R.ny); B.fill(-st.t);
+  V3.S3 = { w: st.w, h: st.h, t: st.t, nx: R.nx, ny: R.ny, cx: R.cx, cy: R.cy, H, B, floor: -st.t - 0.01, segs: [], cum: [], thr: [], total: 0, idx: 0, frac: 0, has2: false, relief: true };
+  V3.toolMesh.clear(); $('#v3OneRow').hidden = true; $('#v3Show').value = 'stock'; v3BuildMesh(); v3BuildPaths(); v3BuildThreads(); v3ResetView(); V3.T = 0; V3.cur = null; V3.dirty = true; v3Play(false); v3Ui(); v3Req();
+  $('#v3Info').textContent = tr('Relief') + ' · ' + R.nx + ' × ' + R.ny + ' points · ' + fr(R.cx, 2) + ' mm · ' + Math.round(performance.now() - t0) + ' ms';
+}
 // ---------- vectorisation d'image (contours) ----------
 const VZ = new Map(), VZ_MAX = 700;
 function vzP(im) { if (!im.trace) im.trace = { t: null, l: 3, inv: false }; return im.trace; }
@@ -5695,8 +5882,15 @@ function bindImgPanel() {
 }
 async function idbPutImg(id, src) { const db = await idb(); return new Promise((res, rej) => { const tx = db.transaction('images', 'readwrite'); tx.objectStore('images').put({ id, src }); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); }
 async function idbGetImgs() { const db = await idb(); return new Promise((res, rej) => { const q = db.transaction('images').objectStore('images').getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => rej(q.error); }); }
-async function loadImgData() { try { for (const r of await idbGetImgs()) imgData[r.id] = r.src; } catch (e) { } renderImgPanel(); draw(); }
+async function loadImgData() { try { for (const r of await idbGetImgs()) { if (r.id.startsWith('rel_')) relGrid[r.id.slice(4)] = relUnpack(r.src); else if (r.id.startsWith('relm_')) relMesh[r.id.slice(5)] = r.src; else imgData[r.id] = r.src; } } catch (e) { } relDirty = true; relPanel(); renderImgPanel(); draw(); }
 function imgAct(a) {
+  if (a === 'relImg') { $('#fRelImg').click(); return true; }
+  if (a === 'relStl') { $('#fRelStl').click(); return true; }
+  if (a === 'relFit') { relSet(i => { const st = S.stock, k = Math.min(st.w / i.w, st.h / i.h) * 0.98; if ($('#rlLock').checked) i.zH *= k; i.w *= k; i.h *= k; i.rot = 0; i.x = st.w / 2; i.y = st.h / 2; }); return true; }
+  if (a === 'relCenter') { relSet(i => { i.x = S.stock.w / 2; i.y = S.stock.h / 2; }); return true; }
+  if (a === 'relRot0') { relSet(i => { i.rot = 0; }); return true; }
+  if (a === 'relDel') { const it = relCur(); if (!it) return true; S.relief.items = S.relief.items.filter(x => x !== it); S.relSel = null; relDirty = true; commit(false); relPanel(); draw(); return true; }
+  if (a === 'relView') { relView3d(); return true; }
   const im = S.imgSel && imgById(S.imgSel);
   if (a === 'imgInsert') { $('#fImg').click(); return true; }
   if (!im) { if (a.startsWith('img')) { toast('Sélectionnez d’abord une image.'); return true; } return false; }
@@ -5740,7 +5934,7 @@ function loadSample() {
   let loaded = false; const saved = LS.get('copeau.project');
   if (saved) { try { const o = JSON.parse(saved); if (o.shapes && o.shapes.length) { restore(saved); hist = [snapState()]; hi = 0; S.form = newForm(); renderForm(); loaded = true; } } catch (e) { console.warn(e); } }
   if (!loaded) loadSample();
-  bindImgPanel(); loadImgData(); dgInit(); icoInit(); dRefresh();
+  bindImgPanel(); bindRelPanel(); relPanel(); loadImgData(); dgInit(); icoInit(); dRefresh();
   renderTools(); renderSel(); renderLayers(); renderGuides(); renderImgPanel(); trStart(); requestAnimationFrame(fit);
 })();
 </script>
