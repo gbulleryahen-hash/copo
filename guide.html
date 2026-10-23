@@ -185,7 +185,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.77</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.78</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -329,8 +329,8 @@ footer p{max-width:none}
     <ul>
       <li><strong>Dôme</strong> (une ou plusieurs formes fermées ; les formes intérieures font des trous) : la hauteur monte depuis le bord. <em>Largeur du bord</em> = 0 bombe jusqu’au centre (arête au milieu des formes allongées, comme dans Aspire) ; une valeur donne un arrondi de cette largeur puis un plateau.</li>
       <li><strong>Extrusion</strong> (un ou plusieurs vecteurs, ouverts ou fermés) : une moulure de la <em>largeur</em> choisie suit le tracé, extrémités arrondies.</li>
-      <li><strong>Lissage</strong> (deux vecteurs ouverts = les rails) : une section passe d’un rail à l’autre ; <em>Hauteur à la fin</em> fait varier la hauteur du début à la fin (crosse, manche, bord bombé) et la case <em>Hauteur proportionnelle à la largeur</em> l’adapte à l’écart entre les rails.</li>
-      <li><strong>Profil</strong> commun : rond, angulaire (en pointe), plat ou doucine (en S). L’épaisseur Z, le décalage de la base, la combinaison et l’adoucissement se règlent comme pour les autres éléments.</li>
+      <li><strong>Lissage</strong> (deux rails + un vecteur de profil, tous ouverts) : la section dessinée passe d’un rail à l’autre, mise à l’échelle de l’écart entre les rails. Le profil est le vecteur qui relie les deux rails, sinon le dernier sélectionné (modifiable par <em>Vecteur de profil</em>) ; sa corde va d’un rail à l’autre et sa hauteur réelle donne l’épaisseur Z ; <em>Retourner le profil</em> l’inverse si besoin. Sans troisième vecteur, la section est ronde ; <em>Hauteur à la fin</em> fait varier la hauteur du début à la fin (crosse, manche, bord bombé) et la case <em>Hauteur proportionnelle à la largeur</em> l’adapte à l’écart entre les rails.</li>
+      <li><strong>Profil</strong> du dôme et de l’extrusion : rond, angulaire (en pointe), plat ou doucine (en S). L’épaisseur Z, le décalage de la base, la combinaison et l’adoucissement se règlent comme pour les autres éléments.</li>
     </ul>
     <h3>Usiner le relief</h3>
     <p>Dans l’onglet <span class="ui">Parcours</span>, le type <strong>Relief</strong> propose deux opérations :</p>
@@ -506,7 +506,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.77 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.78 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -541,7 +541,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.77</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.78</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -685,8 +685,8 @@ M30</pre>
     <ul>
       <li><strong>Dome</strong> (one or more closed shapes; inner shapes make holes): height rises from the edge. <em>Edge width</em> = 0 domes up to the center (a ridge along elongated shapes, as in Aspire); a value gives a rounded edge of that width, then a plateau.</li>
       <li><strong>Extrusion</strong> (one or more vectors, open or closed): a moulding of the chosen <em>width</em> follows the path, with rounded ends.</li>
-      <li><strong>Sweep</strong> (two open vectors = the rails): a section spans from one rail to the other; <em>Height at the end</em> varies the height from start to end (scroll, neck, domed edge) and <em>Height proportional to the width</em> adapts it to the gap between the rails.</li>
-      <li>Common <strong>profile</strong>: round, angular (pointed), flat or ogee (S-shaped). Z height, base offset, combine mode and softening work as for other items.</li>
+      <li><strong>Sweep</strong> (two rails + one profile vector, all open): the drawn section spans from one rail to the other, scaled to the gap between them. The profile is the vector joining the two rails, otherwise the last one selected (changeable with <em>Profile vector</em>); its chord runs from rail to rail and its real height gives the Z height; <em>Flip the profile</em> reverses it if needed. Without a third vector, the section is round; <em>Height at the end</em> varies the height from start to end (scroll, neck, domed edge) and <em>Height proportional to the width</em> adapts it to the gap between the rails.</li>
+      <li><strong>Profile</strong> of domes and extrusions: round, angular (pointed), flat or ogee (S-shaped). Z height, base offset, combine mode and softening work as for other items.</li>
     </ul>
     <h3>Machining the relief</h3>
     <p>In the <span class="ui">Toolpaths</span> tab, the <strong>Relief</strong> type offers two operations:</p>
@@ -862,7 +862,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.77 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.78 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 

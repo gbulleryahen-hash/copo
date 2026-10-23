@@ -728,7 +728,7 @@ label.inl input{width:70px}
             <button data-act="relExt" class="impbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16c4-8 8 2 18-8"/><path d="M3 20c4-8 8 2 18-8" opacity=".5"/></svg><b>Extrusion</b><small>le long d’un vecteur</small></button>
             <button data-act="relSweep" class="impbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5c5 2 11 2 16 0"/><path d="M4 19c5-3 11-3 16 0"/><path d="M8 6v11M12 6.5v10M16 6v11" opacity=".55"/></svg><b>Lissage</b><small>entre deux rails</small></button>
           </div>
-          <p class="hint">Sélectionnez d’abord sur le plan : une ou plusieurs formes fermées pour un dôme (les formes intérieures font des trous), un ou plusieurs vecteurs pour une extrusion, deux vecteurs ouverts pour un lissage. La forme est copiée : modifier le dessin ensuite ne la change pas.</p>
+          <p class="hint">Sélectionnez d’abord sur le plan : une ou plusieurs formes fermées pour un dôme (les formes intérieures font des trous), un ou plusieurs vecteurs pour une extrusion, deux rails et un vecteur de profil (ouverts) pour un lissage : le profil dessiné donne la forme de la section, sa hauteur réelle donne l’épaisseur Z. La forme est copiée : modifier le dessin ensuite ne la change pas.</p>
         </section>
         <section class="blk"><h3>Éléments du relief</h3>
           <ul class="imglist" id="relList"></ul>
@@ -748,10 +748,12 @@ label.inl input{width:70px}
             </div>
             <div id="rlGen" class="tabbox" hidden>
               <div class="g2">
-                <label>Profil<select id="rlGP"><option value="round">Rond</option><option value="angular">Angulaire (en pointe)</option><option value="flat">Plat</option><option value="ogee">Doucine (en S)</option></select></label>
+                <label id="rlGPRow">Profil<select id="rlGP"><option value="round">Rond</option><option value="angular">Angulaire (en pointe)</option><option value="flat">Plat</option><option value="ogee">Doucine (en S)</option></select></label>
                 <label id="rlGWRow"><span id="rlGWL">Largeur du bord (mm, 0 = jusqu’au centre)</span><input data-u="len" type="number" id="rlGW" step="0.5" min="0"></label>
+                <label id="rlGSRow">Vecteur de profil<select id="rlGS"><option value="0">Vecteur 1</option><option value="1">Vecteur 2</option><option value="2">Vecteur 3</option></select></label>
                 <label id="rlGERow">Hauteur à la fin (% du début)<input type="number" id="rlGE" step="5" min="0" max="400"></label>
               </div>
+              <label class="chk" id="rlGFRow"><input type="checkbox" id="rlGF"> Retourner le profil (échanger les deux rails)</label>
               <label class="chk" id="rlGPrRow"><input type="checkbox" id="rlGPr"> Hauteur proportionnelle à la largeur entre les rails</label>
             </div>
             <label class="chk"><input type="checkbox" id="rlLock" checked> Garder les proportions (Z suit la taille)</label>
@@ -800,7 +802,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.77</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.78</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1162,6 +1164,8 @@ Object.assign(I18N_EN, {"Relief": "Relief", "Importer un relief": "Import a reli
 Object.assign(I18N_EN, {"Ébauche": "Roughing", "Finition": "Finishing", "Pas latéral (% du diamètre)": "Stepover (% of diameter)", "Seconde passe croisée (à 90°)": "Second cross pass (at 90°)", "Ébauche relief": "Relief roughing", "Finition relief": "Relief finishing", "Aucun relief : importez-le dans l’onglet Relief.": "No relief: import it in the Relief tab.", "Limite : {n} forme(s) fermée(s) sélectionnée(s), centre de l’outil à l’intérieur.": "Boundary: {n} selected closed shape(s), tool center inside.", "Limite : cadres des éléments du relief (sélectionnez des formes fermées pour limiter la zone).": "Boundary: relief item frames (select closed shapes to limit the area).", "Finition du relief : balayage parallèle qui suit la surface, avec la forme réelle de l’outil (fraise hémisphérique ou conique à bout sphérique de préférence). Un pas latéral de 8 à 12 % donne une surface lisse.": "Relief finishing: parallel raster following the surface, using the real tool shape (preferably a ball-nose or tapered ball-nose). A stepover of 8 to 12% gives a smooth surface.", "Ébauche du relief : balayage par niveaux de Z avec une fraise droite, en laissant la surépaisseur pour la finition. Chaque niveau descend de la profondeur de passe.": "Relief roughing: raster by Z levels with a flat end mill, leaving the allowance for finishing. Each level steps down by the pass depth.", "Relief modifié depuis le calcul : mettez à jour le parcours.": "Relief changed since calculation: update the toolpath.", "Aucun relief : importez une image en niveaux de gris ou un STL dans l’onglet Relief.": "No relief: import a grayscale image or an STL in the Relief tab.", "Rien à usiner dans la limite choisie.": "Nothing to machine inside the chosen boundary.", "Le relief dépasse l’épaisseur du brut : il est coupé au fond.": "The relief is deeper than the stock: it is cut off at the bottom.", "Finition avec une fraise droite : préférez une fraise hémisphérique ou conique à bout sphérique pour une surface lisse.": "Finishing with a flat end mill: prefer a ball-nose or tapered ball-nose for a smooth surface.", "finition": "finishing", "ébauche": "roughing", "lignes": "lines", "croisées": "crossed", "niveaux": "levels", "pas latéral": "stepover", "surépaisseur": "allowance"});
 Object.assign(I18N_EN, {"Créer à partir du dessin": "Create from the drawing", "Dôme": "Dome", "formes fermées": "closed shapes", "Extrusion": "Extrusion", "le long d’un vecteur": "along a vector", "entre deux rails": "between two rails", "Sélectionnez d’abord sur le plan : une ou plusieurs formes fermées pour un dôme (les formes intérieures font des trous), un ou plusieurs vecteurs pour une extrusion, deux vecteurs ouverts pour un lissage. La forme est copiée : modifier le dessin ensuite ne la change pas.": "First select on the workspace: one or more closed shapes for a dome (inner shapes make holes), one or more vectors for an extrusion, two open vectors for a sweep. The shape is copied: editing the drawing afterwards does not change it.", "Rond": "Round", "Angulaire (en pointe)": "Angular (pointed)", "Plat": "Flat", "Doucine (en S)": "Ogee (S-shaped)", "Largeur du bord (mm, 0 = jusqu’au centre)": "Edge width (mm, 0 = up to the center)", "Largeur (mm)": "Width (mm)", "Hauteur à la fin (% du début)": "Height at the end (% of start)", "Hauteur proportionnelle à la largeur entre les rails": "Height proportional to the width between rails", "Forme trop petite.": "Shape too small.", "Sélectionnez une ou plusieurs formes fermées.": "Select one or more closed shapes.", "Sélectionnez un ou plusieurs vecteurs.": "Select one or more vectors.", "Sélectionnez exactement deux vecteurs ouverts (les rails).": "Select exactly two open vectors (the rails).", "Forme créée : réglez le profil, la largeur et l’épaisseur Z.": "Shape created: set the profile, width and Z height."});
 Object.assign(I18N_EN, {"Adoucissement": "Softening"});
+Object.assign(I18N_EN, {"Vecteur de profil": "Profile vector", "Vecteur 1": "Vector 1", "Vecteur 2": "Vector 2", "Vecteur 3": "Vector 3", "Sélectionnez deux rails et un vecteur de profil (vecteurs ouverts).": "Select two rails and a profile vector (open vectors).", "Sélectionnez d’abord sur le plan : une ou plusieurs formes fermées pour un dôme (les formes intérieures font des trous), un ou plusieurs vecteurs pour une extrusion, deux rails et un vecteur de profil (ouverts) pour un lissage : le profil dessiné donne la forme de la section, sa hauteur réelle donne l’épaisseur Z. La forme est copiée : modifier le dessin ensuite ne la change pas.": "First select on the workspace: one or more closed shapes for a dome (inner shapes make holes), one or more vectors for an extrusion, two rails and a profile vector (open) for a sweep: the drawn profile gives the section shape, its real height gives the Z height. The shape is copied: editing the drawing afterwards does not change it."});
+Object.assign(I18N_EN, {"Retourner le profil (échanger les deux rails)": "Flip the profile (swap the two rails)"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4616,7 +4620,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.77', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.78', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5829,7 +5833,7 @@ function relPanel(soft) {
     const o = outXY(it.x, it.y), set = (id, v) => { const el = $(id); if (document.activeElement !== el) el.value = v; };
     set('#rlName', it.name); set('#rlX', +o[0].toFixed(2)); set('#rlY', +o[1].toFixed(2)); set('#rlW', +it.w.toFixed(2)); set('#rlH', +it.h.toFixed(2)); set('#rlR', +(it.rot || 0).toFixed(1)); set('#rlZ', +(+it.zH).toFixed(2)); set('#rlZ0', +(+it.z0 || 0).toFixed(2)); set('#rlS', it.smooth || 0); $('#rlSv').textContent = it.smooth || 0; $('#rlMode').value = it.mode || 'add'; $('#rlInv').checked = !!it.invert;
     $('#rlOrRow').hidden = it.kind !== 'stl'; $('#rlInvRow').hidden = it.kind === 'stl' || !!it.gen;
-    { const G = it.gen; $('#rlGen').hidden = !G; if (G) { $('#rlGP').value = G.prof || 'round'; set('#rlGW', +(+G.W || 0).toFixed(2)); $('#rlGWRow').hidden = G.type === 'sweep'; $('#rlGWL').textContent = tr(G.type === 'dome' ? 'Largeur du bord (mm, 0 = jusqu’au centre)' : 'Largeur (mm)'); $('#rlGERow').hidden = G.type !== 'sweep'; set('#rlGE', G.end ?? 100); $('#rlGPrRow').hidden = G.type !== 'sweep'; $('#rlGPr').checked = !!G.prop; } } if (it.kind === 'stl') $('#rlOr').value = it.orient || 'z'; const g = relGrid[it.id];
+    { const G = it.gen; $('#rlGen').hidden = !G; if (G) { $('#rlGP').value = G.prof || 'round'; $('#rlGPRow').hidden = G.type === 'sweep'; $('#rlGSRow').hidden = !(G.type === 'sweep' && G.all); if (G.all) $('#rlGS').value = String(G.secIdx); set('#rlGW', +(+G.W || 0).toFixed(2)); $('#rlGWRow').hidden = G.type === 'sweep'; $('#rlGWL').textContent = tr(G.type === 'dome' ? 'Largeur du bord (mm, 0 = jusqu’au centre)' : 'Largeur (mm)'); $('#rlGERow').hidden = G.type !== 'sweep'; set('#rlGE', G.end ?? 100); $('#rlGPrRow').hidden = G.type !== 'sweep'; $('#rlGPr').checked = !!G.prop; $('#rlGFRow').hidden = !G.all; $('#rlGF').checked = !!G.secFlip; } } if (it.kind === 'stl') $('#rlOr').value = it.orient || 'z'; const g = relGrid[it.id];
     $('#rlInfo').textContent = (it.kind === 'stl' ? trf('Modèle STL {w} × {h} × {z} mm, {n} triangles.', { w: fr(it.nat[0], 1), h: fr(it.nat[1], 1), z: fr(it.nat[2], 1), n: (it.tris || 0).toLocaleString() }) + ' ' : '') + (g ? trf('Grille source {a} × {b} points ({p} mm par point).', { a: g.nx, b: g.ny, p: fr(it.w / (g.nx - 1), 2) }) : tr('Données absentes : réimportez le fichier.'));
   }
   $('#relShow').checked = S.relief.show !== false; $('#relRes').value = String(S.relief.res || 0.3);
@@ -5859,6 +5863,8 @@ function bindRelPanel() {
   $('#rlOr').onchange = () => { const it = relCur(); if (it) relReorient(it, $('#rlOr').value); };
   const regen = fn => { const it = relCur(); if (!it || !it.gen) return; fn(it.gen); try { relRegen(it); } catch (e) { toast(e.message); } relBump(); relDirty = true; commit(false); relPanel(true); draw(); };
   $('#rlGP').onchange = () => regen(G => { G.prof = $('#rlGP').value; });
+  $('#rlGS').onchange = () => regen(G => { relSweepRoles(G, +$('#rlGS').value); });
+  $('#rlGF').onchange = () => regen(G => { G.secFlip = $('#rlGF').checked; relSweepRoles(G, G.secIdx); });
   $('#rlGW').onchange = () => regen(G => { const v = num('#rlGW'); if (v >= 0) G.W = v; });
   $('#rlGE').onchange = () => regen(G => { const v = num('#rlGE'); if (v >= 0) G.end = v; });
   $('#rlGPr').onchange = () => regen(G => { G.prop = $('#rlGPr').checked; });
@@ -5897,18 +5903,30 @@ function relGenGrid(G) {
   } else { // lissage entre deux rails : bandes de quadrilatères A_i, A_i+1, B_i+1, B_i, paramètre u en travers
     const rs = pts => { const L = [0]; for (let k = 1; k < pts.length; k++) L.push(L[k - 1] + Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1])); return { pts, L, T: L[L.length - 1] }; };
     const at = (r, t) => { const s = t * r.T; let k = 1; while (k < r.L.length - 1 && r.L[k] < s) k++; const a = r.pts[k - 1], b = r.pts[k], u = (s - r.L[k - 1]) / ((r.L[k] - r.L[k - 1]) || 1); return [a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u]; };
+    const sec = G.sec && G.sec.length > 1 ? G.sec : null, secAt = u => { const x = Math.max(0, Math.min(1, u)) * (sec.length - 1), k = Math.min(sec.length - 2, Math.floor(x)); return sec[k] + (sec[k + 1] - sec[k]) * (x - k); };
     let A = P[0].pts, B = P[1].pts; const dd = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1]); if (dd(A[0], B[0]) + dd(A[A.length - 1], B[B.length - 1]) > dd(A[0], B[B.length - 1]) + dd(A[A.length - 1], B[0])) B = B.slice().reverse();
     const ra = rs(A), rb = rs(B), M = Math.max(2, Math.ceil(Math.max(ra.T, rb.T) / (c * 2))), SA = [], SB = []; for (let k = 0; k <= M; k++) { SA.push(at(ra, k / M)); SB.push(at(rb, k / M)); }
     const wid = SA.map((q, k) => dd(q, SB[k])), w0 = Math.max(...wid) || 1, end = (G.end ?? 100) / 100;
     const tri = (P1, P2, P3) => { const [ax, ay] = P1, [bx, by] = P2, [qx, qy] = P3, den = (by - qy) * (ax - qx) + (qx - bx) * (ay - qy); if (Math.abs(den) < 1e-12) return;
       const i0 = Math.max(0, Math.floor((Math.min(ax, bx, qx) - x0) / c)), i1 = Math.min(nx - 1, Math.ceil((Math.max(ax, bx, qx) - x0) / c)), j0 = Math.max(0, Math.floor((y1 - Math.max(ay, by, qy)) / c)), j1 = Math.min(ny - 1, Math.ceil((y1 - Math.min(ay, by, qy)) / c));
       for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) { const x = X(i), y = Y(j), l1 = ((by - qy) * (x - qx) + (qx - bx) * (y - qy)) / den, l2 = ((qy - ay) * (x - qx) + (ax - qx) * (y - qy)) / den, l3 = 1 - l1 - l2; if (l1 < -1e-7 || l2 < -1e-7 || l3 < -1e-7) continue;
-        const u = l1 * P1[2] + l2 * P2[2] + l3 * P3[2], s2 = l1 * P1[3] + l2 * P2[3] + l3 * P3[3], wl = l1 * P1[4] + l2 * P2[4] + l3 * P3[4], amp = (1 + (end - 1) * s2) * (G.prop ? wl / w0 : 1), t = 1 - Math.abs(2 * u - 1), v = amp * relProf(G.prof, t), q = j * nx + i; if (!(h[q] >= v)) h[q] = v; } };
+        const u = l1 * P1[2] + l2 * P2[2] + l3 * P3[2], s2 = l1 * P1[3] + l2 * P2[3] + l3 * P3[3], wl = l1 * P1[4] + l2 * P2[4] + l3 * P3[4], amp = (1 + (end - 1) * s2) * (G.prop ? wl / w0 : 1), v = amp * (sec ? secAt(u) : relProf('round', 1 - Math.abs(2 * u - 1))), q = j * nx + i; if (!(h[q] >= v)) h[q] = v; } };
     for (let k = 0; k < M; k++) { const a0 = [...SA[k], 0, k / M, wid[k]], a1 = [...SA[k + 1], 0, (k + 1) / M, wid[k + 1]], b0 = [...SB[k], 1, k / M, wid[k]], b1 = [...SB[k + 1], 1, (k + 1) / M, wid[k + 1]]; tri(a0, a1, b1); tri(a0, b1, b0); }
   }
   let mx = 0; for (let i = 0; i < N; i++) if (h[i] > mx) mx = h[i]; if (!(mx > 0)) mx = 1;
   const d = new Uint16Array(N); for (let i = 0; i < N; i++) d[i] = h[i] === h[i] ? 1 + Math.round(Math.max(0, h[i] / mx) * 65534) : 0;
   return { g: { nx, ny, d }, box: [x0, y0, x1, y1] };
+}
+function relSweepRoles(G, si) {
+  const all = G.all, prof = all[si].pts, rails = all.filter((x, k) => k !== si); G.secIdx = si; G.polys = rails.map(x => ({ pts: x.pts, closed: false }));
+  const dSeg = (p, pl) => { let m = Infinity; for (let k = 0; k + 1 < pl.length; k++) { const a = pl[k], b = pl[k + 1], dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy || 1e-12, t = Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / L)); m = Math.min(m, Math.hypot(p[0] - a[0] - dx * t, p[1] - a[1] - dy * t)); } return m; };
+  let pr = prof; const e0 = pr[0], e1 = pr[pr.length - 1]; if (dSeg(e0, rails[0].pts) + dSeg(e1, rails[1].pts) > dSeg(e1, rails[0].pts) + dSeg(e0, rails[1].pts)) pr = pr.slice().reverse();
+  const a = pr[0], b = pr[pr.length - 1], L = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1, ux = (b[0] - a[0]) / L, uy = (b[1] - a[1]) / L;
+  const pts = pr.map(q => [((q[0] - a[0]) * ux + (q[1] - a[1]) * uy) / L, (q[0] - a[0]) * -uy + (q[1] - a[1]) * ux]);
+  let sg = 0; for (const q of pts) sg += q[1]; if (sg < 0) for (const q of pts) q[1] = -q[1]; // le côté où est la courbe = le haut
+  const N = 128, sec = new Array(N + 1).fill(0); let mx = 0;
+  for (let k = 0; k <= N; k++) { const u = k / N; let best = null; for (let i = 0; i + 1 < pts.length; i++) { const p0 = pts[i], p1 = pts[i + 1]; if ((p0[0] - u) * (p1[0] - u) <= 0 && p1[0] !== p0[0]) { const y = p0[1] + (p1[1] - p0[1]) * (u - p0[0]) / (p1[0] - p0[0]); if (best === null || y > best) best = y; } } sec[k] = Math.max(0, best ?? 0); if (sec[k] > mx) mx = sec[k]; }
+  G.sec = sec.map(v => mx > 0 ? v / mx : 0); if (G.secFlip) G.sec.reverse(); G.secH = mx; G.secW = L;
 }
 function relRegen(it) { const R = relGenGrid(it.gen), ow = it.w || 1, k = it.gen.box ? ow / (it.gen.box[2] - it.gen.box[0]) : 1; it.w = (R.box[2] - R.box[0]) * k; it.h = (R.box[3] - R.box[1]) * k; it.gen.box = R.box; relStore(it.id, R.g); }
 function relFromDrawing(type) {
@@ -5916,10 +5934,14 @@ function relFromDrawing(type) {
   let polys;
   if (type === 'dome') { polys = sh.filter(x => x.closed && x.pts.length > 2).map(x => ({ pts: x.pts.map(q => [q[0], q[1]]), closed: true })); if (!polys.length) { toast(tr('Sélectionnez une ou plusieurs formes fermées.')); return; } }
   else if (type === 'extrude') { polys = sh.map(x => ({ pts: x.pts.map(q => [q[0], q[1]]), closed: !!x.closed })); if (!polys.length) { toast(tr('Sélectionnez un ou plusieurs vecteurs.')); return; } }
-  else { const op = sh.filter(x => !x.closed); if (op.length !== 2) { toast(tr('Sélectionnez exactement deux vecteurs ouverts (les rails).')); return; } polys = op.map(x => ({ pts: x.pts.map(q => [q[0], q[1]]), closed: false })); }
+  else { const op = sh.filter(x => !x.closed); if (op.length !== 2 && op.length !== 3) { toast(tr('Sélectionnez deux rails et un vecteur de profil (vecteurs ouverts).')); return; } polys = op.map(x => ({ pts: x.pts.map(q => [q[0], q[1]]), closed: false })); }
   const G = { type, polys, prof: 'round', W: type === 'extrude' ? 10 : 0, end: 100, prop: false };
+  if (type === 'sweep' && polys.length === 3) { // profil : le vecteur qui relie les deux autres, sinon le dernier sélectionné
+    G.all = polys; const dd = (p, pl) => Math.min(...pl.map(q => Math.hypot(p[0] - q[0], p[1] - q[1]))), score = k => { const o = polys.filter((x, i) => i !== k), e = polys[k].pts; return Math.min(dd(e[0], o[0].pts) + dd(e[e.length - 1], o[1].pts), dd(e[0], o[1].pts) + dd(e[e.length - 1], o[0].pts)); };
+    const sc = [0, 1, 2].map(score), best = sc.indexOf(Math.min(...sc)), tol = Math.max(2, Math.min(...polys.map(x => Math.hypot(x.pts[0][0] - x.pts[x.pts.length - 1][0], x.pts[0][1] - x.pts[x.pts.length - 1][1]))) * 0.25);
+    relSweepRoles(G, sc[best] <= tol ? best : 2); }
   try { const R = relGenGrid(G); G.box = R.box; const st = S.stock;
-    relAdd({ kind: 'gen', gen: G, name: tr(lbl) + ' ' + (S.relief.items.filter(i => i.gen && i.gen.type === type).length + 1), x: (R.box[0] + R.box[2]) / 2, y: (R.box[1] + R.box[3]) / 2, w: R.box[2] - R.box[0], h: R.box[3] - R.box[1], rot: 0, zH: Math.min(type === 'extrude' ? 4 : 8, st.t / 2), z0: 0, invert: false, smooth: 0, mode: 'add', visible: true }, R.g);
+    relAdd({ kind: 'gen', gen: G, name: tr(lbl) + ' ' + (S.relief.items.filter(i => i.gen && i.gen.type === type).length + 1), x: (R.box[0] + R.box[2]) / 2, y: (R.box[1] + R.box[3]) / 2, w: R.box[2] - R.box[0], h: R.box[3] - R.box[1], rot: 0, zH: G.sec ? Math.min(Math.max(0.5, G.secH), st.t) : Math.min(type === 'extrude' ? 4 : 8, st.t / 2), z0: 0, invert: false, smooth: 0, mode: 'add', visible: true }, R.g);
     toast(tr('Forme créée : réglez le profil, la largeur et l’épaisseur Z.')); } catch (e) { toast(e.message); }
 }
 // aperçu 3D du relief seul : le brut est creusé depuis le dessus, le point le plus haut à la surface
