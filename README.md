@@ -6,13 +6,13 @@
 - **Utiliser COPO / Use COPO :** `index.html` (page GitHub Pages de ce dépôt / this repository's GitHub Pages site)
 - **Mode d'emploi / User guide :** `guide.html` · PDF : `COPO-mode-emploi-FR.pdf`, `COPO-user-guide-EN.pdf`
 
-**Version 1.76**
+**Version 1.77**
 
 ## Fonctions / Features
 - Dessin : rectangle, ellipse, polygone/étoile, arc, plume (Bézier), texte (aussi sur une courbe), nœuds, chanfreins, congés, dégagements dogbone et T-bone, ajuster, couper, joindre, booléens, réseau, calques, repères, cotes, images de référence, vectorisation d'image (contours), import/export SVG, import DXF (calques, blocs, splines)
 - Bibliothèque d'outils façon Aspire : matériaux (bois tendre, bois dur, MDF, acrylique, PVC, aluminium, laiton), outils métriques et impériaux par type, réglages par matériau, avance par dent commentée, import des bibliothèques Aspire/VCarve (.vtdb)
 - Usinage : profil (extérieur, intérieur, sur la ligne, gauche/droite des lignes ouvertes), poche en anneaux ou en balayage, reprise de matière, V-carving par axe médian, perçage (débourrage, temporisation, hélice, cycles G81/G82/G83), filetage à la fraise à fileter (intérieur, extérieur, pas, sens)
-- Relief (modélisation 2,5D) : import d'images en niveaux de gris et de modèles STL, combinaison, aperçu ombré et 3D ; usinage du relief : ébauche par niveaux et finition en balayage (fraise hémisphérique ou conique à bout sphérique), limite par formes fermées
+- Relief (modélisation 2,5D) : import d'images en niveaux de gris et de modèles STL, formes depuis le dessin (dôme, extrusion le long d'un vecteur, lissage entre deux rails ; profils rond, angulaire, plat, doucine), combinaison, aperçu ombré et 3D ; usinage du relief : ébauche par niveaux et finition en balayage (fraise hémisphérique ou conique à bout sphérique), limite par formes fermées
 - Projets enregistrés en fichiers `.copo` ; application installable (Chrome, Edge, Brave… sous Windows, macOS, Linux) : fenêtre dédiée, hors ligne, ouverture des `.copo` par double-clic
 - Profondeur de départ (D) et de coupe (C) pour tous les parcours ; pendant l'édition d'un parcours, le reste du dessin est estompé et une ligne d'état indique les vecteurs sélectionnés
 - Règles d'accroche (Édition › Accroche…) : grille, repères, brut, rayon, points d'accroche sur les objets

@@ -101,7 +101,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .libbtn{display:flex;align-items:center;gap:8px;margin-top:8px}.libbtn svg{width:18px;height:18px;fill:none;stroke:var(--accent);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .toolpick{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;text-align:left;padding:6px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--raised);color:var(--ink);cursor:pointer}.toolpick small{color:var(--accent);flex:none}.toolpick.bad{border-color:var(--danger)}.toolpick span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media (max-width:760px){.libbody{grid-template-columns:1fr;grid-template-rows:minmax(180px,40%) minmax(0,1fr)}.libleft{border-right:0;border-bottom:1px solid var(--line)}}
-.impgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.impbtn{display:grid;justify-items:center;gap:3px;padding:12px 8px;border:1px solid var(--line);border-radius:8px;background:var(--raised);text-align:center;cursor:pointer;color:var(--ink)}.impbtn:hover{border-color:var(--accent)}.impbtn svg{width:28px;height:28px;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.impbtn small{color:var(--muted);font-size:11.5px;line-height:1.3}.sw-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}.sw-col{display:grid;gap:8px;align-content:start}.sw-h{margin:0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.sw-h label.chk{text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink)}.sw-sub{margin-left:22px}label.sw-sub:not(.chk){display:grid;gap:4px}.sw-r{display:grid;gap:4px}.sw-rr{display:flex;align-items:center;gap:8px}.sw-rr input{flex:1}.sw-body{display:grid;gap:14px}@media (max-width:560px){.sw-cols{grid-template-columns:1fr}}.tp-selinfo{margin:0;font-size:12.5px;font-weight:600;color:var(--ink)}.tp-selinfo.bad{color:var(--danger)}.tp-selinfo small{font-weight:400;color:var(--muted)}
+.impgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.impgrid.g3{grid-template-columns:1fr 1fr 1fr;gap:6px}.impgrid.g3 .impbtn{padding:10px 4px}.impbtn{display:grid;justify-items:center;gap:3px;padding:12px 8px;border:1px solid var(--line);border-radius:8px;background:var(--raised);text-align:center;cursor:pointer;color:var(--ink)}.impbtn:hover{border-color:var(--accent)}.impbtn svg{width:28px;height:28px;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.impbtn small{color:var(--muted);font-size:11.5px;line-height:1.3}.sw-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}.sw-col{display:grid;gap:8px;align-content:start}.sw-h{margin:0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.sw-h label.chk{text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink)}.sw-sub{margin-left:22px}label.sw-sub:not(.chk){display:grid;gap:4px}.sw-r{display:grid;gap:4px}.sw-rr{display:flex;align-items:center;gap:8px}.sw-rr input{flex:1}.sw-body{display:grid;gap:14px}@media (max-width:560px){.sw-cols{grid-template-columns:1fr}}.tp-selinfo{margin:0;font-size:12.5px;font-weight:600;color:var(--ink)}.tp-selinfo.bad{color:var(--danger)}.tp-selinfo small{font-weight:400;color:var(--muted)}
 .fwin-wide{width:560px}.fwin-ico svg{width:18px;height:18px;display:block;fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.fwin-body.fb-card{max-width:none}.fwin-body .row{justify-content:flex-end}.fwin-head{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 10px;border-bottom:1px solid var(--line);cursor:move;user-select:none;touch-action:none}
 .fwin-head b{flex:1;font:600 14px var(--f-ui)}.fwin-head .grip{width:10px;height:16px;background:radial-gradient(circle,var(--muted) 1.2px,transparent 1.4px) 0 0/5px 5px;opacity:.7}
 .fwin-x{width:30px;height:30px}.fwin-x svg{width:16px;height:16px}.fwin-body{overflow:auto;padding:10px 14px 14px;display:grid;gap:10px;min-height:0;grid-auto-rows:max-content;align-content:start}
@@ -722,6 +722,14 @@ label.inl input{width:70px}
           </div>
           <p class="hint">Le relief se creuse dans le brut depuis le dessus : son point le plus haut affleure la surface. Les éléments se combinent dans l’ordre de la liste.</p>
         </section>
+        <section class="blk"><h3>Créer à partir du dessin</h3>
+          <div class="impgrid g3">
+            <button data-act="relDome" class="impbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19h18"/><path d="M4 19c0-6 3.6-10 8-10s8 4 8 10"/></svg><b>Dôme</b><small>formes fermées</small></button>
+            <button data-act="relExt" class="impbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16c4-8 8 2 18-8"/><path d="M3 20c4-8 8 2 18-8" opacity=".5"/></svg><b>Extrusion</b><small>le long d’un vecteur</small></button>
+            <button data-act="relSweep" class="impbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5c5 2 11 2 16 0"/><path d="M4 19c5-3 11-3 16 0"/><path d="M8 6v11M12 6.5v10M16 6v11" opacity=".55"/></svg><b>Lissage</b><small>entre deux rails</small></button>
+          </div>
+          <p class="hint">Sélectionnez d’abord sur le plan : une ou plusieurs formes fermées pour un dôme (les formes intérieures font des trous), un ou plusieurs vecteurs pour une extrusion, deux vecteurs ouverts pour un lissage. La forme est copiée : modifier le dessin ensuite ne la change pas.</p>
+        </section>
         <section class="blk"><h3>Éléments du relief</h3>
           <ul class="imglist" id="relList"></ul>
           <div id="relProps" hidden>
@@ -735,8 +743,16 @@ label.inl input{width:70px}
               <label>Combinaison<select id="rlMode"><option value="add">Ajouter</option><option value="sub">Soustraire</option><option value="max">Garder le plus haut</option><option value="min">Garder le plus bas</option></select></label>
               <label>Épaisseur du relief Z<input data-u="len" type="number" id="rlZ" step="0.5" min="0"></label>
               <label>Décalage de la base Z<input data-u="len" type="number" id="rlZ0" step="0.5"></label>
-              <label>Lissage <span id="rlSv" class="mono"></span><input type="range" id="rlS" min="0" max="8" step="1"></label>
+              <label>Adoucissement <span id="rlSv" class="mono"></span><input type="range" id="rlS" min="0" max="8" step="1"></label>
               <label id="rlOrRow">Haut du modèle<select id="rlOr"><option value="z">+Z (dessus)</option><option value="-z">−Z (dessous)</option><option value="y">+Y</option><option value="-y">−Y</option><option value="x">+X</option><option value="-x">−X</option></select></label>
+            </div>
+            <div id="rlGen" class="tabbox" hidden>
+              <div class="g2">
+                <label>Profil<select id="rlGP"><option value="round">Rond</option><option value="angular">Angulaire (en pointe)</option><option value="flat">Plat</option><option value="ogee">Doucine (en S)</option></select></label>
+                <label id="rlGWRow"><span id="rlGWL">Largeur du bord (mm, 0 = jusqu’au centre)</span><input data-u="len" type="number" id="rlGW" step="0.5" min="0"></label>
+                <label id="rlGERow">Hauteur à la fin (% du début)<input type="number" id="rlGE" step="5" min="0" max="400"></label>
+              </div>
+              <label class="chk" id="rlGPrRow"><input type="checkbox" id="rlGPr"> Hauteur proportionnelle à la largeur entre les rails</label>
             </div>
             <label class="chk"><input type="checkbox" id="rlLock" checked> Garder les proportions (Z suit la taille)</label>
             <label class="chk" id="rlInvRow"><input type="checkbox" id="rlInv"> Inverser (le foncé est en haut)</label>
@@ -784,7 +800,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.76</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.77</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1144,6 +1160,8 @@ Object.assign(I18N_EN, {"Longueur filetée (C) (mm)": "Thread length (C) (mm)"})
 Object.assign(I18N_EN, {"Dessous": "Bottom", "Avant": "Front", "Arrière": "Back", "Droite": "Right", "Gauche": "Left", "Cube d’orientation : cliquez une face ou un coin": "View cube: click a face or a corner"});
 Object.assign(I18N_EN, {"Relief": "Relief", "Importer un relief": "Import a relief", "Niveaux de gris": "Grayscale", "PNG, JPG : le clair est en haut": "PNG, JPG: light is high", "Modèle 3D": "3D model", "STL : vu de dessus, à l’échelle": "STL: seen from above, to scale", "Le relief se creuse dans le brut depuis le dessus : son point le plus haut affleure la surface. Les éléments se combinent dans l’ordre de la liste.": "The relief is carved into the stock from the top: its highest point is flush with the surface. Items combine in list order.", "Éléments du relief": "Relief items", "Combinaison": "Combine", "Garder le plus haut": "Keep highest", "Garder le plus bas": "Keep lowest", "Épaisseur du relief Z": "Relief height Z", "Décalage de la base Z": "Base offset Z", "Haut du modèle": "Model top", "Garder les proportions (Z suit la taille)": "Keep proportions (Z follows size)", "Inverser (le foncé est en haut)": "Invert (dark is high)", "Afficher le relief sur le plan": "Show the relief on the workspace", "Précision de l’aperçu 3D": "3D preview resolution", "0,5 mm (rapide)": "0.5 mm (fast)", "0,3 mm": "0.3 mm", "0,2 mm": "0.2 mm", "0,12 mm (fine)": "0.12 mm (fine)", "Voir le relief en 3D": "View the relief in 3D", "Aucun relief : importez une image en niveaux de gris ou un fichier STL.": "No relief: import a grayscale image or an STL file.", "{n} élément(s) · profondeur du relief {d} mm (brut {t} mm).": "{n} item(s) · relief depth {d} mm (stock {t} mm).", "Le relief dépasse l’épaisseur du brut : il sera coupé au fond.": "The relief is deeper than the stock: it will be cut off at the bottom.", "Relief importé : réglez sa taille et son épaisseur Z.": "Relief imported: set its size and Z height.", "Image illisible.": "Unreadable image.", "Fichier STL illisible.": "Unreadable STL file.", "Lecture du STL…": "Reading the STL…", "STL importé : {n} triangles, {w} × {h} × {z} mm{k}.": "STL imported: {n} triangles, {w} × {h} × {z} mm{k}.", "(réduit à {p} % pour tenir dans le brut)": "(scaled to {p}% to fit the stock)", "Réimportez le STL pour changer son orientation (le maillage n’est plus en mémoire).": "Re-import the STL to change its orientation (the mesh is no longer in memory).", "Modèle STL {w} × {h} × {z} mm, {n} triangles.": "STL model {w} × {h} × {z} mm, {n} triangles.", "Grille source {a} × {b} points ({p} mm par point).": "Source grid {a} × {b} points ({p} mm per point).", "Données absentes : réimportez le fichier.": "Data missing: re-import the file.", "Aucun élément. Importez une image en niveaux de gris ou un modèle STL.": "No items. Import a grayscale image or an STL model.", "Aucun relief à afficher.": "No relief to show."});
 Object.assign(I18N_EN, {"Ébauche": "Roughing", "Finition": "Finishing", "Pas latéral (% du diamètre)": "Stepover (% of diameter)", "Seconde passe croisée (à 90°)": "Second cross pass (at 90°)", "Ébauche relief": "Relief roughing", "Finition relief": "Relief finishing", "Aucun relief : importez-le dans l’onglet Relief.": "No relief: import it in the Relief tab.", "Limite : {n} forme(s) fermée(s) sélectionnée(s), centre de l’outil à l’intérieur.": "Boundary: {n} selected closed shape(s), tool center inside.", "Limite : cadres des éléments du relief (sélectionnez des formes fermées pour limiter la zone).": "Boundary: relief item frames (select closed shapes to limit the area).", "Finition du relief : balayage parallèle qui suit la surface, avec la forme réelle de l’outil (fraise hémisphérique ou conique à bout sphérique de préférence). Un pas latéral de 8 à 12 % donne une surface lisse.": "Relief finishing: parallel raster following the surface, using the real tool shape (preferably a ball-nose or tapered ball-nose). A stepover of 8 to 12% gives a smooth surface.", "Ébauche du relief : balayage par niveaux de Z avec une fraise droite, en laissant la surépaisseur pour la finition. Chaque niveau descend de la profondeur de passe.": "Relief roughing: raster by Z levels with a flat end mill, leaving the allowance for finishing. Each level steps down by the pass depth.", "Relief modifié depuis le calcul : mettez à jour le parcours.": "Relief changed since calculation: update the toolpath.", "Aucun relief : importez une image en niveaux de gris ou un STL dans l’onglet Relief.": "No relief: import a grayscale image or an STL in the Relief tab.", "Rien à usiner dans la limite choisie.": "Nothing to machine inside the chosen boundary.", "Le relief dépasse l’épaisseur du brut : il est coupé au fond.": "The relief is deeper than the stock: it is cut off at the bottom.", "Finition avec une fraise droite : préférez une fraise hémisphérique ou conique à bout sphérique pour une surface lisse.": "Finishing with a flat end mill: prefer a ball-nose or tapered ball-nose for a smooth surface.", "finition": "finishing", "ébauche": "roughing", "lignes": "lines", "croisées": "crossed", "niveaux": "levels", "pas latéral": "stepover", "surépaisseur": "allowance"});
+Object.assign(I18N_EN, {"Créer à partir du dessin": "Create from the drawing", "Dôme": "Dome", "formes fermées": "closed shapes", "Extrusion": "Extrusion", "le long d’un vecteur": "along a vector", "entre deux rails": "between two rails", "Sélectionnez d’abord sur le plan : une ou plusieurs formes fermées pour un dôme (les formes intérieures font des trous), un ou plusieurs vecteurs pour une extrusion, deux vecteurs ouverts pour un lissage. La forme est copiée : modifier le dessin ensuite ne la change pas.": "First select on the workspace: one or more closed shapes for a dome (inner shapes make holes), one or more vectors for an extrusion, two open vectors for a sweep. The shape is copied: editing the drawing afterwards does not change it.", "Rond": "Round", "Angulaire (en pointe)": "Angular (pointed)", "Plat": "Flat", "Doucine (en S)": "Ogee (S-shaped)", "Largeur du bord (mm, 0 = jusqu’au centre)": "Edge width (mm, 0 = up to the center)", "Largeur (mm)": "Width (mm)", "Hauteur à la fin (% du début)": "Height at the end (% of start)", "Hauteur proportionnelle à la largeur entre les rails": "Height proportional to the width between rails", "Forme trop petite.": "Shape too small.", "Sélectionnez une ou plusieurs formes fermées.": "Select one or more closed shapes.", "Sélectionnez un ou plusieurs vecteurs.": "Select one or more vectors.", "Sélectionnez exactement deux vecteurs ouverts (les rails).": "Select exactly two open vectors (the rails).", "Forme créée : réglez le profil, la largeur et l’épaisseur Z.": "Shape created: set the profile, width and Z height."});
+Object.assign(I18N_EN, {"Adoucissement": "Softening"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4598,7 +4616,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.76', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.77', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5810,7 +5828,8 @@ function relPanel(soft) {
   if (it) {
     const o = outXY(it.x, it.y), set = (id, v) => { const el = $(id); if (document.activeElement !== el) el.value = v; };
     set('#rlName', it.name); set('#rlX', +o[0].toFixed(2)); set('#rlY', +o[1].toFixed(2)); set('#rlW', +it.w.toFixed(2)); set('#rlH', +it.h.toFixed(2)); set('#rlR', +(it.rot || 0).toFixed(1)); set('#rlZ', +(+it.zH).toFixed(2)); set('#rlZ0', +(+it.z0 || 0).toFixed(2)); set('#rlS', it.smooth || 0); $('#rlSv').textContent = it.smooth || 0; $('#rlMode').value = it.mode || 'add'; $('#rlInv').checked = !!it.invert;
-    $('#rlOrRow').hidden = it.kind !== 'stl'; $('#rlInvRow').hidden = it.kind === 'stl'; if (it.kind === 'stl') $('#rlOr').value = it.orient || 'z'; const g = relGrid[it.id];
+    $('#rlOrRow').hidden = it.kind !== 'stl'; $('#rlInvRow').hidden = it.kind === 'stl' || !!it.gen;
+    { const G = it.gen; $('#rlGen').hidden = !G; if (G) { $('#rlGP').value = G.prof || 'round'; set('#rlGW', +(+G.W || 0).toFixed(2)); $('#rlGWRow').hidden = G.type === 'sweep'; $('#rlGWL').textContent = tr(G.type === 'dome' ? 'Largeur du bord (mm, 0 = jusqu’au centre)' : 'Largeur (mm)'); $('#rlGERow').hidden = G.type !== 'sweep'; set('#rlGE', G.end ?? 100); $('#rlGPrRow').hidden = G.type !== 'sweep'; $('#rlGPr').checked = !!G.prop; } } if (it.kind === 'stl') $('#rlOr').value = it.orient || 'z'; const g = relGrid[it.id];
     $('#rlInfo').textContent = (it.kind === 'stl' ? trf('Modèle STL {w} × {h} × {z} mm, {n} triangles.', { w: fr(it.nat[0], 1), h: fr(it.nat[1], 1), z: fr(it.nat[2], 1), n: (it.tris || 0).toLocaleString() }) + ' ' : '') + (g ? trf('Grille source {a} × {b} points ({p} mm par point).', { a: g.nx, b: g.ny, p: fr(it.w / (g.nx - 1), 2) }) : tr('Données absentes : réimportez le fichier.'));
   }
   $('#relShow').checked = S.relief.show !== false; $('#relRes').value = String(S.relief.res || 0.3);
@@ -5819,7 +5838,7 @@ function relPanel(soft) {
   S.relief.items.forEach((x, k) => {
     const li = document.createElement('li'); li.className = 'imgrow' + (x.id === S.relSel ? ' on' : '');
     li.innerHTML = '<span class="relk"></span><span></span><button class="iconbtn" data-i="up" title="' + tr('Monter') + '" aria-label="' + tr('Monter') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 14l5-5 5 5"/></svg></button><button class="iconbtn" data-i="vis" title="' + tr(x.visible ? 'Masquer' : 'Afficher') + '" aria-label="' + tr('Visibilité') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/>' + (x.visible ? '<circle cx="12" cy="12" r="3"/>' : '<path d="M4 20L20 4"/>') + '</svg></button>';
-    li.querySelector('.relk').textContent = x.kind === 'stl' ? 'STL' : 'IMG'; li.children[1].textContent = x.name + ' · ' + tr({ add: 'Ajouter', sub: 'Soustraire', max: 'Garder le plus haut', min: 'Garder le plus bas' }[x.mode || 'add']);
+    li.querySelector('.relk').textContent = x.kind === 'stl' ? 'STL' : x.gen ? { dome: 'DÔME', extrude: 'EXTR', sweep: 'RAIL' }[x.gen.type] : 'IMG'; li.children[1].textContent = x.name + ' · ' + tr({ add: 'Ajouter', sub: 'Soustraire', max: 'Garder le plus haut', min: 'Garder le plus bas' }[x.mode || 'add']);
     li.onclick = e => { const b = e.target.closest('[data-i]'); if (b) { e.stopPropagation(); if (b.dataset.i === 'vis') x.visible = !x.visible; else if (k > 0) { const A = S.relief.items; [A[k - 1], A[k]] = [A[k], A[k - 1]]; } relBump(); relDirty = true; commit(false); relPanel(); draw(); return; } S.relSel = x.id; relPanel(); draw(); };
     ul.appendChild(li);
   });
@@ -5838,8 +5857,70 @@ function bindRelPanel() {
   $('#rlS').oninput = () => { $('#rlSv').textContent = $('#rlS').value; }; $('#rlS').onchange = () => relSet(i => { i.smooth = +$('#rlS').value; });
   $('#rlMode').onchange = () => relSet(i => { i.mode = $('#rlMode').value; }); $('#rlInv').onchange = () => relSet(i => { i.invert = $('#rlInv').checked; });
   $('#rlOr').onchange = () => { const it = relCur(); if (it) relReorient(it, $('#rlOr').value); };
+  const regen = fn => { const it = relCur(); if (!it || !it.gen) return; fn(it.gen); try { relRegen(it); } catch (e) { toast(e.message); } relBump(); relDirty = true; commit(false); relPanel(true); draw(); };
+  $('#rlGP').onchange = () => regen(G => { G.prof = $('#rlGP').value; });
+  $('#rlGW').onchange = () => regen(G => { const v = num('#rlGW'); if (v >= 0) G.W = v; });
+  $('#rlGE').onchange = () => regen(G => { const v = num('#rlGE'); if (v >= 0) G.end = v; });
+  $('#rlGPr').onchange = () => regen(G => { G.prop = $('#rlGPr').checked; });
   $('#relShow').onchange = () => { S.relief.show = $('#relShow').checked; commit(false); draw(); };
   $('#relRes').onchange = () => { S.relief.res = +$('#relRes').value; commit(false); };
+}
+// ---- formes créées à partir du dessin : dôme, extrusion le long d'un vecteur, lissage entre deux rails ----
+// distance euclidienne exacte (Felzenszwalb) : f = 0 sur les germes, Infinity ailleurs ; renvoie la distance en points
+function relEDT(f, nx, ny) {
+  const BIG = 1e20, n = Math.max(nx, ny), v = new Int32Array(n), z = new Float64Array(n + 1), g = new Float64Array(n), o = new Float64Array(n);
+  for (let i = 0; i < f.length; i++) if (f[i] === Infinity) f[i] = BIG;
+  const pass = len => { let k = 0; v[0] = 0; z[0] = -Infinity; z[1] = Infinity;
+    for (let q = 1; q < len; q++) { let s = ((g[q] + q * q) - (g[v[k]] + v[k] * v[k])) / (2 * q - 2 * v[k]); while (s <= z[k]) { k--; s = ((g[q] + q * q) - (g[v[k]] + v[k] * v[k])) / (2 * q - 2 * v[k]); } k++; v[k] = q; z[k] = s; z[k + 1] = Infinity; }
+    k = 0; for (let q = 0; q < len; q++) { while (z[k + 1] < q) k++; o[q] = (q - v[k]) * (q - v[k]) + g[v[k]]; } };
+  for (let x = 0; x < nx; x++) { for (let y = 0; y < ny; y++) g[y] = f[y * nx + x]; pass(ny); for (let y = 0; y < ny; y++) f[y * nx + x] = o[y]; }
+  for (let y = 0; y < ny; y++) { for (let x = 0; x < nx; x++) g[x] = f[y * nx + x]; pass(nx); for (let x = 0; x < nx; x++) f[y * nx + x] = o[x]; }
+  for (let i = 0; i < f.length; i++) f[i] = f[i] >= BIG * 0.5 ? Infinity : Math.sqrt(f[i]);
+  return f;
+}
+const relProf = (pr, t) => { t = Math.max(0, Math.min(1, t)); return pr === 'angular' ? t : pr === 'flat' ? 1 : pr === 'ogee' ? (t < 0.5 ? 2 * t * t : 1 - 2 * (1 - t) * (1 - t)) : Math.sqrt(1 - (1 - t) * (1 - t)); };
+function relGenGrid(G) {
+  const P = G.polys, pad = G.type === 'extrude' ? (+G.W || 1) / 2 + 0.5 : 0.5; let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const pl of P) for (const q of pl.pts) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); }
+  x0 -= pad; y0 -= pad; x1 += pad; y1 += pad; const W = x1 - x0, Hh = y1 - y0, c = Math.max(0.04, Math.max(W, Hh) / 1023), nx = Math.max(2, Math.round(W / c) + 1), ny = Math.max(2, Math.round(Hh / c) + 1), N = nx * ny;
+  const X = i => x0 + i * c, Y = j => y1 - j * c, h = new Float32Array(N).fill(NaN);
+  if (G.type === 'dome') {
+    const ins = new Uint8Array(N); // remplissage pair-impair
+    for (let j = 0; j < ny; j++) { const y = Y(j), xs = []; for (const pl of P) { const a = pl.pts; for (let k = 0; k < a.length; k++) { const A = a[k], B = a[(k + 1) % a.length]; if ((A[1] <= y) !== (B[1] <= y)) xs.push(A[0] + (y - A[1]) * (B[0] - A[0]) / (B[1] - A[1])); } } xs.sort((a, b) => a - b); for (let k = 0; k + 1 < xs.length; k += 2) { const i0 = Math.max(0, Math.ceil((xs[k] - x0) / c)), i1 = Math.min(nx - 1, Math.floor((xs[k + 1] - x0) / c)); for (let i = i0; i <= i1; i++) ins[j * nx + i] = 1; } }
+    const f = new Float64Array(N); for (let i = 0; i < N; i++) f[i] = ins[i] ? Infinity : 0; relEDT(f, nx, ny);
+    let dm = 0; for (let i = 0; i < N; i++) if (ins[i] && f[i] > dm) dm = f[i]; const Wd = +G.W > 0 ? +G.W / c : dm; if (!dm) throw new Error(tr('Forme trop petite.'));
+    for (let i = 0; i < N; i++) if (ins[i]) h[i] = relProf(G.prof, (f[i] - 0.5) / Math.max(0.5, Wd - 0.5));
+  } else if (G.type === 'extrude') {
+    const f = new Float64Array(N).fill(Infinity), hw = Math.max(c, (+G.W || 1) / 2);
+    for (const pl of P) { const a = pl.closed ? [...pl.pts, pl.pts[0]] : pl.pts; for (let k = 0; k + 1 < a.length; k++) { const A = a[k], B = a[k + 1], n = Math.max(1, Math.ceil(Math.hypot(B[0] - A[0], B[1] - A[1]) / (c * 0.5))); for (let s = 0; s <= n; s++) { const x = A[0] + (B[0] - A[0]) * s / n, y = A[1] + (B[1] - A[1]) * s / n, i = Math.round((x - x0) / c), j = Math.round((y1 - y) / c); if (i >= 0 && j >= 0 && i < nx && j < ny) f[j * nx + i] = 0; } } }
+    relEDT(f, nx, ny); for (let i = 0; i < N; i++) { const d = f[i] * c; if (d <= hw) h[i] = relProf(G.prof, 1 - d / hw); }
+  } else { // lissage entre deux rails : bandes de quadrilatères A_i, A_i+1, B_i+1, B_i, paramètre u en travers
+    const rs = pts => { const L = [0]; for (let k = 1; k < pts.length; k++) L.push(L[k - 1] + Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1])); return { pts, L, T: L[L.length - 1] }; };
+    const at = (r, t) => { const s = t * r.T; let k = 1; while (k < r.L.length - 1 && r.L[k] < s) k++; const a = r.pts[k - 1], b = r.pts[k], u = (s - r.L[k - 1]) / ((r.L[k] - r.L[k - 1]) || 1); return [a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u]; };
+    let A = P[0].pts, B = P[1].pts; const dd = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1]); if (dd(A[0], B[0]) + dd(A[A.length - 1], B[B.length - 1]) > dd(A[0], B[B.length - 1]) + dd(A[A.length - 1], B[0])) B = B.slice().reverse();
+    const ra = rs(A), rb = rs(B), M = Math.max(2, Math.ceil(Math.max(ra.T, rb.T) / (c * 2))), SA = [], SB = []; for (let k = 0; k <= M; k++) { SA.push(at(ra, k / M)); SB.push(at(rb, k / M)); }
+    const wid = SA.map((q, k) => dd(q, SB[k])), w0 = Math.max(...wid) || 1, end = (G.end ?? 100) / 100;
+    const tri = (P1, P2, P3) => { const [ax, ay] = P1, [bx, by] = P2, [qx, qy] = P3, den = (by - qy) * (ax - qx) + (qx - bx) * (ay - qy); if (Math.abs(den) < 1e-12) return;
+      const i0 = Math.max(0, Math.floor((Math.min(ax, bx, qx) - x0) / c)), i1 = Math.min(nx - 1, Math.ceil((Math.max(ax, bx, qx) - x0) / c)), j0 = Math.max(0, Math.floor((y1 - Math.max(ay, by, qy)) / c)), j1 = Math.min(ny - 1, Math.ceil((y1 - Math.min(ay, by, qy)) / c));
+      for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) { const x = X(i), y = Y(j), l1 = ((by - qy) * (x - qx) + (qx - bx) * (y - qy)) / den, l2 = ((qy - ay) * (x - qx) + (ax - qx) * (y - qy)) / den, l3 = 1 - l1 - l2; if (l1 < -1e-7 || l2 < -1e-7 || l3 < -1e-7) continue;
+        const u = l1 * P1[2] + l2 * P2[2] + l3 * P3[2], s2 = l1 * P1[3] + l2 * P2[3] + l3 * P3[3], wl = l1 * P1[4] + l2 * P2[4] + l3 * P3[4], amp = (1 + (end - 1) * s2) * (G.prop ? wl / w0 : 1), t = 1 - Math.abs(2 * u - 1), v = amp * relProf(G.prof, t), q = j * nx + i; if (!(h[q] >= v)) h[q] = v; } };
+    for (let k = 0; k < M; k++) { const a0 = [...SA[k], 0, k / M, wid[k]], a1 = [...SA[k + 1], 0, (k + 1) / M, wid[k + 1]], b0 = [...SB[k], 1, k / M, wid[k]], b1 = [...SB[k + 1], 1, (k + 1) / M, wid[k + 1]]; tri(a0, a1, b1); tri(a0, b1, b0); }
+  }
+  let mx = 0; for (let i = 0; i < N; i++) if (h[i] > mx) mx = h[i]; if (!(mx > 0)) mx = 1;
+  const d = new Uint16Array(N); for (let i = 0; i < N; i++) d[i] = h[i] === h[i] ? 1 + Math.round(Math.max(0, h[i] / mx) * 65534) : 0;
+  return { g: { nx, ny, d }, box: [x0, y0, x1, y1] };
+}
+function relRegen(it) { const R = relGenGrid(it.gen), ow = it.w || 1, k = it.gen.box ? ow / (it.gen.box[2] - it.gen.box[0]) : 1; it.w = (R.box[2] - R.box[0]) * k; it.h = (R.box[3] - R.box[1]) * k; it.gen.box = R.box; relStore(it.id, R.g); }
+function relFromDrawing(type) {
+  const sh = selShapes().filter(x => x.pts && x.pts.length > 1), lbl = { dome: 'Dôme', extrude: 'Extrusion', sweep: 'Lissage' }[type];
+  let polys;
+  if (type === 'dome') { polys = sh.filter(x => x.closed && x.pts.length > 2).map(x => ({ pts: x.pts.map(q => [q[0], q[1]]), closed: true })); if (!polys.length) { toast(tr('Sélectionnez une ou plusieurs formes fermées.')); return; } }
+  else if (type === 'extrude') { polys = sh.map(x => ({ pts: x.pts.map(q => [q[0], q[1]]), closed: !!x.closed })); if (!polys.length) { toast(tr('Sélectionnez un ou plusieurs vecteurs.')); return; } }
+  else { const op = sh.filter(x => !x.closed); if (op.length !== 2) { toast(tr('Sélectionnez exactement deux vecteurs ouverts (les rails).')); return; } polys = op.map(x => ({ pts: x.pts.map(q => [q[0], q[1]]), closed: false })); }
+  const G = { type, polys, prof: 'round', W: type === 'extrude' ? 10 : 0, end: 100, prop: false };
+  try { const R = relGenGrid(G); G.box = R.box; const st = S.stock;
+    relAdd({ kind: 'gen', gen: G, name: tr(lbl) + ' ' + (S.relief.items.filter(i => i.gen && i.gen.type === type).length + 1), x: (R.box[0] + R.box[2]) / 2, y: (R.box[1] + R.box[3]) / 2, w: R.box[2] - R.box[0], h: R.box[3] - R.box[1], rot: 0, zH: Math.min(type === 'extrude' ? 4 : 8, st.t / 2), z0: 0, invert: false, smooth: 0, mode: 'add', visible: true }, R.g);
+    toast(tr('Forme créée : réglez le profil, la largeur et l’épaisseur Z.')); } catch (e) { toast(e.message); }
 }
 // aperçu 3D du relief seul : le brut est creusé depuis le dessus, le point le plus haut à la surface
 function relView3d() {
@@ -5979,6 +6060,7 @@ function imgAct(a) {
   if (a === 'relRot0') { relSet(i => { i.rot = 0; }); return true; }
   if (a === 'relDel') { const it = relCur(); if (!it) return true; relBump(); S.relief.items = S.relief.items.filter(x => x !== it); S.relSel = null; relDirty = true; commit(false); relPanel(); draw(); return true; }
   if (a === 'relView') { relView3d(); return true; }
+  if (a === 'relDome' || a === 'relExt' || a === 'relSweep') { relFromDrawing({ relDome: 'dome', relExt: 'extrude', relSweep: 'sweep' }[a]); return true; }
   const im = S.imgSel && imgById(S.imgSel);
   if (a === 'imgInsert') { $('#fImg').click(); return true; }
   if (!im) { if (a.startsWith('img')) { toast('Sélectionnez d’abord une image.'); return true; } return false; }
