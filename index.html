@@ -739,7 +739,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.65</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.66</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -822,7 +822,7 @@ label.inl input{width:70px}
             <label class="chk"><input type="checkbox" data-f="rest"> Reprise de matière (coins non atteints par une fraise plus grosse)</label>
             <label id="restRow">Fraise utilisée avant<select data-f="restTool" id="fRestTool"></select></label>
           </div>
-          <label class="chk" data-show="drill"><input type="checkbox" data-f="helixHoles"> Trous plus grands que l'outil : usiner en hélice au bon diamètre</label>
+          <label class="chk" data-show="drill" id="helixHolesRow"><input type="checkbox" data-f="helixHoles"> Trous plus grands que l'outil : usiner en hélice au bon diamètre</label>
           <div class="g2" data-show="drill">
             <label id="drillPitchRow">Descente par tour en hélice (mm)<input data-u="len" type="number" data-f="helixPitch" step="0.25" min="0.1"></label>
             <label>Débourrage (mm, 0 = sans)<input data-u="len" type="number" data-f="peck" step="0.5" min="0"></label>
@@ -1667,7 +1667,7 @@ function buildDrill(p, tool, shapes, M) {
   const peck = +p.peck > 0 ? +p.peck : depth, dwell = Math.max(0, +p.dwell || 0), up = Math.max(0.5, Math.min(M.clearZ, 2)), warns = [];
   const mb = new MB(M);
   const R = tool.dia / 2, climb = p.dir !== 'conv', pitch = Math.max(0.1, +p.helixPitch || 1), stepH = tool.dia * Math.max(0.05, 1 - (+tool.over || 0) / 100); let nHel = 0;
-  const helOK = h => p.helixHoles !== false && tool.type !== 'v' && tool.type !== 'drill' && h.d > tool.dia * 1.05;
+  const helOK = h => p.helixHoles !== false && tool.type === 'flat' && h.d > tool.dia * 1.05;
   for (const h of orderNN(holes, o => o.c)) {
     const [x, y] = h.c;
     if (helOK(h)) {
@@ -4388,7 +4388,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.65', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.66', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -4520,7 +4520,7 @@ function renderForm() {
   $('#tabRow').hidden = $('#tabShapeRow').hidden = $('#tabEditRow').hidden = !F.tabs;
   { const man = F.tabMode === 'manual', ti = $('#tabModeInfo'); ti.hidden = !F.tabs; ti.textContent = man ? 'Ponts placés à la main : ' + ((F.tabPts || []).length) + '. « Nombre par contour » est ignoré.' : (S.editTp ? 'Répartition automatique. « Placer à la main » pour ajouter, retirer ou glisser des ponts sur le plan.' : 'Calculez le parcours, puis vous pourrez placer les ponts à la main.'); $('[data-f="tabN"]').disabled = man; }
   root.querySelectorAll('[data-entry]').forEach(el => { const ok = { ramp: ['ramp', 'rampzz'], arc: ['arc', 'arcramp', 'helix'], helix: ['helix'] }[el.dataset.entry] || []; el.hidden = !ok.includes(F.entry); });
-  $('#rasterAngRow').hidden = F.strategy !== 'raster' || !!F.rest; $('#restRow').hidden = !F.rest; $('#drillPitchRow').hidden = F.helixHoles === false;
+  $('#rasterAngRow').hidden = F.strategy !== 'raster' || !!F.rest; $('#restRow').hidden = !F.rest; { const ht = S.tools.find(x => x.id === F.toolId), flat = !!ht && ht.type === 'flat'; if (F.type === 'drill' && !flat) $('#helixHolesRow').hidden = true; $('#drillPitchRow').hidden = F.helixHoles === false || !flat; }
   { const rs = $('#fRestTool'), cur = S.tools.find(t => t.id === F.toolId), big = S.tools.filter(t => t.type !== 'v' && cur && t.dia > cur.dia + 1e-6); rs.innerHTML = ''; if (!big.length) rs.innerHTML = '<option value="">Aucune fraise plus grosse dans la bibliothèque</option>'; for (const t of big) { const o = document.createElement('option'); o.value = t.id; o.textContent = t.name; rs.appendChild(o); } if (!big.find(t => t.id === F.restTool)) F.restTool = big[0] ? big[0].id : ''; rs.value = F.restTool; }
   $('#depthLbl').textContent = tr(F.type === 'vcarve' ? 'Prof. coupe max (C) (0 = illimitée)' : 'Prof. coupe (C) (mm)');
   const tool = S.tools.find(t => t.id === F.toolId); let h = '';
@@ -4530,7 +4530,7 @@ function renderForm() {
     if (F.type === 'pocket' && F.rest) h = 'Reprise : seuls les coins et passages que la fraise « ' + ((S.tools.find(t => t.id === F.restTool) || {}).name || '?') + ' » n’a pas pu atteindre sont usinés avec cette fraise plus petite. Gardez la même profondeur que la poche d’origine, et placez ce parcours après elle.';
     else if (F.type === 'pocket') h = (F.strategy === 'raster' ? 'Balayage en lignes parallèles à ' + (+F.rasterAng || 0) + '°, puis un tour du contour pour nettoyer les bords. ' : '') + 'Pas latéral ' + fr(tool.dia * Math.max(0.05, 1 - tool.over / 100)) + ' mm (recouvrement ' + tool.over + ' % de l’outil). La rampe sert aux passes d’ébauche ; l’arc ne s’applique qu’au contour des parois.' + (+F.depth > 0 ? ' ' + depthLevels(+F.depth, pass).length + ' passe(s).' : '');
     if (F.type === 'profile' && F.tabs) h += ' Ponts : ' + (F.tabN || 4) + ' par contour, ' + fr(+F.tabL || 0) + ' mm de matière laissée sur ' + fr(+F.tabH || 0) + ' mm d’épaisseur, au fond de la coupe.';
-    if (F.type === 'drill') h = 'Un trou au centre de chaque forme fermée sélectionnée (dessinez un cercle à chaque emplacement). ' + (tool.type === 'drill' ? 'Foret : chaque trou est percé au diamètre du foret. La pointe dépasse de ' + fr(tool.dia / 2 / Math.tan((+tool.angle || 118) * Math.PI / 360)) + ' mm la profondeur à pleine section : ajoutez-la pour un trou débouchant. ' : F.helixHoles !== false ? 'Les cercles plus grands que l’outil sont usinés en hélice au diamètre dessiné (fraise droite). ' : '') + (+F.peck > 0 ? 'Débourrage : l’outil descend de ' + fr(+F.peck) + ' mm à la fois et remonte au-dessus de la surface pour évacuer les copeaux.' : 'Sans débourrage : descente en une fois.') + ' Vitesse de descente de l’outil : ' + tool.plunge + ' mm/min.';
+    if (F.type === 'drill') h = 'Un trou au centre de chaque forme fermée sélectionnée (dessinez un cercle à chaque emplacement). ' + (tool.type === 'drill' ? 'Foret : chaque trou est percé au diamètre du foret. La pointe dépasse de ' + fr(tool.dia / 2 / Math.tan((+tool.angle || 118) * Math.PI / 360)) + ' mm la profondeur à pleine section : ajoutez-la pour un trou débouchant. ' : tool.type === 'flat' && F.helixHoles !== false ? 'Les cercles plus grands que l’outil sont usinés en hélice au diamètre dessiné (fraise droite). ' : '') + (+F.peck > 0 ? 'Débourrage : l’outil descend de ' + fr(+F.peck) + ' mm à la fois et remonte au-dessus de la surface pour évacuer les copeaux.' : 'Sans débourrage : descente en une fois.') + ' Vitesse de descente de l’outil : ' + tool.plunge + ' mm/min.';
     if (F.type === 'vcarve') h = tool.type === 'v' ? 'La fraise suit l’axe médian du tracé : elle descend là où le trait est large et remonte jusqu’à la pointe de chaque coin. Une précision plus petite donne des pointes plus nettes mais un calcul plus long. Profondeur maximale de cette fraise : ' + fr(tool.dia / 2 / Math.tan(tool.angle * Math.PI / 360)) + ' mm ; au-delà, le fond devient plat.' : 'Choisissez une fraise en V.';
     if (F.type !== 'vcarve' && F.type !== 'drill' && F.entry === 'helix') h += ' Hélice : l’outil descend en spirale (' + fr(+F.helixPitch || 1) + ' mm par tour, rayon jusqu’à ' + fr(+F.arcR || 0) + ' mm, réduit si la place manque) ; sinon il passe en rampe.';
     if (F.type !== 'vcarve' && F.type !== 'drill' && F.entry === 'rampzz') h += ' Rampe aller-retour : l’outil descend en avançant, revient au point de départ à pleine profondeur, puis fait le tour : chaque passe commence et finit au même point.';
