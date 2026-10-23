@@ -185,7 +185,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.84</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.85</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -340,7 +340,7 @@ footer p{max-width:none}
     <p>Dans l’onglet <span class="ui">Parcours</span>, le type <strong>Relief</strong> propose deux opérations :</p>
     <ul>
       <li><strong>Ébauche</strong> : balayage par niveaux de Z avec une fraise droite (la plus grosse est proposée), chaque niveau descendant de la profondeur de passe, en laissant une <em>surépaisseur</em> (0,5 mm par défaut) pour la finition. Pas latéral par défaut : 40 % du diamètre.</li>
-      <li><strong>Finition</strong> : balayage parallèle qui suit la surface en tenant compte de la forme réelle de l’outil, sans jamais entamer le relief. Utilisez une fraise hémisphérique, une fraise conique à bout sphérique (définie par D, R et L) ou, pour les détails fins, une fraise de gravure à pointe plate (angle et diamètre de la pointe). Une fraise de gravure à bout rond se décrit comme une fraise conique à bout sphérique : diamètre D, rayon R, longueur L ; une 10° (20° inclus), R 0,25 mm, Ø 3,175 mm (L 7,81 mm) est ajoutée au dossier Gravure de la bibliothèque. Pas latéral par défaut : 10 % du diamètre ; angle du balayage réglable et <em>seconde passe croisée</em> à 90° possible.</li>
+      <li><strong>Finition</strong> : balayage parallèle qui suit la surface en tenant compte de la forme réelle de l’outil, sans jamais entamer le relief. Utilisez une fraise hémisphérique, une fraise conique à bout sphérique (définie par D, R et L) ou, pour les détails fins, une fraise de gravure à pointe plate (angle et diamètre de la pointe). Une fraise de gravure à bout rond se décrit comme une fraise conique à bout sphérique, avec les cotes de la boîte : diamètre de queue D, rayon en bout R, longueur d’usinage L ; COPO en déduit l’angle (D 6, R 1, L 20 : 5,99°). Pas latéral par défaut : 10 % du diamètre ; angle du balayage réglable et <em>seconde passe croisée</em> à 90° possible.</li>
       <li><strong>Limite</strong> : sélectionnez une ou plusieurs formes fermées avant de calculer pour limiter la zone (le centre de l’outil reste à l’intérieur) ; sans sélection, c’est la zone des éléments du relief, sans le fond transparent des images.</li>
     </ul>
     <p>Si le relief change après le calcul, le parcours l’indique en orange : ouvrez-le et cliquez sur <span class="ui">Mettre à jour</span>. Les fichiers de finition sont longs (des dizaines de milliers de lignes), comme dans tout logiciel de sculpture ; l’aperçu 3D rejoue l’ébauche puis la finition.</p>
@@ -512,7 +512,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.84 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.85 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -547,7 +547,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.84</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.85</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -702,7 +702,7 @@ M30</pre>
     <p>In the <span class="ui">Toolpaths</span> tab, the <strong>Relief</strong> type offers two operations:</p>
     <ul>
       <li><strong>Roughing</strong>: raster by Z levels with a flat end mill (the largest is suggested), each level stepping down by the pass depth, leaving an <em>allowance</em> (0.5 mm by default) for finishing. Default stepover: 40% of the diameter.</li>
-      <li><strong>Finishing</strong>: parallel raster following the surface with the real tool shape, never gouging the relief. Use a ball-nose, a tapered ball-nose (defined by D, R and L) or, for fine details, a flat-tip engraving bit (angle and tip diameter). A round-tip engraving bit is described as a tapered ball-nose: diameter D, radius R, length L; a 10° (20° included), R 0.25 mm, Ø 3.175 mm (L 7.81 mm) bit is added to the library’s Engraving folder. Default stepover: 10% of the diameter; adjustable raster angle and an optional <em>second cross pass</em> at 90°.</li>
+      <li><strong>Finishing</strong>: parallel raster following the surface with the real tool shape, never gouging the relief. Use a ball-nose, a tapered ball-nose (defined by D, R and L) or, for fine details, a flat-tip engraving bit (angle and tip diameter). A round-tip engraving bit is described as a tapered ball-nose, using the box dimensions: shank diameter D, tip radius R, cutting length L; COPO derives the angle (D 6, R 1, L 20: 5.99°). Default stepover: 10% of the diameter; adjustable raster angle and an optional <em>second cross pass</em> at 90°.</li>
       <li><strong>Boundary</strong>: select one or more closed shapes before calculating to limit the area (the tool center stays inside); with no selection, the relief items area is used, without the transparent background of images.</li>
     </ul>
     <p>If the relief changes after calculation, the toolpath says so in orange: open it and click <span class="ui">Update</span>. Finishing files are long (tens of thousands of lines), as in any carving software; the 3D preview replays roughing then finishing.</p>
@@ -874,7 +874,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.84 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.85 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
