@@ -802,7 +802,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.83</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.84</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -960,7 +960,7 @@ label.inl input{width:70px}
           <p class="sw-h">Géométrie</p>
           <label>Nom<input type="text" data-t="name"></label>
           <div class="figrow"><span class="ill" data-ill="tool"></span><div class="g2">
-            <label>Type<select data-t="type"><option value="flat">Fraise droite</option><option value="ball">Fraise hémisphérique</option><option value="v">Fraise en V</option><option value="engrave">Fraise de gravure (conique à pointe plate)</option><option value="engball">Fraise de gravure à bout rond (conique)</option><option value="taper">Fraise conique à bout sphérique</option><option value="drill">Foret</option><option value="thread">Fraise à fileter</option></select></label>
+            <label>Type<select data-t="type"><option value="flat">Fraise droite</option><option value="ball">Fraise hémisphérique</option><option value="v">Fraise en V</option><option value="engrave">Fraise de gravure (conique à pointe plate)</option><option value="taper">Fraise conique à bout sphérique</option><option value="drill">Foret</option><option value="thread">Fraise à fileter</option></select></label>
             <label><span id="tDiaLbl">Diamètre (mm)</span><input data-u="len" type="number" data-t="dia" step="0.01" min="0.1"></label>
           </div></div>
           <div class="g2">
@@ -4626,7 +4626,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.83', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.84', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -4951,6 +4951,8 @@ if (!LIB.engb) { // fraise de gravure à bout rond par défaut, dans le dossier 
   t.name = libToolName(t); for (const m of ['softwood', 'hardwood', 'mdf', 'acrylic', 'alu', 'brass', 'pvc']) { const es = libEstimate(t, m, t.cut); if (es) t.cut[m] = es; }
   LIB.tools.push(t); LIB.engb = 1; try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { }
 }
+// une « gravure à bout rond » est une fraise conique à bout sphérique : conversion en D, R, L (L = hauteur où le cône atteint D)
+{ let ch = false; for (const t of LIB.tools) if (t.type === 'engball') { const b = (+t.angle || 20) / 2 * Math.PI / 180, R = +t.tipR || 0.25, rt = R * Math.cos(b), L = R * (1 - Math.sin(b)) + (t.dia / 2 - rt) / Math.tan(b); t.type = 'taper'; t.flen = +L.toFixed(2); t.angle = +(2 * taperHalfAngle(t.dia, R, t.flen)).toFixed(3); t.name = libToolName(t); if (t.id === 'engb-10-025') t.notes = 'Conique 10° (20° inclus), bout sphérique R 0,25 mm, queue 3,175 mm.'; ch = true; } if (ch) try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { } }
 function libSave() { try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { } }
 const projMat = () => (S.stock && LIB.materials.some(m => m.id === S.stock.mat)) ? S.stock.mat : (LIB.materials[0] || { id: 'softwood' }).id;
 const libMatName = id => { const m = LIB.materials.find(x => x.id === id); return m ? tr(m.name) : id; };
