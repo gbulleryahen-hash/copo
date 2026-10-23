@@ -401,7 +401,7 @@ label.inl input{width:70px}
       </div></div>
       <div class="menu"><button class="mtop" aria-expanded="false">Aide</button><div class="mdrop" hidden>
         <a class="mlink" id="guideLink" href="guide.html#fr" target="_blank" rel="noopener">Mode d'emploi</a>
-        <hr><button data-act="bugOpen">Signaler un bug…</button><a class="mlink" href="https://github.com/gbulleryahen-hash/copo/issues" target="_blank" rel="noopener">Suggestions et bugs connus</a>
+        <hr><button data-act="bugOpen">Signaler un bug…</button><button data-act="ideaOpen">Proposer une amélioration…</button><a class="mlink" href="https://github.com/gbulleryahen-hash/copo/issues" target="_blank" rel="noopener">Suggestions et bugs connus</a>
         <hr><button data-act="about">À propos de COPO</button>
       </div></div>
     </nav>
@@ -735,7 +735,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version 1.0 · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.63</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -956,11 +956,11 @@ label.inl input{width:70px}
 </div>
 <div class="about" id="bug" hidden role="dialog" aria-modal="true" aria-labelledby="bugT">
   <div class="about-card bug-card">
-    <div class="about-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6a4 4 0 0 1 8 0"/><rect x="6" y="7" width="12" height="13" rx="6"/><path d="M12 11v9M3 13h3M18 13h3M4 7l3 2M20 7l-3 2M4 20l3-2M20 20l-3-2"/></svg><div><b id="bugT">Signaler un bug</b><span>Le rapport s'ouvre sur GitHub, prêt à être envoyé (compte GitHub gratuit nécessaire).</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6a4 4 0 0 1 8 0"/><rect x="6" y="7" width="12" height="13" rx="6"/><path d="M12 11v9M3 13h3M18 13h3M4 7l3 2M20 7l-3 2M4 20l3-2M20 20l-3-2"/></svg><div><b id="bugT">Signaler un bug</b><span id="bugSub">Le rapport s'ouvre sur GitHub, prêt à être envoyé (compte GitHub gratuit nécessaire).</span></div></div>
     <label>Titre<input id="bugTitle" type="text" maxlength="120" placeholder="Ex. : le congé échoue entre un arc et une droite"></label>
-    <label>Que s'est-il passé ?<textarea id="bugWhat" rows="3" placeholder="Décrivez le problème."></textarea></label>
-    <label>Étapes pour le reproduire<textarea id="bugSteps" rows="3" placeholder="1. …&#10;2. …&#10;3. …"></textarea></label>
-    <label>Résultat attendu<textarea id="bugExp" rows="2" placeholder="Ce que COPO aurait dû faire."></textarea></label>
+    <label><span id="bugWhatL">Que s'est-il passé ?</span><textarea id="bugWhat" rows="3" placeholder="Décrivez le problème."></textarea></label>
+    <label><span id="bugStepsL">Étapes pour le reproduire</span><textarea id="bugSteps" rows="3" placeholder="1. …&#10;2. …&#10;3. …"></textarea></label>
+    <label id="bugExpRow">Résultat attendu<textarea id="bugExp" rows="2" placeholder="Ce que COPO aurait dû faire."></textarea></label>
     <div class="bug-att">
       <label class="chk"><input type="checkbox" id="bugShot" checked> Joindre une capture du plan</label>
       <img id="bugImg" alt="Aperçu de la capture du plan">
@@ -1062,6 +1062,7 @@ Object.assign(I18N_EN, {"pour les plastiques": "for plastics", "pour le bois et 
 Object.assign(I18N_EN, {"Matériau : {m} · {n} outil(s) utilisé(s) · {t} dans la bibliothèque": "Material: {m} · {n} tool(s) used · {t} in the library"});
 Object.assign(I18N_EN, {"{m} · {n} outil(s) utilisé(s)": "{m} · {n} tool(s) used"});
 Object.assign(I18N_EN, {"Fraise de gravure (conique à pointe plate)": "Engraving bit (tapered, flat tip)", "Fraise conique à bout sphérique": "Tapered ball-nose bit", "Rayon en bout R (mm)": "Tip radius R (mm)", "Longueur d’usinage L (mm)": "Cutting length L (mm)", "Diamètre de queue D (mm)": "Shank diameter D (mm)", "Angle déduit : {a}° de dépouille (angle inclus {b}°)": "Derived angle: {a}° per side ({b}° included)", "Vérifiez D, R et L : il faut D/2 > R et L > R.": "Check D, R and L: D/2 must exceed R and L must exceed R."});
+Object.assign(I18N_EN, {"Proposer une amélioration…": "Suggest an improvement…", "Proposer une amélioration": "Suggest an improvement", "La proposition s’ouvre sur GitHub, prête à être envoyée (compte GitHub gratuit nécessaire).": "The suggestion opens on GitHub, ready to send (free GitHub account needed).", "Votre proposition": "Your suggestion", "À quoi cela servirait (exemple, logiciel qui le fait déjà…)": "What it would be used for (example, software that already does it…)", "Décrivez la fonction ou l’amélioration souhaitée.": "Describe the feature or improvement you would like.", "Ex. : pouvoir coter un angle": "E.g.: being able to dimension an angle", "Ouvrir la proposition sur GitHub": "Open the suggestion on GitHub", "Proposition": "Suggestion", "À quoi cela servirait": "What it would be used for", "Proposition ouverte sur GitHub : vérifiez-la puis cliquez sur « Create »/« Submit new issue ».": "Suggestion opened on GitHub: check it then click “Create”/“Submit new issue”."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -3704,7 +3705,8 @@ function act(a, btn) {
     case 'sheetPdf': sheetPdf(); return;
     case 'lang': setLang(btn.dataset.lang); fsSync(); return;
     case 'about': $('#about').hidden = false; return;
-    case 'bugOpen': bugOpen(); return;
+    case 'bugOpen': bugOpen('bug'); return;
+    case 'ideaOpen': bugOpen('idea'); return;
     case 'fbOpen': fbOpen(); return;
     case 'boxOpen': boxOpen(); return;
     case 'boxClose': fwClose('box'); return;
@@ -4382,7 +4384,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.0', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.63', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -4397,7 +4399,16 @@ function bugEnv() {
     'Brut : ' + st.w + ' × ' + st.h + ' × ' + st.t + ' mm · origine ' + st.originXY + '/' + st.originZ + (st.flip ? ' · double face (' + st.flip + ')' : ''),
     'Objets : ' + S.shapes.length + ' · calques : ' + S.layers.length + ' · parcours : ' + S.tps.length].concat(tps, ERRLOG.length ? ['Erreurs récentes :'].concat(ERRLOG.map(e => '  - ' + e)) : []).join('\n');
 }
-function bugOpen() {
+{ const v = document.getElementById('aboutVer'); if (v) v.textContent = COPO_VERSION; }
+let bugMode = 'bug';
+function bugOpen(mode) {
+  bugMode = mode === 'idea' ? 'idea' : 'bug'; const idea = bugMode === 'idea';
+  $('#bugT').textContent = tr(idea ? 'Proposer une amélioration' : 'Signaler un bug');
+  $('#bugSub').textContent = tr(idea ? 'La proposition s’ouvre sur GitHub, prête à être envoyée (compte GitHub gratuit nécessaire).' : 'Le rapport s\'ouvre sur GitHub, prêt à être envoyé (compte GitHub gratuit nécessaire).');
+  $('#bugWhatL').textContent = tr(idea ? 'Votre proposition' : 'Que s\'est-il passé ?'); $('#bugStepsL').textContent = tr(idea ? 'À quoi cela servirait (exemple, logiciel qui le fait déjà…)' : 'Étapes pour le reproduire');
+  $('#bugWhat').placeholder = tr(idea ? 'Décrivez la fonction ou l’amélioration souhaitée.' : 'Décrivez le problème.'); $('#bugSteps').placeholder = idea ? '' : '1. …\n2. …\n3. …';
+  $('#bugTitle').placeholder = tr(idea ? 'Ex. : pouvoir coter un angle' : 'Ex. : le congé échoue entre un arc et une droite');
+  $('#bugExpRow').hidden = idea; $('#bugShot').checked = !idea; $('[data-act="bugSend"]').textContent = tr(idea ? 'Ouvrir la proposition sur GitHub' : 'Ouvrir le rapport sur GitHub');
   try { draw(); bugPng = cv.toDataURL('image/png'); } catch { bugPng = null; }
   $('#bugImg').hidden = !bugPng; if (bugPng) $('#bugImg').src = bugPng; $('#bugShot').disabled = !bugPng; if (!bugPng) $('#bugShot').checked = false;
   $('#bugInfo').textContent = bugEnv(); $('#bug').hidden = false; setTimeout(() => $('#bugTitle').focus(), 30);
@@ -4415,14 +4426,14 @@ async function bugSend() {
   let projNote = '';
   if ($('#bugProj').checked) { const o = JSON.parse(snapState()); await saveFile('projet-bug-copo.json', JSON.stringify(o), T('Projet COPO')); projNote = T('_(Glissez ici le fichier « projet-bug-copo.json » qui vient d\'être téléchargé.)_'); }
   const sec = (h, v) => '### ' + T(h) + '\n' + (v || '_' + T('(non renseigné)') + '_') + '\n\n';
-  let body = sec('Que s\'est-il passé ?', what) + sec('Étapes pour le reproduire', steps) + sec('Résultat attendu', exp);
+  const idea = bugMode === 'idea'; let body = idea ? sec('Proposition', what) + sec('À quoi cela servirait', steps) : sec('Que s\'est-il passé ?', what) + sec('Étapes pour le reproduire', steps) + sec('Résultat attendu', exp);
   if (shotNote) body += '### ' + T('Capture') + '\n' + shotNote + '\n\n';
   if (projNote) body += '### ' + T('Projet') + '\n' + projNote + '\n\n';
   let env = bugEnv(); const mk = e => body + '### ' + T('Informations techniques') + '\n```\n' + e + '\n```\n';
   let full = mk(env); while (encodeURIComponent(full).length > 6500 && env.length > 200) { env = env.slice(0, Math.floor(env.length * 0.8)) + '\n…'; full = mk(env); }
-  const url = BUG_REPO + '/issues/new?labels=bug&title=' + encodeURIComponent(title || what.slice(0, 80)) + '&body=' + encodeURIComponent(full);
+  const url = BUG_REPO + '/issues/new?labels=' + (idea ? 'enhancement' : 'bug') + '&title=' + encodeURIComponent((idea ? '[' + tr('Proposition') + '] ' : '') + (title || what.slice(0, 80))) + '&body=' + encodeURIComponent(full);
   const w = window.open(url, '_blank', 'noopener'); if (!w && window.claude) showText(T('Signaler un bug'), url, T('Ouvrez ce lien dans votre navigateur.'));
-  $('#bug').hidden = true; toast(T('Rapport ouvert sur GitHub : vérifiez-le puis cliquez sur « Create »/« Submit new issue ».'));
+  $('#bug').hidden = true; toast(T(idea ? 'Proposition ouverte sur GitHub : vérifiez-la puis cliquez sur « Create »/« Submit new issue ».' : 'Rapport ouvert sur GitHub : vérifiez-le puis cliquez sur « Create »/« Submit new issue ».'));
 }
 async function saveFile(name, data, title) {
   if (DL) { try { await DL.save({ filename: name, data }); toast('Fichier enregistré.'); return; } catch (e) { if (e && e.code === 'declined') return; if (e && e.code === 'rate_limited') { toast('Un enregistrement est déjà en attente.'); return; } } }
@@ -5170,7 +5181,7 @@ function sheetHTML(meta) {
   h += '<h2>' + T('Avant de lancer') + '</h2><ul class="chk">' + ck.map(c => '<li>' + escH(c) + '</li>').join('') + '</ul>';
   h += '<h2>' + T('Remarques') + '</h2><div class="notes">' + escH(meta.notes || '') + '</div>';
   h += '<div class="sign"><div>' + T('Préparé par') + '</div><div>' + T('Usiné par / date') + '</div><div>' + T('Contrôle') + '</div></div>';
-  h += '<footer>COPO · ' + T('Fiche générée le') + ' ' + escH(date) + ' · ' + T('Vérifiez toujours le G-code par un passage à vide avant d\'usiner.') + '</footer></body></html>';
+  h += '<footer>COPO ' + COPO_VERSION + ' · ' + T('Fiche générée le') + ' ' + escH(date) + ' · ' + T('Vérifiez toujours le G-code par un passage à vide avant d\'usiner.') + '</footer></body></html>';
   const bi = h.indexOf('<body>'); return uOn() ? h.slice(0, bi) + h.slice(bi).replace(/>([^<]+)</g, (x, t) => '>' + uConv(t) + '<') : h;
 }
 function sheetOpen() {
@@ -5230,7 +5241,7 @@ async function sheetPdf() {
       if (i) pdf.addPage('a4');
       pdf.addImage(c.toDataURL('image/jpeg', 0.9), 'JPEG', MX, MY, MW, h * MW / PX);
     }
-    pdf.setProperties({ title: tr('Fiche de gamme') + ' — ' + ((S.meta && S.meta.name) || 'COPO'), creator: 'COPO' });
+    pdf.setProperties({ title: tr('Fiche de gamme') + ' — ' + ((S.meta && S.meta.name) || 'COPO'), creator: 'COPO ' + COPO_VERSION });
     const nm = (S.meta && S.meta.name ? S.meta.name.replace(/[^\w\-]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() : 'copo') || 'copo';
     await saveFile('fiche-' + nm + '.pdf', pdf.output('arraybuffer'), tr('Fiche de gamme'));
   } catch (e) { console.error(e); toast(tr('Le PDF n’a pas pu être créé.') + ' ' + tr('Utilisez « Imprimer » puis « Enregistrer au format PDF ».')); }

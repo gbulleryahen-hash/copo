@@ -6,6 +6,8 @@
 - **Utiliser COPO / Use COPO :** `index.html` (page GitHub Pages de ce dépôt / this repository's GitHub Pages site)
 - **Mode d'emploi / User guide :** `guide.html` · PDF : `COPO-mode-emploi-FR.pdf`, `COPO-user-guide-EN.pdf`
 
+**Version 1.63**
+
 ## Fonctions / Features
 - Dessin : rectangle, ellipse, polygone/étoile, arc, plume (Bézier), texte (aussi sur une courbe), nœuds, chanfreins, congés, dégagements dogbone et T-bone, ajuster, couper, joindre, booléens, réseau, calques, repères, cotes, images de référence, vectorisation d'image (contours), import/export SVG, import DXF (calques, blocs, splines)
 - Bibliothèque d'outils façon Aspire : matériaux (bois tendre, bois dur, MDF, acrylique, PVC, aluminium, laiton), outils métriques et impériaux par type, réglages par matériau, avance par dent commentée, import des bibliothèques Aspire/VCarve (.vtdb)
