@@ -802,7 +802,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.82</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.83</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -2553,7 +2553,7 @@ function render() {
   // cadre de sélection
   const ss = selShapes();
   if (ss.length && S.ui.tool !== 'nodes' && !tpMode && !xfOn()) { const b = bbox(ss); ctx.strokeStyle = C.acc; ctx.globalAlpha = 0.6; ctx.setLineDash([3, 3]); ctx.lineWidth = 1; ctx.strokeRect(sx(b.x0) - 4, sy(b.y1) - 4, b.w * S.view.s + 8, b.h * S.view.s + 8); ctx.setLineDash([]); ctx.globalAlpha = 1; const pa = anchorPt(b, S.ui.selAnchor), AX = sx(pa[0]), AY = sy(pa[1]); ctx.fillStyle = C.acc; ctx.beginPath(); ctx.moveTo(AX, AY - 6); ctx.lineTo(AX + 6, AY); ctx.lineTo(AX, AY + 6); ctx.lineTo(AX - 6, AY); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke(); }
-  drawImgHandles(C);
+  drawImgHandles(C); drawRelHandles(C);
   drawXf(C);
   drawFitPrev(C);
   // cotes
@@ -3178,7 +3178,7 @@ cv.addEventListener('pointerdown', e => {
   if (e.button !== 0) return;
   if (X < RB || Y < RB) { if (X < RB && Y < RB) return; const axis = Y < RB ? 'y' : 'x'; S.guides[axis].push(axis === 'x' ? p[0] : p[1]); drag = { mode: 'guide', axis, i: S.guides[axis].length - 1 }; draw(); return; }
   if (t === 'select') {
-    const ih = imgHandleAt(X, Y);
+    const ih = relHandleAt(X, Y) || imgHandleAt(X, Y);
     const xh = xfHandleAt(X, Y);
     if (xh) {
       const ss = selShapes(), orig = ss.map(s => [s, s.nodes.map(cloneNode), +s.rot || 0]), piv0 = PIV && PIV.key === selKey() ? PIV.p.slice() : null;
@@ -3187,19 +3187,20 @@ cv.addEventListener('pointerdown', e => {
       else drag = { mode: 'sscale', h: xh, orig, piv0, moved: false };
       draw(); return;
     }
-    if (ih) { const im = ih.im; drag = ih.kind === 'irot' ? { mode: 'irot', im, rot0: im.rot || 0, a0: Math.atan2(p[1] - im.y, p[0] - im.x) } : { mode: 'iscale', im, sgn: ih.sgn, anchor: ih.anchor, w0: im.w, h0: im.h }; draw(); return; }
+    if (ih) { const im = ih.im; drag = ih.kind === 'irot' ? { mode: 'irot', im, rot0: im.rot || 0, a0: Math.atan2(p[1] - im.y, p[0] - im.x), rel: !!ih.rel } : { mode: 'iscale', im, sgn: ih.sgn, anchor: ih.anchor, w0: im.w, h0: im.h, zH0: +im.zH || 0, rel: !!ih.rel }; draw(); return; }
     const h = hitShape(p);
     if (h) {
-      S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } const ids = groupIds(h), wasSel = S.sel.has(h.id) && !e.shiftKey;
+      S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (S.relSel) { S.relSel = null; relPanel(); } const ids = groupIds(h), wasSel = S.sel.has(h.id) && !e.shiftKey;
       if (e.shiftKey) { const has = S.sel.has(h.id); ids.forEach(id => has ? S.sel.delete(id) : S.sel.add(id)); } else if (!S.sel.has(h.id)) { S.sel.clear(); ids.forEach(id => S.sel.add(id)); }
       renderSel(); drag = { mode: 'move', p0: snap(p, S.sel), bb0: bbox(selShapes()), orig: selShapes().map(s => [s, s.nodes.map(cloneNode)]), moved: false, wasSel, piv0: PIV && PIV.key === selKey() ? PIV.p.slice() : null };
     } else {
       const dm = hitDim(p), gd = hitGuide(X, Y);
-      const hi = !dm && !gd ? imgHit(p) : null;
+      const hi = !dm && !gd ? imgHit(p) : null, hr = !dm && !gd && !hi ? relHit(p) : null;
       if (dm) { S.selDim = dm.id; S.sel.clear(); renderSel(); }
       else if (gd) { drag = { mode: 'guide', axis: gd.axis, i: gd.i }; }
       else if (hi) { selectImg(hi.id); drag = { mode: 'imove', im: hi, off: [hi.x - p[0], hi.y - p[1]] }; }
-      else { S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (!e.shiftKey) S.sel.clear(); renderSel(); drag = { mode: 'band', sx0: X, sy0: Y, sx1: X, sy1: Y }; }
+      else if (hr) { selectRel(hr.id); drag = { mode: 'imove', im: hr, off: [hr.x - p[0], hr.y - p[1]], rel: true }; }
+      else { S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (S.relSel) { S.relSel = null; relPanel(); } if (!e.shiftKey) S.sel.clear(); renderSel(); drag = { mode: 'band', sx0: X, sy0: Y, sx1: X, sy1: Y }; }
     }
   } else if (t === 'nodes') nodesDown(p, e, X, Y);
   else if (['rect', 'ellipse', 'circle', 'polygon'].includes(t)) { const q = snap(p); drag = { mode: t, p0: q, p1: q, shift: e.shiftKey }; }
@@ -3322,7 +3323,7 @@ function endPointer(e) {
   else if (D.mode === 'srot') { cv.style.cursor = 'grab'; if (D.moved) { for (const [s, , r0] of D.orig) s.rot = normDeg(r0 + D.ang); commit(); renderSel(); } }
   else if (D.mode === 'sscale') { if (D.moved) { commit(); renderSel(); } }
   else if (D.mode === 'tabdrag') { if (!D.moved) D.tp.p.tabPts.splice(D.idx, 1); tabChanged(D.tp); }
-  else if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot') { if (D.moved) commit(false); renderImgPanel(); }
+  else if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot') { if (D.rel) { if (D.moved) { relBump(); relDirty = true; commit(false); draw(); } relPanel(); } else { if (D.moved) commit(false); renderImgPanel(); } }
   else if (D.mode === 'node' || D.mode === 'handle') { if (D.moved) commit(); }
   else if (D.mode === 'nband') {
     if (Math.abs(D.sx1 - D.sx0) + Math.abs(D.sy1 - D.sy0) <= 4) { if (!D.add) { S.ne = null; S.sel.clear(); renderSel(); } }
@@ -3343,6 +3344,7 @@ cv.addEventListener('pointerup', endPointer); cv.addEventListener('pointercancel
 cv.addEventListener('pointerleave', () => { hover = null; if (!drag) { hoverCorner = null; hoverEdge = null; snapMark = null; draw(); } });
 cv.addEventListener('dblclick', e => {
   const [X, Y] = evPt(e), p = [wx(X), wy(Y)];
+  if (S.ui.tool === 'select' && !hitShape(p)) { const hr = relHit(p); if (hr && !imgHit(p)) { selectRel(hr.id); setTab('relief'); return; } }
   if (DBL_TOOLS.includes(S.ui.tool) && X > RB && Y > RB) {
     const h = hitShape(p);
     if (h) {
@@ -3625,7 +3627,7 @@ window.addEventListener('keydown', e => {
   if (mod && (k === 'a' || k === 'A') && S.ui.tool === 'nodes' && S.ne && shapeById(S.ne.sid)) { e.preventDefault(); neSetSel(shapeById(S.ne.sid).nodes.map((_, i) => i)); syncNe(); draw(); return; }
   if (mod && (k === 'a' || k === 'A')) { e.preventDefault(); S.shapes.forEach(s => { if (editable(s)) S.sel.add(s.id); }); renderSel(); draw(); return; }
   if (k === ' ') { spaceDown = true; e.preventDefault(); return; }
-  if (k === 'Delete' || k === 'Backspace') { e.preventDefault(); if (S.imgSel && !S.sel.size) { imgAct('imgDel'); return; } if (S.ui.tool === 'nodes' && S.ne && (neSel().length || (S.ne.seg !== null && S.ne.seg !== undefined))) act('neDel'); else if (S.selDim) { S.dims = S.dims.filter(d => d.id !== S.selDim); S.selDim = null; commit(false); draw(); } else act('del'); return; }
+  if (k === 'Delete' || k === 'Backspace') { e.preventDefault(); if (S.imgSel && !S.sel.size) { imgAct('imgDel'); return; } if (S.relSel && !S.sel.size && document.activeElement === document.body) { imgAct('relDel'); return; } if (S.ui.tool === 'nodes' && S.ne && (neSel().length || (S.ne.seg !== null && S.ne.seg !== undefined))) act('neDel'); else if (S.selDim) { S.dims = S.dims.filter(d => d.id !== S.selDim); S.selDim = null; commit(false); draw(); } else act('del'); return; }
   if (k === 'Escape' && S.ui.tool === 'tabedit') { setTool('select'); return; }
   if (k === 'Escape' && S.ui.dsec && S.ui.tool === 'select' && !S.sel.size) { S.ui.dsec = null; dRefresh(); return; }
   if (k === 'Escape') { if (pen.length) { pen = []; } else if (arcSt.length || dimSt.length) { arcSt = []; dimSt = []; } else if (S.ui.tool === 'nodes') { setTool('select'); dRefresh(); } else { S.sel.clear(); S.selDim = null; if (S.ne) S.ne = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } renderSel(); } draw(); return; }
@@ -4624,7 +4626,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.82', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.83', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5684,6 +5686,26 @@ function drawImages(C) {
     ctx.restore();
   }
 }
+function relHit(p) { if (!S.relief || S.relief.show === false) return null; for (let k = S.relief.items.length - 1; k >= 0; k--) { const it = S.relief.items[k]; if (!it.visible || !relGrid[it.id]) continue; const l = imgLocal(it, p); if (Math.abs(l[0]) <= it.w / 2 && Math.abs(l[1]) <= it.h / 2) return it; } return null; }
+function relHandleAt(X, Y) {
+  const it = typeof relCur === 'function' && relCur(); if (!it || !it.visible || S.relief.show === false || S.ui.tool !== 'select') return null;
+  const near = q => Math.hypot(sx(q[0]) - X, sy(q[1]) - Y) < 9, f = imgFrame(it), rh = imgRotHandle(it);
+  if (near(rh.h)) return { kind: 'irot', im: it, rel: true };
+  const sg = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
+  for (let k = 0; k < 4; k++) if (near(f.corners[k])) return { kind: 'iscale', im: it, sgn: sg[k], anchor: f.corners[(k + 2) % 4], rel: true };
+  return null;
+}
+function selectRel(id) { S.relSel = id; if (id) { S.sel.clear(); S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } renderSel(); } relPanel(); dRefresh(); draw(); }
+function drawRelHandles(C) {
+  const it = typeof relCur === 'function' && relCur(); if (!it || !it.visible || S.relief.show === false || S.ui.tool !== 'select') return;
+  const f = imgFrame(it), cs = f.corners.map(q => [sx(q[0]), sy(q[1])]), rh = imgRotHandle(it);
+  ctx.save(); ctx.strokeStyle = C.rl || C.acc; ctx.lineWidth = 1.5; ctx.beginPath(); cs.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(sx(rh.base[0]), sy(rh.base[1])); ctx.lineTo(sx(rh.h[0]), sy(rh.h[1])); ctx.stroke();
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(sx(rh.h[0]), sy(rh.h[1]), 6, 0, 7); ctx.fill(); ctx.stroke();
+  for (const q of cs) { ctx.fillStyle = '#fff'; ctx.fillRect(q[0] - 5, q[1] - 5, 10, 10); ctx.strokeRect(q[0] - 5, q[1] - 5, 10, 10); }
+  ctx.fillStyle = C.rl || C.acc; ctx.beginPath(); ctx.arc(sx(it.x), sy(it.y), 3, 0, 7); ctx.fill(); ctx.font = '600 11px ' + (C.mono || 'monospace'); ctx.fillText(it.name, cs[3][0], cs[3][1] - 6);
+  ctx.restore();
+}
 function drawImgHandles(C) {
   const im = S.imgSel && imgById(S.imgSel); if (!im || !im.visible || S.ui.tool !== 'select') return;
   const f = imgFrame(im), cs = f.corners.map(q => [sx(q[0]), sy(q[1])]);
@@ -5696,7 +5718,7 @@ function drawImgHandles(C) {
   }
   ctx.restore();
 }
-function imgCursor(X, Y) { const h = imgHandleAt(X, Y); if (h) return h.kind === 'irot' ? 'grab' : 'nwse-resize'; return null; }
+function imgCursor(X, Y) { const h = relHandleAt(X, Y) || imgHandleAt(X, Y); if (h) return h.kind === 'irot' ? 'grab' : 'nwse-resize'; return null; }
 function imgDragMove(D, p, e) {
   const im = D.im;
   if (D.mode === 'imove') { const q = snap([p[0] + D.off[0], p[1] + D.off[1]]); im.x = q[0]; im.y = q[1]; setCoords(p, 'Centre ' + fr(outXY(im.x, im.y)[0]) + ' / ' + fr(outXY(im.x, im.y)[1])); }
@@ -5704,15 +5726,16 @@ function imgDragMove(D, p, e) {
     const r = (im.rot || 0) * Math.PI / 180, u = [Math.cos(r), Math.sin(r)], v = [-Math.sin(r), Math.cos(r)], d = [p[0] - D.anchor[0], p[1] - D.anchor[1]];
     let w = Math.max(1, (d[0] * u[0] + d[1] * u[1]) * D.sgn[0]), h = Math.max(1, (d[0] * v[0] + d[1] * v[1]) * D.sgn[1]);
     if (!e.shiftKey) { const k = Math.max(w / D.w0, h / D.h0); w = D.w0 * k; h = D.h0 * k; }
+    if (D.rel && !e.shiftKey && (!$('#rlLock') || $('#rlLock').checked)) im.zH = D.zH0 * w / D.w0;
     im.w = w; im.h = h; im.x = D.anchor[0] + u[0] * D.sgn[0] * w / 2 + v[0] * D.sgn[1] * h / 2; im.y = D.anchor[1] + u[1] * D.sgn[0] * w / 2 + v[1] * D.sgn[1] * h / 2;
     setCoords(p, fr(im.w) + ' × ' + fr(im.h) + ' mm' + (e.shiftKey ? ' (libre)' : ''));
   } else if (D.mode === 'irot') {
     let a = D.rot0 + (Math.atan2(p[1] - im.y, p[0] - im.x) - D.a0) * 180 / Math.PI; if (e.shiftKey) a = Math.round(a / 15) * 15;
     im.rot = ((a % 360) + 540) % 360 - 180; setCoords(p, 'Angle ' + fr(im.rot, 1) + '°');
   }
-  D.moved = true; renderImgPanel(true); draw();
+  D.moved = true; if (D.rel) { const now = performance.now(); if (!D.tR || now - D.tR > 70) { relDirty = true; D.tR = now; } relPanel(true); } else renderImgPanel(true); draw();
 }
-function selectImg(id) { S.imgSel = id; if (id) { S.sel.clear(); S.selDim = null; renderSel(); } renderImgPanel(); dRefresh(); draw(); }
+function selectImg(id) { S.imgSel = id; if (id) { S.sel.clear(); S.selDim = null; S.relSel = null; renderSel(); relPanel(); } renderImgPanel(); dRefresh(); draw(); }
 async function insertImageFile(file, at) {
   if (!file || !/^image\//.test(file.type)) { toast('Choisissez une image (JPG, PNG, WebP, GIF, BMP).'); return; }
   const url = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
@@ -5795,7 +5818,7 @@ function drawRelief(C) {
     g.putImageData(im, 0, 0); relCache = { cv, R }; relDirty = false; relSummary();
   }
   ctx.save(); ctx.imageSmoothingEnabled = true; ctx.drawImage(relCache.cv, sx(0), sy(S.stock.h), S.stock.w * S.view.s, S.stock.h * S.view.s); ctx.restore();
-  const it = curTab === 'relief' && relCur(); if (it) { const f = imgFrame(it), cs = f.corners.map(q => [sx(q[0]), sy(q[1])]); ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]); ctx.beginPath(); cs.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.stroke(); ctx.restore(); }
+  const it = curTab === 'relief' && S.ui.tool !== 'select' && relCur(); if (it) { const f = imgFrame(it), cs = f.corners.map(q => [sx(q[0]), sy(q[1])]); ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]); ctx.beginPath(); cs.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.stroke(); ctx.restore(); }
 }
 function relSummary() { const el = $('#relSum'); if (!el) return; const R = relCache && relCache.R, n = S.relief.items.length; if (!n || !R) { el.textContent = n ? '' : tr('Aucun relief : importez une image en niveaux de gris ou un fichier STL.'); return; } const dep = R.max - R.min; el.textContent = trf('{n} élément(s) · profondeur du relief {d} mm (brut {t} mm).', { n, d: fr(dep, 2), t: fr(S.stock.t, 1) }) + (dep > S.stock.t ? ' ' + tr('Le relief dépasse l’épaisseur du brut : il sera coupé au fond.') : ''); }
 function relBump() { S.relief.ver = (S.relief.ver || 0) + 1; if (typeof renderTpList === 'function') renderTpList(); }
