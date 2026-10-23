@@ -1,0 +1,26 @@
+{
+  "id": "./",
+  "name": "COPO — FAO 2D pour CNC",
+  "short_name": "COPO",
+  "description": "Logiciel libre de FAO 2D pour CNC, dans le navigateur.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#262626",
+  "theme_color": "#262626",
+  "icons": [
+    { "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "file_handlers": [
+    {
+      "action": "./",
+      "name": "Projet COPO",
+      "accept": { "application/x-copo": [".copo"] },
+      "icons": [{ "src": "img/doc-copo-256.png", "sizes": "256x256", "type": "image/png" }],
+      "launch_type": "single-client"
+    }
+  ]
+}

@@ -16,6 +16,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADiUlEQVR4nMRXXWxLYRh+zunvWq3WqrbaT7Oui58tyBBEiLhYhoQrrvxEJOIvwp07ggtuJFwgROJCkPi5EUNCQkJEkPmf0LV+Zuuszrau7Zyf1vud2mForVu3Pjfn/c73nvd9zve933POq8dv8Hq9DqPRuCuVSs2j4UyO49zIAyheJ12aKd5DURSPhEKh7oE5bsDw+XyNOp3uNJkejC6+KIqyKRAINGkEqqurG3iev4ExBJFYxkhwFRUVTrPZ/IrulWJs8SUej9fpac/XFyA5g4defJ2eln4eCgSWW0/XghFguRmBShQOlXoUGDzyAE5nhtlZq15zxYhWwF6xAq6pW2C0+0Aqh2RSRn/kOfo67iLScookUPlvDK6mpiaFHMHxBpTMPgCHd1VGn3jkBdoebIec6EDeCRRP3Qx33W7VluIdiLw9AzEaQlFxHezly2GyV6lzcr+A99eXIiXHMsbKuQb0llJMnL5DtcW+jwjeWgnh3VnEwg+ITCc+3d+GaPu9tK/ZCWfV6qzxciYwrmSxugUM4WeHoYjpD5tr2lZ45uxH+cITtPQ7IH9P33f617EqzR8B3mDV7MS355rNVoPBZKuEyTEFPcHL6tho9UBnKs4cDzlCEXs022gt12w50a7ZhqJJkBLhXw+lZOSNQPTzLSQVSbU9cw/BVtYAi3s+3DP2aD79wptBmpBKZiaQsw4kpV6Emw+itH4vjOPKULbg6KB5IXABUuwjbJ4l6lgRe5HMcgqGJUTdgfNUC3a4a3dSQaYLLJVU6DieRterY2oNWFyz0r7BK1kFadhK+K3lJHo/XIW1ZJG6xH3td5EUBZVY6ZxDmp/QejFrnBFJsZzopGq/pI2LXPUoqd8H83i/Ov76+iSkaCuGRMBgmQyDdTKGCna0eL0lHcRcrBZj0YRabb7nwzX00NtbJs7961kp1kai1faLgNFWBV9jE4YKpt1clvn41yfoen0c1SvuZPQJNDWSfLcObwv+TM40X4p9QrzrMaJtt5Hoekov5cVQwPn9/g76lE7KdQv0JhcUuY+SPaZjFv+nT6aYA1tADUuYEbhBBBpQABCBm0wJm1E4NPOSJJ0gJt0YY7CcLDdPjWKItmAjxhhEYAPLrepoJBJpcTgcj6hRYAJuw+iCNadrqC+8xgban4IgCO9tNtsZ6pBFYvedEaGVsSIP+Nme36d456g9XxsMBl8OzP0AAAD//4R9A+oAAAAGSURBVAMAdeFVyBDQYsQAAAAASUVORK5CYII=">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <meta name="theme-color" content="#262626">
+<link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
 <style>
@@ -406,6 +407,7 @@ label.inl input{width:70px}
       </div></div>
       <div class="menu"><button class="mtop" aria-expanded="false">Aide</button><div class="mdrop" hidden>
         <a class="mlink" id="guideLink" href="guide.html#fr" target="_blank" rel="noopener">Mode d'emploi</a>
+        <button data-act="install" hidden>Installer COPO comme application…</button>
         <hr><button data-act="bugOpen">Signaler un bug…</button><button data-act="ideaOpen">Proposer une amélioration…</button><a class="mlink" href="https://github.com/gbulleryahen-hash/copo/issues" target="_blank" rel="noopener">Suggestions et bugs connus</a>
         <hr><button data-act="about">À propos de COPO</button>
       </div></div>
@@ -741,7 +743,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.69</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.70</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1026,7 +1028,7 @@ label.inl input{width:70px}
   <div class="row"><button class="primary" id="dlgCopy">Copier</button><button id="dlgClose">Fermer</button></div>
 </div></div>
 
-<input type="file" id="fOpen" accept=".json,application/json" hidden>
+<input type="file" id="fOpen" accept=".copo,.json,application/json" hidden>
 <input type="file" id="fSvg" accept=".svg,.dxf,image/svg+xml,image/vnd.dxf,application/dxf" hidden>
 <input type="file" id="fTools" accept=".json,application/json" hidden>
 <input type="file" id="fFont" accept=".ttf,.otf,.woff,.ttc,.svg" multiple hidden>
@@ -1072,6 +1074,7 @@ Object.assign(I18N_EN, {"Fraise de gravure (conique à pointe plate)": "Engravin
 Object.assign(I18N_EN, {"Proposer une amélioration…": "Suggest an improvement…", "Proposer une amélioration": "Suggest an improvement", "La proposition s’ouvre sur GitHub, prête à être envoyée (compte GitHub gratuit nécessaire).": "The suggestion opens on GitHub, ready to send (free GitHub account needed).", "Votre proposition": "Your suggestion", "À quoi cela servirait (exemple, logiciel qui le fait déjà…)": "What it would be used for (example, software that already does it…)", "Décrivez la fonction ou l’amélioration souhaitée.": "Describe the feature or improvement you would like.", "Ex. : pouvoir coter un angle": "E.g.: being able to dimension an angle", "Ouvrir la proposition sur GitHub": "Open the suggestion on GitHub", "Proposition": "Suggestion", "À quoi cela servirait": "What it would be used for", "Proposition ouverte sur GitHub : vérifiez-la puis cliquez sur « Create »/« Submit new issue ».": "Suggestion opened on GitHub: check it then click “Create”/“Submit new issue”."});
 Object.assign(I18N_EN, {"{n} trou(s) plus grand(s) que la fraise : percé(s) à Ø{d} au lieu du diamètre dessiné (cochez l’usinage en hélice).": "{n} hole(s) larger than the bit: drilled at Ø{d} instead of the drawn diameter (tick helical milling).", "Cycles de perçage G81/G82/G83 (le contrôleur gère les remontées)": "G81/G82/G83 drilling cycles (the controller handles retracts)"});
 Object.assign(I18N_EN, {"grblHAL (pause M0 au changement d'outil, cycles de perçage)": "grblHAL (M0 pause at tool change, drilling cycles)", "Temporisation au fond (s, 0 = sans)": "Dwell at the bottom (s, 0 = none)"});
+Object.assign(I18N_EN, {"COPO est installé : les fichiers .copo s’ouvrent maintenant d’un double-clic.": "COPO is installed: .copo files now open with a double-click.", "Installer COPO comme application…": "Install COPO as an app…", "Déposez une image, un fichier SVG ou un projet .copo.": "Drop an image, an SVG file or a .copo project."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -1093,7 +1096,7 @@ Object.assign(I18N_EN, {"Coins intérieurs": "Inside corners", "Arrondis (rayon 
 Object.assign(I18N_EN, {"Carbide Motion (Shapeoko, Nomad)": "Carbide Motion (Shapeoko, Nomad)", "LinuxCNC (T… M6)": "LinuxCNC (T… M6)", "Personnalisé": "Custom", "En-tête du programme": "Program header", "Changement d'outil": "Tool change", "Fin du programme": "Program end", "Extension du fichier": "File extension", "Ajouter G91.1 (arcs IJ incrémentaux)": "Add G91.1 (incremental IJ arcs)", "Variables : ": "Variables: ", " G20/G21 · ": " G20/G21 · ", " Z de sécurité · ": " safe Z · ", " Z machine de changement · ": " machine Z for tool change · ", " numéro d'outil · ": " tool number · ", " vitesse de broche · ": " spindle speed · ", " diamètre · ": " diameter · ", " nom de l'outil. Le changement d'outil doit démarrer la broche (S{S} M3).": " tool name. The tool change must start the spindle (S{S} M3).", "Rétablir les valeurs par défaut": "Restore defaults"});
 Object.assign(I18N_EN, {"Importer un SVG ou un DXF…": "Import an SVG or DXF…", "DXF importé : {n} tracé(s) dont {c} fermé(s), {w} × {h} mm": "DXF imported: {n} path(s), {c} closed, {w} × {h} mm", "unité du fichier": "file unit", "sans unité : lu en mm": "no unit: read as mm", "{n} calques": "{n} layers", "Ignorés": "Skipped", "DXF binaire non pris en charge : réenregistrez-le en DXF ASCII (texte).": "Binary DXF is not supported: save it again as ASCII (text) DXF.", "Aucun tracé 2D trouvé dans ce DXF.": "No 2D geometry found in this DXF.", "Éléments non pris en charge": "Unsupported entities"});
 Object.assign(I18N_EN, {"Vectoriser : contours de l'image": "Vectorize: image outlines", "Seuil": "Threshold", "Lissage": "Smoothing", "Inverser (contours des zones claires)": "Invert (outline light areas)", "Aperçu des contours": "Outline preview", "Seuil automatique": "Auto threshold", "Créer les contours": "Create outlines", "Seuil : ce qui est plus sombre devient la forme. Lissage : arrondit les contours et retire les petits détails. Les contours sont créés groupés, dans le calque actif, à l'emplacement de l'image.": "Threshold: anything darker becomes the shape. Smoothing: rounds the outlines and removes small details. Outlines are created grouped, on the active layer, where the image is.", "Image en cours de chargement…": "Image loading…", "{n} contours · {m} points": "{n} outlines · {m} points", "Image pas encore chargée.": "Image not loaded yet.", "Aucun contour trouvé : ajustez le seuil ou cochez Inverser.": "No outline found: adjust the threshold or tick Invert.", "{n} contours créés (groupés). Vous pouvez masquer l’image.": "{n} outlines created (grouped). You can hide the image."});
-Object.assign(I18N_EN, {"Signaler un bug…": "Report a bug…", "Suggestions et bugs connus": "Suggestions and known bugs", "Signaler un bug": "Report a bug", "Le rapport s'ouvre sur GitHub, prêt à être envoyé (compte GitHub gratuit nécessaire).": "The report opens on GitHub, ready to send (free GitHub account required).", "Titre": "Title", "Ex. : le congé échoue entre un arc et une droite": "E.g. the fillet fails between an arc and a line", "Que s'est-il passé ?": "What happened?", "Décrivez le problème.": "Describe the problem.", "Étapes pour le reproduire": "Steps to reproduce", "Résultat attendu": "Expected result", "Ce que COPO aurait dû faire.": "What COPO should have done.", "Joindre une capture du plan": "Attach a screenshot of the workspace", "Aperçu de la capture du plan": "Workspace screenshot preview", "Joindre le projet (fichier .json)": "Attach the project (.json file)", "Informations techniques ajoutées au rapport": "Technical information added to the report", "La capture est copiée dans le presse-papiers (ou téléchargée) : collez-la dans le rapport avec Ctrl+V. Le projet est téléchargé : glissez-le dans le rapport.": "The screenshot is copied to the clipboard (or downloaded): paste it into the report with Ctrl+V. The project is downloaded: drag it into the report.", "Annuler": "Cancel", "Ouvrir le rapport sur GitHub": "Open the report on GitHub", "Donnez au moins un titre ou une description.": "Give at least a title or a description.", "_(La capture est dans le presse-papiers : cliquez ici puis Ctrl+V pour la coller.)_": "_(The screenshot is on the clipboard: click here, then Ctrl+V to paste it.)_", "_(Glissez ici le fichier « capture-copo.png » qui vient d'être téléchargé.)_": "_(Drag the downloaded “capture-copo.png” file here.)_", "_(Glissez ici le fichier « projet-bug-copo.json » qui vient d'être téléchargé.)_": "_(Drag the downloaded “projet-bug-copo.json” file here.)_", "(non renseigné)": "(not specified)", "Capture": "Screenshot", "Projet": "Project", "Informations techniques": "Technical information", "Ouvrez ce lien dans votre navigateur.": "Open this link in your browser.", "Rapport ouvert sur GitHub : vérifiez-le puis cliquez sur « Create »/« Submit new issue ».": "Report opened on GitHub: check it, then click “Create” / “Submit new issue”."});
+Object.assign(I18N_EN, {"Signaler un bug…": "Report a bug…", "Suggestions et bugs connus": "Suggestions and known bugs", "Signaler un bug": "Report a bug", "Le rapport s'ouvre sur GitHub, prêt à être envoyé (compte GitHub gratuit nécessaire).": "The report opens on GitHub, ready to send (free GitHub account required).", "Titre": "Title", "Ex. : le congé échoue entre un arc et une droite": "E.g. the fillet fails between an arc and a line", "Que s'est-il passé ?": "What happened?", "Décrivez le problème.": "Describe the problem.", "Étapes pour le reproduire": "Steps to reproduce", "Résultat attendu": "Expected result", "Ce que COPO aurait dû faire.": "What COPO should have done.", "Joindre une capture du plan": "Attach a screenshot of the workspace", "Aperçu de la capture du plan": "Workspace screenshot preview", "Joindre le projet (fichier .json)": "Attach the project (.json file)", "Informations techniques ajoutées au rapport": "Technical information added to the report", "La capture est copiée dans le presse-papiers (ou téléchargée) : collez-la dans le rapport avec Ctrl+V. Le projet est téléchargé : glissez-le dans le rapport.": "The screenshot is copied to the clipboard (or downloaded): paste it into the report with Ctrl+V. The project is downloaded: drag it into the report.", "Annuler": "Cancel", "Ouvrir le rapport sur GitHub": "Open the report on GitHub", "Donnez au moins un titre ou une description.": "Give at least a title or a description.", "_(La capture est dans le presse-papiers : cliquez ici puis Ctrl+V pour la coller.)_": "_(The screenshot is on the clipboard: click here, then Ctrl+V to paste it.)_", "_(Glissez ici le fichier « capture-copo.png » qui vient d'être téléchargé.)_": "_(Drag the downloaded “capture-copo.png” file here.)_", "_(Glissez ici le fichier « projet-bug-copo.copo » qui vient d'être téléchargé.)_": "_(Drag the downloaded “projet-bug-copo.copo” file here.)_", "(non renseigné)": "(not specified)", "Capture": "Screenshot", "Projet": "Project", "Informations techniques": "Technical information", "Ouvrez ce lien dans votre navigateur.": "Open this link in your browser.", "Rapport ouvert sur GitHub : vérifiez-le puis cliquez sur « Create »/« Submit new issue ».": "Report opened on GitHub: check it, then click “Create” / “Submit new issue”."});
 let LANG = (() => { try { const v = localStorage.getItem('copo.lang'); if (v === 'fr' || v === 'en') return v; } catch { } return /^fr/i.test(navigator.language || 'fr') ? 'fr' : 'en'; })();
 let trRe = null;
 function trBuild() {
@@ -3699,7 +3702,7 @@ function act(a, btn) {
     case 'font': $('#fFont').click(); return;
     case 'fontDir': $('#fFontDir').click(); return;
     case 'ufClear': { const b = $('#ufClear'); if (Date.now() - ufArm > 3000) { ufArm = Date.now(); b.textContent = 'Vider ?'; b.classList.add('armed'); setTimeout(() => { b.textContent = 'Vider'; b.classList.remove('armed'); }, 3000); return; } ufArm = 0; b.textContent = 'Vider'; b.classList.remove('armed'); idbClear().catch(() => { }); UF = UF.filter(u => u.src !== 'idb'); updateUFCount(); if (!$('#fpPop').hidden) fpOpen(true); toast('Dossier de polices vidé (les fichiers sur votre ordinateur ne sont pas touchés).'); return; }
-    case 'save': { const o = JSON.parse(snapState()); const d = {}; for (const im of S.images) if (imgData[im.id]) d[im.id] = imgData[im.id]; if (Object.keys(d).length) o.imgData = d; saveFile('projet-copo.json', JSON.stringify(o), 'Projet COPO'); return; }
+    case 'save': { const o = JSON.parse(snapState()); const d = {}; for (const im of S.images) if (imgData[im.id]) d[im.id] = imgData[im.id]; if (Object.keys(d).length) o.imgData = d; saveFile(projFileName(), JSON.stringify(o), 'Projet COPO'); return; }
     case 'undo': undo(); return;
     case 'redo': redo(); return;
     case 'fit': fit(); return;
@@ -3729,6 +3732,7 @@ function act(a, btn) {
     case 'about': $('#about').hidden = false; return;
     case 'bugOpen': bugOpen('bug'); return;
     case 'ideaOpen': bugOpen('idea'); return;
+    case 'install': if (installEvt) { installEvt.prompt(); installEvt.userChoice.finally(() => { installEvt = null; $('[data-act="install"]').hidden = true; }); } return;
     case 'fbOpen': fbOpen(); return;
     case 'boxOpen': boxOpen(); return;
     case 'boxClose': fwClose('box'); return;
@@ -4406,7 +4410,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.69', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.70', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -4446,7 +4450,7 @@ async function bugSend() {
     shotNote = ok ? T('_(La capture est dans le presse-papiers : cliquez ici puis Ctrl+V pour la coller.)_') : T('_(Glissez ici le fichier « capture-copo.png » qui vient d\'être téléchargé.)_');
   }
   let projNote = '';
-  if ($('#bugProj').checked) { const o = JSON.parse(snapState()); await saveFile('projet-bug-copo.json', JSON.stringify(o), T('Projet COPO')); projNote = T('_(Glissez ici le fichier « projet-bug-copo.json » qui vient d\'être téléchargé.)_'); }
+  if ($('#bugProj').checked) { const o = JSON.parse(snapState()); await saveFile('projet-bug-copo.copo', JSON.stringify(o), T('Projet COPO')); projNote = T('_(Glissez ici le fichier « projet-bug-copo.copo » qui vient d\'être téléchargé.)_'); }
   const sec = (h, v) => '### ' + T(h) + '\n' + (v || '_' + T('(non renseigné)') + '_') + '\n\n';
   const idea = bugMode === 'idea'; let body = idea ? sec('Proposition', what) + sec('À quoi cela servirait', steps) : sec('Que s\'est-il passé ?', what) + sec('Étapes pour le reproduire', steps) + sec('Résultat attendu', exp);
   if (shotNote) body += '### ' + T('Capture') + '\n' + shotNote + '\n\n';
@@ -4457,6 +4461,7 @@ async function bugSend() {
   const w = window.open(url, '_blank', 'noopener'); if (!w && window.claude) showText(T('Signaler un bug'), url, T('Ouvrez ce lien dans votre navigateur.'));
   $('#bug').hidden = true; toast(T(idea ? 'Proposition ouverte sur GitHub : vérifiez-la puis cliquez sur « Create »/« Submit new issue ».' : 'Rapport ouvert sur GitHub : vérifiez-le puis cliquez sur « Create »/« Submit new issue ».'));
 }
+function projFileName() { const n = String((S.meta && S.meta.name) || '').replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim(); return (n || 'projet-copo') + '.copo'; }
 async function saveFile(name, data, title) {
   if (DL) { try { await DL.save({ filename: name, data }); toast('Fichier enregistré.'); return; } catch (e) { if (e && e.code === 'declined') return; if (e && e.code === 'rate_limited') { toast('Un enregistrement est déjà en attente.'); return; } } }
   if (!window.claude) { try { const url = URL.createObjectURL(new Blob([data], { type: 'application/octet-stream' })), a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000); toast('Fichier « ' + name + ' » téléchargé.'); return; } catch (e) { } }
@@ -4468,7 +4473,13 @@ $('#dlgClose').onclick = () => { $('#dlg').hidden = true; };
 $('#dlgCopy').onclick = () => copyText($('#dlgText'));
 function copyText(ta) { const v = ta.value; const fb = () => { ta.focus(); ta.select(); try { document.execCommand('copy'); toast('Copié.'); } catch { toast('Sélection prête : copiez avec Ctrl+C.'); } }; if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(v).then(() => toast('Copié dans le presse-papiers.'), fb); else fb(); }
 function readFile(input, cb, binary) { input.onchange = () => { const f = input.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { try { cb(r.result, f); } catch (e) { toast(e.message || 'Fichier illisible.'); } input.value = ''; }; binary ? r.readAsArrayBuffer(f) : r.readAsText(f); }; }
-readFile($('#fOpen'), txt => { const o = JSON.parse(txt); if (!o.shapes || !o.stock) throw new Error('Ce fichier n’est pas un projet COPO.'); if (o.imgData) { for (const [k, v] of Object.entries(o.imgData)) { imgData[k] = v; IMG.delete(k); idbPutImg(k, v).catch(() => { }); } delete o.imgData; txt = JSON.stringify(o); } S.imgSel = null; hist = []; hi = -1; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; restore(txt); commit(false); S.form = newForm(); renderForm(); fit(); toast('Projet ouvert.'); });
+function openProjectText(txt) { const o = JSON.parse(txt); if (!o.shapes || !o.stock) throw new Error('Ce fichier n’est pas un projet COPO.'); if (o.imgData) { for (const [k, v] of Object.entries(o.imgData)) { imgData[k] = v; IMG.delete(k); idbPutImg(k, v).catch(() => { }); } delete o.imgData; txt = JSON.stringify(o); } S.imgSel = null; hist = []; hi = -1; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; restore(txt); commit(false); S.form = newForm(); renderForm(); fit(); toast('Projet ouvert.'); }
+readFile($('#fOpen'), txt => openProjectText(txt));
+// application installée : un double-clic sur un fichier .copo l'ouvre ici
+if ('launchQueue' in window) launchQueue.setConsumer(async lp => { const h = lp.files && lp.files[0]; if (!h) return; try { openProjectText(await (await h.getFile()).text()); } catch (e) { toast(e.message || 'Fichier illisible.'); } });
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => { });
+let installEvt = null; addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; const b = document.querySelector('[data-act="install"]'); if (b) b.hidden = false; });
+addEventListener('appinstalled', () => { installEvt = null; const b = document.querySelector('[data-act="install"]'); if (b) b.hidden = true; toast(T('COPO est installé : les fichiers .copo s’ouvrent maintenant d’un double-clic.')); });
 readFile($('#fSvg'), (txt, f) => {
   if (/\.dxf$/i.test(f.name) || (!/<svg[\s>]/i.test(txt) && /^\s*0\s*\r?\n\s*SECTION/m.test(txt))) {
     const r = importDXF(txt); commit(); renderSel(); fit(); setTool('select');
@@ -5520,9 +5531,10 @@ function bindImgPanel() {
   cw.addEventListener('drop', e => {
     const f = [...(e.dataTransfer.files || [])]; if (!f.length) return; e.preventDefault();
     const r = cv.getBoundingClientRect(), at = [wx(e.clientX - r.left), wy(e.clientY - r.top)];
+    const pj = f.find(x => /\.(copo|json)$/i.test(x.name)); if (pj) { pj.text().then(t => { try { openProjectText(t); } catch (er) { toast(er.message || 'Fichier illisible.'); } }); return; }
     const im = f.find(x => /^image\//.test(x.type) && !/svg/.test(x.type)), sv = f.find(x => /svg/.test(x.type) || /\.svg$/i.test(x.name));
     if (im) insertImageFile(im, at); else if (sv) sv.text().then(t => { try { const n = importSVG(t); commit(); renderSel(); fit(); toast(n + ' tracé(s) importé(s).'); } catch (er) { toast(er.message); } });
-    else toast('Déposez une image ou un fichier SVG.');
+    else toast('Déposez une image, un fichier SVG ou un projet .copo.');
   });
   $('#fImg').onchange = e => { const f = e.target.files[0]; e.target.value = ''; if (f) insertImageFile(f); };
 }
