@@ -185,7 +185,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.75</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.76</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -323,7 +323,15 @@ footer p{max-width:none}
       <li><strong>Réglages de chaque élément</strong> : centre, largeur, hauteur, angle, <em>épaisseur du relief Z</em> (hauteur entre le point le plus bas et le plus haut), <em>décalage de la base</em>, <em>lissage</em> et <em>combinaison</em> avec les éléments précédents : ajouter, soustraire, garder le plus haut ou le plus bas. « Garder les proportions » fait suivre l’épaisseur Z quand on change la taille.</li>
       <li><strong>Affichage</strong> : le relief s’affiche ombré sous le dessin (case à décocher), et <span class="ui">Voir le relief en 3D</span> le montre dans l’aperçu 3D, à la précision choisie. Le résumé indique la profondeur totale du relief et prévient s’il dépasse l’épaisseur du brut.</li>
     </ul>
-    <p>Les données du relief sont gardées dans le navigateur et enregistrées dans le fichier <code>.copo</code>. L’usinage du relief (ébauche et finition) et les formes créées à partir du dessin (dôme, extrusion, lissage entre rails) arriveront dans les prochaines versions.</p>
+    <p>Les données du relief sont gardées dans le navigateur et enregistrées dans le fichier <code>.copo</code>. Les formes créées à partir du dessin (dôme, extrusion, lissage entre rails) arriveront dans une prochaine version.</p>
+    <h3>Usiner le relief</h3>
+    <p>Dans l’onglet <span class="ui">Parcours</span>, le type <strong>Relief</strong> propose deux opérations :</p>
+    <ul>
+      <li><strong>Ébauche</strong> : balayage par niveaux de Z avec une fraise droite (la plus grosse est proposée), chaque niveau descendant de la profondeur de passe, en laissant une <em>surépaisseur</em> (0,5 mm par défaut) pour la finition. Pas latéral par défaut : 40 % du diamètre.</li>
+      <li><strong>Finition</strong> : balayage parallèle qui suit la surface en tenant compte de la forme réelle de l’outil, sans jamais entamer le relief. Utilisez une fraise hémisphérique ou une fraise conique à bout sphérique (définie par D, R et L). Pas latéral par défaut : 10 % du diamètre ; angle du balayage réglable et <em>seconde passe croisée</em> à 90° possible.</li>
+      <li><strong>Limite</strong> : sélectionnez une ou plusieurs formes fermées avant de calculer pour limiter la zone (le centre de l’outil reste à l’intérieur) ; sans sélection, ce sont les cadres des éléments du relief.</li>
+    </ul>
+    <p>Si le relief change après le calcul, le parcours l’indique en orange : ouvrez-le et cliquez sur <span class="ui">Mettre à jour</span>. Les fichiers de finition sont longs (des dizaines de milliers de lignes), comme dans tout logiciel de sculpture ; l’aperçu 3D rejoue l’ébauche puis la finition.</p>
 
     <h2 id="fr-parcours" class="pb">Parcours d'outils</h2>
     <figure><img src="img/fr-03-parcours.webp" alt="Formulaire de modification du parcours de détourage extérieur, avec ponts d'attache." width="1800" height="1125" loading="lazy"><figcaption>Cliquez un parcours dans la liste pour le modifier : son tracé est mis en évidence sur le plan. Le texte sous le formulaire résume ce que fera la machine.</figcaption></figure>
@@ -490,7 +498,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.75 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.76 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -525,7 +533,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.75</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.76</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -663,7 +671,15 @@ M30</pre>
       <li><strong>Settings of each item</strong>: center, width, height, angle, <em>relief height Z</em> (from the lowest to the highest point), <em>base offset</em>, <em>smoothing</em> and how it <em>combines</em> with the items before it: add, subtract, keep highest or keep lowest. “Keep proportions” makes the Z height follow size changes.</li>
       <li><strong>Display</strong>: the relief is shown shaded under the drawing (box to untick), and <span class="ui">View the relief in 3D</span> shows it in the 3D preview at the chosen resolution. The summary gives the total relief depth and warns if it exceeds the stock thickness.</li>
     </ul>
-    <p>Relief data is kept in the browser and saved in the <code>.copo</code> file. Relief machining (roughing and finishing) and shapes built from the drawing (dome, extrusion, two-rail sweep) will come in the next versions.</p>
+    <p>Relief data is kept in the browser and saved in the <code>.copo</code> file. Shapes built from the drawing (dome, extrusion, two-rail sweep) will come in a later version.</p>
+    <h3>Machining the relief</h3>
+    <p>In the <span class="ui">Toolpaths</span> tab, the <strong>Relief</strong> type offers two operations:</p>
+    <ul>
+      <li><strong>Roughing</strong>: raster by Z levels with a flat end mill (the largest is suggested), each level stepping down by the pass depth, leaving an <em>allowance</em> (0.5 mm by default) for finishing. Default stepover: 40% of the diameter.</li>
+      <li><strong>Finishing</strong>: parallel raster following the surface with the real tool shape, never gouging the relief. Use a ball-nose or a tapered ball-nose (defined by D, R and L). Default stepover: 10% of the diameter; adjustable raster angle and an optional <em>second cross pass</em> at 90°.</li>
+      <li><strong>Boundary</strong>: select one or more closed shapes before calculating to limit the area (the tool center stays inside); with no selection, the relief item frames are used.</li>
+    </ul>
+    <p>If the relief changes after calculation, the toolpath says so in orange: open it and click <span class="ui">Update</span>. Finishing files are long (tens of thousands of lines), as in any carving software; the 3D preview replays roughing then finishing.</p>
 
     <h2 id="en-toolpaths" class="pb">Toolpaths</h2>
     <figure><img src="img/en-03-parcours.webp" alt="Edit form of the outside cut-out toolpath, with tabs." width="1800" height="1125" loading="lazy"><figcaption>Click a toolpath in the list to edit it: its path is highlighted on the canvas. The text under the form sums up what the machine will do.</figcaption></figure>
@@ -830,7 +846,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.75 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.76 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 

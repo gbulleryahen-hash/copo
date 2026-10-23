@@ -28,7 +28,7 @@
   --bg:#262626; --panel:#323232; --raised:#3d3d3d; --ink:#e8e8e8; --muted:#a8a8a8; --line:#4a4a4a;
   --accent:#4f7cff; --accent-ink:#ffffff; --accent-soft:#34406a;
   --canvas:#535353; --grid:#5a5a5a; --grid2:#626262; --stock:#f1ece2; --stock-edge:#9a8a6a; --draw:#161616; --draw-muted:#6b6b6b;
-  --pf:#e2560f; --pk:#1f6fe0; --vc:#9b3ad1; --dr:#12935a; --th:#c2410c; --danger:#ff6b5b; --warn:#f0b43c; --guide:#00a8d8;
+  --pf:#e2560f; --pk:#1f6fe0; --vc:#9b3ad1; --dr:#12935a; --th:#c2410c; --rl:#0f9b8e; --danger:#ff6b5b; --warn:#f0b43c; --guide:#00a8d8;
   --f-ui:"Source Sans 3","COPO Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-head:"Source Sans 3","COPO Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"JetBrains Mono","COPO Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
@@ -753,7 +753,7 @@ label.inl input{width:70px}
       </div>
       <div class="pane" data-pane="parcours" hidden>
         <section class="blk"><h3>Nouveau parcours</h3>
-          <div class="seg ico tpnew" id="tpNew"><button data-newtp="profile">Profil</button><button data-newtp="pocket">Poche</button><button data-newtp="vcarve">V-carving</button><button data-newtp="drill">Perçage</button><button data-newtp="thread">Filetage</button></div>
+          <div class="seg ico tpnew" id="tpNew"><button data-newtp="profile">Profil</button><button data-newtp="pocket">Poche</button><button data-newtp="vcarve">V-carving</button><button data-newtp="drill">Perçage</button><button data-newtp="thread">Filetage</button><button data-newtp="relief">Relief</button></div>
           <p class="hint">Sélectionnez les formes sur le plan, puis choisissez l'opération : ses réglages s'ouvrent dans une fenêtre que vous pouvez déplacer.</p>
         </section>
         <section class="blk"><h3>Outils</h3>
@@ -784,7 +784,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.75</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.76</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -845,7 +845,7 @@ label.inl input{width:70px}
 <div class="fwin" id="tpWin" hidden role="dialog" aria-labelledby="tpFormTitle">
   <div class="fwin-head"><span class="grip" aria-hidden="true"></span><b id="tpFormTitle">Nouveau parcours</b><button class="iconbtn fwin-x" data-act="tpCancel" title="Fermer" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
         <section class="fwin-body" id="tpForm">
-          <div class="seg" data-f="type"><button value="profile">Profil</button><button value="pocket">Poche</button><button value="vcarve">V-carving</button><button value="drill">Perçage</button><button value="thread">Filetage</button></div>
+          <div class="seg" data-f="type"><button value="profile">Profil</button><button value="pocket">Poche</button><button value="vcarve">V-carving</button><button value="drill">Perçage</button><button value="thread">Filetage</button><button value="relief">Relief</button></div>
           <div class="g2">
             <label>Nom<input type="text" data-f="name" placeholder="automatique"></label>
             <label>Face<select data-f="face"><option value="auto">Selon le calque</option><option value="1">Face 1 (dessus)</option><option value="2">Face 2 (dessous)</option></select></label>
@@ -853,7 +853,7 @@ label.inl input{width:70px}
           </div>
           <div class="seg" data-f="side" data-show="profile"><button value="out">Extérieur / droite</button><button value="in">Intérieur / gauche</button><button value="on">Sur la ligne</button></div>
           <label data-show="profile" id="openSideRow">Lignes ouvertes<select data-f="openSide"><option value="on">Sur la ligne</option><option value="left">À gauche du tracé</option><option value="right">À droite du tracé</option></select></label>
-          <div class="figrow"><span class="ill" data-ill="depth"></span><div class="g2">
+          <div class="figrow" data-show="profile pocket vcarve drill thread"><span class="ill" data-ill="depth"></span><div class="g2">
             <label>Prof. départ (D) (mm)<input data-u="len" type="number" data-f="vstart" step="0.1" min="0" placeholder="0"></label>
             <label><span id="depthLbl">Prof. coupe (C) (mm)</span><input data-u="len" type="number" data-f="depth" step="0.1" min="0"></label>
             <label data-show="profile pocket">Profondeur de passe (mm)<input data-u="len" type="number" data-f="pass" step="0.1" min="0.05" placeholder="celle de l'outil"></label>
@@ -873,6 +873,17 @@ label.inl input{width:70px}
             <label id="drillPitchRow">Descente par tour en hélice (mm)<input data-u="len" type="number" data-f="helixPitch" step="0.25" min="0.1"></label>
             <label>Débourrage (mm, 0 = sans)<input data-u="len" type="number" data-f="peck" step="0.5" min="0"></label>
             <label>Temporisation au fond (s, 0 = sans)<input type="number" data-f="dwell" step="0.1" min="0"></label>
+          </div>
+          <div data-show="relief" class="thbox">
+            <div class="seg" data-f="rlOp"><button value="rough">Ébauche</button><button value="finish">Finition</button></div>
+            <div class="g2">
+              <label>Pas latéral (% du diamètre)<input type="number" data-f="rlStep" step="1" min="2" max="95"></label>
+              <label>Angle du balayage (°)<input type="number" data-f="rlAng" step="15"></label>
+              <label id="rlPassRow">Profondeur de passe (mm)<input data-u="len" type="number" data-f="pass" step="0.1" min="0.05" placeholder="celle de l'outil"></label>
+              <label id="rlAllowRow">Surépaisseur (mm)<input data-u="len" type="number" data-f="rlAllow" step="0.1" min="0"></label>
+            </div>
+            <label class="chk" id="rlCrossRow"><input type="checkbox" data-f="rlCross"> Seconde passe croisée (à 90°)</label>
+            <p class="hint" id="rlTpInfo"></p>
           </div>
           <div data-show="thread" class="thbox">
             <div class="seg" data-f="thSide"><button value="in">Intérieur (taraudage)</button><button value="out">Extérieur (vis)</button></div>
@@ -1132,6 +1143,7 @@ Object.assign(I18N_EN, {"Filetage": "Threading", "Fraise à fileter": "Thread mi
 Object.assign(I18N_EN, {"Longueur filetée (C) (mm)": "Thread length (C) (mm)"});
 Object.assign(I18N_EN, {"Dessous": "Bottom", "Avant": "Front", "Arrière": "Back", "Droite": "Right", "Gauche": "Left", "Cube d’orientation : cliquez une face ou un coin": "View cube: click a face or a corner"});
 Object.assign(I18N_EN, {"Relief": "Relief", "Importer un relief": "Import a relief", "Niveaux de gris": "Grayscale", "PNG, JPG : le clair est en haut": "PNG, JPG: light is high", "Modèle 3D": "3D model", "STL : vu de dessus, à l’échelle": "STL: seen from above, to scale", "Le relief se creuse dans le brut depuis le dessus : son point le plus haut affleure la surface. Les éléments se combinent dans l’ordre de la liste.": "The relief is carved into the stock from the top: its highest point is flush with the surface. Items combine in list order.", "Éléments du relief": "Relief items", "Combinaison": "Combine", "Garder le plus haut": "Keep highest", "Garder le plus bas": "Keep lowest", "Épaisseur du relief Z": "Relief height Z", "Décalage de la base Z": "Base offset Z", "Haut du modèle": "Model top", "Garder les proportions (Z suit la taille)": "Keep proportions (Z follows size)", "Inverser (le foncé est en haut)": "Invert (dark is high)", "Afficher le relief sur le plan": "Show the relief on the workspace", "Précision de l’aperçu 3D": "3D preview resolution", "0,5 mm (rapide)": "0.5 mm (fast)", "0,3 mm": "0.3 mm", "0,2 mm": "0.2 mm", "0,12 mm (fine)": "0.12 mm (fine)", "Voir le relief en 3D": "View the relief in 3D", "Aucun relief : importez une image en niveaux de gris ou un fichier STL.": "No relief: import a grayscale image or an STL file.", "{n} élément(s) · profondeur du relief {d} mm (brut {t} mm).": "{n} item(s) · relief depth {d} mm (stock {t} mm).", "Le relief dépasse l’épaisseur du brut : il sera coupé au fond.": "The relief is deeper than the stock: it will be cut off at the bottom.", "Relief importé : réglez sa taille et son épaisseur Z.": "Relief imported: set its size and Z height.", "Image illisible.": "Unreadable image.", "Fichier STL illisible.": "Unreadable STL file.", "Lecture du STL…": "Reading the STL…", "STL importé : {n} triangles, {w} × {h} × {z} mm{k}.": "STL imported: {n} triangles, {w} × {h} × {z} mm{k}.", "(réduit à {p} % pour tenir dans le brut)": "(scaled to {p}% to fit the stock)", "Réimportez le STL pour changer son orientation (le maillage n’est plus en mémoire).": "Re-import the STL to change its orientation (the mesh is no longer in memory).", "Modèle STL {w} × {h} × {z} mm, {n} triangles.": "STL model {w} × {h} × {z} mm, {n} triangles.", "Grille source {a} × {b} points ({p} mm par point).": "Source grid {a} × {b} points ({p} mm per point).", "Données absentes : réimportez le fichier.": "Data missing: re-import the file.", "Aucun élément. Importez une image en niveaux de gris ou un modèle STL.": "No items. Import a grayscale image or an STL model.", "Aucun relief à afficher.": "No relief to show."});
+Object.assign(I18N_EN, {"Ébauche": "Roughing", "Finition": "Finishing", "Pas latéral (% du diamètre)": "Stepover (% of diameter)", "Seconde passe croisée (à 90°)": "Second cross pass (at 90°)", "Ébauche relief": "Relief roughing", "Finition relief": "Relief finishing", "Aucun relief : importez-le dans l’onglet Relief.": "No relief: import it in the Relief tab.", "Limite : {n} forme(s) fermée(s) sélectionnée(s), centre de l’outil à l’intérieur.": "Boundary: {n} selected closed shape(s), tool center inside.", "Limite : cadres des éléments du relief (sélectionnez des formes fermées pour limiter la zone).": "Boundary: relief item frames (select closed shapes to limit the area).", "Finition du relief : balayage parallèle qui suit la surface, avec la forme réelle de l’outil (fraise hémisphérique ou conique à bout sphérique de préférence). Un pas latéral de 8 à 12 % donne une surface lisse.": "Relief finishing: parallel raster following the surface, using the real tool shape (preferably a ball-nose or tapered ball-nose). A stepover of 8 to 12% gives a smooth surface.", "Ébauche du relief : balayage par niveaux de Z avec une fraise droite, en laissant la surépaisseur pour la finition. Chaque niveau descend de la profondeur de passe.": "Relief roughing: raster by Z levels with a flat end mill, leaving the allowance for finishing. Each level steps down by the pass depth.", "Relief modifié depuis le calcul : mettez à jour le parcours.": "Relief changed since calculation: update the toolpath.", "Aucun relief : importez une image en niveaux de gris ou un STL dans l’onglet Relief.": "No relief: import a grayscale image or an STL in the Relief tab.", "Rien à usiner dans la limite choisie.": "Nothing to machine inside the chosen boundary.", "Le relief dépasse l’épaisseur du brut : il est coupé au fond.": "The relief is deeper than the stock: it is cut off at the bottom.", "Finition avec une fraise droite : préférez une fraise hémisphérique ou conique à bout sphérique pour une surface lisse.": "Finishing with a flat end mill: prefer a ball-nose or tapered ball-nose for a smooth surface.", "finition": "finishing", "ébauche": "roughing", "lignes": "lines", "croisées": "crossed", "niveaux": "levels", "pas latéral": "stepover", "surépaisseur": "allowance"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -1723,6 +1735,67 @@ function buildVcarve(p, tool, shapes, M) {
   return { moves: mb.m, warns, info: 'axe médian' + (S0 > 0 ? ' · départ ' + S0.toFixed(2).replace('.', ',') + ' mm' : '') + ' · prof. max ' + (-deepest).toFixed(2).replace('.', ',') + ' mm' };
 }
 
+// ---------- USINAGE DU RELIEF (ébauche par niveaux, finition en balayage) ----------
+// surface compensée : pour chaque nœud, Z le plus bas de la pointe sans entamer le relief (max sur l'empreinte de l'outil)
+function buildRelief(p, tool, shapes, M) {
+  if (!S.relief.items.some(i => i.visible && relGrid[i.id])) throw new Error(tr('Aucun relief : importez une image en niveaux de gris ou un STL dans l’onglet Relief.'));
+  if (!tool) throw new Error("L'outil de ce parcours n'existe plus.");
+  const fin = p.rlOp === 'finish', st = S.stock, D = tool.dia, step = Math.max(0.02, D * (+p.rlStep || (fin ? 10 : 40)) / 100);
+  let c = Math.max(0.05, Math.min(0.3, D / 16, step / 2)); while ((st.w / c + 1) * (st.h / c + 1) > 7e6) c *= 1.25;
+  const R = reliefCompose(c), { nx, ny, cx, cy } = R, H = R.H, top = R.max; for (let i = 0; i < H.length; i++) H[i] -= top;
+  const K = toolKernel(tool, cx, cy), memo = new Float32Array(nx * ny).fill(NaN), floor = -st.t, warns = [];
+  const hc = (i, j) => { const q = j * nx + i; let v = memo[q]; if (v === v) return v; v = -Infinity; const { di, dj, dz, n } = K; for (let k = 0; k < n; k++) { const a = i + di[k], b = j + dj[k]; if (a < 0 || b < 0 || a >= nx || b >= ny) continue; const h = H[b * nx + a] - dz[k]; if (h > v) v = h; } if (v === -Infinity) v = floor; memo[q] = v; return v; };
+  const zAt = (x, y) => { const X = Math.max(0, Math.min(nx - 1.000001, x / cx)), Y = Math.max(0, Math.min(ny - 1.000001, y / cy)), i = Math.floor(X), j = Math.floor(Y), a = X - i, b = Y - j; return (hc(i, j) * (1 - a) + hc(i + 1, j) * a) * (1 - b) + (hc(i, j + 1) * (1 - a) + hc(i + 1, j + 1) * a) * b; };
+  // limite : formes fermées sélectionnées (pair-impair) ou cadres des éléments (réunion)
+  const loops = shapes.filter(sh => sh.closed && sh.pts.length > 2).map(sh => sh.pts), rects = loops.length ? null : S.relief.items.filter(i => i.visible && relGrid[i.id]).map(i => imgFrame(i).corners);
+  const spans = (A, B) => { // intervalles [t0,t1] de la ligne A->B à l'intérieur de la limite
+    const L = Math.hypot(B[0] - A[0], B[1] - A[1]), cut = poly => { const ts = []; for (let k = 0; k < poly.length; k++) { const P = poly[k], Q = poly[(k + 1) % poly.length], d1x = B[0] - A[0], d1y = B[1] - A[1], d2x = Q[0] - P[0], d2y = Q[1] - P[1], den = d1x * d2y - d1y * d2x; if (Math.abs(den) < 1e-12) continue; const t = ((P[0] - A[0]) * d2y - (P[1] - A[1]) * d2x) / den, u = ((P[0] - A[0]) * d1y - (P[1] - A[1]) * d1x) / den; if (u >= 0 && u < 1 && t > -1e-9 && t < 1 + 1e-9) ts.push(t * L); } return ts.sort((a, b) => a - b); };
+    let out = [];
+    if (loops.length) { const ts = loops.flatMap(cut).sort((a, b) => a - b); for (let k = 0; k + 1 < ts.length; k += 2) out.push([ts[k], ts[k + 1]]); }
+    else { for (const r of rects) { const ts = cut(r); for (let k = 0; k + 1 < ts.length; k += 2) out.push([ts[k], ts[k + 1]]); } out.sort((a, b) => a[0] - b[0]); const m = []; for (const iv of out) { if (m.length && iv[0] <= m[m.length - 1][1]) m[m.length - 1][1] = Math.max(m[m.length - 1][1], iv[1]); else m.push([...iv]); } out = m; }
+    return out.filter(iv => iv[1] - iv[0] > 1e-6);
+  };
+  // lignes de balayage à l'angle donné, couvrant le brut
+  const lines = ang => { const a = ang * Math.PI / 180, u = [Math.cos(a), Math.sin(a)], v = [-u[1], u[0]], cs = [[0, 0], [st.w, 0], [st.w, st.h], [0, st.h]], pu = cs.map(q => q[0] * u[0] + q[1] * u[1]), pv = cs.map(q => q[0] * v[0] + q[1] * v[1]), u0 = Math.min(...pu) - 1, u1 = Math.max(...pu) + 1, v0 = Math.min(...pv), v1 = Math.max(...pv), L = [];
+    for (let w = v0 + step / 2; w < v1; w += step) { const A = [u[0] * u0 + v[0] * w, u[1] * u0 + v[1] * w], B = [u[0] * u1 + v[0] * w, u[1] * u1 + v[1] * w], sp = spans(A, B); if (sp.length) L.push({ A, B, u, sp }); } return L; };
+  // échantillonnage d'un intervalle (pas c) -> points [x, y, zSurface]
+  const sample = (ln, t0, t1) => { const n = Math.max(1, Math.ceil(Math.abs(t1 - t0) / c)), P = []; for (let k = 0; k <= n; k++) { const t = t0 + (t1 - t0) * k / n, x = ln.A[0] + ln.u[0] * t, y = ln.A[1] + ln.u[1] * t; P.push([x, y, Math.max(floor, Math.min(0, zAt(x, y)))]); } return P; };
+  // simplification (Douglas-Peucker en 3D, tolérance 0,005 mm)
+  const simp = P => { if (P.length < 3) return P; const keep = new Uint8Array(P.length); keep[0] = keep[P.length - 1] = 1; const st2 = [[0, P.length - 1]]; while (st2.length) { const [a, b] = st2.pop(); let md = 0, mi = -1; const A = P[a], B = P[b], d = [B[0] - A[0], B[1] - A[1], B[2] - A[2]], dd = d[0] * d[0] + d[1] * d[1] + d[2] * d[2] || 1e-12; for (let i = a + 1; i < b; i++) { const q = P[i], t = Math.max(0, Math.min(1, ((q[0] - A[0]) * d[0] + (q[1] - A[1]) * d[1] + (q[2] - A[2]) * d[2]) / dd)), e = Math.hypot(q[0] - A[0] - d[0] * t, q[1] - A[1] - d[1] * t, q[2] - A[2] - d[2] * t); if (e > md) { md = e; mi = i; } } if (md > 0.005) { keep[mi] = 1; st2.push([a, mi], [mi, b]); } } return P.filter((q, i) => keep[i]); };
+  const mb = new MB(M), feed = tool.feed, plunge = tool.plunge; let nl = 0, nlev = 0;
+  if (fin) {
+    for (const ang of p.rlCross ? [+p.rlAng || 0, (+p.rlAng || 0) + 90] : [+p.rlAng || 0]) {
+      const L = lines(ang); let last = null;
+      L.forEach((ln, k) => { const sp = k % 2 ? ln.sp.slice().reverse().map(iv => [iv[1], iv[0]]) : ln.sp;
+        for (const [t0, t1] of sp) { const P = simp(sample(ln, t0, t1)); nl++; const f = P[0];
+          if (last && Math.hypot(f[0] - last[0], f[1] - last[1]) <= step * 1.6) { const n = Math.max(1, Math.ceil(Math.hypot(f[0] - last[0], f[1] - last[1]) / c)); for (let i = 1; i <= n; i++) { const x = last[0] + (f[0] - last[0]) * i / n, y = last[1] + (f[1] - last[1]) * i / n; mb.g1(x, y, Math.max(floor, Math.min(0, zAt(x, y))), feed); } }
+          else mb.approach(f[0], f[1], f[2], plunge);
+          for (let i = 1; i < P.length; i++) mb.g1(P[i][0], P[i][1], P[i][2], feed); last = P[P.length - 1]; } });
+      mb.up(M.clearZ); last = null;
+    }
+  } else {
+    const allow = Math.max(0, +p.rlAllow || 0), pass = Math.max(0.05, +p.pass > 0 ? +p.pass : (+tool.pass || D / 2)), L = lines(+p.rlAng || 0);
+    const rows = L.map((ln, k) => (k % 2 ? ln.sp.slice().reverse().map(iv => [iv[1], iv[0]]) : ln.sp).map(([t0, t1]) => sample(ln, t0, t1).map(q => [q[0], q[1], Math.min(0, q[2] + allow)])));
+    let zmin = 0; for (const r of rows) for (const P of r) for (const q of P) if (q[2] < zmin) zmin = q[2];
+    for (let z = -pass; z > zmin - pass + 1e-6; z -= pass) {
+      const zk = Math.max(z, zmin), zPrev = zk + pass; nlev++;
+      for (const r of rows) for (const P of r) {
+        // tronçons où la surface (plus surépaisseur) est sous le niveau ; on suit la surface sur les petits écarts
+        let run = null; const flush = () => { if (!run || run.length < 2) { run = null; return; } nl++; const f = run[0]; mb.approach(f[0], f[1], Math.min(0, zPrev), plunge); mb.g1(f[0], f[1], f[2], plunge); for (let i = 1; i < run.length; i++) mb.g1(run[i][0], run[i][1], run[i][2], feed); mb.up(M.clearZ); run = null; };
+        let gap = 0, pend = [];
+        for (const q of P) { const z2 = Math.max(zk, q[2]); if (q[2] < zk - 1e-6) { if (run && pend.length) run.push(...pend); pend = []; gap = 0; (run = run || []).push([q[0], q[1], z2]); } else if (run) { pend.push([q[0], q[1], z2]); gap += c; if (gap > D) { flush(); pend = []; gap = 0; } } }
+        flush();
+      }
+      if (zk <= zmin) break;
+    }
+  }
+  mb.up(M.safeZ);
+  if (!mb.m.length) throw new Error(tr('Rien à usiner dans la limite choisie.'));
+  if (R.max - R.min > st.t) warns.push(tr('Le relief dépasse l’épaisseur du brut : il est coupé au fond.'));
+  if (fin && tool.type === 'flat') warns.push(tr('Finition avec une fraise droite : préférez une fraise hémisphérique ou conique à bout sphérique pour une surface lisse.'));
+  return { moves: mb.m, warns, info: (fin ? tr('finition') + ' · ' + nl + ' ' + tr('lignes') + (p.rlCross ? ' ' + tr('croisées') : '') : tr('ébauche') + ' · ' + nlev + ' ' + tr('niveaux')) + ' · ' + tr('pas latéral') + ' ' + fr(step, 2) + ' mm' };
+}
+
 // ---------- FILETAGE (fraise à fileter monodent, interpolation hélicoïdale) ----------
 // filet ISO à 60° : intérieur jusqu'au Ø nominal, extérieur jusqu'au Ø de fond d = D − 1,2269·P ; toujours en avalant :
 // intérieur = G3 (vers le haut à droite, vers le bas à gauche), extérieur = G2 (vers le bas à droite, vers le haut à gauche)
@@ -1905,7 +1978,7 @@ function fitArcs(mv, tol) {
     while (j + 1 < mv.length && mv[j + 1].g === 1 && mv[j + 1].f === m.f) {
       j++; if (j - i + 2 < 5) continue;
       const pts = [[p.x, p.y, p.z]]; for (let q = i; q <= j; q++) pts.push([mv[q].x, mv[q].y, mv[q].z]);
-      const f = arcFit(pts, tol); if (f) { best = j; bc = f; } else if (best >= 0 && j - best > 2) break;
+      const f = arcFit(pts, tol); if (f) { best = j; bc = f; } else if (best >= 0 ? j - best > 2 : j - i > 6) break;
     }
     if (best >= 0) { const e = mv[best]; out.push({ g: bc.dir, x: e.x, y: e.y, z: e.z, f: m.f, i: bc.cx - p.x, j: bc.cy - p.y }); i = best + 1; }
     else { out.push(m); i++; }
@@ -2344,7 +2417,7 @@ const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAl
 const uid = () => Math.random().toString(36).slice(2, 9);
 const fr = (v, d = 2) => (Math.round(v * 10 ** d) / 10 ** d).toFixed(d).replace('.', ',');
 const clone = o => JSON.parse(JSON.stringify(o));
-const TYPE_LBL = { profile: 'Profil', pocket: 'Poche', vcarve: 'V-carving', drill: 'Perçage', thread: 'Filetage' };
+const TYPE_LBL = { profile: 'Profil', pocket: 'Poche', vcarve: 'V-carving', drill: 'Perçage', thread: 'Filetage', relief: 'Relief' };
 const SIDE_LBL = { out: 'extérieur', in: 'intérieur', on: 'sur la ligne' };
 const TOOL_LBL = { flat: 'Fraise droite', ball: 'Hémisphérique', v: 'Fraise en V', drill: 'Foret', thread: 'Fraise à fileter' };
 const LS = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch { } } };
@@ -2372,7 +2445,7 @@ const S = {
   view: { s: 2, ox: 0, oy: 0 },
   form: null, editTp: null, activeTp: null, toolSel: 't2', font: null, ne: null, measure: null,
 };
-const newForm = () => ({ type: 'profile', name: '', vstart: 0, toolId: (S.tools.find(t => t.type === 'flat' || t.type === 'ball') || S.tools[0] || {}).id, side: 'out', depth: 6, pass: '', allow: 0.2, finish: 'last', dir: 'climb', entry: 'rampzz', rampLen: 20, arcR: 5, vstep: 0.2, peck: 0, dwell: 0, openSide: 'on', face: 'auto', tabs: false, tabN: 4, tabL: 8, tabH: 2, tabShape: 'rect', tabMode: 'auto', tabPts: null, strategy: 'rings', rasterAng: 0, rest: false, restTool: '', helixPitch: 1, helixHoles: true, thSide: 'in', thPitch: 1.25, thD: 0, thHand: 'R', thPasses: 2 });
+const newForm = () => ({ type: 'profile', name: '', vstart: 0, toolId: (S.tools.find(t => t.type === 'flat' || t.type === 'ball') || S.tools[0] || {}).id, side: 'out', depth: 6, pass: '', allow: 0.2, finish: 'last', dir: 'climb', entry: 'rampzz', rampLen: 20, arcR: 5, vstep: 0.2, peck: 0, dwell: 0, openSide: 'on', face: 'auto', tabs: false, tabN: 4, tabL: 8, tabH: 2, tabShape: 'rect', tabMode: 'auto', tabPts: null, strategy: 'rings', rasterAng: 0, rest: false, restTool: '', helixPitch: 1, helixHoles: true, thSide: 'in', thPitch: 1.25, thD: 0, thHand: 'R', thPasses: 2, rlOp: 'rough', rlStep: 40, rlAng: 0, rlAllow: 0.5, rlCross: false });
 
 // ---------- calques et formes ----------
 const layerOf = s => S.layers.find(l => l.id === s.layer) || S.layers[0];
@@ -2420,7 +2493,7 @@ function draw() { if (drawQueued) return; drawQueued = true; requestAnimationFra
 function pathOf(pts, closed) { ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(sx(p[0]), sy(p[1])) : ctx.moveTo(sx(p[0]), sy(p[1]))); if (closed) ctx.closePath(); }
 function gridSteps() { if (UNIT.len === 'in') { const st = [1 / 64, 1 / 32, 1 / 16, 1 / 8, 1 / 4, 1 / 2, 1, 2, 6, 12, 24, 48, 120].map(x => x * 25.4), g = st.find(v => v * S.view.s >= 9) || st[st.length - 1]; return [g, g < 25.4 ? (25.4 / g <= 16 ? 25.4 : g * 4) : g < 304.8 ? 304.8 : g * 4]; } const steps = [0.5, 1, 5, 10, 50, 100, 500]; const g = steps.find(s => s * S.view.s >= 9) || 500; return [g, g === 0.5 ? 1 : String(g)[0] === '5' ? g * 2 : g * 5]; }
 function render() {
-  const C = { dr: tok('--dr'), draw: tok('--draw'), drawMuted: tok('--draw-muted'), canvas: tok('--canvas'), grid: tok('--grid'), grid2: tok('--grid2'), stock: tok('--stock'), edge: tok('--stock-edge'), ink: tok('--ink'), muted: tok('--muted'), acc: tok('--accent'), pf: tok('--pf'), pk: tok('--pk'), vc: tok('--vc'), th: tok('--th'), danger: tok('--danger'), panel: tok('--panel'), line: tok('--line'), guide: tok('--guide'), mono: tok('--f-mono') };
+  const C = { dr: tok('--dr'), draw: tok('--draw'), drawMuted: tok('--draw-muted'), canvas: tok('--canvas'), grid: tok('--grid'), grid2: tok('--grid2'), stock: tok('--stock'), edge: tok('--stock-edge'), ink: tok('--ink'), muted: tok('--muted'), acc: tok('--accent'), pf: tok('--pf'), pk: tok('--pk'), vc: tok('--vc'), th: tok('--th'), rl: tok('--rl'), danger: tok('--danger'), panel: tok('--panel'), line: tok('--line'), guide: tok('--guide'), mono: tok('--f-mono') };
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.fillStyle = C.canvas; ctx.fillRect(0, 0, W, H);
   const [g, G] = gridSteps(), x0 = wx(0), x1 = wx(W), y0 = wy(H), y1 = wy(0);
   const st = S.stock; ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = 14; ctx.shadowOffsetY = 3; ctx.fillStyle = C.stock; ctx.fillRect(sx(0), sy(st.h), st.w * S.view.s, st.h * S.view.s); ctx.restore();
@@ -2440,7 +2513,7 @@ function render() {
   ctx.stroke(); ctx.setLineDash([]);
   // parcours
   const tpMode = !$('#tpWin').hidden;
-  if (S.ui.showTP) for (const tp of S.tps) { if (!tp.visible || !tp.moves) continue; TPA = tpMode && tp.id !== S.editTp ? 0.15 : 1; ctx.globalAlpha = TPA; drawTP(tp, { profile: C.pf, pocket: C.pk, vcarve: C.vc, drill: C.dr, thread: C.th }[tp.type], tp.id === S.activeTp); ctx.globalAlpha = 1; TPA = 1; }
+  if (S.ui.showTP) for (const tp of S.tps) { if (!tp.visible || !tp.moves) continue; TPA = tpMode && tp.id !== S.editTp ? 0.15 : 1; ctx.globalAlpha = TPA; drawTP(tp, { profile: C.pf, pocket: C.pk, vcarve: C.vc, drill: C.dr, thread: C.th, relief: C.rl }[tp.type], tp.id === S.activeTp); ctx.globalAlpha = 1; TPA = 1; }
   // formes
   for (const s of S.shapes) {
     if (!shown(s)) continue; const sel = S.sel.has(s.id), lk = layerOf(s).locked;
@@ -2601,8 +2674,8 @@ function computeTP(tp) {
   try {
     if (!window.ClipperLib) throw new Error('Bibliothèque de calcul absente.');
     if (!tool) throw new Error("L'outil de ce parcours n'existe plus.");
-    if (!shapes.length) throw new Error('Les formes de ce parcours ont été supprimées.');
-    const fn = { profile: buildProfile, pocket: buildPocket, vcarve: buildVcarve, drill: buildDrill, thread: buildThread }[tp.type];
+    if (!shapes.length && (tp.type !== 'relief' || tp.shapeIds.length)) throw new Error('Les formes de ce parcours ont été supprimées.');
+    const fn = { profile: buildProfile, pocket: buildPocket, vcarve: buildVcarve, drill: buildDrill, thread: buildThread, relief: buildRelief }[tp.type];
     const f2 = tp.face === 2, sh = f2 ? shapes.map(sp => ({ ...sp, pts: sp.pts.map(q => flipPt(q)) })) : shapes;
     let pp = f2 && tp.p.openSide && tp.p.openSide !== 'on' ? { ...tp.p, openSide: tp.p.openSide === 'left' ? 'right' : 'left' } : tp.p; if (f2) pp = { ...pp, f2: true };
     if (f2 && Array.isArray(pp.tabPts)) pp = { ...pp, tabPts: pp.tabPts.map(q => flipPt(q)) };
@@ -2610,7 +2683,7 @@ function computeTP(tp) {
     const z0 = Math.max(0, +tp.p.vstart || 0); if (z0 > 0) pp = { ...pp, vstart: 0 };
     const r = fn(pp, tool, sh, S.machine);
     if (z0 > 0) { const cz = S.machine.clearZ - 1e-9; r.moves = r.moves.map(m => typeof m.z === 'number' && m.z < cz ? { ...m, z: m.z - z0 } : m); r.info = (r.info ? r.info + ' · ' : '') + trf('départ à {d} mm', { d: LANG === 'fr' ? fr(z0, 2) : z0.toFixed(2) }); }
-    tp.moves = r.moves; tp.warns = r.warns; tp.info = r.info;
+    tp.moves = r.moves; tp.warns = r.warns; tp.info = r.info; if (tp.type === 'relief') tp.relVer = S.relief.ver || 0;
     tp.dmoves = f2 ? r.moves.map(m => { const q = flipPt([m.x, m.y]); return { ...m, x: q[0], y: q[1] }; }) : null;
     tp.loops = r.loops ? (f2 ? r.loops.map(l => l.map(q => flipPt(q))) : r.loops) : null;
     tp.holes = r.holes ? (f2 ? r.holes.map(q => flipPt(q)) : r.holes) : null;
@@ -3979,6 +4052,7 @@ const ICO = {
   type_pocket: SVG24('<rect class="sm" x="3.5" y="3.5" width="17" height="17" rx="1"/><rect class="sp" x="7" y="7" width="10" height="10"/><path class="sp" d="M10.5 10.5h3v3h-3z"/>'),
   type_vcarve: SVG24('<path class="sm" d="M2 7h6l4 11 4-11h6"/><path class="sp" d="M12 18V3"/>'),
   type_drill: SVG24('<circle class="sm" cx="7.5" cy="12" r="3.5"/><circle class="sm" cx="16.5" cy="12" r="3.5"/><circle class="dt" cx="7.5" cy="12" r="1"/><circle class="dt" cx="16.5" cy="12" r="1"/>'),
+  type_relief: SVG24('<path class="sm" d="M3 18c3-1 4-9 7-9s3 5 5 5 3-4 6-4"/><path class="sp" d="M3 21h18"/>'),
   type_thread: SVG24('<circle class="sm" cx="12" cy="12" r="8"/><path class="sp" d="M12 6.5a5.5 5.5 0 1 1-5.4 6.6M12 9.5a2.5 2.5 0 1 1-2.4 3.2"/>'),
   side_out: SVG24('<rect class="sm" x="8" y="8" width="8" height="8"/><rect class="sp" x="4" y="4" width="16" height="16" rx="4"/>'),
   side_in: SVG24('<rect class="sm" x="4" y="4" width="16" height="16"/><rect class="sp" x="8" y="8" width="8" height="8" rx="1"/>'),
@@ -4357,6 +4431,7 @@ function tpNew(type) {
   setTab('parcours'); S.editTp = null; S.activeTp = null; const f = newForm(); f.type = type;
   const os = selShapes(); if (type === 'profile' && os.length && os.every(x => !x.closed)) f.side = 'on';
   if (type === 'thread') { const t = S.tools.find(t => t.type === 'thread'); if (t) f.toolId = t.id; f.depth = 10; }
+  if (type === 'relief') { const fl = S.tools.filter(t => t.type === 'flat').sort((a, b) => b.dia - a.dia)[0]; if (fl) f.toolId = fl.id; }
   S.form = f; renderForm(); renderTpList(); draw(); fwOpen('tpWin');
 }
 document.querySelectorAll('#tpNew [data-newtp]').forEach(b => { b.insertAdjacentHTML('afterbegin', ICO['type_' + b.dataset.newtp] || ''); b.onclick = () => tpNew(b.dataset.newtp); });
@@ -4523,7 +4598,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.75', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.76', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -4613,14 +4688,14 @@ function renderTpList() { if (typeof libCardSync === 'function') libCardSync();
   S.tps.forEach((tp, idx) => {
     const tool = S.tools.find(t => t.id === tp.toolId); if (tp.visible) tot += (tp.stats && tp.stats.min) || 0;
     const li = document.createElement('li'); li.className = 'tpitem' + (tp.id === S.activeTp ? ' on' : '') + (tp.visible ? '' : ' off'); li.tabIndex = 0;
-    li.style.setProperty('--c', 'var(' + { profile: '--pf', pocket: '--pk', vcarve: '--vc', drill: '--dr', thread: '--th' }[tp.type] + ')');
+    li.style.setProperty('--c', 'var(' + { profile: '--pf', pocket: '--pk', vcarve: '--vc', drill: '--dr', thread: '--th', relief: '--rl' }[tp.type] + ')');
     const sub = (tp.face === 2 ? 'Face 2 · ' : '') + TYPE_LBL[tp.type] + (tp.type === 'profile' ? ' ' + SIDE_LBL[tp.p.side] : '') + ' · ' + (tool ? tool.name : '?') + (tp.info ? ' · ' + tp.info : '') + (tp.stats && tp.stats.min ? ' · ' + fmtTime(tp.stats.min) : '');
-    li.innerHTML = '<span class="sw"></span><div style="min-width:0"><b></b><small></small>' + (tp.err ? '<small class="err"></small>' : '') + (tp.warns && tp.warns.length ? '<small class="wrn"></small>' : '') + '</div><div class="acts">'
+    li.innerHTML = '<span class="sw"></span><div style="min-width:0"><b></b><small></small>' + (tp.err ? '<small class="err"></small>' : '') + ((tp.warns && tp.warns.length) || (tp.type === 'relief' && tp.relVer !== (S.relief.ver || 0)) ? '<small class="wrn"></small>' : '') + '</div><div class="acts">'
       + '<button class="iconbtn" data-a="up" title="Monter" aria-label="Monter"' + (idx ? '' : ' disabled') + '><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 15 6-6 6 6"/></svg></button>'
       + '<button class="iconbtn" data-a="vis" title="' + (tp.visible ? 'Masquer et exclure du G-code' : 'Afficher et inclure') + '" aria-label="Visibilité"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>' + (tp.visible ? '' : '<path d="M4 4l16 16"/>') + '</svg></button>'
       + '<button class="iconbtn" data-a="del" title="Supprimer" aria-label="Supprimer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div>';
     li.querySelector('b').textContent = tp.name; li.querySelector('small').textContent = sub;
-    if (tp.err) li.querySelector('.err').textContent = tp.err; if (tp.warns && tp.warns.length) li.querySelector('.wrn').textContent = tp.warns.join(' ');
+    if (tp.err) li.querySelector('.err').textContent = tp.err; if (li.querySelector('.wrn')) li.querySelector('.wrn').textContent = [...(tp.type === 'relief' && tp.relVer !== (S.relief.ver || 0) ? [tr('Relief modifié depuis le calcul : mettez à jour le parcours.')] : []), ...(tp.warns || [])].join(' ');
     li.onclick = e => {
       const a = e.target.closest('[data-a]'); if (a) { e.stopPropagation();
         if (a.dataset.a === 'del') { S.tps = S.tps.filter(x => x !== tp); if (S.editTp === tp.id) { S.editTp = null; S.form = newForm(); fwClose('tpWin'); } commit(false); gcDirty = true; renderTpList(); renderForm(); draw(); }
@@ -4651,7 +4726,7 @@ function renderForm() {
   $('#tpFormTitle').textContent = S.editTp ? 'Modifier le parcours' : 'Nouveau parcours';
   $('#tpApply').textContent = S.editTp ? 'Mettre à jour' : 'Calculer sur la sélection (' + S.sel.size + ')';
   $('#tpCancel').hidden = !S.editTp;
-  { const by = f => S.tools.filter(f), mill = t => t.type === 'flat' || t.type === 'ball', list = F.type === 'vcarve' ? [...by(t => t.type === 'v'), ...by(mill)] : F.type === 'drill' ? [...by(t => t.type === 'drill'), ...by(mill), ...by(t => t.type === 'v')] : F.type === 'thread' ? by(t => t.type === 'thread') : [...by(mill), ...by(t => t.type === 'v')];
+  { const by = f => S.tools.filter(f), mill = t => t.type === 'flat' || t.type === 'ball', list = F.type === 'vcarve' ? [...by(t => t.type === 'v'), ...by(mill)] : F.type === 'drill' ? [...by(t => t.type === 'drill'), ...by(mill), ...by(t => t.type === 'v')] : F.type === 'thread' ? by(t => t.type === 'thread') : F.type === 'relief' ? (F.rlOp === 'finish' ? [...by(t => t.type === 'ball'), ...by(t => t.type === 'v'), ...by(t => t.type === 'flat')] : [...by(t => t.type === 'flat'), ...by(t => t.type === 'ball')]) : [...by(mill), ...by(t => t.type === 'v')];
   if (!S.tools.find(t => t.id === F.toolId)) F.toolId = list[0] && list[0].id; }
   { const t = S.tools.find(x => x.id === F.toolId); $('#fToolName').textContent = t ? t.name : tr('Choisir un outil…'); $('#fToolBtn').classList.toggle('bad', !t); }
   root.querySelectorAll('[data-f]').forEach(el => { const k = el.dataset.f; if (el.classList.contains('seg')) el.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.value === F[k])); else if (el.type === 'checkbox') el.checked = !!F[k]; else el.value = F[k] ?? ''; });
@@ -4665,6 +4740,7 @@ function renderForm() {
   $('#rasterAngRow').hidden = F.strategy !== 'raster' || !!F.rest; $('#restRow').hidden = !F.rest; { const ht = S.tools.find(x => x.id === F.toolId), flat = !!ht && ht.type === 'flat'; if (F.type === 'drill' && !flat) $('#helixHolesRow').hidden = true; $('#drillPitchRow').hidden = F.helixHoles === false || !flat;
     let nb = 0; if (F.type === 'drill' && flat && F.helixHoles === false) { const ids = S.editTp ? ((S.tps.find(t => t.id === S.editTp) || {}).shapeIds || []) : [...S.sel]; for (const sh of ids.map(shapeById).filter(x => x && x.closed && x.pts && x.pts.length > 2)) { let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (const q of sh.pts) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); } if (Math.max(x1 - x0, y1 - y0) > ht.dia * 1.05) nb++; } }
     if (F.type === 'thread') { const ti = $('#thInfo'), tl = S.tools.find(x => x.id === F.toolId), ids = S.editTp ? ((S.tps.find(t => t.id === S.editTp) || {}).shapeIds || []) : [...S.sel], sh = ids.map(shapeById).find(x => x && x.closed && x.pts && x.pts.length > 2); let d0 = 0; if (sh) { let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity; for (const q of sh.pts) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); } d0 = Math.max(x1 - x0, y1 - y0); } const G = threadGeo(F, tl || { dia: 0 }, d0); ti.textContent = G.D > 0 ? (G.inner ? trf('M{d} × {p} : perçage préalable Ø{a} (fond de filet Ø{m}).', { d: fr(G.D, 2).replace(/,?0+$/, ''), p: String(+G.P.toFixed(3)).replace('.', ','), a: fr(G.tap, 2).replace(/,?0+$/, ''), m: fr(G.D1, 2) }) : trf('Vis Ø{d} × {p} : cylindre au Ø{d}, fond de filet Ø{m}.', { d: fr(G.D, 2).replace(/,?0+$/, ''), p: String(+G.P.toFixed(3)).replace('.', ','), m: fr(G.d3, 2) })) + (tl && G.inner && tl.dia >= G.D1 ? ' ' + tr('Fraise trop grosse pour ce diamètre.') : '') : tr('Sélectionnez un cercle ou indiquez le diamètre nominal.'); }
+    if (F.type === 'relief') { const fin = F.rlOp === 'finish'; $('#rlPassRow').hidden = fin; $('#rlAllowRow').hidden = fin; $('#rlCrossRow').hidden = !fin; const nb = (S.editTp ? ((S.tps.find(t => t.id === S.editTp) || {}).shapeIds || []) : [...S.sel]).map(shapeById).filter(x => x && x.closed).length; $('#rlTpInfo').textContent = (S.relief.items.some(i => i.visible && relGrid[i.id]) ? '' : tr('Aucun relief : importez-le dans l’onglet Relief.') + ' ') + (nb ? trf('Limite : {n} forme(s) fermée(s) sélectionnée(s), centre de l’outil à l’intérieur.', { n: nb }) : tr('Limite : cadres des éléments du relief (sélectionnez des formes fermées pour limiter la zone).')); }
     const dw = $('#drillWarn'); dw.hidden = !nb; if (nb) dw.textContent = trf('{n} trou(s) plus grand(s) que la fraise : percé(s) à Ø{d} au lieu du diamètre dessiné (cochez l’usinage en hélice).', { n: nb, d: String(+(+ht.dia).toFixed(3)).replace('.', ',') }); }
   { const rs = $('#fRestTool'), cur = S.tools.find(t => t.id === F.toolId), big = S.tools.filter(t => t.type !== 'v' && cur && t.dia > cur.dia + 1e-6); rs.innerHTML = ''; if (!big.length) rs.innerHTML = '<option value="">Aucune fraise plus grosse dans la bibliothèque</option>'; for (const t of big) { const o = document.createElement('option'); o.value = t.id; o.textContent = t.name; rs.appendChild(o); } if (!big.find(t => t.id === F.restTool)) F.restTool = big[0] ? big[0].id : ''; rs.value = F.restTool; }
   $('#depthLbl').textContent = tr(F.type === 'vcarve' ? 'Prof. coupe max (C) (0 = illimitée)' : F.type === 'thread' ? 'Longueur filetée (C) (mm)' : 'Prof. coupe (C) (mm)');
@@ -4675,7 +4751,8 @@ function renderForm() {
     if (F.type === 'pocket' && F.rest) h = 'Reprise : seuls les coins et passages que la fraise « ' + ((S.tools.find(t => t.id === F.restTool) || {}).name || '?') + ' » n’a pas pu atteindre sont usinés avec cette fraise plus petite. Gardez la même profondeur que la poche d’origine, et placez ce parcours après elle.';
     else if (F.type === 'pocket') h = (F.strategy === 'raster' ? 'Balayage en lignes parallèles à ' + (+F.rasterAng || 0) + '°, puis un tour du contour pour nettoyer les bords. ' : '') + 'Pas latéral ' + fr(tool.dia * Math.max(0.05, 1 - tool.over / 100)) + ' mm (recouvrement ' + tool.over + ' % de l’outil). La rampe sert aux passes d’ébauche ; l’arc ne s’applique qu’au contour des parois.' + (+F.depth > 0 ? ' ' + depthLevels(+F.depth, pass).length + ' passe(s).' : '');
     if (F.type === 'profile' && F.tabs) h += ' Ponts : ' + (F.tabN || 4) + ' par contour, ' + fr(+F.tabL || 0) + ' mm de matière laissée sur ' + fr(+F.tabH || 0) + ' mm d’épaisseur, au fond de la coupe.';
-    if (F.type === 'thread') { const tl = S.tools.find(x => x.id === F.toolId); h = 'Filetage à la fraise à fileter, centré sur chaque cercle sélectionné. Dessinez le cercle au diamètre nominal (8 pour M8) ou indiquez-le ci-dessus. ' + (F.thSide === 'out' ? 'Extérieur : l’outil tourne autour du cylindre en descendant (filet à droite) ; dégagez la matière autour avant.' : 'Intérieur : percez ou fraisez d’abord le trou au diamètre de perçage, l’outil remonte en hélice depuis le fond (filet à droite).') + ' Un tour d’hélice = un pas. L’avance de l’outil est celle du tranchant : COPO la corrige au centre de l’outil.'; }
+    if (F.type === 'relief') h = F.rlOp === 'finish' ? 'Finition du relief : balayage parallèle qui suit la surface, avec la forme réelle de l’outil (fraise hémisphérique ou conique à bout sphérique de préférence). Un pas latéral de 8 à 12 % donne une surface lisse.' : 'Ébauche du relief : balayage par niveaux de Z avec une fraise droite, en laissant la surépaisseur pour la finition. Chaque niveau descend de la profondeur de passe.';
+    else if (F.type === 'thread') { const tl = S.tools.find(x => x.id === F.toolId); h = 'Filetage à la fraise à fileter, centré sur chaque cercle sélectionné. Dessinez le cercle au diamètre nominal (8 pour M8) ou indiquez-le ci-dessus. ' + (F.thSide === 'out' ? 'Extérieur : l’outil tourne autour du cylindre en descendant (filet à droite) ; dégagez la matière autour avant.' : 'Intérieur : percez ou fraisez d’abord le trou au diamètre de perçage, l’outil remonte en hélice depuis le fond (filet à droite).') + ' Un tour d’hélice = un pas. L’avance de l’outil est celle du tranchant : COPO la corrige au centre de l’outil.'; }
     else if (F.type === 'drill') h = 'Un trou au centre de chaque forme fermée sélectionnée (dessinez un cercle à chaque emplacement). ' + (tool.type === 'drill' ? 'Foret : chaque trou est percé au diamètre du foret. La pointe dépasse de ' + fr(tool.dia / 2 / Math.tan((+tool.angle || 118) * Math.PI / 360)) + ' mm la profondeur à pleine section : ajoutez-la pour un trou débouchant. ' : tool.type === 'flat' && F.helixHoles !== false ? 'Les cercles plus grands que l’outil sont usinés en hélice au diamètre dessiné (fraise droite). ' : '') + (+F.peck > 0 ? 'Débourrage : l’outil descend de ' + fr(+F.peck) + ' mm à la fois et remonte au-dessus de la surface pour évacuer les copeaux.' : 'Sans débourrage : descente en une fois.') + ' Vitesse de descente de l’outil : ' + tool.plunge + ' mm/min.';
     if (F.type === 'vcarve') h = tool.type === 'v' ? 'La fraise suit l’axe médian du tracé : elle descend là où le trait est large et remonte jusqu’à la pointe de chaque coin. Une précision plus petite donne des pointes plus nettes mais un calcul plus long. Profondeur maximale de cette fraise : ' + fr(tool.dia / 2 / Math.tan(tool.angle * Math.PI / 360)) + ' mm ; au-delà, le fond devient plat.' : 'Choisissez une fraise en V.';
     if ((F.type === 'profile' || F.type === 'pocket') && F.entry === 'helix') h += ' Hélice : l’outil descend en spirale (' + fr(+F.helixPitch || 1) + ' mm par tour, rayon jusqu’à ' + fr(+F.arcR || 0) + ' mm, réduit si la place manque) ; sinon il passe en rampe.';
@@ -4687,18 +4764,19 @@ function renderForm() {
   illRefresh();
 }
 $('#tpForm').addEventListener('click', e => { const b = e.target.closest('.seg button'); if (!b) return; const k = b.parentElement.dataset.f, F = S.form; const prev = F[k]; F[k] = b.value;
-  if (k === 'type' && prev !== b.value) { const okT = t => b.value === 'vcarve' ? t.type === 'v' : b.value === 'drill' ? t.type === 'drill' : b.value === 'thread' ? t.type === 'thread' : (t.type === 'flat' || t.type === 'ball'); const cur = S.tools.find(t => t.id === F.toolId); if (!cur || !okT(cur)) { const t = S.tools.find(okT) || (b.value === 'drill' ? S.tools.find(t => t.type === 'flat') : null); if (t) F.toolId = t.id; } if (b.value === 'vcarve') F.depth = 0; else if (!(+F.depth > 0)) F.depth = b.value === 'pocket' ? 4 : (b.value === 'drill' || b.value === 'thread') ? 10 : 6; }
+  if (k === 'rlOp' && prev !== b.value) { F.rlStep = b.value === 'finish' ? 10 : 40; const pick = b.value === 'finish' ? (S.tools.filter(t => t.type === 'ball' || (t.type === 'v' && +t.tipR > 0)).sort((a, c) => a.dia - c.dia)[0]) : S.tools.filter(t => t.type === 'flat').sort((a, c) => c.dia - a.dia)[0]; if (pick) F.toolId = pick.id; }
+  if (k === 'type' && prev !== b.value) { const okT = t => b.value === 'vcarve' ? t.type === 'v' : b.value === 'drill' ? t.type === 'drill' : b.value === 'thread' ? t.type === 'thread' : b.value === 'relief' ? (t.type === 'flat' || t.type === 'ball' || t.type === 'v') : (t.type === 'flat' || t.type === 'ball'); const cur = S.tools.find(t => t.id === F.toolId); if (!cur || !okT(cur)) { const t = S.tools.find(okT) || (b.value === 'drill' ? S.tools.find(t => t.type === 'flat') : null); if (t) F.toolId = t.id; } if (b.value === 'vcarve') F.depth = 0; else if (!(+F.depth > 0)) F.depth = b.value === 'pocket' ? 4 : (b.value === 'drill' || b.value === 'thread') ? 10 : 6; }
   renderForm(); });
 $('#tpForm').addEventListener('input', e => { const k = e.target.dataset.f; if (!k) return; const el = e.target; S.form[k] = el.type === 'checkbox' ? el.checked : el.type === 'number' ? (el.value === '' ? '' : +el.value) : el.value; clearTimeout(renderForm.t); renderForm.t = setTimeout(renderForm, 250); });
 $('#tpForm').addEventListener('change', e => { if (e.target.dataset.f) renderForm(); });
 function applyForm() {
   const F = S.form, ids = [...S.sel];
-  const p = { side: F.side, depth: +F.depth || 0, pass: F.pass === '' ? '' : +F.pass, allow: +F.allow || 0, finish: F.finish, dir: F.dir, entry: F.entry, rampLen: +F.rampLen || 0, arcR: +F.arcR || 0, vstep: +F.vstep || 0.2, vstart: Math.max(0, +F.vstart || 0), zrel: 1, peck: +F.peck || 0, dwell: +F.dwell || 0, openSide: F.openSide || 'on', tabs: !!F.tabs, tabN: +F.tabN || 4, tabL: F.tabL === '' ? 8 : +F.tabL, tabH: +F.tabH || 2, tabShape: F.tabShape || 'rect', tabMode: F.tabMode === 'manual' ? 'manual' : 'auto', tabPts: F.tabMode === 'manual' && Array.isArray(F.tabPts) ? clone(F.tabPts) : null, strategy: F.strategy || 'rings', rasterAng: +F.rasterAng || 0, rest: !!F.rest, restTool: F.restTool || '', restDia: (S.tools.find(t => t.id === F.restTool) || {}).dia || 0, helixPitch: +F.helixPitch || 1, helixHoles: F.helixHoles !== false, thSide: F.thSide === 'out' ? 'out' : 'in', thPitch: Math.max(0.2, +F.thPitch || 1.25), thD: Math.max(0, +F.thD || 0), thHand: F.thHand === 'L' ? 'L' : 'R', thPasses: Math.max(1, Math.min(10, Math.round(+F.thPasses || 1))) };
+  const p = { side: F.side, depth: +F.depth || 0, pass: F.pass === '' ? '' : +F.pass, allow: +F.allow || 0, finish: F.finish, dir: F.dir, entry: F.entry, rampLen: +F.rampLen || 0, arcR: +F.arcR || 0, vstep: +F.vstep || 0.2, vstart: Math.max(0, +F.vstart || 0), zrel: 1, peck: +F.peck || 0, dwell: +F.dwell || 0, openSide: F.openSide || 'on', tabs: !!F.tabs, tabN: +F.tabN || 4, tabL: F.tabL === '' ? 8 : +F.tabL, tabH: +F.tabH || 2, tabShape: F.tabShape || 'rect', tabMode: F.tabMode === 'manual' ? 'manual' : 'auto', tabPts: F.tabMode === 'manual' && Array.isArray(F.tabPts) ? clone(F.tabPts) : null, strategy: F.strategy || 'rings', rasterAng: +F.rasterAng || 0, rest: !!F.rest, restTool: F.restTool || '', restDia: (S.tools.find(t => t.id === F.restTool) || {}).dia || 0, helixPitch: +F.helixPitch || 1, helixHoles: F.helixHoles !== false, thSide: F.thSide === 'out' ? 'out' : 'in', thPitch: Math.max(0.2, +F.thPitch || 1.25), thD: Math.max(0, +F.thD || 0), thHand: F.thHand === 'L' ? 'L' : 'R', thPasses: Math.max(1, Math.min(10, Math.round(+F.thPasses || 1))), rlOp: F.rlOp === 'finish' ? 'finish' : 'rough', rlStep: Math.max(2, Math.min(95, +F.rlStep || 40)), rlAng: +F.rlAng || 0, rlAllow: Math.max(0, +F.rlAllow || 0), rlCross: !!F.rlCross };
   const autoFace = sh => sh.length && sh.every(x => faceOf(x) === 2) ? 2 : 1, faceFor = idl => F.face === 'auto' || !F.face ? autoFace(idl.map(shapeById).filter(Boolean)) : +F.face;
   if (S.editTp) { const tp = S.tps.find(t => t.id === S.editTp); if (!tp) return; tp.face = faceFor(ids.length ? ids : tp.shapeIds); tp.type = F.type; tp.toolId = F.toolId; tp.p = p; if (ids.length) tp.shapeIds = ids; tp.name = F.name || tp.name; computeTP(tp); commit(false); gcDirty = true; renderTpList(); draw(); toast(tp.err ? tp.err : 'Parcours mis à jour.'); return; }
-  if (!ids.length) { toast('Sélectionnez d’abord les formes à usiner sur le plan.'); return; }
+  if (!ids.length && F.type !== 'relief') { toast('Sélectionnez d’abord les formes à usiner sur le plan.'); return; }
   const n = S.tps.filter(t => t.type === F.type).length + 1;
-  const fc = faceFor(ids), tp = { id: uid(), name: F.name || ((fc === 2 ? 'F2 · ' : '') + tr(TYPE_LBL[F.type] + (F.type === 'profile' ? ' ' + SIDE_LBL[F.side] : '')) + ' ' + n), type: F.type, toolId: F.toolId, shapeIds: ids, p, visible: true, face: fc };
+  const fc = F.type === 'relief' ? 1 : faceFor(ids), tp = { id: uid(), name: F.name || ((fc === 2 ? 'F2 · ' : '') + (F.type === 'relief' ? tr(F.rlOp === 'finish' ? 'Finition relief' : 'Ébauche relief') : tr(TYPE_LBL[F.type] + (F.type === 'profile' ? ' ' + SIDE_LBL[F.side] : ''))) + ' ' + n), type: F.type, toolId: F.toolId, shapeIds: ids, p, visible: true, face: fc };
   computeTP(tp); S.tps.push(tp); S.activeTp = tp.id; S.editTp = tp.id; S.form.name = tp.name; commit(false); gcDirty = true; renderTpList(); renderForm(); draw();
   toast(tp.err ? tp.err : 'Parcours calculé' + (tp.stats && tp.stats.min ? ' · ' + fmtTime(tp.stats.min) : '') + '.');
 }
@@ -4846,7 +4924,7 @@ const pct = (a, b) => b > 0 ? Math.round(100 * a / b) : 0;
 function libCut(t, mat) { if (t.cut && t.cut[mat]) return { ...t.cut[mat], src: 'lib' }; const es = libEstimate(t, mat, t.cut || {}); if (es) return { ...es, src: 'est' }; const k = Object.keys(t.cut || {}); const c = t.cut.softwood || (k.length ? t.cut[k[0]] : null); return c ? { ...c, src: 'other' } : { rpm: 18000, feed: 1000, plunge: 300, pass: +(t.dia / 2).toFixed(2), step: +(t.dia * 0.4).toFixed(2), src: 'none' }; }
 function libFlat(t, mat) { const c = libCut(t, mat), step = +c.step || t.dia * 0.4; return { tipR: t.tipR || '', flen: t.flen || '', name: t.name, type: t.type, dia: t.dia, angle: t.angle || (t.type === 'drill' ? 118 : 90), flat: t.flat || 0, flutes: t.flutes || 2, num: t.num || '', notes: t.notes || '', rpm: c.rpm || 0, feed: c.feed || c.plunge || 0, plunge: c.plunge || Math.round((c.feed || 0) / 3), pass: c.pass || +(t.dia / 2).toFixed(2), step: +step.toFixed(3), stepPct: pct(step, t.dia), over: Math.max(0, Math.min(95, Math.round(100 * (1 - step / t.dia)))), src: c.src, est: !!c.est }; }
 // outil de la bibliothèque → outil du projet (copie des réglages pour le matériau du projet)
-function libProjVals(t, mat) { const f = libFlat(t, mat), mx = (S.machine && +S.machine.maxFeed) || Infinity; return { name: t.name, type: (t.type === 'engrave' || t.type === 'taper') ? 'v' : t.type, dia: t.dia, angle: t.angle || (t.type === 'drill' ? 118 : t.type === 'thread' ? 60 : 90), flen: +t.flen || 0, flutes: f.flutes, rpm: f.rpm, feed: Math.min(f.feed, mx), plunge: Math.min(f.plunge, mx), pass: f.pass, over: f.over }; }
+function libProjVals(t, mat) { const f = libFlat(t, mat), mx = (S.machine && +S.machine.maxFeed) || Infinity; return { name: t.name, type: (t.type === 'engrave' || t.type === 'taper') ? 'v' : t.type, dia: t.dia, angle: t.angle || (t.type === 'drill' ? 118 : t.type === 'thread' ? 60 : 90), flen: +t.flen || 0, tipR: t.type === 'taper' ? +t.tipR || 0 : 0, flutes: f.flutes, rpm: f.rpm, feed: Math.min(f.feed, mx), plunge: Math.min(f.plunge, mx), pass: f.pass, over: f.over }; }
 function libToProject(t, mat) {
   let pt = S.tools.find(x => x.libId === t.id); const v = libProjVals(t, mat || projMat());
   if (!pt) { let num = +t.num || 1; while (S.tools.some(x => +x.num === num)) num++; pt = { id: uid(), libId: t.id, num, ...v }; S.tools.push(pt); } else Object.assign(pt, v);
@@ -4867,7 +4945,7 @@ function libLinkProject() {
   if (added) libSave();
 }
 // compatibilité outil / type de parcours
-const libFits = (ft, t) => !ft || (ft === 'thread' ? t.type === 'thread' : t.type === 'thread' ? false : ft === 'vcarve' ? (t.type === 'v' || t.type === 'engrave' || t.type === 'taper') : ft === 'drill' ? (t.type !== 'engrave' && t.type !== 'taper') : ft === 'profile' ? t.type !== 'drill' : (t.type === 'flat' || t.type === 'ball' || t.type === 'v'));
+const libFits = (ft, t) => !ft || (ft === 'thread' ? t.type === 'thread' : ft === 'relief' ? (t.type === 'flat' || t.type === 'ball' || t.type === 'v' || t.type === 'taper') : t.type === 'thread' ? false : ft === 'vcarve' ? (t.type === 'v' || t.type === 'engrave' || t.type === 'taper') : ft === 'drill' ? (t.type !== 'engrave' && t.type !== 'taper') : ft === 'profile' ? t.type !== 'drill' : (t.type === 'flat' || t.type === 'ball' || t.type === 'v'));
 const LIB_ICO = { thread: '<path d="M9 3h6v4H9zM11 7h2v12h-2z"/><path d="M8 19l4-2 4 2-4 2z"/>', taper: '<path d="M9 3h6v4H9zM9 7h6l-2 12a1 1 0 0 1-2 0z"/>', flat: '<path d="M9 3h6v4H9zM10 7h4v14h-4z"/>', ball: '<path d="M9 3h6v4H9zM10 7h4v11a2 2 0 0 1-4 0z"/>', v: '<path d="M9 3h6v4H9zM9 7h6l-3 14z"/>', engrave: '<path d="M9 3h6v4H9zM9 7h6l-2 13h-2z"/>', drill: '<path d="M9 3h6v4H9zM10 7h4v11l-2 3-2-3z"/>' };
 const GRP_ICO = '<path d="M3 7h6l2 2h10v10H3z"/>';
 function libCardSync() { const el = document.getElementById('libCardSub'); if (!el) return; const n = new Set(S.tps.map(t => t.toolId)).size; el.textContent = trf('{m} · {n} outil(s) utilisé(s)', { m: libMatName(projMat()), n }); }
@@ -4970,11 +5048,18 @@ function renderGcode() { if (!gcDirty) return; const tps = gcTps(); const g = ma
 // Aperçu 3D : simulation par carte de hauteurs + rendu WebGL2
 // ======================================================================
 /*SIM-START*/
+function toolProf(tool) {
+  const r = tool.dia / 2, th = Math.tan((+tool.angle || 90) * Math.PI / 360), R = +tool.tipR || 0;
+  if (tool.type === 'ball') return d => r - Math.sqrt(Math.max(0, r * r - d * d));
+  if ((tool.type === 'v') && R > 0) { const b = Math.atan(th), rt = R * Math.cos(b), ht = R * (1 - Math.sin(b)); return d => d <= rt ? R - Math.sqrt(Math.max(0, R * R - d * d)) : ht + (d - rt) / th; }
+  if (tool.type === 'v' || tool.type === 'drill') return d => d / th;
+  return () => 0;
+}
 function toolKernel(tool, cx, cy) {
-  const r = tool.dia / 2, th = Math.tan((+tool.angle || 90) * Math.PI / 360), ni = Math.ceil(r / cx) + 1, nj = Math.ceil(r / cy) + 1, di = [], dj = [], dz = [];
+  const r = tool.dia / 2, pf = toolProf(tool), ni = Math.ceil(r / cx) + 1, nj = Math.ceil(r / cy) + 1, di = [], dj = [], dz = [];
   for (let j = -nj; j <= nj; j++) for (let i = -ni; i <= ni; i++) {
     const d = Math.hypot(i * cx, j * cy); if (d > r + 1e-9) continue;
-    di.push(i); dj.push(j); dz.push(tool.type === 'v' || tool.type === 'drill' ? d / th : tool.type === 'ball' ? r - Math.sqrt(Math.max(0, r * r - d * d)) : 0);
+    di.push(i); dj.push(j); dz.push(pf(d));
   }
   return { di: Int32Array.from(di), dj: Int32Array.from(dj), dz: Float32Array.from(dz), n: di.length };
 }
@@ -5066,7 +5151,7 @@ precision highp float; in vec3 vC; in float vT; in float vL; in float vR; out ve
 void main(){ if (vT > uNow) discard; if (vR > 0.5) { if (fract(vL / 3.0) > 0.5) discard; o = vec4(mix(vC, vec3(0.6), 0.45), 1.0); } else o = vec4(vC, 1.0); }`;
 // trajectoires 3D : une paire de sommets par segment (position, couleur, temps, longueur cumulée, rapide)
 function v3BuildPaths() {
-  const gl = V3.gl, S3 = V3.S3, one = $('#v3One').checked && S.activeTp, col = { profile: hex3(tok('--pf')), pocket: hex3(tok('--pk')), vcarve: hex3(tok('--vc')), drill: hex3(tok('--dr')), thread: hex3(tok('--th')) };
+  const gl = V3.gl, S3 = V3.S3, one = $('#v3One').checked && S.activeTp, col = { profile: hex3(tok('--pf')), pocket: hex3(tok('--pk')), vcarve: hex3(tok('--vc')), drill: hex3(tok('--dr')), thread: hex3(tok('--th')), relief: hex3(tok('--rl')) };
   const vb = []; let L = 0, last = null;
   S3.segs.forEach((sg, i) => {
     if (one && sg.tp !== S.activeTp) return;
@@ -5124,6 +5209,7 @@ function v3ToolMesh(tool) {
   if (V3.toolMesh.has(tool.id)) return V3.toolMesh.get(tool.id);
   const gl = V3.gl, r = tool.dia / 2, H = Math.max(25, tool.dia * 5), th = Math.tan((+tool.angle || 90) * Math.PI / 360);
   let prof; if (tool.type === 'thread') { const d = r * 0.32, t3 = Math.tan(Math.PI / 6), rn = r - d * 1.15, L = Math.max(+tool.flen || 0, tool.dia * 2.5), rs = Math.max(r, 3); prof = [[0, 0], [r - d, 0], [r, d * t3], [r - d, 2 * d * t3], [rn, 2 * d * t3 + 0.2], [rn, L], [rs, L + Math.max(0.5, rs - rn)], [rs, Math.max(H, L + 20)]]; }
+  else if (tool.type === 'v' && +tool.tipR > 0) { const pf = toolProf(tool); prof = []; for (let i = 0; i <= 12; i++) { const d = r * i / 12; prof.push([d, pf(d)]); } prof.push([r, Math.max(H, pf(r) + 10)]); }
   else if (tool.type === 'v' || tool.type === 'drill') prof = [[0, 0], [r, r / th], [r, H]]; else if (tool.type === 'ball') { prof = []; for (let i = 0; i <= 8; i++) { const a = i / 8 * Math.PI / 2; prof.push([r * Math.sin(a), r - r * Math.cos(a)]); } prof.push([r, H]); } else prof = [[0, 0], [r, 0], [r, H]];
   prof.push([0, H]);
   const seg = 28, vb = [];
@@ -5310,7 +5396,7 @@ function sheetSvg2D(face, tps) {
   shapes.forEach(s => s.pts.forEach(q => all.push(P(q))));
   let x0 = Math.min(...all.map(q => q[0])), x1 = Math.max(...all.map(q => q[0])), y0 = Math.min(...all.map(q => q[1])), y1 = Math.max(...all.map(q => q[1]));
   const sz = Math.max(x1 - x0, y1 - y0), pad = sz * 0.1, fs = sz * 0.042, X = x => (x - x0 + pad), Y = y => (y1 - y + pad), Wv = x1 - x0 + 2 * pad, Hv = y1 - y0 + 2 * pad;
-  const col = { profile: tok('--pf'), pocket: tok('--pk'), vcarve: tok('--vc'), drill: tok('--dr'), thread: tok('--th') };
+  const col = { profile: tok('--pf'), pocket: tok('--pk'), vcarve: tok('--vc'), drill: tok('--dr'), thread: tok('--th'), relief: tok('--rl') };
   const poly = (pts, closed) => pts.length ? 'M' + pts.map(q => X(q[0]).toFixed(2) + ' ' + Y(q[1]).toFixed(2)).join('L') + (closed ? 'Z' : '') : '';
   let g = '<rect x="' + X(0) + '" y="' + Y(st.h) + '" width="' + st.w + '" height="' + st.h + '" fill="#f4eee2" stroke="#a8977a" stroke-width="1.2" vector-effect="non-scaling-stroke"/>';
   for (const tp of tps.filter(t => (t.face === 2) === f2)) {
@@ -5345,6 +5431,7 @@ function sheetData() {
     let kind = tr(TYPE_LBL[tp.type] || tp.type);
     if (tp.type === 'profile') kind += ' ' + tr(SIDE_LBL[p.side] || '');
     if (tp.type === 'pocket') kind += ' · ' + tr(p.rest ? 'reprise' : p.strategy === 'raster' ? 'balayage' : 'anneaux');
+    if (tp.type === 'relief') kind += ' · ' + tr(p.rlOp === 'finish' ? 'finition' : 'ébauche') + ' · ' + tr('pas latéral') + ' ' + (p.rlStep || 0) + ' %' + (p.rlOp !== 'finish' && p.rlAllow ? ' · ' + tr('surépaisseur') + ' ' + fL(+p.rlAllow, 2) : '');
     if (tp.type === 'thread') kind += ' · ' + (p.thSide === 'out' ? tr('extérieur') : tr('intérieur')) + ' · ' + tr('pas') + ' ' + fL(+p.thPitch || 0, 2) + (p.thHand === 'L' ? ' · ' + tr('à gauche') : '');
     if (tp.type === 'drill') kind += (p.peck > 0 ? ' · ' + tr('débourrage') + ' ' + fL(+p.peck, 1) : '') + (p.helixHoles ? ' · ' + tr('hélice') : '');
     const nP = tp.type === 'vcarve' ? '—' : pass > 0 ? Math.max(1, Math.ceil(depth / pass - 1e-6)) + ' × ' + fL(Math.min(pass, depth || pass), 2) : '—';
@@ -5356,7 +5443,7 @@ function sheetData() {
     if (!order.length || order[order.length - 1].tool.id !== tool.id || order[order.length - 1].face !== (tp.face === 2 ? 2 : 1)) order.push({ tool, face: tp.face === 2 ? 2 : 1, names: [tp.name] }); else order[order.length - 1].names.push(tp.name);
     if (-zl > st.t + 1e-6) warns.push(trf('« {n} » traverse le brut de {d} mm : posez une planche martyr.', { n: tp.name, d: fn(-zl - st.t, 2) }));
     if (tp.type === 'profile' && p.side !== 'on' && -zl >= st.t - 1e-6 && !p.tabs) warns.push(trf('« {n} » détoure sans ponts d’attache : la pièce peut bouger en fin de coupe.', { n: tp.name }));
-    if (pass > (+tool.dia || 0) * 1.5 && tp.type !== 'vcarve' && tp.type !== 'drill' && tp.type !== 'thread') warns.push(trf('« {n} » : profondeur de passe de {d} mm, plus de 1,5 fois le diamètre de la fraise.', { n: tp.name, d: fn(pass, 2) }));
+    if (pass > (+tool.dia || 0) * 1.5 && tp.type !== 'vcarve' && tp.type !== 'drill' && tp.type !== 'thread' && !(tp.type === 'relief' && p.rlOp === 'finish')) warns.push(trf('« {n} » : profondeur de passe de {d} mm, plus de 1,5 fois le diamètre de la fraise.', { n: tp.name, d: fn(pass, 2) }));
   });
   if (isFinite(ex.x0) && (ex.x0 < -ox - 1e-3 || ex.y0 < -oy - 1e-3 || ex.x1 > st.w - ox + 1e-3 || ex.y1 > st.h - oy + 1e-3)) warns.push(tr('Une partie de l’usinage sort du brut : vérifiez les dimensions et le bridage.'));
   const hidden = S.tps.filter(t => !t.visible).length, errs = S.tps.filter(t => t.visible && t.err).length;
@@ -5674,8 +5761,9 @@ function drawRelief(C) {
   const it = curTab === 'relief' && relCur(); if (it) { const f = imgFrame(it), cs = f.corners.map(q => [sx(q[0]), sy(q[1])]); ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]); ctx.beginPath(); cs.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.stroke(); ctx.restore(); }
 }
 function relSummary() { const el = $('#relSum'); if (!el) return; const R = relCache && relCache.R, n = S.relief.items.length; if (!n || !R) { el.textContent = n ? '' : tr('Aucun relief : importez une image en niveaux de gris ou un fichier STL.'); return; } const dep = R.max - R.min; el.textContent = trf('{n} élément(s) · profondeur du relief {d} mm (brut {t} mm).', { n, d: fr(dep, 2), t: fr(S.stock.t, 1) }) + (dep > S.stock.t ? ' ' + tr('Le relief dépasse l’épaisseur du brut : il sera coupé au fond.') : ''); }
-function relAdd(it, g) { it.id = 'r' + Math.random().toString(36).slice(2, 9); relStore(it.id, g); S.relief.items.push(it); S.relSel = it.id; relDirty = true; commit(false); relPanel(); setTab('relief'); draw(); }
-function relSet(fn) { const it = relCur(); if (!it) return; fn(it); relDirty = true; commit(false); relPanel(true); draw(); }
+function relBump() { S.relief.ver = (S.relief.ver || 0) + 1; if (typeof renderTpList === 'function') renderTpList(); }
+function relAdd(it, g) { relBump(); it.id = 'r' + Math.random().toString(36).slice(2, 9); relStore(it.id, g); S.relief.items.push(it); S.relSel = it.id; relDirty = true; commit(false); relPanel(); setTab('relief'); draw(); }
+function relSet(fn) { const it = relCur(); if (!it) return; fn(it); relBump(); relDirty = true; commit(false); relPanel(true); draw(); }
 // image en niveaux de gris (le côté le plus long ramené à 1024 points)
 function relImportImage(file) {
   const url = URL.createObjectURL(file), im = new Image();
@@ -5715,7 +5803,7 @@ function relImportStl(file) {
 }
 function relReorient(it, o) {
   const T = relMesh[it.id]; if (!T) { toast(tr('Réimportez le STL pour changer son orientation (le maillage n’est plus en mémoire).')); relPanel(true); return; }
-  const R = stlRaster(T, o), k = it.w / (it.nat ? it.nat[0] : R.W); it.orient = o; it.nat = [R.W, R.H, R.Z]; it.h = R.H * k; it.zH = Math.min(R.Z * k, S.stock.t); relStore(it.id, R.g); relDirty = true; commit(false); relPanel(); draw();
+  const R = stlRaster(T, o), k = it.w / (it.nat ? it.nat[0] : R.W); relBump(); it.orient = o; it.nat = [R.W, R.H, R.Z]; it.h = R.H * k; it.zH = Math.min(R.Z * k, S.stock.t); relStore(it.id, R.g); relDirty = true; commit(false); relPanel(); draw();
 }
 function relPanel(soft) {
   const ul = $('#relList'), box = $('#relProps'); if (!ul) return; const it = relCur(); box.hidden = !it;
@@ -5732,7 +5820,7 @@ function relPanel(soft) {
     const li = document.createElement('li'); li.className = 'imgrow' + (x.id === S.relSel ? ' on' : '');
     li.innerHTML = '<span class="relk"></span><span></span><button class="iconbtn" data-i="up" title="' + tr('Monter') + '" aria-label="' + tr('Monter') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 14l5-5 5 5"/></svg></button><button class="iconbtn" data-i="vis" title="' + tr(x.visible ? 'Masquer' : 'Afficher') + '" aria-label="' + tr('Visibilité') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/>' + (x.visible ? '<circle cx="12" cy="12" r="3"/>' : '<path d="M4 20L20 4"/>') + '</svg></button>';
     li.querySelector('.relk').textContent = x.kind === 'stl' ? 'STL' : 'IMG'; li.children[1].textContent = x.name + ' · ' + tr({ add: 'Ajouter', sub: 'Soustraire', max: 'Garder le plus haut', min: 'Garder le plus bas' }[x.mode || 'add']);
-    li.onclick = e => { const b = e.target.closest('[data-i]'); if (b) { e.stopPropagation(); if (b.dataset.i === 'vis') x.visible = !x.visible; else if (k > 0) { const A = S.relief.items; [A[k - 1], A[k]] = [A[k], A[k - 1]]; } relDirty = true; commit(false); relPanel(); draw(); return; } S.relSel = x.id; relPanel(); draw(); };
+    li.onclick = e => { const b = e.target.closest('[data-i]'); if (b) { e.stopPropagation(); if (b.dataset.i === 'vis') x.visible = !x.visible; else if (k > 0) { const A = S.relief.items; [A[k - 1], A[k]] = [A[k], A[k - 1]]; } relBump(); relDirty = true; commit(false); relPanel(); draw(); return; } S.relSel = x.id; relPanel(); draw(); };
     ul.appendChild(li);
   });
 }
@@ -5889,7 +5977,7 @@ function imgAct(a) {
   if (a === 'relFit') { relSet(i => { const st = S.stock, k = Math.min(st.w / i.w, st.h / i.h) * 0.98; if ($('#rlLock').checked) i.zH *= k; i.w *= k; i.h *= k; i.rot = 0; i.x = st.w / 2; i.y = st.h / 2; }); return true; }
   if (a === 'relCenter') { relSet(i => { i.x = S.stock.w / 2; i.y = S.stock.h / 2; }); return true; }
   if (a === 'relRot0') { relSet(i => { i.rot = 0; }); return true; }
-  if (a === 'relDel') { const it = relCur(); if (!it) return true; S.relief.items = S.relief.items.filter(x => x !== it); S.relSel = null; relDirty = true; commit(false); relPanel(); draw(); return true; }
+  if (a === 'relDel') { const it = relCur(); if (!it) return true; relBump(); S.relief.items = S.relief.items.filter(x => x !== it); S.relSel = null; relDirty = true; commit(false); relPanel(); draw(); return true; }
   if (a === 'relView') { relView3d(); return true; }
   const im = S.imgSel && imgById(S.imgSel);
   if (a === 'imgInsert') { $('#fImg').click(); return true; }
