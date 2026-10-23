@@ -184,7 +184,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.71</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.72</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -397,6 +397,7 @@ footer p{max-width:none}
     <figure><img src="img/fr-06-apercu3d.webp" alt="Aperçu 3D du projet d'exemple usiné." width="1800" height="1125" loading="lazy"><figcaption>Glisser pour tourner, clic droit ou Maj pour déplacer, molette pour zoomer, double-clic pour recentrer.</figcaption></figure>
     <p>L'aperçu simule l'enlèvement de matière dans l'épaisseur réelle du brut, y compris les trous débouchants. Les boutons de lecture rejouent l'usinage : <strong>retour au début</strong>, <strong>pas en arrière</strong>, <strong>lecture / pause</strong>, <strong>pas en avant</strong> et <strong>aller à la fin</strong> ; un pas correspond à un déplacement de l'outil. Au clavier : flèches gauche et droite, Début, Fin et Espace. Le curseur permet d'aller à n'importe quel instant. L'aperçu demande WebGL 2 (Chrome, Edge ou Firefox récents).</p>
 
+    <p><strong>Cube d’orientation</strong> (coin haut droit) : il tourne avec la vue et indique les faces (Dessus, Avant, Droite…) et les axes X, Y, Z. Cliquez une face pour la vue correspondante (Dessus = vue de plan, comme le dessin), ou un coin pour une vue isométrique. L’outil affiché reprend sa forme : fraise droite, hémisphérique, en V, foret ou fraise à fileter (dent à 60° en bout, col dégagé). Pour le filetage, la simulation enlève la matière jusqu’au diamètre extérieur du filet, sans dessiner les filets.</p>
     <h3>Trajectoires en 3D</h3>
     <p>La liste <span class="ui">Afficher</span> de la barre de l'aperçu propose <em>Matière</em>, <em>Matière + trajectoires</em> ou <em>Trajectoires seules</em>. La case <span class="ui">Dessin</span> affiche ou masque les vecteurs du dessin, à la couleur de leur calque, sur la face tournée vers le haut : ceux de la face 1 avec la vue Face 1, ceux de la face 2 avec la vue Face 2. Les trajectoires sont tracées en lignes dans l'espace, avec la couleur du type de parcours ; les déplacements rapides (G0) sont en pointillés gris. Pendant la lecture, elles se dessinent au fur et à mesure que l'outil avance. Avec un parcours sélectionné dans la liste, la case <span class="ui">Parcours sélectionné seul</span> n'affiche que lui. Idéal pour vérifier les passes, les rampes, les hélices et les hauteurs de dégagement avant d'usiner.</p>
     <figure class="narrow"><img src="img/apercu3d-trajectoires.webp" alt="Aperçu 3D en mode Trajectoires seules : passes du détourage, poches et V-carving dans le cadre du brut." width="1000" height="790" loading="lazy"><figcaption>Mode <em>Trajectoires seules</em> : chaque passe du détourage est visible, les rapides en pointillés.</figcaption></figure>
@@ -478,7 +479,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.71 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.72 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -512,7 +513,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.71</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.72</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -725,6 +726,7 @@ M30</pre>
     <figure><img src="img/en-06-apercu3d.webp" alt="3D preview of the machined sample project." width="1800" height="1125" loading="lazy"><figcaption>Drag to rotate, right-click or Shift to pan, wheel to zoom, double-click to recenter.</figcaption></figure>
     <p>The preview simulates material removal through the real stock thickness, through-holes included. The playback buttons replay the machining: <strong>back to start</strong>, <strong>step back</strong>, <strong>play / pause</strong>, <strong>step forward</strong> and <strong>go to end</strong>; one step is one tool move. Keyboard: left and right arrows, Home, End and Space. The slider jumps to any moment.</p>
 
+    <p><strong>View cube</strong> (top-right corner): it turns with the view and shows the faces (Top, Front, Right…) and the X, Y, Z axes. Click a face for that view (Top = plan view, like the drawing), or a corner for an isometric view. The tool shown keeps its shape: flat, ball-nose, V-bit, drill or thread mill (60° tooth at the tip, relieved neck). For threading, the simulation removes material up to the thread’s major diameter without drawing the threads.</p>
     <h3>Toolpaths in 3D</h3>
     <p>The <span class="ui">Show</span> list in the preview bar offers <em>Material</em>, <em>Material + toolpaths</em> or <em>Toolpaths only</em>. The <span class="ui">Drawing</span> box shows or hides the drawing's vectors, in their layer colour, on the face turned upwards: face 1 vectors in the Face 1 view, face 2 vectors in the Face 2 view. Toolpaths are drawn as lines in space, in the colour of their type; rapid moves (G0) are dashed grey. During playback they are drawn as the tool moves. With a toolpath selected in the list, the <span class="ui">Selected toolpath only</span> box shows just that one. Great for checking passes, ramps, helixes and clearance heights before cutting.</p>
     <figure class="narrow"><img src="img/apercu3d-trajectoires.webp" alt="3D preview in Toolpaths only mode: cut-out passes, pockets and V-carving inside the stock frame." width="1000" height="790" loading="lazy"><figcaption><em>Toolpaths only</em> mode: every cut-out pass is visible, rapids are dashed.</figcaption></figure>
@@ -806,7 +808,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.71 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.72 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 

@@ -237,6 +237,7 @@ textarea#gcOut{height:260px;font:12px/1.5 var(--f-mono);resize:vertical;white-sp
 #v3Pos{flex:1;min-width:140px;accent-color:var(--accent)}
 #v3Time{font-size:12.5px;min-width:17ch;color:var(--ink);font-variant-numeric:tabular-nums}
 .v3d-view{position:relative;min-height:0}
+#v3cube{position:absolute;left:auto;bottom:auto;top:10px;right:max(12px,env(safe-area-inset-right,0px));width:120px;height:120px;cursor:pointer;touch-action:none}
 #v3c{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
 .v3d-help{position:absolute;left:max(16px,env(safe-area-inset-left,0px));bottom:10px;right:16px;font-size:12px;color:var(--muted);pointer-events:none}
 .banner{background:var(--danger);color:#fff;padding:8px 12px;border-radius:var(--r)}
@@ -743,7 +744,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.71</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.72</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1027,7 +1028,7 @@ label.inl input{width:70px}
     <button id="v3Reset">Recentrer</button>
     <button id="v3Close">Fermer</button>
   </div>
-  <div class="v3d-view"><canvas id="v3c" aria-label="Vue 3D du brut usiné"></canvas>
+  <div class="v3d-view"><canvas id="v3c" aria-label="Vue 3D du brut usiné"></canvas><canvas id="v3cube" width="120" height="120" aria-label="Cube d’orientation : cliquez une face ou un coin"></canvas>
     <div class="v3d-help">Glisser : tourner · Clic droit ou Maj + glisser : déplacer · Molette : zoom · Double-clic : recentrer · <span id="v3Info"></span></div>
   </div>
 </div>
@@ -1087,6 +1088,7 @@ Object.assign(I18N_EN, {"grblHAL (pause M0 au changement d'outil, cycles de per�
 Object.assign(I18N_EN, {"COPO est installé : les fichiers .copo s’ouvrent maintenant d’un double-clic.": "COPO is installed: .copo files now open with a double-click.", "Installer COPO comme application…": "Install COPO as an app…", "Déposez une image, un fichier SVG ou un projet .copo.": "Drop an image, an SVG file or a .copo project."});
 Object.assign(I18N_EN, {"Filetage": "Threading", "Fraise à fileter": "Thread mill", "Fraises à fileter": "Thread mills", "Intérieur (taraudage)": "Internal (tapped hole)", "Extérieur (vis)": "External (screw)", "Pas (mm)": "Pitch (mm)", "Diamètre nominal (mm, 0 = celui du cercle)": "Nominal diameter (mm, 0 = the circle's)", "Sens du filet": "Thread hand", "À droite (standard)": "Right-hand (standard)", "À gauche": "Left-hand", "Passes radiales": "Radial passes", "Choisissez une fraise à fileter (type « Fraise à fileter » dans la bibliothèque).": "Choose a thread mill (type “Thread mill” in the library).", "Indiquez la longueur filetée (profondeur de coupe).": "Enter the thread length (cut depth).", "Sélectionnez des cercles : chaque filetage est centré sur un cercle.": "Select circles: each thread is centered on a circle.", "Fraise trop grosse : Ø{t} pour un taraudage Ø{d} au pas de {p} (perçage préalable Ø{a}).": "Bit too large: Ø{t} for a Ø{d} tapped hole at {p} pitch (pre-drill Ø{a}).", "Diamètre de vis trop petit pour ce pas.": "Screw diameter too small for this pitch.", "Longueur filetée ({l} mm) plus grande que la longueur utile de la fraise ({f} mm).": "Thread length ({l} mm) longer than the bit's reach ({f} mm).", "Filetage extérieur : la matière autour de la vis doit être dégagée avant (poche), l’outil descend à côté du cylindre.": "External thread: material around the screw must be cleared first (pocket); the bit goes down beside the cylinder.", "perçage préalable": "pre-drill", "passes": "passes", "pas": "pitch", "M{d} × {p} : perçage préalable Ø{a} (fond de filet Ø{m}).": "M{d} × {p}: pre-drill Ø{a} (minor diameter Ø{m}).", "Vis Ø{d} × {p} : cylindre au Ø{d}, fond de filet Ø{m}.": "Screw Ø{d} × {p}: cylinder at Ø{d}, root diameter Ø{m}.", "Fraise trop grosse pour ce diamètre.": "Bit too large for this diameter.", "Sélectionnez un cercle ou indiquez le diamètre nominal.": "Select a circle or enter the nominal diameter.", "Angle du filet (°)": "Thread angle (°)", "Filetage à la fraise à fileter, centré sur chaque cercle sélectionné. Dessinez le cercle au diamètre nominal (8 pour M8) ou indiquez-le ci-dessus. ": "Thread milling with a thread mill, centered on each selected circle. Draw the circle at the nominal diameter (8 for M8) or enter it above. ", "Extérieur : l’outil tourne autour du cylindre en descendant (filet à droite) ; dégagez la matière autour avant.": "External: the bit circles the cylinder going down (right-hand thread); clear the material around it first.", "Intérieur : percez ou fraisez d’abord le trou au diamètre de perçage, l’outil remonte en hélice depuis le fond (filet à droite).": "Internal: drill or mill the hole at the tap-drill diameter first; the bit spirals up from the bottom (right-hand thread).", " Un tour d’hélice = un pas. L’avance de l’outil est celle du tranchant : COPO la corrige au centre de l’outil.": " One helix turn = one pitch. The tool feed is the cutting-edge feed: COPO corrects it at the tool center.", "Monodent, carbure : du M5 au M12 environ.": "Single-form, carbide: about M5 to M12.", "Monodent, carbure : à partir du M10.": "Single-form, carbide: M10 and up."});
 Object.assign(I18N_EN, {"Longueur filetée (C) (mm)": "Thread length (C) (mm)"});
+Object.assign(I18N_EN, {"Dessous": "Bottom", "Avant": "Front", "Arrière": "Back", "Droite": "Right", "Gauche": "Left", "Cube d’orientation : cliquez une face ou un coin": "View cube: click a face or a corner"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4471,7 +4473,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.71', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.72', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5069,7 +5071,8 @@ function v3BuildMesh() {
 function v3ToolMesh(tool) {
   if (V3.toolMesh.has(tool.id)) return V3.toolMesh.get(tool.id);
   const gl = V3.gl, r = tool.dia / 2, H = Math.max(25, tool.dia * 5), th = Math.tan((+tool.angle || 90) * Math.PI / 360);
-  let prof; if (tool.type === 'v' || tool.type === 'drill') prof = [[0, 0], [r, r / th], [r, H]]; else if (tool.type === 'ball') { prof = []; for (let i = 0; i <= 8; i++) { const a = i / 8 * Math.PI / 2; prof.push([r * Math.sin(a), r - r * Math.cos(a)]); } prof.push([r, H]); } else prof = [[0, 0], [r, 0], [r, H]];
+  let prof; if (tool.type === 'thread') { const d = r * 0.32, t3 = Math.tan(Math.PI / 6), rn = r - d * 1.15, L = Math.max(+tool.flen || 0, tool.dia * 2.5), rs = Math.max(r, 3); prof = [[0, 0], [r - d, 0], [r, d * t3], [r - d, 2 * d * t3], [rn, 2 * d * t3 + 0.2], [rn, L], [rs, L + Math.max(0.5, rs - rn)], [rs, Math.max(H, L + 20)]]; }
+  else if (tool.type === 'v' || tool.type === 'drill') prof = [[0, 0], [r, r / th], [r, H]]; else if (tool.type === 'ball') { prof = []; for (let i = 0; i <= 8; i++) { const a = i / 8 * Math.PI / 2; prof.push([r * Math.sin(a), r - r * Math.cos(a)]); } prof.push([r, H]); } else prof = [[0, 0], [r, 0], [r, H]];
   prof.push([0, H]);
   const seg = 28, vb = [];
   for (let s = 0; s < seg; s++) {
@@ -5119,7 +5122,54 @@ function v3Render() {
     const c2 = V3.cur.face === 2, tp_ = c2 ? [V3.cur.p[0], V3.cur.p[1], -S3.t - V3.cur.p[2]] : V3.cur.p; gl.uniformMatrix4fv(t('uMVP'), false, mvp); gl.uniformMatrix4fv(t('uModel'), false, model); gl.uniform1f(t('uTZ'), c2 ? -1 : 1); gl.uniform3fv(t('uOff'), tp_); gl.uniform3fv(t('uL'), L); gl.uniform3fv(t('uC'), [0.78, 0.8, 0.84]);
     gl.bindVertexArray(m.vao); gl.drawArrays(gl.TRIANGLES, 0, m.n); gl.bindVertexArray(null);
   }
+  v3Cube();
 }
+// cube d'orientation (coin haut droit) : faces = vues orthogonales, coins = vues isométriques
+const V3CUBE = [
+  { n: [0, 0, 1], l: 'Dessus', u: [1, 0, 0], v: [0, -1, 0], yaw: -Math.PI / 2, pitch: 1.5703 },
+  { n: [0, 0, -1], l: 'Dessous', u: [1, 0, 0], v: [0, 1, 0], yaw: -Math.PI / 2, pitch: -1.5703 },
+  { n: [0, -1, 0], l: 'Avant', u: [1, 0, 0], v: [0, 0, -1], yaw: -Math.PI / 2, pitch: 0 },
+  { n: [0, 1, 0], l: 'Arrière', u: [-1, 0, 0], v: [0, 0, -1], yaw: Math.PI / 2, pitch: 0 },
+  { n: [1, 0, 0], l: 'Droite', u: [0, 1, 0], v: [0, 0, -1], yaw: 0, pitch: 0 },
+  { n: [-1, 0, 0], l: 'Gauche', u: [0, -1, 0], v: [0, 0, -1], yaw: Math.PI, pitch: 0 }];
+function v3CubeBasis() { const cp = Math.cos(V3.pitch), e = [cp * Math.cos(V3.yaw), cp * Math.sin(V3.yaw), Math.sin(V3.pitch)], rt = v3n([-Math.sin(V3.yaw), Math.cos(V3.yaw), 0]), up = v3cross(rt, [-e[0], -e[1], -e[2]]); return { e, rt, up: v3n(up) }; }
+function v3CubeHit(mx, my) {
+  const B = v3CubeBasis(), K = 30, P = q => [60 + K * (q[0] * B.rt[0] + q[1] * B.rt[1] + q[2] * B.rt[2]), 60 - K * (q[0] * B.up[0] + q[1] * B.up[1] + q[2] * B.up[2])];
+  for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const sz of [-1, 1]) { const vis = sx * B.e[0] + sy * B.e[1] + sz * B.e[2] > 0.25; if (!vis) continue; const q = P([sx, sy, sz]); if (Math.hypot(q[0] - mx, q[1] - my) < 9) return { yaw: Math.atan2(sy, sx), pitch: sz * 0.6155, k: 'c' + sx + sy + sz }; }
+  for (const f of V3CUBE) { if (f.n[0] * B.e[0] + f.n[1] * B.e[1] + f.n[2] * B.e[2] <= 0.02) continue; const c = f.n, Q = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([a, b]) => P([c[0] + a * f.u[0] + b * f.v[0], c[1] + a * f.u[1] + b * f.v[1], c[2] + a * f.u[2] + b * f.v[2]]));
+    let ins = false; for (let i = 0, j = 3; i < 4; j = i++) if ((Q[i][1] > my) !== (Q[j][1] > my) && mx < (Q[j][0] - Q[i][0]) * (my - Q[i][1]) / (Q[j][1] - Q[i][1]) + Q[i][0]) ins = !ins; if (ins) return { yaw: f.yaw, pitch: f.pitch, k: f.l }; }
+  return null;
+}
+function v3Cube() {
+  const cv = $('#v3cube'); if (!cv || !V3.S3) return; const dpr = window.devicePixelRatio || 1; if (cv.width !== 120 * dpr) { cv.width = cv.height = 120 * dpr; }
+  const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, 120, 120);
+  const B = v3CubeBasis(), K = 30, P = q => [60 + K * (q[0] * B.rt[0] + q[1] * B.rt[1] + q[2] * B.rt[2]), 60 - K * (q[0] * B.up[0] + q[1] * B.up[1] + q[2] * B.up[2])];
+  const ink = tok('--ink'), acc = tok('--accent'), raised = tok('--raised'), line = tok('--line'), hv = V3.cubeHover;
+  const fs = V3CUBE.map(f => ({ f, d: f.n[0] * B.e[0] + f.n[1] * B.e[1] + f.n[2] * B.e[2] })).filter(o => o.d > 0.02).sort((a, b) => a.d - b.d);
+  for (const { f, d } of fs) {
+    const c = f.n, Q = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([a, b]) => P([c[0] + a * f.u[0] + b * f.v[0], c[1] + a * f.u[1] + b * f.v[1], c[2] + a * f.u[2] + b * f.v[2]]));
+    g.beginPath(); Q.forEach((q, i) => i ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1])); g.closePath();
+    g.fillStyle = hv === f.l ? acc : raised; g.globalAlpha = 0.55 + 0.45 * d; g.fill(); g.globalAlpha = 1; g.strokeStyle = line; g.lineWidth = 1; g.stroke();
+    if (d > 0.2) { const o = P(c), U = P([c[0] + f.u[0], c[1] + f.u[1], c[2] + f.u[2]]), Vv = P([c[0] + f.v[0], c[1] + f.v[1], c[2] + f.v[2]]); g.save(); g.transform(U[0] - o[0], U[1] - o[1], Vv[0] - o[0], Vv[1] - o[1], o[0], o[1]); const t = tr(f.l); g.font = '600 0.42px ' + (tok('--f-ui') || 'sans-serif'); const w = g.measureText(t).width; const k = w > 1.75 ? 1.75 / w : 1; g.scale(k, k); g.fillStyle = hv === f.l ? '#fff' : ink; g.globalAlpha = Math.min(1, (d - 0.2) * 2.5); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(t, 0, 0.02); g.restore(); g.globalAlpha = 1; }
+  }
+  // coins cliquables
+  for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const sz of [-1, 1]) { if (sx * B.e[0] + sy * B.e[1] + sz * B.e[2] <= 0.25) continue; const q = P([sx, sy, sz]), k = 'c' + sx + sy + sz; g.beginPath(); g.arc(q[0], q[1], hv === k ? 5 : 3, 0, 7); g.fillStyle = hv === k ? acc : line; g.fill(); }
+  // axes X (rouge) Y (vert) depuis le coin avant gauche bas
+  const o = P([-1.35, -1.35, -1.35]), ax = [[[1, 0, 0], '#e5484d', 'X'], [[0, 1, 0], '#30a46c', 'Y'], [[0, 0, 1], '#3e7bfa', 'Z']];
+  for (const [v, col, l] of ax) { const q = P([-1.35 + v[0] * 0.9, -1.35 + v[1] * 0.9, -1.35 + v[2] * 0.9]); g.beginPath(); g.moveTo(o[0], o[1]); g.lineTo(q[0], q[1]); g.strokeStyle = col; g.lineWidth = 2; g.stroke(); g.fillStyle = col; g.font = '700 9px sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(l, q[0] + (q[0] - o[0]) * 0.25, q[1] + (q[1] - o[1]) * 0.25); }
+}
+function v3AnimTo(yaw, pitch) {
+  let y0 = V3.yaw, d = yaw - y0; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI;
+  // vue de dessus/dessous : garde l'orientation actuelle si on y est déjà presque
+  const p0 = V3.pitch, t0 = performance.now(), D = 320;
+  const step = () => { const k = Math.min(1, Math.max(0, (performance.now() - t0) / D)), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; V3.yaw = y0 + d * e; V3.pitch = p0 + (pitch - p0) * e; v3Req(); if (k < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+(() => { const cv = document.getElementById('v3cube'); if (!cv) return; const pos = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  cv.addEventListener('pointermove', e => { const h = v3CubeHit(...pos(e)), k = h ? h.k : null; if (k !== V3.cubeHover) { V3.cubeHover = k; v3Cube(); } });
+  cv.addEventListener('pointerleave', () => { V3.cubeHover = null; v3Cube(); });
+  cv.addEventListener('pointerdown', e => { e.stopPropagation(); const h = v3CubeHit(...pos(e)); if (h) v3AnimTo(h.yaw, h.pitch); });
+  cv.addEventListener('dblclick', e => e.stopPropagation()); cv.addEventListener('contextmenu', e => e.preventDefault()); })();
 function v3Req() { if (!V3.raf) V3.raf = requestAnimationFrame(v3Frame); }
 function v3Frame(ts) {
   V3.raf = 0; if ($('#v3d').hidden) return;
