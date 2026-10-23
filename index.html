@@ -529,7 +529,7 @@ label.inl input{width:70px}
           <label class="chk" id="uG20Row" hidden><input type="checkbox" id="mG20"> G-code en pouces (G20)</label>
           <label class="chk"><input type="checkbox" id="mComments" checked> Commentaires dans le programme</label>
           <label class="chk"><input type="checkbox" id="mArcs" checked> Arcs G2/G3 (fichier plus court, mouvement plus fluide)</label>
-          <label class="chk" id="mCycRow" hidden><input type="checkbox" id="mCyc" checked> Cycles de perçage G81/G83 (le contrôleur gère les remontées)</label>
+          <label class="chk" id="mCycRow" hidden><input type="checkbox" id="mCyc" checked> Cycles de perçage G81/G82/G83 (le contrôleur gère les remontées)</label>
         </section>
       </div>
       <div class="pane" data-pane="dessin">
@@ -741,7 +741,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.67</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.68</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -829,6 +829,7 @@ label.inl input{width:70px}
           <div class="g2" data-show="drill">
             <label id="drillPitchRow">Descente par tour en hélice (mm)<input data-u="len" type="number" data-f="helixPitch" step="0.25" min="0.1"></label>
             <label>Débourrage (mm, 0 = sans)<input data-u="len" type="number" data-f="peck" step="0.5" min="0"></label>
+            <label>Temporisation au fond (s, 0 = sans)<input type="number" data-f="dwell" step="0.1" min="0"></label>
           </div>
           <div class="figrow" data-show="profile pocket" id="allowRow"><span class="ill" data-ill="allow"></span><div class="g2">
             <label>Surépaisseur (mm)<input data-u="len" type="number" data-f="allow" step="0.05" min="0"></label>
@@ -1069,7 +1070,8 @@ Object.assign(I18N_EN, {"Matériau : {m} · {n} outil(s) utilisé(s) · {t} dans
 Object.assign(I18N_EN, {"{m} · {n} outil(s) utilisé(s)": "{m} · {n} tool(s) used"});
 Object.assign(I18N_EN, {"Fraise de gravure (conique à pointe plate)": "Engraving bit (tapered, flat tip)", "Fraise conique à bout sphérique": "Tapered ball-nose bit", "Rayon en bout R (mm)": "Tip radius R (mm)", "Longueur d’usinage L (mm)": "Cutting length L (mm)", "Diamètre de queue D (mm)": "Shank diameter D (mm)", "Angle déduit : {a}° de dépouille (angle inclus {b}°)": "Derived angle: {a}° per side ({b}° included)", "Vérifiez D, R et L : il faut D/2 > R et L > R.": "Check D, R and L: D/2 must exceed R and L must exceed R."});
 Object.assign(I18N_EN, {"Proposer une amélioration…": "Suggest an improvement…", "Proposer une amélioration": "Suggest an improvement", "La proposition s’ouvre sur GitHub, prête à être envoyée (compte GitHub gratuit nécessaire).": "The suggestion opens on GitHub, ready to send (free GitHub account needed).", "Votre proposition": "Your suggestion", "À quoi cela servirait (exemple, logiciel qui le fait déjà…)": "What it would be used for (example, software that already does it…)", "Décrivez la fonction ou l’amélioration souhaitée.": "Describe the feature or improvement you would like.", "Ex. : pouvoir coter un angle": "E.g.: being able to dimension an angle", "Ouvrir la proposition sur GitHub": "Open the suggestion on GitHub", "Proposition": "Suggestion", "À quoi cela servirait": "What it would be used for", "Proposition ouverte sur GitHub : vérifiez-la puis cliquez sur « Create »/« Submit new issue ».": "Suggestion opened on GitHub: check it then click “Create”/“Submit new issue”."});
-Object.assign(I18N_EN, {"{n} trou(s) plus grand(s) que la fraise : percé(s) à Ø{d} au lieu du diamètre dessiné (cochez l’usinage en hélice).": "{n} hole(s) larger than the bit: drilled at Ø{d} instead of the drawn diameter (tick helical milling).", "Cycles de perçage G81/G83 (le contrôleur gère les remontées)": "G81/G83 drilling cycles (the controller handles retracts)"});
+Object.assign(I18N_EN, {"{n} trou(s) plus grand(s) que la fraise : percé(s) à Ø{d} au lieu du diamètre dessiné (cochez l’usinage en hélice).": "{n} hole(s) larger than the bit: drilled at Ø{d} instead of the drawn diameter (tick helical milling).", "Cycles de perçage G81/G82/G83 (le contrôleur gère les remontées)": "G81/G82/G83 drilling cycles (the controller handles retracts)"});
+Object.assign(I18N_EN, {"grblHAL (pause M0 au changement d'outil, cycles de perçage)": "grblHAL (M0 pause at tool change, drilling cycles)", "Temporisation au fond (s, 0 = sans)": "Dwell at the bottom (s, 0 = none)"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -1667,7 +1669,7 @@ function buildDrill(p, tool, shapes, M) {
   const depth = +p.depth; if (!(depth > 0)) throw new Error('Indiquez une profondeur.');
   const holes = shapes.filter(s => s.closed && s.pts.length > 2).map(s => { let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (const q of s.pts) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); } return { c: [(x0 + x1) / 2, (y0 + y1) / 2], d: Math.max(x1 - x0, y1 - y0) }; });
   if (!holes.length) throw new Error('Sélectionnez des cercles ou des formes fermées : chaque trou est percé en leur centre.');
-  const peck = +p.peck > 0 ? +p.peck : depth, up = Math.max(0.5, Math.min(M.clearZ, 2)), warns = [];
+  const peck = +p.peck > 0 ? +p.peck : depth, dwell = Math.max(0, +p.dwell || 0), up = Math.max(0.5, Math.min(M.clearZ, 2)), warns = [];
   const mb = new MB(M);
   const R = tool.dia / 2, climb = p.dir !== 'conv', pitch = Math.max(0.1, +p.helixPitch || 1), stepH = tool.dia * Math.max(0.05, 1 - (+tool.over || 0) / 100); let nHel = 0;
   const helOK = h => p.helixHoles !== false && tool.type === 'flat' && h.d > tool.dia * 1.05;
@@ -1691,8 +1693,10 @@ function buildDrill(p, tool, shapes, M) {
       mb.g1(x, y, nz, tool.plunge); cur = nz;
       if (cur > -depth + 1e-9) mb.g0(x, y, up);
     }
+    if (dwell > 0) mb.m.push({ g: 4, x, y, z: mb.z, p: dwell });
     mb.up(M.clearZ);
-    const cy = { x, y, zb: -depth, r: up, q: +p.peck > 0 ? +p.peck : 0, f: tool.plunge }; for (let i = s0; i < mb.m.length; i++) mb.m[i].cy = cy;
+    // cycle : G81 simple, G82 avec temporisation, G83 avec débourrage (G83 n'a pas de temporisation : ce cas reste écrit en G0/G1)
+    if (!(+p.peck > 0 && dwell > 0)) { const cy = { x, y, zb: -depth, r: up, q: +p.peck > 0 ? +p.peck : 0, p: dwell, f: tool.plunge }; for (let i = s0; i < mb.m.length; i++) mb.m[i].cy = cy; }
   }
   mb.up(M.safeZ);
   const big = holes.filter(h => h.d > tool.dia * 1.05 && !helOK(h)).length, small = holes.filter(h => h.d < tool.dia * 0.95).length;
@@ -1862,6 +1866,7 @@ const nf = v => { const s = (Math.round(v * 1000) / 1000).toFixed(3).replace(/\.
 // post-processeurs : tc = mode de changement d'outil ; m6 = format ; g911 = mode IJ incrémental explicite ; head = ligne de sécurité en tête
 const POSTS = {
   grbl: { label: "GRBL (pause M0 au changement d'outil)", short: 'GRBL', tc: 'pause', g911: false, ext: 'nc' },
+  grblhal: { label: "grblHAL (pause M0 au changement d'outil, cycles de perçage)", short: 'grblHAL', tc: 'pause', g911: false, cyc: true, ext: 'nc' },
   grblm: { label: 'GRBL manuel (G53 + pause à chaque outil)', short: 'GRBL G53', tc: 'manual', g911: false, ext: 'nc' },
   carbide: { label: 'Carbide Motion (Shapeoko, Nomad)', short: 'Carbide Motion', tc: 'm6', m6: 'M6 T{T}', g911: false, ext: 'nc' },
   onefinity: { label: 'Onefinity / Buildbotics', short: 'Onefinity', tc: 'm6', m6: 'M6 T{T}', g911: false, ext: 'nc' },
@@ -1914,7 +1919,7 @@ function makeGcode(tps, tools, stock, M, faceMode) {
         if (m.cy === lastCy) continue;
         const c = m.cy, zc = M.clearZ + oz;
         if (!inCyc) { const X = c.x - ox, Y = c.y - oy; if (st.x === null || nx(st.x) !== nx(X) || nx(st.y) !== nx(Y)) L.push('G0 X' + nx(X) + ' Y' + nx(Y)); if (st.z === null || nx(st.z) !== nx(zc)) L.push('G0 Z' + nx(zc)); }
-        L.push((inCyc ? '' : 'G98 ') + (c.q > 0 ? 'G83' : 'G81') + ' X' + nx(c.x - ox) + ' Y' + nx(c.y - oy) + ' Z' + nx(c.zb + oz) + ' R' + nx(c.r + oz) + (c.q > 0 ? ' Q' + nx(c.q) : '') + ' F' + fF(c.f));
+        L.push((inCyc ? '' : 'G98 ') + (c.q > 0 ? 'G83' : c.p > 0 ? 'G82' : 'G81') + ' X' + nx(c.x - ox) + ' Y' + nx(c.y - oy) + ' Z' + nx(c.zb + oz) + ' R' + nx(c.r + oz) + (c.q > 0 ? ' Q' + nx(c.q) : c.p > 0 ? ' P' + nf(c.p) : '') + ' F' + fF(c.f));
         inCyc = true; lastCy = c; st = { ...st, g: null, x: c.x - ox, y: c.y - oy, z: zc, f: c.f }; continue;
       }
       endCyc();
@@ -4401,7 +4406,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.67', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.68', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
