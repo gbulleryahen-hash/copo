@@ -804,7 +804,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.86</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.87</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1806,7 +1806,21 @@ function buildRelief(p, tool, shapes, M) {
   const sample = (ln, t0, t1) => { const n = Math.max(1, Math.ceil(Math.abs(t1 - t0) / c)), P = []; for (let k = 0; k <= n; k++) { const t = t0 + (t1 - t0) * k / n, x = ln.A[0] + ln.u[0] * t, y = ln.A[1] + ln.u[1] * t; P.push([x, y, Math.max(floor, Math.min(0, zAt(x, y)))]); } return P; };
   // simplification (Douglas-Peucker en 3D, tolérance 0,005 mm)
   const simp = P => { if (P.length < 3) return P; const keep = new Uint8Array(P.length); keep[0] = keep[P.length - 1] = 1; const st2 = [[0, P.length - 1]]; while (st2.length) { const [a, b] = st2.pop(); let md = 0, mi = -1; const A = P[a], B = P[b], d = [B[0] - A[0], B[1] - A[1], B[2] - A[2]], dd = d[0] * d[0] + d[1] * d[1] + d[2] * d[2] || 1e-12; for (let i = a + 1; i < b; i++) { const q = P[i], t = Math.max(0, Math.min(1, ((q[0] - A[0]) * d[0] + (q[1] - A[1]) * d[1] + (q[2] - A[2]) * d[2]) / dd)), e = Math.hypot(q[0] - A[0] - d[0] * t, q[1] - A[1] - d[1] * t, q[2] - A[2] - d[2] * t); if (e > md) { md = e; mi = i; } } if (md > 0.005) { keep[mi] = 1; st2.push([a, mi], [mi, b]); } } return P.filter((q, i) => keep[i]); };
-  const mb = new MB(M), feed = tool.feed, plunge = tool.plunge; let nl = 0, nlev = 0;
+  const mb = new MB(M), feed = tool.feed, plunge = tool.plunge; let nl = 0, nlev = 0, nlift = 0;
+  // liaison entre deux passes : si le trajet direct reste dans la limite et n'est pas trop long, on suit la surface (zf) ; sinon on remonte
+  const inB = (x, y) => { const i = Math.round(x / cx), j = Math.round(y / cy); return i >= 0 && j >= 0 && i < nx && j < ny && Bm[j * nx + i] === 1; };
+  const Lmax = Math.max(4 * D, 12 * step, 8);
+  const link = (from, to, zf, zStart) => { const L = from ? Math.hypot(to[0] - from[0], to[1] - from[1]) : Infinity;
+    if (from && L <= Lmax) { const n = Math.max(1, Math.ceil(L / c)), tol = Math.max(2, Math.ceil(step / c)); let outN = 0; for (let i = 1; i < n && outN <= tol; i++) if (!inB(from[0] + (to[0] - from[0]) * i / n, from[1] + (to[1] - from[1]) * i / n)) outN++; const ok = outN <= tol; // quelques points hors limite tolérés (bord en biais)
+      if (ok) { for (let i = 1; i <= n; i++) { const x = from[0] + (to[0] - from[0]) * i / n, y = from[1] + (to[1] - from[1]) * i / n; mb.g1(x, y, i === n ? to[2] : zf(x, y), feed); } return; } }
+    if (from) { mb.up(M.clearZ); nlift++; } mb.approach(to[0], to[1], zStart ?? to[2], plunge); if (zStart !== undefined && zStart !== to[2]) mb.g1(to[0], to[1], to[2], plunge); };
+  const zSurf = (x, y) => Math.max(floor, Math.min(0, zAt(x, y)));
+  // ordre des tronçons de balayage : chaînes en zigzag qui restent dans une même zone (comme Aspire), au lieu de traverser toute la ligne
+  const chainOrder = L => { const used = L.map(ln => ln.sp.map(() => false)), out = [];
+    for (let k0 = 0; k0 < L.length; k0++) for (let j0 = 0; j0 < L[k0].sp.length; j0++) { if (used[k0][j0]) continue; let k = k0, j = j0, fwd = true;
+      while (true) { used[k][j] = true; const [a, b] = L[k].sp[j]; out.push(fwd ? [L[k], a, b] : [L[k], b, a]); if (k + 1 >= L.length) break; let bj = -1, bo = 0;
+        L[k + 1].sp.forEach(([c0, c1], jj) => { if (used[k + 1][jj]) return; const o = Math.min(b, c1) - Math.max(a, c0); if (o > bo) { bo = o; bj = jj; } }); if (bj < 0) break; k++; j = bj; fwd = !fwd; } }
+    return out; };
   if (fin && p.rlFStrat === 'offset') {
     // courbes de niveau de la distance au bord de la limite (pas = pas latéral), suivies sur la surface
     const f = new Float64Array(N); for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i; f[q] = Bm[q] && i > 0 && j > 0 && i < nx - 1 && j < ny - 1 ? Infinity : 0; } relEDT(f, nx, ny); let dmax = 0; for (let i = 0; i < N; i++) if (f[i] !== Infinity && f[i] > dmax) dmax = f[i];
@@ -1832,31 +1846,30 @@ function buildRelief(p, tool, shapes, M) {
         if (closed && ((p.rlDir !== 'conv') === (ar > 0))) pl = pl.reverse(); // avalant : sens horaire
         if (closed && last) { let bi = 0, bd = Infinity; for (let k = 0; k < pl.length; k++) { const d = Math.hypot(pl[k][0] - last[0], pl[k][1] - last[1]); if (d < bd) { bd = d; bi = k; } } pl = [...pl.slice(bi), ...pl.slice(1, bi + 1)]; }
         const Pz = simp(pl.map(q => [q[0], q[1], Math.max(floor, Math.min(0, zAt(q[0], q[1])))])); nl++;
-        mb.approach(Pz[0][0], Pz[0][1], Pz[0][2], plunge); for (let k = 1; k < Pz.length; k++) mb.g1(Pz[k][0], Pz[k][1], Pz[k][2], feed); last = Pz[Pz.length - 1]; mb.up(M.clearZ); }
+        link(last, Pz[0], zSurf); for (let k = 1; k < Pz.length; k++) mb.g1(Pz[k][0], Pz[k][1], Pz[k][2], feed); last = Pz[Pz.length - 1]; }
     }
   } else if (fin) {
     for (const ang of p.rlCross ? [+p.rlAng || 0, (+p.rlAng || 0) + 90] : [+p.rlAng || 0]) {
       const L = lines(ang); let last = null;
-      L.forEach((ln, k) => { const sp = k % 2 ? ln.sp.slice().reverse().map(iv => [iv[1], iv[0]]) : ln.sp;
-        for (const [t0, t1] of sp) { const P = simp(sample(ln, t0, t1)); nl++; const f = P[0];
-          if (last && Math.hypot(f[0] - last[0], f[1] - last[1]) <= step * 1.6) { const n = Math.max(1, Math.ceil(Math.hypot(f[0] - last[0], f[1] - last[1]) / c)); for (let i = 1; i <= n; i++) { const x = last[0] + (f[0] - last[0]) * i / n, y = last[1] + (f[1] - last[1]) * i / n; mb.g1(x, y, Math.max(floor, Math.min(0, zAt(x, y))), feed); } }
-          else mb.approach(f[0], f[1], f[2], plunge);
-          for (let i = 1; i < P.length; i++) mb.g1(P[i][0], P[i][1], P[i][2], feed); last = P[P.length - 1]; } });
-      mb.up(M.clearZ); last = null;
+      for (const [ln, t0, t1] of chainOrder(L)) { const P = simp(sample(ln, t0, t1)); nl++; link(last, P[0], zSurf); for (let i = 1; i < P.length; i++) mb.g1(P[i][0], P[i][1], P[i][2], feed); last = P[P.length - 1]; }
+      if (p.rlCross) { mb.up(M.clearZ); last = null; }
     }
   } else {
     const allow = Math.max(0, +p.rlAllow || 0), pass = Math.max(0.05, +p.pass > 0 ? +p.pass : (+tool.pass || D / 2)), L = lines(+p.rlAng || 0);
-    const rows = L.map((ln, k) => (k % 2 ? ln.sp.slice().reverse().map(iv => [iv[1], iv[0]]) : ln.sp).map(([t0, t1]) => sample(ln, t0, t1).map(q => [q[0], q[1], Math.min(0, q[2] + allow)])));
+    const rows = [chainOrder(L).map(([ln, t0, t1]) => sample(ln, t0, t1).map(q => [q[0], q[1], Math.min(0, q[2] + allow)]))];
     let zmin = 0; for (const r of rows) for (const P of r) for (const q of P) if (q[2] < zmin) zmin = q[2];
     for (let z = -pass; z > zmin - pass + 1e-6; z -= pass) {
       const zk = Math.max(z, zmin), zPrev = zk + pass; nlev++;
       if (p.rlRStrat === 'raster') { // balayage 3D : chaque ligne suit la surface (plus surépaisseur) sans descendre sous le niveau
-        for (const r of rows) for (const P of r) { if (!P.some(q => q[2] < zk - 1e-6)) continue; nl++; const f0 = P[0]; mb.approach(f0[0], f0[1], Math.min(0, zPrev), plunge); mb.g1(f0[0], f0[1], Math.max(zk, f0[2]), plunge); for (let i = 1; i < P.length; i++) mb.g1(P[i][0], P[i][1], Math.max(zk, P[i][2]), feed); mb.up(M.clearZ); }
+        const zr = (x, y) => Math.max(zk, Math.min(0, zAt(x, y) + allow)); let last = null;
+        for (const r of rows) for (const P of r) { if (!P.some(q => q[2] < zk - 1e-6)) continue; nl++; const f0 = [P[0][0], P[0][1], Math.max(zk, P[0][2])]; link(last, f0, zr, Math.min(0, zPrev)); for (let i = 1; i < P.length; i++) mb.g1(P[i][0], P[i][1], Math.max(zk, P[i][2]), feed); last = [P[P.length - 1][0], P[P.length - 1][1], Math.max(zk, P[P.length - 1][2])]; }
+        mb.up(M.clearZ);
         if (zk <= zmin) break; continue;
       }
+      const zrz = (x, y) => Math.max(zk, Math.min(0, zAt(x, y) + allow)); let lastR = null;
       for (const r of rows) for (const P of r) {
         // tronçons où la surface (plus surépaisseur) est sous le niveau ; on suit la surface sur les petits écarts
-        let run = null; const flush = () => { if (!run || run.length < 2) { run = null; return; } nl++; const f = run[0]; mb.approach(f[0], f[1], Math.min(0, zPrev), plunge); mb.g1(f[0], f[1], f[2], plunge); for (let i = 1; i < run.length; i++) mb.g1(run[i][0], run[i][1], run[i][2], feed); mb.up(M.clearZ); run = null; };
+        let run = null; const flush = () => { if (!run || run.length < 2) { run = null; return; } nl++; link(lastR, run[0], zrz, Math.min(0, zPrev)); for (let i = 1; i < run.length; i++) mb.g1(run[i][0], run[i][1], run[i][2], feed); lastR = run[run.length - 1]; run = null; };
         let gap = 0, pend = [];
         for (const q of P) { const z2 = Math.max(zk, q[2]); if (q[2] < zk - 1e-6) { if (run && pend.length) run.push(...pend); pend = []; gap = 0; (run = run || []).push([q[0], q[1], z2]); } else if (run) { pend.push([q[0], q[1], z2]); gap += c; if (gap > D) { flush(); pend = []; gap = 0; } } }
         flush();
@@ -2953,7 +2966,8 @@ function inXY(x, y) { const o = originOf(S.stock); return [x + o[0], y + o[1]]; 
 // ---------- tests de clic ----------
 function edgeDist(s, p) { const n = s.pts.length; let b = Infinity; for (let i = 0; i < n - (s.closed ? 0 : 1); i++) b = Math.min(b, segDist(p, s.pts[i], s.pts[(i + 1) % n])); return b; }
 function hitEdge(p, px = 7) { const tol = px / S.view.s; let best = null, bd = tol; for (const s of S.shapes) { if (!editable(s)) continue; const d = edgeDist(s, p); if (d < bd) { bd = d; best = s; } } return best; }
-function hitShape(p) { const e = hitEdge(p, 6); if (e) return e; let best = null, ba = Infinity; for (const s of S.shapes) if (editable(s) && s.closed && pip(p, s.pts)) { const a = Math.abs(area(s.pts)); if (a < ba) { ba = a; best = s; } } return best; }
+function hitShape(p) { return hitEdge(p, 6) || null; } // sélection sur le trait uniquement (les formes empilées restent accessibles)
+function hitSelInside(p) { let best = null, ba = Infinity; for (const s of selShapes()) if (editable(s) && s.closed && pip(p, s.pts)) { const a = Math.abs(area(s.pts)); if (a < ba) { ba = a; best = s; } } return best; } // glisser une sélection depuis l'intérieur
 function hitDim(p) { const tol = 6 / S.view.s; for (const d of S.dims) { const { A, B } = dimGeom(d); if (segDist(p, A, B) < tol) return d; } return null; }
 function hitGuide(X, Y) { for (let i = 0; i < S.guides.x.length; i++) if (Math.abs(sx(S.guides.x[i]) - X) < 4) return { axis: 'x', i }; for (let i = 0; i < S.guides.y.length; i++) if (Math.abs(sy(S.guides.y[i]) - Y) < 4) return { axis: 'y', i }; return null; }
 function findCorner(p) { let best = null, bd = 12 / S.view.s; for (const s of S.shapes) { if (!editable(s)) continue; s.nodes.forEach((n, i) => { const d = Math.hypot(n.x - p[0], n.y - p[1]); if (d < bd && canCorner(s, i)) { bd = d; best = { s, i, p: [n.x, n.y] }; } }); } return best; }
@@ -3237,7 +3251,7 @@ cv.addEventListener('pointerdown', e => {
       draw(); return;
     }
     if (ih) { const im = ih.im; drag = ih.kind === 'irot' ? { mode: 'irot', im, rot0: im.rot || 0, a0: Math.atan2(p[1] - im.y, p[0] - im.x), rel: !!ih.rel } : { mode: 'iscale', im, sgn: ih.sgn, anchor: ih.anchor, w0: im.w, h0: im.h, zH0: +im.zH || 0, rel: !!ih.rel }; draw(); return; }
-    const h = hitShape(p);
+    const h = hitShape(p) || (!e.shiftKey ? hitSelInside(p) : null);
     if (h) {
       S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (S.relSel) { S.relSel = null; relPanel(); } const ids = groupIds(h), wasSel = S.sel.has(h.id) && !e.shiftKey;
       if (e.shiftKey) { const has = S.sel.has(h.id); ids.forEach(id => has ? S.sel.delete(id) : S.sel.add(id)); } else if (!S.sel.has(h.id)) { S.sel.clear(); ids.forEach(id => S.sel.add(id)); }
@@ -4675,7 +4689,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.86', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.87', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
