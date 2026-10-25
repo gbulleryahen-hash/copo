@@ -137,7 +137,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 #rvcube{position:absolute;left:auto;bottom:auto;top:8px;right:8px;width:120px;height:120px;cursor:pointer;touch-action:none}
 .rvtools{position:absolute;left:10px;bottom:10px}
 
-.rvinfo{position:absolute;left:10px;top:8px;font:12px/1.5 var(--f-mono);color:var(--ink);text-shadow:0 1px 2px rgb(0 0 0/.6);pointer-events:none;white-space:pre}
+.v3stat{position:absolute;left:12px;top:10px;z-index:3;font:500 13px/1.5 var(--f-mono);color:var(--ink);text-shadow:0 1px 2px rgb(0 0 0/.7);pointer-events:none;white-space:pre;font-variant-numeric:tabular-nums}.rvinfo{position:absolute;left:10px;top:8px;font:12px/1.5 var(--f-mono);color:var(--ink);text-shadow:0 1px 2px rgb(0 0 0/.6);pointer-events:none;white-space:pre}
 .splitsw button[disabled]{opacity:.35;cursor:default}
 .simbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:6px}.simbtn svg{width:18px;height:18px}
 canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;display:block}
@@ -253,7 +253,7 @@ textarea#gcOut{height:260px;font:12px/1.5 var(--f-mono);resize:vertical;white-sp
 .v3d-bar button{background:var(--raised);border:1px solid var(--line);border-radius:5px;padding:5px 12px;color:var(--ink);cursor:pointer}
 .v3d-bar button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);min-width:84px}
 .v3d-bar label{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px}
-.v3d-bar select{width:auto;padding:3px 6px}
+.v3d-bar select{width:auto;padding:3px 6px}.v3d-bar .v3x{margin-left:auto;width:32px;height:32px;padding:0;display:grid;place-items:center}.v3d-bar .v3x svg{width:16px;height:16px}.v3d-bar{gap:8px}
 #v3Pos{flex:1;min-width:140px;accent-color:var(--accent)}
 #v3Time{font-size:12.5px;min-width:17ch;color:var(--ink);font-variant-numeric:tabular-nums}
 .v3d-view{position:relative;min-height:0}
@@ -428,7 +428,7 @@ label.inl input{width:70px}
         <button data-act="new" id="btnNew" data-keep="1">Nouveau</button>
         <button data-act="sample">Ouvrir l'exemple</button>
         <button data-act="open">Ouvrir un projet…<kbd>Ctrl+O</kbd></button>
-        <button data-act="save">Enregistrer le projet<kbd>Ctrl+S</kbd></button>
+        <button data-act="save">Enregistrer le projet<kbd>Ctrl+S</kbd></button><button data-act="saveAs">Enregistrer sous…<kbd>Ctrl+Maj+S</kbd></button>
         <hr><button data-act="imgInsert">Insérer une image…</button><button data-act="import">Importer un SVG ou un DXF…</button><button data-act="fontDir">Ouvrir un dossier de polices…</button>
         <hr><button data-act="svgAll">Exporter le dessin en SVG</button><button data-act="svgSel">Exporter la sélection en SVG</button>
         <hr><button data-act="gcExport">Enregistrer le G-code</button><button data-act="sheetPdf">Enregistrer la fiche de gamme en PDF</button>
@@ -880,7 +880,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.123</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.124</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1177,18 +1177,16 @@ label.inl input{width:70px}
       <button id="v3Last" title="Aller à la fin (Fin)" aria-label="Aller à la fin"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button>
     </div>
     <input type="range" id="v3Pos" min="0" max="1000" value="1000" aria-label="Avancement de l'usinage">
-    <span id="v3Time" class="mono"></span>
     <label>Vitesse<select id="v3Speed"><option value="10">× 10</option><option value="50" selected>× 50</option><option value="200">× 200</option><option value="1000">× 1000</option></select></label>
     <label>Qualité<select id="v3Q"><option value="1">Normale</option><option value="2">Fine</option></select></label>
-    <label>Vue<select id="v3Face"><option value="f1">Face 1 en haut</option><option value="f2">Face 2 en haut (pièce retournée)</option></select></label>
+    <label>Vue<select id="v3Face"><option value="f1">Face 1</option><option value="f2">Face 2 (retournée)</option></select></label>
     <label class="chk"><input type="checkbox" id="v3Tool" checked> Outil</label>
     <label class="chk"><input type="checkbox" id="v3Draw"> Dessin</label><label class="chk" title="Affiche le relief dessiné (maillage de lignes) pour le comparer à la matière usinée"><input type="checkbox" id="v3Rel"> Relief</label><label class="chk" title="Cache les chutes autour des pièces détourées (découpes sur toute l’épaisseur) : il ne reste que la pièce finie. Les ponts d’attache ne relient plus la pièce à la chute."><input type="checkbox" id="v3Only"> Pièce finie seule</label>
-    <label>Afficher<select id="v3Show"><option value="stock">Matière</option><option value="both">Matière + trajectoires</option><option value="paths">Trajectoires seules</option></select></label>
+    <label>Afficher<select id="v3Show"><option value="stock">Matière</option><option value="both">Matière + trajets</option><option value="paths">Trajets seuls</option></select></label>
     <label class="chk" id="v3OneRow"><input type="checkbox" id="v3One"> Parcours sélectionné seul</label>
-    <button id="v3Reset">Recentrer</button>
-    <button id="v3Close">Fermer</button>
+    <button id="v3Close" class="v3x" title="Fermer l’aperçu (Échap)" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
-  <div class="v3d-view"><canvas id="v3c" aria-label="Vue 3D du brut usiné"></canvas><canvas id="v3cube" width="120" height="120" aria-label="Cube d’orientation : cliquez une face ou un coin"></canvas>
+  <div class="v3d-view"><span id="v3Time" class="v3stat"></span><div class="fbar fbfit"><button id="v3Reset" title="Recentrer la vue (double-clic dans la vue)" aria-label="Recentrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><circle cx="12" cy="12" r="2.5"/></svg></button></div><canvas id="v3c" aria-label="Vue 3D du brut usiné"></canvas><canvas id="v3cube" width="120" height="120" aria-label="Cube d’orientation : cliquez une face ou un coin"></canvas>
     <div class="v3d-help">Glisser : tourner · Clic droit ou Maj + glisser : déplacer · Molette : zoom · Double-clic : recentrer · <span id="v3Info"></span></div>
   </div>
 </div>
@@ -1287,6 +1285,8 @@ Object.assign(I18N_EN, {"Le relief dépasse l’épaisseur du brut : il sera cou
 Object.assign(I18N_EN, {"Le relief ({d} mm) est plus épais que le brut ({t} mm) : le bas sera coupé. Augmentez l’épaisseur du brut.": "The relief ({d} mm) is thicker than the stock ({t} mm): the bottom will be cut off. Increase the stock thickness."});
 Object.assign(I18N_EN, {"Cache les chutes autour des pièces détourées (découpes sur toute l’épaisseur) : il ne reste que la pièce finie. Les ponts d’attache ne relient plus la pièce à la chute.": "Hides the offcuts around cut-out parts (cuts through the full thickness): only the finished part remains. Tabs no longer link the part to the offcut.", "Pièce finie seule": "Finished part only"});
 Object.assign(I18N_EN, {"Créer le contour": "Create outline", "Crée un vecteur fermé qui suit le pourtour du relief sélectionné (vu de dessus). Utilisez-le ensuite avec un parcours Profil (extérieur) pour détourer la pièce, ou avec Contour décalé.": "Creates a closed vector following the outline of the selected relief (seen from above). Then use it with a Profile toolpath (outside) to cut the part out, or with Offset.", "Sélectionnez d’abord un relief.": "Select a relief first.", "Ce relief n’a pas d’emprise sur le brut.": "This relief does not lie on the stock.", "Contour introuvable.": "No outline found.", "Contour du relief créé ({n} vecteur(s), sélectionnés) : créez un parcours Profil à l’extérieur pour détourer la pièce.": "Relief outline created ({n} vector(s), selected): create an outside Profile toolpath to cut the part out."});
+Object.assign(I18N_EN, {"Projet enregistré dans « {f} ».": "Project saved to “{f}”.", "Enregistrer sous…": "Save as…"});
+Object.assign(I18N_EN, {"Face 1": "Side 1", "Face 2 (retournée)": "Side 2 (flipped)", "Matière + trajets": "Material + paths", "Trajets seuls": "Paths only"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -3880,7 +3880,7 @@ window.addEventListener('keydown', e => {
   if (mod && (k === 'g' || k === 'G')) { e.preventDefault(); act(e.shiftKey ? 'ungroup' : 'group'); return; }
   if (mod && (e.code === 'BracketRight' || k === ']' || k === '}')) { e.preventDefault(); arrange(e.shiftKey ? 'zFront' : 'zUp'); return; }
   if (mod && (e.code === 'BracketLeft' || k === '[' || k === '{')) { e.preventDefault(); arrange(e.shiftKey ? 'zBack' : 'zDown'); return; }
-  if (mod && (k === 's' || k === 'S')) { e.preventDefault(); act('save'); return; }
+  if (mod && (k === 's' || k === 'S')) { e.preventDefault(); act(e.shiftKey ? 'saveAs' : 'save'); return; }
   if (mod && (k === 'o' || k === 'O')) { e.preventDefault(); act('open'); return; }
   if (mod && (k === 'a' || k === 'A') && S.ui.tool === 'nodes' && S.ne && shapeById(S.ne.sid)) { e.preventDefault(); neSetSel(shapeById(S.ne.sid).nodes.map((_, i) => i)); syncNe(); draw(); return; }
   if (mod && (k === 'a' || k === 'A')) { e.preventDefault(); S.shapes.forEach(s => { if (editable(s)) S.sel.add(s.id); }); renderSel(); draw(); return; }
@@ -4150,7 +4150,7 @@ function act(a, btn) {
   switch (a) {
     case 'new': {
       const b = $('#btnNew'); if (Date.now() - newArm > 3000) { newArm = Date.now(); b.textContent = 'Tout effacer ?'; b.classList.add('armed'); setTimeout(() => { b.textContent = 'Nouveau'; b.classList.remove('armed'); }, 3000); return; }
-      newArm = 0; b.textContent = 'Nouveau'; b.classList.remove('armed'); closeMenus(); S.shapes = []; S.tps = []; S.dims = []; S.images = []; S.imgSel = null; S.relief = { items: [], show: true, res: 0.3 }; S.relSel = null; relGrid = {}; relMesh = {}; relSm.clear(); relDirty = true; relCache = null; if (typeof RXF !== 'undefined') RXF = false; S.guides = { x: [], y: [] }; S.layers = DEFAULT_LAYERS(); S.layerActive = 'l1'; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; S.form = newForm(); S.meta = {}; commit(); renderSel(); renderForm(); renderLayers(); renderGuides(); fit(); setTab('projet'); toast('Projet vide.'); return;
+      newArm = 0; b.textContent = 'Nouveau'; b.classList.remove('armed'); closeMenus(); projHandle = null; S.shapes = []; S.tps = []; S.dims = []; S.images = []; S.imgSel = null; S.relief = { items: [], show: true, res: 0.3 }; S.relSel = null; relGrid = {}; relMesh = {}; relSm.clear(); relDirty = true; relCache = null; if (typeof RXF !== 'undefined') RXF = false; S.guides = { x: [], y: [] }; S.layers = DEFAULT_LAYERS(); S.layerActive = 'l1'; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; S.form = newForm(); S.meta = {}; commit(); renderSel(); renderForm(); renderLayers(); renderGuides(); fit(); setTab('projet'); toast('Projet vide.'); return;
     }
     case 'v3d': v3Open(); return;
     case 'fpOpen': fpOpen(); return;
@@ -4182,12 +4182,13 @@ function act(a, btn) {
     case 'libMatAdd': { const nm = (window.prompt && window.prompt(tr('Nom du nouveau matériau'), '')) || ''; if (!nm.trim()) return; const id = 'm_' + uid(); LIB.materials.push({ id, name: nm.trim() }); libSave(); libSetMat(id); return; }
     case 'tabGcode': setTab('gcode'); return;
     case 'sample': loadSample(); toast('Projet d’exemple chargé.'); return;
-    case 'open': $('#fOpen').click(); return;
+    case 'open': projOpen(); return;
     case 'import': $('#fSvg').click(); return;
     case 'font': $('#fFont').click(); return;
     case 'fontDir': $('#fFontDir').click(); return;
     case 'ufClear': { const b = $('#ufClear'); if (Date.now() - ufArm > 3000) { ufArm = Date.now(); b.textContent = 'Vider ?'; b.classList.add('armed'); setTimeout(() => { b.textContent = 'Vider'; b.classList.remove('armed'); }, 3000); return; } ufArm = 0; b.textContent = 'Vider'; b.classList.remove('armed'); idbClear().catch(() => { }); UF = UF.filter(u => u.src !== 'idb'); updateUFCount(); if (!$('#fpPop').hidden) fpOpen(true); toast('Dossier de polices vidé (les fichiers sur votre ordinateur ne sont pas touchés).'); return; }
-    case 'save': { const o = JSON.parse(snapState()); const d = {}; for (const im of S.images) if (imgData[im.id]) d[im.id] = imgData[im.id]; if (Object.keys(d).length) o.imgData = d; { const rd = {}; for (const it of S.relief.items) if (relGrid[it.id]) rd[it.id] = relPack(relGrid[it.id]); if (Object.keys(rd).length) o.relData = rd; const rm = {}; for (const it of S.relief.items) if (it.kind === 'stl' && relMesh[it.id]) rm[it.id] = f32ToB64(relMesh[it.id]); if (Object.keys(rm).length) o.relMesh = rm; } saveFile(projFileName(), JSON.stringify(o), 'Projet COPO'); return; } // le maillage STL voyage avec le projet
+    case 'save': projSave(false); return;
+    case 'saveAs': projSave(true); return;
     case 'undo': undo(); return;
     case 'redo': redo(); return;
     case 'fit': fit(); return;
@@ -4922,7 +4923,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.123', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.124', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -4973,6 +4974,23 @@ async function bugSend() {
   const w = window.open(url, '_blank', 'noopener'); if (!w && window.claude) showText(T('Signaler un bug'), url, T('Ouvrez ce lien dans votre navigateur.'));
   $('#bug').hidden = true; toast(T(idea ? 'Proposition ouverte sur GitHub : vérifiez-la puis cliquez sur « Create »/« Submit new issue ».' : 'Rapport ouvert sur GitHub : vérifiez-le puis cliquez sur « Create »/« Submit new issue ».'));
 }
+// enregistrement du projet : après le premier « Enregistrer », le même fichier est réécrit sans redemander le dossier (Chrome, Edge, Brave, Vivaldi)
+var projHandle = null;
+const COPO_TYPES = [{ description: 'Projet COPO', accept: { 'application/x-copo': ['.copo'] } }];
+function projJSON() { const o = JSON.parse(snapState()); const d = {}; for (const im of S.images) if (imgData[im.id]) d[im.id] = imgData[im.id]; if (Object.keys(d).length) o.imgData = d; { const rd = {}; for (const it of S.relief.items) if (relGrid[it.id]) rd[it.id] = relPack(relGrid[it.id]); if (Object.keys(rd).length) o.relData = rd; const rm = {}; for (const it of S.relief.items) if (it.kind === 'stl' && relMesh[it.id]) rm[it.id] = f32ToB64(relMesh[it.id]); if (Object.keys(rm).length) o.relMesh = rm; } return JSON.stringify(o); } // le maillage STL voyage avec le projet
+async function projSave(as) {
+  const txt = projJSON();
+  if (window.showSaveFilePicker && !window.claude) {
+    try { if (!projHandle || as) projHandle = await window.showSaveFilePicker({ suggestedName: projHandle ? projHandle.name : projFileName(), types: COPO_TYPES });
+      const w = await projHandle.createWritable(); await w.write(txt); await w.close(); toast(trf('Projet enregistré dans « {f} ».', { f: projHandle.name })); return; }
+    catch (e) { if (e && e.name === 'AbortError') return; projHandle = null; }
+  }
+  saveFile(projFileName(), txt, 'Projet COPO');
+}
+async function projOpen() {
+  if (window.showOpenFilePicker && !window.claude) { try { const [h] = await window.showOpenFilePicker({ types: COPO_TYPES.concat([{ description: 'JSON', accept: { 'application/json': ['.json'] } }]), multiple: false }); openProjectText(await (await h.getFile()).text()); projHandle = /\.copo$/i.test(h.name) ? h : null; } catch (e) { if (!(e && e.name === 'AbortError')) toast(e.message || tr('Fichier illisible.')); } return; }
+  projHandle = null; $('#fOpen').click();
+}
 function projFileName() { const n = String((S.meta && S.meta.name) || '').replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim(); return (n || 'projet-copo') + '.copo'; }
 async function saveFile(name, data, title) {
   if (DL) { try { await DL.save({ filename: name, data }); toast('Fichier enregistré.'); return; } catch (e) { if (e && e.code === 'declined') return; if (e && e.code === 'rate_limited') { toast('Un enregistrement est déjà en attente.'); return; } } }
@@ -4988,9 +5006,9 @@ function readFile(input, cb, binary) { input.onchange = () => { const f = input.
 function f32ToB64(a) { const u = new Uint8Array(a.buffer, a.byteOffset, a.byteLength); let s = ''; for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(s); }
 function b64ToF32(b) { const s = atob(b), u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return new Float32Array(u.buffer); }
 function openProjectText(txt) { const o = JSON.parse(txt); if (!o.shapes || !o.stock) throw new Error('Ce fichier n’est pas un projet COPO.'); if (o.imgData) { for (const [k, v] of Object.entries(o.imgData)) { imgData[k] = v; IMG.delete(k); idbPutImg(k, v).catch(() => { }); } delete o.imgData; txt = JSON.stringify(o); } if (o.relData) { for (const [k, v] of Object.entries(o.relData)) { relGrid[k] = relUnpack(v); relSm.delete(k); idbPutImg('rel_' + k, v).catch(() => { }); } delete o.relData; txt = JSON.stringify(o); } if (o.relMesh) { for (const [k, v] of Object.entries(o.relMesh)) { try { const T = b64ToF32(v); relMesh[k] = T; idbPutImg('relm_' + k, T).catch(() => { }); } catch { } } delete o.relMesh; txt = JSON.stringify(o); } S.imgSel = null; hist = []; hi = -1; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; restore(txt); commit(false); S.form = newForm(); renderForm(); fit(); toast('Projet ouvert.'); }
-readFile($('#fOpen'), txt => openProjectText(txt));
+readFile($('#fOpen'), txt => { projHandle = null; openProjectText(txt); });
 // application installée : un double-clic sur un fichier .copo l'ouvre ici
-if ('launchQueue' in window) launchQueue.setConsumer(async lp => { const h = lp.files && lp.files[0]; if (!h) return; try { openProjectText(await (await h.getFile()).text()); } catch (e) { toast(e.message || 'Fichier illisible.'); } });
+if ('launchQueue' in window) launchQueue.setConsumer(async lp => { const h = lp.files && lp.files[0]; if (!h) return; try { openProjectText(await (await h.getFile()).text()); projHandle = h; } catch (e) { toast(e.message || 'Fichier illisible.'); } });
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => { });
 let installEvt = null; addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; const b = document.querySelector('[data-act="install"]'); if (b) b.hidden = false; });
 addEventListener('appinstalled', () => { installEvt = null; const b = document.querySelector('[data-act="install"]'); if (b) b.hidden = true; toast(T('COPO est installé : les fichiers .copo s’ouvrent maintenant d’un double-clic.')); });
@@ -6143,15 +6161,18 @@ function relLinked(it) { return it.kind === 'image' && it.src && it.linked !== f
 function relSyncLinks() { for (const it of S.relief.items) { const im = relLinked(it); if (im) { it.x = im.x; it.y = im.y; it.w = im.w; it.h = im.h; it.rot = im.rot || 0; } } }
 function relBox(it) { let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (const q of imgFrame(it).corners) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); } return { x0, y0, x1, y1, w: x1 - x0, h: y1 - y0 }; }
 // hauteurs absolues (0 = dessus du brut) : chaque élément est placé dans le brut par « haut du brut → haut du relief » (top) et son épaisseur zH
-function reliefCompose(cell, wantMask, maskIds) {
+function reliefCompose(cell, wantMask, maskIds, ext) {
   relSyncLinks();
-  const st = S.stock, nx = Math.max(2, Math.round(st.w / cell) + 1), ny = Math.max(2, Math.round(st.h / cell) + 1), cx = st.w / (nx - 1), cy = st.h / (ny - 1), H = new Float32Array(nx * ny).fill(NaN), Mk = wantMask ? new Uint8Array(nx * ny) : null;
+  const st = S.stock; let X0 = 0, Y0 = 0, X1 = st.w, Y1 = st.h;
+  if (ext) for (const it of S.relief.items) { if (!it.visible || !relGrid[it.id]) continue; const r = (it.rot || 0) * Math.PI / 180, ex = Math.abs(Math.cos(r)) * it.w / 2 + Math.abs(Math.sin(r)) * it.h / 2, ey = Math.abs(Math.sin(r)) * it.w / 2 + Math.abs(Math.cos(r)) * it.h / 2; X0 = Math.min(X0, it.x - ex); Y0 = Math.min(Y0, it.y - ey); X1 = Math.max(X1, it.x + ex); Y1 = Math.max(Y1, it.y + ey); } // affichage : aussi la partie hors du brut
+  if (ext) while (((X1 - X0) / cell + 1) * ((Y1 - Y0) / cell + 1) > 4e6) cell *= 1.25;
+  const DW = X1 - X0, DH = Y1 - Y0, nx = Math.max(2, Math.round(DW / cell) + 1), ny = Math.max(2, Math.round(DH / cell) + 1), cx = DW / (nx - 1), cy = DH / (ny - 1), H = new Float32Array(nx * ny).fill(NaN), Mk = wantMask ? new Uint8Array(nx * ny) : null;
   for (const it of S.relief.items) {
     if (!it.visible) continue; const f = relSrc(it), g = relGrid[it.id]; if (!f) continue;
     const r = (it.rot || 0) * Math.PI / 180, cs = Math.cos(r), sn = Math.sin(r), hw = it.w / 2, hh = it.h / 2, ex = Math.abs(cs) * hw + Math.abs(sn) * hh, ey = Math.abs(sn) * hw + Math.abs(cs) * hh;
-    const i0 = Math.max(0, Math.floor((it.x - ex) / cx)), i1 = Math.min(nx - 1, Math.ceil((it.x + ex) / cx)), j0 = Math.max(0, Math.floor((it.y - ey) / cy)), j1 = Math.min(ny - 1, Math.ceil((it.y + ey) / cy));
-    const zH = +it.zH || 0, topZ = -(+it.top || 0), bot = topZ - zH, inv = !!it.invert, mode = it.mode || 'add', CL = relClipMask(it, i0, i1, j0, j1, cx, cy), cw = i1 - i0 + 1, fe = Math.max(1e-6, 0.2 * Math.min(hw, hh));
-    for (let j = j0; j <= j1; j++) { const dy = j * cy - it.y; for (let i = i0; i <= i1; i++) { const dx = i * cx - it.x, lu = dx * cs + dy * sn, lv = -dx * sn + dy * cs; if (Math.abs(lu) > hw || Math.abs(lv) > hh) continue; if (CL && !CL[(j - j0) * cw + (i - i0)]) continue;
+    const i0 = Math.max(0, Math.floor((it.x - ex - X0) / cx)), i1 = Math.min(nx - 1, Math.ceil((it.x + ex - X0) / cx)), j0 = Math.max(0, Math.floor((it.y - ey - Y0) / cy)), j1 = Math.min(ny - 1, Math.ceil((it.y + ey - Y0) / cy));
+    const zH = +it.zH || 0, topZ = -(+it.top || 0), bot = topZ - zH, inv = !!it.invert, mode = it.mode || 'add', CL = relClipMask(it, i0, i1, j0, j1, cx, cy, X0, Y0), cw = i1 - i0 + 1, fe = Math.max(1e-6, 0.2 * Math.min(hw, hh));
+    for (let j = j0; j <= j1; j++) { const dy = Y0 + j * cy - it.y; for (let i = i0; i <= i1; i++) { const dx = X0 + i * cx - it.x, lu = dx * cs + dy * sn, lv = -dx * sn + dy * cs; if (Math.abs(lu) > hw || Math.abs(lv) > hh) continue; if (CL && !CL[(j - j0) * cw + (i - i0)]) continue;
       const su = lu / it.w + 0.5, sv = 0.5 - lv / it.h, v = relSample(f, g.nx, g.ny, su, sv); if (v !== v) continue; const h = zH * (inv ? 1 - v : v), q = j * nx + i, cur = H[q];
       if (Mk && (!maskIds || maskIds.includes(it.id)) && (it.kind !== 'image' || g.d[Math.round(Math.max(0, Math.min(1, sv)) * (g.ny - 1)) * g.nx + Math.round(Math.max(0, Math.min(1, su)) * (g.nx - 1))])) Mk[q] = 1;
       let w = 0; if (mode === 'blend') { const t = Math.min(1, Math.min(hw - Math.abs(lu), hh - Math.abs(lv)) / fe); w = 0.5 * t * t * (3 - 2 * t); } // mélanger : moyenne des deux reliefs, fondue vers les bords
@@ -6160,29 +6181,30 @@ function reliefCompose(cell, wantMask, maskIds) {
   // fond (zones sans relief) : le bas le plus bas des éléments
   let base = Infinity; for (const it of S.relief.items) if (it.visible && relGrid[it.id]) base = Math.min(base, -(+it.top || 0) - (+it.zH || 0)); if (base === Infinity) base = 0;
   let mx = -Infinity, mn = Infinity; for (let i = 0; i < H.length; i++) { if (H[i] !== H[i]) H[i] = base; if (H[i] > mx) mx = H[i]; if (H[i] < mn) mn = H[i]; }
-  return { nx, ny, cx, cy, H, M: Mk, max: mx, min: mn, base };
+  return { nx, ny, cx, cy, H, M: Mk, max: mx, min: mn, base, ox: X0, oy: Y0, dw: DW, dh: DH };
 }
 function relClipSig(it) { if (!it.clip) return ''; let h = 0; for (const id of it.clip) { const x = shapeById(id); if (!x || !x.pts) continue; h += x.pts.length * 7.3; for (const q of x.pts) h += q[0] * 1.37 + q[1] * 2.11; } return it.clip.join(',') + ':' + h.toFixed(4); }
 // limite d'un relief par des vecteurs fermés : masque (pair-impair, les formes intérieures font des trous) sur la fenêtre de la grille
-function relClipMask(it, i0, i1, j0, j1, cx, cy) {
+function relClipMask(it, i0, i1, j0, j1, cx, cy, ox = 0, oy = 0) {
   if (!it.clip || !it.clip.length) return null; const sh = it.clip.map(id => shapeById(id)).filter(x => x && x.closed && x.pts && x.pts.length > 2); if (!sh.length) return null;
   const w = i1 - i0 + 1, h = j1 - j0 + 1; if (w < 1 || h < 1) return null; const cv = document.createElement('canvas'); cv.width = w; cv.height = h; const g = cv.getContext('2d');
-  g.beginPath(); for (const x of sh) { x.pts.forEach((q, k) => { const X = q[0] / cx - i0 + 0.5, Y = q[1] / cy - j0 + 0.5; k ? g.lineTo(X, Y) : g.moveTo(X, Y); }); g.closePath(); } g.fillStyle = '#000'; g.fill('evenodd');
+  g.beginPath(); for (const x of sh) { x.pts.forEach((q, k) => { const X = (q[0] - ox) / cx - i0 + 0.5, Y = (q[1] - oy) / cy - j0 + 0.5; k ? g.lineTo(X, Y) : g.moveTo(X, Y); }); g.closePath(); } g.fillStyle = '#000'; g.fill('evenodd');
   const d = g.getImageData(0, 0, w, h).data, m = new Uint8Array(w * h); for (let k = 0; k < m.length; k++) m[k] = d[k * 4 + 3] >= 128 ? 1 : 0; return m;
 }
 // aperçu 2D : ombrage sous le dessin
 function drawRelief(C) {
   const shownIds = S.relief && S.relief.show !== false ? S.relief.items.filter(i => i.visible && relGrid[i.id] && (i.kind === 'stl' || i.kind === 'gen' || (i.kind === 'image' && !relLinked(i)))).map(i => i.id) : [];
   if (!shownIds.length) return;
-  if (relDirty || !relCache) {
-    const st = S.stock, R = reliefCompose(Math.max(st.w, st.h) / 700, true, shownIds), { nx, ny, cx, cy, H, max, min } = R, cv = relCache && relCache.cv || document.createElement('canvas'); cv.width = nx; cv.height = ny;
+  const sk = S.stock.w + 'x' + S.stock.h + 'x' + S.stock.t;
+  if (relDirty || !relCache || relCache.sk !== sk) {
+    const st = S.stock, R = reliefCompose(Math.max(st.w, st.h) / 700, true, shownIds, true), { nx, ny, cx, cy, H, max, min } = R, cv = relCache && relCache.cv || document.createElement('canvas'); cv.width = nx; cv.height = ny;
     const g = cv.getContext('2d'), im = g.createImageData(nx, ny), span = Math.max(1e-6, max - min), L = v3n([-0.5, 0.6, 0.62]);
     for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, hx = (H[j * nx + Math.min(nx - 1, i + 1)] - H[j * nx + Math.max(0, i - 1)]) / (2 * cx), hy = (H[Math.min(ny - 1, j + 1) * nx + i] - H[Math.max(0, j - 1) * nx + i]) / (2 * cy), n = v3n([-hx, -hy, 1]);
       const sh = Math.max(0, n[0] * L[0] + n[1] * L[1] + n[2] * L[2]), lv = 0.35 + 0.65 * (H[q] - min) / span, c = Math.round(255 * Math.min(1, 0.25 + 0.75 * sh) * (0.55 + 0.45 * lv)), o = ((ny - 1 - j) * nx + i) * 4;
       im.data[o] = c; im.data[o + 1] = Math.round(c * 0.96); im.data[o + 2] = Math.round(c * 0.9); im.data[o + 3] = R.M[q] ? 235 : 0; }
-    g.putImageData(im, 0, 0); relCache = { cv, R }; relDirty = false;
+    g.putImageData(im, 0, 0); relCache = { cv, R, sk }; relDirty = false;
   }
-  ctx.save(); ctx.imageSmoothingEnabled = true; ctx.drawImage(relCache.cv, sx(0), sy(S.stock.h), S.stock.w * S.view.s, S.stock.h * S.view.s); ctx.restore();
+  ctx.save(); ctx.imageSmoothingEnabled = true; { const Rc = relCache.R; ctx.drawImage(relCache.cv, sx(Rc.ox), sy(Rc.oy + Rc.dh), Rc.dw * S.view.s, Rc.dh * S.view.s); } ctx.restore();
   const it = curTab === 'relief' && S.ui.tool !== 'select' && relCur(); if (it) { const f = imgFrame(it), cs = f.corners.map(q => [sx(q[0]), sy(q[1])]); ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]); ctx.beginPath(); cs.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.stroke(); ctx.restore(); }
 }
 function relSummary() { const el = $('#relSum'); if (!el) return; const n = S.relief.items.length; if (!n) { el.textContent = tr('Aucun relief : importez un STL ou créez-en un à partir du dessin.'); return; } const R = reliefCompose(Math.max(1, Math.max(S.stock.w, S.stock.h) / 200)), dep = -R.min; const out = S.relief.items.some(i => { if (!i.visible) return false; const r = (i.rot || 0) * Math.PI / 180, ex = Math.abs(Math.cos(r)) * i.w / 2 + Math.abs(Math.sin(r)) * i.h / 2, ey = Math.abs(Math.sin(r)) * i.w / 2 + Math.abs(Math.cos(r)) * i.h / 2; return i.x - ex < -0.01 || i.y - ey < -0.01 || i.x + ex > S.stock.w + 0.01 || i.y + ey > S.stock.h + 0.01; }); el.textContent = trf('{n} élément(s) · profondeur du relief {d} mm (brut {t} mm).', { n, d: fr(dep, 2), t: fr(S.stock.t, 1) }) + (dep > S.stock.t + 1e-6 ? ' ⚠ ' + tr('Le relief dépasse l’épaisseur du brut : il sera coupé au fond. Augmentez l’épaisseur du brut (onglet Projet) ou réduisez l’épaisseur du relief.') : '') + (out ? ' ⚠ ' + tr('Un relief déborde du brut : la partie en dehors ne sera pas usinée.') : ''); el.classList.toggle('bad', dep > S.stock.t + 1e-6 || out); }
@@ -6482,16 +6504,16 @@ function rvSync() {
 function rvBuildMesh() {
   const gl = RV.gl; if (RV.mesh) gl.deleteVertexArray(RV.mesh.vao); RV.mesh = null; RV.depth = 0;
   if (!S.relief.items.some(i => i.visible && relGrid[i.id])) return;
-  const st = S.stock, R = reliefCompose(Math.max(0.2, Math.sqrt(st.w * st.h / 220000)), true), { nx, ny, cx, cy, H, M } = R, N = nx * ny, vb = new Float32Array(N * 6), ix = [];
-  for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, z = Math.max(-st.t, H[q]), hx = (H[j * nx + Math.min(nx - 1, i + 1)] - H[j * nx + Math.max(0, i - 1)]) / (2 * cx), hy = (H[Math.min(ny - 1, j + 1) * nx + i] - H[Math.max(0, j - 1) * nx + i]) / (2 * cy), n = v3n([-hx, -hy, 1]); vb.set([i * cx, j * cy, z, n[0], n[1], n[2]], q * 6); }
+  const st = S.stock, R = reliefCompose(Math.max(0.2, Math.sqrt(st.w * st.h / 220000)), true, null, true), { nx, ny, cx, cy, H, M, ox, oy } = R, N = nx * ny, vb = new Float32Array(N * 6), ix = [];
+  for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, z = Math.max(-st.t, H[q]), hx = (H[j * nx + Math.min(nx - 1, i + 1)] - H[j * nx + Math.max(0, i - 1)]) / (2 * cx), hy = (H[Math.min(ny - 1, j + 1) * nx + i] - H[Math.max(0, j - 1) * nx + i]) / (2 * cy), n = v3n([-hx, -hy, 1]); vb.set([ox + i * cx, oy + j * cy, z, n[0], n[1], n[2]], q * 6); }
   const CW = nx - 1, CH = ny - 1, on = new Uint8Array(CW * CH);
   for (let j = 0; j < CH; j++) for (let i = 0; i < CW; i++) { const a = j * nx + i, b = a + 1, c2 = a + nx + 1, d = a + nx; if (M[a] && M[b] && M[c2] && M[d]) { on[j * CW + i] = 1; ix.push(a, b, c2, a, c2, d); } }
   if (!ix.length) return; RV.depth = -R.min;
   // volume : dessous à la base du relief et parois sur le pourtour, pour que le relief se lise comme une pièce pleine
   const zb = Math.max(-st.t, R.base), ex = [], base = N * 2, isOn = (i, j) => i >= 0 && j >= 0 && i < CW && j < CH && on[j * CW + i];
-  const bot = new Float32Array(N * 6); for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) bot.set([i * cx, j * cy, zb, 0, 0, -1], (j * nx + i) * 6);
+  const bot = new Float32Array(N * 6); for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) bot.set([ox + i * cx, oy + j * cy, zb, 0, 0, -1], (j * nx + i) * 6);
   for (let j = 0; j < CH; j++) for (let i = 0; i < CW; i++) if (on[j * CW + i]) { const a = j * nx + i, b = a + 1, c2 = a + nx + 1, d = a + nx; ix.push(N + a, N + c2, N + b, N + a, N + d, N + c2); }
-  let nv = 0; const wall = (p, q, nrm) => { const zp = Math.max(-st.t, H[p]), zq = Math.max(-st.t, H[q]), P = [(p % nx) * cx, Math.floor(p / nx) * cy], Q = [(q % nx) * cx, Math.floor(q / nx) * cy], k = base + nv; ex.push(P[0], P[1], zp, ...nrm, Q[0], Q[1], zq, ...nrm, Q[0], Q[1], zb, ...nrm, P[0], P[1], zb, ...nrm); nv += 4; ix.push(k, k + 1, k + 2, k, k + 2, k + 3); };
+  let nv = 0; const wall = (p, q, nrm) => { const zp = Math.max(-st.t, H[p]), zq = Math.max(-st.t, H[q]), P = [ox + (p % nx) * cx, oy + Math.floor(p / nx) * cy], Q = [ox + (q % nx) * cx, oy + Math.floor(q / nx) * cy], k = base + nv; ex.push(P[0], P[1], zp, ...nrm, Q[0], Q[1], zq, ...nrm, Q[0], Q[1], zb, ...nrm, P[0], P[1], zb, ...nrm); nv += 4; ix.push(k, k + 1, k + 2, k, k + 2, k + 3); };
   for (let j = 0; j < CH; j++) for (let i = 0; i < CW; i++) { if (!on[j * CW + i]) continue; const a = j * nx + i, b = a + 1, c2 = a + nx + 1, d = a + nx;
     if (!isOn(i, j - 1)) wall(a, b, [0, -1, 0]); if (!isOn(i, j + 1)) wall(c2, d, [0, 1, 0]); if (!isOn(i - 1, j)) wall(d, a, [-1, 0, 0]); if (!isOn(i + 1, j)) wall(b, c2, [1, 0, 0]); }
   const all = new Float32Array(N * 12 + ex.length); all.set(vb, 0); all.set(bot, N * 6); all.set(ex, N * 12);
