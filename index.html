@@ -880,7 +880,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.126</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.127</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1287,6 +1287,7 @@ Object.assign(I18N_EN, {"Cache les chutes autour des pièces détourées (décou
 Object.assign(I18N_EN, {"Créer le contour": "Create outline", "Crée un vecteur fermé qui suit le pourtour du relief sélectionné (vu de dessus). Utilisez-le ensuite avec un parcours Profil (extérieur) pour détourer la pièce, ou avec Contour décalé.": "Creates a closed vector following the outline of the selected relief (seen from above). Then use it with a Profile toolpath (outside) to cut the part out, or with Offset.", "Sélectionnez d’abord un relief.": "Select a relief first.", "Ce relief n’a pas d’emprise sur le brut.": "This relief does not lie on the stock.", "Contour introuvable.": "No outline found.", "Contour du relief créé ({n} vecteur(s), sélectionnés) : créez un parcours Profil à l’extérieur pour détourer la pièce.": "Relief outline created ({n} vector(s), selected): create an outside Profile toolpath to cut the part out."});
 Object.assign(I18N_EN, {"Projet enregistré dans « {f} ».": "Project saved to “{f}”.", "Enregistrer sous…": "Save as…"});
 Object.assign(I18N_EN, {"Face 1": "Side 1", "Face 2 (retournée)": "Side 2 (flipped)", "Matière + trajets": "Material + paths", "Trajets seuls": "Paths only"});
+Object.assign(I18N_EN, {"Autorisation refusée : choisissez où enregistrer.": "Permission refused: choose where to save.", "Ce navigateur ne permet pas de réécrire le fichier : le projet est téléchargé à chaque enregistrement. Avec Chrome, Edge ou Vivaldi (ou Brave avec l’option « File System Access API » activée), Ctrl+S réécrit directement le même fichier.": "This browser cannot rewrite the file: the project is downloaded on every save. In Chrome, Edge or Vivaldi (or Brave with the “File System Access API” option enabled), Ctrl+S rewrites the same file directly."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4150,7 +4151,7 @@ function act(a, btn) {
   switch (a) {
     case 'new': {
       const b = $('#btnNew'); if (Date.now() - newArm > 3000) { newArm = Date.now(); b.textContent = 'Tout effacer ?'; b.classList.add('armed'); setTimeout(() => { b.textContent = 'Nouveau'; b.classList.remove('armed'); }, 3000); return; }
-      newArm = 0; b.textContent = 'Nouveau'; b.classList.remove('armed'); closeMenus(); projHandle = null; S.shapes = []; S.tps = []; S.dims = []; S.images = []; S.imgSel = null; S.relief = { items: [], show: true, res: 0.3 }; S.relSel = null; relGrid = {}; relMesh = {}; relSm.clear(); relDirty = true; relCache = null; if (typeof RXF !== 'undefined') RXF = false; S.guides = { x: [], y: [] }; S.layers = DEFAULT_LAYERS(); S.layerActive = 'l1'; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; S.form = newForm(); S.meta = {}; commit(); renderSel(); renderForm(); renderLayers(); renderGuides(); fit(); setTab('projet'); toast('Projet vide.'); return;
+      newArm = 0; b.textContent = 'Nouveau'; b.classList.remove('armed'); closeMenus(); projKeep(null); S.shapes = []; S.tps = []; S.dims = []; S.images = []; S.imgSel = null; S.relief = { items: [], show: true, res: 0.3 }; S.relSel = null; relGrid = {}; relMesh = {}; relSm.clear(); relDirty = true; relCache = null; if (typeof RXF !== 'undefined') RXF = false; S.guides = { x: [], y: [] }; S.layers = DEFAULT_LAYERS(); S.layerActive = 'l1'; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; S.form = newForm(); S.meta = {}; commit(); renderSel(); renderForm(); renderLayers(); renderGuides(); fit(); setTab('projet'); toast('Projet vide.'); return;
     }
     case 'v3d': v3Open(); return;
     case 'fpOpen': fpOpen(); return;
@@ -4923,7 +4924,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.126', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.127', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -4976,20 +4977,23 @@ async function bugSend() {
 }
 // enregistrement du projet : après le premier « Enregistrer », le même fichier est réécrit sans redemander le dossier (Chrome, Edge, Brave, Vivaldi)
 var projHandle = null;
+function projKeep(h) { projHandle = h; try { idbPutImg('proj_handle', h || null).catch(() => { }); } catch { } } // mémorisé : Ctrl+S réécrit le même fichier même après avoir rechargé COPO
+(async () => { try { const db = await idb(); const r = await new Promise((res, rej) => { const q = db.transaction('images').objectStore('images').get('proj_handle'); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); }); if (r && r.src && r.src.kind === 'file' && !projHandle) projHandle = r.src; } catch { } })();
 const COPO_TYPES = [{ description: 'Projet COPO', accept: { 'application/x-copo': ['.copo'] } }];
 function projJSON() { const o = JSON.parse(snapState()); const d = {}; for (const im of S.images) if (imgData[im.id]) d[im.id] = imgData[im.id]; if (Object.keys(d).length) o.imgData = d; { const rd = {}; for (const it of S.relief.items) if (relGrid[it.id]) rd[it.id] = relPack(relGrid[it.id]); if (Object.keys(rd).length) o.relData = rd; const rm = {}; for (const it of S.relief.items) if (it.kind === 'stl' && relMesh[it.id]) rm[it.id] = f32ToB64(relMesh[it.id]); if (Object.keys(rm).length) o.relMesh = rm; } return JSON.stringify(o); } // le maillage STL voyage avec le projet
 async function projSave(as) {
   const txt = projJSON();
   if (window.showSaveFilePicker && !window.claude) {
-    try { if (!projHandle || as) projHandle = await window.showSaveFilePicker({ suggestedName: projHandle ? projHandle.name : projFileName(), types: COPO_TYPES });
+    try { if (!projHandle || as) projKeep(await window.showSaveFilePicker({ suggestedName: projHandle ? projHandle.name : projFileName(), types: COPO_TYPES }));
+      else if (projHandle.queryPermission && (await projHandle.queryPermission({ mode: 'readwrite' })) !== 'granted' && (await projHandle.requestPermission({ mode: 'readwrite' })) !== 'granted') { toast(tr('Autorisation refusée : choisissez où enregistrer.')); projKeep(await window.showSaveFilePicker({ suggestedName: projHandle.name, types: COPO_TYPES })); }
       const w = await projHandle.createWritable(); await w.write(txt); await w.close(); toast(trf('Projet enregistré dans « {f} ».', { f: projHandle.name })); return; }
-    catch (e) { if (e && e.name === 'AbortError') return; projHandle = null; }
+    catch (e) { if (e && e.name === 'AbortError') return; projKeep(null); }
   }
-  saveFile(projFileName(), txt, 'Projet COPO');
+  saveFile(projFileName(), txt, 'Projet COPO'); if (!window.showSaveFilePicker && !window.claude && !projSave.told) { projSave.told = true; setTimeout(() => toast(tr('Ce navigateur ne permet pas de réécrire le fichier : le projet est téléchargé à chaque enregistrement. Avec Chrome, Edge ou Vivaldi (ou Brave avec l’option « File System Access API » activée), Ctrl+S réécrit directement le même fichier.')), 1800); }
 }
 async function projOpen() {
-  if (window.showOpenFilePicker && !window.claude) { try { const [h] = await window.showOpenFilePicker({ types: COPO_TYPES.concat([{ description: 'JSON', accept: { 'application/json': ['.json'] } }]), multiple: false }); openProjectText(await (await h.getFile()).text()); projHandle = /\.copo$/i.test(h.name) ? h : null; } catch (e) { if (!(e && e.name === 'AbortError')) toast(e.message || tr('Fichier illisible.')); } return; }
-  projHandle = null; $('#fOpen').click();
+  if (window.showOpenFilePicker && !window.claude) { try { const [h] = await window.showOpenFilePicker({ types: COPO_TYPES.concat([{ description: 'JSON', accept: { 'application/json': ['.json'] } }]), multiple: false }); openProjectText(await (await h.getFile()).text()); projKeep(/\.copo$/i.test(h.name) ? h : null); } catch (e) { if (!(e && e.name === 'AbortError')) toast(e.message || tr('Fichier illisible.')); } return; }
+  projKeep(null); $('#fOpen').click();
 }
 function projFileName() { const n = String((S.meta && S.meta.name) || '').replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim(); return (n || 'projet-copo') + '.copo'; }
 async function saveFile(name, data, title) {
@@ -5006,9 +5010,9 @@ function readFile(input, cb, binary) { input.onchange = () => { const f = input.
 function f32ToB64(a) { const u = new Uint8Array(a.buffer, a.byteOffset, a.byteLength); let s = ''; for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(s); }
 function b64ToF32(b) { const s = atob(b), u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return new Float32Array(u.buffer); }
 function openProjectText(txt) { const o = JSON.parse(txt); if (!o.shapes || !o.stock) throw new Error('Ce fichier n’est pas un projet COPO.'); if (o.imgData) { for (const [k, v] of Object.entries(o.imgData)) { imgData[k] = v; IMG.delete(k); idbPutImg(k, v).catch(() => { }); } delete o.imgData; txt = JSON.stringify(o); } if (o.relData) { for (const [k, v] of Object.entries(o.relData)) { relGrid[k] = relUnpack(v); relSm.delete(k); idbPutImg('rel_' + k, v).catch(() => { }); } delete o.relData; txt = JSON.stringify(o); } if (o.relMesh) { for (const [k, v] of Object.entries(o.relMesh)) { try { const T = b64ToF32(v); relMesh[k] = T; idbPutImg('relm_' + k, T).catch(() => { }); } catch { } } delete o.relMesh; txt = JSON.stringify(o); } S.imgSel = null; hist = []; hi = -1; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; restore(txt); commit(false); S.form = newForm(); renderForm(); fit(); toast('Projet ouvert.'); }
-readFile($('#fOpen'), txt => { projHandle = null; openProjectText(txt); });
+readFile($('#fOpen'), txt => { projKeep(null); openProjectText(txt); });
 // application installée : un double-clic sur un fichier .copo l'ouvre ici
-if ('launchQueue' in window) launchQueue.setConsumer(async lp => { const h = lp.files && lp.files[0]; if (!h) return; try { openProjectText(await (await h.getFile()).text()); projHandle = h; } catch (e) { toast(e.message || 'Fichier illisible.'); } });
+if ('launchQueue' in window) launchQueue.setConsumer(async lp => { const h = lp.files && lp.files[0]; if (!h) return; try { openProjectText(await (await h.getFile()).text()); projKeep(h); } catch (e) { toast(e.message || 'Fichier illisible.'); } });
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => { });
 let installEvt = null; addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; const b = document.querySelector('[data-act="install"]'); if (b) b.hidden = false; });
 addEventListener('appinstalled', () => { installEvt = null; const b = document.querySelector('[data-act="install"]'); if (b) b.hidden = true; toast(T('COPO est installé : les fichiers .copo s’ouvrent maintenant d’un double-clic.')); });
@@ -6754,7 +6758,7 @@ function bindImgPanel() {
 }
 async function idbPutImg(id, src) { const db = await idb(); return new Promise((res, rej) => { const tx = db.transaction('images', 'readwrite'); tx.objectStore('images').put({ id, src }); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); }
 async function idbGetImgs() { const db = await idb(); return new Promise((res, rej) => { const q = db.transaction('images').objectStore('images').getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => rej(q.error); }); }
-async function loadImgData() { try { for (const r of await idbGetImgs()) { if (r.id.startsWith('rel_')) relGrid[r.id.slice(4)] = relUnpack(r.src); else if (r.id.startsWith('relm_')) relMesh[r.id.slice(5)] = r.src; else if (r.id !== 'send_dir') imgData[r.id] = r.src; } } catch (e) { } relDirty = true; relPanel(); renderImgPanel(); draw(); }
+async function loadImgData() { try { for (const r of await idbGetImgs()) { if (r.id.startsWith('rel_')) relGrid[r.id.slice(4)] = relUnpack(r.src); else if (r.id.startsWith('relm_')) relMesh[r.id.slice(5)] = r.src; else if (r.id !== 'send_dir' && r.id !== 'proj_handle') imgData[r.id] = r.src; } } catch (e) { } relDirty = true; relPanel(); renderImgPanel(); draw(); }
 function imgAct(a) {
   if (a === 'relImg') { $('#fRelImg').click(); return true; }
   if (a === 'relStl') { $('#fRelStl').click(); return true; }
