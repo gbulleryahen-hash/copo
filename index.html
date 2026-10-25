@@ -101,7 +101,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .libbtn{display:flex;align-items:center;gap:8px;margin-top:8px}.libbtn svg{width:18px;height:18px;fill:none;stroke:var(--accent);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .toolpick{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;text-align:left;padding:6px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--raised);color:var(--ink);cursor:pointer}.toolpick small{color:var(--accent);flex:none}.toolpick.bad{border-color:var(--danger)}.toolpick span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media (max-width:760px){.libbody{grid-template-columns:1fr;grid-template-rows:minmax(180px,40%) minmax(0,1fr)}.libleft{border-right:0;border-bottom:1px solid var(--line)}}
-.impgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.impgrid.one{grid-template-columns:1fr}.impbtn{display:grid;justify-items:center;gap:3px;padding:12px 8px;border:1px solid var(--line);border-radius:8px;background:var(--raised);text-align:center;cursor:pointer;color:var(--ink)}.impbtn:hover{border-color:var(--accent)}.impbtn svg{width:28px;height:28px;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.impbtn small{color:var(--muted);font-size:11.5px;line-height:1.3}.sw-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}.sw-col{display:grid;gap:8px;align-content:start}.sw-h{margin:0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.sw-h label.chk{text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink)}.sw-sub{margin-left:22px}label.sw-sub:not(.chk){display:grid;gap:4px}.sw-r{display:grid;gap:4px}.sw-rr{display:flex;align-items:center;gap:8px}.sw-rr input{flex:1}.sw-body{display:grid;gap:14px}@media (max-width:560px){.sw-cols{grid-template-columns:1fr}}.tp-selinfo{margin:0;font-size:12.5px;font-weight:600;color:var(--ink)}.tp-selinfo.bad{color:var(--danger)}.tp-selinfo small{font-weight:400;color:var(--muted)}
+.impgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.impgrid.one{grid-template-columns:1fr}
+.rbtns{display:grid;grid-template-columns:1fr 1fr;gap:6px}.rbtn{display:flex;align-items:center;gap:9px;padding:7px 10px;border:1px solid var(--line);border-radius:7px;background:var(--raised);color:var(--ink);cursor:pointer;text-align:left}.rbtn:hover{border-color:var(--accent)}.rbtn svg{width:20px;height:20px;flex:none;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.rbtn b{font-weight:600;font-size:13px}
+.zhrow{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:end;margin:6px 0}.zhrow svg{width:58px;height:34px}.zhrow .zs{fill:color-mix(in srgb,var(--stock) 70%,transparent);stroke:var(--muted);stroke-width:1}.zhrow .zr{fill:var(--rl);opacity:.85}.zhrow .za{stroke:var(--accent);stroke-width:1.5;fill:none}.impbtn{display:grid;justify-items:center;gap:3px;padding:12px 8px;border:1px solid var(--line);border-radius:8px;background:var(--raised);text-align:center;cursor:pointer;color:var(--ink)}.impbtn:hover{border-color:var(--accent)}.impbtn svg{width:28px;height:28px;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.impbtn small{color:var(--muted);font-size:11.5px;line-height:1.3}.sw-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}.sw-col{display:grid;gap:8px;align-content:start}.sw-h{margin:0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.sw-h label.chk{text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink)}.sw-sub{margin-left:22px}label.sw-sub:not(.chk){display:grid;gap:4px}.sw-r{display:grid;gap:4px}.sw-rr{display:flex;align-items:center;gap:8px}.sw-rr input{flex:1}.sw-body{display:grid;gap:14px}@media (max-width:560px){.sw-cols{grid-template-columns:1fr}}.tp-selinfo{margin:0;font-size:12.5px;font-weight:600;color:var(--ink)}.tp-selinfo.bad{color:var(--danger)}.tp-selinfo small{font-weight:400;color:var(--muted)}
 .fwin-wide{width:560px}.fwin-ico svg{width:18px;height:18px;display:block;fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.fwin-body.fb-card{max-width:none}.fwin-body .row{justify-content:flex-end}.fwin-head{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 10px;border-bottom:1px solid var(--line);cursor:move;user-select:none;touch-action:none}
 .fwin-head b{flex:1;font:600 14px var(--f-ui)}.fwin-head .grip{width:10px;height:16px;background:radial-gradient(circle,var(--muted) 1.2px,transparent 1.4px) 0 0/5px 5px;opacity:.7}
 .fwin-x{width:30px;height:30px}.fwin-x svg{width:16px;height:16px}.fwin-body{overflow:auto;padding:10px 14px 14px;display:grid;gap:10px;min-height:0;grid-auto-rows:max-content;align-content:start}
@@ -740,35 +742,39 @@ label.inl input{width:70px}
         </details>
       </div>
       <div class="pane" data-pane="relief" hidden>
-        <section class="blk"><h3>Importer un modèle 3D</h3>
-          <div class="impgrid one">
-            <button data-act="relStl" class="impbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><b>Fichier STL</b><small>STL : vu de dessus, à l’échelle</small></button>
+        <section class="blk"><h3>Créer un relief</h3>
+          <div class="rbtns">
+            <button data-act="relStl" class="rbtn" title="Importer un modèle 3D (STL binaire ou texte) : il est vu de dessus et projeté en hauteurs, à l’échelle du fichier."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><b>Fichier STL</b></button>
+            <button data-act="relGray" class="rbtn" title="Sélectionnez sur le plan une image insérée dans l’onglet Dessin : le clair est en haut. Le relief reste lié à l’image (position, taille, angle)."><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3.5 16c3-2 4-6 7-6s4 5 6.5 5 3-2 3.5-2.5"/></svg><b>Niveaux de gris</b></button>
+            <button data-act="relDome" class="rbtn" title="Sélectionnez une ou plusieurs formes fermées : la forme se bombe depuis le bord (les formes intérieures font des trous)."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19h18"/><path d="M4 19c0-6 3.6-10 8-10s8 4 8 10"/></svg><b>Dôme</b></button>
+            <button data-act="relExt" class="rbtn" title="Sélectionnez un ou plusieurs vecteurs : une moulure suit le tracé."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16c4-8 8 2 18-8"/><path d="M3 20c4-8 8 2 18-8" opacity=".5"/></svg><b>Extrusion</b></button>
+            <button data-act="relSweep" class="rbtn" title="Sélectionnez deux rails et un vecteur de profil (ouverts) : la section passe d’un rail à l’autre."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5c5 2 11 2 16 0"/><path d="M4 19c5-3 11-3 16 0"/><path d="M8 6v11M12 6.5v10M16 6v11" opacity=".55"/></svg><b>Lissage</b></button>
           </div>
-          <p class="hint">Le relief se creuse dans le brut depuis le dessus : son point le plus haut affleure la surface. Les éléments se combinent dans l’ordre de la liste.</p>
-        </section>
-        <section class="blk"><h3>Créer à partir du dessin</h3>
-          <div class="impgrid">
-            <button data-act="relGray" class="impbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3.5 16c3-2 4-6 7-6s4 5 6.5 5 3-2 3.5-2.5"/></svg><b>Niveaux de gris</b><small>image du dessin</small></button>
-            <button data-act="relDome" class="impbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19h18"/><path d="M4 19c0-6 3.6-10 8-10s8 4 8 10"/></svg><b>Dôme</b><small>formes fermées</small></button>
-            <button data-act="relExt" class="impbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16c4-8 8 2 18-8"/><path d="M3 20c4-8 8 2 18-8" opacity=".5"/></svg><b>Extrusion</b><small>le long d’un vecteur</small></button>
-            <button data-act="relSweep" class="impbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5c5 2 11 2 16 0"/><path d="M4 19c5-3 11-3 16 0"/><path d="M8 6v11M12 6.5v10M16 6v11" opacity=".55"/></svg><b>Lissage</b><small>entre deux rails</small></button>
-          </div>
-          <p class="hint">Niveaux de gris : sélectionnez sur le plan une image insérée dans l’onglet Dessin (le clair est en haut ; le relief reprend sa place et sa taille).</p>
-          <p class="hint">Sélectionnez d’abord sur le plan : une ou plusieurs formes fermées pour un dôme (les formes intérieures font des trous), un ou plusieurs vecteurs pour une extrusion, deux rails et un vecteur de profil (ouverts) pour un lissage : le profil dessiné donne la forme de la section, sa hauteur réelle donne l’épaisseur Z. La forme est copiée : modifier le dessin ensuite ne la change pas.</p>
         </section>
         <section class="blk"><h3>Éléments du relief</h3>
           <ul class="imglist" id="relList"></ul>
           <div id="relProps" hidden>
             <label>Nom<input type="text" id="rlName"></label>
+            <label class="chk" id="rlLinkRow"><input type="checkbox" id="rlLink"> Lié à l’image du dessin (suit sa position, sa taille et son angle)</label>
+            <div class="orow">
+              <div class="ogrid sm" id="rlAnchor" role="group" aria-label="Point de référence">
+                <button data-a="tl" title="Coin haut gauche"></button><button data-a="tc" title="Milieu haut"></button><button data-a="tr" title="Coin haut droit"></button>
+                <button data-a="ml" title="Milieu gauche"></button><button data-a="mc" title="Centre"></button><button data-a="mr" title="Milieu droit"></button>
+                <button data-a="bl" title="Coin bas gauche"></button><button data-a="bc" title="Milieu bas"></button><button data-a="br" title="Coin bas droit"></button>
+              </div>
+              <div class="sfields">
+                <label>X<input data-u="len" type="number" id="rlX" step="0.1"></label>
+                <label>Y<input data-u="len" type="number" id="rlY" step="0.1"></label>
+                <label>Largeur<input data-u="len" type="number" id="rlW" step="0.1" min="0.1"></label>
+                <label>Hauteur<input data-u="len" type="number" id="rlH" step="0.1" min="0.1"></label>
+              </div>
+            </div>
+            <div class="zhrow"><svg viewBox="0 0 58 34" aria-hidden="true"><path class="zr" d="M14 30c3-14 10-20 15-20s12 6 15 20z"/><path class="za" d="M6 10v20M3 10h6M3 30h6"/></svg><label>Épaisseur du relief (mm)<input data-u="len" type="number" id="rlZ" step="0.1" min="0"></label></div>
+            <div class="zhrow"><svg viewBox="0 0 58 34" aria-hidden="true"><rect class="zs" x="10" y="3" width="44" height="29"/><path class="zr" d="M18 31c3-12 8-17 14-17s11 5 14 17z"/><path class="za" d="M6 3v11M3 3h6M3 14h6"/></svg><label>Haut du brut → haut du relief (mm)<input data-u="len" type="number" id="rlTop" step="0.1"></label></div>
+            <div class="zhrow"><svg viewBox="0 0 58 34" aria-hidden="true"><rect class="zs" x="10" y="3" width="44" height="29"/><path class="zr" d="M18 24c3-10 8-14 14-14s11 4 14 14z"/><path class="za" d="M6 24v8M3 24h6M3 32h6"/></svg><label>Bas du brut → bas du relief (mm)<input data-u="len" type="number" id="rlBot" step="0.1"></label></div>
             <div class="g2">
-              <label>Centre X<input data-u="len" type="number" id="rlX" step="0.5"></label>
-              <label>Centre Y<input data-u="len" type="number" id="rlY" step="0.5"></label>
-              <label>Largeur<input data-u="len" type="number" id="rlW" step="0.5" min="1"></label>
-              <label>Hauteur<input data-u="len" type="number" id="rlH" step="0.5" min="1"></label>
               <label>Angle (°)<input type="number" id="rlR" step="1"></label>
               <label>Combinaison<select id="rlMode"><option value="add">Ajouter</option><option value="sub">Soustraire</option><option value="max">Garder le plus haut</option><option value="min">Garder le plus bas</option></select></label>
-              <label>Épaisseur du relief Z<input data-u="len" type="number" id="rlZ" step="0.5" min="0"></label>
-              <label>Décalage de la base Z<input data-u="len" type="number" id="rlZ0" step="0.5"></label>
               <label>Adoucissement <span id="rlSv" class="mono"></span><input type="range" id="rlS" min="0" max="8" step="1"></label>
               <label id="rlOrRow">Haut du modèle<select id="rlOr"><option value="z">+Z (dessus)</option><option value="-z">−Z (dessous)</option><option value="y">+Y</option><option value="-y">−Y</option><option value="x">+X</option><option value="-x">−X</option></select></label>
             </div>
@@ -789,9 +795,7 @@ label.inl input{width:70px}
           </div>
         </section>
         <section class="blk"><h3>Affichage</h3>
-          <label class="chk"><input type="checkbox" id="relShow" checked> Afficher le relief sur le plan</label>
-          <label>Précision de l’aperçu 3D<select id="relRes"><option value="0.5">0,5 mm (rapide)</option><option value="0.3">0,3 mm</option><option value="0.2">0,2 mm</option><option value="0.12">0,12 mm (fine)</option></select></label>
-          <div class="row"><button data-act="relView" class="primary">Voir le relief en 3D</button></div>
+          <label class="chk"><input type="checkbox" id="relShow" checked> Afficher les modèles STL sur le plan</label>
           <p class="hint" id="relSum"></p>
         </section>
       </div>
@@ -829,7 +833,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.90</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.91</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1211,6 +1215,7 @@ Object.assign(I18N_EN, {"Importer un modèle 3D": "Import a 3D model", "Fichier 
 Object.assign(I18N_EN, {"Finition du relief en contours décalés : l’outil suit des contours parallèles au bord de la limite, de l’extérieur vers l’intérieur, en épousant la surface avec sa forme réelle.": "Offset relief finishing: the tool follows contours parallel to the boundary edge, from outside in, hugging the surface with its real shape.", "Ébauche du relief en balayage 3D : à chaque niveau, chaque ligne suit la surface plus la surépaisseur sans descendre sous le niveau ; moins de remontées qu’en niveaux Z.": "3D raster relief roughing: at each level, every line follows the surface plus allowance without going below the level; fewer retracts than Z levels."});
 Object.assign(I18N_EN, {"Outil par rapport à la limite": "Tool relative to boundary", "Bord de l’outil à l’intérieur": "Tool edge inside", "Centre de l’outil sur la limite": "Tool center on boundary", "Limite : {n} forme(s) fermée(s) sélectionnée(s).": "Boundary: {n} selected closed shape(s)."});
 Object.assign(I18N_EN, {"Vues": "Views", "Vue 2D : le dessin": "2D view: the drawing", "Vue 3D : le relief": "3D view: the relief", "Vues côte à côte": "Side by side", "Vues l’une au-dessus de l’autre": "One above the other", "Afficher / masquer le dessin": "Show / hide the drawing", "Afficher / masquer le repère (axes et origine)": "Show / hide the axes and origin", "Afficher / masquer le brut (filaire)": "Show / hide the stock (wireframe)", "Recentrer sur le relief (double-clic : tout le brut)": "Recenter on the relief (double-click: whole stock)", "Simulation de l’usinage": "Machining simulation", "La vue 3D demande WebGL 2.": "The 3D view needs WebGL 2.", "{n} élément(s) de relief · profondeur {d} mm": "{n} relief item(s) · depth {d} mm", "Aucun relief : importez un STL ou créez-en un dans l’onglet Relief.": "No relief: import an STL or create one in the Relief tab.", "Vue 3D du relief": "3D view of the relief", "Affichage 3D": "3D display"});
+Object.assign(I18N_EN, {"Créer un relief": "Create a relief", "Lié à l’image du dessin (suit sa position, sa taille et son angle)": "Linked to the drawing image (follows its position, size and angle)", "Point de référence": "Reference point", "Épaisseur du relief (mm)": "Relief height (mm)", "Haut du brut → haut du relief (mm)": "Stock top → relief top (mm)", "Bas du brut → bas du relief (mm)": "Stock bottom → relief bottom (mm)", "Afficher les modèles STL sur le plan": "Show STL models on the workspace", "Importer un modèle 3D (STL binaire ou texte) : il est vu de dessus et projeté en hauteurs, à l’échelle du fichier.": "Import a 3D model (binary or text STL): it is seen from above and projected into heights, at the file's scale.", "Sélectionnez sur le plan une image insérée dans l’onglet Dessin : le clair est en haut. Le relief reste lié à l’image (position, taille, angle).": "Select on the workspace an image inserted in the Drawing tab: light is high. The relief stays linked to the image (position, size, angle).", "Sélectionnez une ou plusieurs formes fermées : la forme se bombe depuis le bord (les formes intérieures font des trous).": "Select one or more closed shapes: the shape domes up from the edge (inner shapes make holes).", "Sélectionnez un ou plusieurs vecteurs : une moulure suit le tracé.": "Select one or more vectors: a moulding follows the path.", "Sélectionnez deux rails et un vecteur de profil (ouverts) : la section passe d’un rail à l’autre.": "Select two rails and a profile vector (open): the section spans from one rail to the other.", "Une partie du relief dépasse le dessus du brut : elle n’est pas usinée.": "Part of the relief rises above the stock top: it is not machined.", "Aucun relief : importez un STL ou créez-en un à partir du dessin.": "No relief: import an STL or create one from the drawing.", "Relief créé à partir de l’image : il la suit quand vous la déplacez ou la redimensionnez. Réglez son épaisseur Z.": "Relief created from the image: it follows it when you move or resize it. Set its Z height."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -1813,7 +1818,7 @@ function buildRelief(p, tool, shapes, M) {
   const fin = p.rlOp === 'finish', st = S.stock, D = tool.dia, step = Math.max(0.02, D * (+p.rlStep || (fin ? 10 : 40)) / 100);
   let c = Math.max(0.05, Math.min(0.3, D / 16, step / 2)); while ((st.w / c + 1) * (st.h / c + 1) > 7e6) c *= 1.25;
   const sel = Array.isArray(p.rlItems) ? p.rlItems.filter(id => S.relief.items.some(i => i.id === id && i.visible)) : null; if (sel && !sel.length) throw new Error(tr('Cochez au moins un relief à usiner.'));
-  const R = reliefCompose(c, true, sel), { nx, ny, cx, cy } = R, H = R.H, top = R.max; for (let i = 0; i < H.length; i++) H[i] -= top;
+  const R = reliefCompose(c, true, sel), { nx, ny, cx, cy } = R, H = R.H;
   const K = toolKernel(tool, cx, cy), memo = new Float32Array(nx * ny).fill(NaN), floor = -st.t, warns = [];
   const hc = (i, j) => { const q = j * nx + i; let v = memo[q]; if (v === v) return v; v = -Infinity; const { di, dj, dz, n } = K; for (let k = 0; k < n; k++) { const a = i + di[k], b = j + dj[k]; if (a < 0 || b < 0 || a >= nx || b >= ny) continue; const h = H[b * nx + a] - dz[k]; if (h > v) v = h; } if (v === -Infinity) v = floor; memo[q] = v; return v; };
   const zAt = (x, y) => { const X = Math.max(0, Math.min(nx - 1.000001, x / cx)), Y = Math.max(0, Math.min(ny - 1.000001, y / cy)), i = Math.floor(X), j = Math.floor(Y), a = X - i, b = Y - j; return (hc(i, j) * (1 - a) + hc(i + 1, j) * a) * (1 - b) + (hc(i, j + 1) * (1 - a) + hc(i + 1, j + 1) * a) * b; };
@@ -1910,7 +1915,8 @@ function buildRelief(p, tool, shapes, M) {
   }
   mb.up(M.safeZ);
   if (!mb.m.length) throw new Error(tr('Rien à usiner dans la limite choisie.'));
-  if (R.max - R.min > st.t) warns.push(tr('Le relief dépasse l’épaisseur du brut : il est coupé au fond.'));
+  if (-R.min > st.t + 1e-6) warns.push(tr('Le relief dépasse l’épaisseur du brut : il est coupé au fond.'));
+  if (R.max > 1e-6) warns.push(tr('Une partie du relief dépasse le dessus du brut : elle n’est pas usinée.'));
   if (fin && tool.type === 'flat') warns.push(tr('Finition avec une fraise droite : préférez une fraise hémisphérique ou conique à bout sphérique pour une surface lisse.'));
   return { moves: mb.m, warns, info: (fin ? tr('finition') + ' · ' + (p.rlFStrat === 'offset' ? nl + ' ' + tr('contours décalés') : nl + ' ' + tr('lignes') + (p.rlCross ? ' ' + tr('croisées') : '')) : tr('ébauche') + ' · ' + (p.rlRStrat === 'raster' ? tr('balayage 3D') + ' · ' : '') + nlev + ' ' + tr('niveaux')) + ' · ' + tr('pas latéral') + ' ' + fr(step, 2) + ' mm' };
 }
@@ -2777,7 +2783,8 @@ function commit(recompute = true) { snapVer++; const s = snapState(); if (hist[h
 function restore(s) {
   const o = JSON.parse(s); S.meta = o.meta || {}; S.stock = { offX: 0, offY: 0, ...o.stock }; S.stock.originXY = originKey(S.stock); S.layers = o.layers && o.layers.length ? o.layers : DEFAULT_LAYERS(); S.layerActive = S.layers.find(l => l.id === o.layerActive) ? o.layerActive : S.layers[0].id;
   S.shapes = (o.shapes || []).map(migrateShape); if (o.tools && o.tools.length) S.tools = o.tools; S.tps = (o.tps || []).map(t => ({ ...t }));
-  S.relief = o.relief && Array.isArray(o.relief.items) ? { show: true, res: 0.3, ...o.relief, items: o.relief.items.map(i => ({ ...i })) } : { items: [], show: true, res: 0.3 }; if (S.relSel && !S.relief.items.some(i => i.id === S.relSel)) S.relSel = null; relDirty = true; if (typeof relPanel === 'function') relPanel();
+  S.relief = o.relief && Array.isArray(o.relief.items) ? { show: true, res: 0.3, ...o.relief, items: o.relief.items.map(i => ({ ...i })) } : { items: [], show: true, res: 0.3 };
+  for (const it of S.relief.items) { if (it.top === undefined) it.top = 0; if (it.kind === 'image' && it.src && it.linked === undefined) { it.linked = true; const im = S.images.find(x => x.id === it.src) || (o.images || []).find(x => x.id === it.src); if (im) im.visible = true; } } if (S.relSel && !S.relief.items.some(i => i.id === S.relSel)) S.relSel = null; relDirty = true; if (typeof relPanel === 'function') relPanel();
   S.guides = o.guides || { x: [], y: [] }; S.dims = o.dims || []; S.images = (o.images || []).map(i => ({ ...i })); if (S.imgSel && !imgById(S.imgSel)) S.imgSel = null; if (typeof renderImgPanel === 'function') renderImgPanel();
   for (const id of [...S.sel]) if (!shapeById(id)) S.sel.delete(id); if (S.ne && !shapeById(S.ne.sid)) S.ne = null;
   if (typeof libLinkProject === 'function') libLinkProject(); syncStock(); recomputeAll(); renderTools(); renderSel(); renderLayers(); renderGuides(); autosave();
@@ -4727,7 +4734,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.90', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.91', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5789,9 +5796,9 @@ function drawImages(C) {
     ctx.restore();
   }
 }
-function relHit(p) { if (!S.relief || S.relief.show === false) return null; for (let k = S.relief.items.length - 1; k >= 0; k--) { const it = S.relief.items[k]; if (!it.visible || !relGrid[it.id]) continue; const l = imgLocal(it, p); if (Math.abs(l[0]) <= it.w / 2 && Math.abs(l[1]) <= it.h / 2) return it; } return null; }
+function relHit(p) { if (!S.relief || S.relief.show === false) return null; for (let k = S.relief.items.length - 1; k >= 0; k--) { const it = S.relief.items[k]; if (!it.visible || !relGrid[it.id] || relLinked(it) || it.gen) continue; const l = imgLocal(it, p); if (Math.abs(l[0]) <= it.w / 2 && Math.abs(l[1]) <= it.h / 2) return it; } return null; }
 function relHandleAt(X, Y) {
-  const it = typeof relCur === 'function' && relCur(); if (!it || !it.visible || S.relief.show === false || S.ui.tool !== 'select') return null;
+  const it = typeof relCur === 'function' && relCur(); if (!it || !it.visible || S.relief.show === false || S.ui.tool !== 'select' || relLinked(it) || it.gen) return null;
   const near = q => Math.hypot(sx(q[0]) - X, sy(q[1]) - Y) < 9, f = imgFrame(it), rh = imgRotHandle(it);
   if (near(rh.h)) return { kind: 'irot', im: it, rel: true };
   const sg = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
@@ -5800,7 +5807,7 @@ function relHandleAt(X, Y) {
 }
 function selectRel(id) { S.relSel = id; if (id) { S.sel.clear(); S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } renderSel(); } relPanel(); dRefresh(); draw(); }
 function drawRelHandles(C) {
-  const it = typeof relCur === 'function' && relCur(); if (!it || !it.visible || S.relief.show === false || S.ui.tool !== 'select') return;
+  const it = typeof relCur === 'function' && relCur(); if (!it || !it.visible || S.relief.show === false || S.ui.tool !== 'select' || relLinked(it) || it.gen) return;
   const f = imgFrame(it), cs = f.corners.map(q => [sx(q[0]), sy(q[1])]), rh = imgRotHandle(it);
   ctx.save(); ctx.strokeStyle = C.rl || C.acc; ctx.lineWidth = 1.5; ctx.beginPath(); cs.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(sx(rh.base[0]), sy(rh.base[1])); ctx.lineTo(sx(rh.h[0]), sy(rh.h[1])); ctx.stroke();
@@ -5894,39 +5901,48 @@ function relSample(f, nx, ny, u, v) { // u, v dans [0,1] ; bilinéaire, NaN si v
   const n = [[p00, (1 - a) * (1 - b)], [p10, a * (1 - b)], [p01, (1 - a) * b], [p11, a * b]].sort((x, y) => y[1] - x[1])[0][0]; return n;
 }
 // composition sur le brut : H (mm, au-dessus de la base 0), grille de pas « cell »
+// élément lié à une image du dessin : il en reprend le cadre
+function relLinked(it) { return it.kind === 'image' && it.src && it.linked !== false && imgById(it.src) ? imgById(it.src) : null; }
+function relSyncLinks() { for (const it of S.relief.items) { const im = relLinked(it); if (im) { it.x = im.x; it.y = im.y; it.w = im.w; it.h = im.h; it.rot = im.rot || 0; } } }
+function relBox(it) { let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (const q of imgFrame(it).corners) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); } return { x0, y0, x1, y1, w: x1 - x0, h: y1 - y0 }; }
+// hauteurs absolues (0 = dessus du brut) : chaque élément est placé dans le brut par « haut du brut → haut du relief » (top) et son épaisseur zH
 function reliefCompose(cell, wantMask, maskIds) {
-  const st = S.stock, nx = Math.max(2, Math.round(st.w / cell) + 1), ny = Math.max(2, Math.round(st.h / cell) + 1), cx = st.w / (nx - 1), cy = st.h / (ny - 1), H = new Float32Array(nx * ny), Mk = wantMask ? new Uint8Array(nx * ny) : null;
+  relSyncLinks();
+  const st = S.stock, nx = Math.max(2, Math.round(st.w / cell) + 1), ny = Math.max(2, Math.round(st.h / cell) + 1), cx = st.w / (nx - 1), cy = st.h / (ny - 1), H = new Float32Array(nx * ny).fill(NaN), Mk = wantMask ? new Uint8Array(nx * ny) : null;
   for (const it of S.relief.items) {
     if (!it.visible) continue; const f = relSrc(it), g = relGrid[it.id]; if (!f) continue;
     const r = (it.rot || 0) * Math.PI / 180, cs = Math.cos(r), sn = Math.sin(r), hw = it.w / 2, hh = it.h / 2, ex = Math.abs(cs) * hw + Math.abs(sn) * hh, ey = Math.abs(sn) * hw + Math.abs(cs) * hh;
     const i0 = Math.max(0, Math.floor((it.x - ex) / cx)), i1 = Math.min(nx - 1, Math.ceil((it.x + ex) / cx)), j0 = Math.max(0, Math.floor((it.y - ey) / cy)), j1 = Math.min(ny - 1, Math.ceil((it.y + ey) / cy));
-    const zH = +it.zH || 0, z0 = +it.z0 || 0, inv = !!it.invert, mode = it.mode || 'add';
+    const zH = +it.zH || 0, topZ = -(+it.top || 0), bot = topZ - zH, inv = !!it.invert, mode = it.mode || 'add';
     for (let j = j0; j <= j1; j++) { const dy = j * cy - it.y; for (let i = i0; i <= i1; i++) { const dx = i * cx - it.x, lu = dx * cs + dy * sn, lv = -dx * sn + dy * cs; if (Math.abs(lu) > hw || Math.abs(lv) > hh) continue;
-      const su = lu / it.w + 0.5, sv = 0.5 - lv / it.h, v = relSample(f, g.nx, g.ny, su, sv); if (v !== v) continue; const h = z0 + zH * (inv ? 1 - v : v), q = j * nx + i;
+      const su = lu / it.w + 0.5, sv = 0.5 - lv / it.h, v = relSample(f, g.nx, g.ny, su, sv); if (v !== v) continue; const h = zH * (inv ? 1 - v : v), q = j * nx + i, cur = H[q];
       if (Mk && (!maskIds || maskIds.includes(it.id)) && (it.kind !== 'image' || g.d[Math.round(Math.max(0, Math.min(1, sv)) * (g.ny - 1)) * g.nx + Math.round(Math.max(0, Math.min(1, su)) * (g.nx - 1))])) Mk[q] = 1;
-      H[q] = mode === 'sub' ? H[q] - h : mode === 'max' ? Math.max(H[q], h) : mode === 'min' ? Math.min(H[q], h) : H[q] + h; } }
+      H[q] = cur !== cur ? (mode === 'sub' ? topZ - h : bot + h) : mode === 'sub' ? cur - h : mode === 'max' ? Math.max(cur, bot + h) : mode === 'min' ? Math.min(cur, bot + h) : cur + h; } }
   }
-  let mx = -Infinity, mn = Infinity; for (let i = 0; i < H.length; i++) { if (H[i] > mx) mx = H[i]; if (H[i] < mn) mn = H[i]; }
-  return { nx, ny, cx, cy, H, M: Mk, max: mx, min: mn };
+  // fond (zones sans relief) : le bas le plus bas des éléments
+  let base = Infinity; for (const it of S.relief.items) if (it.visible && relGrid[it.id]) base = Math.min(base, -(+it.top || 0) - (+it.zH || 0)); if (base === Infinity) base = 0;
+  let mx = -Infinity, mn = Infinity; for (let i = 0; i < H.length; i++) { if (H[i] !== H[i]) H[i] = base; if (H[i] > mx) mx = H[i]; if (H[i] < mn) mn = H[i]; }
+  return { nx, ny, cx, cy, H, M: Mk, max: mx, min: mn, base };
 }
 // aperçu 2D : ombrage sous le dessin
 function drawRelief(C) {
-  if (!S.relief || !S.relief.show || !S.relief.items.some(i => i.visible && relGrid[i.id])) return;
+  const shownIds = S.relief && S.relief.show !== false ? S.relief.items.filter(i => i.visible && relGrid[i.id] && (i.kind === 'stl' || (i.kind === 'image' && !relLinked(i)))).map(i => i.id) : [];
+  if (!shownIds.length) return;
   if (relDirty || !relCache) {
-    const st = S.stock, R = reliefCompose(Math.max(st.w, st.h) / 700), { nx, ny, cx, cy, H, max, min } = R, cv = relCache && relCache.cv || document.createElement('canvas'); cv.width = nx; cv.height = ny;
+    const st = S.stock, R = reliefCompose(Math.max(st.w, st.h) / 700, true, shownIds), { nx, ny, cx, cy, H, max, min } = R, cv = relCache && relCache.cv || document.createElement('canvas'); cv.width = nx; cv.height = ny;
     const g = cv.getContext('2d'), im = g.createImageData(nx, ny), span = Math.max(1e-6, max - min), L = v3n([-0.5, 0.6, 0.62]);
     for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, hx = (H[j * nx + Math.min(nx - 1, i + 1)] - H[j * nx + Math.max(0, i - 1)]) / (2 * cx), hy = (H[Math.min(ny - 1, j + 1) * nx + i] - H[Math.max(0, j - 1) * nx + i]) / (2 * cy), n = v3n([-hx, -hy, 1]);
       const sh = Math.max(0, n[0] * L[0] + n[1] * L[1] + n[2] * L[2]), lv = 0.35 + 0.65 * (H[q] - min) / span, c = Math.round(255 * Math.min(1, 0.25 + 0.75 * sh) * (0.55 + 0.45 * lv)), o = ((ny - 1 - j) * nx + i) * 4;
-      im.data[o] = c; im.data[o + 1] = Math.round(c * 0.96); im.data[o + 2] = Math.round(c * 0.9); im.data[o + 3] = H[q] !== 0 ? 235 : 0; }
-    g.putImageData(im, 0, 0); relCache = { cv, R }; relDirty = false; relSummary();
+      im.data[o] = c; im.data[o + 1] = Math.round(c * 0.96); im.data[o + 2] = Math.round(c * 0.9); im.data[o + 3] = R.M[q] ? 235 : 0; }
+    g.putImageData(im, 0, 0); relCache = { cv, R }; relDirty = false;
   }
   ctx.save(); ctx.imageSmoothingEnabled = true; ctx.drawImage(relCache.cv, sx(0), sy(S.stock.h), S.stock.w * S.view.s, S.stock.h * S.view.s); ctx.restore();
   const it = curTab === 'relief' && S.ui.tool !== 'select' && relCur(); if (it) { const f = imgFrame(it), cs = f.corners.map(q => [sx(q[0]), sy(q[1])]); ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]); ctx.beginPath(); cs.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.stroke(); ctx.restore(); }
 }
-function relSummary() { const el = $('#relSum'); if (!el) return; const R = relCache && relCache.R, n = S.relief.items.length; if (!n || !R) { el.textContent = n ? '' : tr('Aucun relief : importez une image en niveaux de gris ou un fichier STL.'); return; } const dep = R.max - R.min; el.textContent = trf('{n} élément(s) · profondeur du relief {d} mm (brut {t} mm).', { n, d: fr(dep, 2), t: fr(S.stock.t, 1) }) + (dep > S.stock.t ? ' ' + tr('Le relief dépasse l’épaisseur du brut : il sera coupé au fond.') : ''); }
+function relSummary() { const el = $('#relSum'); if (!el) return; const n = S.relief.items.length; if (!n) { el.textContent = tr('Aucun relief : importez un STL ou créez-en un à partir du dessin.'); return; } const R = reliefCompose(Math.max(1, Math.max(S.stock.w, S.stock.h) / 200)), dep = -R.min; el.textContent = trf('{n} élément(s) · profondeur du relief {d} mm (brut {t} mm).', { n, d: fr(dep, 2), t: fr(S.stock.t, 1) }) + (dep > S.stock.t + 1e-6 ? ' ' + tr('Le relief dépasse l’épaisseur du brut : il sera coupé au fond.') : ''); }
 function relBump() { S.relief.ver = (S.relief.ver || 0) + 1; if (typeof renderTpList === 'function') renderTpList(); }
-function relAdd(it, g) { relBump(); if (typeof RV !== 'undefined') RV.fitted = false; it.id = 'r' + Math.random().toString(36).slice(2, 9); relStore(it.id, g); S.relief.items.push(it); S.relSel = it.id; relDirty = true; commit(false); relPanel(); setTab('relief'); draw(); }
-function relSet(fn) { const it = relCur(); if (!it) return; fn(it); relBump(); relDirty = true; commit(false); relPanel(true); draw(); }
+function relAdd(it, g) { if (it.top === undefined) it.top = 0; relBump(); if (typeof RV !== 'undefined') RV.fitted = false; it.id = 'r' + Math.random().toString(36).slice(2, 9); relStore(it.id, g); S.relief.items.push(it); S.relSel = it.id; relDirty = true; commit(false); relPanel(); setTab('relief'); draw(); }
+function relSet(fn) { const it = relCur(); if (!it) return; fn(it); if (relLinked(it)) { const im = imgById(it.src); im.x = it.x; im.y = it.y; im.w = it.w; im.h = it.h; im.rot = it.rot || 0; renderImgPanel(true); } relBump(); relDirty = true; commit(false); relPanel(true); draw(); }
 // image en niveaux de gris (le côté le plus long ramené à 1024 points)
 function relGridFromImg(im) { const k = Math.min(1, 1024 / Math.max(im.naturalWidth, im.naturalHeight)), nx = Math.max(2, Math.round(im.naturalWidth * k)), ny = Math.max(2, Math.round(im.naturalHeight * k)), cv = document.createElement('canvas'); cv.width = nx; cv.height = ny; const g = cv.getContext('2d'); g.drawImage(im, 0, 0, nx, ny); const px = g.getImageData(0, 0, nx, ny).data, d = new Uint16Array(nx * ny);
   for (let i = 0; i < nx * ny; i++) { const a = px[i * 4 + 3]; d[i] = a < 128 ? 0 : 1 + Math.round((0.2126 * px[i * 4] + 0.7152 * px[i * 4 + 1] + 0.0722 * px[i * 4 + 2]) / 255 * 65534); } return { nx, ny, d }; }
@@ -5936,8 +5952,8 @@ function relFromImage() {
   if (!im) { toast(tr(S.images.length ? 'Sélectionnez sur le plan l’image à transformer en relief.' : 'Insérez d’abord une image dans l’onglet Dessin (Importer › Image), puis sélectionnez-la.')); return; }
   const src = imgData[im.id]; if (!src) { toast(tr('Image illisible.')); return; }
   const el = new Image(); el.onload = () => { const g = relGridFromImg(el);
-    relAdd({ kind: 'image', src: im.id, name: (im.name || tr('Image')).replace(/\.[a-z0-9]{2,5}$/i, ''), x: im.x, y: im.y, w: im.w, h: im.h, rot: im.rot || 0, zH: Math.min(5, S.stock.t / 2), z0: 0, invert: false, smooth: 1, mode: 'add', visible: true }, g);
-    im.visible = false; renderImgPanel(); commit(false); draw(); toast(tr('Relief créé à partir de l’image (l’image de référence est masquée) : réglez son épaisseur Z.')); };
+    relAdd({ kind: 'image', src: im.id, linked: true, top: 0, name: (im.name || tr('Image')).replace(/\.[a-z0-9]{2,5}$/i, ''), x: im.x, y: im.y, w: im.w, h: im.h, rot: im.rot || 0, zH: Math.min(5, S.stock.t / 2), z0: 0, invert: false, smooth: 1, mode: 'add', visible: true }, g);
+    commit(false); draw(); toast(tr('Relief créé à partir de l’image : il la suit quand vous la déplacez ou la redimensionnez. Réglez son épaisseur Z.')); };
   el.onerror = () => toast(tr('Image illisible.')); el.src = src;
 }
 function relImportImage(file) {
@@ -5984,12 +6000,13 @@ function relPanel(soft) {
   const ul = $('#relList'), box = $('#relProps'); if (!ul) return; const it = relCur(); box.hidden = !it;
   if (it) {
     const o = outXY(it.x, it.y), set = (id, v) => { const el = $(id); if (document.activeElement !== el) el.value = v; };
-    set('#rlName', it.name); set('#rlX', +o[0].toFixed(2)); set('#rlY', +o[1].toFixed(2)); set('#rlW', +it.w.toFixed(2)); set('#rlH', +it.h.toFixed(2)); set('#rlR', +(it.rot || 0).toFixed(1)); set('#rlZ', +(+it.zH).toFixed(2)); set('#rlZ0', +(+it.z0 || 0).toFixed(2)); set('#rlS', it.smooth || 0); $('#rlSv').textContent = it.smooth || 0; $('#rlMode').value = it.mode || 'add'; $('#rlInv').checked = !!it.invert;
+    const an = S.ui.relAnchor || 'mc', pa = anchorPt(relBox(it), an), oa = outXY(pa[0], pa[1]); $$('#rlAnchor button').forEach(b => b.setAttribute('aria-pressed', b.dataset.a === an));
+    set('#rlName', it.name); set('#rlX', +oa[0].toFixed(2)); set('#rlY', +oa[1].toFixed(2)); set('#rlW', +it.w.toFixed(2)); set('#rlH', +it.h.toFixed(2)); set('#rlTop', +(+it.top || 0).toFixed(2)); set('#rlBot', +(S.stock.t - (+it.top || 0) - (+it.zH || 0)).toFixed(2)); const lk = relLinked(it); $('#rlLinkRow').hidden = !(it.kind === 'image' && it.src && imgById(it.src)); $('#rlLink').checked = !!lk; set('#rlR', +(it.rot || 0).toFixed(1)); set('#rlZ', +(+it.zH).toFixed(2)); set('#rlS', it.smooth || 0); $('#rlSv').textContent = it.smooth || 0; $('#rlMode').value = it.mode || 'add'; $('#rlInv').checked = !!it.invert;
     $('#rlOrRow').hidden = it.kind !== 'stl'; $('#rlInvRow').hidden = it.kind === 'stl' || !!it.gen;
     { const G = it.gen; $('#rlGen').hidden = !G; if (G) { $('#rlGP').value = G.prof || 'round'; $('#rlGPRow').hidden = G.type === 'sweep'; $('#rlGSRow').hidden = !(G.type === 'sweep' && G.all); if (G.all) $('#rlGS').value = String(G.secIdx); set('#rlGW', +(+G.W || 0).toFixed(2)); $('#rlGWRow').hidden = G.type === 'sweep'; $('#rlGWL').textContent = tr(G.type === 'dome' ? 'Largeur du bord (mm, 0 = jusqu’au centre)' : 'Largeur (mm)'); $('#rlGERow').hidden = G.type !== 'sweep'; set('#rlGE', G.end ?? 100); $('#rlGPrRow').hidden = G.type !== 'sweep'; $('#rlGPr').checked = !!G.prop; $('#rlGFRow').hidden = !G.all; $('#rlGF').checked = !!G.secFlip; } } if (it.kind === 'stl') $('#rlOr').value = it.orient || 'z'; const g = relGrid[it.id];
     $('#rlInfo').textContent = (it.kind === 'stl' ? trf('Modèle STL {w} × {h} × {z} mm, {n} triangles.', { w: fr(it.nat[0], 1), h: fr(it.nat[1], 1), z: fr(it.nat[2], 1), n: (it.tris || 0).toLocaleString() }) + ' ' : '') + (g ? trf('Grille source {a} × {b} points ({p} mm par point).', { a: g.nx, b: g.ny, p: fr(it.w / (g.nx - 1), 2) }) : tr('Données absentes : réimportez le fichier.'));
   }
-  $('#relShow').checked = S.relief.show !== false; $('#relRes').value = String(S.relief.res || 0.3);
+  $('#relShow').checked = S.relief.show !== false;
   if (soft) return; relSummary();
   ul.innerHTML = ''; if (!S.relief.items.length) { ul.innerHTML = '<li class="hint">' + tr('Aucun élément. Importez une image en niveaux de gris ou un modèle STL.') + '</li>'; return; }
   S.relief.items.forEach((x, k) => {
@@ -6005,12 +6022,16 @@ function bindRelPanel() {
   $('#fRelImg').onchange = e => { const f = e.target.files[0]; e.target.value = ''; if (f) relImportImage(f); };
   $('#fRelStl').onchange = e => { const f = e.target.files[0]; e.target.value = ''; if (f) relImportStl(f); };
   $('#rlName').onchange = () => relSet(i => { i.name = $('#rlName').value.trim() || i.name; });
-  $('#rlX').onchange = $('#rlY').onchange = () => relSet(i => { const q = inXY(isFinite(num('#rlX')) ? num('#rlX') : 0, isFinite(num('#rlY')) ? num('#rlY') : 0); i.x = q[0]; i.y = q[1]; });
-  $('#rlW').onchange = () => relSet(i => { const v = num('#rlW'); if (!(v > 0)) return; if ($('#rlLock').checked) { i.h *= v / i.w; i.zH *= v / i.w; } i.w = v; });
-  $('#rlH').onchange = () => relSet(i => { const v = num('#rlH'); if (!(v > 0)) return; if ($('#rlLock').checked) { i.w *= v / i.h; i.zH *= v / i.h; } i.h = v; });
+  $('#rlX').onchange = $('#rlY').onchange = () => relSet(i => { const q = inXY(isFinite(num('#rlX')) ? num('#rlX') : 0, isFinite(num('#rlY')) ? num('#rlY') : 0), pa = anchorPt(relBox(i), S.ui.relAnchor || 'mc'); i.x += q[0] - pa[0]; i.y += q[1] - pa[1]; });
+  $$('#rlAnchor button').forEach(b => b.onclick = () => { S.ui.relAnchor = b.dataset.a; relPanel(true); });
+  $('#rlTop').onchange = () => relSet(i => { const v = num('#rlTop'); if (isFinite(v)) i.top = v; });
+  $('#rlBot').onchange = () => relSet(i => { const v = num('#rlBot'); if (isFinite(v)) i.top = S.stock.t - v - (+i.zH || 0); });
+  $('#rlLink').onchange = () => relSet(i => { i.linked = $('#rlLink').checked; });
+  const keepA = (i, fn) => { const an = S.ui.relAnchor || 'mc', pa = anchorPt(relBox(i), an); fn(); const pb = anchorPt(relBox(i), an); i.x += pa[0] - pb[0]; i.y += pa[1] - pb[1]; };
+  $('#rlW').onchange = () => relSet(i => { const v = num('#rlW'); if (!(v > 0)) return; keepA(i, () => { if ($('#rlLock').checked) { i.h *= v / i.w; i.zH *= v / i.w; } i.w = v; }); });
+  $('#rlH').onchange = () => relSet(i => { const v = num('#rlH'); if (!(v > 0)) return; keepA(i, () => { if ($('#rlLock').checked) { i.w *= v / i.h; i.zH *= v / i.h; } i.h = v; }); });
   $('#rlR').onchange = () => relSet(i => { const v = num('#rlR'); if (isFinite(v)) i.rot = v; });
   $('#rlZ').onchange = () => relSet(i => { const v = num('#rlZ'); if (v >= 0) i.zH = v; });
-  $('#rlZ0').onchange = () => relSet(i => { const v = num('#rlZ0'); if (isFinite(v)) i.z0 = v; });
   $('#rlS').oninput = () => { $('#rlSv').textContent = $('#rlS').value; }; $('#rlS').onchange = () => relSet(i => { i.smooth = +$('#rlS').value; });
   $('#rlMode').onchange = () => relSet(i => { i.mode = $('#rlMode').value; }); $('#rlInv').onchange = () => relSet(i => { i.invert = $('#rlInv').checked; });
   $('#rlOr').onchange = () => { const it = relCur(); if (it) relReorient(it, $('#rlOr').value); };
@@ -6022,7 +6043,6 @@ function bindRelPanel() {
   $('#rlGE').onchange = () => regen(G => { const v = num('#rlGE'); if (v >= 0) G.end = v; });
   $('#rlGPr').onchange = () => regen(G => { G.prop = $('#rlGPr').checked; });
   $('#relShow').onchange = () => { S.relief.show = $('#relShow').checked; commit(false); draw(); };
-  $('#relRes').onchange = () => { S.relief.res = +$('#relRes').value; commit(false); };
 }
 // ---- formes créées à partir du dessin : dôme, extrusion le long d'un vecteur, lissage entre deux rails ----
 // distance euclidienne exacte (Felzenszwalb) : f = 0 sur les germes, Infinity ailleurs ; renvoie la distance en points
@@ -6153,8 +6173,8 @@ function rvBuf(attrs, data, idx) { const gl = RV.gl, vao = gl.createVertexArray(
   if (idx) { const ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, idx, gl.STATIC_DRAW); } gl.bindVertexArray(null); return vao; }
 // reconstruit le maillage quand le relief ou le brut change, et les traits quand le dessin change
 function rvSync() {
-  if (!VIEWS.d3 || !RV.gl) return; const st = S.stock;
-  const sig = JSON.stringify([st.w, st.h, st.t, S.relief.items.map(i => [i.id, i.x, i.y, i.w, i.h, i.rot, i.zH, i.z0, i.mode, i.visible, i.smooth, i.invert, !!relGrid[i.id], relGrid[i.id] && relGrid[i.id].nx])]);
+  if (!VIEWS.d3 || !RV.gl) return; const st = S.stock; relSyncLinks();
+  const sig = JSON.stringify([st.w, st.h, st.t, S.relief.items.map(i => [i.id, i.x, i.y, i.w, i.h, i.rot, i.zH, i.top, i.mode, i.visible, i.smooth, i.invert, !!relGrid[i.id], relGrid[i.id] && relGrid[i.id].nx])]);
   if (sig !== RV.sig) { RV.sig = sig; rvBuildMesh(); if (!RV.fitted) { rvFit(true); RV.fitted = true; } rvReq(); }
   const lsig = (typeof snapVer !== 'undefined' ? snapVer : 0) + '|' + st.w + '|' + st.h + '|' + st.t + '|' + st.originXY + '|' + S.shapes.length;
   if (lsig !== RV.lsig) { RV.lsig = lsig; rvBuildLines(); rvReq(); }
@@ -6162,10 +6182,10 @@ function rvSync() {
 function rvBuildMesh() {
   const gl = RV.gl; if (RV.mesh) gl.deleteVertexArray(RV.mesh.vao); RV.mesh = null; RV.depth = 0;
   if (!S.relief.items.some(i => i.visible && relGrid[i.id])) return;
-  const st = S.stock, R = reliefCompose(Math.max(0.2, Math.sqrt(st.w * st.h / 220000)), true), { nx, ny, cx, cy, H, M } = R, top = R.max, N = nx * ny, vb = new Float32Array(N * 6), ix = [];
-  for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, z = Math.max(-st.t, H[q] - top), hx = (H[j * nx + Math.min(nx - 1, i + 1)] - H[j * nx + Math.max(0, i - 1)]) / (2 * cx), hy = (H[Math.min(ny - 1, j + 1) * nx + i] - H[Math.max(0, j - 1) * nx + i]) / (2 * cy), n = v3n([-hx, -hy, 1]); vb.set([i * cx, j * cy, z, n[0], n[1], n[2]], q * 6); }
+  const st = S.stock, R = reliefCompose(Math.max(0.2, Math.sqrt(st.w * st.h / 220000)), true), { nx, ny, cx, cy, H, M } = R, N = nx * ny, vb = new Float32Array(N * 6), ix = [];
+  for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, z = Math.max(-st.t, H[q]), hx = (H[j * nx + Math.min(nx - 1, i + 1)] - H[j * nx + Math.max(0, i - 1)]) / (2 * cx), hy = (H[Math.min(ny - 1, j + 1) * nx + i] - H[Math.max(0, j - 1) * nx + i]) / (2 * cy), n = v3n([-hx, -hy, 1]); vb.set([i * cx, j * cy, z, n[0], n[1], n[2]], q * 6); }
   for (let j = 0; j + 1 < ny; j++) for (let i = 0; i + 1 < nx; i++) { const a = j * nx + i, b = a + 1, c2 = a + nx + 1, d = a + nx; if (M[a] && M[b] && M[c2] && M[d]) ix.push(a, b, c2, a, c2, d); }
-  if (!ix.length) return; RV.depth = R.max - R.min;
+  if (!ix.length) return; RV.depth = -R.min;
   RV.mesh = { vao: rvBuf([[RV.prog, 3, 'aP'], [RV.prog, 3, 'aN']], vb, new Uint32Array(ix)), n: ix.length };
 }
 function rvBuildLines() {
@@ -6198,7 +6218,7 @@ function relView3d() {
   if (!S.relief.items.some(i => i.visible && relGrid[i.id])) { toast(tr('Aucun relief à afficher.')); return; }
   $('#v3d').hidden = false; if (!v3Init()) { $('#v3d').hidden = true; toast('L’aperçu 3D demande WebGL 2, absent de ce navigateur. Essayez Chrome, Edge ou Firefox récents.'); return; }
   const st = S.stock, t0 = performance.now(), cell = Math.max(+S.relief.res || 0.3, Math.sqrt(st.w * st.h / 1200000)), R = reliefCompose(cell), H = R.H;
-  for (let i = 0; i < H.length; i++) H[i] = Math.max(-st.t - 0.01, Math.min(0, H[i] - R.max));
+  for (let i = 0; i < H.length; i++) H[i] = Math.max(-st.t - 0.01, Math.min(0, H[i]));
   const B = new Float32Array(R.nx * R.ny); B.fill(-st.t);
   V3.S3 = { w: st.w, h: st.h, t: st.t, nx: R.nx, ny: R.ny, cx: R.cx, cy: R.cy, H, B, floor: -st.t - 0.01, segs: [], cum: [], thr: [], total: 0, idx: 0, frac: 0, has2: false, relief: true };
   V3.toolMesh.clear(); $('#v3OneRow').hidden = true; $('#v3Show').value = 'stock'; v3BuildMesh(); v3BuildPaths(); v3BuildThreads(); v3ResetView(); V3.T = 0; V3.cur = null; V3.dirty = true; v3Play(false); v3Ui(); v3Req();
