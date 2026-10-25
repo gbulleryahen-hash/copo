@@ -326,7 +326,7 @@ label.inl input{width:70px}
 .fp-styles button{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:3px 8px;cursor:pointer;color:var(--ink);font-size:12.5px}
 .fp-styles button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .optbar .fp-mini{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
-.coordin{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.tpt{min-width:0;display:flex;align-items:center;gap:6px}.tpt b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tpbad{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;font:700 10px/1 sans-serif;font-style:normal;color:#111}.tpbad.err{background:var(--danger)}.tpbad.wrn{background:#e8a33a}.sn-col{display:grid;gap:4px;align-content:start}.sn-cap{font-size:12.5px;color:var(--muted)}.sn-dir{display:flex;align-items:center;gap:8px}.sn-dir .mono{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:6px 8px;border:1px solid var(--line);border-radius:6px}.rlclip{display:grid;gap:6px;margin:8px 0}.ptb button:disabled{opacity:.45;cursor:default}.nebtn{display:inline-flex;align-items:center;gap:6px}.neico{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.neico .nf{fill:var(--accent);stroke:none}.neico .nh{stroke:var(--accent);stroke-width:1.3}.ptnext{display:grid;gap:8px}.ptnext>b{font-size:12.5px}.ptg{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px}.ptg label{display:grid;grid-template-columns:42px 1fr;align-items:center;gap:6px;font-size:12px;color:var(--muted)}.ptg input{width:100%;min-width:0}.ptb{display:flex;flex-wrap:wrap;gap:6px}
+.coordin{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.tpt{min-width:0;display:flex;align-items:center;gap:6px}.tpt b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tpbad{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;font:700 10px/1 sans-serif;font-style:normal;color:#111}.tpbad.err{background:var(--danger)}.tpbad.wrn{background:#e8a33a}.rlclip{display:grid;gap:6px;margin:8px 0}.ptb button:disabled{opacity:.45;cursor:default}.nebtn{display:inline-flex;align-items:center;gap:6px}.neico{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.neico .nf{fill:var(--accent);stroke:none}.neico .nh{stroke:var(--accent);stroke-width:1.3}.ptnext{display:grid;gap:8px}.ptnext>b{font-size:12.5px}.ptg{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px}.ptg label{display:grid;grid-template-columns:42px 1fr;align-items:center;gap:6px;font-size:12px;color:var(--muted)}.ptg input{width:100%;min-width:0}.ptb{display:flex;flex-wrap:wrap;gap:6px}
 .coordin input{width:80px}
 .coordin select{width:auto}
 .nebar button{padding:3px 8px!important;font-size:12.5px}
@@ -410,7 +410,7 @@ label.inl input{width:70px}
 .fbar select{height:26px;padding:0 4px;border:1px solid var(--line);border-radius:5px;background:var(--raised);color:var(--ink);font-size:12px;width:auto}
 .fbar .coords{font:500 12px var(--f-mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:pre;padding:0 6px;flex:none}
 .fbar .coords.cx{position:absolute;left:0;bottom:calc(100% + 6px);max-width:60ch;padding:3px 8px;background:var(--panel);border:1px solid var(--line);border-radius:6px;pointer-events:none;color:var(--muted);overflow:hidden;text-overflow:ellipsis}.fbar .coords.cx:empty{display:none}
-.stbar.fbar{left:10px;bottom:10px;max-width:calc(100% - 72px);flex-wrap:wrap}
+.stbar.fbar{left:28px;bottom:10px;max-width:calc(100% - 90px);flex-wrap:wrap} /* 18 px de règle + marge */
 .fbfit{right:10px;bottom:10px}
 .rvxf.fbar{left:50%;bottom:10px;transform:translateX(-50%);gap:3px}
 .rvxf.fbar button{width:32px;height:32px;padding:0}
@@ -870,12 +870,6 @@ label.inl input{width:70px}
           <div class="row"><button class="primary" data-act="gcSave">Enregistrer le G-code</button><button data-act="gcCopy">Copier</button><button data-act="v3d">Aperçu 3D</button><button data-act="sheet">Fiche de gamme…</button></div>
           <p class="hint">Le fichier est enregistré en .txt. Renommez-le en .nc ou .gcode si votre logiciel de pilotage l'exige ; UGS, Candle et bCNC lisent aussi les .txt.</p>
         </section>
-        <section class="blk"><h3>Envoyer au logiciel de pilotage</h3>
-          <div class="g2"><label>Logiciel<select id="snSoft"><option value="gsender">gSender</option><option value="obc">OpenBuilds CONTROL</option><option value="ugs">Universal G-code Sender</option><option value="cncjs">CNCjs</option><option value="candle">Candle</option><option value="bcnc">bCNC</option><option value="mach3">Mach3</option><option value="mach4">Mach4</option><option value="uccnc">UCCNC</option><option value="linuxcnc">LinuxCNC</option><option value="masso">MASSO</option><option value="other">Autre</option></select></label>
-          <div class="sn-col"><span class="sn-cap">Dossier d’envoi</span><span class="sn-dir"><span id="snDir" class="mono">—</span><button type="button" data-act="snPick" title="Choisissez le dossier où votre logiciel de pilotage ouvre ses programmes (une seule fois, COPO s’en souvient)">Choisir…</button></span></div></div>
-          <div class="row"><button class="primary" data-act="snSend" title="Écrit le programme dans le dossier d’envoi, avec l’extension attendue par le logiciel choisi">Envoyer</button></div>
-          <p class="hint" id="snHint"></p>
-        </section>
       </div>
     </aside>
   </main>
@@ -883,7 +877,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.103</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.104</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -4301,8 +4295,6 @@ function act(a, btn) {
     case 'toolsExport': saveFile('bibliotheque-outils.json', JSON.stringify(S.tools, null, 2), 'Bibliothèque d’outils'); return;
     case 'toolsImport': $('#fTools').click(); return;
     case 'mcReset': S.machine.custom = CUSTOM_POST(); syncMachine(); autosave(); gcDirty = true; renderGcode(); return;
-    case 'snPick': snPick(); return;
-    case 'snSend': snSend(); return;
     case 'gcSave': { renderGcode(); saveFile(gcName(), $('#gcOut').value, 'G-code'); return; }
     case 'gcCopy': { renderGcode(); copyText($('#gcOut')); return; }
   }
@@ -4873,7 +4865,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.103', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.104', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6707,27 +6699,6 @@ const TIPS = {"[data-tab=\"projet\"]": "Brut, origine des coordonnées, unités 
   document.addEventListener('scroll', hide, true);
 })();
 
-// ---------- envoi du G-code au logiciel de pilotage : écrit le fichier dans un dossier choisi une fois (le navigateur ne peut pas lancer le logiciel lui-même) ----------
-const SN_SOFT = { gsender: ['gSender', 'gcode', 'Dans gSender : « Load File » et choisissez le fichier dans ce dossier.'], obc: ['OpenBuilds CONTROL', 'gcode', 'Dans OpenBuilds CONTROL : « Open G-code » puis le fichier de ce dossier.'], ugs: ['Universal G-code Sender', 'nc', 'Dans UGS : « Open » puis le fichier de ce dossier.'], cncjs: ['CNCjs', 'nc', 'Dans CNCjs : « Upload G-code » puis le fichier de ce dossier.'], candle: ['Candle', 'nc', 'Dans Candle : « Ouvrir » puis le fichier de ce dossier.'], bcnc: ['bCNC', 'nc', 'Dans bCNC : « Open » puis le fichier de ce dossier.'], mach3: ['Mach3', 'tap', 'Dans Mach3 : « Load G-Code » ; le fichier .tap est dans ce dossier.'], mach4: ['Mach4', 'tap', 'Dans Mach4 : « Load G-Code » ; le fichier .tap est dans ce dossier.'], uccnc: ['UCCNC', 'tap', 'Dans UCCNC : « Load file » ; le fichier .tap est dans ce dossier.'], linuxcnc: ['LinuxCNC', 'ngc', 'Dans LinuxCNC (AXIS) : « Open » ; le fichier .ngc est dans ce dossier.'], masso: ['MASSO', 'nc', 'Choisissez la clé USB du MASSO comme dossier d’envoi : le programme y est copié directement.'], other: ['', '', 'Le programme est écrit dans le dossier choisi, avec l’extension du post-processeur.'] };
-let snHandle = null;
-async function snLoad() { try { const db = await idb(); const r = await new Promise((res, rej) => { const q = db.transaction('images').objectStore('images').get('send_dir'); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); }); snHandle = r && r.src && r.src.kind === 'directory' ? r.src : null; } catch { snHandle = null; } snUi(); }
-function snUi() {
-  const sel = $('#snSoft'); if (!sel) return; let v = 'gsender'; try { v = LS.get('copo.sendSoft') || (S.machine.post === 'mach3' ? 'mach3' : S.machine.post === 'linuxcnc' ? 'linuxcnc' : S.machine.post === 'uccnc' ? 'uccnc' : S.machine.post === 'masso' ? 'masso' : 'gsender'); } catch { } if (SN_SOFT[v]) sel.value = v;
-  $('#snDir').textContent = snHandle ? snHandle.name : (window.showDirectoryPicker ? tr('aucun') : tr('téléchargement'));
-  $('#snHint').textContent = !window.showDirectoryPicker ? tr('Ce navigateur ne permet pas d’écrire dans un dossier : le programme est téléchargé avec la bonne extension. Chrome, Edge, Brave et Vivaldi permettent l’envoi direct dans un dossier.') : tr(SN_SOFT[sel.value][2]) + ' ' + tr('Le navigateur ne peut pas lancer le logiciel : COPO dépose le programme dans le dossier, il reste à l’ouvrir (ou à le recharger) dans le logiciel.');
-}
-function snName() { const soft = $('#snSoft').value, ext = SN_SOFT[soft][1] || (S.machine.post === 'custom' ? ((S.machine.custom && S.machine.custom.ext) || 'nc') : postOf(S.machine).ext || 'nc'), base = (S.meta && S.meta.name ? S.meta.name : 'programme-copo').replace(/[\\/:*?"<>|]+/g, '-').trim() || 'programme-copo', m = $('#gcFace') ? $('#gcFace').value : 'all'; return base + (m === '1' ? '-face1' : m === '2' ? '-face2' : '') + '.' + ext; }
-async function snPick() { if (!window.showDirectoryPicker) { toast(tr('Ce navigateur ne permet pas de choisir un dossier : le programme sera téléchargé.')); return false; } try { snHandle = await window.showDirectoryPicker({ id: 'copo-send', mode: 'readwrite' }); await idbPutImg('send_dir', snHandle); snUi(); return true; } catch (e) { if (e && e.name !== 'AbortError') toast(tr('Impossible d’utiliser ce dossier.')); return false; } }
-async function snSend() {
-  renderGcode(); const data = $('#gcOut').value, name = snName(); if (!S.tps.some(t => t.visible)) { toast(tr('Aucun parcours visible à envoyer.')); return; }
-  if (!window.showDirectoryPicker) { const url = URL.createObjectURL(new Blob([data], { type: 'application/octet-stream' })), a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000); toast(trf('« {f} » téléchargé.', { f: name })); return; }
-  if (!snHandle && !(await snPick())) return;
-  try { if ((await snHandle.queryPermission({ mode: 'readwrite' })) !== 'granted' && (await snHandle.requestPermission({ mode: 'readwrite' })) !== 'granted') { toast(tr('Accès au dossier refusé.')); return; }
-    const fh = await snHandle.getFileHandle(name, { create: true }), w = await fh.createWritable(); await w.write(data); await w.close();
-    const soft = SN_SOFT[$('#snSoft').value][0]; toast(soft ? trf('Programme « {f} » envoyé dans {d} : ouvrez-le dans {s}.', { f: name, d: snHandle.name, s: soft }) : trf('Programme « {f} » envoyé dans {d}.', { f: name, d: snHandle.name }));
-  } catch (e) { toast(tr('Échec de l’écriture dans le dossier : choisissez-le à nouveau.')); snHandle = null; snUi(); }
-}
-(function snInit() { const sel = document.getElementById('snSoft'); if (!sel) return; sel.addEventListener('change', () => { try { LS.set('copo.sendSoft', sel.value); } catch { } snUi(); }); snLoad(); })();
 </script>
 
 </body>

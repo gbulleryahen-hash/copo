@@ -186,7 +186,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.103</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.104</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -498,8 +498,6 @@ M30</pre>
     </ul>
     <p><span class="ui">Enregistrer en PDF</span> (dans la fenêtre de la fiche, ou directement <span class="ui">Fichier › Enregistrer la fiche de gamme en PDF</span> sans l'ouvrir) crée un fichier PDF au format A4, découpé en pages sans couper les tableaux ni les images, prêt à imprimer ou à envoyer. Le PDF est une image de la fiche (texte non sélectionnable) ; pour un PDF avec du texte, utilisez <span class="ui">Imprimer</span> puis « Enregistrer au format PDF » du navigateur. Vous pouvez aussi garder le fichier HTML avec le G-code. Les réglages de la fiche sont enregistrés avec le projet.</p>
 
-    <h3>Envoyer au logiciel de pilotage</h3>
-    <p>Le bloc <span class="ui">Envoyer au logiciel de pilotage</span> de l’onglet G-code dépose le programme directement dans un dossier : choisissez le logiciel (gSender, OpenBuilds CONTROL, UGS, CNCjs, Candle, bCNC, Mach3, Mach4, UCCNC, LinuxCNC, MASSO…), puis <span class="ui">Choisir…</span> le dossier où il ouvre ses programmes (une seule fois, COPO s’en souvient). <span class="ui">Envoyer</span> écrit le fichier avec l’extension attendue (.gcode, .nc, .tap ou .ngc). Un navigateur ne peut pas lancer un autre logiciel : il reste à ouvrir (ou recharger) le fichier dans le logiciel de pilotage. Pour un MASSO, choisissez sa clé USB comme dossier. L’écriture dans un dossier fonctionne avec Chrome, Edge, Brave et Vivaldi ; avec Firefox et Safari, le programme est téléchargé avec la bonne extension.</p>
     <h2 id="fr-installer">Installer et utiliser hors ligne</h2>
     <ul>
       <li><strong>En ligne</strong> : ouvrez la page GitHub Pages du dépôt COPO. Rien à installer.</li>
@@ -534,7 +532,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.103 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.104 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -570,7 +568,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.103</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.104</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -882,8 +880,6 @@ M30</pre>
     </ul>
     <p><span class="ui">Save as PDF</span> (in the sheet window, or straight from <span class="ui">File › Save the setup sheet as PDF</span> without opening it) creates an A4 PDF file, split into pages without cutting tables or pictures, ready to print or send. The PDF is a picture of the sheet (text not selectable); for a PDF with text, use <span class="ui">Print</span> then the browser's “Save as PDF”. You can also keep the HTML file with the G-code. The sheet settings are saved with the project.</p>
 
-    <h3>Send to the control software</h3>
-    <p>The <span class="ui">Send to the control software</span> block in the G-code tab drops the program straight into a folder: choose the software (gSender, OpenBuilds CONTROL, UGS, CNCjs, Candle, bCNC, Mach3, Mach4, UCCNC, LinuxCNC, MASSO…), then <span class="ui">Choose…</span> the folder it opens its programs from (once, COPO remembers it). <span class="ui">Send</span> writes the file with the expected extension (.gcode, .nc, .tap or .ngc). A browser cannot start another program: you still open (or reload) the file in the control software. For a MASSO, choose its USB stick as the folder. Writing to a folder works in Chrome, Edge, Brave and Vivaldi; in Firefox and Safari the program is downloaded with the right extension.</p>
     <h2 id="en-install">Install and use offline</h2>
     <ul>
       <li><strong>Online</strong>: open the GitHub Pages site of the COPO repository. Nothing to install.</li>
@@ -918,7 +914,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.103 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.104 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
