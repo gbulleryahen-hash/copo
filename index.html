@@ -880,7 +880,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.127</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.128</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1288,6 +1288,7 @@ Object.assign(I18N_EN, {"Créer le contour": "Create outline", "Crée un vecteur
 Object.assign(I18N_EN, {"Projet enregistré dans « {f} ».": "Project saved to “{f}”.", "Enregistrer sous…": "Save as…"});
 Object.assign(I18N_EN, {"Face 1": "Side 1", "Face 2 (retournée)": "Side 2 (flipped)", "Matière + trajets": "Material + paths", "Trajets seuls": "Paths only"});
 Object.assign(I18N_EN, {"Autorisation refusée : choisissez où enregistrer.": "Permission refused: choose where to save.", "Ce navigateur ne permet pas de réécrire le fichier : le projet est téléchargé à chaque enregistrement. Avec Chrome, Edge ou Vivaldi (ou Brave avec l’option « File System Access API » activée), Ctrl+S réécrit directement le même fichier.": "This browser cannot rewrite the file: the project is downloaded on every save. In Chrome, Edge or Vivaldi (or Brave with the “File System Access API” option enabled), Ctrl+S rewrites the same file directly."});
+Object.assign(I18N_EN, {"Écriture directe dans le fichier impossible ({e}) : le projet est téléchargé.": "Writing directly to the file failed ({e}): the project is downloaded."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4924,7 +4925,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.127', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.128', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -4987,7 +4988,7 @@ async function projSave(as) {
     try { if (!projHandle || as) projKeep(await window.showSaveFilePicker({ suggestedName: projHandle ? projHandle.name : projFileName(), types: COPO_TYPES }));
       else if (projHandle.queryPermission && (await projHandle.queryPermission({ mode: 'readwrite' })) !== 'granted' && (await projHandle.requestPermission({ mode: 'readwrite' })) !== 'granted') { toast(tr('Autorisation refusée : choisissez où enregistrer.')); projKeep(await window.showSaveFilePicker({ suggestedName: projHandle.name, types: COPO_TYPES })); }
       const w = await projHandle.createWritable(); await w.write(txt); await w.close(); toast(trf('Projet enregistré dans « {f} ».', { f: projHandle.name })); return; }
-    catch (e) { if (e && e.name === 'AbortError') return; projKeep(null); }
+    catch (e) { if (e && e.name === 'AbortError') return; projKeep(null); setTimeout(() => toast(trf('Écriture directe dans le fichier impossible ({e}) : le projet est téléchargé.', { e: (e && (e.name + (e.message ? ' — ' + e.message : ''))) || '?' })), 1500); }
   }
   saveFile(projFileName(), txt, 'Projet COPO'); if (!window.showSaveFilePicker && !window.claude && !projSave.told) { projSave.told = true; setTimeout(() => toast(tr('Ce navigateur ne permet pas de réécrire le fichier : le projet est téléchargé à chaque enregistrement. Avec Chrome, Edge ou Vivaldi (ou Brave avec l’option « File System Access API » activée), Ctrl+S réécrit directement le même fichier.')), 1800); }
 }
@@ -6758,7 +6759,7 @@ function bindImgPanel() {
 }
 async function idbPutImg(id, src) { const db = await idb(); return new Promise((res, rej) => { const tx = db.transaction('images', 'readwrite'); tx.objectStore('images').put({ id, src }); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); }
 async function idbGetImgs() { const db = await idb(); return new Promise((res, rej) => { const q = db.transaction('images').objectStore('images').getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => rej(q.error); }); }
-async function loadImgData() { try { for (const r of await idbGetImgs()) { if (r.id.startsWith('rel_')) relGrid[r.id.slice(4)] = relUnpack(r.src); else if (r.id.startsWith('relm_')) relMesh[r.id.slice(5)] = r.src; else if (r.id !== 'send_dir' && r.id !== 'proj_handle') imgData[r.id] = r.src; } } catch (e) { } relDirty = true; relPanel(); renderImgPanel(); draw(); }
+async function loadImgData() { try { for (const r of await idbGetImgs()) { if (r.id.startsWith('rel_')) relGrid[r.id.slice(4)] = relUnpack(r.src); else if (r.id.startsWith('relm_')) relMesh[r.id.slice(5)] = r.src; else if (r.id !== 'send_dir' && r.id !== 'proj_handle') imgData[r.id] = r.src; } } catch (e) { } relDirty = true; { const T = S.tps.filter(t => t.type === 'relief' || (t.p && t.p.proj)); if (T.length) { T.forEach(computeTP); gcDirty = true; renderTpList(); } } relPanel(); renderImgPanel(); draw(); } // au démarrage, les reliefs arrivent après le calcul des parcours : on recalcule ceux qui en dépendent
 function imgAct(a) {
   if (a === 'relImg') { $('#fRelImg').click(); return true; }
   if (a === 'relStl') { $('#fRelStl').click(); return true; }
