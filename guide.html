@@ -186,7 +186,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.112</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.113</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -326,8 +326,8 @@ footer p{max-width:none}
       <li><strong>Modèle 3D</strong> (STL binaire ou texte) : le modèle est vu de dessus et projeté en hauteurs, à l’échelle du fichier (réduit s’il dépasse le brut). <em>Haut du modèle</em> choisit l’axe tourné vers le haut (+Z, −Z, ±Y, ±X). Les contre-dépouilles sont usinées telles que vues d’en haut.</li>
       <li><strong>Réglages de chaque élément</strong> : position et taille comme pour un objet (point de référence parmi neuf, X, Y, largeur, hauteur), <em>épaisseur du relief</em>, <em>haut du brut → haut du relief</em> et <em>bas du brut → bas du relief</em> (modifier l’un recalcule l’autre : leur somme plus l’épaisseur fait l’épaisseur du brut), angle, <em>adoucissement</em> et <em>combinaison</em> avec les éléments précédents : ajouter, soustraire, garder le plus haut ou le plus bas, ou <em>mélanger</em> : là où les reliefs se chevauchent, leurs hauteurs font une moyenne, fondue vers les bords de l’élément, sans s’additionner ni se soustraire. « Garder les proportions » fait suivre l’épaisseur quand on change la taille.</li>
       <li><strong>Limiter par des vecteurs</strong> : cliquez sur <span class="ui">Limiter par des vecteurs…</span>, puis choisissez sur le plan un ou plusieurs vecteurs fermés et cliquez sur <span class="ui">Valider la limite</span>. Le relief n’existe qu’à l’intérieur de ces vecteurs (une forme dans une autre fait un trou) ; en dehors il n’y a pas de relief. La limite suit les vecteurs si vous les modifiez ; <span class="ui">Retirer la limite</span> rend tout le cadre au relief.</li>
-      <li><strong>Sur le plan</strong>, un modèle STL ou un relief en niveaux de gris se manipule comme un objet, avec l’outil Sélection : un premier clic le sélectionne et ouvre ses réglages de position dans l’onglet Relief, et vous pouvez le glisser pour le déplacer ; un deuxième clic affiche les poignées : carrés pour redimensionner (coins : proportions gardées, Maj pour déformer ; côtés : une seule dimension), ronds pour tourner (Maj : par 15°). Suppr le retire. Les dômes, extrusions et lissages par la vue 3D ou le panneau.</li>
-      <li><strong>Affichage</strong> : en 2D, les modèles STL et les reliefs en niveaux de gris s’affichent ombrés (les dômes, extrusions et lissages gardent leurs vecteurs) ; tout le relief se voit dans la vue 3D. Le résumé indique la profondeur du point le plus bas et prévient s’il dépasse l’épaisseur du brut.</li>
+      <li><strong>Sur le plan</strong>, un relief (STL, niveaux de gris, dôme, extrusion ou lissage) se manipule comme un objet, avec l’outil Sélection : un premier clic le sélectionne et ouvre ses réglages de position dans l’onglet Relief, et vous pouvez le glisser pour le déplacer ; un deuxième clic affiche les poignées : carrés pour redimensionner (coins : proportions gardées, Maj pour déformer ; côtés : une seule dimension), ronds pour tourner (Maj : par 15°). Suppr le retire.</li>
+      <li><strong>Affichage</strong> : en 2D, tous les reliefs (STL, niveaux de gris, dômes, extrusions et lissages) s’affichent ombrés sous le dessin ; tout le relief se voit dans la vue 3D. Le résumé indique la profondeur du point le plus bas et prévient s’il dépasse l’épaisseur du brut.</li>
     </ul>
     <p>Les données du relief sont gardées dans le navigateur et enregistrées dans le fichier <code>.copo</code>. </p>
     <h3>Formes créées à partir du dessin</h3>
@@ -534,7 +534,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.112 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.113 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -570,7 +570,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.112</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.113</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -710,8 +710,8 @@ M30</pre>
       <li><strong>3D model</strong> (binary or text STL): the model is seen from above and projected into heights, at the file’s scale (reduced if larger than the stock). <em>Model top</em> picks the axis facing up (+Z, −Z, ±Y, ±X). Undercuts are machined as seen from above.</li>
       <li><strong>Settings of each item</strong>: position and size as for an object (one of nine reference points, X, Y, width, height), <em>relief height</em>, <em>stock top → relief top</em> and <em>stock bottom → relief bottom</em> (editing one recalculates the other: their sum plus the height is the stock thickness), angle, <em>softening</em> and how it <em>combines</em> with the items before it: add, subtract, keep highest or keep lowest, or <em>blend</em>: where reliefs overlap, their heights are averaged, faded towards the item’s edges, without adding or subtracting. “Keep proportions” makes the height follow size changes.</li>
       <li><strong>Limit with vectors</strong>: click <span class="ui">Limit with vectors…</span>, pick one or more closed vectors on the workspace and click <span class="ui">Apply the limit</span>. The relief only exists inside those vectors (a shape inside another makes a hole); outside there is no relief. The limit follows the vectors if you edit them; <span class="ui">Remove the limit</span> gives the whole frame back to the relief.</li>
-      <li><strong>On the workspace</strong>, an STL model or a grayscale relief is handled like an object with the Select tool: a first click selects it and opens its position settings in the Relief tab, and you can drag it to move it; a second click shows the handles: squares to resize (corners: proportions kept, Shift to distort; sides: one dimension only), circles to rotate (Shift: 15° steps). Delete removes it. Domes, extrusions and sweeps through the 3D view or the panel.</li>
-      <li><strong>Display</strong>: in 2D, STL models and grayscale reliefs are shown shaded (domes, extrusions and sweeps keep their vectors); the whole relief is visible in the 3D view. The summary gives the depth of the lowest point and warns if it exceeds the stock thickness.</li>
+      <li><strong>On the workspace</strong>, a relief (STL, grayscale, dome, extrusion or sweep) is handled like an object with the Select tool: a first click selects it and opens its position settings in the Relief tab, and you can drag it to move it; a second click shows the handles: squares to resize (corners: proportions kept, Shift to distort; sides: one dimension only), circles to rotate (Shift: 15° steps). Delete removes it.</li>
+      <li><strong>Display</strong>: in 2D, all reliefs (STL, grayscale, domes, extrusions and sweeps) are shown shaded under the drawing; the whole relief is visible in the 3D view. The summary gives the depth of the lowest point and warns if it exceeds the stock thickness.</li>
     </ul>
     <p>Relief data is kept in the browser and saved in the <code>.copo</code> file. </p>
     <h3>Shapes built from the drawing</h3>
@@ -918,7 +918,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.112 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.113 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
