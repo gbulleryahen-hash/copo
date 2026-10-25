@@ -880,7 +880,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.124</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.126</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -4923,7 +4923,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.124', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.126', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6049,7 +6049,14 @@ function drawImages(C) {
     ctx.restore();
   }
 }
-function relHit(p) { if (!S.relief || S.relief.show === false) return null; for (let k = S.relief.items.length - 1; k >= 0; k--) { const it = S.relief.items[k]; if (!it.visible || !relGrid[it.id] || relLinked(it)) continue; const l = imgLocal(it, p); if (Math.abs(l[0]) <= it.w / 2 && Math.abs(l[1]) <= it.h / 2) return it; } return null; }
+// hauteur (0..1) du relief à un point local, NaN là où il n'a pas de matière (trou d'une extrusion, fond transparent…)
+function relAtLocal(it, lu, lv) { const f = relSrc(it), g = relGrid[it.id]; if (!f || !g) return NaN; const su = lu / it.w + 0.5, sv = 0.5 - lv / it.h; if (it.kind === 'image') { const i = Math.round(Math.max(0, Math.min(1, su)) * (g.nx - 1)), j = Math.round(Math.max(0, Math.min(1, sv)) * (g.ny - 1)); if (!g.d[j * g.nx + i]) return NaN; } const v = relSample(f, g.nx, g.ny, su, sv); return v !== v ? NaN : (it.invert ? 1 - v : v); }
+// matière du relief au point local ou tout près (rayon r) : un STL ajouré ou une fine gravure reste facile à attraper
+function relNear(it, lu, lv, r) { if (relAtLocal(it, lu, lv) === relAtLocal(it, lu, lv)) return true; for (let k = 0; k < 12; k++) { const a = k * Math.PI / 6; for (const rr of [r * 0.5, r]) { const v = relAtLocal(it, lu + rr * Math.cos(a), lv + rr * Math.sin(a)); if (v === v) return true; } } return false; }
+function relPickAt(p, r) { let best = null, ba = Infinity; // parmi les reliefs qui ont de la matière sous le curseur (ou tout près), le plus petit : souvent celui posé sur l'autre
+  for (let k = S.relief.items.length - 1; k >= 0; k--) { const it = S.relief.items[k]; if (!it.visible || !relGrid[it.id] || relLinked(it)) continue; const l = imgLocal(it, p); if (Math.abs(l[0]) > it.w / 2 || Math.abs(l[1]) > it.h / 2) continue; if (!relNear(it, l[0], l[1], r)) continue; const a = it.w * it.h; if (a < ba) { ba = a; best = it; } }
+  return best; }
+function relHit(p) { if (!S.relief || S.relief.show === false) return null; return relPickAt(p, Math.max(1.5, 6 / S.view.s)); }
 var RXF = false; // 2e clic sur l'élément sélectionné : poignées de taille et de rotation
 function relXfHandles(it) { const a = (it.rot || 0) * Math.PI / 180, u = [Math.cos(a), Math.sin(a)], v = [-u[1], u[0]], H = [], pad = 7, rp = 18;
   for (const cx of [-1, 0, 1]) for (const cy of [-1, 0, 1]) { if (!cx && !cy) continue; const w = [it.x + u[0] * cx * it.w / 2 + v[0] * cy * it.h / 2, it.y + u[1] * cx * it.w / 2 + v[1] * cy * it.h / 2], dX = u[0] * cx + v[0] * cy, dY = u[1] * cx + v[1] * cy, dl = Math.hypot(dX, dY) || 1;
@@ -6545,11 +6552,9 @@ function rvRay(mx, my) { const c = $('#rvc'), e = rvEye(), f = v3n(v3sub(RV.tgt,
 const rvZ = it => { const top = -(+it.top || 0); return { top, bot: top - (+it.zH || 0), mid: top - (+it.zH || 0) / 2 }; };
 // élément sous le curseur : intersection du rayon avec la boîte de chaque élément (dans son repère tourné)
 function rvPick(mx, my) {
-  const R = rvRay(mx, my); let best = null, bt = Infinity;
-  for (const it of S.relief.items) { if (!it.visible || !relGrid[it.id]) continue; const a = (it.rot || 0) * Math.PI / 180, cs = Math.cos(a), sn = Math.sin(a), Z = rvZ(it);
-    const loc = q => [(q[0] - it.x) * cs + (q[1] - it.y) * sn, -(q[0] - it.x) * sn + (q[1] - it.y) * cs, q[2]], o = loc(R.o), d = [R.d[0] * cs + R.d[1] * sn, -R.d[0] * sn + R.d[1] * cs, R.d[2]];
-    let t0 = -Infinity, t1 = Infinity; for (const [k, lo, hi] of [[0, -it.w / 2, it.w / 2], [1, -it.h / 2, it.h / 2], [2, Z.bot, Math.max(Z.top, Z.bot + 0.01)]]) { if (Math.abs(d[k]) < 1e-12) { if (o[k] < lo || o[k] > hi) { t0 = Infinity; break; } continue; } let a1 = (lo - o[k]) / d[k], a2 = (hi - o[k]) / d[k]; if (a1 > a2) [a1, a2] = [a2, a1]; t0 = Math.max(t0, a1); t1 = Math.min(t1, a2); }
-    if (t0 <= t1 && t1 > 0 && t0 < bt) { bt = t0; best = it.id; } }
+  const R = rvRay(mx, my); let best = null, ba = Infinity;
+  for (const it of S.relief.items) { if (!it.visible || !relGrid[it.id] || Math.abs(R.d[2]) < 1e-9) continue; const Z = rvZ(it), t = (Z.top - (+it.zH || 0) * 0.3 - R.o[2]) / R.d[2]; if (t <= 0) continue; // point visé à hauteur du relief
+    const q = [R.o[0] + R.d[0] * t, R.o[1] + R.d[1] * t], l = imgLocal(it, q); if (Math.abs(l[0]) > it.w / 2 || Math.abs(l[1]) > it.h / 2) continue; if (!relNear(it, l[0], l[1], Math.max(1.5, Math.max(S.stock.w, S.stock.h) / 150))) continue; const a = it.w * it.h; if (a < ba) { ba = a; best = it.id; } }
   return best;
 }
 // géométrie des poignées de l'élément sélectionné (en pixels), calculée à chaque rendu
