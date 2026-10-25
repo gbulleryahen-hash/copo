@@ -880,7 +880,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.133</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.134</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -956,7 +956,7 @@ label.inl input{width:70px}
             <label data-show="profile pocket">Profondeur de passe (mm)<input data-u="len" type="number" data-f="pass" step="0.1" min="0.05" placeholder="celle de l'outil"></label>
             <label data-show="vcarve">Précision du calcul (mm)<input data-u="len" type="number" data-f="vstep" step="0.05" min="0.05"></label>
           </div></div>
-          <label class="chk" data-show="profile pocket vcarve" title="Le parcours suit la surface du relief : les profondeurs se mesurent depuis le relief au lieu du dessus du brut (face 1 seulement)"><input type="checkbox" data-f="proj"> Projeter sur le relief</label>
+          <label class="chk" data-show="profile pocket vcarve" title="Le parcours suit la surface du relief : les profondeurs se mesurent depuis le relief au lieu du dessus du brut (face 1 seulement)"><input type="checkbox" data-f="proj"> Projeter sur le relief (tous les reliefs visibles)</label>
           <div class="figrow" data-show="pocket"><span class="ill" data-ill="strat"></span><div class="g2">
             <label>Stratégie<select data-f="strategy"><option value="rings">Anneaux (contour parallèle)</option><option value="raster">Balayage parallèle</option></select></label>
             <label id="rasterAngRow">Angle du balayage (°)<input type="number" data-f="rasterAng" step="15"></label>
@@ -1290,6 +1290,7 @@ Object.assign(I18N_EN, {"Face 1": "Side 1", "Face 2 (retournée)": "Side 2 (flip
 Object.assign(I18N_EN, {"Autorisation refusée : choisissez où enregistrer.": "Permission refused: choose where to save.", "Ce navigateur ne permet pas de réécrire le fichier : le projet est téléchargé à chaque enregistrement. Avec Chrome, Edge ou Vivaldi (ou Brave avec l’option « File System Access API » activée), Ctrl+S réécrit directement le même fichier.": "This browser cannot rewrite the file: the project is downloaded on every save. In Chrome, Edge or Vivaldi (or Brave with the “File System Access API” option enabled), Ctrl+S rewrites the same file directly."});
 Object.assign(I18N_EN, {"Écriture directe dans le fichier impossible ({e}) : le projet est téléchargé.": "Writing directly to the file failed ({e}): the project is downloaded."});
 Object.assign(I18N_EN, {"Horizontale": "Horizontal", "Verticale": "Vertical"});
+Object.assign(I18N_EN, {"La projection sur le relief utilise tous les reliefs visibles : inutile de sélectionner le relief. Sélectionnez seulement les vecteurs du parcours.": "Projection onto the relief uses all visible reliefs: no need to select the relief. Only select the toolpath’s vectors.", "Projeter sur le relief (tous les reliefs visibles)": "Project onto the relief (all visible reliefs)"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -3428,6 +3429,7 @@ cv.addEventListener('pointerdown', e => {
       if (dm) { S.selDim = dm.id; S.sel.clear(); renderSel(); }
       else if (gd) { drag = { mode: 'guide', axis: gd.axis, i: gd.i }; }
       else if (hi) { const was = S.imgSel === hi.id; if (!was) { IXF = false; selectImg(hi.id); } drag = { mode: 'imove', im: hi, off: [hi.x - p[0], hi.y - p[1]], toggleXf: was, X0: X, Y0: Y }; }
+      else if (hr && !$('#tpWin').hidden) { toast(tr('La projection sur le relief utilise tous les reliefs visibles : inutile de sélectionner le relief. Sélectionnez seulement les vecteurs du parcours.')); }
       else if (hr) { const was = S.relSel === hr.id; if (!was) { RXF = false; selectRel(hr.id); if (curTab !== 'relief') setTab('relief'); } drag = { mode: 'imove', im: hr, off: [hr.x - p[0], hr.y - p[1]], rel: true, toggleXf: was, X0: X, Y0: Y }; }
       else { S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (S.relSel) { S.relSel = null; relPanel(); } if (!e.shiftKey) S.sel.clear(); renderSel(); drag = { mode: 'band', sx0: X, sy0: Y, sx1: X, sy1: Y }; }
     }
@@ -4933,7 +4935,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.133', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.134', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5322,7 +5324,7 @@ function libRender() {
   const box = $('#lib'); if (!box || box.hidden) return; libMatSync();
   const q = ($('#libSearch').value || '').trim().toLowerCase(), ul = $('#libTree'); ul.innerHTML = '';
   const used = new Set(S.tools.filter(x => S.tps.some(tp => tp.toolId === x.id)).map(x => x.libId)), ft = libPick && libPick.ftype;
-  const kids = pid => LIB.groups.filter(g => (g.parent || null) === pid).sort((a, b) => (a.order || 0) - (b.order || 0)), toolsIn = gid => LIB.tools.filter(t => (t.group || null) === gid && (!q || t.name.toLowerCase().includes(q))).sort((a, b) => (a.order || 0) - (b.order || 0) || a.dia - b.dia);
+  const kids = pid => LIB.groups.filter(g => (g.parent || null) === pid).sort((a, b) => (a.order || 0) - (b.order || 0)), toolsIn = gid => LIB.tools.filter(t => (t.group || null) === gid && (!q || t.name.toLowerCase().includes(q))).sort((a, b) => String(a.type).localeCompare(String(b.type)) || (+a.dia || 0) - (+b.dia || 0) || String(a.name).localeCompare(String(b.name), 'fr', { numeric: true }));
   const hasMatch = gid => toolsIn(gid).length || kids(gid).some(g => hasMatch(g.id));
   const add = (html, cls, dep, onclick) => { const li = document.createElement('li'); li.className = cls; li.style.paddingLeft = (6 + dep * 16) + 'px'; li.innerHTML = html; li.onclick = onclick; ul.appendChild(li); return li; };
   const walk = (pid, dep) => {
