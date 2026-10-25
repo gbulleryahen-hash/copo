@@ -186,7 +186,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.130</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.131</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -259,7 +259,7 @@ footer p{max-width:none}
       <li><strong>Position et taille exactes</strong> : bloc <span class="ui">Sélection</span>, avec un point de référence choisi parmi neuf (coins, milieux, centre).</li>
     </ul>
     <h3>Accrochage, repères et cotes</h3>
-    <p><span class="ui">Édition › Accroche…</span> ouvre la fenêtre <strong>Règles d'accroche</strong> : grille magnétique et son pas, <strong>repères</strong>, coins, milieux et centre du brut, rayon d'accroche (petit à grand), et accrochage aux objets avec ses six types de points (extrémités et nœuds, milieux, intersections, centres, tangentes, et <em>sur le tracé</em> : n’importe quel point d’une ligne ou d’une courbe, le plus proche du curseur). Les points précis (extrémité, milieu…) restent prioritaires sur « sur le tracé ». Ces réglages sont mémorisés. Glissez depuis une règle pour créer un repère : les points dessinés s'y accrochent, et en déplaçant une sélection, ses bords et son centre s'alignent sur les repères (et sur le brut si cette case est cochée). Un symbole orange au curseur indique l'accroche trouvée. <span class="ui">Affichage › Afficher la grille</span> montre ou cache la grille du plan. L'outil <strong>Mesurer</strong> <kbd>M</kbd> donne une distance et l'outil <strong>Cote</strong> <kbd>D</kbd> pose une cote qui reste sur le plan. Une extrémité accrochée à un nœud, au milieu d'un segment ou au centre d'un arc ou d'un cercle (point plein au bout de la ligne d'attache) reste liée à l'objet : si vous le déplacez, le redimensionnez ou modifiez ses nœuds, la cote suit et sa valeur se met à jour. Une extrémité posée ailleurs (grille, intersection, point libre) reste fixe.</p>
+    <p><span class="ui">Édition › Accroche…</span> ouvre la fenêtre <strong>Règles d'accroche</strong> : grille magnétique et son pas, <strong>repères</strong>, coins, milieux et centre du brut, rayon d'accroche (petit à grand), et accrochage aux objets avec ses six types de points (extrémités et nœuds, milieux, intersections, centres, tangentes, et <em>sur le tracé</em> : n’importe quel point d’une ligne ou d’une courbe, le plus proche du curseur). Les points précis (extrémité, milieu…) restent prioritaires sur « sur le tracé ». L’<strong>origine</strong> (X0 Y0) est toujours un point d’accroche. Quand vous déplacez un objet en le saisissant par un de ses points (nœud, coin, milieu, centre), c’est ce point qui s’accroche : glissez le coin d’un rectangle sur l’origine, il s’y pose exactement. Ces réglages sont mémorisés. Glissez depuis une règle pour créer un repère : les points dessinés s'y accrochent, et en déplaçant une sélection, ses bords et son centre s'alignent sur les repères (et sur le brut si cette case est cochée). Un symbole orange au curseur indique l'accroche trouvée. <span class="ui">Affichage › Afficher la grille</span> montre ou cache la grille du plan. L'outil <strong>Mesurer</strong> <kbd>M</kbd> donne une distance et l'outil <strong>Cote</strong> <kbd>D</kbd> pose une cote qui reste sur le plan. Une extrémité accrochée à un nœud, au milieu d'un segment ou au centre d'un arc ou d'un cercle (point plein au bout de la ligne d'attache) reste liée à l'objet : si vous le déplacez, le redimensionnez ou modifiez ses nœuds, la cote suit et sa valeur se met à jour. Une extrémité posée ailleurs (grille, intersection, point libre) reste fixe.</p>
     <h3>Calques, images et fichiers</h3>
     <ul>
       <li><strong>Calques</strong> : couleur des traits, visibilité, verrou et face usinée (F1 dessus, F2 dessous).</li>
@@ -535,7 +535,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.130 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.131 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -571,7 +571,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.130</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.131</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -644,7 +644,7 @@ M30</pre>
       <li><strong>Exact position and size</strong>: <span class="ui">Selection</span> block, with a reference point chosen among nine (corners, middles, center).</li>
     </ul>
     <h3>Snapping, guides and dimensions</h3>
-    <p><span class="ui">Edit › Snapping…</span> opens the <strong>Snap settings</strong> window: snap to grid and its spacing, <strong>guides</strong>, stock corners, midpoints and centre, snap radius (small to large), and object snapping with its six kinds of points (ends and nodes, midpoints, intersections, centres, tangents, and <em>on path</em>: any point of a line or curve, the closest to the cursor). Precise points (end, midpoint…) take priority over “on path”. These settings are remembered. Drag from a ruler to create a guide: drawn points snap to it, and when you move a selection its edges and centre line up with the guides (and with the stock if that box is ticked). An orange symbol at the cursor shows the snap found. <span class="ui">View › Show grid</span> shows or hides the canvas grid. The <strong>Measure</strong> tool <kbd>M</kbd> gives a distance and the <strong>Dimension</strong> tool <kbd>D</kbd> places a dimension that stays on the canvas. An end snapped to a node, a segment midpoint or the centre of an arc or circle (solid dot at the end of the extension line) stays attached to the object: move it, resize it or edit its nodes and the dimension follows, with its value updated. An end placed elsewhere (grid, intersection, free point) stays fixed.</p>
+    <p><span class="ui">Edit › Snapping…</span> opens the <strong>Snap settings</strong> window: snap to grid and its spacing, <strong>guides</strong>, stock corners, midpoints and centre, snap radius (small to large), and object snapping with its six kinds of points (ends and nodes, midpoints, intersections, centres, tangents, and <em>on path</em>: any point of a line or curve, the closest to the cursor). Precise points (end, midpoint…) take priority over “on path”. The <strong>origin</strong> (X0 Y0) is always a snap point. When you move an object by grabbing one of its points (node, corner, midpoint, centre), that point is the one that snaps: drag a rectangle’s corner onto the origin and it lands exactly there. These settings are remembered. Drag from a ruler to create a guide: drawn points snap to it, and when you move a selection its edges and centre line up with the guides (and with the stock if that box is ticked). An orange symbol at the cursor shows the snap found. <span class="ui">View › Show grid</span> shows or hides the canvas grid. The <strong>Measure</strong> tool <kbd>M</kbd> gives a distance and the <strong>Dimension</strong> tool <kbd>D</kbd> places a dimension that stays on the canvas. An end snapped to a node, a segment midpoint or the centre of an arc or circle (solid dot at the end of the extension line) stays attached to the object: move it, resize it or edit its nodes and the dimension follows, with its value updated. An end placed elsewhere (grid, intersection, free point) stays fixed.</p>
     <h3>Layers, images and files</h3>
     <ul>
       <li><strong>Layers</strong>: stroke color, visibility, lock and machined side (F1 top, F2 bottom).</li>
@@ -920,7 +920,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.130 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.131 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 

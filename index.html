@@ -880,7 +880,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.130</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.131</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -3017,7 +3017,7 @@ function drawOverlaps() {
 }
 // accrochage aux objets : extrémités, milieux, intersections, centres d'arcs, tangentes
 let snapVer = 0, snapCacheV = -1, snapCache = null;
-const SNAP_KEY = { end: 'snapEnd', mid: 'snapMid', int: 'snapInt', cen: 'snapCen', tan: 'snapTan', on: 'snapOn' }, SNAP_LBL = { end: 'Extrémité', mid: 'Milieu', int: 'Intersection', cen: 'Centre', tan: 'Tangente', on: 'Sur le tracé', stk: 'Brut', gd: 'Repère' };
+const SNAP_KEY = { end: 'snapEnd', mid: 'snapMid', int: 'snapInt', cen: 'snapCen', tan: 'snapTan', on: 'snapOn' }, SNAP_LBL = { end: 'Extrémité', mid: 'Milieu', int: 'Intersection', cen: 'Centre', tan: 'Tangente', on: 'Sur le tracé', org: 'Origine', stk: 'Brut', gd: 'Repère' };
 const snapOff = false;
 function buildSnapCache() {
   const vis = S.shapes.filter(shown), pts = [], arcs = [], seenC = new Set();
@@ -3046,11 +3046,14 @@ function getSnapCache() { if (snapCacheV !== snapVer) { snapCache = buildSnapCac
 function snapFrom() { if (pen.length) { const n = pen[pen.length - 1]; return [n.x, n.y]; } if (arcSt.length) return arcSt[arcSt.length - 1]; if (dimSt.length) return dimSt[dimSt.length - 1]; if (drag && (drag.mode === 'rect' || drag.mode === 'circle' || drag.mode === 'measure') && drag.p0) return drag.p0; return null; }
 const stockPts = () => { const w = S.stock.w, h = S.stock.h; return [[0, 0], [w, 0], [w, h], [0, h], [w / 2, h / 2], [w / 2, 0], [w, h / 2], [w / 2, h], [0, h / 2]]; };
 const snapTol = () => (+S.ui.snapR || 9) / S.view.s;
+// point de la sélection saisi au clic (nœud, extrémité, milieu ou centre proche du curseur) : il servira de point d'accroche pendant le déplacement
+function moveAnchor(p) { const tol = snapTol(); let best = null, bd = tol; for (const sh of selShapes()) { for (const n of sh.nodes) { const d = Math.hypot(n.x - p[0], n.y - p[1]); if (d < bd) { bd = d; best = [n.x, n.y]; } } } if (best) return best; const C = getSnapCache(); for (const c of C.pts) { if (!c.ids.some(id => S.sel.has(id)) || c.k === 'int') continue; const d = hyp(c.p, p); if (d < bd) { bd = d; best = c.p.slice(); } } return best; }
 function snap(p, excl) {
   snapMark = null; const tol = snapTol(); if (snapOff) return p.slice();
-  const pen0 = { end: 0, int: 0.5, stk: 0.5, cen: 1, mid: 1.5, tan: 2, on: 3.5 }; let best = null, bd = tol;
+  const pen0 = { end: 0, int: 0.5, stk: 0.5, org: 0, cen: 1, mid: 1.5, tan: 2, on: 3.5 }; let best = null, bd = tol;
   const consider = (q, k, ref) => { if (SNAP_KEY[k] && S.ui[SNAP_KEY[k]] === false) return; const d = hyp(q, p) + pen0[k] / S.view.s; if (d < bd) { bd = d; best = { p: q, k, ref: ref || null }; } };
   if (S.ui.snapStock) for (const q of stockPts()) consider(q, 'stk');
+  if (S.ui.snapVert || S.ui.snapStock || S.ui.snapGuide !== false) consider(originOf(S.stock), 'org'); // l'origine (X0 Y0) est toujours un point d'accroche
   if (S.ui.snapVert) {
     const C = getSnapCache();
     for (const c of C.pts) { if (excl && c.ids.some(id => excl.has(id))) continue; if (Math.abs(c.p[0] - p[0]) > tol || Math.abs(c.p[1] - p[1]) > tol) continue; consider(c.p, c.k, c); }
@@ -3108,6 +3111,7 @@ function drawSnapMark(C) {
   else if (m.k === 'int') { ctx.moveTo(X - 6, Y - 6); ctx.lineTo(X + 6, Y + 6); ctx.moveTo(X + 6, Y - 6); ctx.lineTo(X - 6, Y + 6); }
   else if (m.k === 'gd') { ctx.moveTo(X, Y - 7); ctx.lineTo(X + 7, Y); ctx.lineTo(X, Y + 7); ctx.lineTo(X - 7, Y); ctx.closePath(); }
   else if (m.k === 'stk') { ctx.rect(X - 5, Y - 5, 10, 10); ctx.moveTo(X - 5, Y - 5); ctx.lineTo(X + 5, Y + 5); }
+  else if (m.k === 'org') { ctx.arc(X, Y, 7, 0, 7); ctx.moveTo(X - 11, Y); ctx.lineTo(X + 11, Y); ctx.moveTo(X, Y - 11); ctx.lineTo(X, Y + 11); }
   else if (m.k === 'on') { ctx.moveTo(X - 5, Y - 6); ctx.lineTo(X + 5, Y - 6); ctx.lineTo(X - 5, Y + 6); ctx.lineTo(X + 5, Y + 6); ctx.closePath(); }
   else if (m.k === 'cen') { ctx.arc(X, Y, 6, 0, 7); ctx.moveTo(X - 9, Y); ctx.lineTo(X + 9, Y); ctx.moveTo(X, Y - 9); ctx.lineTo(X, Y + 9); }
   else { ctx.arc(X, Y, 6, 0, 7); ctx.moveTo(X - 10, Y - 6); ctx.lineTo(X + 10, Y - 6); }
@@ -3410,7 +3414,7 @@ cv.addEventListener('pointerdown', e => {
     if (h) {
       S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (S.relSel) { S.relSel = null; relPanel(); } const ids = groupIds(h), wasSel = S.sel.has(h.id) && !e.shiftKey;
       if (e.shiftKey) { const has = S.sel.has(h.id); ids.forEach(id => has ? S.sel.delete(id) : S.sel.add(id)); } else if (!S.sel.has(h.id)) { S.sel.clear(); ids.forEach(id => S.sel.add(id)); }
-      renderSel(); drag = { mode: 'move', X0: X, Y0: Y, p0: snap(p, S.sel), bb0: bbox(selShapes()), orig: selShapes().map(s => [s, s.nodes.map(cloneNode)]), moved: false, wasSel, piv0: PIV && PIV.key === selKey() ? PIV.p.slice() : null };
+      renderSel(); drag = { mode: 'move', X0: X, Y0: Y, anc: moveAnchor(p), praw: p.slice(), p0: snap(p, S.sel), bb0: bbox(selShapes()), orig: selShapes().map(s => [s, s.nodes.map(cloneNode)]), moved: false, wasSel, piv0: PIV && PIV.key === selKey() ? PIV.p.slice() : null };
     } else {
       const dm = hitDim(p), gd = hitGuide(X, Y);
       const hi = !dm && !gd ? imgHit(p) : null, hr = !dm && !gd && !hi ? relHit(p) : null;
@@ -3516,7 +3520,7 @@ cv.addEventListener('pointermove', e => {
       D.moved = true; const b = bbox(selShapes()); setCoords(q, fr(b.w) + ' × ' + fr(b.h) + ' mm'); draw(); return;
     }
     if (D.mode === 'move' && !D.moved && D.X0 !== undefined && Math.hypot(X - D.X0, Y - D.Y0) < DRAG_MIN()) return; // un clic avec un léger tremblement ne déplace rien
-    if (D.mode === 'move') { const q = snap(p, S.sel); let dx = q[0] - D.p0[0], dy = q[1] - D.p0[1]; if (!snapMark || snapMark.k === 'gd') [dx, dy] = moveAlign(D.bb0, dx, dy); for (const [s, o] of D.orig) { s.nodes = o.map(cloneNode); transformShape(s, v => [v[0] + dx, v[1] + dy]); } if (D.piv0) PIV = { key: selKey(), p: [D.piv0[0] + dx, D.piv0[1] + dy] }; D.moved = D.moved || Math.abs(dx) + Math.abs(dy) > 1e-9; setCoords(q, 'Δ ' + fr(dx) + ' / ' + fr(dy)); draw(); return; }
+    if (D.mode === 'move') { let dx, dy, q; if (D.anc) { q = snap([D.anc[0] + p[0] - D.praw[0], D.anc[1] + p[1] - D.praw[1]], S.sel); dx = q[0] - D.anc[0]; dy = q[1] - D.anc[1]; } else { q = snap(p, S.sel); dx = q[0] - D.p0[0]; dy = q[1] - D.p0[1]; } /* l'objet saisi par un de ses points : c'est ce point qui s'accroche */ if (!snapMark || snapMark.k === 'gd') [dx, dy] = moveAlign(D.bb0, dx, dy); for (const [s, o] of D.orig) { s.nodes = o.map(cloneNode); transformShape(s, v => [v[0] + dx, v[1] + dy]); } if (D.piv0) PIV = { key: selKey(), p: [D.piv0[0] + dx, D.piv0[1] + dy] }; D.moved = D.moved || Math.abs(dx) + Math.abs(dy) > 1e-9; setCoords(q, 'Δ ' + fr(dx) + ' / ' + fr(dy)); draw(); return; }
     if (D.mode === 'band') { D.sx1 = X; D.sy1 = Y; draw(); return; }
     if (D.mode === 'node' && !D.moved && D.X0 !== undefined && Math.hypot(X - D.X0, Y - D.Y0) < DRAG_MIN()) return;
     if (D.mode === 'node') { const q = snap(p, new Set([D.s.id])), dx = q[0] - D.p0[0], dy = q[1] - D.p0[1]; D.ids.forEach((i, k) => { const n = D.s.nodes[i]; if (n) { n.x = D.orig[k][0] + dx; n.y = D.orig[k][1] + dy; } }); refresh(D.s); D.moved = true; setCoords(q, D.ids.length > 1 ? 'Δ ' + fr(dx) + ' / ' + fr(dy) : ''); draw(); return; }
@@ -4922,7 +4926,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.130', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.131', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
