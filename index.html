@@ -881,7 +881,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.118</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.119</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -4917,7 +4917,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.118', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.119', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6455,9 +6455,18 @@ function rvBuildMesh() {
   if (!S.relief.items.some(i => i.visible && relGrid[i.id])) return;
   const st = S.stock, R = reliefCompose(Math.max(0.2, Math.sqrt(st.w * st.h / 220000)), true), { nx, ny, cx, cy, H, M } = R, N = nx * ny, vb = new Float32Array(N * 6), ix = [];
   for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, z = Math.max(-st.t, H[q]), hx = (H[j * nx + Math.min(nx - 1, i + 1)] - H[j * nx + Math.max(0, i - 1)]) / (2 * cx), hy = (H[Math.min(ny - 1, j + 1) * nx + i] - H[Math.max(0, j - 1) * nx + i]) / (2 * cy), n = v3n([-hx, -hy, 1]); vb.set([i * cx, j * cy, z, n[0], n[1], n[2]], q * 6); }
-  for (let j = 0; j + 1 < ny; j++) for (let i = 0; i + 1 < nx; i++) { const a = j * nx + i, b = a + 1, c2 = a + nx + 1, d = a + nx; if (M[a] && M[b] && M[c2] && M[d]) ix.push(a, b, c2, a, c2, d); }
+  const CW = nx - 1, CH = ny - 1, on = new Uint8Array(CW * CH);
+  for (let j = 0; j < CH; j++) for (let i = 0; i < CW; i++) { const a = j * nx + i, b = a + 1, c2 = a + nx + 1, d = a + nx; if (M[a] && M[b] && M[c2] && M[d]) { on[j * CW + i] = 1; ix.push(a, b, c2, a, c2, d); } }
   if (!ix.length) return; RV.depth = -R.min;
-  RV.mesh = { vao: rvBuf([[RV.prog, 3, 'aP'], [RV.prog, 3, 'aN']], vb, new Uint32Array(ix)), n: ix.length };
+  // volume : dessous à la base du relief et parois sur le pourtour, pour que le relief se lise comme une pièce pleine
+  const zb = Math.max(-st.t, R.base), ex = [], base = N * 2, isOn = (i, j) => i >= 0 && j >= 0 && i < CW && j < CH && on[j * CW + i];
+  const bot = new Float32Array(N * 6); for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) bot.set([i * cx, j * cy, zb, 0, 0, -1], (j * nx + i) * 6);
+  for (let j = 0; j < CH; j++) for (let i = 0; i < CW; i++) if (on[j * CW + i]) { const a = j * nx + i, b = a + 1, c2 = a + nx + 1, d = a + nx; ix.push(N + a, N + c2, N + b, N + a, N + d, N + c2); }
+  let nv = 0; const wall = (p, q, nrm) => { const zp = Math.max(-st.t, H[p]), zq = Math.max(-st.t, H[q]), P = [(p % nx) * cx, Math.floor(p / nx) * cy], Q = [(q % nx) * cx, Math.floor(q / nx) * cy], k = base + nv; ex.push(P[0], P[1], zp, ...nrm, Q[0], Q[1], zq, ...nrm, Q[0], Q[1], zb, ...nrm, P[0], P[1], zb, ...nrm); nv += 4; ix.push(k, k + 1, k + 2, k, k + 2, k + 3); };
+  for (let j = 0; j < CH; j++) for (let i = 0; i < CW; i++) { if (!on[j * CW + i]) continue; const a = j * nx + i, b = a + 1, c2 = a + nx + 1, d = a + nx;
+    if (!isOn(i, j - 1)) wall(a, b, [0, -1, 0]); if (!isOn(i, j + 1)) wall(c2, d, [0, 1, 0]); if (!isOn(i - 1, j)) wall(d, a, [-1, 0, 0]); if (!isOn(i + 1, j)) wall(b, c2, [1, 0, 0]); }
+  const all = new Float32Array(N * 12 + ex.length); all.set(vb, 0); all.set(bot, N * 6); all.set(ex, N * 12);
+  RV.mesh = { vao: rvBuf([[RV.prog, 3, 'aP'], [RV.prog, 3, 'aN']], all, new Uint32Array(ix)), n: ix.length };
 }
 function rvBuildLines() {
   const gl = RV.gl, st = S.stock; for (const k of ['lStock', 'lAxes', 'lDraw', 'lTp']) if (RV[k]) gl.deleteVertexArray(RV[k].vao);
