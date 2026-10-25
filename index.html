@@ -880,7 +880,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.128</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.129</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -4925,7 +4925,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.128', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.129', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5010,7 +5010,7 @@ function copyText(ta) { const v = ta.value; const fb = () => { ta.focus(); ta.se
 function readFile(input, cb, binary) { input.onchange = () => { const f = input.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { try { cb(r.result, f); } catch (e) { toast(e.message || 'Fichier illisible.'); } input.value = ''; }; binary ? r.readAsArrayBuffer(f) : r.readAsText(f); }; }
 function f32ToB64(a) { const u = new Uint8Array(a.buffer, a.byteOffset, a.byteLength); let s = ''; for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(s); }
 function b64ToF32(b) { const s = atob(b), u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return new Float32Array(u.buffer); }
-function openProjectText(txt) { const o = JSON.parse(txt); if (!o.shapes || !o.stock) throw new Error('Ce fichier n’est pas un projet COPO.'); if (o.imgData) { for (const [k, v] of Object.entries(o.imgData)) { imgData[k] = v; IMG.delete(k); idbPutImg(k, v).catch(() => { }); } delete o.imgData; txt = JSON.stringify(o); } if (o.relData) { for (const [k, v] of Object.entries(o.relData)) { relGrid[k] = relUnpack(v); relSm.delete(k); idbPutImg('rel_' + k, v).catch(() => { }); } delete o.relData; txt = JSON.stringify(o); } if (o.relMesh) { for (const [k, v] of Object.entries(o.relMesh)) { try { const T = b64ToF32(v); relMesh[k] = T; idbPutImg('relm_' + k, T).catch(() => { }); } catch { } } delete o.relMesh; txt = JSON.stringify(o); } S.imgSel = null; hist = []; hi = -1; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; restore(txt); commit(false); S.form = newForm(); renderForm(); fit(); toast('Projet ouvert.'); }
+function openProjectText(txt) { const o = JSON.parse(txt); if (!o.shapes || !o.stock) throw new Error('Ce fichier n’est pas un projet COPO.'); if (o.imgData) { for (const [k, v] of Object.entries(o.imgData)) { imgData[k] = v; IMG.delete(k); idbPutImg(k, v).catch(() => { }); } delete o.imgData; txt = JSON.stringify(o); } if (o.relData) { for (const [k, v] of Object.entries(o.relData)) { relGrid[k] = relUnpack(v); relSm.delete(k); idbPutImg('rel_' + k, v).catch(() => { }); } delete o.relData; txt = JSON.stringify(o); } if (o.relMesh) { for (const [k, v] of Object.entries(o.relMesh)) { try { const T = b64ToF32(v); relMesh[k] = T; idbPutImg('relm_' + k, T).catch(() => { }); } catch { } } delete o.relMesh; txt = JSON.stringify(o); } S.imgSel = null; hist = []; hi = -1; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; restore(txt); if (relRegenOld()) { S.tps.filter(t => t.type === 'relief' || (t.p && t.p.proj)).forEach(computeTP); renderTpList(); } commit(false); S.form = newForm(); renderForm(); fit(); toast('Projet ouvert.'); }
 readFile($('#fOpen'), txt => { projKeep(null); openProjectText(txt); });
 // application installée : un double-clic sur un fichier .copo l'ouvre ici
 if ('launchQueue' in window) launchQueue.setConsumer(async lp => { const h = lp.files && lp.files[0]; if (!h) return; try { openProjectText(await (await h.getFile()).text()); projKeep(h); } catch (e) { toast(e.message || 'Fichier illisible.'); } });
@@ -6425,14 +6425,16 @@ function relSweepRoles(G, si) {
   for (let k = 0; k <= N; k++) { const u = k / N; let best = null; for (let i = 0; i + 1 < pts.length; i++) { const p0 = pts[i], p1 = pts[i + 1]; if ((p0[0] - u) * (p1[0] - u) <= 0 && p1[0] !== p0[0]) { const y = p0[1] + (p1[1] - p0[1]) * (u - p0[0]) / (p1[0] - p0[0]); if (best === null || y > best) best = y; } } sec[k] = Math.max(0, best ?? 0); if (sec[k] > mx) mx = sec[k]; }
   G.sec = sec.map(v => mx > 0 ? v / mx : 0); if (G.secFlip) G.sec.reverse(); G.secH = mx; G.secW = L;
 }
-function relRegen(it) { const R = relGenGrid(it.gen), ow = it.w || 1, k = it.gen.box ? ow / (it.gen.box[2] - it.gen.box[0]) : 1; it.w = (R.box[2] - R.box[0]) * k; it.h = (R.box[3] - R.box[1]) * k; it.gen.box = R.box; relStore(it.id, R.g); }
+const REL_GEN_V = 2; // version du générateur de formes (2 : transition douce entre profils)
+function relRegenOld() { let n = 0; for (const it of S.relief.items) if (it.kind === 'gen' && it.gen && (it.gen.gv || 0) < REL_GEN_V) { try { it.gen.gv = REL_GEN_V; relRegen(it); n++; } catch (e) { } } if (n) { relDirty = true; relSm.clear(); } return n; }
+function relRegen(it) { it.gen.gv = REL_GEN_V; relSm.delete(it.id); const R = relGenGrid(it.gen), ow = it.w || 1, k = it.gen.box ? ow / (it.gen.box[2] - it.gen.box[0]) : 1; it.w = (R.box[2] - R.box[0]) * k; it.h = (R.box[3] - R.box[1]) * k; it.gen.box = R.box; relStore(it.id, R.g); }
 function relFromDrawing(type) {
   const sh = selShapes().filter(x => x.pts && x.pts.length > 1), lbl = { dome: 'Dôme', extrude: 'Extrusion', sweep: 'Lissage' }[type];
   let polys;
   if (type === 'dome') { polys = sh.filter(x => x.closed && x.pts.length > 2).map(x => ({ pts: x.pts.map(q => [q[0], q[1]]), closed: true })); if (!polys.length) { toast(tr('Sélectionnez une ou plusieurs formes fermées.')); return; } }
   else if (type === 'extrude') { polys = sh.map(x => ({ pts: x.pts.map(q => [q[0], q[1]]), closed: !!x.closed })); if (!polys.length) { toast(tr('Sélectionnez un ou plusieurs vecteurs.')); return; } }
   else { const op = sh.filter(x => !x.closed); if (op.length < 2) { toast(tr('Sélectionnez deux rails et, si vous voulez, un ou plusieurs profils dessinés en travers des rails (vecteurs ouverts).')); return; } polys = op.map(x => ({ pts: x.pts.map(q => [q[0], q[1]]), closed: false })); }
-  const G = { type, polys, prof: 'round', W: type === 'extrude' ? 10 : 0, end: 100, prop: false };
+  const G = { type, polys, prof: 'round', W: type === 'extrude' ? 10 : 0, end: 100, prop: false, gv: REL_GEN_V };
   if (type === 'sweep' && polys.length > 3) { if (!relSweepMulti(G, polys)) return; }
   if (type === 'sweep' && polys.length === 3) { // profil : le vecteur qui relie les deux autres, sinon le dernier sélectionné
     G.all = polys; const dd = (p, pl) => Math.min(...pl.map(q => Math.hypot(p[0] - q[0], p[1] - q[1]))), score = k => { const o = polys.filter((x, i) => i !== k), e = polys[k].pts; return Math.min(dd(e[0], o[0].pts) + dd(e[e.length - 1], o[1].pts), dd(e[0], o[1].pts) + dd(e[e.length - 1], o[0].pts)); };
@@ -6759,7 +6761,7 @@ function bindImgPanel() {
 }
 async function idbPutImg(id, src) { const db = await idb(); return new Promise((res, rej) => { const tx = db.transaction('images', 'readwrite'); tx.objectStore('images').put({ id, src }); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); }
 async function idbGetImgs() { const db = await idb(); return new Promise((res, rej) => { const q = db.transaction('images').objectStore('images').getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => rej(q.error); }); }
-async function loadImgData() { try { for (const r of await idbGetImgs()) { if (r.id.startsWith('rel_')) relGrid[r.id.slice(4)] = relUnpack(r.src); else if (r.id.startsWith('relm_')) relMesh[r.id.slice(5)] = r.src; else if (r.id !== 'send_dir' && r.id !== 'proj_handle') imgData[r.id] = r.src; } } catch (e) { } relDirty = true; { const T = S.tps.filter(t => t.type === 'relief' || (t.p && t.p.proj)); if (T.length) { T.forEach(computeTP); gcDirty = true; renderTpList(); } } relPanel(); renderImgPanel(); draw(); } // au démarrage, les reliefs arrivent après le calcul des parcours : on recalcule ceux qui en dépendent
+async function loadImgData() { try { for (const r of await idbGetImgs()) { if (r.id.startsWith('rel_')) relGrid[r.id.slice(4)] = relUnpack(r.src); else if (r.id.startsWith('relm_')) relMesh[r.id.slice(5)] = r.src; else if (r.id !== 'send_dir' && r.id !== 'proj_handle') imgData[r.id] = r.src; } } catch (e) { } relRegenOld(); relDirty = true; { const T = S.tps.filter(t => t.type === 'relief' || (t.p && t.p.proj)); if (T.length) { T.forEach(computeTP); gcDirty = true; renderTpList(); } } relPanel(); renderImgPanel(); draw(); } // au démarrage, les reliefs arrivent après le calcul des parcours : on recalcule ceux qui en dépendent
 function imgAct(a) {
   if (a === 'relImg') { $('#fRelImg').click(); return true; }
   if (a === 'relStl') { $('#fRelStl').click(); return true; }
