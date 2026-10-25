@@ -186,7 +186,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.135</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.136</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -368,8 +368,9 @@ footer p{max-width:none}
       <li><strong>Filetage</strong> : taraudages et vis usinés à la <em>fraise à fileter</em> (monodent, 60°), centrés sur chaque cercle sélectionné. Réglez intérieur (taraudage) ou extérieur (vis), le pas, le diamètre nominal (0 = celui du cercle : dessinez le cercle à 8 mm pour du M8), le sens du filet et le nombre de passes radiales ; la longueur filetée est la profondeur de coupe. COPO affiche le diamètre de perçage préalable (Ø nominal − pas, par exemple Ø6,75 pour M8 × 1,25). L’outil travaille toujours en avalant, un tour d’hélice par pas, avec une entrée et une sortie tangentes en demi-cercle ; l’avance indiquée est celle du tranchant et COPO la corrige au centre de l’outil. Pour une vis, dégagez d’abord la matière autour du cylindre. Deux fraises à fileter (Ø4 et Ø8 mm) ont été ajoutées à la bibliothèque, avec des réglages estimés.</li>
     </ul>
     <h3>Passes, surépaisseur et sens de coupe</h3>
-    <p><strong>Prof. départ (D)</strong> et <strong>Prof. coupe (C)</strong>, comme dans Aspire : l'usinage commence à la profondeur D sous la surface (par exemple au fond d'une poche déjà usinée) et descend de C à partir de là ; le fond est donc à D + C. Laissez D à 0 pour partir de la surface. En V-carving, la fraise calcule le motif comme si la surface était à D, ce qui sert notamment à l'incrustation. Le petit schéma à côté des champs rappelle ce que sont D et C.</p>
+    <p><strong>Prof. départ (D)</strong> et <strong>Prof. coupe (C)</strong>, comme dans Aspire : l'usinage commence à la profondeur D sous la surface (par exemple au fond d'une poche déjà usinée) et descend de C à partir de là ; le fond est donc à D + C. Laissez D à 0 pour partir de la surface. Une valeur <em>négative</em> fait commencer au-dessus de la surface : les premières passes se font à vide, utile si le brut est plus épais que prévu ou sa surface irrégulière (D = −2 et C = 5 : départ 2 mm au-dessus, fond à 3 mm de profondeur). En V-carving, la fraise calcule le motif comme si la surface était à D, ce qui sert notamment à l'incrustation. Le petit schéma à côté des champs rappelle ce que sont D et C.</p>
     <p><strong>Projeter sur le relief</strong> (profil, poche, V-carving) : le parcours suit la surface de tous les reliefs visibles de l’onglet Relief au lieu du dessus plat du brut (inutile de sélectionner le relief : sélectionnez seulement les vecteurs du parcours) ; les profondeurs D et C se mesurent alors depuis le relief. La hauteur de contact tient compte de la forme de la fraise (en V, hémisphérique, droite), pour graver un motif ou une lettre sur une surface bombée. En dehors du relief, le parcours reste mesuré depuis le dessus du brut. Face 1 seulement ; si le relief change, la liste signale qu’il faut recalculer le parcours.</p>
+    <figure><img src="img/projection-relief.webp" alt="Texte Hello COPO en trait unique, projeté sur un lissage : à gauche le dessin en 2D, à droite le parcours qui suit la surface en 3D." width="1000" height="327" loading="lazy"><figcaption>Un texte à trait unique gravé <em>sur</em> un lissage : le parcours (en orange) épouse la surface du relief.</figcaption></figure>
     <p>La profondeur de coupe est répartie en passes de la profondeur choisie. Une <strong>surépaisseur</strong> laisse un peu de matière sur les parois pendant l'ébauche ; elle est retirée à la dernière passe ou par une passe de finition sur toute la hauteur. Le sens de coupe est <em>avalant</em> ou en <em>opposition</em>.</p>
     <h3>Entrée de l'outil</h3>
     <div class="tbl"><table>
@@ -535,7 +536,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.135 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.136 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -571,7 +572,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.135</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.136</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -753,8 +754,9 @@ M30</pre>
       <li><strong>Threading</strong>: tapped holes and screws milled with a <em>thread mill</em> (single-form, 60°), centered on each selected circle. Set internal (tapped hole) or external (screw), pitch, nominal diameter (0 = the circle’s: draw an 8 mm circle for M8), thread hand and number of radial passes; the thread length is the cut depth. COPO shows the pre-drill diameter (nominal Ø − pitch, e.g. Ø6.75 for M8 × 1.25). The bit always climb-mills, one helix turn per pitch, with tangent half-circle lead-in and lead-out; the feed entered is the cutting-edge feed and COPO corrects it at the tool center. For a screw, clear the material around the cylinder first. Two thread mills (Ø4 and Ø8 mm) were added to the library with estimated settings.</li>
     </ul>
     <h3>Passes, allowance and cut direction</h3>
-    <p><strong>Start depth (D)</strong> and <strong>Cut depth (C)</strong>, as in Aspire: machining starts at depth D below the surface (for example at the bottom of a pocket already cut) and goes down by C from there, so the bottom is at D + C. Leave D at 0 to start from the surface. In V-carving, the pattern is computed as if the surface were at D, which is what inlays use. The small diagram next to the fields shows what D and C are.</p>
+    <p><strong>Start depth (D)</strong> and <strong>Cut depth (C)</strong>, as in Aspire: machining starts at depth D below the surface (for example at the bottom of a pocket already cut) and goes down by C from there, so the bottom is at D + C. Leave D at 0 to start from the surface. In V-carving, the pattern is computed as if the surface were at D, which is what inlays use. The small diagram next to the fields shows what D and C are. A <em>negative</em> value starts above the surface: the first passes cut air, useful when the stock is thicker than planned or its surface uneven (D = −2 and C = 5: start 2 mm above, bottom 3 mm deep).</p>
     <p><strong>Project onto the relief</strong> (profile, pocket, V-carving): the toolpath follows the surface of all visible reliefs of the Relief tab instead of the flat stock top (no need to select the relief: only select the toolpath’s vectors); depths D and C are then measured from the relief. The contact height takes the cutter shape into account (V, ball-nose, flat), to carve a pattern or lettering on a domed surface. Outside the relief, the toolpath stays measured from the stock top. Side 1 only; if the relief changes, the list flags that the toolpath must be recalculated.</p>
+    <figure><img src="img/projection-relief.webp" alt="Single-line text Hello COPO projected onto a sweep: the 2D drawing on the left, the toolpath following the surface in 3D on the right." width="1000" height="327" loading="lazy"><figcaption>Single-line text engraved <em>on</em> a sweep: the toolpath (orange) follows the relief surface.</figcaption></figure>
     <p>The cut depth is split into passes of the chosen depth. An <strong>allowance</strong> leaves a little material on the walls while roughing; it is removed on the last pass or by a full-depth finishing pass. The cut direction is <em>climb</em> or <em>conventional</em>.</p>
     <h3>Tool entry</h3>
     <div class="tbl"><table>
@@ -920,7 +922,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.135 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.136 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
