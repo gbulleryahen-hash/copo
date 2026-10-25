@@ -123,6 +123,18 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .optbar label{display:flex;align-items:center;gap:6px}
 .optbar input{width:84px}
 .canvaswrap{position:relative;min-height:0;background:var(--canvas)}
+.views{display:grid;min-height:0;min-width:0;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr)}
+.views.both.v{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.views.both.h{grid-template-rows:minmax(0,1fr) minmax(0,1fr)}
+.views>[hidden]{display:none!important}
+.rv3{position:relative;min-height:0;min-width:0;background:var(--canvas)}.views.both.v .rv3{border-left:1px solid var(--line)}.views.both.h .rv3{border-top:1px solid var(--line)}
+#rvc{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#rvcube{position:absolute;top:8px;right:8px;width:120px;height:120px;cursor:pointer;touch-action:none}
+.rvtools{position:absolute;top:134px;right:14px;display:flex;flex-direction:column;gap:4px}
+.rvtools button{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);border-radius:7px;background:var(--panel);color:var(--muted);cursor:pointer}
+.rvtools button[aria-pressed="true"]{color:var(--ink);border-color:var(--accent)}.rvtools svg{width:18px;height:18px}
+.rvinfo{position:absolute;left:10px;top:8px;font:12px/1.5 var(--f-mono);color:var(--ink);text-shadow:0 1px 2px rgb(0 0 0/.6);pointer-events:none;white-space:pre}
+.splitsw button[disabled]{opacity:.35;cursor:default}
+.simbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:6px}.simbtn svg{width:18px;height:18px}
 canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;display:block}
 .toast{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:7px 14px;border-radius:999px;font-size:13px;max-width:calc(100% - 24px);text-align:center;box-shadow:0 4px 18px rgb(0 0 0 / .18)}
 .stbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:6px 12px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
@@ -417,10 +429,11 @@ label.inl input{width:70px}
       </div></div>
     </nav>
     <div class="tbicons">
-      <button data-act="v3d" title="Aperçu 3D de l’usinage" aria-label="Aperçu 3D"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3 3.5 7.5v9L12 21l8.5-4.5v-9z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/></svg></button>
       <button data-act="undo" title="Annuler (Ctrl+Z)" aria-label="Annuler"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg></button>
       <button data-act="redo" title="Rétablir (Ctrl+Y)" aria-label="Rétablir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h3"/></svg></button>
     </div>
+    <div class="langsw viewsw" role="group" aria-label="Vues"><button data-act="view2d" data-notr title="Vue 2D : le dessin">2D</button><button data-act="view3d" data-notr title="Vue 3D : le relief">3D</button></div>
+    <div class="tbicons splitsw"><button data-act="splitV" title="Vues côte à côte" aria-label="Vues côte à côte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M12 5v14"/></svg></button><button data-act="splitH" title="Vues l’une au-dessus de l’autre" aria-label="Vues l’une au-dessus de l’autre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 12h17"/></svg></button></div>
     <div class="topstats" id="topstats"></div>
     <div class="langsw" role="group" aria-label="Langue / Language"><button data-act="lang" data-lang="fr" data-notr title="Interface en français">FR</button><button data-act="lang" data-lang="en" data-notr title="Interface in English">EN</button></div>
     <div class="tbicons fsw"><button id="fsBtn" data-act="fullscreen" title="Plein écran" aria-label="Plein écran" aria-pressed="false"><svg class="fs-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg class="fs-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button></div>
@@ -453,7 +466,18 @@ label.inl input{width:70px}
 
     <section class="stage">
       <div class="optbar" id="optbar"></div>
+      <div class="views v" id="views">
       <div class="canvaswrap" id="cw"><canvas id="cv" tabindex="0" aria-label="Plan de travail"></canvas><div class="ctxbar" id="ctxbar" hidden><span class="grip"></span><button data-act="dup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>Dupliquer</button><button data-act="group" id="cxGroup">Grouper</button><button data-act="boolU" id="cxWeld">Souder</button><button data-act="tabParcours"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v10M8 9l4 4 4-4M5 20h14"/></svg>Usiner…</button><button data-act="del" title="Supprimer" aria-label="Supprimer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div><div class="toast" id="toast" hidden></div></div>
+      <div class="rv3" id="rv3" hidden><canvas id="rvc" aria-label="Vue 3D du relief"></canvas><canvas id="rvcube" width="120" height="120" aria-label="Cube d’orientation"></canvas>
+        <div class="rvtools" role="toolbar" aria-label="Affichage 3D">
+          <button data-act="rvDraw" title="Afficher / masquer le dessin" aria-label="Dessin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></svg></button>
+          <button data-act="rvAxes" title="Afficher / masquer le repère (axes et origine)" aria-label="Repère"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 19V5M5 19h14M5 19l9-6"/></svg></button>
+          <button data-act="rvStock" title="Afficher / masquer le brut (filaire)" aria-label="Brut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 9l6-4h12v10l-6 4H3z"/><path d="M3 9h12l6-4M15 9v10"/></svg></button>
+          <button data-act="rvFit" title="Recentrer sur le relief (double-clic : tout le brut)" aria-label="Recentrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><circle cx="12" cy="12" r="2.5"/></svg></button>
+        </div>
+        <div class="rvinfo" id="rvInfo"></div>
+      </div>
+      </div>
       <div class="stbar">
         <span class="coords" id="coords">X     0,00  Y     0,00</span><span class="coords cx" id="coordsx"></span>
         <div class="stg" role="group" aria-label="Accroche"><span class="stg-h"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v8a6 6 0 0 0 12 0V3"/><path d="M6 7h3M15 7h3"/></svg>Accroche</span><button class="tg" data-act="tgl" data-tgl="snapGrid" title="Accrocher les points à la grille">Grille</button><select id="gridStep" aria-label="Pas de la grille"><option value="0.5">0,5 mm</option><option value="1" selected>1 mm</option><option value="5">5 mm</option><option value="10">10 mm</option></select><button class="tg" data-act="tgl" data-tgl="snapVert" title="Extrémités, milieux, intersections, centres, tangentes">Objets</button><button class="tg" data-act="tgl" data-tgl="snapGuide" title="Accrocher aux repères tirés des règles">Repères</button><button class="tg tgi" data-act="snapOpen" title="Règles d’accroche…" aria-label="Règles d’accroche…"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button></div>
@@ -782,6 +806,7 @@ label.inl input{width:70px}
         <section class="blk"><h3>Parcours d'outils</h3>
           <ul class="tplist" id="tpList"></ul>
           <p class="hint" id="tpTotal"></p>
+          <button class="primary simbtn" data-act="v3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 3.5 7.5v9L12 21l8.5-4.5v-9z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/></svg>Simulation de l’usinage</button>
         </section>
       </div>
 
@@ -804,7 +829,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.89</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.90</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1185,6 +1210,7 @@ Object.assign(I18N_EN, {"Limite : zone des éléments du relief, sans le fond tr
 Object.assign(I18N_EN, {"Importer un modèle 3D": "Import a 3D model", "Fichier STL": "STL file", "image du dessin": "drawing image", "Sélectionnez sur le plan l’image à transformer en relief.": "Select on the workspace the image to turn into a relief.", "Insérez d’abord une image dans l’onglet Dessin (Importer › Image), puis sélectionnez-la.": "First insert an image in the Drawing tab (Import › Image), then select it.", "Relief créé à partir de l’image (l’image de référence est masquée) : réglez son épaisseur Z.": "Relief created from the image (the reference image is hidden): set its Z height.", "Reliefs à usiner": "Reliefs to machine", "Limite d’usinage": "Machining boundary", "Contour du modèle": "Model boundary", "Contour du brut": "Stock boundary", "Tracés sélectionnés": "Selected vectors", "Décalage du contour (mm)": "Boundary offset (mm)", "Niveaux Z": "Z levels", "Balayage 3D": "3D raster", "Balayage": "Raster", "Décalage": "Offset", "masqué": "hidden", "Limite « Tracés sélectionnés » : sélectionnez d’abord les formes fermées sur le plan.": "“Selected vectors” boundary: first select the closed shapes on the workspace.", "Sélectionnez sur le plan les formes fermées qui limitent l’usinage.": "Select on the workspace the closed shapes that limit machining.", "Limite : tout le brut.": "Boundary: the whole stock.", "Limite : contour des reliefs cochés (sans le fond transparent des images).": "Boundary: outline of the ticked reliefs (without the transparent background of images).", "Aucun tracé nécessaire pour cette limite.": "No vector needed for this boundary.", "Cochez au moins un relief à usiner.": "Tick at least one relief to machine.", "Limite « Tracés sélectionnés » : sélectionnez des formes fermées.": "“Selected vectors” boundary: select closed shapes.", "contours décalés": "offset contours", "Niveaux de gris : sélectionnez sur le plan une image insérée dans l’onglet Dessin (le clair est en haut ; le relief reprend sa place et sa taille).": "Grayscale: select on the workspace an image inserted in the Drawing tab (light is high; the relief takes its place and size).", "balayage 3D": "3D raster"});
 Object.assign(I18N_EN, {"Finition du relief en contours décalés : l’outil suit des contours parallèles au bord de la limite, de l’extérieur vers l’intérieur, en épousant la surface avec sa forme réelle.": "Offset relief finishing: the tool follows contours parallel to the boundary edge, from outside in, hugging the surface with its real shape.", "Ébauche du relief en balayage 3D : à chaque niveau, chaque ligne suit la surface plus la surépaisseur sans descendre sous le niveau ; moins de remontées qu’en niveaux Z.": "3D raster relief roughing: at each level, every line follows the surface plus allowance without going below the level; fewer retracts than Z levels."});
 Object.assign(I18N_EN, {"Outil par rapport à la limite": "Tool relative to boundary", "Bord de l’outil à l’intérieur": "Tool edge inside", "Centre de l’outil sur la limite": "Tool center on boundary", "Limite : {n} forme(s) fermée(s) sélectionnée(s).": "Boundary: {n} selected closed shape(s)."});
+Object.assign(I18N_EN, {"Vues": "Views", "Vue 2D : le dessin": "2D view: the drawing", "Vue 3D : le relief": "3D view: the relief", "Vues côte à côte": "Side by side", "Vues l’une au-dessus de l’autre": "One above the other", "Afficher / masquer le dessin": "Show / hide the drawing", "Afficher / masquer le repère (axes et origine)": "Show / hide the axes and origin", "Afficher / masquer le brut (filaire)": "Show / hide the stock (wireframe)", "Recentrer sur le relief (double-clic : tout le brut)": "Recenter on the relief (double-click: whole stock)", "Simulation de l’usinage": "Machining simulation", "La vue 3D demande WebGL 2.": "The 3D view needs WebGL 2.", "{n} élément(s) de relief · profondeur {d} mm": "{n} relief item(s) · depth {d} mm", "Aucun relief : importez un STL ou créez-en un dans l’onglet Relief.": "No relief: import an STL or create one in the Relief tab.", "Vue 3D du relief": "3D view of the relief", "Affichage 3D": "3D display"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -2586,6 +2612,7 @@ function draw() { if (drawQueued) return; drawQueued = true; requestAnimationFra
 function pathOf(pts, closed) { ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(sx(p[0]), sy(p[1])) : ctx.moveTo(sx(p[0]), sy(p[1]))); if (closed) ctx.closePath(); }
 function gridSteps() { if (UNIT.len === 'in') { const st = [1 / 64, 1 / 32, 1 / 16, 1 / 8, 1 / 4, 1 / 2, 1, 2, 6, 12, 24, 48, 120].map(x => x * 25.4), g = st.find(v => v * S.view.s >= 9) || st[st.length - 1]; return [g, g < 25.4 ? (25.4 / g <= 16 ? 25.4 : g * 4) : g < 304.8 ? 304.8 : g * 4]; } const steps = [0.5, 1, 5, 10, 50, 100, 500]; const g = steps.find(s => s * S.view.s >= 9) || 500; return [g, g === 0.5 ? 1 : String(g)[0] === '5' ? g * 2 : g * 5]; }
 function render() {
+  if (typeof rvSync === 'function') rvSync();
   const C = { dr: tok('--dr'), draw: tok('--draw'), drawMuted: tok('--draw-muted'), canvas: tok('--canvas'), grid: tok('--grid'), grid2: tok('--grid2'), stock: tok('--stock'), edge: tok('--stock-edge'), ink: tok('--ink'), muted: tok('--muted'), acc: tok('--accent'), pf: tok('--pf'), pk: tok('--pk'), vc: tok('--vc'), th: tok('--th'), rl: tok('--rl'), danger: tok('--danger'), panel: tok('--panel'), line: tok('--line'), guide: tok('--guide'), mono: tok('--f-mono') };
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.fillStyle = C.canvas; ctx.fillRect(0, 0, W, H);
   const [g, G] = gridSteps(), x0 = wx(0), x1 = wx(W), y0 = wy(H), y1 = wy(0);
@@ -2797,7 +2824,7 @@ function pjSummary() {
   const f1 = v => LANG === 'fr' ? fr(v, 1) : v.toFixed(1); el.textContent = f1(st.w) + ' × ' + f1(st.h) + ' × ' + f1(st.t) + ' mm' + (S.meta && S.meta.material ? ' · ' + S.meta.material : '') + '\n' + tr('Origine') + ' : ' + tr(originLabel(st)) + ' · Z0 : ' + tr(st.originZ === 'bottom' ? 'table' : 'dessus du brut') + (has2 ? ' · ' + tr('double face') : '') + '\n' + post + ' · ' + UNIT.len + ' · ' + UNIT.feed;
   illRefresh(); el.style.whiteSpace = 'pre-line'; if (typeof libMatSync === 'function') libMatSync(); const m = document.getElementById('pjMat'); if (m && document.activeElement !== m) m.value = (S.meta && S.meta.material) || '';
 }
-function setTab(t) { if (t !== 'parcours' && S.ui.tool !== 'tabedit') fwClose('tpWin'); if (t !== 'outils') fwClose('toolWin'); curTab = t; if (t === 'projet') pjSummary(); $$('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t)); $$('.pane').forEach(p => p.hidden = p.dataset.pane !== t); if (t === 'gcode') renderGcode(); if (t === 'parcours') renderForm(); if (t === 'relief') relPanel(); draw(); }
+function setTab(t) { if (t !== 'parcours' && S.ui.tool !== 'tabedit') fwClose('tpWin'); if (t !== 'outils') fwClose('toolWin'); curTab = t; if (t === 'projet') pjSummary(); $$('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t)); $$('.pane').forEach(p => p.hidden = p.dataset.pane !== t); if (t === 'gcode') renderGcode(); if (t === 'parcours') renderForm(); if (t === 'relief') { relPanel(); if (!VIEWS.d3 && !VIEWS.userHid3) { VIEWS.d3 = true; viewsApply(); } } draw(); }
 $$('.tabs button').forEach(b => b.onclick = () => setTab(b.dataset.tab));
 document.querySelector('[data-pane="projet"]').addEventListener('change', () => setTimeout(pjSummary, 0));
 document.getElementById('pjMat').addEventListener('change', e => { S.meta = { ...(S.meta || {}), material: e.target.value.trim() }; commit(false); pjSummary(); });
@@ -4120,6 +4147,12 @@ function act(a, btn) {
       commit(); renderSel(); draw(); return;
     }
     case 'tpApply': applyForm(); return;
+    case 'view2d': case 'view3d': viewToggle(a === 'view2d' ? 'd2' : 'd3'); return;
+    case 'splitV': case 'splitH': VIEWS.split = a === 'splitV' ? 'v' : 'h'; viewsApply(); return;
+    case 'rvDraw': RV.showDraw = !RV.showDraw; rvSave(); rvReq(); return;
+    case 'rvAxes': RV.showAxes = !RV.showAxes; rvSave(); rvReq(); return;
+    case 'rvStock': RV.showStock = !RV.showStock; rvSave(); rvReq(); return;
+    case 'rvFit': rvFit(false); return;
     case 'tpCancel': S.editTp = null; S.activeTp = null; S.form = newForm(); fwClose('tpWin'); if (S.ui.tool === 'tabedit') setTool('select'); renderForm(); renderTpList(); draw(); return;
     case 'toolAdd': { const t = { id: uid(), num: Math.max(0, ...S.tools.map(x => +x.num || 0)) + 1, name: tr('Nouvelle fraise 4 mm'), type: 'flat', dia: 4, angle: 90, rpm: 18000, feed: 1500, plunge: 400, pass: 2, over: 40 }; S.tools.push(t); S.toolSel = t.id; toolsChanged(); fwOpen('toolWin'); return; }
     case 'toolDup': { const t0 = S.tools.find(t => t.id === S.toolSel); if (!t0) return; const t = { ...t0, id: uid(), num: Math.max(0, ...S.tools.map(x => +x.num || 0)) + 1, name: t0.name + tr(' (copie)') }; S.tools.push(t); S.toolSel = t.id; toolsChanged(); fwOpen('toolWin'); return; }
@@ -4694,7 +4727,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.89', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.90', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5403,19 +5436,19 @@ const V3CUBE = [
   { n: [0, 1, 0], l: 'Arrière', u: [-1, 0, 0], v: [0, 0, -1], yaw: Math.PI / 2, pitch: 0 },
   { n: [1, 0, 0], l: 'Droite', u: [0, 1, 0], v: [0, 0, -1], yaw: 0, pitch: 0 },
   { n: [-1, 0, 0], l: 'Gauche', u: [0, -1, 0], v: [0, 0, -1], yaw: Math.PI, pitch: 0 }];
-function v3CubeBasis() { const cp = Math.cos(V3.pitch), e = [cp * Math.cos(V3.yaw), cp * Math.sin(V3.yaw), Math.sin(V3.pitch)], rt = v3n([-Math.sin(V3.yaw), Math.cos(V3.yaw), 0]), up = v3cross(rt, [-e[0], -e[1], -e[2]]); return { e, rt, up: v3n(up) }; }
-function v3CubeHit(mx, my) {
-  const B = v3CubeBasis(), K = 30, P = q => [60 + K * (q[0] * B.rt[0] + q[1] * B.rt[1] + q[2] * B.rt[2]), 60 - K * (q[0] * B.up[0] + q[1] * B.up[1] + q[2] * B.up[2])];
+function v3CubeBasis(ST = V3) { const cp = Math.cos(ST.pitch), e = [cp * Math.cos(ST.yaw), cp * Math.sin(ST.yaw), Math.sin(ST.pitch)], rt = v3n([-Math.sin(ST.yaw), Math.cos(ST.yaw), 0]), up = v3cross(rt, [-e[0], -e[1], -e[2]]); return { e, rt, up: v3n(up) }; }
+function v3CubeHit(mx, my, ST = V3) {
+  const B = v3CubeBasis(ST), K = 30, P = q => [60 + K * (q[0] * B.rt[0] + q[1] * B.rt[1] + q[2] * B.rt[2]), 60 - K * (q[0] * B.up[0] + q[1] * B.up[1] + q[2] * B.up[2])];
   for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const sz of [-1, 1]) { const vis = sx * B.e[0] + sy * B.e[1] + sz * B.e[2] > 0.25; if (!vis) continue; const q = P([sx, sy, sz]); if (Math.hypot(q[0] - mx, q[1] - my) < 9) return { yaw: Math.atan2(sy, sx), pitch: sz * 0.6155, k: 'c' + sx + sy + sz }; }
   for (const f of V3CUBE) { if (f.n[0] * B.e[0] + f.n[1] * B.e[1] + f.n[2] * B.e[2] <= 0.02) continue; const c = f.n, Q = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([a, b]) => P([c[0] + a * f.u[0] + b * f.v[0], c[1] + a * f.u[1] + b * f.v[1], c[2] + a * f.u[2] + b * f.v[2]]));
     let ins = false; for (let i = 0, j = 3; i < 4; j = i++) if ((Q[i][1] > my) !== (Q[j][1] > my) && mx < (Q[j][0] - Q[i][0]) * (my - Q[i][1]) / (Q[j][1] - Q[i][1]) + Q[i][0]) ins = !ins; if (ins) return { yaw: f.yaw, pitch: f.pitch, k: f.l }; }
   return null;
 }
-function v3Cube() {
-  const cv = $('#v3cube'); if (!cv || !V3.S3) return; const dpr = window.devicePixelRatio || 1; if (cv.width !== 120 * dpr) { cv.width = cv.height = 120 * dpr; }
+function v3Cube(cvEl, ST = V3) {
+  const cv = cvEl || $('#v3cube'); if (!cv || (ST === V3 && !V3.S3)) return; const dpr = window.devicePixelRatio || 1; if (cv.width !== 120 * dpr) { cv.width = cv.height = 120 * dpr; }
   const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, 120, 120);
-  const B = v3CubeBasis(), K = 30, P = q => [60 + K * (q[0] * B.rt[0] + q[1] * B.rt[1] + q[2] * B.rt[2]), 60 - K * (q[0] * B.up[0] + q[1] * B.up[1] + q[2] * B.up[2])];
-  const ink = tok('--ink'), acc = tok('--accent'), raised = tok('--raised'), line = tok('--line'), hv = V3.cubeHover;
+  const B = v3CubeBasis(ST), K = 30, P = q => [60 + K * (q[0] * B.rt[0] + q[1] * B.rt[1] + q[2] * B.rt[2]), 60 - K * (q[0] * B.up[0] + q[1] * B.up[1] + q[2] * B.up[2])];
+  const ink = tok('--ink'), acc = tok('--accent'), raised = tok('--raised'), line = tok('--line'), hv = ST.cubeHover;
   const fs = V3CUBE.map(f => ({ f, d: f.n[0] * B.e[0] + f.n[1] * B.e[1] + f.n[2] * B.e[2] })).filter(o => o.d > 0.02).sort((a, b) => a.d - b.d);
   for (const { f, d } of fs) {
     const c = f.n, Q = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([a, b]) => P([c[0] + a * f.u[0] + b * f.v[0], c[1] + a * f.u[1] + b * f.v[1], c[2] + a * f.u[2] + b * f.v[2]]));
@@ -5429,11 +5462,11 @@ function v3Cube() {
   const o = P([-1.35, -1.35, -1.35]), ax = [[[1, 0, 0], '#e5484d', 'X'], [[0, 1, 0], '#30a46c', 'Y'], [[0, 0, 1], '#3e7bfa', 'Z']];
   for (const [v, col, l] of ax) { const q = P([-1.35 + v[0] * 0.9, -1.35 + v[1] * 0.9, -1.35 + v[2] * 0.9]); g.beginPath(); g.moveTo(o[0], o[1]); g.lineTo(q[0], q[1]); g.strokeStyle = col; g.lineWidth = 2; g.stroke(); g.fillStyle = col; g.font = '700 9px sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(l, q[0] + (q[0] - o[0]) * 0.25, q[1] + (q[1] - o[1]) * 0.25); }
 }
-function v3AnimTo(yaw, pitch) {
-  let y0 = V3.yaw, d = yaw - y0; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI;
+function v3AnimTo(yaw, pitch, ST = V3, req = v3Req) {
+  let y0 = ST.yaw, d = yaw - y0; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI;
   // vue de dessus/dessous : garde l'orientation actuelle si on y est déjà presque
-  const p0 = V3.pitch, t0 = performance.now(), D = 320;
-  const step = () => { const k = Math.min(1, Math.max(0, (performance.now() - t0) / D)), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; V3.yaw = y0 + d * e; V3.pitch = p0 + (pitch - p0) * e; v3Req(); if (k < 1) requestAnimationFrame(step); };
+  const p0 = ST.pitch, t0 = performance.now(), D = 320;
+  const step = () => { const k = Math.min(1, Math.max(0, (performance.now() - t0) / D)), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; ST.yaw = y0 + d * e; ST.pitch = p0 + (pitch - p0) * e; req(); if (k < 1) requestAnimationFrame(step); };
   requestAnimationFrame(step);
 }
 (() => { const cv = document.getElementById('v3cube'); if (!cv) return; const pos = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
@@ -5892,7 +5925,7 @@ function drawRelief(C) {
 }
 function relSummary() { const el = $('#relSum'); if (!el) return; const R = relCache && relCache.R, n = S.relief.items.length; if (!n || !R) { el.textContent = n ? '' : tr('Aucun relief : importez une image en niveaux de gris ou un fichier STL.'); return; } const dep = R.max - R.min; el.textContent = trf('{n} élément(s) · profondeur du relief {d} mm (brut {t} mm).', { n, d: fr(dep, 2), t: fr(S.stock.t, 1) }) + (dep > S.stock.t ? ' ' + tr('Le relief dépasse l’épaisseur du brut : il sera coupé au fond.') : ''); }
 function relBump() { S.relief.ver = (S.relief.ver || 0) + 1; if (typeof renderTpList === 'function') renderTpList(); }
-function relAdd(it, g) { relBump(); it.id = 'r' + Math.random().toString(36).slice(2, 9); relStore(it.id, g); S.relief.items.push(it); S.relSel = it.id; relDirty = true; commit(false); relPanel(); setTab('relief'); draw(); }
+function relAdd(it, g) { relBump(); if (typeof RV !== 'undefined') RV.fitted = false; it.id = 'r' + Math.random().toString(36).slice(2, 9); relStore(it.id, g); S.relief.items.push(it); S.relSel = it.id; relDirty = true; commit(false); relPanel(); setTab('relief'); draw(); }
 function relSet(fn) { const it = relCur(); if (!it) return; fn(it); relBump(); relDirty = true; commit(false); relPanel(true); draw(); }
 // image en niveaux de gris (le côté le plus long ramené à 1024 points)
 function relGridFromImg(im) { const k = Math.min(1, 1024 / Math.max(im.naturalWidth, im.naturalHeight)), nx = Math.max(2, Math.round(im.naturalWidth * k)), ny = Math.max(2, Math.round(im.naturalHeight * k)), cv = document.createElement('canvas'); cv.width = nx; cv.height = ny; const g = cv.getContext('2d'); g.drawImage(im, 0, 0, nx, ny); const px = g.getImageData(0, 0, nx, ny).data, d = new Uint16Array(nx * ny);
@@ -6064,6 +6097,102 @@ function relFromDrawing(type) {
     relAdd({ kind: 'gen', gen: G, name: tr(lbl) + ' ' + (S.relief.items.filter(i => i.gen && i.gen.type === type).length + 1), x: (R.box[0] + R.box[2]) / 2, y: (R.box[1] + R.box[3]) / 2, w: R.box[2] - R.box[0], h: R.box[3] - R.box[1], rot: 0, zH: G.sec ? Math.min(Math.max(0.5, G.secH), st.t) : Math.min(type === 'extrude' ? 4 : 8, st.t / 2), z0: 0, invert: false, smooth: 0, mode: 'add', visible: true }, R.g);
     toast(tr('Forme créée : réglez le profil, la largeur et l’épaisseur Z.')); } catch (e) { toast(e.message); }
 }
+// ---------- VUES 2D / 3D (zone centrale scindée) et visionneuse 3D du relief ----------
+var VIEWS = (() => { try { const o = JSON.parse(LS.get('copo.views') || 'null'); if (o) return { d2: o.d2 !== false, d3: !!o.d3, split: o.split === 'h' ? 'h' : 'v' }; } catch { } return { d2: true, d3: false, split: 'v' }; })();
+function viewsApply() {
+  const v = $('#views'); if (!v) return; if (!VIEWS.d2 && !VIEWS.d3) VIEWS.d2 = true;
+  $('#cw').hidden = !VIEWS.d2; $('#rv3').hidden = !VIEWS.d3; v.classList.toggle('both', VIEWS.d2 && VIEWS.d3); v.classList.toggle('v', VIEWS.split === 'v'); v.classList.toggle('h', VIEWS.split === 'h');
+  const b2 = document.querySelector('[data-act="view2d"]'), b3 = document.querySelector('[data-act="view3d"]'); if (b2) b2.classList.toggle('on', VIEWS.d2); if (b3) b3.classList.toggle('on', VIEWS.d3);
+  for (const [k, on] of [['splitV', VIEWS.split === 'v'], ['splitH', VIEWS.split === 'h']]) { const b = document.querySelector('[data-act="' + k + '"]'); if (b) { b.disabled = !(VIEWS.d2 && VIEWS.d3); b.setAttribute('aria-pressed', on && !b.disabled); } }
+  try { LS.set('copo.views', JSON.stringify({ d2: VIEWS.d2, d3: VIEWS.d3, split: VIEWS.split })); } catch { }
+  if (VIEWS.d2) requestAnimationFrame(() => { resize(); }); if (VIEWS.d3) { if (!RV.gl) rvInit(); RV.sig = ''; RV.lsig = ''; rvSync(); rvReq(); }
+}
+function viewToggle(k) { VIEWS[k] = !VIEWS[k]; if (!VIEWS.d2 && !VIEWS.d3) VIEWS[k === 'd2' ? 'd3' : 'd2'] = true; if (k === 'd3' && !VIEWS.d3) VIEWS.userHid3 = true; viewsApply(); }
+var RV = (() => { let o = {}; try { o = JSON.parse(LS.get('copo.rv') || '{}') || {}; } catch { } return { gl: null, yaw: -Math.PI / 2 + 0.35, pitch: 0.75, dist: 500, tgt: [150, 100, -9], sig: '', lsig: '', raf: 0, showDraw: o.d !== false, showAxes: o.a !== false, showStock: o.s !== false, cubeHover: null, fitted: false }; })();
+function rvSave() { try { LS.set('copo.rv', JSON.stringify({ d: RV.showDraw, a: RV.showAxes, s: RV.showStock })); } catch { } for (const [k, on] of [['rvDraw', RV.showDraw], ['rvAxes', RV.showAxes], ['rvStock', RV.showStock]]) { const b = document.querySelector('[data-act="' + k + '"]'); if (b) b.setAttribute('aria-pressed', on); } }
+const RV_VS = `#version 300 es
+precision highp float; in vec3 aP; in vec3 aN; uniform mat4 uMVP; out vec3 vN; out float vZ;
+void main(){ vN = aN; vZ = aP.z; gl_Position = uMVP * vec4(aP, 1.0); }`;
+const RV_FS = `#version 300 es
+precision highp float; in vec3 vN; in float vZ; out vec4 o; uniform vec3 uL; uniform vec3 uC;
+void main(){ float d = abs(dot(normalize(vN), uL)); o = vec4(uC * (0.35 + 0.65 * d), 1.0); }`;
+const RV_LVS = `#version 300 es
+precision highp float; in vec3 aP; in vec3 aC; uniform mat4 uMVP; out vec3 vC;
+void main(){ vC = aC; gl_Position = uMVP * vec4(aP, 1.0); gl_Position.z -= 0.0004 * gl_Position.w; }`;
+const RV_LFS = `#version 300 es
+precision highp float; in vec3 vC; out vec4 o; void main(){ o = vec4(vC, 1.0); }`;
+function rvInit() {
+  const c = $('#rvc'), gl = c.getContext('webgl2', { antialias: true }); if (!gl) { $('#rvInfo').textContent = tr('La vue 3D demande WebGL 2.'); return false; }
+  RV.gl = gl; RV.prog = glProg(gl, RV_VS, RV_FS); RV.lprog = glProg(gl, RV_LVS, RV_LFS); gl.enable(gl.DEPTH_TEST);
+  // souris : glisser = tourner, clic droit ou Maj = déplacer, molette = zoom, double-clic = tout le brut
+  let drag = null;
+  c.addEventListener('contextmenu', e => e.preventDefault());
+  c.addEventListener('pointerdown', e => { c.setPointerCapture(e.pointerId); drag = { x: e.clientX, y: e.clientY, pan: e.button === 2 || e.shiftKey || e.button === 1 }; c.style.cursor = 'grabbing'; });
+  c.addEventListener('pointermove', e => { if (!drag) return; const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY;
+    if (drag.pan) { const k = RV.dist / c.clientHeight * 0.75, cy = Math.cos(RV.yaw), sy_ = Math.sin(RV.yaw), sp = Math.sin(RV.pitch), right = [-sy_, cy, 0], up = [-cy * sp, -sy_ * sp, Math.cos(RV.pitch)]; for (let i = 0; i < 3; i++) RV.tgt[i] += (-dx * right[i] + dy * up[i]) * k; }
+    else { RV.yaw -= dx * 0.008; RV.pitch = Math.max(-1.5703, Math.min(1.5703, RV.pitch + dy * 0.008)); }
+    rvReq(); });
+  const end = () => { drag = null; c.style.cursor = 'grab'; }; c.addEventListener('pointerup', end); c.addEventListener('pointercancel', end);
+  c.addEventListener('wheel', e => { e.preventDefault(); RV.dist = Math.max(5, Math.min(1e5, RV.dist * Math.exp(e.deltaY * 0.0012))); rvReq(); }, { passive: false });
+  c.addEventListener('dblclick', () => rvFit(true));
+  const cv = $('#rvcube'), pos = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  cv.addEventListener('pointermove', e => { const h = v3CubeHit(...pos(e), RV), k = h ? h.k : null; if (k !== RV.cubeHover) { RV.cubeHover = k; v3Cube(cv, RV); } });
+  cv.addEventListener('pointerleave', () => { RV.cubeHover = null; v3Cube(cv, RV); });
+  cv.addEventListener('pointerdown', e => { e.stopPropagation(); const h = v3CubeHit(...pos(e), RV); if (h) v3AnimTo(h.yaw, h.pitch, RV, rvReq); });
+  cv.addEventListener('dblclick', e => e.stopPropagation());
+  new ResizeObserver(() => rvReq()).observe($('#rv3'));
+  rvSave(); return true;
+}
+function rvFit(all) {
+  const st = S.stock; let x0 = 0, y0 = 0, x1 = st.w, y1 = st.h;
+  if (!all) { const its = S.relief.items.filter(i => i.visible && relGrid[i.id]); if (its.length) { x0 = y0 = Infinity; x1 = y1 = -Infinity; for (const it of its) for (const q of imgFrame(it).corners) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); } } }
+  RV.tgt = [(x0 + x1) / 2, (y0 + y1) / 2, -st.t / 2]; RV.dist = Math.max(x1 - x0, y1 - y0, st.t * 2) * 1.55; RV.yaw = -Math.PI / 2 + 0.35; RV.pitch = 0.75; rvReq();
+}
+function rvBuf(attrs, data, idx) { const gl = RV.gl, vao = gl.createVertexArray(); gl.bindVertexArray(vao); const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+  const stride = attrs.reduce((a, x) => a + x[1], 0) * 4; let off = 0; for (const [prog, n, name] of attrs) { const l = gl.getAttribLocation(prog, name); if (l >= 0) { gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, n, gl.FLOAT, false, stride, off); } off += n * 4; }
+  if (idx) { const ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, idx, gl.STATIC_DRAW); } gl.bindVertexArray(null); return vao; }
+// reconstruit le maillage quand le relief ou le brut change, et les traits quand le dessin change
+function rvSync() {
+  if (!VIEWS.d3 || !RV.gl) return; const st = S.stock;
+  const sig = JSON.stringify([st.w, st.h, st.t, S.relief.items.map(i => [i.id, i.x, i.y, i.w, i.h, i.rot, i.zH, i.z0, i.mode, i.visible, i.smooth, i.invert, !!relGrid[i.id], relGrid[i.id] && relGrid[i.id].nx])]);
+  if (sig !== RV.sig) { RV.sig = sig; rvBuildMesh(); if (!RV.fitted) { rvFit(true); RV.fitted = true; } rvReq(); }
+  const lsig = (typeof snapVer !== 'undefined' ? snapVer : 0) + '|' + st.w + '|' + st.h + '|' + st.t + '|' + st.originXY + '|' + S.shapes.length;
+  if (lsig !== RV.lsig) { RV.lsig = lsig; rvBuildLines(); rvReq(); }
+}
+function rvBuildMesh() {
+  const gl = RV.gl; if (RV.mesh) gl.deleteVertexArray(RV.mesh.vao); RV.mesh = null; RV.depth = 0;
+  if (!S.relief.items.some(i => i.visible && relGrid[i.id])) return;
+  const st = S.stock, R = reliefCompose(Math.max(0.2, Math.sqrt(st.w * st.h / 220000)), true), { nx, ny, cx, cy, H, M } = R, top = R.max, N = nx * ny, vb = new Float32Array(N * 6), ix = [];
+  for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, z = Math.max(-st.t, H[q] - top), hx = (H[j * nx + Math.min(nx - 1, i + 1)] - H[j * nx + Math.max(0, i - 1)]) / (2 * cx), hy = (H[Math.min(ny - 1, j + 1) * nx + i] - H[Math.max(0, j - 1) * nx + i]) / (2 * cy), n = v3n([-hx, -hy, 1]); vb.set([i * cx, j * cy, z, n[0], n[1], n[2]], q * 6); }
+  for (let j = 0; j + 1 < ny; j++) for (let i = 0; i + 1 < nx; i++) { const a = j * nx + i, b = a + 1, c2 = a + nx + 1, d = a + nx; if (M[a] && M[b] && M[c2] && M[d]) ix.push(a, b, c2, a, c2, d); }
+  if (!ix.length) return; RV.depth = R.max - R.min;
+  RV.mesh = { vao: rvBuf([[RV.prog, 3, 'aP'], [RV.prog, 3, 'aN']], vb, new Uint32Array(ix)), n: ix.length };
+}
+function rvBuildLines() {
+  const gl = RV.gl, st = S.stock; for (const k of ['lStock', 'lAxes', 'lDraw']) if (RV[k]) gl.deleteVertexArray(RV[k].vao);
+  const mk = (segs) => { const d = new Float32Array(segs.length * 6); segs.forEach((v, k) => d.set(v, k * 6)); return segs.length ? { vao: rvBuf([[RV.lprog, 3, 'aP'], [RV.lprog, 3, 'aC']], d), n: segs.length } : null; };
+  const g = hex3(tok('--muted')), P = [[0, 0], [st.w, 0], [st.w, st.h], [0, st.h]], S2 = [];
+  for (let k = 0; k < 4; k++) { const a = P[k], b = P[(k + 1) % 4]; for (const z of [0, -st.t]) S2.push([a[0], a[1], z, ...g], [b[0], b[1], z, ...g]); S2.push([a[0], a[1], 0, ...g], [a[0], a[1], -st.t, ...g]); }
+  RV.lStock = mk(S2);
+  const [ox, oy] = originOf(st), oz = st.originZ === 'bottom' ? -st.t : 0, L = Math.max(st.w, st.h) * 0.12, A2 = [];
+  for (const [d, c] of [[[1, 0, 0], [0.9, 0.28, 0.3]], [[0, 1, 0], [0.19, 0.64, 0.42]], [[0, 0, 1], [0.24, 0.48, 0.98]]]) A2.push([ox, oy, oz, ...c], [ox + d[0] * L, oy + d[1] * L, oz + d[2] * L, ...c]);
+  RV.lAxes = mk(A2);
+  const dc = hex3(tok('--draw')), D2 = []; for (const sh of S.shapes) { if (typeof shown === 'function' && !shown(sh)) continue; const a = sh.pts || []; for (let k = 0; k + 1 < a.length; k++) D2.push([a[k][0], a[k][1], 0.02, ...dc], [a[k + 1][0], a[k + 1][1], 0.02, ...dc]); if (sh.closed && a.length > 2) D2.push([a[a.length - 1][0], a[a.length - 1][1], 0.02, ...dc], [a[0][0], a[0][1], 0.02, ...dc]); }
+  RV.lDraw = mk(D2);
+}
+function rvReq() { if (!RV.raf && VIEWS.d3) RV.raf = requestAnimationFrame(rvRender); }
+function rvRender() {
+  RV.raf = 0; const gl = RV.gl, c = $('#rvc'); if (!gl || !VIEWS.d3) return;
+  const dpr = window.devicePixelRatio || 1, Wd = Math.max(1, Math.round(c.clientWidth * dpr)), Hd = Math.max(1, Math.round(c.clientHeight * dpr)); if (c.width !== Wd || c.height !== Hd) { c.width = Wd; c.height = Hd; }
+  gl.viewport(0, 0, Wd, Hd); const bg = hex3(tok('--canvas')); gl.clearColor(bg[0], bg[1], bg[2], 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  const cp = Math.cos(RV.pitch), e = [RV.tgt[0] + RV.dist * cp * Math.cos(RV.yaw), RV.tgt[1] + RV.dist * cp * Math.sin(RV.yaw), RV.tgt[2] + RV.dist * Math.sin(RV.pitch)];
+  const mvp = m4mul(m4persp(0.7, Wd / Hd, RV.dist * 0.01, RV.dist * 20), m4look(e, RV.tgt, [0, 0, 1])); RV.mvp = mvp;
+  if (RV.mesh) { gl.useProgram(RV.prog); gl.uniformMatrix4fv(gl.getUniformLocation(RV.prog, 'uMVP'), false, mvp); gl.uniform3fv(gl.getUniformLocation(RV.prog, 'uL'), v3n([0.35, -0.55, 0.85])); const sc = hex3(tok('--stock')); gl.uniform3fv(gl.getUniformLocation(RV.prog, 'uC'), [sc[0] * 0.95, sc[1] * 0.9, sc[2] * 0.82]); gl.bindVertexArray(RV.mesh.vao); gl.drawElements(gl.TRIANGLES, RV.mesh.n, gl.UNSIGNED_INT, 0); gl.bindVertexArray(null); }
+  gl.useProgram(RV.lprog); gl.uniformMatrix4fv(gl.getUniformLocation(RV.lprog, 'uMVP'), false, mvp);
+  for (const [k, on] of [['lStock', RV.showStock], ['lAxes', RV.showAxes], ['lDraw', RV.showDraw]]) if (on && RV[k]) { gl.bindVertexArray(RV[k].vao); gl.drawArrays(gl.LINES, 0, RV[k].n); }
+  gl.bindVertexArray(null); v3Cube($('#rvcube'), RV);
+  const n = S.relief.items.filter(i => i.visible && relGrid[i.id]).length; $('#rvInfo').textContent = n ? trf('{n} élément(s) de relief · profondeur {d} mm', { n, d: fr(RV.depth || 0, 2) }) : tr('Aucun relief : importez un STL ou créez-en un dans l’onglet Relief.');
+}
 // aperçu 3D du relief seul : le brut est creusé depuis le dessus, le point le plus haut à la surface
 function relView3d() {
   if (!S.relief.items.some(i => i.visible && relGrid[i.id])) { toast(tr('Aucun relief à afficher.')); return; }
@@ -6201,7 +6330,7 @@ function imgAct(a) {
   if (a === 'relCenter') { relSet(i => { i.x = S.stock.w / 2; i.y = S.stock.h / 2; }); return true; }
   if (a === 'relRot0') { relSet(i => { i.rot = 0; }); return true; }
   if (a === 'relDel') { const it = relCur(); if (!it) return true; relBump(); S.relief.items = S.relief.items.filter(x => x !== it); S.relSel = null; relDirty = true; commit(false); relPanel(); draw(); return true; }
-  if (a === 'relView') { relView3d(); return true; }
+  if (a === 'relView') { VIEWS.d3 = true; VIEWS.userHid3 = false; viewsApply(); return true; }
   if (a === 'relGray') { relFromImage(); return true; }
   if (a === 'relDome' || a === 'relExt' || a === 'relSweep') { relFromDrawing({ relDome: 'dome', relExt: 'extrude', relSweep: 'sweep' }[a]); return true; }
   const im = S.imgSel && imgById(S.imgSel);
@@ -6247,7 +6376,7 @@ function loadSample() {
   let loaded = false; const saved = LS.get('copeau.project');
   if (saved) { try { const o = JSON.parse(saved); if (o.shapes && o.shapes.length) { restore(saved); hist = [snapState()]; hi = 0; S.form = newForm(); renderForm(); loaded = true; } } catch (e) { console.warn(e); } }
   if (!loaded) loadSample();
-  bindImgPanel(); bindRelPanel(); relPanel(); loadImgData(); dgInit(); icoInit(); dRefresh();
+  bindImgPanel(); bindRelPanel(); relPanel(); loadImgData(); viewsApply(); dgInit(); icoInit(); dRefresh();
   renderTools(); renderSel(); renderLayers(); renderGuides(); renderImgPanel(); trStart(); requestAnimationFrame(fit);
 })();
 </script>

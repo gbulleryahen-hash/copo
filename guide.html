@@ -172,6 +172,7 @@ footer p{max-width:none}
       <li><a href="#fr-boite">Boîte à entures</a></li>
       <li><a href="#fr-imbrication">Imbrication</a></li>
       <li><a href="#fr-double">Double face</a></li>
+      <li><a href="#fr-vues">Vues 2D et 3D</a></li>
       <li><a href="#fr-3d">Aperçu 3D</a></li>
       <li><a href="#fr-gcode">G-code</a></li>
       <li><a href="#fr-installer">Installer et hors ligne</a></li>
@@ -185,7 +186,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.89</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.90</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -217,7 +218,7 @@ footer p{max-width:none}
       <li><div><b>Dessinez ou importez</b>Tracez avec les icônes de l'onglet Dessin, importez un SVG, un DXF ou une image (icône <span class="ui">Importer</span> du groupe Créer, ou menu Fichier) ou écrivez un texte.</div></li>
       <li><div><b>Vérifiez vos outils</b>Choisissez le matériau dans l'onglet Projet, puis vérifiez dans la <span class="ui">Bibliothèque d'outils</span> (onglet Parcours) la vitesse, l'avance, la profondeur de passe et le pas latéral de chaque fraise.</div></li>
       <li><div><b>Créez les parcours</b>Sélectionnez les formes sur le plan, ouvrez l'onglet <span class="ui">Parcours</span>, choisissez Profil, Poche, V-carving ou Perçage, réglez puis cliquez sur <span class="ui">Calculer</span>.</div></li>
-      <li><div><b>Contrôlez en 3D</b><span class="ui">Affichage › Aperçu 3D de l'usinage</span> montre le brut usiné. Rejouez l'usinage pour repérer une erreur de profondeur ou d'outil.</div></li>
+      <li><div><b>Contrôlez en 3D</b>Le bouton <span class="ui">Simulation de l’usinage</span> (onglet Parcours) ou <span class="ui">Affichage › Aperçu 3D de l'usinage</span> montre le brut usiné. Rejouez l'usinage pour repérer une erreur de profondeur ou d'outil.</div></li>
       <li><div><b>Enregistrez le G-code</b>Onglet <span class="ui">G-code</span> : choisissez le post-processeur, puis <span class="ui">Enregistrer le G-code</span>. Faites toujours un passage à vide avant d'usiner.</div></li>
     </ol>
 
@@ -429,6 +430,10 @@ footer p{max-width:none}
     </ol>
     <p>L'aperçu 3D montre les deux faces ; l'option <span class="ui">Face 2 en haut</span> présente la pièce retournée.</p>
 
+    <h2 id="fr-vues">Vues 2D et 3D</h2>
+    <p>Les boutons <span class="ui">2D</span> et <span class="ui">3D</span> en haut de l’écran fonctionnent comme deux interrupteurs : 2D seule (le dessin occupe toute la zone), 3D seule (le relief), ou les deux à la fois. Quand les deux vues sont affichées, les boutons voisins les placent côte à côte ou l’une au-dessus de l’autre. L’onglet Relief affiche la vue 3D automatiquement.</p>
+    <p>La vue 3D montre le relief dans le brut (en filaire), avec le dessin et le repère. Glisser : tourner ; clic droit ou Maj + glisser : déplacer ; molette : zoom ; double-clic : tout le brut. À droite : le cube d’orientation, puis les boutons pour afficher ou masquer le dessin, le repère et le brut, et pour recentrer sur le relief.</p>
+
     <h2 id="fr-3d">Aperçu 3D</h2>
     <figure><img src="img/fr-06-apercu3d.webp" alt="Aperçu 3D du projet d'exemple usiné." width="1800" height="1125" loading="lazy"><figcaption>Glisser pour tourner, clic droit ou Maj pour déplacer, molette pour zoomer, double-clic pour recentrer.</figcaption></figure>
     <p>L'aperçu simule l'enlèvement de matière dans l'épaisseur réelle du brut, y compris les trous débouchants. Les boutons de lecture rejouent l'usinage : <strong>retour au début</strong>, <strong>pas en arrière</strong>, <strong>lecture / pause</strong>, <strong>pas en avant</strong> et <strong>aller à la fin</strong> ; un pas correspond à un déplacement de l'outil. Au clavier : flèches gauche et droite, Début, Fin et Espace. Le curseur permet d'aller à n'importe quel instant. L'aperçu demande WebGL 2 (Chrome, Edge ou Firefox récents).</p>
@@ -515,7 +520,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.89 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.90 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -537,6 +542,7 @@ M30</pre>
       <li><a href="#en-box">Finger-joint box</a></li>
       <li><a href="#en-nesting">Nesting</a></li>
       <li><a href="#en-double">Double-sided</a></li>
+      <li><a href="#en-views">2D and 3D views</a></li>
       <li><a href="#en-3d">3D preview</a></li>
       <li><a href="#en-gcode">G-code</a></li>
       <li><a href="#en-install">Install and offline</a></li>
@@ -550,7 +556,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.89</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.90</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -582,7 +588,7 @@ M30</pre>
       <li><div><b>Draw or import</b>Draw with the icons of the Drawing tab, import an SVG, a DXF or an image (the <span class="ui">Import</span> icon in the Create group, or the File menu) or type some text.</div></li>
       <li><div><b>Check your tools</b>Choose the material in the Project tab, then check in the <span class="ui">Tool library</span> (Toolpaths tab) the speed, feed, pass depth and stepover of each bit.</div></li>
       <li><div><b>Create the toolpaths</b>Select shapes on the canvas, open the <span class="ui">Toolpaths</span> tab, choose Profile, Pocket, V-carving or Drilling, adjust, then click <span class="ui">Calculate</span>.</div></li>
-      <li><div><b>Check in 3D</b><span class="ui">View › 3D machining preview</span> shows the machined stock. Play the job back to spot a wrong depth or tool.</div></li>
+      <li><div><b>Check in 3D</b>The <span class="ui">Machining simulation</span> button (Toolpaths tab) or <span class="ui">View › 3D machining preview</span> shows the machined stock. Play the job back to spot a wrong depth or tool.</div></li>
       <li><div><b>Save the G-code</b><span class="ui">G-code</span> tab: choose the post-processor, then <span class="ui">Save G-code</span>. Always do a dry run before cutting.</div></li>
     </ol>
 
@@ -794,6 +800,10 @@ M30</pre>
     </ol>
     <p>The 3D preview shows both sides; the <span class="ui">Side 2 up</span> option shows the part flipped.</p>
 
+    <h2 id="en-views">2D and 3D views</h2>
+    <p>The <span class="ui">2D</span> and <span class="ui">3D</span> buttons at the top work as two switches: 2D only (the drawing fills the area), 3D only (the relief), or both at once. When both are shown, the buttons next to them place the views side by side or one above the other. The Relief tab shows the 3D view automatically.</p>
+    <p>The 3D view shows the relief in the stock (wireframe), with the drawing and the axes. Drag: rotate; right-click or Shift + drag: pan; wheel: zoom; double-click: whole stock. On the right: the view cube, then buttons to show or hide the drawing, the axes and the stock, and to recenter on the relief.</p>
+
     <h2 id="en-3d">3D preview</h2>
     <figure><img src="img/en-06-apercu3d.webp" alt="3D preview of the machined sample project." width="1800" height="1125" loading="lazy"><figcaption>Drag to rotate, right-click or Shift to pan, wheel to zoom, double-click to recenter.</figcaption></figure>
     <p>The preview simulates material removal through the real stock thickness, through-holes included. The playback buttons replay the machining: <strong>back to start</strong>, <strong>step back</strong>, <strong>play / pause</strong>, <strong>step forward</strong> and <strong>go to end</strong>; one step is one tool move. Keyboard: left and right arrows, Home, End and Space. The slider jumps to any moment.</p>
@@ -880,7 +890,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.89 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.90 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
