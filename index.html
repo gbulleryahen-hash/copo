@@ -74,7 +74,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .dg-icons{display:flex;flex-wrap:wrap;gap:3px}
 .dg-icons button{width:34px;height:34px;border:1px solid transparent;border-radius:var(--r);background:var(--raised);display:grid;place-items:center;color:var(--ink);cursor:pointer;padding:0}
 .dg-icons button svg{width:20px;height:20px}.dg-icons button:hover:not(:disabled){border-color:var(--accent)}
-.dg-icons button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}.dg-icons button:disabled{opacity:.35;cursor:default}
+.dg-icons button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}.dg-icons button:disabled{opacity:.35;cursor:default}.ncur{fill:var(--accent);stroke:var(--accent)}[aria-pressed="true"] .ncur{fill:currentColor;stroke:currentColor}
 .dg-icons .bico{width:20px;height:20px}
 .dsec{display:grid;gap:8px;padding:2px 0 12px}.dsec[hidden]{display:none}.dsec-h{margin:0;font:600 12px var(--f-head);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px}
 .dempty{margin:4px 0 12px}.dempty[hidden],.toolblk[hidden]{display:none}
@@ -450,7 +450,7 @@ label.inl input{width:70px}
   <main class="work">
     <nav class="palette" id="palette" aria-label="Outils de dessin">
       <button data-tool="select" title="Sélection (V)" aria-label="Sélection"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 3l14 8-6 2-2 6z"/></svg></button>
-      <button data-tool="nodes" title="Nœuds (N)" aria-label="Édition des nœuds"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 18C8 6 16 6 20 18"/><rect x="2.5" y="16.5" width="3.5" height="3.5" fill="currentColor"/><rect x="18" y="16.5" width="3.5" height="3.5" fill="currentColor"/><path d="M8 5h8" stroke-dasharray="2 2"/><circle cx="12" cy="5" r="1.8" fill="currentColor"/></svg></button>
+      <button data-tool="nodes" title="Nœuds (N)" aria-label="Édition des nœuds"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10.5L13.5 3.5"/><path d="M6.5 20.5C4 15 4.5 9.5 8.5 7.5C11.5 6 16 6 19.5 8"/><rect x="1.8" y="9" width="3.4" height="3.4" rx=".6" fill="currentColor" stroke="none" transform="rotate(-35 3.5 10.7)"/><rect x="11.8" y="1.8" width="3.4" height="3.4" rx=".6" fill="currentColor" stroke="none" transform="rotate(-35 13.5 3.5)"/><circle cx="8.5" cy="7.5" r="2.1" fill="currentColor" stroke="none"/><circle cx="6.5" cy="20.5" r="1.8" fill="currentColor" stroke="none"/><circle cx="19.5" cy="8" r="1.8" fill="currentColor" stroke="none"/><path class="ncur" d="M11.5 11l10.5 4-4.9 1.7-1.7 5.1z" stroke-width="1"/></svg></button>
       <button data-tool="pan" title="Main : déplacer la vue (H)" aria-label="Déplacer la vue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/></svg></button>
       <div class="psep"></div>
       <button data-tool="poly" title="Plume (P) : cliquez et faites glisser pour créer une ligne courbée, cliquez simplement pour un point anguleux. Barre d’espace : termine la ligne en cours et en commence une nouvelle. Clic droit : termine la ligne et quitte la plume." aria-label="Plume"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M21 3l-7.5 2.3-2.3 7.5 7.5-2.3z"/><path d="M11.2 12.8l4.4-4.4"/><circle cx="16.2" cy="7.8" r=".9"/><path d="M2.5 21.5h4.5c3 0 4-3 4.2-7.2" stroke-dasharray="none"/><circle cx="2.5" cy="21.5" r="1.2" fill="currentColor"/></svg></button>
@@ -485,9 +485,9 @@ label.inl input{width:70px}
         <div class="rvinfo" id="rvInfo"></div>
         <canvas id="rvov" aria-hidden="true"></canvas>
         <div class="rvxf" role="toolbar" aria-label="Transformer le relief sélectionné">
-          <button data-act="rvMove" title="Déplacer : tirez les flèches X, Y, Z (Maj : au millimètre)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/></svg><span>Déplacer</span></button>
-          <button data-act="rvRotate" title="Tourner : tirez les cercles (Maj : par 15°)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg><span>Tourner</span></button>
-          <button data-act="rvScale" title="Redimensionner : tirez les poignées (proportions gardées si la case est cochée ; Maj : au millimètre)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="1" stroke-dasharray="3 2"/><rect x="2.5" y="2.5" width="4" height="4" fill="currentColor"/><rect x="17.5" y="17.5" width="4" height="4" fill="currentColor"/></svg><span>Redimensionner</span></button>
+          <button aria-label="Déplacer" data-act="rvMove" title="Déplacer : tirez les flèches X, Y, Z (Maj : au millimètre)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/></svg></button>
+          <button aria-label="Tourner" data-act="rvRotate" title="Tourner : tirez les cercles (Maj : par 15°)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg></button>
+          <button aria-label="Redimensionner" data-act="rvScale" title="Redimensionner : tirez les poignées (proportions gardées si la case est cochée ; Maj : au millimètre)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="1" stroke-dasharray="3 2"/><rect x="2.5" y="2.5" width="4" height="4" fill="currentColor"/><rect x="17.5" y="17.5" width="4" height="4" fill="currentColor"/></svg></button>
           <i class="rvsep"></i>
           <button data-act="rvDropB" title="Poser sur le fond du brut"><svg viewBox="0 0 24 24" stroke-linecap="round"><rect x="2.5" y="2.5" width="19" height="19" rx="1" fill="#8a8f96" fill-opacity=".25" stroke="currentColor" stroke-width="1.2"/><path class="mtn" style="stroke-width:1.6" d="M5 21.5 L9.2 15 L11.4 17.5 L14.5 12.5 L19 21.5Z"/><path d="M12 4.5v5M9.8 7.6l2.2 2.2 2.2-2.2" fill="none" stroke="currentColor" stroke-width="1.7"/></svg></button>
           <button data-act="rvDropT" title="Aligner le haut du relief sur le dessus du brut"><svg viewBox="0 0 24 24" stroke-linecap="round"><rect x="2.5" y="2.5" width="19" height="19" rx="1" fill="#8a8f96" fill-opacity=".25" stroke="currentColor" stroke-width="1.2"/><path class="mtn" style="stroke-width:1.6" d="M5 11.5 L9.2 5 L11.4 7.5 L14.5 2.5 L19 11.5Z"/><path d="M12 19.5v-5M9.8 16.4l2.2-2.2 2.2 2.2" fill="none" stroke="currentColor" stroke-width="1.7"/></svg></button>
@@ -863,7 +863,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.100</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.101</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -4434,7 +4434,7 @@ function dgInit() {
     const grp = document.createElement('div'); grp.className = 'dg-group'; grp.innerHTML = '<span>' + title + '</span><div class="dg-icons"></div>'; const box = grp.lastChild;
     for (const [kind, key, label, need] of items) {
       const b = document.createElement('button'); b.type = 'button';
-      if (kind === 't') { const pb = document.querySelector('.palette button[data-tool="' + key + '"]'); if (!pb) continue; b.dataset.tool = key; b.title = pb.title; b.setAttribute('aria-label', pb.getAttribute('aria-label') || pb.title); b.innerHTML = pb.querySelector('svg').outerHTML; b.onclick = () => { S.ui.dsec = null; setTool(key); }; }
+      if (kind === 't') { const pb = document.querySelector('.palette button[data-tool="' + key + '"]'); if (!pb) continue; b.dataset.tool = key; b.title = pb.title || pb.dataset.tip || ''; b.setAttribute('aria-label', pb.getAttribute('aria-label') || pb.title); b.innerHTML = pb.querySelector('svg').outerHTML; b.onclick = () => { S.ui.dsec = null; setTool(key); }; }
       else if (kind === 's') { b.dataset.sec = key; b.title = label; b.setAttribute('aria-label', label); b.innerHTML = (DI[key] || BICO[key] || '').replace('<svg', '<svg class="bico"'); b.onclick = () => dSec(key); }
       else { b.dataset.dact = key; b.dataset.need = need || 0; b.title = label; b.setAttribute('aria-label', label); b.innerHTML = ((BICO[key] || DI[{ fbOpen: 'fb', ilOpen: 'il', boxOpen: 'box' }[key] || key]) || '').replace('<svg', '<svg class="bico"'); b.onclick = () => act(key); }
       box.appendChild(b);
@@ -4852,7 +4852,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.100', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.101', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6657,6 +6657,9 @@ const TIPS = {"[data-tab=\"projet\"]": "Brut, origine des coordonnées, unités 
 (function tipInit() {
   const tip = document.createElement('div'); tip.id = 'tip'; tip.setAttribute('role', 'tooltip'); tip.hidden = true; document.body.appendChild(tip);
   let cur = null, timer = 0, lastHide = 0, lx = 0, ly = 0, lt = 0, shown = false;
+  const conv = el => { if (!el.getAttribute || el.closest('svg') && el.tagName !== 'svg') return; const t = el.getAttribute('title'); if (!t) return; const O = trAOrig.get(el), S2 = trASet.get(el) || {}; el.dataset.tip = O && O.title && S2.title === t ? O.title : t; el.removeAttribute('title'); };
+  document.querySelectorAll('[title]').forEach(conv);
+  new MutationObserver(recs => { for (const r of recs) { if (r.type === 'attributes') conv(r.target); else r.addedNodes.forEach(n => { if (n.nodeType !== 1) return; conv(n); n.querySelectorAll && n.querySelectorAll('[title]').forEach(conv); }); } }).observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['title'] });
   const textOf = el => { const t = el.getAttribute('title'); if (t) { const O = trAOrig.get(el), S2 = trASet.get(el) || {}; el.dataset.tip = O && O.title && S2.title === t ? O.title : t; el.removeAttribute('title'); } const v = el.dataset.tip || ''; return v && trOn() ? disp(v) : v; }; // texte source gardé en français, traduit à l'affichage
   const target = n => { for (let e = n; e && e !== document.body; e = e.parentElement) { if (e.nodeType !== 1) continue; if (e.hasAttribute('title') || e.dataset.tip) return e; if (e.tagName === 'BUTTON' && !e.dataset.tip && !e.textContent.trim() && e.getAttribute('aria-label')) { e.dataset.tip = e.getAttribute('aria-label'); return e; } }
     const el = n && n.nodeType === 1 ? n : n && n.parentElement; if (!el || el.closest('.menu, .mdrop')) return null; const lab = el.closest('label');
@@ -6674,6 +6677,8 @@ const TIPS = {"[data-tab=\"projet\"]": "Brut, origine des coordonnées, unités 
     if (el === cur) return; hide(); cur = el; if (el) { textOf(el); lx = e.clientX; ly = e.clientY; lt = performance.now(); arm(); }
   }, true);
   document.addEventListener('pointermove', e => { // le décompte ne repart que si la souris ralentit sur l'élément
+    if (!cur && e.pointerType !== 'touch') { const u = document.elementFromPoint(e.clientX, e.clientY), el = u && u.closest && u.closest(':disabled, [aria-disabled="true"]') && target(u); if (el) { cur = el; lx = e.clientX; ly = e.clientY; lt = performance.now(); arm(); return; } }
+    else if (cur && cur.matches && cur.matches(':disabled') && !cur.contains(document.elementFromPoint(e.clientX, e.clientY))) { hide(); cur = null; return; }
     if (!cur || shown) return; const now = performance.now(), dt = Math.max(1, now - lt), v = Math.hypot(e.clientX - lx, e.clientY - ly) / dt; lx = e.clientX; ly = e.clientY; lt = now;
     if (v > 0.35 && performance.now() - lastHide >= 700) arm();
   }, true);
