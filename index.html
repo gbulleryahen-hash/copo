@@ -877,7 +877,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.107</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.108</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -3330,6 +3330,7 @@ function importDXF(text) {
 
 // ---------- souris / tactile ----------
 let drag = null, pen = [], arcSt = [], dimSt = [], hover = null, hoverCorner = null, hoverEdge = null; const pointers = new Map(); let pinch = null, spaceDown = false;
+const DRAG_MIN = () => lastPtrType === 'touch' || lastPtrType === 'pen' ? 10 : 6; // seuil (px) avant qu'un glisser ne déplace l'objet
 let lastPtrType = 'mouse'; const downHist = [];
 const evPt = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
 const restCursor = () => S.ui.tool === 'pan' ? 'grab' : (S.ui.tool === 'select' || S.ui.tool === 'nodes') ? 'default' : 'crosshair';
@@ -3357,7 +3358,7 @@ cv.addEventListener('pointerdown', e => {
     if (h) {
       S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (S.relSel) { S.relSel = null; relPanel(); } const ids = groupIds(h), wasSel = S.sel.has(h.id) && !e.shiftKey;
       if (e.shiftKey) { const has = S.sel.has(h.id); ids.forEach(id => has ? S.sel.delete(id) : S.sel.add(id)); } else if (!S.sel.has(h.id)) { S.sel.clear(); ids.forEach(id => S.sel.add(id)); }
-      renderSel(); drag = { mode: 'move', p0: snap(p, S.sel), bb0: bbox(selShapes()), orig: selShapes().map(s => [s, s.nodes.map(cloneNode)]), moved: false, wasSel, piv0: PIV && PIV.key === selKey() ? PIV.p.slice() : null };
+      renderSel(); drag = { mode: 'move', X0: X, Y0: Y, p0: snap(p, S.sel), bb0: bbox(selShapes()), orig: selShapes().map(s => [s, s.nodes.map(cloneNode)]), moved: false, wasSel, piv0: PIV && PIV.key === selKey() ? PIV.p.slice() : null };
     } else {
       const dm = hitDim(p), gd = hitGuide(X, Y);
       const hi = !dm && !gd ? imgHit(p) : null, hr = !dm && !gd && !hi ? relHit(p) : null;
@@ -3431,7 +3432,7 @@ function nodesDown(p, e, X, Y) {
       const cur = neSel();
       if (e.shiftKey) { const set = new Set(cur); if (set.has(bi)) set.delete(bi); else set.add(bi); neSetSel([...set], set.has(bi) ? bi : undefined); draw(); return; }
       if (!cur.includes(bi)) neSetSel([bi]); else S.ne.ni = bi;
-      const L = neSel(); drag = { mode: 'node', s, i: bi, ids: L, orig: L.map(i => [s.nodes[i].x, s.nodes[i].y]), p0: [s.nodes[bi].x, s.nodes[bi].y], moved: false }; return;
+      const L = neSel(); drag = { mode: 'node', X0: X, Y0: Y, s, i: bi, ids: L, orig: L.map(i => [s.nodes[i].x, s.nodes[i].y]), p0: [s.nodes[bi].x, s.nodes[bi].y], moved: false }; return;
     }
     if (edgeDist(s, p) < tol) { const u = paramAt(s, p).u; S.ne.seg = Math.min(nseg(s) - 1, Math.floor(u)); S.ne.ni = null; S.ne.ms = null; return; }
     const h0 = hitEdge(p, 7);
@@ -3448,7 +3449,7 @@ cv.addEventListener('pointermove', e => {
   if (D) {
     if (D.mode === 'pan') { S.view.ox = D.ox + X - D.X; S.view.oy = D.oy + Y - D.Y; draw(); return; }
     if (D.mode === 'guide') { const q = snap(p); S.guides[D.axis][D.i] = D.axis === 'x' ? q[0] : q[1]; setCoords(q, 'repère'); draw(); return; }
-    if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot' || D.mode === 'iedge') { if (D.mode === 'imove' && !D.moved && D.X0 !== undefined && Math.hypot(X - D.X0, Y - D.Y0) < 4) return; imgDragMove(D, p, e); return; }
+    if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot' || D.mode === 'iedge') { if (D.mode === 'imove' && !D.moved && D.X0 !== undefined && Math.hypot(X - D.X0, Y - D.Y0) < DRAG_MIN()) return; imgDragMove(D, p, e); return; }
     if (D.mode === 'tabdrag') { const pr = projectOnLoops(D.tp.loops, p); if (pr) { D.tp.p.tabPts[D.idx] = [pr.x, pr.y]; if (D.tp.tabs && D.tp.tabs[D.idx]) D.tp.tabs[D.idx] = { x: pr.x, y: pr.y, a: pr.a }; if (hyp(p, D.start) * S.view.s > 3) D.moved = true; draw(); } return; }
     if (D.mode === 'pivot') { const q = snap(p); PIV = { key: selKey(), p: q }; D.moved = true; const o = outXY(q[0], q[1]); setCoords(q, tr('Pivot') + ' ' + fr(o[0]) + ' / ' + fr(o[1])); rotSync(); draw(); return; }
     if (D.mode === 'srot') { let ang = (Math.atan2(p[1] - D.c[1], p[0] - D.c[0]) - D.a0) * 180 / Math.PI; ang = normDeg(ang); if (e.shiftKey) ang = Math.round(ang / 15) * 15; const f = rotPts(D.c, ang); for (const [s, o] of D.orig) { s.nodes = o.map(cloneNode); transformShape(s, f); } D.ang = ang; D.moved = D.moved || Math.abs(ang) > 1e-9; setCoords(p, tr('Rotation') + ' ' + fDeg(ang)); draw(); return; }
@@ -3462,8 +3463,10 @@ cv.addEventListener('pointermove', e => {
       if (D.piv0) PIV = { key: selKey(), p: f(D.piv0) };
       D.moved = true; const b = bbox(selShapes()); setCoords(q, fr(b.w) + ' × ' + fr(b.h) + ' mm'); draw(); return;
     }
+    if (D.mode === 'move' && !D.moved && D.X0 !== undefined && Math.hypot(X - D.X0, Y - D.Y0) < DRAG_MIN()) return; // un clic avec un léger tremblement ne déplace rien
     if (D.mode === 'move') { const q = snap(p, S.sel); let dx = q[0] - D.p0[0], dy = q[1] - D.p0[1]; if (!snapMark || snapMark.k === 'gd') [dx, dy] = moveAlign(D.bb0, dx, dy); for (const [s, o] of D.orig) { s.nodes = o.map(cloneNode); transformShape(s, v => [v[0] + dx, v[1] + dy]); } if (D.piv0) PIV = { key: selKey(), p: [D.piv0[0] + dx, D.piv0[1] + dy] }; D.moved = D.moved || Math.abs(dx) + Math.abs(dy) > 1e-9; setCoords(q, 'Δ ' + fr(dx) + ' / ' + fr(dy)); draw(); return; }
     if (D.mode === 'band') { D.sx1 = X; D.sy1 = Y; draw(); return; }
+    if (D.mode === 'node' && !D.moved && D.X0 !== undefined && Math.hypot(X - D.X0, Y - D.Y0) < DRAG_MIN()) return;
     if (D.mode === 'node') { const q = snap(p, new Set([D.s.id])), dx = q[0] - D.p0[0], dy = q[1] - D.p0[1]; D.ids.forEach((i, k) => { const n = D.s.nodes[i]; if (n) { n.x = D.orig[k][0] + dx; n.y = D.orig[k][1] + dy; } }); refresh(D.s); D.moved = true; setCoords(q, D.ids.length > 1 ? 'Δ ' + fr(dx) + ' / ' + fr(dy) : ''); draw(); return; }
     if (D.mode === 'nband') { D.sx1 = X; D.sy1 = Y; draw(); return; }
     if (D.mode === 'handle') { const n = D.s.nodes[D.i], v = [p[0] - n.x, p[1] - n.y]; n[D.w] = v; const ow = D.w === 'i' ? 'o' : 'i'; if (n.sm && !D.alt && !e.altKey && n[ow]) { const L = Math.hypot(n[ow][0], n[ow][1]), u = nrm(v); n[ow] = [-u[0] * L, -u[1] * L]; } else if (e.altKey || D.alt) n.sm = false; refresh(D.s); D.moved = true; draw(); return; }
@@ -4865,7 +4868,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.107', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.108', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
