@@ -837,7 +837,7 @@ label.inl input{width:70px}
             </div>
             <label class="chk"><input type="checkbox" id="rlLock" checked> Garder les proportions (Z suit la taille)</label>
             <label class="chk" id="rlInvRow"><input type="checkbox" id="rlInv"> Inverser (le foncé est en haut)</label>
-            <div class="row"><button data-act="relFit">Ajuster au brut</button><button data-act="relCenter">Centrer</button><button data-act="relRot0">Angle 0°</button><button data-act="relDel" class="danger">Retirer</button></div>
+            <div class="row"><button data-act="relOutline" class="primary" title="Crée un vecteur fermé qui suit le pourtour du relief sélectionné (vu de dessus). Utilisez-le ensuite avec un parcours Profil (extérieur) pour détourer la pièce, ou avec Contour décalé.">Créer le contour</button><button data-act="relFit">Ajuster au brut</button><button data-act="relCenter">Centrer</button><button data-act="relRot0">Angle 0°</button><button data-act="relDel" class="danger">Retirer</button></div>
             <p class="hint" id="rlInfo"></p>
           </div>
         </section>
@@ -880,7 +880,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.121</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.122</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1286,6 +1286,7 @@ Object.assign(I18N_EN, {"STL importé à sa taille réelle : {n} triangles, {w} 
 Object.assign(I18N_EN, {"Le relief dépasse l’épaisseur du brut : il sera coupé au fond. Augmentez l’épaisseur du brut (onglet Projet) ou réduisez l’épaisseur du relief.": "The relief is thicker than the stock: it will be cut off at the bottom. Increase the stock thickness (Project tab) or reduce the relief height.", "Un relief déborde du brut : la partie en dehors ne sera pas usinée.": "A relief extends beyond the stock: the part outside will not be machined."});
 Object.assign(I18N_EN, {"Le relief ({d} mm) est plus épais que le brut ({t} mm) : le bas sera coupé. Augmentez l’épaisseur du brut.": "The relief ({d} mm) is thicker than the stock ({t} mm): the bottom will be cut off. Increase the stock thickness."});
 Object.assign(I18N_EN, {"Cache les chutes autour des pièces détourées (découpes sur toute l’épaisseur) : il ne reste que la pièce finie. Les ponts d’attache ne relient plus la pièce à la chute.": "Hides the offcuts around cut-out parts (cuts through the full thickness): only the finished part remains. Tabs no longer link the part to the offcut.", "Pièce finie seule": "Finished part only"});
+Object.assign(I18N_EN, {"Créer le contour": "Create outline", "Crée un vecteur fermé qui suit le pourtour du relief sélectionné (vu de dessus). Utilisez-le ensuite avec un parcours Profil (extérieur) pour détourer la pièce, ou avec Contour décalé.": "Creates a closed vector following the outline of the selected relief (seen from above). Then use it with a Profile toolpath (outside) to cut the part out, or with Offset.", "Sélectionnez d’abord un relief.": "Select a relief first.", "Ce relief n’a pas d’emprise sur le brut.": "This relief does not lie on the stock.", "Contour introuvable.": "No outline found.", "Contour du relief créé ({n} vecteur(s), sélectionnés) : créez un parcours Profil à l’extérieur pour détourer la pièce.": "Relief outline created ({n} vector(s), selected): create an outside Profile toolpath to cut the part out."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4921,7 +4922,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.121', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.122', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6229,6 +6230,16 @@ function stlRaster(T, orient, rx, ry) {
   const d = new Uint16Array(nx * ny); for (let i = 0; i < d.length; i++) d[i] = zb[i] === -Infinity ? 0 : 1 + Math.round((zb[i] - z0) / Z * 65534);
   return { g: { nx, ny, d }, W, H: Hh, Z, tris: n };
 }
+// contour d'un relief vu de dessus (son empreinte) en vecteurs fermés, pour le détourer avec un parcours Profil
+function relOutline(it) {
+  const st = S.stock; let c = Math.max(0.08, Math.min(0.25, Math.max(it.w, it.h) / 1200)); while ((st.w / c + 1) * (st.h / c + 1) > 9e6) c *= 1.25;
+  const R = reliefCompose(c, true, [it.id]), { nx, ny, cx, cy, M } = R, g = new Float32Array(nx * ny); let n = 0; for (let q = 0; q < g.length; q++) if (M[q]) { g[q] = 1; n++; }
+  if (!n) { toast(tr('Ce relief n’a pas d’emprise sur le brut.')); return; }
+  const loops = vzTrace({ W: nx, H: ny, g, blur: new Map() }, 0.5, true, 2); // léger flou : supprime l’escalier de la grille sans déplacer les bords droits if (!loops.length) { toast(tr('Contour introuvable.')); return; }
+  const gid = loops.length > 1 ? uid() : null; S.sel.clear(); S.relSel = null; let k = 0;
+  for (const lp of loops) { const nodes = lp.map(p => NODE((p[0] - 0.5) * cx, (p[1] - 0.5) * cy)); const sh = mkShape(nodes, true, gid ? { g: gid } : undefined); if (sh) { S.sel.add(sh.id); k++; } }
+  commit(); renderSel(); relPanel(); setTab('dessin'); draw(); toast(trf('Contour du relief créé ({n} vecteur(s), sélectionnés) : créez un parcours Profil à l’extérieur pour détourer la pièce.', { n: k }));
+}
 // avertissement quand un relief ne tient pas dans le brut (rien n'est réduit automatiquement)
 function relFitWarn(it) { const st = S.stock, m = []; if ((+it.top || 0) + (+it.zH || 0) > st.t + 1e-6) m.push(trf('hauteur {z} mm pour un brut de {t} mm', { z: fr((+it.top || 0) + (+it.zH || 0), 1), t: fr(st.t, 1) })); if (it.w > st.w + 1e-6 || it.h > st.h + 1e-6) m.push(trf('{w} × {h} mm pour un brut de {bw} × {bh} mm', { w: fr(it.w, 1), h: fr(it.h, 1), bw: fr(st.w, 1), bh: fr(st.h, 1) })); return m.length ? ' ⚠ ' + trf('Le modèle dépasse le brut ({m}) : agrandissez le brut dans l’onglet Projet, ou réduisez le modèle.', { m: m.join(', ') }) : ''; }
 function relImportStl(file) {
@@ -6723,6 +6734,7 @@ function imgAct(a) {
   if (a === 'relClipOk') { const it = S.relief.items.find(x => x.id === relClipPick), sh = selShapes().filter(x => x.closed && x.pts && x.pts.length > 2); relClipPick = null; if (it && sh.length) { S.relSel = it.id; S.sel.clear(); renderSel(); relSet(i => { i.clip = sh.map(x => x.id); }); toast(trf('Relief limité par {n} vecteur(s).', { n: sh.length })); } else { S.sel.clear(); renderSel(); relPanel(true); draw(); } return true; }
   if (a === 'relClipNo') { relClipPick = null; S.sel.clear(); renderSel(); relPanel(true); draw(); return true; }
   if (a === 'relUnclip') { relSet(i => { delete i.clip; }); return true; }
+  if (a === 'relOutline') { const it = relCur(); if (!it) { toast(tr('Sélectionnez d’abord un relief.')); return true; } relOutline(it); return true; }
   if (a === 'relCenter') { relSet(i => { i.x = S.stock.w / 2; i.y = S.stock.h / 2; }); return true; }
   if (a === 'relRot0') { relSet(i => { i.rot = 0; }); return true; }
   if (a === 'relDel') { const it = relCur(); if (!it) return true; relBump(); S.relief.items = S.relief.items.filter(x => x !== it); S.relSel = null; relDirty = true; commit(false); relPanel(); draw(); return true; }
