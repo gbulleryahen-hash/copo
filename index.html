@@ -846,7 +846,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.94</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.95</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -4752,7 +4752,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.94', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.95', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5857,7 +5857,7 @@ function imgDragMove(D, p, e) {
   } else if (D.mode === 'iedge') { // poignée de côté : une seule dimension, côté opposé fixe
     const r = (im.rot || 0) * Math.PI / 180, u = [Math.cos(r), Math.sin(r)], v = [-Math.sin(r), Math.cos(r)], d = [p[0] - D.anchor[0], p[1] - D.anchor[1]], ax = D.sgn[0] ? u : v, sg = D.sgn[0] || D.sgn[1];
     const ds = (d[0] * ax[0] + d[1] * ax[1]) * sg; if (D.off === undefined) { const d0 = [D.p0[0] - D.anchor[0], D.p0[1] - D.anchor[1]]; D.off = (d0[0] * ax[0] + d0[1] * ax[1]) * sg - (D.sgn[0] ? D.w0 : D.h0); } let L = Math.max(1, ds - D.off); if (e.shiftKey) L = Math.max(1, Math.round(L));
-    const lk = D.rel ? (!$('#rlLock') || $('#rlLock').checked) : (!$('#imLockR') || $('#imLockR').checked); if (lk) { const k = L / (D.sgn[0] ? D.w0 : D.h0); im.w = D.w0 * k; im.h = D.h0 * k; if (D.rel) im.zH = D.zH0 * k; } else if (D.sgn[0]) im.w = L; else im.h = L;
+    if (D.sgn[0]) im.w = L; else im.h = L; // poignée de côté : seule cette dimension change
     im.x = D.anchor[0] + ax[0] * sg * L / 2; im.y = D.anchor[1] + ax[1] * sg * L / 2; setCoords(p, fr(im.w) + ' × ' + fr(im.h) + ' mm');
   } else if (D.mode === 'irot') {
     let a = D.rot0 + (Math.atan2(p[1] - im.y, p[0] - im.x) - D.a0) * 180 / Math.PI; if (e.shiftKey) a = Math.round(a / 15) * 15;
@@ -6277,7 +6277,7 @@ function rvGizmoDrag(D, mx, my, shift) {
   else { const q = rvPlane(mx, my, rvZ(it).top); if (!q) return; const a = (s0.rot || 0) * Math.PI / 180, cs = Math.cos(a), sn = Math.sin(a), sg = { c0: [-1, -1], c1: [1, -1], c2: [1, 1], c3: [-1, 1], e0: [0, -1], e1: [1, 0], e2: [0, 1], e3: [-1, 0] }[g.k];
     const anc = [s0.x - (sg[0] * s0.w / 2) * cs + (sg[1] * s0.h / 2) * sn, s0.y - (sg[0] * s0.w / 2) * sn - (sg[1] * s0.h / 2) * cs], d = [q[0] - anc[0], q[1] - anc[1]], lu = d[0] * cs + d[1] * sn, lv = -d[0] * sn + d[1] * cs;
     let w = sg[0] ? Math.max(0.5, lu * sg[0]) : s0.w, h = sg[1] ? Math.max(0.5, lv * sg[1]) : s0.h; const lock = !$('#rlLock') || $('#rlLock').checked;
-    if (lock) { const k = sg[0] && sg[1] ? Math.max(w / s0.w, h / s0.h) : sg[0] ? w / s0.w : h / s0.h; w = s0.w * k; h = s0.h * k; it.zH = s0.zH * k; }
+    if (lock && sg[0] && sg[1] && !shift) { const k = Math.max(w / s0.w, h / s0.h); w = s0.w * k; h = s0.h * k; it.zH = s0.zH * k; } // coins : proportions ; côtés : une seule dimension
     if (shift) { w = Math.max(1, Math.round(w)); h = Math.max(1, Math.round(h)); }
     it.w = w; it.h = h; const ox = (sg[0] || 0) * w / 2, oy = (sg[1] || 0) * h / 2; it.x = anc[0] + ox * cs - oy * sn; it.y = anc[1] + ox * sn + oy * cs; if (!sg[0]) { it.x = s0.x + (it.x - s0.x); } }
   relAfterXf(it, false);
