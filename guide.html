@@ -186,7 +186,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.93</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.94</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -324,7 +324,7 @@ footer p{max-width:none}
       <li><strong>Niveaux de gris</strong> : insérez l’image (PNG, JPG) dans l’onglet Dessin (<span class="ui">Importer › Image</span>), sélectionnez-la puis cliquez sur <span class="ui">Niveaux de gris</span>. L’image reste dans la vue 2D et le relief n’apparaît qu’en 3D ; il reste <em>lié</em> à l’image : la déplacer, la redimensionner ou la tourner met le relief à jour (case <em>Lié à l’image du dessin</em> pour rompre la liaison). Le clair est en haut, le foncé en bas (case <em>Inverser</em> pour l’inverse). Un fond transparent compte comme du noir pour les hauteurs, mais il n’est pas usiné : sans limite sélectionnée, l’usinage reste dans la partie opaque de l’image.</li>
       <li><strong>Modèle 3D</strong> (STL binaire ou texte) : le modèle est vu de dessus et projeté en hauteurs, à l’échelle du fichier (réduit s’il dépasse le brut). <em>Haut du modèle</em> choisit l’axe tourné vers le haut (+Z, −Z, ±Y, ±X). Les contre-dépouilles sont usinées telles que vues d’en haut.</li>
       <li><strong>Réglages de chaque élément</strong> : position et taille comme pour un objet (point de référence parmi neuf, X, Y, largeur, hauteur), <em>épaisseur du relief</em>, <em>haut du brut → haut du relief</em> et <em>bas du brut → bas du relief</em> (modifier l’un recalcule l’autre : leur somme plus l’épaisseur fait l’épaisseur du brut), angle, <em>adoucissement</em> et <em>combinaison</em> avec les éléments précédents : ajouter, soustraire, garder le plus haut ou le plus bas. « Garder les proportions » fait suivre l’épaisseur quand on change la taille.</li>
-      <li><strong>Sur le plan</strong>, un modèle STL (ou une image déliée) se manipule comme un objet, avec l’outil Sélection : un premier clic le sélectionne et ouvre ses réglages de position dans l’onglet Relief, et vous pouvez le glisser pour le déplacer ; un deuxième clic affiche les poignées : carrés pour redimensionner (coins : proportions gardées, Maj pour déformer ; côtés : une seule dimension), ronds pour tourner (Maj : par 15°). Suppr le retire. Un relief en niveaux de gris se manipule par son image, et les dômes, extrusions et lissages par la vue 3D ou le panneau.</li>
+      <li><strong>Sur le plan</strong>, un modèle STL (ou une image déliée) se manipule comme un objet, avec l’outil Sélection : un premier clic le sélectionne et ouvre ses réglages de position dans l’onglet Relief, et vous pouvez le glisser pour le déplacer ; un deuxième clic affiche les poignées : carrés pour redimensionner (proportions gardées si la case est cochée, coins comme côtés ; Maj pour déformer), ronds pour tourner (Maj : par 15°). Suppr le retire. Un relief en niveaux de gris se manipule par son image, et les dômes, extrusions et lissages par la vue 3D ou le panneau.</li>
       <li><strong>Affichage</strong> : en 2D, seuls les modèles STL (et les images déliées) s’affichent ombrés, pour ne pas doubler l’image ou les vecteurs ; tout le relief se voit dans la vue 3D. Le résumé indique la profondeur du point le plus bas et prévient s’il dépasse l’épaisseur du brut.</li>
     </ul>
     <p>Les données du relief sont gardées dans le navigateur et enregistrées dans le fichier <code>.copo</code>. </p>
@@ -432,12 +432,12 @@ footer p{max-width:none}
 
     <h2 id="fr-vues">Vues 2D et 3D</h2>
     <p>Les boutons <span class="ui">2D</span> et <span class="ui">3D</span> en haut de l’écran fonctionnent comme deux interrupteurs : 2D seule (le dessin occupe toute la zone), 3D seule (le relief), ou les deux à la fois. Quand les deux vues sont affichées, les boutons voisins les placent côte à côte ou l’une au-dessus de l’autre. L’onglet Relief affiche la vue 3D automatiquement.</p>
-    <p>La vue 3D montre le relief dans le brut (en filaire), avec le dessin et le repère. Glisser : tourner ; clic droit ou Maj + glisser : déplacer ; molette : zoom ; double-clic : tout le brut. À droite : le cube d’orientation, puis les boutons pour afficher ou masquer le dessin, le repère et le brut, et pour recentrer sur le relief.</p>
+    <p>La vue 3D montre le relief dans le brut (en filaire), avec le dessin et le repère. La vue est en projection orthogonale (sans perspective), pratique de face ou de côté. Glisser : tourner ; clic droit ou Maj + glisser : déplacer ; molette : zoom ; double-clic : tout le brut. À droite : le cube d’orientation, puis les boutons pour afficher ou masquer le dessin, le repère et le brut, et pour recentrer sur le relief.</p>
     <p><strong>Transformer un relief en 3D.</strong> Cliquez un élément dans la vue 3D pour le sélectionner (coins de sa boîte en surbrillance ; la sélection est la même dans la vue 2D et dans la liste). La barre du bas propose trois outils, avec les cotes affichées en haut à gauche :</p>
     <ul>
       <li><strong>Déplacer</strong> : tirez les flèches X, Y ou Z (Maj : au millimètre). En Z, le haut du relief s’accroche au dessus du brut et le bas au fond ; en X et Y, les bords s’accrochent aux bords du brut.</li>
       <li><strong>Tourner</strong> : tirez le cercle bleu (autour de Z) ; pour un STL, les cercles rouge et vert le font aussi pivoter autour de X et de Y (Maj : par 15°).</li>
-      <li><strong>Redimensionner</strong> : tirez les poignées des coins et des côtés (proportions gardées si la case est cochée), ou la poignée bleue au-dessus pour l’épaisseur (Maj : au millimètre).</li>
+      <li><strong>Redimensionner</strong> : tirez les poignées des coins et des côtés (proportions gardées si la case est cochée), ou le rond bleu au-dessus pour l’épaisseur : le haut monte ou descend, le bas reste en place (Maj : au millimètre).</li>
       <li>Les deux derniers boutons <strong>posent le relief sur le fond</strong> du brut ou <strong>alignent son haut sur le dessus</strong>.</li>
     </ul>
     <p>Chaque transformation s’annule avec <span class="ui">Ctrl+Z</span> ; le panneau du relief garde les valeurs exactes.</p>
@@ -528,7 +528,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.93 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.94 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -564,7 +564,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.93</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.94</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -702,7 +702,7 @@ M30</pre>
       <li><strong>Grayscale</strong>: insert the image (PNG, JPG) in the Drawing tab (<span class="ui">Import › Image</span>), select it, then click <span class="ui">Grayscale</span>. The image stays in the 2D view and the relief only shows in 3D; it stays <em>linked</em> to the image: moving, resizing or rotating it updates the relief (untick <em>Linked to the drawing image</em> to break the link). Light is high, dark is low (tick <em>Invert</em> for the opposite). A transparent background counts as black for heights but is not machined: with no boundary selected, machining stays within the opaque part of the image.</li>
       <li><strong>3D model</strong> (binary or text STL): the model is seen from above and projected into heights, at the file’s scale (reduced if larger than the stock). <em>Model top</em> picks the axis facing up (+Z, −Z, ±Y, ±X). Undercuts are machined as seen from above.</li>
       <li><strong>Settings of each item</strong>: position and size as for an object (one of nine reference points, X, Y, width, height), <em>relief height</em>, <em>stock top → relief top</em> and <em>stock bottom → relief bottom</em> (editing one recalculates the other: their sum plus the height is the stock thickness), angle, <em>softening</em> and how it <em>combines</em> with the items before it: add, subtract, keep highest or keep lowest. “Keep proportions” makes the height follow size changes.</li>
-      <li><strong>On the workspace</strong>, an STL model (or an unlinked image) is handled like an object with the Select tool: a first click selects it and opens its position settings in the Relief tab, and you can drag it to move it; a second click shows the handles: squares to resize (corners: proportions kept, Shift to distort; sides: one dimension), circles to rotate (Shift: 15° steps). Delete removes it. A grayscale relief is handled through its image, and domes, extrusions and sweeps through the 3D view or the panel.</li>
+      <li><strong>On the workspace</strong>, an STL model (or an unlinked image) is handled like an object with the Select tool: a first click selects it and opens its position settings in the Relief tab, and you can drag it to move it; a second click shows the handles: squares to resize (proportions kept if the box is ticked, corners and sides alike; Shift to distort), circles to rotate (Shift: 15° steps). Delete removes it. A grayscale relief is handled through its image, and domes, extrusions and sweeps through the 3D view or the panel.</li>
       <li><strong>Display</strong>: in 2D, only STL models (and unlinked images) are shown shaded, so the image or the vectors are not doubled; the whole relief is visible in the 3D view. The summary gives the depth of the lowest point and warns if it exceeds the stock thickness.</li>
     </ul>
     <p>Relief data is kept in the browser and saved in the <code>.copo</code> file. </p>
@@ -810,12 +810,12 @@ M30</pre>
 
     <h2 id="en-views">2D and 3D views</h2>
     <p>The <span class="ui">2D</span> and <span class="ui">3D</span> buttons at the top work as two switches: 2D only (the drawing fills the area), 3D only (the relief), or both at once. When both are shown, the buttons next to them place the views side by side or one above the other. The Relief tab shows the 3D view automatically.</p>
-    <p>The 3D view shows the relief in the stock (wireframe), with the drawing and the axes. Drag: rotate; right-click or Shift + drag: pan; wheel: zoom; double-click: whole stock. On the right: the view cube, then buttons to show or hide the drawing, the axes and the stock, and to recenter on the relief.</p>
+    <p>The 3D view shows the relief in the stock (wireframe), with the drawing and the axes. The view uses an orthographic projection (no perspective), handy from the front or the side. Drag: rotate; right-click or Shift + drag: pan; wheel: zoom; double-click: whole stock. On the right: the view cube, then buttons to show or hide the drawing, the axes and the stock, and to recenter on the relief.</p>
     <p><strong>Transforming a relief in 3D.</strong> Click an item in the 3D view to select it (its box corners are highlighted; the selection is shared with the 2D view and the list). The bottom bar offers three tools, with dimensions shown at the top left:</p>
     <ul>
       <li><strong>Move</strong>: drag the X, Y or Z arrows (Shift: whole millimetres). In Z, the relief top snaps to the stock top and its bottom to the stock bottom; in X and Y, its edges snap to the stock edges.</li>
       <li><strong>Rotate</strong>: drag the blue ring (around Z); for an STL, the red and green rings also tilt it around X and Y (Shift: 15° steps).</li>
-      <li><strong>Resize</strong>: drag the corner and side handles (proportions kept if the box is ticked), or the blue handle above for the height (Shift: whole millimetres).</li>
+      <li><strong>Resize</strong>: drag the corner and side handles (proportions kept if the box is ticked), or the blue dot above for the height: the top moves, the bottom stays put (Shift: whole millimetres).</li>
       <li>The last two buttons <strong>drop the relief onto the stock bottom</strong> or <strong>align its top with the stock top</strong>.</li>
     </ul>
     <p>Each transformation can be undone with <span class="ui">Ctrl+Z</span>; the relief panel keeps the exact values.</p>
@@ -906,7 +906,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.93 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.94 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 

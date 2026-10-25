@@ -103,7 +103,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 @media (max-width:760px){.libbody{grid-template-columns:1fr;grid-template-rows:minmax(180px,40%) minmax(0,1fr)}.libleft{border-right:0;border-bottom:1px solid var(--line)}}
 .impgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.impgrid.one{grid-template-columns:1fr}
 .rbtns{display:grid;grid-template-columns:1fr 1fr;gap:6px}.rbtn{display:flex;align-items:center;gap:9px;padding:7px 10px;border:1px solid var(--line);border-radius:7px;background:var(--raised);color:var(--ink);cursor:pointer;text-align:left}.rbtn:hover{border-color:var(--accent)}.rbtn svg{width:20px;height:20px;flex:none;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.rbtn b{font-weight:600;font-size:13px}
-.zhrow{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:end;margin:6px 0}.zhrow svg{width:58px;height:34px}.zhrow .zs{fill:color-mix(in srgb,var(--stock) 70%,transparent);stroke:var(--muted);stroke-width:1}.zhrow .zr{fill:var(--rl);opacity:.85}.zhrow .za{stroke:var(--accent);stroke-width:1.5;fill:none}.impbtn{display:grid;justify-items:center;gap:3px;padding:12px 8px;border:1px solid var(--line);border-radius:8px;background:var(--raised);text-align:center;cursor:pointer;color:var(--ink)}.impbtn:hover{border-color:var(--accent)}.impbtn svg{width:28px;height:28px;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.impbtn small{color:var(--muted);font-size:11.5px;line-height:1.3}.sw-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}.sw-col{display:grid;gap:8px;align-content:start}.sw-h{margin:0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.sw-h label.chk{text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink)}.sw-sub{margin-left:22px}label.sw-sub:not(.chk){display:grid;gap:4px}.sw-r{display:grid;gap:4px}.sw-rr{display:flex;align-items:center;gap:8px}.sw-rr input{flex:1}.sw-body{display:grid;gap:14px}@media (max-width:560px){.sw-cols{grid-template-columns:1fr}}.tp-selinfo{margin:0;font-size:12.5px;font-weight:600;color:var(--ink)}.tp-selinfo.bad{color:var(--danger)}.tp-selinfo small{font-weight:400;color:var(--muted)}
+.zhrow{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:end;margin:6px 0}.zhrow svg{width:58px;height:34px}.zhrow .zs{fill:#8a8f96;fill-opacity:.35;stroke:#9aa0a6;stroke-width:1}.zhrow .zr{fill:rgb(196 160 112 / .55);stroke:var(--accent);stroke-width:1.5;stroke-linejoin:round}.zhrow .za{stroke:var(--accent);stroke-width:1.5;fill:none}.impbtn{display:grid;justify-items:center;gap:3px;padding:12px 8px;border:1px solid var(--line);border-radius:8px;background:var(--raised);text-align:center;cursor:pointer;color:var(--ink)}.impbtn:hover{border-color:var(--accent)}.impbtn svg{width:28px;height:28px;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.impbtn small{color:var(--muted);font-size:11.5px;line-height:1.3}.sw-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}.sw-col{display:grid;gap:8px;align-content:start}.sw-h{margin:0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.sw-h label.chk{text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink)}.sw-sub{margin-left:22px}label.sw-sub:not(.chk){display:grid;gap:4px}.sw-r{display:grid;gap:4px}.sw-rr{display:flex;align-items:center;gap:8px}.sw-rr input{flex:1}.sw-body{display:grid;gap:14px}@media (max-width:560px){.sw-cols{grid-template-columns:1fr}}.tp-selinfo{margin:0;font-size:12.5px;font-weight:600;color:var(--ink)}.tp-selinfo.bad{color:var(--danger)}.tp-selinfo small{font-weight:400;color:var(--muted)}
 .fwin-wide{width:560px}.fwin-ico svg{width:18px;height:18px;display:block;fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.fwin-body.fb-card{max-width:none}.fwin-body .row{justify-content:flex-end}.fwin-head{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 10px;border-bottom:1px solid var(--line);cursor:move;user-select:none;touch-action:none}
 .fwin-head b{flex:1;font:600 14px var(--f-ui)}.fwin-head .grip{width:10px;height:16px;background:radial-gradient(circle,var(--muted) 1.2px,transparent 1.4px) 0 0/5px 5px;opacity:.7}
 .fwin-x{width:30px;height:30px}.fwin-x svg{width:16px;height:16px}.fwin-body{overflow:auto;padding:10px 14px 14px;display:grid;gap:10px;min-height:0;grid-auto-rows:max-content;align-content:start}
@@ -617,7 +617,7 @@ label.inl input{width:70px}
               <p class="hint">Seuil : ce qui est plus sombre devient la forme. Lissage : arrondit les contours et retire les petits détails. Les contours sont créés groupés, dans le calque actif, à l'emplacement de l'image.</p>
             </div>
           </div>
-          <p class="hint">Image de référence pour dessiner par-dessus : elle n'est pas usinée. Sur le plan, glissez l'image pour la déplacer, tirez un coin pour la redimensionner (Maj : déformer), le rond pour la pivoter (Maj : par 15°). Vous pouvez aussi déposer une image directement sur le plan.</p>
+          <p class="hint">Image de référence pour dessiner par-dessus : elle n'est pas usinée (sauf si vous en faites un relief en niveaux de gris). Sur le plan : un clic la sélectionne et vous pouvez la glisser ; un deuxième clic affiche les poignées, comme pour un objet : carrés pour redimensionner (proportions gardées si la case est cochée, Maj pour déformer), ronds pour tourner (Maj : par 15°).</p>
         </section>
         <section class="dsec" data-sec="sel" hidden><h3 class="dsec-h">Sélection <span class="chip" id="selCount">0</span></h3>
           <div class="orow">
@@ -782,9 +782,9 @@ label.inl input{width:70px}
                 <label>Hauteur<input data-u="len" type="number" id="rlH" step="0.1" min="0.1"></label>
               </div>
             </div>
-            <div class="zhrow"><svg viewBox="0 0 58 34" aria-hidden="true"><path class="zr" d="M14 30c3-14 10-20 15-20s12 6 15 20z"/><path class="za" d="M6 10v20M3 10h6M3 30h6"/></svg><label>Épaisseur du relief (mm)<input data-u="len" type="number" id="rlZ" step="0.1" min="0"></label></div>
-            <div class="zhrow"><svg viewBox="0 0 58 34" aria-hidden="true"><rect class="zs" x="10" y="3" width="44" height="29"/><path class="zr" d="M18 31c3-12 8-17 14-17s11 5 14 17z"/><path class="za" d="M6 3v11M3 3h6M3 14h6"/></svg><label>Haut du brut → haut du relief (mm)<input data-u="len" type="number" id="rlTop" step="0.1"></label></div>
-            <div class="zhrow"><svg viewBox="0 0 58 34" aria-hidden="true"><rect class="zs" x="10" y="3" width="44" height="29"/><path class="zr" d="M18 24c3-10 8-14 14-14s11 4 14 14z"/><path class="za" d="M6 24v8M3 24h6M3 32h6"/></svg><label>Bas du brut → bas du relief (mm)<input data-u="len" type="number" id="rlBot" step="0.1"></label></div>
+            <div class="zhrow"><svg viewBox="0 0 58 34" aria-hidden="true"><path class="zr" d="M12 31c4-12 7-21 12-21s6 8 10 8 5-5 8-7 6 6 9 20z"/><path class="za" d="M5 10v21M2 10h6M2 31h6"/></svg><label>Épaisseur du relief (mm)<input data-u="len" type="number" id="rlZ" step="0.1" min="0"></label></div>
+            <div class="zhrow"><svg viewBox="0 0 58 34" aria-hidden="true"><rect class="zs" x="10" y="3" width="44" height="29"/><path class="zr" d="M14 32c3-9 6-17 10-17s5 6 8 6 4-4 6-5 5 5 8 16z"/><path class="za" d="M5 3v12M2 3h6M2 15h6"/></svg><label>Haut du brut → haut du relief (mm)<input data-u="len" type="number" id="rlTop" step="0.1"></label></div>
+            <div class="zhrow"><svg viewBox="0 0 58 34" aria-hidden="true"><rect class="zs" x="10" y="3" width="44" height="29"/><path class="zr" d="M14 25c3-7 6-13 10-13s5 5 8 5 4-3 6-4 5 4 8 12z"/><path class="za" d="M5 25v7M2 25h6M2 32h6"/></svg><label>Bas du brut → bas du relief (mm)<input data-u="len" type="number" id="rlBot" step="0.1"></label></div>
             <div class="g2">
               <label>Angle (°)<input type="number" id="rlR" step="1"></label>
               <label>Combinaison<select id="rlMode"><option value="add">Ajouter</option><option value="sub">Soustraire</option><option value="max">Garder le plus haut</option><option value="min">Garder le plus bas</option></select></label>
@@ -846,7 +846,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.93</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.94</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1231,6 +1231,7 @@ Object.assign(I18N_EN, {"Vues": "Views", "Vue 2D : le dessin": "2D view: the dra
 Object.assign(I18N_EN, {"Créer un relief": "Create a relief", "Lié à l’image du dessin (suit sa position, sa taille et son angle)": "Linked to the drawing image (follows its position, size and angle)", "Point de référence": "Reference point", "Épaisseur du relief (mm)": "Relief height (mm)", "Haut du brut → haut du relief (mm)": "Stock top → relief top (mm)", "Bas du brut → bas du relief (mm)": "Stock bottom → relief bottom (mm)", "Afficher les modèles STL sur le plan": "Show STL models on the workspace", "Importer un modèle 3D (STL binaire ou texte) : il est vu de dessus et projeté en hauteurs, à l’échelle du fichier.": "Import a 3D model (binary or text STL): it is seen from above and projected into heights, at the file's scale.", "Sélectionnez sur le plan une image insérée dans l’onglet Dessin : le clair est en haut. Le relief reste lié à l’image (position, taille, angle).": "Select on the workspace an image inserted in the Drawing tab: light is high. The relief stays linked to the image (position, size, angle).", "Sélectionnez une ou plusieurs formes fermées : la forme se bombe depuis le bord (les formes intérieures font des trous).": "Select one or more closed shapes: the shape domes up from the edge (inner shapes make holes).", "Sélectionnez un ou plusieurs vecteurs : une moulure suit le tracé.": "Select one or more vectors: a moulding follows the path.", "Sélectionnez deux rails et un vecteur de profil (ouverts) : la section passe d’un rail à l’autre.": "Select two rails and a profile vector (open): the section spans from one rail to the other.", "Une partie du relief dépasse le dessus du brut : elle n’est pas usinée.": "Part of the relief rises above the stock top: it is not machined.", "Aucun relief : importez un STL ou créez-en un à partir du dessin.": "No relief: import an STL or create one from the drawing.", "Relief créé à partir de l’image : il la suit quand vous la déplacez ou la redimensionnez. Réglez son épaisseur Z.": "Relief created from the image: it follows it when you move or resize it. Set its Z height."});
 Object.assign(I18N_EN, {"Transformer le relief sélectionné": "Transform the selected relief", "Déplacer : tirez les flèches X, Y, Z (Maj : au millimètre)": "Move: drag the X, Y, Z arrows (Shift: whole millimetres)", "Déplacer": "Move", "Tourner : tirez les cercles (Maj : par 15°)": "Rotate: drag the rings (Shift: 15° steps)", "Tourner": "Rotate", "Redimensionner : tirez les poignées (proportions gardées si la case est cochée ; Maj : au millimètre)": "Resize: drag the handles (proportions kept if the box is ticked; Shift: whole millimetres)", "Redimensionner": "Resize", "Poser sur le fond du brut": "Drop onto the stock bottom", "Aligner le haut du relief sur le dessus du brut": "Align the relief top with the stock top", "Sélectionnez un relief (clic dans la vue 3D, sur le plan ou dans la liste).": "Select a relief (click in the 3D view, on the workspace or in the list).", "(centre)": "(center)", "Taille": "Size", "Haut brut → haut relief": "Stock top → relief top", "Bas brut → bas relief": "Stock bottom → relief bottom"});
 Object.assign(I18N_EN, {"Recentrer sur le relief sélectionné ou sur tout le relief (double-clic dans la vue : tout le brut)": "Recenter on the selected relief or the whole relief (double-click in the view: whole stock)"});
+Object.assign(I18N_EN, {"Image de référence pour dessiner par-dessus : elle n'est pas usinée (sauf si vous en faites un relief en niveaux de gris). Sur le plan : un clic la sélectionne et vous pouvez la glisser ; un deuxième clic affiche les poignées, comme pour un objet : carrés pour redimensionner (proportions gardées si la case est cochée, Maj pour déformer), ronds pour tourner (Maj : par 15°).": "Reference image to draw over: it is not machined (unless you turn it into a grayscale relief). On the workspace: one click selects it and you can drag it; a second click shows the handles, as for an object: squares to resize (proportions kept if the box is ticked, Shift to distort), circles to rotate (Shift: 15° steps)."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -3304,7 +3305,7 @@ cv.addEventListener('pointerdown', e => {
       else drag = { mode: 'sscale', h: xh, orig, piv0, moved: false };
       draw(); return;
     }
-    if (ih) { const im = ih.im; drag = ih.kind === 'iedge' ? { mode: 'iedge', im, sgn: ih.sgn, anchor: ih.anchor, w0: im.w, h0: im.h, zH0: +im.zH || 0, rel: true, p0: p } : ih.kind === 'irot' ? { mode: 'irot', im, rot0: im.rot || 0, a0: Math.atan2(p[1] - im.y, p[0] - im.x), rel: !!ih.rel } : { mode: 'iscale', im, sgn: ih.sgn, anchor: ih.anchor, w0: im.w, h0: im.h, zH0: +im.zH || 0, rel: !!ih.rel }; draw(); return; }
+    if (ih) { const im = ih.im; drag = ih.kind === 'iedge' ? { mode: 'iedge', im, sgn: ih.sgn, anchor: ih.anchor, w0: im.w, h0: im.h, zH0: +im.zH || 0, rel: !!ih.rel, p0: p } : ih.kind === 'irot' ? { mode: 'irot', im, rot0: im.rot || 0, a0: Math.atan2(p[1] - im.y, p[0] - im.x), rel: !!ih.rel } : { mode: 'iscale', im, sgn: ih.sgn, anchor: ih.anchor, w0: im.w, h0: im.h, zH0: +im.zH || 0, rel: !!ih.rel }; draw(); return; }
     const h = hitShape(p) || (!e.shiftKey ? hitSelInside(p) : null);
     if (h) {
       S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (S.relSel) { S.relSel = null; relPanel(); } const ids = groupIds(h), wasSel = S.sel.has(h.id) && !e.shiftKey;
@@ -3315,8 +3316,8 @@ cv.addEventListener('pointerdown', e => {
       const hi = !dm && !gd ? imgHit(p) : null, hr = !dm && !gd && !hi ? relHit(p) : null;
       if (dm) { S.selDim = dm.id; S.sel.clear(); renderSel(); }
       else if (gd) { drag = { mode: 'guide', axis: gd.axis, i: gd.i }; }
-      else if (hi) { selectImg(hi.id); drag = { mode: 'imove', im: hi, off: [hi.x - p[0], hi.y - p[1]] }; }
-      else if (hr) { const was = S.relSel === hr.id; if (!was) { RXF = false; selectRel(hr.id); if (curTab !== 'relief') setTab('relief'); } drag = { mode: 'imove', im: hr, off: [hr.x - p[0], hr.y - p[1]], rel: true, toggleXf: was }; }
+      else if (hi) { const was = S.imgSel === hi.id; if (!was) { IXF = false; selectImg(hi.id); } drag = { mode: 'imove', im: hi, off: [hi.x - p[0], hi.y - p[1]], toggleXf: was, X0: X, Y0: Y }; }
+      else if (hr) { const was = S.relSel === hr.id; if (!was) { RXF = false; selectRel(hr.id); if (curTab !== 'relief') setTab('relief'); } drag = { mode: 'imove', im: hr, off: [hr.x - p[0], hr.y - p[1]], rel: true, toggleXf: was, X0: X, Y0: Y }; }
       else { S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (S.relSel) { S.relSel = null; relPanel(); } if (!e.shiftKey) S.sel.clear(); renderSel(); drag = { mode: 'band', sx0: X, sy0: Y, sx1: X, sy1: Y }; }
     }
   } else if (t === 'nodes') nodesDown(p, e, X, Y);
@@ -3393,7 +3394,7 @@ cv.addEventListener('pointermove', e => {
   if (D) {
     if (D.mode === 'pan') { S.view.ox = D.ox + X - D.X; S.view.oy = D.oy + Y - D.Y; draw(); return; }
     if (D.mode === 'guide') { const q = snap(p); S.guides[D.axis][D.i] = D.axis === 'x' ? q[0] : q[1]; setCoords(q, 'repère'); draw(); return; }
-    if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot' || D.mode === 'iedge') { imgDragMove(D, p, e); return; }
+    if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot' || D.mode === 'iedge') { if (D.mode === 'imove' && !D.moved && D.X0 !== undefined && Math.hypot(X - D.X0, Y - D.Y0) < 4) return; imgDragMove(D, p, e); return; }
     if (D.mode === 'tabdrag') { const pr = projectOnLoops(D.tp.loops, p); if (pr) { D.tp.p.tabPts[D.idx] = [pr.x, pr.y]; if (D.tp.tabs && D.tp.tabs[D.idx]) D.tp.tabs[D.idx] = { x: pr.x, y: pr.y, a: pr.a }; if (hyp(p, D.start) * S.view.s > 3) D.moved = true; draw(); } return; }
     if (D.mode === 'pivot') { const q = snap(p); PIV = { key: selKey(), p: q }; D.moved = true; const o = outXY(q[0], q[1]); setCoords(q, tr('Pivot') + ' ' + fr(o[0]) + ' / ' + fr(o[1])); rotSync(); draw(); return; }
     if (D.mode === 'srot') { let ang = (Math.atan2(p[1] - D.c[1], p[0] - D.c[0]) - D.a0) * 180 / Math.PI; ang = normDeg(ang); if (e.shiftKey) ang = Math.round(ang / 15) * 15; const f = rotPts(D.c, ang); for (const [s, o] of D.orig) { s.nodes = o.map(cloneNode); transformShape(s, f); } D.ang = ang; D.moved = D.moved || Math.abs(ang) > 1e-9; setCoords(p, tr('Rotation') + ' ' + fDeg(ang)); draw(); return; }
@@ -3440,7 +3441,7 @@ function endPointer(e) {
   else if (D.mode === 'srot') { cv.style.cursor = 'grab'; if (D.moved) { for (const [s, , r0] of D.orig) s.rot = normDeg(r0 + D.ang); commit(); renderSel(); } }
   else if (D.mode === 'sscale') { if (D.moved) { commit(); renderSel(); } }
   else if (D.mode === 'tabdrag') { if (!D.moved) D.tp.p.tabPts.splice(D.idx, 1); tabChanged(D.tp); }
-  else if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot' || D.mode === 'iedge') { if (D.rel) { if (D.moved) { relBump(); relDirty = true; commit(false); draw(); } else if (D.toggleXf) { RXF = !RXF; draw(); } relPanel(); } else { if (D.moved) commit(false); renderImgPanel(); } }
+  else if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot' || D.mode === 'iedge') { if (D.rel) { if (D.moved) { relBump(); relDirty = true; commit(false); draw(); } else if (D.toggleXf) { RXF = !RXF; draw(); } relPanel(); } else { if (D.moved) commit(false); else if (D.toggleXf) { IXF = !IXF; draw(); } renderImgPanel(); } }
   else if (D.mode === 'node' || D.mode === 'handle') { if (D.moved) commit(); }
   else if (D.mode === 'nband') {
     if (Math.abs(D.sx1 - D.sx0) + Math.abs(D.sy1 - D.sy0) <= 4) { if (!D.add) { S.ne = null; S.sel.clear(); renderSel(); } }
@@ -4751,7 +4752,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.93', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.94', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5796,13 +5797,13 @@ function imgFrame(im) { const r = (im.rot || 0) * Math.PI / 180, u = [Math.cos(r
 function imgLocal(im, p) { const f = imgFrame(im), d = [p[0] - im.x, p[1] - im.y]; return [d[0] * f.u[0] + d[1] * f.u[1], d[0] * f.v[0] + d[1] * f.v[1]]; }
 function imgHit(p) { for (let k = S.images.length - 1; k >= 0; k--) { const im = S.images[k]; if (!im.visible || im.locked) continue; const l = imgLocal(im, p); if (Math.abs(l[0]) <= im.w / 2 && Math.abs(l[1]) <= im.h / 2) return im; } return null; }
 function imgRotHandle(im) { const f = imgFrame(im), top = f.P(0, im.h / 2), off = 26 / S.view.s; return { base: top, h: [top[0] + f.v[0] * off, top[1] + f.v[1] * off] }; }
+var IXF = false; // 2e clic sur l'image sélectionnée : poignées façon objets
 function imgHandleAt(X, Y) {
-  const im = S.imgSel && imgById(S.imgSel); if (!im || im.locked || !im.visible) return null;
-  const near = q => Math.hypot(sx(q[0]) - X, sy(q[1]) - Y) < 9, f = imgFrame(im), rh = imgRotHandle(im);
-  if (near(rh.h)) return { kind: 'irot', im };
-  const sg = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
-  for (let k = 0; k < 4; k++) if (near(f.corners[k])) return { kind: 'iscale', im, sgn: sg[k], anchor: f.corners[(k + 2) % 4] };
-  return null;
+  const im = S.imgSel && imgById(S.imgSel); if (!im || im.locked || !im.visible || !IXF) return null;
+  let best = null, bd = 8; for (const h of relXfHandles(im)) { const d = Math.hypot(h.X - X, h.Y - Y); if (d < bd) { bd = d; best = h; } } if (!best) return null;
+  if (best.k === 'r') return { kind: 'irot', im };
+  const opp = [im.x - (best.w[0] - im.x), im.y - (best.w[1] - im.y)];
+  return best.cx && best.cy ? { kind: 'iscale', im, sgn: [best.cx, best.cy], anchor: opp } : { kind: 'iedge', im, sgn: [best.cx, best.cy], anchor: opp };
 }
 function drawImages(C) {
   for (const im of S.images) {
@@ -5838,13 +5839,8 @@ function drawRelHandles(C) {
 function drawImgHandles(C) {
   const im = S.imgSel && imgById(S.imgSel); if (!im || !im.visible || S.ui.tool !== 'select') return;
   const f = imgFrame(im), cs = f.corners.map(q => [sx(q[0]), sy(q[1])]);
-  ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1.5; ctx.setLineDash(im.locked ? [4, 4] : []); ctx.beginPath(); cs.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.stroke(); ctx.setLineDash([]);
-  if (!im.locked) {
-    const rh = imgRotHandle(im); ctx.beginPath(); ctx.moveTo(sx(rh.base[0]), sy(rh.base[1])); ctx.lineTo(sx(rh.h[0]), sy(rh.h[1])); ctx.stroke();
-    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(sx(rh.h[0]), sy(rh.h[1]), 6, 0, 7); ctx.fill(); ctx.stroke();
-    for (const q of cs) { ctx.fillStyle = '#fff'; ctx.fillRect(q[0] - 5, q[1] - 5, 10, 10); ctx.strokeRect(q[0] - 5, q[1] - 5, 10, 10); }
-    ctx.fillStyle = C.acc; ctx.beginPath(); ctx.arc(sx(im.x), sy(im.y), 3, 0, 7); ctx.fill();
-  }
+  ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1; ctx.setLineDash(im.locked ? [2, 3] : [4, 3]); ctx.beginPath(); cs.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.stroke(); ctx.setLineDash([]);
+  if (IXF && !im.locked) for (const h of relXfHandles(im)) { ctx.beginPath(); if (h.k === 's') ctx.rect(h.X - 4.5, h.Y - 4.5, 9, 9); else ctx.arc(h.X, h.Y, 5, 0, 7); ctx.fillStyle = h.k === 's' ? C.panel : C.acc; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = C.acc; ctx.stroke(); }
   ctx.restore();
 }
 function imgCursor(X, Y) { const h = relHandleAt(X, Y) || imgHandleAt(X, Y); if (h) return h.kind === 'irot' ? 'grab' : h.kind === 'iedge' ? 'move' : 'nwse-resize'; return null; }
@@ -5860,7 +5856,8 @@ function imgDragMove(D, p, e) {
     setCoords(p, fr(im.w) + ' × ' + fr(im.h) + ' mm' + (e.shiftKey ? ' (libre)' : ''));
   } else if (D.mode === 'iedge') { // poignée de côté : une seule dimension, côté opposé fixe
     const r = (im.rot || 0) * Math.PI / 180, u = [Math.cos(r), Math.sin(r)], v = [-Math.sin(r), Math.cos(r)], d = [p[0] - D.anchor[0], p[1] - D.anchor[1]], ax = D.sgn[0] ? u : v, sg = D.sgn[0] || D.sgn[1];
-    const ds = (d[0] * ax[0] + d[1] * ax[1]) * sg; if (D.off === undefined) { const d0 = [D.p0[0] - D.anchor[0], D.p0[1] - D.anchor[1]]; D.off = (d0[0] * ax[0] + d0[1] * ax[1]) * sg - (D.sgn[0] ? D.w0 : D.h0); } let L = Math.max(1, ds - D.off); if (e.shiftKey) L = Math.max(1, Math.round(L)); if (D.sgn[0]) im.w = L; else im.h = L;
+    const ds = (d[0] * ax[0] + d[1] * ax[1]) * sg; if (D.off === undefined) { const d0 = [D.p0[0] - D.anchor[0], D.p0[1] - D.anchor[1]]; D.off = (d0[0] * ax[0] + d0[1] * ax[1]) * sg - (D.sgn[0] ? D.w0 : D.h0); } let L = Math.max(1, ds - D.off); if (e.shiftKey) L = Math.max(1, Math.round(L));
+    const lk = D.rel ? (!$('#rlLock') || $('#rlLock').checked) : (!$('#imLockR') || $('#imLockR').checked); if (lk) { const k = L / (D.sgn[0] ? D.w0 : D.h0); im.w = D.w0 * k; im.h = D.h0 * k; if (D.rel) im.zH = D.zH0 * k; } else if (D.sgn[0]) im.w = L; else im.h = L;
     im.x = D.anchor[0] + ax[0] * sg * L / 2; im.y = D.anchor[1] + ax[1] * sg * L / 2; setCoords(p, fr(im.w) + ' × ' + fr(im.h) + ' mm');
   } else if (D.mode === 'irot') {
     let a = D.rot0 + (Math.atan2(p[1] - im.y, p[0] - im.x) - D.a0) * 180 / Math.PI; if (e.shiftKey) a = Math.round(a / 15) * 15;
@@ -5868,7 +5865,7 @@ function imgDragMove(D, p, e) {
   }
   D.moved = true; if (D.rel) { const now = performance.now(); if (!D.tR || now - D.tR > 70) { relDirty = true; D.tR = now; } relPanel(true); } else renderImgPanel(true); draw();
 }
-function selectImg(id) { S.imgSel = id; if (id) { S.sel.clear(); S.selDim = null; S.relSel = null; renderSel(); relPanel(); } renderImgPanel(); dRefresh(); draw(); }
+function selectImg(id) { if (S.imgSel !== id) IXF = false; S.imgSel = id; if (id) { S.sel.clear(); S.selDim = null; S.relSel = null; renderSel(); relPanel(); } renderImgPanel(); dRefresh(); draw(); }
 async function insertImageFile(file, at) {
   if (!file || !/^image\//.test(file.type)) { toast('Choisissez une image (JPG, PNG, WebP, GIF, BMP).'); return; }
   const url = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
@@ -6238,7 +6235,7 @@ function rvReq() { if (!RV.raf && VIEWS.d3) RV.raf = requestAnimationFrame(rvRen
 function rvToolsSync() { for (const [k, t] of [['rvMove', 'move'], ['rvRotate', 'rotate'], ['rvScale', 'scale']]) { const b = document.querySelector('[data-act="' + k + '"]'); if (b) b.setAttribute('aria-pressed', RV.tool === t); } }
 function rvProj(p) { const m = RV.mvp, c = $('#rvc'); if (!m) return [0, 0, -1]; const x = m[0] * p[0] + m[4] * p[1] + m[8] * p[2] + m[12], y = m[1] * p[0] + m[5] * p[1] + m[9] * p[2] + m[13], w = m[3] * p[0] + m[7] * p[1] + m[11] * p[2] + m[15]; return [(x / w * 0.5 + 0.5) * c.clientWidth, (1 - (y / w * 0.5 + 0.5)) * c.clientHeight, w]; }
 function rvEye() { const cp = Math.cos(RV.pitch); return [RV.tgt[0] + RV.dist * cp * Math.cos(RV.yaw), RV.tgt[1] + RV.dist * cp * Math.sin(RV.yaw), RV.tgt[2] + RV.dist * Math.sin(RV.pitch)]; }
-function rvRay(mx, my) { const c = $('#rvc'), e = rvEye(), f = v3n(v3sub(RV.tgt, e)), rt = v3n(v3cross(f, [0, 0, 1])), up = v3cross(rt, f), t = Math.tan(0.35), a = c.clientWidth / c.clientHeight, u = (mx / c.clientWidth * 2 - 1) * t * a, v = (1 - my / c.clientHeight * 2) * t; return { o: e, d: v3n([f[0] + rt[0] * u + up[0] * v, f[1] + rt[1] * u + up[1] * v, f[2] + rt[2] * u + up[2] * v]) }; }
+function rvRay(mx, my) { const c = $('#rvc'), e = rvEye(), f = v3n(v3sub(RV.tgt, e)), rt = v3n(v3cross(f, [0, 0, 1])), up = v3cross(rt, f), hh = RV.dist * Math.tan(0.35), a = c.clientWidth / c.clientHeight, u = (mx / c.clientWidth * 2 - 1) * hh * a, v = (1 - my / c.clientHeight * 2) * hh; return { o: [e[0] + rt[0] * u + up[0] * v - f[0] * RV.dist * 10, e[1] + rt[1] * u + up[1] * v - f[1] * RV.dist * 10, e[2] + rt[2] * u + up[2] * v - f[2] * RV.dist * 10], d: f }; }
 const rvZ = it => { const top = -(+it.top || 0); return { top, bot: top - (+it.zH || 0), mid: top - (+it.zH || 0) / 2 }; };
 // élément sous le curseur : intersection du rayon avec la boîte de chaque élément (dans son repère tourné)
 function rvPick(mx, my) {
@@ -6261,13 +6258,14 @@ function rvGizmo() {
 }
 function rvGizmoHit(mx, my) {
   const G = rvGizmo(); if (!G) return null; const dseg = (p, a, b) => { const dx = b[0] - a[0], dy = b[1] - a[1], L2 = dx * dx + dy * dy || 1e-9, t = Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / L2)); return Math.hypot(p[0] - a[0] - dx * t, p[1] - a[1] - dy * t); };
-  let best = null, bd = 9; for (const g of G.items) { let d = Infinity; if (g.type === 'axis') d = dseg([mx, my], g.a, g.b); else if (g.type === 'ring') for (let i = 0; i + 1 < g.pts.length; i++) d = Math.min(d, dseg([mx, my], g.pts[i], g.pts[i + 1])); else d = Math.hypot(mx - g.p[0], my - g.p[1]) - 2; if (d < bd) { bd = d; best = g; } }
+  let best = null, bd = 9; for (const g of G.items) { let d = Infinity; if (g.type === 'axis') d = dseg([mx, my], g.a, g.b); else if (g.type === 'ring') for (let i = 0; i + 1 < g.pts.length; i++) d = Math.min(d, dseg([mx, my], g.pts[i], g.pts[i + 1])); else { const q = g.k === 'hz' ? g.zAxis : g.p; d = Math.hypot(mx - q[0], my - q[1]) - 2; } if (d < bd) { bd = d; best = g; } }
   return best ? { ...best, G } : null;
 }
+function snapPx(G, px) { const a = rvProj(G.c), b = rvProj([G.c[0] + G.L, G.c[1], G.c[2]]), l = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1; return Math.max(0.5, px * G.L / l); } // distance d'accroche en mm pour px pixels
 function rvSnapIt(it) { return it ? { x: it.x, y: it.y, w: it.w, h: it.h, rot: it.rot || 0, top: +it.top || 0, zH: +it.zH || 0, rx: +it.rx || 0, ry: +it.ry || 0 } : null; }
 function rvPlane(mx, my, z) { const R = rvRay(mx, my); if (Math.abs(R.d[2]) < 1e-9) return null; const t = (z - R.o[2]) / R.d[2]; return t > 0 ? [R.o[0] + R.d[0] * t, R.o[1] + R.d[1] * t] : null; }
 function rvGizmoDrag(D, mx, my, shift) {
-  const it = D.it, g = D.gz, s0 = D.st; if (!it) return; const st = S.stock, rnd = v => shift ? Math.round(v) : v, snapT = 0.8;
+  const it = D.it, g = D.gz, s0 = D.st; if (!it) return; const st = S.stock, rnd = v => shift ? Math.round(v) : v, snapT = snapPx(g.G, 12);
   if (g.type === 'axis') { const a = g.a, b = g.b, ax = [b[0] - a[0], b[1] - a[1]], l2 = ax[0] * ax[0] + ax[1] * ax[1] || 1, t = ((mx - D.mx) * ax[0] + (my - D.my) * ax[1]) / l2 * g.G.L;
     if (g.k === 'z') { let top = s0.top - t; if (shift) top = Math.round(top); if (Math.abs(top) < snapT) top = 0; if (Math.abs(st.t - top - it.zH) < snapT) top = st.t - it.zH; it.top = top; }
     else { const k = g.k === 'x' ? 0 : 1; let v = (k ? s0.y : s0.x) + t; if (shift) v = Math.round(v); if (k) it.y = v; else it.x = v; const b2 = relBox(it); // accroche aux bords du brut
@@ -6275,7 +6273,7 @@ function rvGizmoDrag(D, mx, my, shift) {
   else if (g.type === 'ring') { const c = rvProj(g.G.c), a0 = Math.atan2(D.my - c[1], D.mx - c[0]), a1 = Math.atan2(my - c[1], mx - c[0]), axis = [0, 0, 0]; axis[g.ax] = 1; const e = v3sub(rvEye(), g.G.c), facing = v3dot(axis, e) > 0; let dA = (a1 - a0) * 180 / Math.PI * (facing ? -1 : 1);
     const key = g.k === 'rz' ? 'rot' : g.k; let v = s0[key] + dA; if (shift) v = Math.round(v / 15) * 15; v = ((v % 360) + 540) % 360 - 180; it[key] = v;
     if (g.k !== 'rz') { const now = performance.now(); if (!D.tR || now - D.tR > 150) { D.tR = now; rvReraster(it, false); } } }
-  else if (g.k === 'hz') { const ax = [g.zAxis[0] - g.p[0], g.zAxis[1] - g.p[1]], l2 = ax[0] * ax[0] + ax[1] * ax[1] || 1, t = ((mx - D.mx) * ax[0] + (my - D.my) * ax[1]) / l2 * 10; let zH = Math.max(0.1, s0.zH + t); if (shift) zH = Math.max(1, Math.round(zH)); it.zH = zH; }
+  else if (g.k === 'hz') { const ax = [g.zAxis[0] - g.p[0], g.zAxis[1] - g.p[1]], l2 = ax[0] * ax[0] + ax[1] * ax[1] || 1, t = ((mx - D.mx) * ax[0] + (my - D.my) * ax[1]) / l2 * 10, bot = s0.top + s0.zH; let top = s0.top - t; if (shift) top = Math.round(top); if (Math.abs(top) < snapPx(g.G, 10)) top = 0; top = Math.min(top, bot - 0.1); it.top = top; it.zH = bot - top; }
   else { const q = rvPlane(mx, my, rvZ(it).top); if (!q) return; const a = (s0.rot || 0) * Math.PI / 180, cs = Math.cos(a), sn = Math.sin(a), sg = { c0: [-1, -1], c1: [1, -1], c2: [1, 1], c3: [-1, 1], e0: [0, -1], e1: [1, 0], e2: [0, 1], e3: [-1, 0] }[g.k];
     const anc = [s0.x - (sg[0] * s0.w / 2) * cs + (sg[1] * s0.h / 2) * sn, s0.y - (sg[0] * s0.w / 2) * sn - (sg[1] * s0.h / 2) * cs], d = [q[0] - anc[0], q[1] - anc[1]], lu = d[0] * cs + d[1] * sn, lv = -d[0] * sn + d[1] * cs;
     let w = sg[0] ? Math.max(0.5, lu * sg[0]) : s0.w, h = sg[1] ? Math.max(0.5, lv * sg[1]) : s0.h; const lock = !$('#rlLock') || $('#rlLock').checked;
@@ -6307,7 +6305,8 @@ function rvRender() {
   const dpr = window.devicePixelRatio || 1, Wd = Math.max(1, Math.round(c.clientWidth * dpr)), Hd = Math.max(1, Math.round(c.clientHeight * dpr)); if (c.width !== Wd || c.height !== Hd) { c.width = Wd; c.height = Hd; }
   gl.viewport(0, 0, Wd, Hd); const bg = hex3(tok('--canvas')); gl.clearColor(bg[0], bg[1], bg[2], 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   const cp = Math.cos(RV.pitch), e = [RV.tgt[0] + RV.dist * cp * Math.cos(RV.yaw), RV.tgt[1] + RV.dist * cp * Math.sin(RV.yaw), RV.tgt[2] + RV.dist * Math.sin(RV.pitch)];
-  const mvp = m4mul(m4persp(0.7, Wd / Hd, RV.dist * 0.01, RV.dist * 20), m4look(e, RV.tgt, [0, 0, 1])); RV.mvp = mvp;
+  const hh = RV.dist * Math.tan(0.35), hw = hh * Wd / Hd, fa = RV.dist * 20, ortho = [1 / hw, 0, 0, 0, 0, 1 / hh, 0, 0, 0, 0, -2 / (2 * fa), 0, 0, 0, 0, 1]; // projection orthogonale (pas d'effet de perspective)
+  const mvp = m4mul(ortho, m4look(e, RV.tgt, [0, 0, 1])); RV.mvp = mvp;
   if (RV.mesh) { gl.useProgram(RV.prog); gl.uniformMatrix4fv(gl.getUniformLocation(RV.prog, 'uMVP'), false, mvp); gl.uniform3fv(gl.getUniformLocation(RV.prog, 'uL'), v3n([0.35, -0.55, 0.85])); const sc = hex3(tok('--stock')); gl.uniform3fv(gl.getUniformLocation(RV.prog, 'uC'), [sc[0] * 0.95, sc[1] * 0.9, sc[2] * 0.82]); gl.bindVertexArray(RV.mesh.vao); gl.drawElements(gl.TRIANGLES, RV.mesh.n, gl.UNSIGNED_INT, 0); gl.bindVertexArray(null); }
   gl.useProgram(RV.lprog); gl.uniformMatrix4fv(gl.getUniformLocation(RV.lprog, 'uMVP'), false, mvp);
   for (const [k, on] of [['lStock', RV.showStock], ['lAxes', RV.showAxes], ['lDraw', RV.showDraw]]) if (on && RV[k]) { gl.bindVertexArray(RV[k].vao); gl.drawArrays(gl.LINES, 0, RV[k].n); }
