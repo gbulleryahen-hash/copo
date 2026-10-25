@@ -186,7 +186,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.91</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.92</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -433,6 +433,14 @@ footer p{max-width:none}
     <h2 id="fr-vues">Vues 2D et 3D</h2>
     <p>Les boutons <span class="ui">2D</span> et <span class="ui">3D</span> en haut de l’écran fonctionnent comme deux interrupteurs : 2D seule (le dessin occupe toute la zone), 3D seule (le relief), ou les deux à la fois. Quand les deux vues sont affichées, les boutons voisins les placent côte à côte ou l’une au-dessus de l’autre. L’onglet Relief affiche la vue 3D automatiquement.</p>
     <p>La vue 3D montre le relief dans le brut (en filaire), avec le dessin et le repère. Glisser : tourner ; clic droit ou Maj + glisser : déplacer ; molette : zoom ; double-clic : tout le brut. À droite : le cube d’orientation, puis les boutons pour afficher ou masquer le dessin, le repère et le brut, et pour recentrer sur le relief.</p>
+    <p><strong>Transformer un relief en 3D.</strong> Cliquez un élément dans la vue 3D pour le sélectionner (coins de sa boîte en surbrillance ; la sélection est la même dans la vue 2D et dans la liste). La barre du bas propose trois outils, avec les cotes affichées en haut à gauche :</p>
+    <ul>
+      <li><strong>Déplacer</strong> : tirez les flèches X, Y ou Z (Maj : au millimètre). En Z, le haut du relief s’accroche au dessus du brut et le bas au fond ; en X et Y, les bords s’accrochent aux bords du brut.</li>
+      <li><strong>Tourner</strong> : tirez le cercle bleu (autour de Z) ; pour un STL, les cercles rouge et vert le font aussi pivoter autour de X et de Y (Maj : par 15°).</li>
+      <li><strong>Redimensionner</strong> : tirez les poignées des coins et des côtés (proportions gardées si la case est cochée), ou la poignée bleue au-dessus pour l’épaisseur (Maj : au millimètre).</li>
+      <li>Les deux derniers boutons <strong>posent le relief sur le fond</strong> du brut ou <strong>alignent son haut sur le dessus</strong>.</li>
+    </ul>
+    <p>Chaque transformation s’annule avec <span class="ui">Ctrl+Z</span> ; le panneau du relief garde les valeurs exactes.</p>
 
     <h2 id="fr-3d">Aperçu 3D</h2>
     <figure><img src="img/fr-06-apercu3d.webp" alt="Aperçu 3D du projet d'exemple usiné." width="1800" height="1125" loading="lazy"><figcaption>Glisser pour tourner, clic droit ou Maj pour déplacer, molette pour zoomer, double-clic pour recentrer.</figcaption></figure>
@@ -520,7 +528,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.91 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.92 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -556,7 +564,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.91</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.92</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -803,6 +811,14 @@ M30</pre>
     <h2 id="en-views">2D and 3D views</h2>
     <p>The <span class="ui">2D</span> and <span class="ui">3D</span> buttons at the top work as two switches: 2D only (the drawing fills the area), 3D only (the relief), or both at once. When both are shown, the buttons next to them place the views side by side or one above the other. The Relief tab shows the 3D view automatically.</p>
     <p>The 3D view shows the relief in the stock (wireframe), with the drawing and the axes. Drag: rotate; right-click or Shift + drag: pan; wheel: zoom; double-click: whole stock. On the right: the view cube, then buttons to show or hide the drawing, the axes and the stock, and to recenter on the relief.</p>
+    <p><strong>Transforming a relief in 3D.</strong> Click an item in the 3D view to select it (its box corners are highlighted; the selection is shared with the 2D view and the list). The bottom bar offers three tools, with dimensions shown at the top left:</p>
+    <ul>
+      <li><strong>Move</strong>: drag the X, Y or Z arrows (Shift: whole millimetres). In Z, the relief top snaps to the stock top and its bottom to the stock bottom; in X and Y, its edges snap to the stock edges.</li>
+      <li><strong>Rotate</strong>: drag the blue ring (around Z); for an STL, the red and green rings also tilt it around X and Y (Shift: 15° steps).</li>
+      <li><strong>Resize</strong>: drag the corner and side handles (proportions kept if the box is ticked), or the blue handle above for the height (Shift: whole millimetres).</li>
+      <li>The last two buttons <strong>drop the relief onto the stock bottom</strong> or <strong>align its top with the stock top</strong>.</li>
+    </ul>
+    <p>Each transformation can be undone with <span class="ui">Ctrl+Z</span>; the relief panel keeps the exact values.</p>
 
     <h2 id="en-3d">3D preview</h2>
     <figure><img src="img/en-06-apercu3d.webp" alt="3D preview of the machined sample project." width="1800" height="1125" loading="lazy"><figcaption>Drag to rotate, right-click or Shift to pan, wheel to zoom, double-click to recenter.</figcaption></figure>
@@ -890,7 +906,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.91 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.92 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 

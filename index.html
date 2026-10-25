@@ -130,7 +130,11 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .views>[hidden]{display:none!important}
 .rv3{position:relative;min-height:0;min-width:0;background:var(--canvas)}.views.both.v .rv3{border-left:1px solid var(--line)}.views.both.h .rv3{border-top:1px solid var(--line)}
 #rvc{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
-#rvcube{position:absolute;top:8px;right:8px;width:120px;height:120px;cursor:pointer;touch-action:none}
+#rvov{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.rvxf{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;gap:4px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:4px;box-shadow:0 6px 18px rgb(0 0 0/.3)}
+.rvxf button{display:flex;align-items:center;gap:6px;height:32px;padding:0 9px;border:1px solid transparent;border-radius:6px;background:transparent;color:var(--ink);cursor:pointer;font-size:12.5px}.rvxf button:hover{background:var(--raised)}.rvxf button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}.rvxf button[disabled]{opacity:.4;cursor:default}.rvxf svg{width:18px;height:18px}.rvxf .rvsep{width:1px;height:22px;background:var(--line);margin:0 2px}
+@media (max-width:700px){.rvxf span{display:none}}
+#rvcube{position:absolute;left:auto;bottom:auto;top:8px;right:8px;width:120px;height:120px;cursor:pointer;touch-action:none}
 .rvtools{position:absolute;top:134px;right:14px;display:flex;flex-direction:column;gap:4px}
 .rvtools button{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);border-radius:7px;background:var(--panel);color:var(--muted);cursor:pointer}
 .rvtools button[aria-pressed="true"]{color:var(--ink);border-color:var(--accent)}.rvtools svg{width:18px;height:18px}
@@ -478,6 +482,15 @@ label.inl input{width:70px}
           <button data-act="rvFit" title="Recentrer sur le relief (double-clic : tout le brut)" aria-label="Recentrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><circle cx="12" cy="12" r="2.5"/></svg></button>
         </div>
         <div class="rvinfo" id="rvInfo"></div>
+        <canvas id="rvov" aria-hidden="true"></canvas>
+        <div class="rvxf" role="toolbar" aria-label="Transformer le relief sélectionné">
+          <button data-act="rvMove" title="Déplacer : tirez les flèches X, Y, Z (Maj : au millimètre)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/></svg><span>Déplacer</span></button>
+          <button data-act="rvRotate" title="Tourner : tirez les cercles (Maj : par 15°)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg><span>Tourner</span></button>
+          <button data-act="rvScale" title="Redimensionner : tirez les poignées (proportions gardées si la case est cochée ; Maj : au millimètre)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="1" stroke-dasharray="3 2"/><rect x="2.5" y="2.5" width="4" height="4" fill="currentColor"/><rect x="17.5" y="17.5" width="4" height="4" fill="currentColor"/></svg><span>Redimensionner</span></button>
+          <i class="rvsep"></i>
+          <button data-act="rvDropB" title="Poser sur le fond du brut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 21h18"/><path d="M8 17c1-5 2.5-7 4-7s3 2 4 7z"/><path d="M12 3v4M10 5l2 2 2-2"/></svg></button>
+          <button data-act="rvDropT" title="Aligner le haut du relief sur le dessus du brut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 3h18"/><path d="M8 18c1-6 2.5-9 4-9s3 3 4 9z"/><path d="M12 21v-4M10 19l2-2 2 2"/></svg></button>
+        </div>
       </div>
       </div>
       <div class="stbar">
@@ -833,7 +846,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.91</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.92</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1216,6 +1229,7 @@ Object.assign(I18N_EN, {"Finition du relief en contours décalés : l’outil su
 Object.assign(I18N_EN, {"Outil par rapport à la limite": "Tool relative to boundary", "Bord de l’outil à l’intérieur": "Tool edge inside", "Centre de l’outil sur la limite": "Tool center on boundary", "Limite : {n} forme(s) fermée(s) sélectionnée(s).": "Boundary: {n} selected closed shape(s)."});
 Object.assign(I18N_EN, {"Vues": "Views", "Vue 2D : le dessin": "2D view: the drawing", "Vue 3D : le relief": "3D view: the relief", "Vues côte à côte": "Side by side", "Vues l’une au-dessus de l’autre": "One above the other", "Afficher / masquer le dessin": "Show / hide the drawing", "Afficher / masquer le repère (axes et origine)": "Show / hide the axes and origin", "Afficher / masquer le brut (filaire)": "Show / hide the stock (wireframe)", "Recentrer sur le relief (double-clic : tout le brut)": "Recenter on the relief (double-click: whole stock)", "Simulation de l’usinage": "Machining simulation", "La vue 3D demande WebGL 2.": "The 3D view needs WebGL 2.", "{n} élément(s) de relief · profondeur {d} mm": "{n} relief item(s) · depth {d} mm", "Aucun relief : importez un STL ou créez-en un dans l’onglet Relief.": "No relief: import an STL or create one in the Relief tab.", "Vue 3D du relief": "3D view of the relief", "Affichage 3D": "3D display"});
 Object.assign(I18N_EN, {"Créer un relief": "Create a relief", "Lié à l’image du dessin (suit sa position, sa taille et son angle)": "Linked to the drawing image (follows its position, size and angle)", "Point de référence": "Reference point", "Épaisseur du relief (mm)": "Relief height (mm)", "Haut du brut → haut du relief (mm)": "Stock top → relief top (mm)", "Bas du brut → bas du relief (mm)": "Stock bottom → relief bottom (mm)", "Afficher les modèles STL sur le plan": "Show STL models on the workspace", "Importer un modèle 3D (STL binaire ou texte) : il est vu de dessus et projeté en hauteurs, à l’échelle du fichier.": "Import a 3D model (binary or text STL): it is seen from above and projected into heights, at the file's scale.", "Sélectionnez sur le plan une image insérée dans l’onglet Dessin : le clair est en haut. Le relief reste lié à l’image (position, taille, angle).": "Select on the workspace an image inserted in the Drawing tab: light is high. The relief stays linked to the image (position, size, angle).", "Sélectionnez une ou plusieurs formes fermées : la forme se bombe depuis le bord (les formes intérieures font des trous).": "Select one or more closed shapes: the shape domes up from the edge (inner shapes make holes).", "Sélectionnez un ou plusieurs vecteurs : une moulure suit le tracé.": "Select one or more vectors: a moulding follows the path.", "Sélectionnez deux rails et un vecteur de profil (ouverts) : la section passe d’un rail à l’autre.": "Select two rails and a profile vector (open): the section spans from one rail to the other.", "Une partie du relief dépasse le dessus du brut : elle n’est pas usinée.": "Part of the relief rises above the stock top: it is not machined.", "Aucun relief : importez un STL ou créez-en un à partir du dessin.": "No relief: import an STL or create one from the drawing.", "Relief créé à partir de l’image : il la suit quand vous la déplacez ou la redimensionnez. Réglez son épaisseur Z.": "Relief created from the image: it follows it when you move or resize it. Set its Z height."});
+Object.assign(I18N_EN, {"Transformer le relief sélectionné": "Transform the selected relief", "Déplacer : tirez les flèches X, Y, Z (Maj : au millimètre)": "Move: drag the X, Y, Z arrows (Shift: whole millimetres)", "Déplacer": "Move", "Tourner : tirez les cercles (Maj : par 15°)": "Rotate: drag the rings (Shift: 15° steps)", "Tourner": "Rotate", "Redimensionner : tirez les poignées (proportions gardées si la case est cochée ; Maj : au millimètre)": "Resize: drag the handles (proportions kept if the box is ticked; Shift: whole millimetres)", "Redimensionner": "Resize", "Poser sur le fond du brut": "Drop onto the stock bottom", "Aligner le haut du relief sur le dessus du brut": "Align the relief top with the stock top", "Sélectionnez un relief (clic dans la vue 3D, sur le plan ou dans la liste).": "Select a relief (click in the 3D view, on the workspace or in the list).", "(centre)": "(center)", "Taille": "Size", "Haut brut → haut relief": "Stock top → relief top", "Bas brut → bas relief": "Stock bottom → relief bottom"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4160,6 +4174,8 @@ function act(a, btn) {
     case 'rvAxes': RV.showAxes = !RV.showAxes; rvSave(); rvReq(); return;
     case 'rvStock': RV.showStock = !RV.showStock; rvSave(); rvReq(); return;
     case 'rvFit': rvFit(false); return;
+    case 'rvMove': case 'rvRotate': case 'rvScale': { const t = { rvMove: 'move', rvRotate: 'rotate', rvScale: 'scale' }[a]; RV.tool = RV.tool === t ? null : t; rvToolsSync(); rvReq(); return; }
+    case 'rvDropB': case 'rvDropT': { const it = relCur(); if (!it) { toast(tr('Sélectionnez un relief (clic dans la vue 3D, sur le plan ou dans la liste).')); return; } it.top = a === 'rvDropT' ? 0 : S.stock.t - (+it.zH || 0); relAfterXf(it, true); return; }
     case 'tpCancel': S.editTp = null; S.activeTp = null; S.form = newForm(); fwClose('tpWin'); if (S.ui.tool === 'tabedit') setTool('select'); renderForm(); renderTpList(); draw(); return;
     case 'toolAdd': { const t = { id: uid(), num: Math.max(0, ...S.tools.map(x => +x.num || 0)) + 1, name: tr('Nouvelle fraise 4 mm'), type: 'flat', dia: 4, angle: 90, rpm: 18000, feed: 1500, plunge: 400, pass: 2, over: 40 }; S.tools.push(t); S.toolSel = t.id; toolsChanged(); fwOpen('toolWin'); return; }
     case 'toolDup': { const t0 = S.tools.find(t => t.id === S.toolSel); if (!t0) return; const t = { ...t0, id: uid(), num: Math.max(0, ...S.tools.map(x => +x.num || 0)) + 1, name: t0.name + tr(' (copie)') }; S.tools.push(t); S.toolSel = t.id; toolsChanged(); fwOpen('toolWin'); return; }
@@ -4734,7 +4750,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.91', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.92', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5973,8 +5989,9 @@ function stlParse(buf) {
 }
 var STL_OR = { z: (x, y, z) => [x, y, z], '-z': (x, y, z) => [x, -y, -z], y: (x, y, z) => [x, -z, y], '-y': (x, y, z) => [x, z, -y], x: (x, y, z) => [y, z, x], '-x': (x, y, z) => [y, -z, -x] };
 // rastérisation vue de dessus : tampon de profondeur (on garde le Z le plus haut)
-function stlRaster(T, orient) {
-  const f = STL_OR[orient] || STL_OR.z, n = T.length / 9, P = new Float32Array(T.length); let x0 = Infinity, y0 = Infinity, z0 = Infinity, x1 = -Infinity, y1 = -Infinity, z1 = -Infinity;
+function stlRaster(T, orient, rx, ry) {
+  const f0 = STL_OR[orient] || STL_OR.z, ax = (+rx || 0) * Math.PI / 180, ay = (+ry || 0) * Math.PI / 180, cxr = Math.cos(ax), sxr = Math.sin(ax), cyr = Math.cos(ay), syr = Math.sin(ay);
+  const f = (ax || ay) ? (x, y, z) => { let [a, b, c] = f0(x, y, z); [b, c] = [b * cxr - c * sxr, b * sxr + c * cxr]; [a, c] = [a * cyr + c * syr, -a * syr + c * cyr]; return [a, b, c]; } : f0, n = T.length / 9, P = new Float32Array(T.length); let x0 = Infinity, y0 = Infinity, z0 = Infinity, x1 = -Infinity, y1 = -Infinity, z1 = -Infinity;
   for (let i = 0; i < n * 3; i++) { const q = f(T[i * 3], T[i * 3 + 1], T[i * 3 + 2]); P[i * 3] = q[0]; P[i * 3 + 1] = q[1]; P[i * 3 + 2] = q[2]; if (q[0] < x0) x0 = q[0]; if (q[0] > x1) x1 = q[0]; if (q[1] < y0) y0 = q[1]; if (q[1] > y1) y1 = q[1]; if (q[2] < z0) z0 = q[2]; if (q[2] > z1) z1 = q[2]; }
   const W = x1 - x0, Hh = y1 - y0, Z = Math.max(1e-6, z1 - z0), c = Math.max(W, Hh) / 1023 || 1, nx = Math.max(2, Math.round(W / c) + 1), ny = Math.max(2, Math.round(Hh / c) + 1), zb = new Float32Array(nx * ny).fill(-Infinity);
   for (let t = 0; t < n; t++) { const o = t * 9, ax = (P[o] - x0) / c, ay = (y1 - P[o + 1]) / c, az = P[o + 2], bx = (P[o + 3] - x0) / c, by = (y1 - P[o + 4]) / c, bz = P[o + 5], qx = (P[o + 6] - x0) / c, qy = (y1 - P[o + 7]) / c, qz = P[o + 8];
@@ -5994,10 +6011,10 @@ function relImportStl(file) {
 }
 function relReorient(it, o) {
   const T = relMesh[it.id]; if (!T) { toast(tr('Réimportez le STL pour changer son orientation (le maillage n’est plus en mémoire).')); relPanel(true); return; }
-  const R = stlRaster(T, o), k = it.w / (it.nat ? it.nat[0] : R.W); relBump(); it.orient = o; it.nat = [R.W, R.H, R.Z]; it.h = R.H * k; it.zH = Math.min(R.Z * k, S.stock.t); relStore(it.id, R.g); relDirty = true; commit(false); relPanel(); draw();
+  const R = stlRaster(T, o, it.rx, it.ry), k = it.w / (it.nat ? it.nat[0] : R.W); relBump(); it.orient = o; it.nat = [R.W, R.H, R.Z]; it.h = R.H * k; it.zH = Math.min(R.Z * k, S.stock.t); relStore(it.id, R.g); relDirty = true; commit(false); relPanel(); draw();
 }
 function relPanel(soft) {
-  const ul = $('#relList'), box = $('#relProps'); if (!ul) return; const it = relCur(); box.hidden = !it;
+  const ul = $('#relList'), box = $('#relProps'); if (!ul) return; if (typeof rvReq === 'function') rvReq(); const it = relCur(); box.hidden = !it;
   if (it) {
     const o = outXY(it.x, it.y), set = (id, v) => { const el = $(id); if (document.activeElement !== el) el.value = v; };
     const an = S.ui.relAnchor || 'mc', pa = anchorPt(relBox(it), an), oa = outXY(pa[0], pa[1]); $$('#rlAnchor button').forEach(b => b.setAttribute('aria-pressed', b.dataset.a === an));
@@ -6147,12 +6164,21 @@ function rvInit() {
   // souris : glisser = tourner, clic droit ou Maj = déplacer, molette = zoom, double-clic = tout le brut
   let drag = null;
   c.addEventListener('contextmenu', e => e.preventDefault());
-  c.addEventListener('pointerdown', e => { c.setPointerCapture(e.pointerId); drag = { x: e.clientX, y: e.clientY, pan: e.button === 2 || e.shiftKey || e.button === 1 }; c.style.cursor = 'grabbing'; });
-  c.addEventListener('pointermove', e => { if (!drag) return; const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY;
+  c.addEventListener('pointerdown', e => { c.setPointerCapture(e.pointerId); const r = c.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+    const gh = e.button === 0 ? rvGizmoHit(mx, my) : null;
+    if (gh) { drag = { gz: gh, mx, my, x0: e.clientX, y0: e.clientY, it: relCur(), st: rvSnapIt(relCur()), moved: false }; return; }
+    drag = { x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, mx, my, pan: e.button === 2 || e.shiftKey || e.button === 1 }; c.style.cursor = 'grabbing'; });
+  c.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+    if (!drag) { const h = RV.tool ? rvGizmoHit(mx, my) : null, k = h ? h.k : null; if (k !== RV.hover) { RV.hover = k; c.style.cursor = h ? 'pointer' : 'grab'; rvReq(); } return; }
+    if (drag.gz) { drag.moved = true; rvGizmoDrag(drag, mx, my, e.shiftKey); return; }
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY;
     if (drag.pan) { const k = RV.dist / c.clientHeight * 0.75, cy = Math.cos(RV.yaw), sy_ = Math.sin(RV.yaw), sp = Math.sin(RV.pitch), right = [-sy_, cy, 0], up = [-cy * sp, -sy_ * sp, Math.cos(RV.pitch)]; for (let i = 0; i < 3; i++) RV.tgt[i] += (-dx * right[i] + dy * up[i]) * k; }
     else { RV.yaw -= dx * 0.008; RV.pitch = Math.max(-1.5703, Math.min(1.5703, RV.pitch + dy * 0.008)); }
     rvReq(); });
-  const end = () => { drag = null; c.style.cursor = 'grab'; }; c.addEventListener('pointerup', end); c.addEventListener('pointercancel', end);
+  const end = e => { if (drag && drag.gz) { if (drag.moved) rvGizmoEnd(drag); drag = null; return; }
+    if (drag && e && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 4 && !drag.pan) { const id = rvPick(drag.mx, drag.my); if (id !== (S.relSel || null)) { if (id) selectRel(id); else { S.relSel = null; relPanel(); draw(); } rvReq(); } }
+    drag = null; c.style.cursor = 'grab'; };
+  c.addEventListener('pointerup', end); c.addEventListener('pointercancel', () => { drag = null; });
   c.addEventListener('wheel', e => { e.preventDefault(); RV.dist = Math.max(5, Math.min(1e5, RV.dist * Math.exp(e.deltaY * 0.0012))); rvReq(); }, { passive: false });
   c.addEventListener('dblclick', () => rvFit(true));
   const cv = $('#rvcube'), pos = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
@@ -6174,7 +6200,7 @@ function rvBuf(attrs, data, idx) { const gl = RV.gl, vao = gl.createVertexArray(
 // reconstruit le maillage quand le relief ou le brut change, et les traits quand le dessin change
 function rvSync() {
   if (!VIEWS.d3 || !RV.gl) return; const st = S.stock; relSyncLinks();
-  const sig = JSON.stringify([st.w, st.h, st.t, S.relief.items.map(i => [i.id, i.x, i.y, i.w, i.h, i.rot, i.zH, i.top, i.mode, i.visible, i.smooth, i.invert, !!relGrid[i.id], relGrid[i.id] && relGrid[i.id].nx])]);
+  const sig = JSON.stringify([st.w, st.h, st.t, S.relief.items.map(i => [i.id, i.x, i.y, i.w, i.h, i.rot, i.zH, i.top, i.rx, i.ry, i.mode, i.visible, i.smooth, i.invert, !!relGrid[i.id], relGrid[i.id] && relGrid[i.id].nx])]);
   if (sig !== RV.sig) { RV.sig = sig; rvBuildMesh(); if (!RV.fitted) { rvFit(true); RV.fitted = true; } rvReq(); }
   const lsig = (typeof snapVer !== 'undefined' ? snapVer : 0) + '|' + st.w + '|' + st.h + '|' + st.t + '|' + st.originXY + '|' + S.shapes.length;
   if (lsig !== RV.lsig) { RV.lsig = lsig; rvBuildLines(); rvReq(); }
@@ -6201,6 +6227,74 @@ function rvBuildLines() {
   RV.lDraw = mk(D2);
 }
 function rvReq() { if (!RV.raf && VIEWS.d3) RV.raf = requestAnimationFrame(rvRender); }
+// ----- sélection et transformations dans la vue 3D -----
+function rvToolsSync() { for (const [k, t] of [['rvMove', 'move'], ['rvRotate', 'rotate'], ['rvScale', 'scale']]) { const b = document.querySelector('[data-act="' + k + '"]'); if (b) b.setAttribute('aria-pressed', RV.tool === t); } }
+function rvProj(p) { const m = RV.mvp, c = $('#rvc'); if (!m) return [0, 0, -1]; const x = m[0] * p[0] + m[4] * p[1] + m[8] * p[2] + m[12], y = m[1] * p[0] + m[5] * p[1] + m[9] * p[2] + m[13], w = m[3] * p[0] + m[7] * p[1] + m[11] * p[2] + m[15]; return [(x / w * 0.5 + 0.5) * c.clientWidth, (1 - (y / w * 0.5 + 0.5)) * c.clientHeight, w]; }
+function rvEye() { const cp = Math.cos(RV.pitch); return [RV.tgt[0] + RV.dist * cp * Math.cos(RV.yaw), RV.tgt[1] + RV.dist * cp * Math.sin(RV.yaw), RV.tgt[2] + RV.dist * Math.sin(RV.pitch)]; }
+function rvRay(mx, my) { const c = $('#rvc'), e = rvEye(), f = v3n(v3sub(RV.tgt, e)), rt = v3n(v3cross(f, [0, 0, 1])), up = v3cross(rt, f), t = Math.tan(0.35), a = c.clientWidth / c.clientHeight, u = (mx / c.clientWidth * 2 - 1) * t * a, v = (1 - my / c.clientHeight * 2) * t; return { o: e, d: v3n([f[0] + rt[0] * u + up[0] * v, f[1] + rt[1] * u + up[1] * v, f[2] + rt[2] * u + up[2] * v]) }; }
+const rvZ = it => { const top = -(+it.top || 0); return { top, bot: top - (+it.zH || 0), mid: top - (+it.zH || 0) / 2 }; };
+// élément sous le curseur : intersection du rayon avec la boîte de chaque élément (dans son repère tourné)
+function rvPick(mx, my) {
+  const R = rvRay(mx, my); let best = null, bt = Infinity;
+  for (const it of S.relief.items) { if (!it.visible || !relGrid[it.id]) continue; const a = (it.rot || 0) * Math.PI / 180, cs = Math.cos(a), sn = Math.sin(a), Z = rvZ(it);
+    const loc = q => [(q[0] - it.x) * cs + (q[1] - it.y) * sn, -(q[0] - it.x) * sn + (q[1] - it.y) * cs, q[2]], o = loc(R.o), d = [R.d[0] * cs + R.d[1] * sn, -R.d[0] * sn + R.d[1] * cs, R.d[2]];
+    let t0 = -Infinity, t1 = Infinity; for (const [k, lo, hi] of [[0, -it.w / 2, it.w / 2], [1, -it.h / 2, it.h / 2], [2, Z.bot, Math.max(Z.top, Z.bot + 0.01)]]) { if (Math.abs(d[k]) < 1e-12) { if (o[k] < lo || o[k] > hi) { t0 = Infinity; break; } continue; } let a1 = (lo - o[k]) / d[k], a2 = (hi - o[k]) / d[k]; if (a1 > a2) [a1, a2] = [a2, a1]; t0 = Math.max(t0, a1); t1 = Math.min(t1, a2); }
+    if (t0 <= t1 && t1 > 0 && t0 < bt) { bt = t0; best = it.id; } }
+  return best;
+}
+// géométrie des poignées de l'élément sélectionné (en pixels), calculée à chaque rendu
+function rvGizmo() {
+  const it = relCur(); if (!it || !RV.tool || !it.visible || !RV.mvp) return null; const Z = rvZ(it), c = [it.x, it.y, Z.mid], L = Math.max(it.w, it.h) * 0.6 + 6, G = { it, c, L, items: [] };
+  if (RV.tool === 'move') for (const [k, d, col] of [['x', [1, 0, 0], '#e5484d'], ['y', [0, 1, 0], '#30a46c'], ['z', [0, 0, 1], '#3e7bfa']]) G.items.push({ k, type: 'axis', d, col, a: rvProj(c), b: rvProj([c[0] + d[0] * L, c[1] + d[1] * L, c[2] + d[2] * L]) });
+  if (RV.tool === 'rotate') { const stl = it.kind === 'stl'; for (const [k, ax, col] of [['rz', 2, '#3e7bfa'], ['rx', 0, '#e5484d'], ['ry', 1, '#30a46c']]) { if (ax !== 2 && !stl) continue; const pts = []; for (let i = 0; i <= 64; i++) { const t = i / 64 * 2 * Math.PI, u = Math.cos(t) * L * 0.8, v = Math.sin(t) * L * 0.8, q = ax === 2 ? [c[0] + u, c[1] + v, c[2]] : ax === 0 ? [c[0], c[1] + u, c[2] + v] : [c[0] + u, c[1], c[2] + v]; pts.push(rvProj(q)); } G.items.push({ k, type: 'ring', ax, col, pts }); } }
+  if (RV.tool === 'scale') { const f = imgFrame(it), cs = f.corners, mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], hs = [[cs[0], 'c0'], [cs[1], 'c1'], [cs[2], 'c2'], [cs[3], 'c3'], [mid(cs[0], cs[1]), 'e0'], [mid(cs[1], cs[2]), 'e1'], [mid(cs[2], cs[3]), 'e2'], [mid(cs[3], cs[0]), 'e3']];
+    for (const [q, k] of hs) G.items.push({ k, type: 'handle', w: [q[0], q[1], Z.top], p: rvProj([q[0], q[1], Z.top]), col: '#ffffff' });
+    G.items.push({ k: 'hz', type: 'handle', w: [it.x, it.y, Z.top], p: rvProj([it.x, it.y, Z.top]), col: '#3e7bfa', zAxis: rvProj([it.x, it.y, Z.top + 10]) }); }
+  return G;
+}
+function rvGizmoHit(mx, my) {
+  const G = rvGizmo(); if (!G) return null; const dseg = (p, a, b) => { const dx = b[0] - a[0], dy = b[1] - a[1], L2 = dx * dx + dy * dy || 1e-9, t = Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / L2)); return Math.hypot(p[0] - a[0] - dx * t, p[1] - a[1] - dy * t); };
+  let best = null, bd = 9; for (const g of G.items) { let d = Infinity; if (g.type === 'axis') d = dseg([mx, my], g.a, g.b); else if (g.type === 'ring') for (let i = 0; i + 1 < g.pts.length; i++) d = Math.min(d, dseg([mx, my], g.pts[i], g.pts[i + 1])); else d = Math.hypot(mx - g.p[0], my - g.p[1]) - 2; if (d < bd) { bd = d; best = g; } }
+  return best ? { ...best, G } : null;
+}
+function rvSnapIt(it) { return it ? { x: it.x, y: it.y, w: it.w, h: it.h, rot: it.rot || 0, top: +it.top || 0, zH: +it.zH || 0, rx: +it.rx || 0, ry: +it.ry || 0 } : null; }
+function rvPlane(mx, my, z) { const R = rvRay(mx, my); if (Math.abs(R.d[2]) < 1e-9) return null; const t = (z - R.o[2]) / R.d[2]; return t > 0 ? [R.o[0] + R.d[0] * t, R.o[1] + R.d[1] * t] : null; }
+function rvGizmoDrag(D, mx, my, shift) {
+  const it = D.it, g = D.gz, s0 = D.st; if (!it) return; const st = S.stock, rnd = v => shift ? Math.round(v) : v, snapT = 0.8;
+  if (g.type === 'axis') { const a = g.a, b = g.b, ax = [b[0] - a[0], b[1] - a[1]], l2 = ax[0] * ax[0] + ax[1] * ax[1] || 1, t = ((mx - D.mx) * ax[0] + (my - D.my) * ax[1]) / l2 * g.G.L;
+    if (g.k === 'z') { let top = s0.top - t; if (shift) top = Math.round(top); if (Math.abs(top) < snapT) top = 0; if (Math.abs(st.t - top - it.zH) < snapT) top = st.t - it.zH; it.top = top; }
+    else { const k = g.k === 'x' ? 0 : 1; let v = (k ? s0.y : s0.x) + t; if (shift) v = Math.round(v); if (k) it.y = v; else it.x = v; const b2 = relBox(it); // accroche aux bords du brut
+      if (!k) { if (Math.abs(b2.x0) < snapT) it.x -= b2.x0; else if (Math.abs(b2.x1 - st.w) < snapT) it.x -= b2.x1 - st.w; } else { if (Math.abs(b2.y0) < snapT) it.y -= b2.y0; else if (Math.abs(b2.y1 - st.h) < snapT) it.y -= b2.y1 - st.h; } } }
+  else if (g.type === 'ring') { const c = rvProj(g.G.c), a0 = Math.atan2(D.my - c[1], D.mx - c[0]), a1 = Math.atan2(my - c[1], mx - c[0]), axis = [0, 0, 0]; axis[g.ax] = 1; const e = v3sub(rvEye(), g.G.c), facing = v3dot(axis, e) > 0; let dA = (a1 - a0) * 180 / Math.PI * (facing ? -1 : 1);
+    const key = g.k === 'rz' ? 'rot' : g.k; let v = s0[key] + dA; if (shift) v = Math.round(v / 15) * 15; v = ((v % 360) + 540) % 360 - 180; it[key] = v;
+    if (g.k !== 'rz') { const now = performance.now(); if (!D.tR || now - D.tR > 150) { D.tR = now; rvReraster(it, false); } } }
+  else if (g.k === 'hz') { const ax = [g.zAxis[0] - g.p[0], g.zAxis[1] - g.p[1]], l2 = ax[0] * ax[0] + ax[1] * ax[1] || 1, t = ((mx - D.mx) * ax[0] + (my - D.my) * ax[1]) / l2 * 10; let zH = Math.max(0.1, s0.zH + t); if (shift) zH = Math.max(1, Math.round(zH)); it.zH = zH; }
+  else { const q = rvPlane(mx, my, rvZ(it).top); if (!q) return; const a = (s0.rot || 0) * Math.PI / 180, cs = Math.cos(a), sn = Math.sin(a), sg = { c0: [-1, -1], c1: [1, -1], c2: [1, 1], c3: [-1, 1], e0: [0, -1], e1: [1, 0], e2: [0, 1], e3: [-1, 0] }[g.k];
+    const anc = [s0.x - (sg[0] * s0.w / 2) * cs + (sg[1] * s0.h / 2) * sn, s0.y - (sg[0] * s0.w / 2) * sn - (sg[1] * s0.h / 2) * cs], d = [q[0] - anc[0], q[1] - anc[1]], lu = d[0] * cs + d[1] * sn, lv = -d[0] * sn + d[1] * cs;
+    let w = sg[0] ? Math.max(0.5, lu * sg[0]) : s0.w, h = sg[1] ? Math.max(0.5, lv * sg[1]) : s0.h; const lock = !$('#rlLock') || $('#rlLock').checked;
+    if (lock) { const k = sg[0] && sg[1] ? Math.max(w / s0.w, h / s0.h) : sg[0] ? w / s0.w : h / s0.h; w = s0.w * k; h = s0.h * k; it.zH = s0.zH * k; }
+    if (shift) { w = Math.max(1, Math.round(w)); h = Math.max(1, Math.round(h)); }
+    it.w = w; it.h = h; const ox = (sg[0] || 0) * w / 2, oy = (sg[1] || 0) * h / 2; it.x = anc[0] + ox * cs - oy * sn; it.y = anc[1] + ox * sn + oy * cs; if (!sg[0]) { it.x = s0.x + (it.x - s0.x); } }
+  relAfterXf(it, false);
+}
+function rvReraster(it, final) { const T = relMesh[it.id]; if (!T || it.kind !== 'stl') return; const R = stlRaster(T, it.orient || 'z', it.rx, it.ry), k = it.w / (it.nat ? it.nat[0] : R.W), kz = (+it.zH || 0) / (it.nat ? it.nat[2] : R.Z); it.nat = [R.W, R.H, R.Z]; it.w = R.W * k; it.h = R.H * k; it.zH = R.Z * kz; if (final) relStore(it.id, R.g); else { relGrid[it.id] = R.g; relSm.delete(it.id); } }
+function rvGizmoEnd(D) { const it = D.it; if (!it) return; if (D.gz.type === 'ring' && D.gz.k !== 'rz') rvReraster(it, true); relAfterXf(it, true); }
+// après une transformation : image liée, panneau, 2D, 3D, historique
+function relAfterXf(it, done) { const im = relLinked(it); if (im) { im.x = it.x; im.y = it.y; im.w = it.w; im.h = it.h; im.rot = it.rot || 0; } relDirty = true; relPanel(true); draw(); rvReq(); if (done) { relBump(); commit(false); relPanel(); } }
+function rvOverlay() {
+  const cv = $('#rvov'), dpr = window.devicePixelRatio || 1, W2 = cv.clientWidth, H2 = cv.clientHeight; if (cv.width !== Math.round(W2 * dpr) || cv.height !== Math.round(H2 * dpr)) { cv.width = Math.round(W2 * dpr); cv.height = Math.round(H2 * dpr); }
+  const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W2, H2); const it = relCur();
+  // élément sélectionné : coins de la boîte englobante
+  if (it && it.visible && RV.mvp) { const Z = rvZ(it), cs = imgFrame(it).corners; g.strokeStyle = tok('--accent'); g.lineWidth = 2;
+    for (const z of [Z.top, Z.bot]) for (let k = 0; k < 4; k++) { const a = cs[k], b = cs[(k + 1) % 4], pr = cs[(k + 3) % 4], P = rvProj([a[0], a[1], z]), A = rvProj([a[0] + (b[0] - a[0]) * 0.18, a[1] + (b[1] - a[1]) * 0.18, z]), B = rvProj([a[0] + (pr[0] - a[0]) * 0.18, a[1] + (pr[1] - a[1]) * 0.18, z]), V = rvProj([a[0], a[1], z === Z.top ? z - (Z.top - Z.bot) * 0.25 : z + (Z.top - Z.bot) * 0.25]); g.beginPath(); g.moveTo(A[0], A[1]); g.lineTo(P[0], P[1]); g.lineTo(B[0], B[1]); g.moveTo(P[0], P[1]); g.lineTo(V[0], V[1]); g.stroke(); } }
+  const G = rvGizmo(); if (G) for (const q of G.items) { const hv = RV.hover === q.k; g.strokeStyle = q.col; g.fillStyle = q.col; g.lineWidth = hv ? 4 : 2.5;
+    if (q.type === 'axis') { g.beginPath(); g.moveTo(q.a[0], q.a[1]); g.lineTo(q.b[0], q.b[1]); g.stroke(); const an = Math.atan2(q.b[1] - q.a[1], q.b[0] - q.a[0]); g.beginPath(); g.moveTo(q.b[0] + Math.cos(an) * 10, q.b[1] + Math.sin(an) * 10); g.lineTo(q.b[0] + Math.cos(an + 2.5) * 9, q.b[1] + Math.sin(an + 2.5) * 9); g.lineTo(q.b[0] + Math.cos(an - 2.5) * 9, q.b[1] + Math.sin(an - 2.5) * 9); g.closePath(); g.fill(); g.font = '700 12px sans-serif'; g.fillText(q.k.toUpperCase(), q.b[0] + Math.cos(an) * 16 - 4, q.b[1] + Math.sin(an) * 16 + 4); }
+    else if (q.type === 'ring') { g.beginPath(); q.pts.forEach((p, i) => i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.stroke(); }
+    else { g.fillStyle = q.col; g.strokeStyle = '#1b1b1b'; g.lineWidth = 1.5; const r = hv ? 7 : 5; if (q.k === 'hz') { g.beginPath(); g.moveTo(q.p[0], q.p[1]); g.lineTo(q.zAxis[0], q.zAxis[1]); g.strokeStyle = q.col; g.lineWidth = 2; g.stroke(); g.beginPath(); g.arc(q.zAxis[0], q.zAxis[1], r, 0, 7); g.fill(); } else { g.fillRect(q.p[0] - r, q.p[1] - r, 2 * r, 2 * r); g.strokeRect(q.p[0] - r, q.p[1] - r, 2 * r, 2 * r); } } }
+  // infos (coin haut gauche)
+  const el = $('#rvInfo'); if (it) { const Z = rvZ(it), o = outXY(it.x, it.y), f = v => fr(v, 2); el.textContent = it.name + '\n' + 'X ' + f(o[0]) + '  Y ' + f(o[1]) + '  ' + tr('(centre)') + '\n' + tr('Taille') + ' ' + f(it.w) + ' × ' + f(it.h) + ' × ' + f(+it.zH || 0) + ' mm\n' + tr('Haut brut → haut relief') + ' ' + f(+it.top || 0) + ' mm\n' + tr('Bas brut → bas relief') + ' ' + f(S.stock.t - (+it.top || 0) - (+it.zH || 0)) + ' mm\n' + tr('Rotation') + ' Z ' + fr(+it.rot || 0, 1) + '°' + (it.kind === 'stl' ? '  X ' + fr(+it.rx || 0, 1) + '°  Y ' + fr(+it.ry || 0, 1) + '°' : ''); }
+  const dis = !it; document.querySelectorAll('.rvxf button').forEach(b => b.disabled = dis);
+}
 function rvRender() {
   RV.raf = 0; const gl = RV.gl, c = $('#rvc'); if (!gl || !VIEWS.d3) return;
   const dpr = window.devicePixelRatio || 1, Wd = Math.max(1, Math.round(c.clientWidth * dpr)), Hd = Math.max(1, Math.round(c.clientHeight * dpr)); if (c.width !== Wd || c.height !== Hd) { c.width = Wd; c.height = Hd; }
@@ -6211,7 +6305,8 @@ function rvRender() {
   gl.useProgram(RV.lprog); gl.uniformMatrix4fv(gl.getUniformLocation(RV.lprog, 'uMVP'), false, mvp);
   for (const [k, on] of [['lStock', RV.showStock], ['lAxes', RV.showAxes], ['lDraw', RV.showDraw]]) if (on && RV[k]) { gl.bindVertexArray(RV[k].vao); gl.drawArrays(gl.LINES, 0, RV[k].n); }
   gl.bindVertexArray(null); v3Cube($('#rvcube'), RV);
-  const n = S.relief.items.filter(i => i.visible && relGrid[i.id]).length; $('#rvInfo').textContent = n ? trf('{n} élément(s) de relief · profondeur {d} mm', { n, d: fr(RV.depth || 0, 2) }) : tr('Aucun relief : importez un STL ou créez-en un dans l’onglet Relief.');
+  const n = S.relief.items.filter(i => i.visible && relGrid[i.id]).length; if (!relCur()) $('#rvInfo').textContent = n ? trf('{n} élément(s) de relief · profondeur {d} mm', { n, d: fr(RV.depth || 0, 2) }) : tr('Aucun relief : importez un STL ou créez-en un dans l’onglet Relief.');
+  rvOverlay();
 }
 // aperçu 3D du relief seul : le brut est creusé depuis le dessus, le point le plus haut à la surface
 function relView3d() {
