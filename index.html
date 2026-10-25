@@ -758,7 +758,7 @@ label.inl input{width:70px}
         <section class="blk"><h3>Créer un relief</h3>
           <div class="rbtns">
             <button data-act="relStl" class="rbtn" title="Importer un modèle 3D (STL binaire ou texte) : il est vu de dessus et projeté en hauteurs, à l’échelle du fichier."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><b>Fichier STL</b></button>
-            <button data-act="relGray" class="rbtn" title="Sélectionnez sur le plan une image insérée dans l’onglet Dessin : le clair est en haut. Le relief reste lié à l’image (position, taille, angle)."><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3.5 16c3-2 4-6 7-6s4 5 6.5 5 3-2 3.5-2.5"/></svg><b>Niveaux de gris</b></button>
+            <button data-act="relGray" class="rbtn" title="Sélectionnez sur le plan une image insérée dans l’onglet Dessin : elle est transformée en relief (le clair est en haut) et quitte la vue 2D."><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3.5 16c3-2 4-6 7-6s4 5 6.5 5 3-2 3.5-2.5"/></svg><b>Niveaux de gris</b></button>
             <button data-act="relDome" class="rbtn" title="Sélectionnez une ou plusieurs formes fermées : la forme se bombe depuis le bord (les formes intérieures font des trous)."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19h18"/><path d="M4 19c0-6 3.6-10 8-10s8 4 8 10"/></svg><b>Dôme</b></button>
             <button data-act="relExt" class="rbtn" title="Sélectionnez un ou plusieurs vecteurs : une moulure suit le tracé."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16c4-8 8 2 18-8"/><path d="M3 20c4-8 8 2 18-8" opacity=".5"/></svg><b>Extrusion</b></button>
             <button data-act="relSweep" class="rbtn" title="Sélectionnez deux rails et un vecteur de profil (ouverts) : la section passe d’un rail à l’autre."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5c5 2 11 2 16 0"/><path d="M4 19c5-3 11-3 16 0"/><path d="M8 6v11M12 6.5v10M16 6v11" opacity=".55"/></svg><b>Lissage</b></button>
@@ -846,7 +846,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.95</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.96</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1232,6 +1232,7 @@ Object.assign(I18N_EN, {"Créer un relief": "Create a relief", "Lié à l’imag
 Object.assign(I18N_EN, {"Transformer le relief sélectionné": "Transform the selected relief", "Déplacer : tirez les flèches X, Y, Z (Maj : au millimètre)": "Move: drag the X, Y, Z arrows (Shift: whole millimetres)", "Déplacer": "Move", "Tourner : tirez les cercles (Maj : par 15°)": "Rotate: drag the rings (Shift: 15° steps)", "Tourner": "Rotate", "Redimensionner : tirez les poignées (proportions gardées si la case est cochée ; Maj : au millimètre)": "Resize: drag the handles (proportions kept if the box is ticked; Shift: whole millimetres)", "Redimensionner": "Resize", "Poser sur le fond du brut": "Drop onto the stock bottom", "Aligner le haut du relief sur le dessus du brut": "Align the relief top with the stock top", "Sélectionnez un relief (clic dans la vue 3D, sur le plan ou dans la liste).": "Select a relief (click in the 3D view, on the workspace or in the list).", "(centre)": "(center)", "Taille": "Size", "Haut brut → haut relief": "Stock top → relief top", "Bas brut → bas relief": "Stock bottom → relief bottom"});
 Object.assign(I18N_EN, {"Recentrer sur le relief sélectionné ou sur tout le relief (double-clic dans la vue : tout le brut)": "Recenter on the selected relief or the whole relief (double-click in the view: whole stock)"});
 Object.assign(I18N_EN, {"Image de référence pour dessiner par-dessus : elle n'est pas usinée (sauf si vous en faites un relief en niveaux de gris). Sur le plan : un clic la sélectionne et vous pouvez la glisser ; un deuxième clic affiche les poignées, comme pour un objet : carrés pour redimensionner (proportions gardées si la case est cochée, Maj pour déformer), ronds pour tourner (Maj : par 15°).": "Reference image to draw over: it is not machined (unless you turn it into a grayscale relief). On the workspace: one click selects it and you can drag it; a second click shows the handles, as for an object: squares to resize (proportions kept if the box is ticked, Shift to distort), circles to rotate (Shift: 15° steps)."});
+Object.assign(I18N_EN, {"Image transformée en relief : déplacez-la et redimensionnez-la sur le plan, réglez son épaisseur Z.": "Image turned into a relief: move and resize it on the workspace, set its Z height.", "Sélectionnez sur le plan une image insérée dans l’onglet Dessin : elle est transformée en relief (le clair est en haut) et quitte la vue 2D.": "Select on the workspace an image inserted in the Drawing tab: it is turned into a relief (light is high) and leaves the 2D view."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -2800,7 +2801,7 @@ function restore(s) {
   const o = JSON.parse(s); S.meta = o.meta || {}; S.stock = { offX: 0, offY: 0, ...o.stock }; S.stock.originXY = originKey(S.stock); S.layers = o.layers && o.layers.length ? o.layers : DEFAULT_LAYERS(); S.layerActive = S.layers.find(l => l.id === o.layerActive) ? o.layerActive : S.layers[0].id;
   S.shapes = (o.shapes || []).map(migrateShape); if (o.tools && o.tools.length) S.tools = o.tools; S.tps = (o.tps || []).map(t => ({ ...t }));
   S.relief = o.relief && Array.isArray(o.relief.items) ? { show: true, res: 0.3, ...o.relief, items: o.relief.items.map(i => ({ ...i })) } : { items: [], show: true, res: 0.3 };
-  for (const it of S.relief.items) { if (it.top === undefined) it.top = 0; if (it.kind === 'image' && it.src && it.linked === undefined) { it.linked = true; const im = S.images.find(x => x.id === it.src) || (o.images || []).find(x => x.id === it.src); if (im) im.visible = true; } } if (S.relSel && !S.relief.items.some(i => i.id === S.relSel)) S.relSel = null; relDirty = true; if (typeof relPanel === 'function') relPanel();
+  for (const it of S.relief.items) { if (it.top === undefined) it.top = 0; if (it.kind === 'image' && it.src && it.linked !== false) { const im = S.images.find(x => x.id === it.src); if (im) { it.x = im.x; it.y = im.y; it.w = im.w; it.h = im.h; it.rot = im.rot || 0; S.images = S.images.filter(x => x !== im); } it.linked = false; delete it.src; } } if (S.relSel && !S.relief.items.some(i => i.id === S.relSel)) S.relSel = null; relDirty = true; if (typeof relPanel === 'function') relPanel();
   S.guides = o.guides || { x: [], y: [] }; S.dims = o.dims || []; S.images = (o.images || []).map(i => ({ ...i })); if (S.imgSel && !imgById(S.imgSel)) S.imgSel = null; if (typeof renderImgPanel === 'function') renderImgPanel();
   for (const id of [...S.sel]) if (!shapeById(id)) S.sel.delete(id); if (S.ne && !shapeById(S.ne.sid)) S.ne = null;
   if (typeof libLinkProject === 'function') libLinkProject(); syncStock(); recomputeAll(); renderTools(); renderSel(); renderLayers(); renderGuides(); autosave();
@@ -4752,7 +4753,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.95', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.96', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5972,8 +5973,9 @@ function relFromImage() {
   if (!im) { toast(tr(S.images.length ? 'Sélectionnez sur le plan l’image à transformer en relief.' : 'Insérez d’abord une image dans l’onglet Dessin (Importer › Image), puis sélectionnez-la.')); return; }
   const src = imgData[im.id]; if (!src) { toast(tr('Image illisible.')); return; }
   const el = new Image(); el.onload = () => { const g = relGridFromImg(el);
-    relAdd({ kind: 'image', src: im.id, linked: true, top: 0, name: (im.name || tr('Image')).replace(/\.[a-z0-9]{2,5}$/i, ''), x: im.x, y: im.y, w: im.w, h: im.h, rot: im.rot || 0, zH: Math.min(5, S.stock.t / 2), z0: 0, invert: false, smooth: 1, mode: 'add', visible: true }, g);
-    commit(false); draw(); toast(tr('Relief créé à partir de l’image : il la suit quand vous la déplacez ou la redimensionnez. Réglez son épaisseur Z.')); };
+    S.images = S.images.filter(x => x !== im); S.imgSel = null; renderImgPanel(); // l'image devient le relief : elle quitte la vue 2D
+    relAdd({ kind: 'image', linked: false, top: 0, name: (im.name || tr('Image')).replace(/\.[a-z0-9]{2,5}$/i, ''), x: im.x, y: im.y, w: im.w, h: im.h, rot: im.rot || 0, zH: Math.min(5, S.stock.t / 2), z0: 0, invert: false, smooth: 1, mode: 'add', visible: true }, g);
+    commit(false); draw(); toast(tr('Image transformée en relief : déplacez-la et redimensionnez-la sur le plan, réglez son épaisseur Z.')); };
   el.onerror = () => toast(tr('Image illisible.')); el.src = src;
 }
 function relImportImage(file) {
