@@ -7,7 +7,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>COPO</title>
+<title>COPO (essai D)</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23262626%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%234f7cff%22%20stroke-width%3D%222.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2024h12%22/%3E%3Cpath%20d%3D%22M15%2024c4.5%200%208-2.4%208.8-6%20.8-3.7-1.6-7-5.2-7-3%200-5.2%202.4-4.8%205.1.3%202.3%202.5%203.6%204.5%202.8%201.7-.7%202.3-2.6%201.4-4%22/%3E%3Cpath%20d%3D%22M24%2024h5%22/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -415,6 +415,25 @@ label.inl input{width:70px}
 .rvxf.fbar{left:50%;bottom:10px;transform:translateX(-50%);gap:3px}
 .rvxf.fbar button{width:32px;height:32px;padding:0}
 .rvxf .rvsep{width:1px;align-self:stretch;background:var(--line);margin:3px}
+
+/* essai D : barre de sélection fixe au-dessus des vues */
+.stage{grid-template-rows:auto auto minmax(0,1fr)}.stage.nobar{grid-template-rows:auto minmax(0,1fr)}
+.selbar{display:flex;align-items:center;gap:10px;min-height:44px;padding:5px 10px;border-bottom:1px solid var(--line);background:var(--panel);overflow-x:auto;white-space:nowrap}
+.selbar .sbg{display:flex;align-items:center;gap:4px}
+.selbar .sbl{font-size:12.5px;color:var(--muted);margin-right:6px}#sb2l{min-width:120px}.selbar .sbl b{color:var(--ink);font-weight:600}
+.selbar button{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 10px;border:1px solid var(--line);border-radius:6px;background:var(--raised);color:var(--ink);cursor:pointer;font-size:12.5px}
+.selbar button:hover:not(:disabled){border-color:var(--accent)}
+.selbar button:disabled{opacity:.38;cursor:default}
+.selbar button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.selbar button svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.selbar svg .fill{fill:currentColor;stroke:none}.selbar svg .dim{opacity:.55}
+.selbar .sbsep{width:1px;align-self:stretch;background:var(--line);margin:4px 3px}
+.selbar .sbdiv{width:1px;height:26px;background:var(--line);margin:0 6px}
+@media (max-width:1100px){.selbar button span{display:none}.selbar button{padding:0 8px}}
+@media (max-width:1700px){.selbar.both #sb3 button span{display:none}.selbar.both #sb3 button{padding:0 8px}}
+.toast{top:62px}
+.nextstep{position:sticky;bottom:-18px;margin:14px -14px -18px;padding:10px 14px 14px;background:var(--panel);border-top:1px solid var(--line);display:grid;gap:6px}
+.nextstep small{color:var(--muted);font-size:11.5px}
+.nextstep button{width:100%;justify-content:center;background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;height:36px}
 </style>
 
 <div class="app" id="app">
@@ -494,6 +513,14 @@ label.inl input{width:70px}
     <section class="stage">
       <div class="optbar" id="optbar"></div>
       <div class="toast" id="toast" hidden></div>
+      <div class="selbar" id="selbar" role="toolbar" aria-label="Sélection"><div class="sbg" id="sb2"><span class="sbl" id="sb2l"></span><button data-act="dup" title="Dupliquer la sélection (Ctrl+D)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg><span>Dupliquer</span></button><button data-act="group" id="sbGroup"><span>Grouper</span></button><button data-act="boolU" id="sbWeld" title="Souder les formes fermées sélectionnées en une seule"><span>Souder</span></button><button data-act="del" title="Supprimer la sélection (Suppr)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg><span>Supprimer</span></button></div><i class="sbdiv" id="sbdiv"></i><div class="sbg" id="sb3"><span class="sbl" id="sb3l"></span>
+          <button aria-label="Déplacer" data-act="rvMove" title="Déplacer : tirez les flèches X, Y, Z (Maj : au millimètre)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/></svg><span>Déplacer</span></button>
+          <button aria-label="Tourner" data-act="rvRotate" title="Tourner : tirez les cercles (Maj : par 15°)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg><span>Tourner</span></button>
+          <button aria-label="Redimensionner" data-act="rvScale" title="Redimensionner : tirez les poignées (proportions gardées si la case est cochée ; Maj : au millimètre)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="1" stroke-dasharray="3 2.5"/><path d="M3 3h4v4H3zM17 17h4v4h-4z" class="fill"/></svg><span>Redimensionner</span></button>
+          <i class="sbsep"></i>
+          <button data-act="rvDropB" title="Poser sur le fond du brut" aria-label="Poser sur le fond du brut"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"/><path d="M5 20l4.5-6.5 2.5 3 3-5 4 8.5"/><path d="M12 3v5M9.8 5.8 12 8l2.2-2.2"/></svg><span>Poser au fond</span></button>
+          <button data-act="rvDropT" title="Aligner le haut du relief sur le dessus du brut" aria-label="Aligner le haut du relief sur le dessus du brut"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h18"/><path d="M5 13l4.5-6.5 2.5 3 3-5 4 8.5"/><path d="M12 21v-5M9.8 18.2 12 16l2.2 2.2"/></svg><span>Aligner dessus</span></button>
+        </div></div>
       <div class="views v" id="views">
       <div class="canvaswrap" id="cw"><canvas id="cv" tabindex="0" aria-label="Plan de travail"></canvas><div class="cvinfo" aria-live="off"><span id="coords">X     0,00  Y     0,00</span><span id="coordsx"></span></div>
         <div class="stbar fbar" role="toolbar" aria-label="Plan 2D">
@@ -502,7 +529,7 @@ label.inl input{width:70px}
           <div class="stg" role="group" aria-label="Afficher"><span class="stg-h" title="Afficher"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></svg></span><button class="tg" data-act="tgl" data-tgl="showGrid" title="Afficher la grille" aria-label="Afficher la grille"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h18v18H3zM9 3v18M15 3v18M3 9h18M3 15h18"/></svg></button><button class="tg" data-act="tgl" data-tgl="showTP" title="Afficher les parcours d’outils" aria-label="Afficher les parcours"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="4"/><rect x="7.5" y="9" width="9" height="6" rx="1.5" class="dim"/></svg></button><button class="tg" data-act="tgl" data-tgl="showCut" title="Afficher la matière enlevée" aria-label="Afficher la matière enlevée"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 13.5l10-10M3.5 20.5l17-17M10.5 20.5l10-10" class="dim"/></svg></button><button class="tg" data-act="tgl" data-tgl="showOver" title="Afficher les traits superposés (surlignés en rose)" aria-label="Afficher les traits superposés"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18M3 14h18"/><path d="M3 12h18" class="dim" stroke-width="5" style="opacity:.3"/></svg></button></div>
         </div>
         <div class="fbar fbfit"><button data-act="fit" title="Recadrer la vue 2D sur le brut et le dessin" aria-label="Recentrer la vue 2D"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><circle cx="12" cy="12" r="2.5"/></svg></button></div>
-<div class="ctxbar" id="ctxbar" hidden><span class="grip"></span><button data-act="dup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>Dupliquer</button><button data-act="group" id="cxGroup">Grouper</button><button data-act="boolU" id="cxWeld">Souder</button><button data-act="tabParcours"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v10M8 9l4 4 4-4M5 20h14"/></svg>Usiner…</button><button data-act="del" title="Supprimer" aria-label="Supprimer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div></div>
+<div class="ctxbar" id="ctxbar" hidden></div></div>
       <div class="rv3" id="rv3" hidden><canvas id="rvc" aria-label="Vue 3D du relief"></canvas><canvas id="rvcube" width="120" height="120" aria-label="Cube d’orientation"></canvas>
         <div class="rvtools fbar" role="toolbar" aria-label="Affichage 3D">
           <button data-act="rvDraw" title="Afficher / masquer le dessin" aria-label="Dessin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18c3-7 6-10 9-10s4 3 7-3"/><circle cx="4" cy="18" r="1.5" class="fill"/><circle cx="13" cy="8" r="1.5" class="fill"/></svg></button>
@@ -513,14 +540,6 @@ label.inl input{width:70px}
         <div class="fbar fbfit"><button data-act="rvFit" title="Recentrer sur le relief sélectionné ou sur tout le relief (double-clic dans la vue : tout le brut)" aria-label="Recentrer la vue 3D"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><circle cx="12" cy="12" r="2.5"/></svg></button></div>
         <div class="rvinfo" id="rvInfo"></div>
         <canvas id="rvov" aria-hidden="true"></canvas>
-        <div class="rvxf fbar" role="toolbar" aria-label="Transformer le relief sélectionné">
-          <button aria-label="Déplacer" data-act="rvMove" title="Déplacer : tirez les flèches X, Y, Z (Maj : au millimètre)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/></svg></button>
-          <button aria-label="Tourner" data-act="rvRotate" title="Tourner : tirez les cercles (Maj : par 15°)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg></button>
-          <button aria-label="Redimensionner" data-act="rvScale" title="Redimensionner : tirez les poignées (proportions gardées si la case est cochée ; Maj : au millimètre)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="1" stroke-dasharray="3 2.5"/><path d="M3 3h4v4H3zM17 17h4v4h-4z" class="fill"/></svg></button>
-          <i class="rvsep"></i>
-          <button data-act="rvDropB" title="Poser sur le fond du brut" aria-label="Poser sur le fond du brut"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"/><path d="M5 20l4.5-6.5 2.5 3 3-5 4 8.5"/><path d="M12 3v5M9.8 5.8 12 8l2.2-2.2"/></svg></button>
-          <button data-act="rvDropT" title="Aligner le haut du relief sur le dessus du brut" aria-label="Aligner le haut du relief sur le dessus du brut"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h18"/><path d="M5 13l4.5-6.5 2.5 3 3-5 4 8.5"/><path d="M12 21v-5M9.8 18.2 12 16l2.2 2.2"/></svg></button>
-        </div>
       </div>
       </div>
     </section>
@@ -784,6 +803,7 @@ label.inl input{width:70px}
           <ul class="layers" id="layerList"></ul>
           <div class="row"><button data-act="layerAdd">Nouveau calque</button><button data-act="layerMove">Sélection → calque actif</button></div>
         </details>
+        <div class="nextstep"><small>Étape suivante</small><button data-act="tabParcours" id="nsBtn">Passer à 4 Parcours →</button></div>
       </div>
       <div class="pane" data-pane="relief" hidden>
         <section class="blk"><h3>Créer un relief</h3>
@@ -1292,6 +1312,7 @@ Object.assign(I18N_EN, {"Écriture directe dans le fichier impossible ({e}) : le
 Object.assign(I18N_EN, {"Horizontale": "Horizontal", "Verticale": "Vertical"});
 Object.assign(I18N_EN, {"La projection sur le relief utilise tous les reliefs visibles : inutile de sélectionner le relief. Sélectionnez seulement les vecteurs du parcours.": "Projection onto the relief uses all visible reliefs: no need to select the relief. Only select the toolpath’s vectors.", "Projeter sur le relief (tous les reliefs visibles)": "Project onto the relief (all visible reliefs)"});
 Object.assign(I18N_EN, {"Profondeur où commence l’usinage : 0 = dessus du brut, positive = sous la surface, négative = au-dessus (premières passes à vide, pour une surface irrégulière ou un brut plus épais que prévu)": "Depth where machining starts: 0 = stock top, positive = below the surface, negative = above it (first passes in the air, for an uneven surface or thicker stock than planned)", "Profondeur où commence l’usinage : 0 = dessus du brut, positive = sous la surface (fond d’une poche), négative = au-dessus": "Depth where machining starts: 0 = stock top, positive = below the surface (pocket floor), negative = above it"});
+Object.assign(I18N_EN, {"Sélection :": "Selection:", "objet": "object", "objets": "objects", "Rien de sélectionné · cliquez un objet sur le plan": "Nothing selected · click an object on the plan", "Usiner la sélection (4 Parcours) →": "Machine the selection (4 Toolpaths) →", "Passer à 4 Parcours →": "Go to 4 Toolpaths →", "Relief :": "Relief:", "Aucun relief sélectionné": "No relief selected", "Étape suivante": "Next step", "Poser au fond": "Drop to bottom", "Aligner dessus": "Align to top", "Dupliquer la sélection (Ctrl+D)": "Duplicate the selection (Ctrl+D)", "Supprimer la sélection (Suppr)": "Delete the selection (Del)", "Souder les formes fermées sélectionnées en une seule": "Weld the selected closed shapes into one"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4149,15 +4170,23 @@ $('#shSave').onclick = () => { if (!sheetLast) sheetRefresh(); const nm = (S.met
 $('#shPrint').onclick = () => { try { $('#shFrame').contentWindow.focus(); $('#shFrame').contentWindow.print(); } catch (e) { toast('Impression impossible ici : enregistrez la fiche puis imprimez-la depuis votre navigateur.'); } };
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#sheet').hidden && e.target.tagName !== 'TEXTAREA') $('#sheet').hidden = true; });
 function placeCtx() {
-  const bar = $('#ctxbar'), ss = selShapes();
-  if (S.ui.tool !== 'select' || !ss.length || !$('#tpWin').hidden || (drag && (drag.mode === 'move' || drag.mode === 'band'))) { bar.hidden = true; return; }
-  const b = bbox(ss), us = units(ss), oneGroup = us.length === 1 && !!ss[0].g;
-  const gb = $('#cxGroup'); gb.hidden = !(oneGroup || us.length > 1); gb.dataset.act = oneGroup ? 'ungroup' : 'group'; gb.textContent = oneGroup ? 'Dégrouper' : 'Grouper';
-  $('#cxWeld').hidden = ss.filter(s => s.closed).length < 2;
-  bar.hidden = false; const bw = bar.offsetWidth || 360, bh = bar.offsetHeight || 40;
-  const gap = xfOn() ? 34 : 16; let X = (sx(b.x0) + sx(b.x1)) / 2, Y = sy(b.y0) + gap;
-  if (Y + bh > H - 8) Y = sy(b.y1) - bh - gap; X = Math.max(bw / 2 + RB + 6, Math.min(W - bw / 2 - 6, X)); Y = Math.max(RB + 6, Math.min(H - bh - 6, Y));
-  bar.style.left = X + 'px'; bar.style.top = Y + 'px';
+  $('#ctxbar').hidden = true;
+  const ss = selShapes(), n = ss.length, us = n ? units(ss) : [], oneGroup = us.length === 1 && !!(ss[0] && ss[0].g);
+  const l2 = $('#sb2l'); if (!l2) return;
+  const t2 = n ? tr('Sélection :') + ' <b>' + n + ' ' + (n > 1 ? tr('objets') : tr('objet')) + '</b>' : tr('Rien de sélectionné · cliquez un objet sur le plan');
+  if (l2.innerHTML !== t2) l2.innerHTML = t2;
+  const gb = $('#sbGroup'), gl = oneGroup ? tr('Dégrouper') : tr('Grouper'); gb.dataset.act = oneGroup ? 'ungroup' : 'group'; if (gb.textContent !== gl) gb.innerHTML = '<span>' + gl + '</span>';
+  $$('#sb2 button').forEach(x => x.disabled = !n); gb.disabled = !(oneGroup || us.length > 1); $('#sbWeld').disabled = ss.filter(x => x.closed).length < 2;
+  const ns = $('#nsBtn'), nl = n ? tr('Usiner la sélection (4 Parcours) →') : tr('Passer à 4 Parcours →'); if (ns && ns.textContent !== nl) ns.textContent = nl;
+  sbVis();
+}
+function sbVis() {
+  const d2 = typeof VIEWS === 'undefined' || VIEWS.d2, d3 = typeof VIEWS !== 'undefined' && VIEWS.d3;
+  $('#sb2').hidden = !d2; $('#sb3').hidden = !d3; $('#sbdiv').hidden = !(d2 && d3); $('#selbar').classList.toggle('both', !!(d2 && d3));
+  const it = S.relSel && S.relief && S.relief.items.find(x => x.id === S.relSel), l3 = $('#sb3l');
+  const t3 = it ? tr('Relief :') + ' <b>' + String(it.name || '').replace(/[<&]/g, '') + '</b>' : tr('Aucun relief sélectionné');
+  if (l3 && l3.innerHTML !== t3) l3.innerHTML = t3;
+  $$('#sb3 button').forEach(x => x.disabled = !it);
 }
 let newArm = 0;
 function act(a, btn) {
@@ -6462,7 +6491,7 @@ function viewsApply() {
   $('#cw').hidden = !VIEWS.d2; $('#rv3').hidden = !VIEWS.d3; v.classList.toggle('both', VIEWS.d2 && VIEWS.d3); v.classList.toggle('v', VIEWS.split === 'v'); v.classList.toggle('h', VIEWS.split === 'h');
   const b2 = document.querySelector('[data-act="view2d"]'), b3 = document.querySelector('[data-act="view3d"]'); if (b2) b2.classList.toggle('on', VIEWS.d2); if (b3) b3.classList.toggle('on', VIEWS.d3);
   for (const [k, on] of [['splitV', VIEWS.split === 'v'], ['splitH', VIEWS.split === 'h']]) { const b = document.querySelector('[data-act="' + k + '"]'); if (b) { b.disabled = !(VIEWS.d2 && VIEWS.d3); b.setAttribute('aria-pressed', on && !b.disabled); } }
-  try { LS.set('copo.views', JSON.stringify({ d2: VIEWS.d2, d3: VIEWS.d3, split: VIEWS.split })); } catch { }
+  try { LS.set('copo.views', JSON.stringify({ d2: VIEWS.d2, d3: VIEWS.d3, split: VIEWS.split })); } catch { } if (typeof sbVis === 'function') sbVis();
   if (VIEWS.d2) requestAnimationFrame(() => { resize(); }); if (VIEWS.d3) { if (!RV.gl) rvInit(); RV.sig = ''; RV.lsig = ''; rvSync(); rvReq(); }
 }
 function viewToggle(k) { VIEWS[k] = !VIEWS[k]; if (!VIEWS.d2 && !VIEWS.d3) VIEWS[k === 'd2' ? 'd3' : 'd2'] = true; if (k === 'd3' && !VIEWS.d3) VIEWS.userHid3 = true; viewsApply(); }
@@ -6627,7 +6656,7 @@ function rvOverlay() {
     else { g.fillStyle = q.col; g.strokeStyle = '#1b1b1b'; g.lineWidth = 1.5; const r = hv ? 7 : 5; if (q.k === 'hz') { g.beginPath(); g.moveTo(q.p[0], q.p[1]); g.lineTo(q.zAxis[0], q.zAxis[1]); g.strokeStyle = q.col; g.lineWidth = 2; g.stroke(); g.beginPath(); g.arc(q.zAxis[0], q.zAxis[1], r, 0, 7); g.fill(); } else { g.fillRect(q.p[0] - r, q.p[1] - r, 2 * r, 2 * r); g.strokeRect(q.p[0] - r, q.p[1] - r, 2 * r, 2 * r); } } }
   // infos (coin haut gauche)
   const el = $('#rvInfo'); if (it) { const Z = rvZ(it), o = outXY(it.x, it.y), f = v => fr(v, 2); el.textContent = it.name + '\n' + 'X ' + f(o[0]) + '  Y ' + f(o[1]) + '  ' + tr('(centre)') + '\n' + tr('Taille') + ' ' + f(it.w) + ' × ' + f(it.h) + ' × ' + f(+it.zH || 0) + ' mm\n' + tr('Haut brut → haut relief') + ' ' + f(+it.top || 0) + ' mm\n' + tr('Bas brut → bas relief') + ' ' + f(S.stock.t - (+it.top || 0) - (+it.zH || 0)) + ' mm\n' + tr('Rotation') + ' Z ' + fr(+it.rot || 0, 1) + '°' + (it.kind === 'stl' ? '  X ' + fr(+it.rx || 0, 1) + '°  Y ' + fr(+it.ry || 0, 1) + '°' : ''); }
-  const dis = !it; document.querySelectorAll('.rvxf button').forEach(b => b.disabled = dis);
+  const dis = !it; document.querySelectorAll('#sb3 button').forEach(b => b.disabled = dis); sbVis();
 }
 function rvRender() {
   RV.raf = 0; const gl = RV.gl, c = $('#rvc'); if (!gl || !VIEWS.d3) return;
