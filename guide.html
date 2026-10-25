@@ -186,7 +186,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.99</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.100</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -255,7 +255,7 @@ footer p{max-width:none}
       <li><strong>Rotation</strong> (Disposer) : un pivot orange apparaît au centre de la sélection ; faites-le glisser sur le plan (il s'accroche aux objets, aux repères et à la grille), ou choisissez l'un des neuf points, ou tapez ses coordonnées. Rotation <em>relative</em> (la sélection tourne de l'angle indiqué, positif dans le sens inverse des aiguilles d'une montre) ou <em>absolue</em> (la sélection prend l'angle indiqué, COPO retient les rotations déjà faites). Boutons ↺ 90° et ↻ 90° pour les quarts de tour.</li>
       <li><strong>Poignées</strong> : cliquez une seconde fois sur un objet déjà sélectionné. Les carrés redimensionnent (coins proportionnels si « Garder les proportions » est coché, Maj pour l'inverse ; milieux sur un seul axe), les ronds font tourner autour du pivot (Maj : par pas de 15°), et le pivot se déplace. Un nouveau clic les masque.</li>
       <li><strong>Clic droit et double-clic</strong> : un seul clic droit sur le plan termine la ligne en cours (polyligne), annule un tracé commencé, revient à l'outil de sélection et désélectionne ; en sélection, il masque les poignées puis désélectionne. Le double-clic sur un objet, depuis la sélection ou un outil de forme (rectangle, ellipse, cercle, polygone, arc, cote, mesure), le sélectionne avec ses poignées ; un nouveau double-clic ouvre l'édition de ses nœuds (Échap ou clic droit pour en sortir).</li>
-      <li><strong>Copie en réseau</strong> en grille ou circulaire, <strong>miroirs</strong>, <strong>rotation</strong>, <strong>ordre de superposition</strong>.</li>
+      <li><strong>Copie en réseau</strong> en grille, circulaire ou <em>le long d’une courbe</em> (aussi l’icône <span class="ui">Répéter le long d’une courbe</span> de Disposer) : sélectionnez les objets à répéter puis, en dernier, la courbe guide (<kbd>Maj</kbd>+clic) ; indiquez le nombre de copies, réparties sur toute la courbe ou avec un espacement, un décalage au départ, et cochez <em>Orienter selon la courbe</em> pour qu’elles tournent avec elle. <strong>Miroirs</strong>, <strong>rotation</strong>, <strong>ordre de superposition</strong>.</li>
       <li><strong>Position et taille exactes</strong> : bloc <span class="ui">Sélection</span>, avec un point de référence choisi parmi neuf (coins, milieux, centre).</li>
     </ul>
     <h3>Accrochage, repères et cotes</h3>
@@ -367,6 +367,7 @@ footer p{max-width:none}
     </ul>
     <h3>Passes, surépaisseur et sens de coupe</h3>
     <p><strong>Prof. départ (D)</strong> et <strong>Prof. coupe (C)</strong>, comme dans Aspire : l'usinage commence à la profondeur D sous la surface (par exemple au fond d'une poche déjà usinée) et descend de C à partir de là ; le fond est donc à D + C. Laissez D à 0 pour partir de la surface. En V-carving, la fraise calcule le motif comme si la surface était à D, ce qui sert notamment à l'incrustation. Le petit schéma à côté des champs rappelle ce que sont D et C.</p>
+    <p><strong>Projeter sur le relief</strong> (profil, poche, V-carving) : le parcours suit la surface du relief de l’onglet Relief au lieu du dessus plat du brut ; les profondeurs D et C se mesurent alors depuis le relief. La hauteur de contact tient compte de la forme de la fraise (en V, hémisphérique, droite), pour graver un motif ou une lettre sur une surface bombée. En dehors du relief, le parcours reste mesuré depuis le dessus du brut. Face 1 seulement ; si le relief change, la liste signale qu’il faut recalculer le parcours.</p>
     <p>La profondeur de coupe est répartie en passes de la profondeur choisie. Une <strong>surépaisseur</strong> laisse un peu de matière sur les parois pendant l'ébauche ; elle est retirée à la dernière passe ou par une passe de finition sur toute la hauteur. Le sens de coupe est <em>avalant</em> ou en <em>opposition</em>.</p>
     <h3>Entrée de l'outil</h3>
     <div class="tbl"><table>
@@ -387,7 +388,7 @@ footer p{max-width:none}
       <figure><img src="img/fr-08-texte.webp" alt="Texte ATELIER COPO placé sur un arc, avec un parcours de V-carving." width="1800" height="1125" loading="lazy"><figcaption>Texte placé sur un arc, puis gravé en V-carving.</figcaption></figure>
       <figure><img src="img/fr-09-apercu3d-texte.webp" alt="Aperçu 3D de l'enseigne gravée." width="1800" height="1125" loading="lazy"><figcaption>Le même travail dans l'aperçu 3D.</figcaption></figure>
     </div>
-    <p>Choisissez une police dans la liste du bloc <span class="ui">Texte</span> : polices installées (Chrome et Edge) ou votre dossier de polices (<span class="ui">Fichier › Ouvrir un dossier de polices…</span>), avec aperçu. Deux cases en haut de la liste, <em>Polices de COPO</em> et <em>Polices de l'ordinateur</em>, raccourcissent la liste ; le choix est mémorisé. Prenez l'outil <strong>Texte</strong> <kbd>T</kbd> et cliquez sur le plan. En placement <span class="ui">Sur une courbe</span>, cliquez sur un contour : le texte s'y centre, au-dessus ou en dessous, avec l'espacement voulu. Le texte devient des vecteurs groupés, prêts pour le V-carving, la poche ou le profil.</p>
+    <p>Choisissez une police dans la liste du bloc <span class="ui">Texte</span> : polices installées (Chrome et Edge) ou votre dossier de polices (<span class="ui">Fichier › Ouvrir un dossier de polices…</span>), avec aperçu. Deux cases en haut de la liste, <em>Polices de COPO</em> et <em>Polices de l'ordinateur</em>, raccourcissent la liste ; le choix est mémorisé. Prenez l'outil <strong>Texte</strong> <kbd>T</kbd> et cliquez sur le plan. En placement <span class="ui">Sur une courbe</span>, cliquez sur un contour : le texte s'y centre, au-dessus ou en dessous, avec l'espacement voulu. En placement <span class="ui">Entre deux courbes</span>, cliquez la courbe du bas (la ligne de base) puis celle du haut : les lettres s’étirent pour remplir l’espace entre les deux, comme une enveloppe (deux arcs pour une enseigne bombée, par exemple). Le texte devient des vecteurs groupés, prêts pour le V-carving, la poche ou le profil.</p>
 
     <h3>Polices à trait unique</h3>
     <p>COPO est livré avec une soixantaine de <strong>polices à trait unique</strong> (Hershey, EMS, Cutlings, Relief SingleLine, Routed Gothic…), rangées dans le dossier <code>fonts/trait-unique</code> et proposées en tête de la liste des polices, avec aperçu. Chaque lettre y est un simple trait : le texte se grave en une seule passe avec un parcours <span class="ui">Profil</span> <span class="ui">Sur la ligne</span>, à la fraise en V ou avec une petite fraise droite. C'est le plus rapide pour les numéros de pièce, les plaques et les repères. Quand la sélection ne contient que des traits ouverts, <span class="ui">Usiner…</span> propose directement ce profil. Le catalogue <code>fonts/apercu-polices.html</code> (lien « Voir le catalogue des polices à trait unique » dans le bloc Texte) les montre toutes avec un aperçu de votre texte. Vous pouvez aussi ajouter vos propres polices SVG avec <span class="ui">Ajouter des polices…</span>.</p>
@@ -497,6 +498,8 @@ M30</pre>
     </ul>
     <p><span class="ui">Enregistrer en PDF</span> (dans la fenêtre de la fiche, ou directement <span class="ui">Fichier › Enregistrer la fiche de gamme en PDF</span> sans l'ouvrir) crée un fichier PDF au format A4, découpé en pages sans couper les tableaux ni les images, prêt à imprimer ou à envoyer. Le PDF est une image de la fiche (texte non sélectionnable) ; pour un PDF avec du texte, utilisez <span class="ui">Imprimer</span> puis « Enregistrer au format PDF » du navigateur. Vous pouvez aussi garder le fichier HTML avec le G-code. Les réglages de la fiche sont enregistrés avec le projet.</p>
 
+    <h3>Envoyer au logiciel de pilotage</h3>
+    <p>Le bloc <span class="ui">Envoyer au logiciel de pilotage</span> de l’onglet G-code dépose le programme directement dans un dossier : choisissez le logiciel (gSender, OpenBuilds CONTROL, UGS, CNCjs, Candle, bCNC, Mach3, Mach4, UCCNC, LinuxCNC, MASSO…), puis <span class="ui">Choisir…</span> le dossier où il ouvre ses programmes (une seule fois, COPO s’en souvient). <span class="ui">Envoyer</span> écrit le fichier avec l’extension attendue (.gcode, .nc, .tap ou .ngc). Un navigateur ne peut pas lancer un autre logiciel : il reste à ouvrir (ou recharger) le fichier dans le logiciel de pilotage. Pour un MASSO, choisissez sa clé USB comme dossier. L’écriture dans un dossier fonctionne avec Chrome, Edge, Brave et Vivaldi ; avec Firefox et Safari, le programme est téléchargé avec la bonne extension.</p>
     <h2 id="fr-installer">Installer et utiliser hors ligne</h2>
     <ul>
       <li><strong>En ligne</strong> : ouvrez la page GitHub Pages du dépôt COPO. Rien à installer.</li>
@@ -531,7 +534,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.99 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.100 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -567,7 +570,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.99</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.100</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -636,7 +639,7 @@ M30</pre>
       <li><strong>Rotation</strong> (Arrange): an orange pivot appears at the centre of the selection; drag it on the plan (it snaps to objects, guides and the grid), pick one of the nine points, or type its coordinates. <em>Relative</em> rotation (the selection turns by the given angle, positive counter-clockwise) or <em>absolute</em> (the selection takes the given angle; COPO remembers earlier rotations). ↺ 90° and ↻ 90° buttons for quarter turns.</li>
       <li><strong>Handles</strong>: click an already selected object a second time. Squares resize (corners keep proportions when “Keep proportions” is ticked, Shift for the opposite; middles resize one axis), circles rotate around the pivot (Shift: 15° steps), and the pivot can be moved. Click again to hide them.</li>
       <li><strong>Right-click and double-click</strong>: a single right-click on the plan finishes the current line (polyline), cancels a shape in progress, goes back to the selection tool and deselects; with the selection tool, it hides the handles and then deselects. Double-clicking an object, from the selection tool or a shape tool (rectangle, ellipse, circle, polygon, arc, dimension, measure), selects it with its handles; another double-click opens node editing (Esc or right-click to leave).</li>
-      <li><strong>Array copy</strong> in a grid or a circle, <strong>mirrors</strong>, <strong>rotation</strong>, <strong>stacking order</strong>.</li>
+      <li><strong>Array copy</strong> in a grid, a circle or <em>along a curve</em> (also the <span class="ui">Repeat along a curve</span> icon in Arrange): select the objects to repeat then, last, the guide curve (<kbd>Shift</kbd>+click); set the number of copies, spread over the whole curve or with a spacing, a start offset, and tick <em>Align to the curve</em> so they rotate with it. <strong>Mirrors</strong>, <strong>rotation</strong>, <strong>stacking order</strong>.</li>
       <li><strong>Exact position and size</strong>: <span class="ui">Selection</span> block, with a reference point chosen among nine (corners, middles, center).</li>
     </ul>
     <h3>Snapping, guides and dimensions</h3>
@@ -748,6 +751,7 @@ M30</pre>
     </ul>
     <h3>Passes, allowance and cut direction</h3>
     <p><strong>Start depth (D)</strong> and <strong>Cut depth (C)</strong>, as in Aspire: machining starts at depth D below the surface (for example at the bottom of a pocket already cut) and goes down by C from there, so the bottom is at D + C. Leave D at 0 to start from the surface. In V-carving, the pattern is computed as if the surface were at D, which is what inlays use. The small diagram next to the fields shows what D and C are.</p>
+    <p><strong>Project onto the relief</strong> (profile, pocket, V-carving): the toolpath follows the surface of the Relief tab instead of the flat stock top; depths D and C are then measured from the relief. The contact height takes the cutter shape into account (V, ball-nose, flat), to carve a pattern or lettering on a domed surface. Outside the relief, the toolpath stays measured from the stock top. Side 1 only; if the relief changes, the list flags that the toolpath must be recalculated.</p>
     <p>The cut depth is split into passes of the chosen depth. An <strong>allowance</strong> leaves a little material on the walls while roughing; it is removed on the last pass or by a full-depth finishing pass. The cut direction is <em>climb</em> or <em>conventional</em>.</p>
     <h3>Tool entry</h3>
     <div class="tbl"><table>
@@ -768,7 +772,7 @@ M30</pre>
       <figure><img src="img/en-08-texte.webp" alt="ATELIER COPO text placed on an arc, with a V-carving toolpath." width="1800" height="1125" loading="lazy"><figcaption>Text placed on an arc, then V-carved.</figcaption></figure>
       <figure><img src="img/en-09-apercu3d-texte.webp" alt="3D preview of the carved sign." width="1800" height="1125" loading="lazy"><figcaption>The same job in the 3D preview.</figcaption></figure>
     </div>
-    <p>Choose a font in the <span class="ui">Text</span> block list: installed fonts (Chrome and Edge) or your fonts folder (<span class="ui">File › Open a fonts folder…</span>), with a preview. Two boxes at the top of the list, <em>COPO fonts</em> and <em>Computer fonts</em>, shorten the list; the choice is remembered. Take the <strong>Text</strong> tool <kbd>T</kbd> and click on the canvas. With <span class="ui">On a curve</span> placement, click a contour: the text centers on it, above or below, with the spacing you want. The text becomes grouped vectors, ready for V-carving, pocketing or profiling.</p>
+    <p>Choose a font in the <span class="ui">Text</span> block list: installed fonts (Chrome and Edge) or your fonts folder (<span class="ui">File › Open a fonts folder…</span>), with a preview. Two boxes at the top of the list, <em>COPO fonts</em> and <em>Computer fonts</em>, shorten the list; the choice is remembered. Take the <strong>Text</strong> tool <kbd>T</kbd> and click on the canvas. With <span class="ui">On a curve</span> placement, click a contour: the text centers on it, above or below, with the spacing you want. The text becomes grouped vectors, ready for V-carving, pocketing or profiling. In <span class="ui">Between two curves</span> placement, click the bottom curve (the baseline) then the top one: the letters stretch to fill the space between them, like an envelope (two arcs for an arched sign, for example).</p>
 
     <h3>Single-line fonts</h3>
     <p>COPO comes with about sixty <strong>single-line fonts</strong> (Hershey, EMS, Cutlings, Relief SingleLine, Routed Gothic…), stored in the <code>fonts/trait-unique</code> folder and listed first in the font list, with a preview. Each letter is a single stroke: the text is engraved in one pass with a <span class="ui">Profile</span> <span class="ui">On the line</span> toolpath, with a V-bit or a small end mill. It is the fastest way to mark part numbers, plates and assembly marks. When the selection holds only open strokes, <span class="ui">Machine…</span> offers this profile directly. The <code>fonts/apercu-polices.html</code> catalogue (link “See the single-line font catalogue” in the Text block) shows them all with a preview of your text. You can also add your own SVG fonts with <span class="ui">Add fonts…</span>.</p>
@@ -878,6 +882,8 @@ M30</pre>
     </ul>
     <p><span class="ui">Save as PDF</span> (in the sheet window, or straight from <span class="ui">File › Save the setup sheet as PDF</span> without opening it) creates an A4 PDF file, split into pages without cutting tables or pictures, ready to print or send. The PDF is a picture of the sheet (text not selectable); for a PDF with text, use <span class="ui">Print</span> then the browser's “Save as PDF”. You can also keep the HTML file with the G-code. The sheet settings are saved with the project.</p>
 
+    <h3>Send to the control software</h3>
+    <p>The <span class="ui">Send to the control software</span> block in the G-code tab drops the program straight into a folder: choose the software (gSender, OpenBuilds CONTROL, UGS, CNCjs, Candle, bCNC, Mach3, Mach4, UCCNC, LinuxCNC, MASSO…), then <span class="ui">Choose…</span> the folder it opens its programs from (once, COPO remembers it). <span class="ui">Send</span> writes the file with the expected extension (.gcode, .nc, .tap or .ngc). A browser cannot start another program: you still open (or reload) the file in the control software. For a MASSO, choose its USB stick as the folder. Writing to a folder works in Chrome, Edge, Brave and Vivaldi; in Firefox and Safari the program is downloaded with the right extension.</p>
     <h2 id="en-install">Install and use offline</h2>
     <ul>
       <li><strong>Online</strong>: open the GitHub Pages site of the COPO repository. Nothing to install.</li>
@@ -912,7 +918,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.99 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.100 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
