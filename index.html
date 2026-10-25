@@ -411,7 +411,7 @@ label.inl input{width:70px}
 .fbar .coords{font:500 12px var(--f-mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:pre;padding:0 6px;flex:none}
 .fbar .coords.cx{position:absolute;left:0;bottom:calc(100% + 6px);max-width:60ch;padding:3px 8px;background:var(--panel);border:1px solid var(--line);border-radius:6px;pointer-events:none;color:var(--muted);overflow:hidden;text-overflow:ellipsis}.fbar .coords.cx:empty{display:none}
 .stbar.fbar{left:28px;bottom:10px;max-width:calc(100% - 90px);flex-wrap:wrap} /* 18 px de règle + marge */
-.fbfit{right:10px;bottom:10px}.fbar .ovbtn{width:auto;padding:0 8px;gap:4px;display:inline-flex;align-items:center;color:#e23ca0;border-color:#e23ca0}.fbar .ovbtn b{font:600 12px var(--f-mono)}
+.fbfit{right:10px;bottom:10px}.cvinfo{position:absolute;left:26px;top:24px;z-index:5;display:grid;gap:1px;font:500 12px/1.5 var(--f-mono);color:var(--ink);text-shadow:0 1px 2px rgb(0 0 0/.75),0 0 4px rgb(0 0 0/.55);pointer-events:none;white-space:pre;font-variant-numeric:tabular-nums}.cvinfo #coordsx{color:var(--ink);opacity:.85}.cvinfo #coordsx:empty{display:none}.fbar .ovbtn{width:auto;padding:0 8px;gap:4px;display:inline-flex;align-items:center;color:#e23ca0;border-color:#e23ca0}.fbar .ovbtn b{font:600 12px var(--f-mono)}
 .rvxf.fbar{left:50%;bottom:10px;transform:translateX(-50%);gap:3px}
 .rvxf.fbar button{width:32px;height:32px;padding:0}
 .rvxf .rvsep{width:1px;align-self:stretch;background:var(--line);margin:3px}
@@ -495,9 +495,8 @@ label.inl input{width:70px}
       <div class="optbar" id="optbar"></div>
       <div class="toast" id="toast" hidden></div>
       <div class="views v" id="views">
-      <div class="canvaswrap" id="cw"><canvas id="cv" tabindex="0" aria-label="Plan de travail"></canvas><div class="stbar fbar" role="toolbar" aria-label="Plan 2D">
-          <span class="coords" id="coords">X     0,00  Y     0,00</span><span class="coords cx" id="coordsx"></span>
-          <span class="stsep" aria-hidden="true"></span>
+      <div class="canvaswrap" id="cw"><canvas id="cv" tabindex="0" aria-label="Plan de travail"></canvas><div class="cvinfo" aria-live="off"><span id="coords">X     0,00  Y     0,00</span><span id="coordsx"></span></div>
+        <div class="stbar fbar" role="toolbar" aria-label="Plan 2D">
           <div class="stg" role="group" aria-label="Accroche"><span class="stg-h" title="Accroche"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v8a6 6 0 0 0 12 0V3"/><path d="M6 7h3M15 7h3"/></svg></span><button class="tg" data-act="tgl" data-tgl="snapGrid" title="Accroche à la grille" aria-label="Accroche à la grille"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM4 12h16M12 4v16" class="dim"/><circle cx="12" cy="12" r="2.6" class="fill"/></svg></button><select id="gridStep" aria-label="Pas de la grille" title="Pas de la grille d’accroche"><option value="0.5">0,5 mm</option><option value="1" selected>1 mm</option><option value="5">5 mm</option><option value="10">10 mm</option></select><button class="tg" data-act="tgl" data-tgl="snapVert" title="Accroche aux objets : extrémités, milieux, intersections, centres, tangentes et n’importe quel point des lignes" aria-label="Accroche aux objets"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19L12 6l9 13"/><rect x="9.6" y="3.6" width="4.8" height="4.8" class="fill"/></svg></button><button class="tg" data-act="tgl" data-tgl="snapGuide" title="Accroche aux repères tirés des règles" aria-label="Accroche aux repères"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v20M2 15h20" stroke-dasharray="3 2.2"/><circle cx="8" cy="15" r="2.4" class="fill"/></svg></button><button class="tg tgi" data-act="snapOpen" title="Règles d’accroche…" aria-label="Règles d’accroche…"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button></div>
           <span class="stsep" aria-hidden="true"></span>
           <div class="stg" role="group" aria-label="Afficher"><span class="stg-h" title="Afficher"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></svg></span><button class="tg" data-act="tgl" data-tgl="showGrid" title="Afficher la grille" aria-label="Afficher la grille"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h18v18H3zM9 3v18M15 3v18M3 9h18M3 15h18"/></svg></button><button class="tg" data-act="tgl" data-tgl="showTP" title="Afficher les parcours d’outils" aria-label="Afficher les parcours"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="4"/><rect x="7.5" y="9" width="9" height="6" rx="1.5" class="dim"/></svg></button><button class="tg" data-act="tgl" data-tgl="showCut" title="Afficher la matière enlevée" aria-label="Afficher la matière enlevée"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 13.5l10-10M3.5 20.5l17-17M10.5 20.5l10-10" class="dim"/></svg></button><button class="tg" data-act="tgl" data-tgl="showOver" title="Afficher les traits superposés (surlignés en rose)" aria-label="Afficher les traits superposés"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18M3 14h18"/><path d="M3 12h18" class="dim" stroke-width="5" style="opacity:.3"/></svg></button></div><button class="ovbtn" id="ovBtn" data-act="ovSel" hidden title="Traits superposés, surlignés en rose (nombre de paires de vecteurs) : cliquez pour sélectionner les doublons, puis Suppr pour les retirer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18M3 13h18" /><path d="M8 7v8M16 7v8" class="dim"/></svg><b>0</b></button>
@@ -881,7 +880,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.120</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.121</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1183,7 +1182,7 @@ label.inl input{width:70px}
     <label>Qualité<select id="v3Q"><option value="1">Normale</option><option value="2">Fine</option></select></label>
     <label>Vue<select id="v3Face"><option value="f1">Face 1 en haut</option><option value="f2">Face 2 en haut (pièce retournée)</option></select></label>
     <label class="chk"><input type="checkbox" id="v3Tool" checked> Outil</label>
-    <label class="chk"><input type="checkbox" id="v3Draw"> Dessin</label><label class="chk" title="Affiche le relief dessiné (maillage de lignes) pour le comparer à la matière usinée"><input type="checkbox" id="v3Rel"> Relief</label><label class="chk" title="Cache le brut qui n’a pas été touché par la fraise : il ne reste que la partie usinée"><input type="checkbox" id="v3Only"> Partie usinée seule</label>
+    <label class="chk"><input type="checkbox" id="v3Draw"> Dessin</label><label class="chk" title="Affiche le relief dessiné (maillage de lignes) pour le comparer à la matière usinée"><input type="checkbox" id="v3Rel"> Relief</label><label class="chk" title="Cache les chutes autour des pièces détourées (découpes sur toute l’épaisseur) : il ne reste que la pièce finie. Les ponts d’attache ne relient plus la pièce à la chute."><input type="checkbox" id="v3Only"> Pièce finie seule</label>
     <label>Afficher<select id="v3Show"><option value="stock">Matière</option><option value="both">Matière + trajectoires</option><option value="paths">Trajectoires seules</option></select></label>
     <label class="chk" id="v3OneRow"><input type="checkbox" id="v3One"> Parcours sélectionné seul</label>
     <button id="v3Reset">Recentrer</button>
@@ -1286,6 +1285,7 @@ Object.assign(I18N_EN, {"Afficher les traits superposés": "Show overlapping lin
 Object.assign(I18N_EN, {"STL importé à sa taille réelle : {n} triangles, {w} × {h} × {z} mm.": "STL imported at its real size: {n} triangles, {w} × {h} × {z} mm.", "hauteur {z} mm pour un brut de {t} mm": "height {z} mm for a {t} mm stock", "{w} × {h} mm pour un brut de {bw} × {bh} mm": "{w} × {h} mm for a {bw} × {bh} mm stock", "Le modèle dépasse le brut ({m}) : agrandissez le brut dans l’onglet Projet, ou réduisez le modèle.": "The model is larger than the stock ({m}): enlarge the stock in the Project tab, or shrink the model."});
 Object.assign(I18N_EN, {"Le relief dépasse l’épaisseur du brut : il sera coupé au fond. Augmentez l’épaisseur du brut (onglet Projet) ou réduisez l’épaisseur du relief.": "The relief is thicker than the stock: it will be cut off at the bottom. Increase the stock thickness (Project tab) or reduce the relief height.", "Un relief déborde du brut : la partie en dehors ne sera pas usinée.": "A relief extends beyond the stock: the part outside will not be machined."});
 Object.assign(I18N_EN, {"Le relief ({d} mm) est plus épais que le brut ({t} mm) : le bas sera coupé. Augmentez l’épaisseur du brut.": "The relief ({d} mm) is thicker than the stock ({t} mm): the bottom will be cut off. Increase the stock thickness."});
+Object.assign(I18N_EN, {"Cache les chutes autour des pièces détourées (découpes sur toute l’épaisseur) : il ne reste que la pièce finie. Les ponts d’attache ne relient plus la pièce à la chute.": "Hides the offcuts around cut-out parts (cuts through the full thickness): only the finished part remains. Tabs no longer link the part to the offcut.", "Pièce finie seule": "Finished part only"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4921,7 +4921,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.120', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.121', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5607,17 +5607,27 @@ function v3BuildThreads() {
     gl.bindVertexArray(null); V3.thrMesh.push({ vao, n: vb.length / 6, per: 18, steps: n, t0: T.t0, t1: T.t1, face: T.face });
   }
 }
+// « Pièce finie seule » : la matière reliée au bord du brut sans passer par une découpe traversante est une chute ; on la cache (hauteur = fond)
+function v3HDisp(S3) {
+  const el = document.getElementById('v3Only'); if (!el || !el.checked) return S3.H;
+  const tabT = Math.max(0.002, ...S.tps.filter(t => t.visible && t.p && t.p.tabs).map(t => (+t.p.tabH || 0) + 0.05)), { nx, ny, H, B } = S3, N = nx * ny, thru = q => H[q] <= B[q] + tabT, seen = new Uint8Array(N), st = new Int32Array(N); let sp = 0;
+  const push = q => { if (!seen[q] && !thru(q)) { seen[q] = 1; st[sp++] = q; } };
+  for (let i = 0; i < nx; i++) { push(i); push((ny - 1) * nx + i); } for (let j = 0; j < ny; j++) { push(j * nx); push(j * nx + nx - 1); }
+  while (sp) { const q = st[--sp], i = q % nx, j = (q - i) / nx; if (i > 0) push(q - 1); if (i < nx - 1) push(q + 1); if (j > 0) push(q - nx); if (j < ny - 1) push(q + nx); }
+  let keep = 0; for (let q = 0; q < N; q++) if (!seen[q] && !thru(q)) { keep = 1; break; } if (!keep) return S3.H; // aucune pièce détourée : on montre tout
+  const out = new Float32Array(N); for (let q = 0; q < N; q++) out[q] = seen[q] ? B[q] : H[q]; return out;
+}
 function v3Render() {
   const gl = V3.gl, c = $('#v3c'), S3 = V3.S3; if (!gl || !S3) return;
   const dpr = window.devicePixelRatio || 1, W = Math.max(1, Math.round(c.clientWidth * dpr)), Hh = Math.max(1, Math.round(c.clientHeight * dpr));
   if (c.width !== W || c.height !== Hh) { c.width = W; c.height = Hh; }
   gl.viewport(0, 0, W, Hh); const bg = hex3(tok('--canvas')); gl.clearColor(bg[0], bg[1], bg[2], 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  if (V3.dirty) { gl.bindTexture(gl.TEXTURE_2D, V3.tex); gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, S3.nx, S3.ny, gl.RED, gl.FLOAT, S3.H); gl.bindTexture(gl.TEXTURE_2D, V3.texB); gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, S3.nx, S3.ny, gl.RED, gl.FLOAT, S3.B); V3.dirty = false; }
+  if (V3.dirty) { gl.bindTexture(gl.TEXTURE_2D, V3.tex); gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, S3.nx, S3.ny, gl.RED, gl.FLOAT, v3HDisp(S3)); gl.bindTexture(gl.TEXTURE_2D, V3.texB); gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, S3.nx, S3.ny, gl.RED, gl.FLOAT, S3.B); V3.dirty = false; }
   const cp = Math.cos(V3.pitch), e = [V3.tgt[0] + V3.dist * cp * Math.cos(V3.yaw), V3.tgt[1] + V3.dist * cp * Math.sin(V3.yaw), V3.tgt[2] + V3.dist * Math.sin(V3.pitch)];
   const mvp = m4mul(m4persp(0.7, W / Hh, V3.dist * 0.01, V3.dist * 20), m4look(e, V3.tgt, [0, 0, 1])), L = v3n([0.35, -0.55, 0.85]);
   gl.useProgram(V3.prog); const u = n => gl.getUniformLocation(V3.prog, n);
   gl.uniformMatrix4fv(u('uMVP'), false, mvp); gl.uniform2f(u('uCell'), S3.cx, S3.cy); gl.uniform2i(u('uDim'), S3.nx, S3.ny); gl.uniform1f(u('uT'), S3.t);
-  gl.uniform3fv(u('uL'), L); gl.uniform3fv(u('uTop'), hex3(tok('--stock'))); gl.uniform3fv(u('uDeep'), [0.62, 0.47, 0.30]); gl.uniform1f(u('uOnly'), $('#v3Only').checked ? 1 : 0);
+  gl.uniform3fv(u('uL'), L); gl.uniform3fv(u('uTop'), hex3(tok('--stock'))); gl.uniform3fv(u('uDeep'), [0.62, 0.47, 0.30]); gl.uniform1f(u('uOnly'), 0);
   const flipV = $('#v3Face').value === 'f2', model = !flipV ? [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1] : S.stock.flip === 'y' ? [-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, S3.w, 0, -S3.t, 1] : [1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, S3.h, -S3.t, 1];
   gl.uniformMatrix4fv(u('uModel'), false, model);
   gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, V3.tex); gl.uniform1i(u('uH'), 0);
@@ -5980,7 +5990,7 @@ function v3Events(c) {
   $('#v3Tool').onchange = () => v3Req();
   try { $('#v3Draw').checked = LS.get('copo.v3draw') !== '0'; } catch { $('#v3Draw').checked = true; }
   $('#v3Draw').onchange = e => { try { LS.set('copo.v3draw', e.target.checked ? '1' : '0'); } catch { } v3Req(); };
-  for (const [id, key, def] of [['v3Rel', 'copo.v3rel', '0'], ['v3Only', 'copo.v3only', '0']]) { let v = def; try { v = LS.get(key) || def; } catch { } $('#' + id).checked = v === '1'; $('#' + id).onchange = e => { try { LS.set(key, e.target.checked ? '1' : '0'); } catch { } v3Req(); }; }
+  for (const [id, key, def] of [['v3Rel', 'copo.v3rel', '0'], ['v3Only', 'copo.v3only', '0']]) { let v = def; try { v = LS.get(key) || def; } catch { } $('#' + id).checked = v === '1'; $('#' + id).onchange = e => { try { LS.set(key, e.target.checked ? '1' : '0'); } catch { } V3.dirty = true; v3Req(); }; }
   $('#v3Show').onchange = () => { try { LS.set('copo.v3show', $('#v3Show').value); } catch { } v3Req(); };
   $('#v3One').onchange = () => { v3BuildPaths(); v3Req(); };
   $('#v3Face').onchange = () => v3Req();
