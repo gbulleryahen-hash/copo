@@ -510,6 +510,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 .ilfig{width:100%;height:auto;background:#ffffff12;border-radius:6px}
 .ipdim{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;align-items:center}.ipmini{width:96px;height:auto;background:#ffffff12;border-radius:5px}
 .ipdim{display:grid;grid-template-columns:88px minmax(0,1fr);gap:10px;align-items:center}.ipfig{width:88px;height:auto;display:block}.ipf{display:grid;gap:6px}.ipf label{font-size:12px}
+#tpForm .figrow{grid-template-columns:64px minmax(0,1fr)}#tpForm .figrow.fdepth{grid-template-columns:88px minmax(0,1fr)}#tpForm .figrow.nofig{grid-template-columns:minmax(0,1fr)}.tpfig{display:block;width:100%;height:auto}.seg.strat button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px 6px}.seg.strat i{display:block;width:64px}.seg.strat button[aria-pressed="true"] .tpfig{outline:2px solid var(--accent-ink);outline-offset:1px}
 </style>
 
 <div class="app" id="app">
@@ -1025,7 +1026,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.169</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.170</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1096,18 +1097,17 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           </div>
           <div class="seg" data-f="side" data-show="profile"><button value="out">Extérieur / droite</button><button value="in">Intérieur / gauche</button><button value="on">Sur la ligne</button></div>
           <label data-show="profile" id="openSideRow">Lignes ouvertes<select data-f="openSide"><option value="on">Sur la ligne</option><option value="left">À gauche du tracé</option><option value="right">À droite du tracé</option></select></label>
-          <div class="figrow" data-show="profile pocket vcarve drill thread"><span class="ill" data-ill="depth"></span><div class="g2">
+          <div class="figrow fdepth" data-show="profile pocket vcarve drill thread"><span class="ill" data-ill="depth"></span><div class="ipf">
             <label title="Profondeur où commence l’usinage : 0 = dessus du brut, positive = sous la surface, négative = au-dessus (premières passes à vide, pour une surface irrégulière ou un brut plus épais que prévu)">Prof. départ (D) (mm)<input data-u="len" type="number" data-f="vstart" step="0.1" placeholder="0"></label>
             <label><span id="depthLbl">Prof. coupe (C) (mm)</span><input data-u="len" type="number" data-f="depth" step="0.1" min="0"></label>
             <label data-show="profile pocket vcarve">Profondeur de passe (mm)<input data-u="len" type="number" data-f="pass" step="0.1" min="0.05" placeholder="celle de l'outil"></label>
             <label data-show="vcarve">Précision du calcul (mm)<input data-u="len" type="number" data-f="vstep" step="0.05" min="0.05"></label>
           </div></div>
-          <label data-show="vcarve">Fraise de dégagement (fonds plats)<select data-f="clrTool" id="fClrTool"></select></label>
-          <label class="chk" data-show="profile pocket vcarve" title="Le parcours suit la surface du relief : les profondeurs se mesurent depuis le relief au lieu du dessus du brut (face 1 seulement)"><input type="checkbox" data-f="proj"> Projeter sur le relief (tous les reliefs visibles)</label>
-          <div class="figrow" data-show="pocket"><span class="ill" data-ill="strat"></span><div class="g2">
-            <label>Stratégie<select data-f="strategy"><option value="rings">Anneaux (contour parallèle)</option><option value="raster">Balayage parallèle</option></select></label>
+          <label data-show="vcarve">Fraise de dégagement (fonds plats)<span class="toolrow"><select data-f="clrTool" id="fClrTool"></select><button type="button" data-act="tpClrLib" title="Choisir dans la bibliothèque d’outils">Changer…</button></span></label>
+          <div data-show="pocket"><p class="sw-h">Stratégie</p>
+            <div class="seg strat" data-f="strategy"><button value="rings" title="Anneaux (contour parallèle)"><i data-sfig="rings"></i><span>Anneaux</span></button><button value="raster" title="Balayage parallèle"><i data-sfig="raster"></i><span>Balayage</span></button></div>
             <label id="rasterAngRow">Angle du balayage (°)<input type="number" data-f="rasterAng" step="15"></label>
-          </div></div>
+          </div>
           <div data-show="pocket" class="tabbox">
             <label class="chk"><input type="checkbox" data-f="rest"> Reprise de matière (coins non atteints par une fraise plus grosse)</label>
             <label id="restRow">Fraise utilisée avant<select data-f="restTool" id="fRestTool"></select></label>
@@ -1151,15 +1151,16 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             </div>
             <p class="hint" id="thInfo"></p>
           </div>
+          <div class="figrow" data-show="profile pocket vcarve"><span class="ill" data-ill="dir"></span><div class="g2">
+            <label>Sens de coupe<select data-f="dir"><option value="climb">Avalant</option><option value="conv">Opposition</option></select></label>
+          </div></div>
           <div class="figrow" data-show="profile pocket" id="allowRow"><span class="ill" data-ill="allow"></span><div class="g2">
-            <label>Surépaisseur (mm)<input data-u="len" type="number" data-f="allow" step="0.05" min="0"></label>
+            <label>Surépaisseur (a) (mm)<input data-u="len" type="number" data-f="allow" step="0.05" min="0"></label>
             <label>Retrait de la surépaisseur<select data-f="finish"><option value="last">À la dernière passe</option><option value="full">Passe de finition pleine hauteur</option></select></label>
           </div></div>
-          <div class="figrow"><span class="ill" data-ill="dir"></span><div class="g2">
-            <label data-show="profile pocket vcarve">Sens de coupe<select data-f="dir"><option value="climb">Avalant</option><option value="conv">Opposition</option></select></label>
-            <label data-show="profile pocket">Entrée de l'outil<select data-f="entry"><option value="plunge">Plongée droite</option><option value="rampzz">Rampe aller-retour</option><option value="ramp">Rampe continue</option><option value="arc">Arc tangent</option><option value="arcramp">Arc en rampe</option><option value="helix">Hélice</option></select></label>
-          </div></div>
+          <label class="chk" data-show="profile pocket vcarve" title="Le parcours suit la surface du relief : les profondeurs se mesurent depuis le relief au lieu du dessus du brut (face 1 seulement)"><input type="checkbox" data-f="proj"> Projeter sur le relief (tous les reliefs visibles)</label>
           <div class="figrow" data-show="profile pocket"><span class="ill" data-ill="entry"></span><div class="g2">
+            <label>Entrée de l'outil<select data-f="entry"><option value="plunge">Plongée droite</option><option value="rampzz">Rampe aller-retour</option><option value="ramp">Rampe continue</option><option value="arc">Arc tangent</option><option value="arcramp">Arc en rampe</option><option value="helix">Hélice</option></select></label>
             <label data-entry="ramp">Longueur de rampe (mm)<input data-u="len" type="number" data-f="rampLen" step="1" min="0"></label>
             <label data-entry="arc">Rayon de l'arc / de l'hélice (mm)<input data-u="len" type="number" data-f="arcR" step="0.5" min="0.1"></label>
             <label data-entry="helix">Descente par tour (mm)<input data-u="len" type="number" data-f="helixPitch" step="0.25" min="0.1"></label>
@@ -1472,6 +1473,7 @@ Object.assign(I18N_EN, {"Profondeur de poche (a) (mm)": "Pocket depth (a) (mm)",
 Object.assign(I18N_EN, {"Fraise de dégagement (fonds plats)": "Clearance tool (flat areas)", "Aucune (la fraise en V vide les fonds plats)": "None (the V-bit clears flat areas)", "Gravure en {n} palier(s) de {p} mm au plus (profondeur de passe, celle de l’outil si vide).": "Carved in {n} step(s) of at most {p} mm (pass depth, the tool’s if empty).", "Les fonds plats sont d’abord vidés à la fraise droite (parcours « dégagement » ajouté avant celui-ci) ; la fraise en V ne reprend que le bord.": "Flat areas are first cleared with the flat end mill (a “clearance” toolpath is added before this one); the V-bit only cleans up the edge.", "Fonds plats vidés à la fraise « {n} » (parcours de dégagement).": "Flat areas cleared with “{n}” (clearance toolpath).", "Pas de fond plat assez large : rien à dégager.": "No flat area wide enough: nothing to clear.", "Parcours de dégagement lié : réglez-le dans le V-carve.": "Linked clearance toolpath: set it up in the V-carve.", "dégagement": "clearance"});
 Object.assign(I18N_EN, {"La pièce mâle est découpée dans une planchette d’épaisseur b = {b} mm : la fraise la traverse et descend à {h} mm (0,2 mm de plus, pour la détacher), avec des ponts.": "The male piece is cut out of a board of thickness b = {b} mm: the cutter goes through it, down to {h} mm (0.2 mm more, to free it), with tabs.", "Attention : b est plus petit que a, la pièce restera {d} mm sous la surface.": "Warning: b is smaller than a, the piece will sit {d} mm below the surface.", "Elle dépassera de {d} mm : à poncer après collage.": "It will stand {d} mm proud: sand it after gluing."});
 Object.assign(I18N_EN, {"Profondeur de découpe (mm)": "Cut-out depth (mm)", "Pièce mâle découpée dans une planchette d’épaisseur b = {b} mm, à {h} mm de profondeur, avec des ponts.": "Male piece cut out of a board of thickness b = {b} mm, {h} mm deep, with tabs.", "La découpe ne traverse pas la planchette : il faudra finir à la main.": "The cut does not go through the board: you will have to finish by hand.", "Pour traverser franchement, mettez un peu plus que b (par exemple b + 0,2 mm) si votre martyr le permet.": "To cut cleanly through, use a little more than b (for example b + 0.2 mm) if your spoilboard allows it.", "Parcours supprimé avec les contours qu’il avait créés.": "Toolpath deleted along with the outlines it created."});
+Object.assign(I18N_EN, {"Surépaisseur (a) (mm)": "Allowance (a) (mm)", "Anneaux": "Rings"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4721,6 +4723,7 @@ function act(a, btn) {
     case 'ipClose': gadSec(null); return;
     case 'ipMake': ipMake(); return;
     case 'ipLib': libOpen({ ftype: 'flatonly', toolId: $('#ipTool').value, cb: pt => { ipTools(pt.id); ipInfo(); toast(trf('Fraise « {n} » choisie.', { n: pt.name })); } }); return;
+    case 'tpClrLib': libOpen({ ftype: 'flatonly', toolId: S.form && S.form.clrTool, cb: pt => { S.form.clrTool = pt.id; renderForm(); toast(trf('Fraise « {n} » choisie.', { n: pt.name })); } }); return;
     case 'ilClrLib': libOpen({ ftype: 'flatonly', toolId: $('#ilClrTool').value, cb: pt => { ilFill('#ilClrTool', 'flat', pt.id); ilInfo(); toast(trf('Fraise « {n} » choisie.', { n: pt.name })); } }); return;
     case 'ilLib': libOpen({ ftype: 'vonly', toolId: $('#ilTool').value, cb: pt => { ilFill('#ilTool', 'v', pt.id); ilInfo(); toast(trf('Fraise « {n} » choisie.', { n: pt.name })); } }); return;
     case 'ilMake': ilMake(); return;
@@ -4896,10 +4899,72 @@ const CURFIG = {
   polygon: () => S.ui.polyStar ? SVG64('<path class="st" d="M32 3l6.2 12.6 13.8 2-10 9.8 2.4 13.8L32 34.7l-12.4 6.5 2.4-13.8-10-9.8 13.8-2z"/>') : SVG64('<path class="st" d="M32 3l17 9.8v19.6L32 42 15 32.4V12.8z"/>'),
   rect: () => S.ui.rectCorner === 'fillet' ? SVG64('<rect class="st" x="8" y="8" width="48" height="30" rx="7"/>') : S.ui.rectCorner === 'chamfer' ? SVG64('<path class="st" d="M15 8h34l7 7v16l-7 7H15l-7-7V15z"/>') : SVG64('<rect class="st" x="8" y="8" width="48" height="30"/>'),
 };
+// schémas du formulaire de parcours, même style que ceux des inlays : matière orange, outil gris, cotes bleu clair à traits d'arrêt, lettres blanches
+const FGC = { mat: '#c46a2b', tool: '#bdb9ae', out: '#1a1a1a', dim: '#8fb2ff', path: '#6d97ff', halo: '#262626' };
+function FB(w, h) {
+  const P = [], H = [], L = [], T = [], ln = (d, c, wd) => { H.push('<path d="' + d + '" fill="none" stroke="' + FGC.halo + '" stroke-width="' + (wd + 2.2) + '" stroke-linejoin="round"/>'); L.push('<path d="' + d + '" fill="none" stroke="' + c + '" stroke-width="' + wd + '" stroke-linejoin="round"/>'); };
+  const b = {
+    poly(d, f, ex = '') { P.push('<path d="' + d + '" fill="' + f + '" stroke="' + FGC.out + '" stroke-width="1.2" stroke-linejoin="round"' + ex + '/>'); return b; },
+    raw(x) { P.push(x); return b; },
+    dash(x1, y, x2) { if (x2 - x1 > 2) P.push('<path d="M' + x1 + ' ' + y + 'H' + x2 + '" stroke="#fff" stroke-width="1.5" stroke-dasharray="4 3"/>'); return b; },
+    ln(x1, y1, x2, y2, wd = 1.3) { ln('M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2, FGC.dim, wd); return b; },
+    dv(x, y1, y2, t = 3.5) { return b.ln(x, y1, x, y2, 1.6).ln(x - t, y1, x + t, y1, 1.6).ln(x - t, y2, x + t, y2, 1.6); },
+    dh(y, x1, x2, t = 3.5) { return b.ln(x1, y, x2, y, 1.6).ln(x1, y - t, x1, y + t, 1.6).ln(x2, y - t, x2, y + t, 1.6); },
+    path(d, dash) { H.push('<path d="' + d + '" fill="none" stroke="' + FGC.halo + '" stroke-width="4.6" stroke-linejoin="round" stroke-linecap="round"/>'); L.push('<path d="' + d + '" fill="none" stroke="' + FGC.path + '" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 3.5"' : '') + '/>'); return b; },
+    arrow(x, y, a) { const c = Math.cos(a), s = Math.sin(a), q = (u, v) => (x + u * c - v * s).toFixed(1) + ' ' + (y + u * s + v * c).toFixed(1); L.push('<path d="M' + q(3, 0) + 'L' + q(-6, -4.5) + 'L' + q(-6, 4.5) + 'Z" fill="' + FGC.path + '" stroke="' + FGC.halo + '" stroke-width="1"/>'); return b; },
+    dot(x, y, r = 4.5) { T.push('<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + FGC.tool + '" stroke="' + FGC.out + '" stroke-width="1.2"/>'); return b; },
+    tool(x0, y0, w, h) { P.push('<path d="M' + (x0 + w * 0.2) + ' ' + (y0 - h * 0.35) + 'h' + (w * 0.6) + 'v' + (h * 0.35) + 'h-' + (w * 0.6) + 'Z" fill="' + FGC.tool + '" stroke="' + FGC.out + '" stroke-width="1.2"/><path d="M' + x0 + ' ' + y0 + 'h' + w + 'v' + h + 'h-' + w + 'Z" fill="' + FGC.tool + '" stroke="' + FGC.out + '" stroke-width="1.2"/>'); let d = ''; for (let k = 0; k < 4; k++) { const y = y0 + h * (k + 0.6) / 4; d += 'M' + x0 + ' ' + (y + w * 0.3).toFixed(1) + 'L' + (x0 + w) + ' ' + (y - w * 0.3).toFixed(1); } P.push('<path d="' + d + '" stroke="#5c5850" stroke-width="1.2"/>'); return b; },
+    tx(x, y, t, an = 'middle') { T.push('<text x="' + x + '" y="' + y + '" text-anchor="' + an + '" fill="#fff" stroke="' + FGC.halo + '" stroke-width="3" paint-order="stroke">' + t + '</text>'); return b; },
+    svg() { return '<svg class="tpfig" viewBox="0 0 ' + w + ' ' + h + '" aria-hidden="true" font-family="sans-serif" font-size="15" font-weight="600" data-notr>' + P.join('') + H.join('') + L.join('') + T.join('') + '</svg>'; },
+  };
+  return b;
+}
+const FIG = {
+  profDepth() { // profil ou poche : départ D, coupe C, passes P
+    const G = 4, f = FB(132, 96).poly('M10 8H26V28H40V78H74V92H10Z', FGC.mat);
+    [38, 48, 58, 68].forEach(y => f.dash(43, y, 72));
+    f.ln(26 + G, 8, 116, 8).ln(40 + G, 28, 116, 28).ln(74 + G, 78, 116, 78).dv(112, 8, 28).dv(112, 28, 78).tx(124, 23, 'D').tx(124, 58, 'C');
+    f.ln(75, 48, 92, 48).ln(75, 58, 92, 58).dv(88, 48, 58).tx(99, 58, 'P');
+    return f.svg();
+  },
+  vDepth(open) { // V-carve : fond plat à la profondeur max, ou pointe si C = 0
+    const G = 4, xb = open ? 45 : 38, sl = (xb - 22) / 62, xl = y => 22 + (y - 8) * sl, xr = y => 68 - (y - 8) * sl;
+    const f = FB(132, 96).poly(open ? 'M8 8H22L45 70L68 8H84V92H8Z' : 'M8 8H22L38 70H52L68 8H84V92H8Z', FGC.mat);
+    [24, 36, 48, 60].forEach(y => f.dash(+(xl(y) + 2).toFixed(1), y, +(xr(y) - 2).toFixed(1)));
+    f.ln(84 + G, 8, 116, 8).ln(84 + G, 24, 116, 24).ln((open ? 45 : 52) + G, 70, 116, 70).dv(112, 8, 24).dv(112, 24, 70).tx(124, 21, 'D').tx(124, 52, 'C');
+    f.ln(+(xr(36) + G).toFixed(1), 36, 96, 36).ln(+(xr(48) + G).toFixed(1), 48, 96, 48).dv(92, 36, 48).tx(102, 47, 'P');
+    return f.svg();
+  },
+  allow() { const G = 4; return FB(96, 78).poly('M6 28H40V74H6Z', FGC.mat).tool(52, 30, 16, 44).ln(40, 28 - G, 40, 10).ln(52, 30 - G, 52, 10).dh(14, 40, 52).tx(46, 10, 'a').svg(); },
+  dir(F) {
+    const climb = F.dir !== 'conv', side = F.side || 'out', ccw = side === 'in' ? !climb : climb, f = FB(96, 72);
+    if (side === 'in') f.poly('M8 6H88V66H8Z', FGC.mat).raw('<path d="M24 20H72V52H24Z" fill="' + FGC.halo + '" stroke="' + FGC.out + '" stroke-width="1.2"/>').path('M30 26H66V46H30Z');
+    else if (side === 'on') f.poly('M20 16H76V56H20Z', FGC.mat).path('M20 16H76V56H20Z');
+    else f.poly('M24 20H72V52H24Z', FGC.mat).path('M14 18a8 8 0 0 1 8-8h52a8 8 0 0 1 8 8v36a8 8 0 0 1-8 8H22a8 8 0 0 1-8-8z');
+    const y = side === 'in' ? 26 : side === 'on' ? 16 : 10; f.arrow(48, y, ccw ? Math.PI : 0).dot(side === 'in' ? 30 : side === 'on' ? 20 : 17, side === 'out' ? 13 : y);
+    return f.svg();
+  },
+  entry(F) {
+    const e = F.entry || 'plunge', f = FB(96, 64);
+    if (e === 'arc' || e === 'arcramp') return f.poly('M4 46H92V60H4Z', FGC.mat).path('M14 12a28 28 0 0 0 28 28h40', e === 'arcramp').arrow(84, 40, 0).dot(14, 12).svg();
+    f.poly('M4 30H92V60H4Z', FGC.mat).tool(9, 6, 10, 22);
+    const d = { plunge: 'M14 30V50H80', rampzz: 'M14 30L62 42L16 50H80', ramp: 'M14 30L50 50H80', helix: 'M14 30l8 3.5-8 3.5 8 3.5-8 3.5 8 3.5-8 2.5H80' }[e] || 'M14 30V50H80';
+    return f.path(d).arrow(83, 50, 0).svg();
+  },
+  tabs() { return FB(96, 64).poly('M4 6H92V60H4Z', FGC.mat).raw('<path d="M12 14H84V52H12Z" fill="' + FGC.halo + '" stroke="' + FGC.out + '" stroke-width="1.2"/>').poly('M18 20H78V46H18Z', FGC.mat).poly('M42 13H54V21H42Z', '#e0a070').svg(); },
+  strat(k) {
+    const f = FB(96, 64).poly('M6 6H90V58H6Z', FGC.mat);
+    if (k === 'raster') { let d = 'M14 14'; for (let i = 0; i < 6; i++) { const y = 14 + i * 7.2; d += (i ? 'L' + (i % 2 ? 82 : 14) + ' ' + y.toFixed(1) : '') + 'L' + (i % 2 ? 14 : 82) + ' ' + y.toFixed(1); } f.path(d).dot(14, 14); }
+    else f.path('M14 14H82V50H14ZM24 24H72V40H24ZM34 32H62').dot(14, 14);
+    return f.svg();
+  },
+};
 const ILL = {
   curtool() { const f = CURFIG[S.ui.tool]; return f ? f() : ''; },
   depth(F) {
-    if (F.type === 'vcarve') {
+    if (F.type === 'profile' || F.type === 'pocket') return FIG.profDepth();
+    if (F.type === 'vcarve') return FIG.vDepth(!(+F.depth > 0));
+    if (F.type === 'vcarve-old') {
       const st = +F.vstart > 0;
       return SVG64('<path class="st" d="M3 10h11l11 23h13l11-23h12v30H3z"/><path class="dl" d="M17.3 17h28.4M46 17h12"/>' + DIM(8, 10, 8, 17) + DIM(55, 17, 55, 33) + '<text class="tx" x="1" y="16">D</text><text class="tx" x="58" y="28">C</text>' + '<path class="tl" d="M26.5 0h10v4l-5 17-5-17z"/>');
     }
@@ -4910,33 +4975,15 @@ const ILL = {
     }
     return SVG64('<path class="st" d="M3 10h11v7h7v16h22V17h7v-7h11v30H3z"/><path class="dl" d="M14 10h36M50 17h8"/><path class="tl" d="M27 0h10v33H27z"/>' + FLUTE(27, 37, 18, 33) + '<path class="ad" d="M21 22h22M21 27.5h22"/>' + DIM(8, 10, 8, 17) + DIM(55, 17, 55, 33) + '<text class="tx" x="1" y="16">D</text><text class="tx" x="58" y="28">C</text>');
   },
-  allow() { return SVG64('<path class="st" d="M3 6h25v34H3z"/><rect class="al" x="28" y="6" width="5" height="34"/><path class="tl" d="M33 0h12v34H33z"/>' + FLUTE(33, 45, 8, 34) + DIM(28, 3, 33, 3) + '<path class="ad" d="M28 6v34"/>'); },
+  allow() { return FIG.allow(); },
   strat(F) {
     const climb = F.dir !== 'conv';
     if (F.strategy === 'raster') { let d = 'M10 9'; for (let k = 0; k < 6; k++) { const y = 9 + k * 5.2; d += (k ? 'L' + (k % 2 ? 54 : 10) + ' ' + y.toFixed(1) : '') + 'L' + (k % 2 ? 10 : 54) + ' ' + y.toFixed(1); } return SVG64('<rect class="sh" x="5" y="4" width="54" height="36"/><path class="ac" d="' + d + '"/>' + ARW(32, 9, climb ? 0 : Math.PI) + '<circle class="tc" cx="54" cy="9" r="4"/>'); }
     return SVG64('<rect class="sh" x="5" y="4" width="54" height="36"/><rect class="ac" x="9.5" y="8.5" width="45" height="27" rx="1.5"/><rect class="ac" x="16" y="15" width="32" height="14"/><path class="ac" d="M22.5 21.5h19"/>' + ARW(32, 8.5, climb ? 0 : Math.PI) + '<circle class="tc" cx="9.5" cy="8.5" r="4"/>');
   },
-  dir(F) {
-    if (F.type !== 'profile') return '';
-    const climb = F.dir !== 'conv', side = F.side || 'out';
-    // avalant : matière à gauche du sens d'avance (broche en sens horaire)
-    const ccw = side === 'in' ? !climb : climb, sh = side === 'in' ? '<rect class="sh" x="8" y="5" width="48" height="34"/>' : '<rect class="sh" x="18" y="12" width="28" height="20"/>';
-    const p = side === 'in' ? '<rect class="ac" x="13" y="10" width="38" height="24" rx="1.5"/>' : side === 'on' ? '<rect class="ac" x="18" y="12" width="28" height="20"/>' : '<rect class="ac" x="12" y="6" width="40" height="32" rx="6"/>';
-    const ty = side === 'in' ? 10 : side === 'on' ? 12 : 6;
-    return SVG64(sh + p + ARW(32, ty, ccw ? Math.PI : 0) + '<circle class="tc" cx="' + (side === 'in' ? 13 : side === 'on' ? 18 : 15) + '" cy="' + (ty + (side === 'out' ? 1.5 : 0)) + '" r="3.6"/>');
-  },
-  entry(F) {
-    const base = '<path class="st" d="M3 12h58v28H3z"/><path class="dl" d="M3 31h58"/>';
-    switch (F.entry) {
-      case 'rampzz': return SVG64(base + '<path class="ac" d="M8 2v10l30 10-28 9h48"/>' + ARW(52, 31, 0));
-      case 'ramp': return SVG64(base + '<path class="ac" d="M8 2v10l32 19h18"/>' + ARW(52, 31, 0));
-      case 'arc': return SVG64('<rect class="sh" x="3" y="26" width="58" height="14"/><path class="dl" d="M3 26h58"/><path class="ac" d="M10 6a18 18 0 0 0 18 18h30"/>' + ARW(48, 24, 0) + '<circle class="tc" cx="10" cy="6" r="3"/>');
-      case 'arcramp': return SVG64('<rect class="sh" x="3" y="26" width="58" height="14"/><path class="dl" d="M3 26h58"/><path class="ac" d="M10 6a18 18 0 0 0 18 18h30" stroke-dasharray="4 2"/>' + ARW(48, 24, 0) + '<circle class="tc" cx="10" cy="6" r="3"/>');
-      case 'helix': return SVG64(base + '<path class="ac" d="M24 2v10c10 1.5 10 4 0 5s-10 4 0 5 10 4 0 5-10 3 0 4h32"/>' + ARW(52, 31, 0));
-      default: return SVG64(base + '<path class="ac" d="M10 2v29h48"/>' + ARW(10, 22, Math.PI / 2) + ARW(52, 31, 0));
-    }
-  },
-  tabs() { return SVG64('<path class="sh" d="M3 10h58v26H3z" stroke-dasharray="3 2"/><path class="st" d="M24 26h16v10H24z"/>' + DIM(24, 22, 40, 22) + DIM(45, 26, 45, 36)); },
+  dir(F) { return F.type === 'profile' ? FIG.dir(F) : ''; },
+  entry(F) { return FIG.entry(F); },
+  tabs() { return FIG.tabs(); },
   stock() { return SVG64('<path class="st" d="M8 16l22-8 26 8-22 8z"/><path class="st" d="M8 16l26 8v12L8 28z"/><path class="st st2" d="M34 24l22-8v12l-22 8z"/><text class="tx" x="45" y="42">X</text><text class="tx" x="14" y="39">Y</text><text class="tx" x="1" y="25">Z</text>'); },
   zzero() { const top = (S.stock.originZ || 'top') !== 'bottom'; return SVG64('<rect class="st" x="10" y="10" width="46" height="20"/><path class="tb" d="M4 34h56"/><path class="zz" d="M8 ' + (top ? 10 : 30) + 'h50"/><circle class="af" cx="10" cy="' + (top ? 10 : 30) + '" r="2.4"/><text class="tx" x="1" y="' + (top ? 8 : 41) + '">Z0</text>'); },
   flip() { const y = (S.stock.flip || 'x') === 'y'; return SVG64('<rect class="st" x="12" y="8" width="40" height="28"/>' + (y ? '<path class="dl" d="M32 3v38"/><path class="ac" d="M20 22c0-8 24-8 24 0"/>' + ARW(44, 22, Math.PI / 2) : '<path class="dl" d="M7 22h50"/><path class="ac" d="M26 12c-8 0-8 20 0 20"/>' + ARW(26, 32, 0))); },
@@ -4949,7 +4996,8 @@ const ILL = {
     return SVG64(sh + '<path class="tl" d="M26 15h12v24H26z"/>' + FLUTE(26, 38, 15, 39) + DIM(26, 42, 38, 42));
   },
 };
-function illRefresh() {
+function sfigInit() { document.querySelectorAll('[data-sfig]').forEach(el => { if (!el.firstChild) el.innerHTML = FIG.strat(el.dataset.sfig); }); }
+function illRefresh() { sfigInit();
   const F = S.form || newForm();
   document.querySelectorAll('[data-ill]').forEach(el => { const f = ILL[el.dataset.ill]; if (!f) return; const h = f(F) || ''; if (el._h !== h) { el.innerHTML = h; el._h = h; } el.style.display = h ? '' : 'none'; if (el.parentElement.classList.contains('figrow')) el.parentElement.classList.toggle('nofig', !h); });
 }
@@ -5503,7 +5551,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle (parcours visible) et pièce rapportée (parcours masqué, calque à part).' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.169', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.170', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
