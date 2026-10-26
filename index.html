@@ -509,6 +509,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 .g2>.span2{grid-column:1/-1}.toolrow button{background:var(--raised);border:1px solid var(--line);color:var(--ink);border-radius:var(--r);cursor:pointer}.toolrow button:hover{border-color:var(--accent)}
 .ilfig{width:100%;height:auto;background:#ffffff12;border-radius:6px}
 .ipdim{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;align-items:center}.ipmini{width:96px;height:auto;background:#ffffff12;border-radius:5px}
+.ipdim{display:grid;grid-template-columns:88px minmax(0,1fr);gap:10px;align-items:center}.ipfig{width:88px;height:auto;display:block}.ipf{display:grid;gap:6px}.ipf label{font-size:12px}
 </style>
 
 <div class="app" id="app">
@@ -769,25 +770,16 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         </section>
         <section class="dsec" data-sec="il" hidden><h3 class="dsec-h">Incrustation en V (inlay)</h3>
           <p class="hint" id="ilSel"></p>
-          <svg class="ilfig" viewBox="0 0 240 110" aria-hidden="true" font-family="sans-serif" font-size="10">
-            <path d="M10 62h70l30 34h20l30-34h70v40H10z" fill="#c99a6b"/>
-            <path d="M40 22h160v18H40z" fill="#d9b48a"/><path d="M84 40h72l-28 32h-16z" fill="#8a5a3a"/>
-            <path d="M10 62h70M160 62h70" stroke="#3b2a1e" stroke-width="0.8"/>
-            <path d="M206 40v22M202 40h8M202 62h8" stroke="#4f7dff" stroke-width="1.3"/><text x="214" y="55" fill="#4f7dff" font-weight="700">S</text>
-            <path d="M28 62v34M24 62h8M24 96h8" stroke="#e5534b" stroke-width="1.3"/><text x="14" y="83" fill="#e5534b" font-weight="700">D</text>
-            <path d="M120 72v24" stroke="#2fa36b" stroke-width="1.3"/><path d="M116 72h8M116 96h8" stroke="#2fa36b" stroke-width="1.3"/><text x="127" y="88" fill="#2fa36b" font-weight="700">G</text>
-            <text x="120" y="34" text-anchor="middle" fill="#3b2a1e">mâle retourné</text><text x="44" y="80" fill="#3b2a1e">femelle</text>
-          </svg>
-          <div class="g2">
-            <label>Profondeur de poche (D) (mm)<input data-u="len" type="number" id="ilD" step="0.5" min="0.5"></label>
-            <label>Jeu pour la colle (G) (mm)<input data-u="len" type="number" id="ilGap" step="0.1" min="0"></label>
-            <label>Écart de surface (S) (mm)<input data-u="len" type="number" id="ilS" step="0.5" min="0"></label>
-            <label>Nom<input type="text" id="ilName"></label>
-          </div>
+          <div class="ipdim"><svg class="ipfig" viewBox="0 0 132 90" aria-hidden="true" font-family="sans-serif" font-size="15" font-weight="600"><g transform="translate(0 8)"><path d="M20 50H50.00L56.67 70H75.33L82.00 50H112V80H20Z" fill="#bdb9ae" stroke="#1a1a1a" stroke-width="1.2" stroke-linejoin="round"/><path d="M22 14H110V26H90L80.00 56H52.00L42 26H22Z" fill="#c46a2b" stroke="#1a1a1a" stroke-width="1.2" stroke-linejoin="round"/><path d="M22 4L22 12" stroke="#8fb2ff" stroke-width="1.3"/><path d="M42 4L42 24" stroke="#8fb2ff" stroke-width="1.3"/><path d="M22 7L42 7" stroke="#8fb2ff" stroke-width="1.6"/><path d="M22 3.5L22 10.5" stroke="#8fb2ff" stroke-width="1.6"/><path d="M42 3.5L42 10.5" stroke="#8fb2ff" stroke-width="1.6"/><text x="32" y="1" text-anchor="middle" fill="#ffffff" stroke="#262626" stroke-width="3" paint-order="stroke">c</text><path d="M8 50L18 50" stroke="#8fb2ff" stroke-width="1.3"/><path d="M8 70L54.666666666666664 70" stroke="#8fb2ff" stroke-width="1.3"/><path d="M12 50L12 70" stroke="#8fb2ff" stroke-width="1.6"/><path d="M8.5 50L15.5 50" stroke="#8fb2ff" stroke-width="1.6"/><path d="M8.5 70L15.5 70" stroke="#8fb2ff" stroke-width="1.6"/><text x="4" y="65" text-anchor="middle" fill="#ffffff" stroke="#262626" stroke-width="3" paint-order="stroke">a</text><path d="M112 26L121 26" stroke="#8fb2ff" stroke-width="1.3"/><path d="M82.0 56L121 56" stroke="#8fb2ff" stroke-width="1.3"/><path d="M117 26L117 56" stroke="#8fb2ff" stroke-width="1.6"/><path d="M113.5 26L120.5 26" stroke="#8fb2ff" stroke-width="1.6"/><path d="M113.5 56L120.5 56" stroke="#8fb2ff" stroke-width="1.6"/><text x="126" y="46" text-anchor="middle" fill="#ffffff" stroke="#262626" stroke-width="3" paint-order="stroke">b</text><path d="M87.33333333333333 56L87.33333333333333 70" stroke="#8fb2ff" stroke-width="1.6"/><path d="M83.83333333333333 56L90.83333333333333 56" stroke="#8fb2ff" stroke-width="1.6"/><path d="M83.83333333333333 70L90.83333333333333 70" stroke="#8fb2ff" stroke-width="1.6"/><path d="M77.33333333333333 70L91.33333333333333 70" stroke="#8fb2ff" stroke-width="1.3"/><text x="95.33333333333333" y="67" text-anchor="start" fill="#ffffff" stroke="#262626" stroke-width="3" paint-order="stroke">g</text></g></svg><div class="ipf">
+            <label>Profondeur de poche (a) (mm)<input data-u="len" type="number" id="ilD" step="0.5" min="0.5"></label>
+            <label>Jeu au fond (g) (mm)<input data-u="len" type="number" id="ilGap" step="0.1" min="0"></label>
+            <label>Hauteur du mâle sous le support (b) (mm)<input data-u="len" type="number" id="ilB" step="0.5" min="0.5"></label>
+            <label>Débord du support (c) (mm)<input data-u="len" type="number" id="ilMargin" step="1" min="0" placeholder="auto"></label>
+          </div></div>
+          <label>Nom<input type="text" id="ilName"></label>
           <label>Fraise en V<span class="toolrow"><select id="ilTool"></select><button type="button" data-act="ilLib" title="Choisir dans la bibliothèque d’outils">Bibliothèque…</button></span></label>
           <label class="chk"><input type="checkbox" id="ilClr"> Utiliser une fraise de dégagement (vide les fonds plats)</label>
           <label id="ilClrRow" hidden>Fraise de dégagement<span class="toolrow"><select id="ilClrTool"></select><button type="button" data-act="ilClrLib" title="Choisir dans la bibliothèque d’outils">Bibliothèque…</button></span></label>
-          <label>Décalage du cadre du mâle (mm)<input data-u="len" type="number" id="ilMargin" step="1" min="0" placeholder="auto"></label>
           <label class="chk"><input type="checkbox" id="ilTp" checked> Créer les parcours d’outils</label>
           <p class="hint mono" id="ilInfo"></p>
           <p class="hint">La pièce mâle est le motif en miroir, entouré d’un cadre (décalé de la valeur indiquée), placée à droite du motif sur un calque à part. Ses parcours sont créés masqués : pour l’usiner, affichez-les (œil) et masquez ceux de la femelle. Collez le mâle retourné dans la femelle, puis rabotez ou sciez le surplus.</p>
@@ -798,13 +790,15 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <p class="hint" id="ipSel"></p>
           <div class="g2">
             <label class="span2">Fraise droite<span class="toolrow"><select id="ipTool"></select><button type="button" data-act="ipLib" title="Choisir dans la bibliothèque d’outils">Bibliothèque…</button></span></label>
-            <label>Profondeur de la poche (mm)<input data-u="len" type="number" id="ipD" step="0.5" min="0.2"></label>
             <label>Jeu pour la colle (mm)<input data-u="len" type="number" id="ipGap" step="0.05" min="0"></label>
             <select id="ipKind" hidden><option value="plug">Bouchon arasé (planche épaisse)</option><option value="cut">Pièce découpée (planchette, avec ponts)</option></select>
           </div>
           <label class="chk"><input type="checkbox" id="ipSup" checked> Pièce mâle sur support (à araser après collage)</label>
-          <div class="ipdim" id="ipOverRow"><svg class="ipmini" viewBox="0 0 92 50" aria-hidden="true" font-family="sans-serif" font-size="9"><rect x="8" y="5" width="64" height="11" fill="#8a5a3a"/><rect x="28" y="16" width="24" height="14" fill="#8a5a3a"/><path d="M2 24h26v6h24v-6h26v22H2z" fill="#e2c49b"/><path d="M8 20h64" stroke="#e5534b" stroke-dasharray="3 2"/><path d="M80 16v8M77 16h6M77 24h6" stroke="#4f7dff" stroke-width="1.3"/><text x="85" y="23" fill="#4f7dff" font-weight="700">e</text></svg><label>Dépassement du support (e) (mm)<input data-u="len" type="number" id="ipOver" step="0.5" min="0.2"></label></div>
-          <div class="ipdim" id="ipThRow" hidden><svg class="ipmini" viewBox="0 0 92 50" aria-hidden="true" font-family="sans-serif" font-size="9"><rect x="28" y="6" width="24" height="10" fill="#8a5a3a"/><rect x="14" y="9" width="14" height="3" fill="#8a5a3a"/><rect x="52" y="9" width="14" height="3" fill="#8a5a3a"/><path d="M2 30h26v-6h24v6h26v16H2z" fill="#e2c49b"/><path d="M22 6v10M19 6h6M19 16h6" stroke="#4f7dff" stroke-width="1.3"/><text x="8" y="14" fill="#4f7dff" font-weight="700">ép</text></svg><label>Épaisseur de la pièce mâle (ép) (mm)<input data-u="len" type="number" id="ipTh" step="0.5" min="0.2"></label></div>
+          <div class="ipdim"><span id="ipFig"></span><div class="ipf">
+            <label>Profondeur de poche (a) (mm)<input data-u="len" type="number" id="ipD" step="0.5" min="0.2"></label>
+            <label><span id="ipBL">Hauteur du mâle sous le support (b) (mm)</span><input data-u="len" type="number" id="ipB" step="0.5" min="0.2"></label>
+            <label id="ipCRow">Débord du support (c) (mm)<input data-u="len" type="number" id="ipC" step="1" min="0" placeholder="auto"></label>
+          </div></div>
           <canvas id="ipCv" aria-label="Aperçu du contour commun"></canvas>
           <label class="chk"><input type="checkbox" id="ipTp" checked> Créer les parcours d’outils (poche et pièce rapportée)</label>
           <p class="hint mono" id="ipInfo"></p>
@@ -1030,7 +1024,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.163</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.164</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1446,6 +1440,7 @@ Object.assign(I18N_EN, {"planche retournée": "flipped board", "support": "workp
 Object.assign(I18N_EN, {"trait de scie": "saw line", "ponts à casser": "tabs to break"});
 Object.assign(I18N_EN, {"Profondeur de poche (D) (mm)": "Pocket depth (D) (mm)", "Jeu pour la colle (G) (mm)": "Glue gap (G) (mm)", "Écart de surface (S) (mm)": "Surface gap (S) (mm)", "Utiliser une fraise de dégagement (vide les fonds plats)": "Use a clearance tool (clears flat areas)", "Fraise de dégagement": "Clearance tool", "Décalage du cadre du mâle (mm)": "Male frame offset (mm)", "Créer les parcours d’outils": "Create the toolpaths", "La pièce mâle est le motif en miroir, entouré d’un cadre (décalé de la valeur indiquée), placée à droite du motif sur un calque à part. Ses parcours sont créés masqués : pour l’usiner, affichez-les (œil) et masquez ceux de la femelle. Collez le mâle retourné dans la femelle, puis rabotez ou sciez le surplus.": "The male piece is the mirrored design, inside a frame (offset by the value given), placed to the right of the design on its own layer. Its toolpaths are created hidden: to machine it, show them (eye) and hide the female ones. Glue the flipped male into the female, then plane or saw off the excess.", "Créer l’incrustation": "Create the inlay", "mâle retourné": "flipped male", "femelle": "female", "mâle": "male", "Incrustation V": "V inlay", "Indiquez l’écart de surface (le mâle doit dépasser pour être raboté).": "Enter the surface gap (the male must stand proud to be planed).", "Choisissez la fraise de dégagement.": "Choose the clearance tool.", "Incrustation · dégagement": "Inlay · clearance", "femelle, dégagement": "female, clearance", "mâle, dégagement": "male, clearance", "Pas de fond plat assez large pour la fraise de dégagement : seule la fraise en V travaille.": "No flat area wide enough for the clearance tool: only the V-bit cuts.", "Incrustation créée : parcours femelle (visibles) et mâle (masqués).": "Inlay created: female toolpaths (visible) and male (hidden).", "Incrustation créée : pièce mâle dessinée, sans parcours.": "Inlay created: male piece drawn, no toolpaths."});
 Object.assign(I18N_EN, {"Pièce mâle sur support (à araser après collage)": "Male piece on a backing board (flush off after gluing)", "Dépassement du support (e) (mm)": "Backing height above the part (e) (mm)", "Épaisseur de la pièce mâle (ép) (mm)": "Male piece thickness (th) (mm)", "Pièce mâle sur support : le motif est usiné en miroir, en relief, sur un support épais (pièce placée à droite, sur un calque à part). Collez-la retournée dans la poche, puis sciez ou rabotez le support le long du trait rouge.": "Male piece on a backing board: the design is machined mirrored, raised, on a thick board (placed to the right, on its own layer). Glue it upside down into the pocket, then saw or plane off the backing along the red line.", "Pièce mâle sans support : le motif est découpé dans une planchette, avec des ponts d’attache (pièce placée à droite, sur un calque à part). Cassez les ponts, poncez, puis collez la pièce dans la poche.": "Male piece without backing: the design is cut out of a thin board, with holding tabs (placed to the right, on its own layer). Break the tabs, sand, then glue the piece into the pocket."});
+Object.assign(I18N_EN, {"Profondeur de poche (a) (mm)": "Pocket depth (a) (mm)", "Hauteur du mâle sous le support (b) (mm)": "Male height below the backing (b) (mm)", "Débord du support (c) (mm)": "Backing overhang (c) (mm)", "Épaisseur de la pièce mâle (b) (mm)": "Male piece thickness (b) (mm)", "Jeu au fond (g) (mm)": "Bottom gap (g) (mm)", "La hauteur du mâle sous le support (b) doit dépasser la profondeur de poche (a).": "The male height below the backing (b) must exceed the pocket depth (a).", "Indiquez l’épaisseur de la pièce mâle (b).": "Enter the male piece thickness (b).", "Le débord du support (c) doit être plus grand que le diamètre de la fraise ({d} mm).": "The backing overhang (c) must be larger than the cutter diameter ({d} mm).", "La hauteur du mâle (b) doit dépasser la profondeur de poche moins le jeu (a − g), pour qu’il reste un écart à raboter.": "The male height (b) must exceed the pocket depth minus the gap (a − g), so there is something left to plane off."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -5328,20 +5323,20 @@ function ilOpen() {
   const ss = ilSel(); if (!ss.length) return toast('Sélectionnez d’abord le motif à incruster (formes fermées).');
   let o = { D: 4, gap: 0.5, Sg: 1.5, name: tr('Incrustation V'), clr: false, margin: '', tp: true }; try { const q = JSON.parse(LS.get('copo.inlay') || '{}'); if (q.F != null && q.Sg == null) q.Sg = Math.max(0, q.F - (q.D || 4) + (q.gap || 0)); o = { ...o, ...q }; } catch { }
   ilFill('#ilTool', 'v', o.tool); ilFill('#ilClrTool', 'flat', o.clrTool);
-  $('#ilD').value = o.D; $('#ilGap').value = o.gap; $('#ilS').value = o.Sg; $('#ilName').value = o.name || tr('Incrustation V'); $('#ilClr').checked = !!o.clr; $('#ilMargin').value = o.margin === '' || o.margin == null ? '' : o.margin; $('#ilTp').checked = o.tp !== false;
+  $('#ilD').value = o.D; $('#ilGap').value = o.gap; $('#ilB').value = +(o.D - o.gap + o.Sg).toFixed(3); $('#ilName').value = o.name || tr('Incrustation V'); $('#ilClr').checked = !!o.clr; $('#ilMargin').value = o.margin === '' || o.margin == null ? '' : o.margin; $('#ilTp').checked = o.tp !== false;
   $('#ilSel').textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ss.length });
   gadSec('il'); ilInfo();
 }
-function ilVals() { const tool = S.tools.find(t => t.id === $('#ilTool').value), D = +$('#ilD').value, gap = Math.max(0, +$('#ilGap').value || 0), Sg = Math.max(0, +$('#ilS').value || 0), clr = $('#ilClr').checked, clrTool = S.tools.find(t => t.id === $('#ilClrTool').value), mg = $('#ilMargin').value; return { tool, D, gap, Sg, S: D - gap, F: D - gap + Sg, clr, clrTool, margin: mg === '' ? null : Math.max(0, +mg || 0), name: $('#ilName').value.trim() || tr('Incrustation V'), tp: $('#ilTp').checked }; }
+function ilVals() { const tool = S.tools.find(t => t.id === $('#ilTool').value), D = +$('#ilD').value, gap = Math.max(0, +$('#ilGap').value || 0), Sg = (+$('#ilB').value || 0) - (D - gap), clr = $('#ilClr').checked, clrTool = S.tools.find(t => t.id === $('#ilClrTool').value), mg = $('#ilMargin').value; return { tool, D, gap, Sg, S: D - gap, F: D - gap + Sg, clr, clrTool, margin: mg === '' ? null : Math.max(0, +mg || 0), name: $('#ilName').value.trim() || tr('Incrustation V'), tp: $('#ilTp').checked }; }
 function ilCheck(v) {
   if (!v.tool) return tr('Choisissez une fraise en V.'); if (!(v.D > 0)) return tr('Indiquez la profondeur de la poche femelle.');
-  if (!(v.S > 0)) return tr('Le jeu doit être plus petit que la profondeur de la poche.'); if (!(v.Sg > 0)) return tr('Indiquez l’écart de surface (le mâle doit dépasser pour être raboté).');
+  if (!(v.S > 0)) return tr('Le jeu doit être plus petit que la profondeur de la poche.'); if (!(v.Sg > 0)) return tr('La hauteur du mâle (b) doit dépasser la profondeur de poche moins le jeu (a − g), pour qu’il reste un écart à raboter.');
   const fl = v.tool.dia / 2 / Math.tan(v.tool.angle * Math.PI / 360); if (v.D > fl + 1e-6 || v.F > fl + 1e-6) return trf('Trop profond pour cette fraise ({f} mm max).', { f: fr(fl, 1) });
   if (v.clr && !v.clrTool) return tr('Choisissez la fraise de dégagement.');
   return '';
 }
 function ilInfo() { const v = ilVals(), e = ilCheck(v), F = x => LANG === 'fr' ? fr(x, 2) : x.toFixed(2); $('#ilClrRow').hidden = !$('#ilClr').checked; const sl = $('#ilSel'); if (sl) sl.textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ilSel().length }); $('#ilInfo').textContent = e || trf('Le mâle s’enfonce de {s} mm et laisse {g} mm de jeu au fond ; il dépasse de {p} mm avant rabotage.', { s: F(v.S), g: F(v.gap), p: F(v.Sg) }); }
-['#ilTool', '#ilD', '#ilGap', '#ilS', '#ilClr', '#ilClrTool', '#ilMargin'].forEach(id => { const el = document.querySelector(id); if (el) { el.addEventListener('input', ilInfo); el.addEventListener('change', ilInfo); } });
+['#ilTool', '#ilD', '#ilGap', '#ilB', '#ilClr', '#ilClrTool', '#ilMargin'].forEach(id => { const el = document.querySelector(id); if (el) { el.addEventListener('input', ilInfo); el.addEventListener('change', ilInfo); } });
 function ilMake() {
   const v = ilVals(), e = ilCheck(v); if (e) return toast(e);
   try { LS.set('copo.inlay', JSON.stringify({ tool: v.tool.id, D: v.D, gap: v.gap, Sg: v.Sg, name: v.name, clr: v.clr, clrTool: v.clrTool && v.clrTool.id, margin: v.margin == null ? '' : v.margin, tp: v.tp })); } catch { }
@@ -5373,28 +5368,30 @@ function ilMake() {
 // la poche (femelle) et la pièce rapportée (mâle) s'usinent alors exactement sur le même tracé
 function ipCommon(base, r) { if (!base.length || !(r > 0)) return base; const o = offLoops(offLoops(base, -r), r); return offLoops(offLoops(o, r), -r); }
 const ipArea = L => L.reduce((a, l) => a + area(l), 0);
+const IP_FIG = { plug: '<svg class="ipfig" viewBox="0 0 132 80" aria-hidden="true" font-family="sans-serif" font-size="15" font-weight="600"><g transform="translate(0 8)"><path d="M24 44H44V58H88V44H108V70H24Z" fill="#bdb9ae" stroke="#1a1a1a" stroke-width="1.2" stroke-linejoin="round"/><path d="M26 14H106V26H88V58H44V26H26Z" fill="#c46a2b" stroke="#1a1a1a" stroke-width="1.2" stroke-linejoin="round"/><path d="M26 4L26 12" stroke="#8fb2ff" stroke-width="1.3"/><path d="M44 4L44 24" stroke="#8fb2ff" stroke-width="1.3"/><path d="M26 7L44 7" stroke="#8fb2ff" stroke-width="1.6"/><path d="M26 3.5L26 10.5" stroke="#8fb2ff" stroke-width="1.6"/><path d="M44 3.5L44 10.5" stroke="#8fb2ff" stroke-width="1.6"/><text x="35" y="1" text-anchor="middle" fill="#ffffff" stroke="#262626" stroke-width="3" paint-order="stroke">c</text><path d="M10 44L22 44" stroke="#8fb2ff" stroke-width="1.3"/><path d="M10 58L42 58" stroke="#8fb2ff" stroke-width="1.3"/><path d="M14 44L14 58" stroke="#8fb2ff" stroke-width="1.6"/><path d="M10.5 44L17.5 44" stroke="#8fb2ff" stroke-width="1.6"/><path d="M10.5 58L17.5 58" stroke="#8fb2ff" stroke-width="1.6"/><text x="5" y="56" text-anchor="middle" fill="#ffffff" stroke="#262626" stroke-width="3" paint-order="stroke">a</text><path d="M108 26L124 26" stroke="#8fb2ff" stroke-width="1.3"/><path d="M90 58L124 58" stroke="#8fb2ff" stroke-width="1.3"/><path d="M120 26L120 58" stroke="#8fb2ff" stroke-width="1.6"/><path d="M116.5 26L123.5 26" stroke="#8fb2ff" stroke-width="1.6"/><path d="M116.5 58L123.5 58" stroke="#8fb2ff" stroke-width="1.6"/><text x="128" y="46" text-anchor="middle" fill="#ffffff" stroke="#262626" stroke-width="3" paint-order="stroke">b</text></g></svg>', cut: '<svg class="ipfig" viewBox="0 0 132 62" aria-hidden="true" font-family="sans-serif" font-size="15" font-weight="600"><g transform="translate(0 0)"><path d="M26 30H46V46H86V30H106V58H26Z" fill="#bdb9ae" stroke="#1a1a1a" stroke-width="1.2" stroke-linejoin="round"/><path d="M46 14H86V46H46Z" fill="#c46a2b" stroke="#1a1a1a" stroke-width="1.2" stroke-linejoin="round"/><path d="M12 30L24 30" stroke="#8fb2ff" stroke-width="1.3"/><path d="M12 46L44 46" stroke="#8fb2ff" stroke-width="1.3"/><path d="M16 30L16 46" stroke="#8fb2ff" stroke-width="1.6"/><path d="M12.5 30L19.5 30" stroke="#8fb2ff" stroke-width="1.6"/><path d="M12.5 46L19.5 46" stroke="#8fb2ff" stroke-width="1.6"/><text x="6" y="43" text-anchor="middle" fill="#ffffff" stroke="#262626" stroke-width="3" paint-order="stroke">a</text><path d="M88 14L122 14" stroke="#8fb2ff" stroke-width="1.3"/><path d="M88 46L122 46" stroke="#8fb2ff" stroke-width="1.3"/><path d="M118 14L118 46" stroke="#8fb2ff" stroke-width="1.6"/><path d="M114.5 14L121.5 14" stroke="#8fb2ff" stroke-width="1.6"/><path d="M114.5 46L121.5 46" stroke="#8fb2ff" stroke-width="1.6"/><text x="127" y="34" text-anchor="middle" fill="#ffffff" stroke="#262626" stroke-width="3" paint-order="stroke">b</text></g></svg>' };
 function ipTools(pick) { const ft = S.tools.filter(t => t.type === 'flat'), sel = $('#ipTool'); sel.innerHTML = ''; if (!ft.length) { const o = document.createElement('option'); o.value = ''; o.textContent = tr('Aucune : choisissez dans la bibliothèque'); sel.appendChild(o); } for (const t of ft) { const o = document.createElement('option'); o.value = t.id; o.textContent = t.name; sel.appendChild(o); } if (pick && ft.some(t => t.id === pick)) sel.value = pick; }
 $('#ipSup').addEventListener('change', () => { $('#ipKind').value = $('#ipSup').checked ? 'plug' : 'cut'; ipInfo(); });
 function gadSec(k) { if (k) { setTab('dessin'); if (S.ui.tool !== 'select') setTool('select'); } S.ui.dsec = k; dRefresh(); draw(); }
 function ipOpen() {
   const ss = ilSel(); if (!ss.length) return toast(tr('Sélectionnez d’abord le motif à incruster (formes fermées).'));
-  let o = { D: 3, gap: 0.1, kind: 'plug', over: 1.5, th: 3.5, tp: true }; try { o = { ...o, ...JSON.parse(LS.get('copo.inlayPocket') || '{}') }; } catch { }
+  let o = { D: 3, gap: 0.1, kind: 'plug', c: '', tp: true }; try { const q = JSON.parse(LS.get('copo.inlayPocket') || '{}'); o = { ...o, ...q }; if (o.b == null) o.b = o.kind === 'cut' ? (o.th || o.D + 0.5) : o.D + (o.over || 1.5); } catch { o.b = 4.5; }
   ipTools(o.tool); $('#ipTp').checked = o.tp !== false; $('#ipSup').checked = o.kind !== 'cut';
-  $('#ipD').value = o.D; $('#ipGap').value = o.gap; $('#ipKind').value = o.kind; $('#ipOver').value = o.over; $('#ipTh').value = o.th;
+  $('#ipD').value = o.D; $('#ipGap').value = o.gap; $('#ipKind').value = o.kind; $('#ipB').value = o.b; $('#ipC').value = o.c === '' || o.c == null ? '' : o.c;
   $('#ipSel').textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ss.length });
   gadSec('ip'); requestAnimationFrame(ipInfo);
 }
-function ipVals() { return { tool: S.tools.find(t => t.id === $('#ipTool').value), D: +$('#ipD').value, gap: Math.max(0, +$('#ipGap').value || 0), kind: $('#ipKind').value, over: +$('#ipOver').value, th: +$('#ipTh').value }; }
+function ipVals() { const D = +$('#ipD').value, b = +$('#ipB').value, cv = $('#ipC').value; return { tool: S.tools.find(t => t.id === $('#ipTool').value), D, b, gap: Math.max(0, +$('#ipGap').value || 0), kind: $('#ipKind').value, over: b - D, th: b, c: cv === '' ? null : Math.max(0, +cv || 0) }; }
 function ipCheck(v) {
   if (!v.tool) return tr('Choisissez une fraise droite.'); if (!(v.D > 0)) return tr('Indiquez la profondeur de la poche.');
-  if (v.kind === 'plug' && !(v.over > 0)) return tr('Indiquez le dépassement à araser.');
-  if (v.kind === 'cut' && !(v.th > 0)) return tr('Indiquez l’épaisseur de la planchette.');
+  if (v.kind === 'plug' && !(v.over > 0)) return tr('La hauteur du mâle sous le support (b) doit dépasser la profondeur de poche (a).');
+  if (v.kind === 'cut' && !(v.th > 0)) return tr('Indiquez l’épaisseur de la pièce mâle (b).');
+  if (v.kind === 'plug' && v.c != null && v.c < v.tool.dia + 0.2) return trf('Le débord du support (c) doit être plus grand que le diamètre de la fraise ({d} mm).', { d: fr(v.tool.dia, 2) });
   const fl = +v.tool.flen || 0, need = v.kind === 'plug' ? v.D + v.over : v.th + 0.2; if (fl > 0 && Math.max(v.D, need) > fl + 1e-6) return trf('Trop profond pour cette fraise (longueur utile {f} mm).', { f: fr(fl, 1) });
   return '';
 }
 function ipGeom(v) { const base = baseLoops(ilSel()), r = v.tool.dia / 2, C = ipCommon(base, r), M = v.gap > 0 ? offLoops(C, -v.gap) : C; return { base, C, M, r }; }
 function ipInfo() {
-  const v = ipVals(); $('#ipOverRow').hidden = v.kind !== 'plug'; $('#ipThRow').hidden = v.kind !== 'cut'; $('#ipSup').checked = v.kind === 'plug';
+  const v = ipVals(); $('#ipSup').checked = v.kind === 'plug'; $('#ipCRow').hidden = v.kind !== 'plug'; $('#ipBL').textContent = tr(v.kind === 'plug' ? 'Hauteur du mâle sous le support (b) (mm)' : 'Épaisseur de la pièce mâle (b) (mm)'); { const f = $('#ipFig'); if (f.dataset.k !== v.kind) { f.innerHTML = IP_FIG[v.kind]; f.dataset.k = v.kind; } }
   $('#ipHelp').textContent = tr(v.kind === 'plug' ? 'Pièce mâle sur support : le motif est usiné en miroir, en relief, sur un support épais (pièce placée à droite, sur un calque à part). Collez-la retournée dans la poche, puis sciez ou rabotez le support le long du trait rouge.' : 'Pièce mâle sans support : le motif est découpé dans une planchette, avec des ponts d’attache (pièce placée à droite, sur un calque à part). Cassez les ponts, poncez, puis collez la pièce dans la poche.');
   $('#ipSel').textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ilSel().length }); if (!ilSel().length) { $('#ipInfo').textContent = tr('Sélectionnez sur le plan le motif à incruster (formes fermées).'); return; }
   const e = ipCheck(v), info = $('#ipInfo'); if (e) { info.textContent = e; return; }
@@ -5411,10 +5408,10 @@ function ipInfo() {
     + (gone > 0 ? ' ' + trf('Attention : {n} partie(s) plus fine(s) que la fraise disparaissent.', { n: gone }) : '')
     + ' ' + (v.kind === 'plug' ? trf('Bouchon en relief de {h} mm.', { h: F(v.D + v.over) }) : trf('Découpe de la planchette sur {h} mm.', { h: F(v.th + 0.2) }));
 }
-['#ipTool', '#ipD', '#ipGap', '#ipKind', '#ipOver', '#ipTh'].forEach(id => { const el = document.querySelector(id); if (el) { el.addEventListener('input', ipInfo); el.addEventListener('change', ipInfo); } });
+['#ipTool', '#ipD', '#ipGap', '#ipKind', '#ipB', '#ipC'].forEach(id => { const el = document.querySelector(id); if (el) { el.addEventListener('input', ipInfo); el.addEventListener('change', ipInfo); } });
 function ipMake() {
   const v = ipVals(), e = ipCheck(v); if (e) return toast(e);
-  const wantTp = $('#ipTp').checked; try { LS.set('copo.inlayPocket', JSON.stringify({ tool: v.tool.id, D: v.D, gap: v.gap, kind: v.kind, over: v.over, th: v.th, tp: wantTp })); } catch { }
+  const wantTp = $('#ipTp').checked; try { LS.set('copo.inlayPocket', JSON.stringify({ tool: v.tool.id, D: v.D, gap: v.gap, kind: v.kind, b: v.b, c: v.c == null ? '' : v.c, tp: wantTp })); } catch { }
   const ss = ilSel(), G = ipGeom(v); if (!G.C.length) return toast(tr('Le motif est plus fin que la fraise : rien à usiner. Choisissez une fraise plus petite.'));
   const lay = (name, color) => { let l = S.layers.find(x => x.name === name); if (!l) { l = { id: uid(), name, visible: true, locked: false, color }; S.layers.push(l); } return l; };
   const lf = lay(tr('Inlay poche · femelle'), '#d18a3a'), lm = lay(tr('Inlay poche · mâle'), '#9b3ad1'), face = faceOf(ss[0]) === 2 ? 2 : 1;
@@ -5423,7 +5420,7 @@ function ipMake() {
   const fem = toShapes(G.C, lf, G.C.length > 1 ? uid() : null), nf = newForm();
   const tf = { id: uid(), name: tr('Inlay poche · femelle'), type: 'pocket', toolId: v.tool.id, shapeIds: fem.map(x => x.id), p: { ...nf, type: 'pocket', depth: v.D, vstart: 0, zrel: 1, allow: 0, dir: 'climb' }, visible: true, face };
   // mâle, placé à droite du motif
-  const bb = bbox(ss), margin = Math.max(3, v.tool.dia * 1.6 + 1), cx = bb.x0 + bb.w / 2, dx = bb.w + 2 * margin + 10, g = uid();
+  const bb = bbox(ss), margin = v.c != null && v.kind === 'plug' ? v.c : Math.max(3, v.tool.dia * 1.6 + 1), cx = bb.x0 + bb.w / 2, dx = bb.w + 2 * margin + 10, g = uid();
   let tm, made;
   if (v.kind === 'plug') {
     made = toShapes(G.M, lm, g, q => [2 * cx - q[0] + dx, q[1]]); // miroir : la planche est retournée pour le collage
@@ -5439,7 +5436,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle (parcours visible) et pièce rapportée (parcours masqué, calque à part).' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.163', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.164', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });

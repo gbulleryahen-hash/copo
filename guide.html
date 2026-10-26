@@ -186,7 +186,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.163</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.164</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -419,7 +419,7 @@ footer p{max-width:none}
     </table></div>
     <p>Le résultat forme des groupes séparés : le trait du diapason (à ne pas usiner), le contour, les traits de frettes (traits ouverts, à usiner en profil <span class="ui">Sur la ligne</span> avec une fraise ou une lame de la largeur de la rainure) et les repères (cercles, en poche ou en perçage).</p>
     <h3>Incrustation en V (inlay)</h3>
-    <p>Sélectionnez le motif (formes fermées), puis <span class="ui">Dessin › Incrustation en V (inlay)…</span>. Les réglages s’ouvrent dans le panneau de gauche, avec un schéma comme dans Aspire : <strong>profondeur de poche (D)</strong>, <strong>jeu pour la colle (G)</strong> au fond, <strong>écart de surface (S)</strong> entre le mâle collé et la pièce (ce qui sera raboté), et un <strong>nom</strong> pour les parcours. Choisissez la fraise en V (bouton <span class="ui">Bibliothèque…</span> pour toute la bibliothèque) et, si vous voulez, une <strong>fraise de dégagement</strong> droite qui vide d’abord les fonds plats (plus rapide sur les grands motifs). Le <em>décalage du cadre du mâle</em> est automatique si la case reste vide ; la case <em>Créer les parcours d’outils</em> peut être décochée pour ne dessiner que la pièce mâle. COPO crée :</p>
+    <p>Sélectionnez le motif (formes fermées), puis <span class="ui">Dessin › Incrustation en V (inlay)…</span>. Les réglages s’ouvrent dans le panneau de gauche, avec un schéma coté comme dans Aspire : <strong>a</strong> profondeur de poche, <strong>g</strong> jeu pour la colle au fond, <strong>b</strong> hauteur du mâle sous le support (il doit dépasser a − g : l’écart restant sera raboté), <strong>c</strong> débord du support, et un <strong>nom</strong> pour les parcours. Choisissez la fraise en V (bouton <span class="ui">Bibliothèque…</span> pour toute la bibliothèque) et, si vous voulez, une <strong>fraise de dégagement</strong> droite qui vide d’abord les fonds plats (plus rapide sur les grands motifs). Le débord <em>c</em> est automatique si la case reste vide ; la case <em>Créer les parcours d’outils</em> peut être décochée pour ne dessiner que la pièce mâle. COPO crée :</p>
     <ul>
       <li>un V-carving <em>femelle</em> du motif dans votre pièce ;</li>
       <li>la pièce <em>mâle</em> : le motif en miroir entouré d'un cadre, sur le calque « Incrustation · mâle », avec un V-carving qui démarre à la profondeur de la poche moins le jeu et descend de l’écart de surface. Ses parcours sont créés <em>masqués</em> : pour l'usiner dans le bois d'incrustation, affichez-les et masquez ceux de la femelle avant d'enregistrer le G-code.</li>
@@ -428,11 +428,11 @@ footer p{max-width:none}
     <p>Retournez le mâle, collez-le dans la femelle, puis rabotez ou poncez le surplus. Le réglage <span class="ui">Profondeur de départ</span> du V-carving est aussi disponible à la main dans le formulaire des parcours.</p>
 
     <h3>Inlay en poche (fraise droite)</h3>
-    <p>Sélectionnez le motif (formes fermées), puis <span class="ui">Gadgets › Inlay en poche…</span> ou, au clic droit, <span class="ui">Incrustation › En poche</span>. Les réglages s’ouvrent dans le panneau de gauche. Choisissez la <strong>fraise droite</strong> (le bouton <span class="ui">Bibliothèque…</span> donne accès à toute la bibliothèque d’outils), la <strong>profondeur de la poche</strong>, le <strong>jeu pour la colle</strong> (0,1 mm par défaut) et la façon de faire la pièce mâle (case <em>Pièce mâle sur support</em>, avec un petit schéma). La case <em>Créer les parcours d’outils</em> (cochée par défaut) peut être décochée pour ne créer que les contours.</p>
+    <p>Sélectionnez le motif (formes fermées), puis <span class="ui">Gadgets › Inlay en poche…</span> ou, au clic droit, <span class="ui">Incrustation › En poche</span>. Les réglages s’ouvrent dans le panneau de gauche. Choisissez la <strong>fraise droite</strong> (le bouton <span class="ui">Bibliothèque…</span> donne accès à toute la bibliothèque d’outils), le <strong>jeu pour la colle</strong> (0,1 mm par défaut) et la façon de faire la pièce mâle (case <em>Pièce mâle sur support</em>). Un petit schéma coté, comme dans Aspire, montre les cotes à remplir : <strong>a</strong> profondeur de poche, <strong>b</strong> hauteur du mâle (sous le support, ou épaisseur de la pièce sans support) et <strong>c</strong> débord du support (automatique si la case reste vide). La case <em>Créer les parcours d’outils</em> (cochée par défaut) peut être décochée pour ne créer que les contours.</p>
     <p>Une fraise droite ne fait pas d’angle plus vif que son rayon. COPO calcule donc un <strong>contour commun</strong> dont tous les angles, rentrants comme saillants, sont arrondis au moins au rayon de la fraise : la poche et la pièce rapportée s’usinent exactement sur ce tracé et s’emboîtent sans retouche. L’aperçu montre ce contour en bleu, le dessin d’origine en pointillés rouges, et la part de surface modifiée ; un avertissement signale les parties plus fines que la fraise, qui disparaissent.</p>
     <ul>
-      <li><strong>Pièce mâle sur support</strong> (case cochée, par défaut) : le motif est usiné en miroir, en relief, dans une planche épaisse, à la hauteur de la poche plus le <em>dépassement du support (e)</em> : une fois collée, la planche reste à cette hauteur au-dessus de la pièce, ce qui laisse la place du trait de scie. Collez la planche retournée dans la poche, puis sciez ou rabotez le surplus. Tous les morceaux du motif restent liés et se posent d’un coup.</li>
-      <li><strong>Pièce mâle sans support</strong> (case décochée) : le motif est découpé dans une planchette de l’épaisseur indiquée (ép), avec des ponts d’attache. Cassez les ponts, poncez, puis collez la pièce dans la poche.</li>
+      <li><strong>Pièce mâle sur support</strong> (case cochée, par défaut) : le motif est usiné en miroir, en relief, dans une planche épaisse, sur une hauteur <em>b</em> plus grande que la poche <em>a</em> : une fois collée, la planche reste à b − a au-dessus de la pièce, ce qui laisse la place du trait de scie. Collez la planche retournée dans la poche, puis sciez ou rabotez le surplus. Tous les morceaux du motif restent liés et se posent d’un coup.</li>
+      <li><strong>Pièce mâle sans support</strong> (case décochée) : le motif est découpé dans une planchette d’épaisseur <em>b</em>, avec des ponts d’attache. Cassez les ponts, poncez, puis collez la pièce dans la poche.</li>
     </ul>
     <p>COPO crée la poche sur le calque « Inlay poche · femelle » (parcours visible) et la pièce rapportée à droite du motif, sur le calque « Inlay poche · mâle » (parcours masqué : affichez-le pour l’usiner).</p>
 
@@ -555,7 +555,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.163 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.164 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -591,7 +591,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.163</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.164</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -824,7 +824,7 @@ M30</pre>
     </table></div>
     <p>The result is separate groups: the scale line (not to be machined), the outline, the fret lines (open lines, to cut with an <span class="ui">On the line</span> profile and a bit or blade as wide as the slot) and the markers (circles, pocketed or drilled).</p>
     <h3>V-carve inlay</h3>
-    <p>Select the design (closed shapes), then <span class="ui">Drawing › V-carve inlay…</span>. The settings open in the left panel, with a diagram as in Aspire: <strong>pocket depth (D)</strong>, <strong>glue gap (G)</strong> at the bottom, <strong>surface gap (S)</strong> between the glued male and the part (what will be planed off), and a <strong>name</strong> for the toolpaths. Choose the V-bit (<span class="ui">Library…</span> button for the whole library) and, if you like, a flat <strong>clearance tool</strong> that first clears the flat areas (faster on large designs). The <em>male frame offset</em> is automatic when left empty; the <em>Create the toolpaths</em> box can be unticked to draw only the male piece. COPO creates:</p>
+    <p>Select the design (closed shapes), then <span class="ui">Drawing › V-carve inlay…</span>. The settings open in the left panel, with a dimensioned diagram as in Aspire: <strong>a</strong> pocket depth, <strong>g</strong> glue gap at the bottom, <strong>b</strong> male height below the backing (it must exceed a − g: the rest is planed off), <strong>c</strong> backing overhang, and a <strong>name</strong> for the toolpaths. Choose the V-bit (<span class="ui">Library…</span> button for the whole library) and, if you like, a flat <strong>clearance tool</strong> that first clears the flat areas (faster on large designs). The overhang <em>c</em> is automatic when left empty; the <em>Create the toolpaths</em> box can be unticked to draw only the male piece. COPO creates:</p>
     <ul>
       <li>a <em>female</em> V-carving of the design in your part;</li>
       <li>the <em>male</em> plug: the mirrored design inside a frame, on the “Inlay · male” layer, with a V-carving that starts at the pocket depth minus the gap and goes down by the surface gap. Its toolpaths are created <em>hidden</em>: to cut it from the inlay wood, show them and hide the female ones before saving the G-code.</li>
@@ -833,11 +833,11 @@ M30</pre>
     <p>Flip the plug, glue it into the female pocket, then plane or sand off the excess. The V-carving <span class="ui">Start depth</span> setting is also available by hand in the toolpath form.</p>
 
     <h3>Pocket inlay (flat end mill)</h3>
-    <p>Select the design (closed shapes), then <span class="ui">Gadgets › Pocket inlay…</span> or, with a right click, <span class="ui">Inlay › Pocket</span>. The settings open in the left panel. Choose the <strong>flat end mill</strong> (the <span class="ui">Library…</span> button gives access to the whole tool library), the <strong>pocket depth</strong>, the <strong>glue gap</strong> (0.1 mm by default) and how to make the male piece (<em>Male piece on a backing board</em> box, with a small diagram). The <em>Create the toolpaths</em> box (ticked by default) can be unticked to create only the outlines.</p>
+    <p>Select the design (closed shapes), then <span class="ui">Gadgets › Pocket inlay…</span> or, with a right click, <span class="ui">Inlay › Pocket</span>. The settings open in the left panel. Choose the <strong>flat end mill</strong> (the <span class="ui">Library…</span> button gives access to the whole tool library), the <strong>glue gap</strong> (0.1 mm by default) and how to make the male piece (<em>Male piece on a backing board</em> box). A small dimensioned diagram, as in Aspire, shows the values to fill in: <strong>a</strong> pocket depth, <strong>b</strong> male height (below the backing, or piece thickness without backing) and <strong>c</strong> backing overhang (automatic when left empty). The <em>Create the toolpaths</em> box (ticked by default) can be unticked to create only the outlines.</p>
     <p>A flat end mill cannot cut a corner sharper than its radius. COPO therefore computes a <strong>common outline</strong> whose corners, inside and outside, are all rounded to at least the cutter radius: the pocket and the insert are machined exactly on this outline and fit without touch-up. The preview shows this outline in blue, the original drawing in dashed red, and the share of area changed; a warning flags parts thinner than the cutter, which disappear.</p>
     <ul>
-      <li><strong>Male piece on a backing board</strong> (box ticked, default): the design is machined mirrored, raised, in a thick board, at the pocket depth plus the <em>backing height above the part (e)</em>: once glued, the board stays this far above the part, leaving room for the saw cut. Glue the board upside down into the pocket, then saw or plane off the excess. All parts of the design stay joined and go in at once.</li>
-      <li><strong>Male piece without backing</strong> (box unticked): the design is cut out of a thin board of the given thickness (th), with holding tabs. Break the tabs, sand, then glue the piece into the pocket.</li>
+      <li><strong>Male piece on a backing board</strong> (box ticked, default): the design is machined mirrored, raised, in a thick board, to a height <em>b</em> greater than the pocket <em>a</em>: once glued, the board stays b − a above the part, leaving room for the saw cut. Glue the board upside down into the pocket, then saw or plane off the excess. All parts of the design stay joined and go in at once.</li>
+      <li><strong>Male piece without backing</strong> (box unticked): the design is cut out of a thin board of thickness <em>b</em>, with holding tabs. Break the tabs, sand, then glue the piece into the pocket.</li>
     </ul>
     <p>COPO creates the pocket on the “Pocket inlay · female” layer (visible toolpath) and the insert to the right of the design, on the “Pocket inlay · male” layer (hidden toolpath: show it to machine it).</p>
 
@@ -960,7 +960,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.163 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.164 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
