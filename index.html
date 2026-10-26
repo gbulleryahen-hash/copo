@@ -901,7 +901,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.137</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.138</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -2938,7 +2938,7 @@ function pjSummary() {
   const f1 = v => LANG === 'fr' ? fr(v, 1) : v.toFixed(1); el.textContent = f1(st.w) + ' × ' + f1(st.h) + ' × ' + f1(st.t) + ' mm' + (S.meta && S.meta.material ? ' · ' + S.meta.material : '') + '\n' + tr('Origine') + ' : ' + tr(originLabel(st)) + ' · Z0 : ' + tr(st.originZ === 'bottom' ? 'table' : 'dessus du brut') + (has2 ? ' · ' + tr('double face') : '') + '\n' + post + ' · ' + UNIT.len + ' · ' + UNIT.feed;
   illRefresh(); el.style.whiteSpace = 'pre-line'; if (typeof libMatSync === 'function') libMatSync(); const m = document.getElementById('pjMat'); if (m && document.activeElement !== m) m.value = (S.meta && S.meta.material) || '';
 }
-function setTab(t) { if (t !== 'parcours' && S.ui.tool !== 'tabedit') fwClose('tpWin'); if (t !== 'outils') fwClose('toolWin'); curTab = t; if (t === 'projet') pjSummary(); $$('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t)); $$('.pane').forEach(p => p.hidden = p.dataset.pane !== t); if (t === 'gcode') renderGcode(); if (t === 'parcours') renderForm(); if (t === 'relief') { relPanel(); if (!VIEWS.d3 && !VIEWS.userHid3) { VIEWS.d3 = true; viewsApply(); } } draw(); }
+function setTab(t) { if (t !== 'parcours' && S.ui.tool !== 'tabedit') fwClose('tpWin'); if (t !== 'outils') fwClose('toolWin'); curTab = t; if (t === 'projet') pjSummary(); $$('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t)); $$('.pane').forEach(p => p.hidden = p.dataset.pane !== t); if (t === 'gcode') renderGcode(); if (t === 'parcours') { renderForm(); if (typeof VIEWS !== 'undefined' && !VIEWS.d3 && !VIEWS.userHid3) { VIEWS.d3 = true; viewsApply(); } } if (t === 'relief') { relPanel(); if (!VIEWS.d3 && !VIEWS.userHid3) { VIEWS.d3 = true; viewsApply(); } } draw(); }
 $$('.tabs button').forEach(b => b.onclick = () => setTab(b.dataset.tab));
 document.querySelector('[data-pane="projet"]').addEventListener('change', () => setTimeout(pjSummary, 0));
 document.getElementById('pjMat').addEventListener('change', e => { S.meta = { ...(S.meta || {}), material: e.target.value.trim() }; commit(false); pjSummary(); });
@@ -4770,7 +4770,7 @@ function fsSync() { const on = !!fsEl(); document.documentElement.classList.togg
 document.addEventListener('fullscreenchange', fsSync); document.addEventListener('webkitfullscreenchange', fsSync);
 if (!fsOk()) { const w = document.querySelector('.fsw'); if (w) w.hidden = true; const m = $('#fsMenu'); if (m) m.hidden = true; }
 // ---------- fenêtres flottantes (réglages des parcours et des outils) ----------
-function fwOpen(id, anchor) {
+function fwOpen(id, anchor) { if (id === 'tpWin') setTimeout(() => { if (typeof rvReq === 'function') rvReq(); }, 0);
   const w = $('#' + id); if (!w.hidden) return;
   if (anchor) { w.hidden = false; const r = w.getBoundingClientRect(), a = anchor.getBoundingClientRect(); w.style.left = Math.max(4, Math.min(a.right - r.width, innerWidth - r.width - 4)) + 'px'; w.style.top = Math.max(4, a.top - r.height - 8) + 'px'; return; } // fenêtre posée juste au-dessus du bouton qui l'ouvre
   let pos = null; try { pos = JSON.parse(LS.get('copo.fwin2.' + id) || 'null'); } catch { }
@@ -4780,7 +4780,7 @@ function fwOpen(id, anchor) {
   x = Math.max(4, Math.min(x, innerWidth - r.width - 4)); y = Math.max(4, Math.min(y, innerHeight - 80));
   w.style.left = x + 'px'; w.style.top = y + 'px';
 }
-function fwClose(id) { const w = $('#' + id); if (w) w.hidden = true; if (id === 'tpWin') draw(); }
+function fwClose(id) { const w = $('#' + id); if (w) w.hidden = true; if (id === 'tpWin') { draw(); if (typeof rvReq === 'function') rvReq(); } }
 document.querySelectorAll('.fwin-head').forEach(h => h.addEventListener('pointerdown', e => {
   if (e.target.closest('button')) return; const w = h.parentElement, r = w.getBoundingClientRect(), dx = e.clientX - r.left, dy = e.clientY - r.top; h.setPointerCapture(e.pointerId);
   const mv = ev => { const x = Math.max(4, Math.min(ev.clientX - dx, innerWidth - r.width - 4)), y = Math.max(4, Math.min(ev.clientY - dy, innerHeight - 40)); w.style.left = x + 'px'; w.style.top = y + 'px'; };
@@ -4958,7 +4958,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.137', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.138', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5088,6 +5088,7 @@ function renderTpList() { if (typeof libCardSync === 'function') libCardSync();
       S.sel = new Set(tp.shapeIds.filter(id => shapeById(id))); renderSel(); renderForm(); renderTpList(); draw(); fwOpen('tpWin');
     };
     li.onkeydown = e => { if (e.key === 'Enter') li.click(); };
+    li.onmouseenter = () => { RV.hoverTp = tp.id; if (typeof rvReq === 'function') rvReq(); }; li.onmouseleave = () => { if (RV.hoverTp === tp.id) { RV.hoverTp = null; rvReq(); } };
     ul.appendChild(li);
   });
   $('#tpTotal').textContent = 'Temps d’usinage estimé : ' + fmtTime(tot) + ' (parcours visibles).';
@@ -6488,7 +6489,7 @@ function viewsApply() {
   if (VIEWS.d2) requestAnimationFrame(() => { resize(); }); if (VIEWS.d3) { if (!RV.gl) rvInit(); RV.sig = ''; RV.lsig = ''; rvSync(); rvReq(); }
 }
 function viewToggle(k) { VIEWS[k] = !VIEWS[k]; if (!VIEWS.d2 && !VIEWS.d3) VIEWS[k === 'd2' ? 'd3' : 'd2'] = true; if (k === 'd3' && !VIEWS.d3) VIEWS.userHid3 = true; viewsApply(); }
-var RV = (() => { let o = {}; try { o = JSON.parse(LS.get('copo.rv') || '{}') || {}; } catch { } return { gl: null, yaw: -Math.PI / 2 + 0.35, pitch: 0.75, dist: 500, tgt: [150, 100, -9], sig: '', lsig: '', raf: 0, showDraw: o.d !== false, showAxes: o.a !== false, showStock: o.s !== false, showTp: o.t !== false, cubeHover: null, fitted: false }; })();
+var RV = (() => { let o = {}; try { o = JSON.parse(LS.get('copo.rv') || '{}') || {}; } catch { } return { gl: null, yaw: -Math.PI / 2 + 0.35, pitch: 0.75, dist: 500, tgt: [150, 100, -9], sig: '', lsig: '', raf: 0, showDraw: o.d !== false, showAxes: o.a !== false, showStock: true, showTp: true, cubeHover: null, fitted: false }; })();
 function rvSave() { try { LS.set('copo.rv', JSON.stringify({ d: RV.showDraw, a: RV.showAxes, s: RV.showStock, t: RV.showTp })); } catch { } for (const [k, on] of [['rvDraw', RV.showDraw], ['rvAxes', RV.showAxes], ['rvStock', RV.showStock], ['rvTp', RV.showTp]]) { const b = document.querySelector('[data-act="' + k + '"]'); if (b) b.setAttribute('aria-pressed', on); } }
 const RV_VS = `#version 300 es
 precision highp float; in vec3 aP; in vec3 aN; uniform mat4 uMVP; out vec3 vN; out float vZ;
@@ -6584,6 +6585,16 @@ function rvBuildLines() {
   RV.lTp = mk(T2);
 }
 function rvReq() { if (!RV.raf && VIEWS.d3) RV.raf = requestAnimationFrame(rvRender); }
+// parcours mis en avant (survolé dans la liste, ou en cours d'édition) : affiché même si « Parcours » est décoché
+function rvFocusTp() { const w = $('#tpWin'), id = RV.hoverTp || (w && !w.hidden && S.editTp) || null; return id ? S.tps.find(t => t.id === id && !t.err) || null : null; }
+function rvFocusSync() {
+  const tp = rvFocusTp(), sig = tp ? tp.id + '|' + (tp.moves ? tp.moves.length : 0) + '|' + (tp.face || 1) + '|' + S.stock.t : '';
+  if (sig === RV.fsig) return; RV.fsig = sig; const gl = RV.gl; if (RV.lTpX) { gl.deleteVertexArray(RV.lTpX.vao); RV.lTpX = null; } if (!tp) return;
+  const st = S.stock, f2 = tp.face === 2, mv = f2 && tp.dmoves ? tp.dmoves : tp.moves; if (!mv) return;
+  const c = hex3(tok({ profile: '--pf', pocket: '--pk', vcarve: '--vc', drill: '--dr', thread: '--th', relief: '--rl' }[tp.type] || '--accent')), rg = hex3(tok('--muted')).map(v => v * 0.8), T = []; let pr = null;
+  for (const m of mv) { if (typeof m.x !== 'number' || (m.g !== 0 && m.g !== 1)) continue; const q = [m.x, m.y, f2 ? -st.t - m.z : m.z]; if (pr) { const cc = m.g === 0 ? rg : c; T.push([...pr, ...cc], [...q, ...cc]); } pr = q; }
+  if (!T.length) return; const d = new Float32Array(T.length * 6); T.forEach((v, k) => d.set(v, k * 6)); RV.lTpX = { vao: rvBuf([[RV.lprog, 3, 'aP'], [RV.lprog, 3, 'aC']], d), n: T.length };
+}
 // ----- sélection et transformations dans la vue 3D -----
 function rvToolsSync() { for (const [k, t] of [['rvMove', 'move'], ['rvRotate', 'rotate'], ['rvScale', 'scale']]) { const b = document.querySelector('[data-act="' + k + '"]'); if (b) b.setAttribute('aria-pressed', RV.tool === t); } }
 function rvProj(p) { const m = RV.mvp, c = $('#rvc'); if (!m) return [0, 0, -1]; const x = m[0] * p[0] + m[4] * p[1] + m[8] * p[2] + m[12], y = m[1] * p[0] + m[5] * p[1] + m[9] * p[2] + m[13], w = m[3] * p[0] + m[7] * p[1] + m[11] * p[2] + m[15]; return [(x / w * 0.5 + 0.5) * c.clientWidth, (1 - (y / w * 0.5 + 0.5)) * c.clientHeight, w]; }
@@ -6660,7 +6671,7 @@ function rvRender() {
   const mvp = m4mul(ortho, m4look(e, RV.tgt, [0, 0, 1])); RV.mvp = mvp;
   if (RV.mesh) { gl.useProgram(RV.prog); gl.uniformMatrix4fv(gl.getUniformLocation(RV.prog, 'uMVP'), false, mvp); gl.uniform3fv(gl.getUniformLocation(RV.prog, 'uL'), v3n([0.35, -0.55, 0.85])); const sc = hex3(tok('--stock')); gl.uniform3fv(gl.getUniformLocation(RV.prog, 'uC'), [sc[0] * 0.95, sc[1] * 0.9, sc[2] * 0.82]); gl.bindVertexArray(RV.mesh.vao); gl.drawElements(gl.TRIANGLES, RV.mesh.n, gl.UNSIGNED_INT, 0); gl.bindVertexArray(null); }
   gl.useProgram(RV.lprog); gl.uniformMatrix4fv(gl.getUniformLocation(RV.lprog, 'uMVP'), false, mvp);
-  for (const [k, on] of [['lStock', RV.showStock], ['lAxes', RV.showAxes], ['lDraw', RV.showDraw], ['lTp', RV.showTp]]) if (on && RV[k]) { gl.bindVertexArray(RV[k].vao); gl.drawArrays(gl.LINES, 0, RV[k].n); }
+  rvFocusSync(); for (const [k, on] of [['lStock', RV.showStock], ['lAxes', RV.showAxes], ['lDraw', RV.showDraw], ['lTp', RV.showTp], ['lTpX', !RV.showTp || !(rvFocusTp() || {}).visible]]) if (on && RV[k]) { gl.bindVertexArray(RV[k].vao); gl.drawArrays(gl.LINES, 0, RV[k].n); }
   gl.bindVertexArray(null); v3Cube($('#rvcube'), RV);
   const n = S.relief.items.filter(i => i.visible && relGrid[i.id]).length; if (!relCur()) $('#rvInfo').textContent = n ? trf('{n} élément(s) de relief · profondeur {d} mm', { n, d: fr(RV.depth || 0, 2) }) : tr('Aucun relief : importez un STL ou créez-en un dans l’onglet Relief.');
   rvOverlay();
