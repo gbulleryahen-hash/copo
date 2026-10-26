@@ -450,6 +450,18 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 .mirpad{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center;justify-items:center;max-width:300px}
 .mirpad button{min-width:84px;background:var(--raised);border:1px solid var(--line);border-radius:var(--r);padding:5px 10px;color:var(--ink);font-weight:500;cursor:pointer}.mirpad button:hover{border-color:var(--accent)}.mirP{font:700 30px var(--f-head);color:var(--accent);line-height:1}
 
+/* menu du clic droit */
+.cmenu{position:fixed;z-index:90;min-width:230px;padding:4px;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 10px 30px rgb(0 0 0/.35);display:grid;font-size:13px}
+.cmenu .cmh{padding:5px 10px 6px;font:600 11px var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px}
+.cmi{position:relative;display:flex;align-items:center;gap:9px;height:30px;padding:0 10px 0 8px;border:0;border-radius:5px;background:transparent;color:var(--ink);font:inherit;text-align:left;cursor:pointer;white-space:nowrap}
+.cmi:hover,.cmi:focus-visible{background:var(--accent-soft,rgb(79 125 255/.18));outline:none}
+.cmi:disabled{opacity:.4;cursor:default;background:transparent}
+.cmi.danger{color:var(--danger,#e5534b)}
+.cmic{width:16px;height:16px;display:grid;place-items:center;flex:none}.cmic svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.cml{flex:1}.cmi kbd{font:500 10.5px var(--f-mono);color:var(--muted);margin-left:14px}.cmar{color:var(--muted);margin-left:10px}
+.cmsep{height:1px;background:var(--line);margin:4px 6px}
+.cmsub{position:absolute;left:100%;top:-5px;display:none}.cmsub.on{display:grid}
+
 /* ===== essai : réglages à la place des outils, languette pour les faire redescendre ===== */
 .essai-b{margin-left:8px;font:600 10px var(--f-ui);letter-spacing:.1em;color:#fff;background:var(--accent);border-radius:4px;padding:2px 6px}
 .peekrow{position:sticky;top:-4px;height:0;z-index:7;display:flex;justify-content:flex-end;margin:0 -6px 0 0}
@@ -962,7 +974,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.147</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.148</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1381,6 +1393,7 @@ Object.assign(I18N_EN, {"Profondeur réglée sur le bas du relief : {d} mm.": "D
 Object.assign(I18N_EN, {"Supprimer ce relief": "Delete this relief", "Contour : vectoriser l’image sélectionnée ou créer le contour du relief sélectionné": "Outline: vectorize the selected image or create the outline of the selected relief", "Réglez le seuil et le lissage, puis cliquez « Créer les contours ».": "Adjust the threshold and smoothing, then click “Create outlines”.", "Sélectionnez d’abord une image (sur le plan) ou un relief (sur le plan, dans la vue 3D ou dans l’onglet Relief).": "First select an image (on the canvas) or a relief (on the canvas, in the 3D view or in the Relief tab).", "Miroir": "Mirror", "Retourne la sélection par rapport à un bord de son cadre, à son centre, au centre du brut ou à une ligne.": "Flips the selection about an edge of its frame, its center, the stock center or a line.", "Retourner horizontalement": "Flip horizontally", "Retourner verticalement": "Flip vertically", "Retourner sur le centre du brut": "Flip about the stock center", "Retourner sur la ligne": "Flip about the line", "« Retourner sur la ligne » : sélectionnez les formes et une ligne droite (2 points) qui sert d’axe.": "“Flip about the line”: select the shapes and a straight line (2 points) used as the axis.", "Créer une copie en miroir (l’original reste en place)": "Create a mirror copy (the original stays in place)", "Carrés": "Square", "Rayon externe": "External radius", "Rayon interne": "Internal radius", "Point central": "Center point", "Point": "Point", "Type de coin": "Corner type", "Largeur (X)": "Width (X)", "Hauteur (Y)": "Height (Y)", "Diamètre": "Diameter", "Rayon": "Radius", "À travers 3 points": "Through 3 points", "Centre, départ, arrivée": "Center, start, end", "Point de départ": "Start point", "Point d’arrivée": "End point", "Tracez à la souris ou saisissez les valeurs. Les valeurs modifient la forme qui vient d’être tracée (tant qu’elle est sélectionnée) ; « Créer » en ajoute une nouvelle.": "Draw with the mouse or type the values. The values change the shape you just drew (while it is selected); “Create” adds a new one.", "Valeurs incomplètes : indiquez une taille.": "Incomplete values: enter a size.", "Forme créée.": "Shape created.", "Sélectionnez les formes à retourner et une seule ligne droite (2 points) qui sert d’axe.": "Select the shapes to flip and a single straight line (2 points) used as the axis.", "{n} copie(s) en miroir créée(s).": "{n} mirror copy(ies) created.", "Sélection retournée.": "Selection flipped.", "Clic : départ · clic : arrivée · déplacez la souris pour le bombé puis cliquez (mode « Centre » : clic au centre, au départ puis à l’arrivée)": "Click: start · click: end · move the mouse for the bulge then click (“Center” mode: click the center, the start then the end)"});
 Object.assign(I18N_EN, {"Importer un STL (relief)…": "Import an STL (relief)…", "Étendre les tracés : prolonger deux vecteurs jusqu’à leur point commun": "Extend vectors: lengthen two vectors to their common point", "Étendre les tracés": "Extend vectors", "Cliquez sur deux vecteurs ouverts, près de l’extrémité à prolonger : ils sont étendus jusqu’à leur point commun, dans le prolongement de leurs tracés (tangentes)": "Click two open vectors, near the end to lengthen: they are extended to their common point, following their tangents", "Cliquez sur un vecteur ouvert, près de l’extrémité à prolonger.": "Click an open vector, near the end to lengthen.", "Ce vecteur est fermé : il n’a pas d’extrémité à prolonger.": "This vector is closed: it has no end to lengthen.", "Cliquez maintenant le second vecteur.": "Now click the second vector.", "Choisissez une autre extrémité.": "Pick another end.", "Les deux tracés sont parallèles : ils ne se rejoignent pas.": "The two paths are parallel: they never meet.", "Les prolongements ne se croisent pas en avant des extrémités choisies.": "The extensions do not cross ahead of the chosen ends.", "Tracés prolongés jusqu’à leur point commun.": "Paths extended to their common point.", "Créer l’ébauche de relief (onglet Parcours)": "Create the relief roughing (Toolpaths tab)", "Détourer": "Cut out", "Parcours Profil autour du relief, profondeur au bas du relief": "Profile toolpath around the relief, depth to the bottom of the relief", "Contour": "Outline", "Créer un vecteur qui suit le pourtour du relief": "Create a vector that follows the edge of the relief", "Relief encore en chargement.": "Relief still loading.", "Relief dupliqué (décalé de 10 mm).": "Relief duplicated (offset by 10 mm)."});
 Object.assign(I18N_EN, {"Tracé prolongé jusqu’au croisement.": "Path extended to the crossing.", "Approchez la souris d’une extrémité : le prolongement s’affiche en pointillés. Cliquez son croisement avec un autre vecteur.": "Move the mouse near an end: the extension shows as a dashed line. Click where it crosses another vector.", "Cliquez sur un point de croisement (rond) du prolongement en pointillés.": "Click a crossing point (circle) of the dashed extension.", "Le prolongement de ce côté ne croise aucun vecteur.": "The extension on this side crosses no vector.", "Cliquez d’abord le trait ouvert à prolonger.": "First click the open line to extend.", "Cliquez le trait ouvert à prolonger, puis approchez la souris d’une de ses extrémités : son prolongement apparaît en pointillés avec ses croisements (ronds). Cliquez un croisement pour prolonger le trait jusque-là. Échap : choisir un autre trait": "Click the open line to extend, then move the mouse near one of its ends: its extension shows as a dashed line with its crossings (circles). Click a crossing to extend the line up to it. Esc: pick another line", "Étendre les tracés : prolonger un trait jusqu’à un autre vecteur": "Extend vectors: lengthen a line up to another vector"});
+Object.assign(I18N_EN, {"Usiner": "Machine", "Miroir…": "Mirror…", "Mettre sur le calque": "Move to layer", "Déplacé sur le calque « {n} ».": "Moved to layer “{n}”.", "{n} vecteurs": "{n} vectors", "{n} vecteur": "{n} vector", "Vectoriser…": "Vectorize…", "Transformer en relief (niveaux de gris)": "Turn into a relief (grayscale)", "Parcours d’ébauche": "Roughing toolpath", "Parcours de finition": "Finishing toolpath", "Parcours de profil (détourer)": "Profile toolpath (cut out)", "Poser au fond du brut": "Drop to the stock bottom", "Aligner sur le dessus du brut": "Align to the stock top", "Recentrer la vue": "Recenter the view", "Tout désélectionner": "Deselect all", "Vue de dessus": "Top view", "Vue de face": "Front view"});
 Object.assign(I18N_EN, {"Afficher les outils de dessin": "Show the drawing tools", "Afficher les opérations et la liste des parcours": "Show the operations and the toolpath list", "Type :": "Type:", "changer": "change", "Sélectionnez les formes sur le plan, puis choisissez l'opération : ses réglages s'affichent dans ce panneau.": "Select the shapes on the canvas, then choose the operation: its settings appear in this panel.", "Version d’essai de la nouvelle interface : la version normale reste sur la page principale.": "Trial version of the new interface: the regular version stays on the main page."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
@@ -3068,6 +3081,7 @@ function drawExt() {
 let RELBAR = null;
 function relBarShow(host, x, y) { const it = relCur(); RELBAR = it ? { host, x, y, id: it.id } : null; placeRelBar(); }
 function placeRelBar() {
+  { const b = $('#relbar'); if (b) b.hidden = true; return; }
   const bar = $('#relbar'); if (!bar) return;
   if (!RELBAR || S.relSel !== RELBAR.id || !$('#tpWin').hidden || (RELBAR.host === 'rv3' && !VIEWS.d3) || (RELBAR.host === 'cw' && !VIEWS.d2)) { bar.hidden = true; return; }
   const host = $('#' + RELBAR.host); if (bar.parentElement !== host) host.appendChild(bar);
@@ -3075,6 +3089,95 @@ function placeRelBar() {
   bar.style.left = Math.max(bw / 2 + 6, Math.min(hw - bw / 2 - 6, RELBAR.x)) + 'px'; bar.style.top = Math.max(6, Math.min(hh - bh - 6, RELBAR.y + 18)) + 'px';
 }
 function relDup() { const it = relCur(); if (!it) return; const g = relGrid[it.id]; if (!g) return toast(tr('Relief encore en chargement.')); const c = JSON.parse(JSON.stringify(it)); delete c.id; c.name = it.name + ' ' + tr('(copie)'); c.x = it.x + 10; c.y = it.y - 10; if (c.kind === 'image') c.linked = false; const oldMesh = relMesh[it.id]; relAdd(c, typeof structuredClone === 'function' ? structuredClone(g) : g); if (oldMesh) { relMesh[c.id] = oldMesh; idbPutImg('relm_' + c.id, oldMesh).catch(() => { }); } toast(tr('Relief dupliqué (décalé de 10 mm).')); }
+
+
+// ===== menu du clic droit (2D et 3D) =====
+const CMI = { dup: '<svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>', del: '<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>', mach: '<svg viewBox="0 0 24 24"><path d="M12 3v10M8 9l4 4 4-4M5 20h14"/></svg>', fit: '<svg viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>', ctr: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v5M12 16v5M3 12h5M16 12h5"/></svg>', eye: '<svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>' };
+function cmIco(k) { return CMI[k] || (DI[k] || BICO[k] || '').replace('<svg', '<svg class="bico"'); }
+function cmClose() { document.querySelectorAll('.cmenu').forEach(m => m.remove()); }
+function cmBuild(items, title) {
+  const m = document.createElement('div'); m.className = 'cmenu'; m.setAttribute('role', 'menu');
+  if (title) { const h = document.createElement('div'); h.className = 'cmh'; h.textContent = title; m.appendChild(h); }
+  for (const it of items) {
+    if (it === '-') { const hr = document.createElement('div'); hr.className = 'cmsep'; m.appendChild(hr); continue; }
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'cmi' + (it.sub ? ' sub' : '') + (it.danger ? ' danger' : ''); b.setAttribute('role', 'menuitem'); b.disabled = !!it.off;
+    b.innerHTML = '<span class="cmic">' + (it.ico ? cmIco(it.ico) : '') + '</span><span class="cml"></span>' + (it.kbd ? '<kbd></kbd>' : '') + (it.sub ? '<span class="cmar">›</span>' : '');
+    b.querySelector('.cml').textContent = tr(it.label); if (it.kbd) b.querySelector('kbd').textContent = it.kbd;
+    if (it.sub) { const sm = cmBuild(it.sub); sm.classList.add('cmsub'); b.appendChild(sm); b.addEventListener('mouseenter', () => { m.querySelectorAll(':scope > .cmi > .cmsub').forEach(x => x.classList.toggle('on', x === sm)); cmFit(sm, true); }); b.addEventListener('click', e => { e.stopPropagation(); sm.classList.add('on'); cmFit(sm, true); }); }
+    else { b.addEventListener('mouseenter', () => m.querySelectorAll(':scope > .cmi > .cmsub').forEach(x => x.classList.remove('on'))); b.addEventListener('click', e => { e.stopPropagation(); cmClose(); try { it.fn(); } catch (er) { toast(er.message || String(er)); } }); }
+    m.appendChild(b);
+  }
+  return m;
+}
+function cmFit(sm) { sm.style.left = ''; sm.style.right = ''; sm.style.top = ''; const r = sm.getBoundingClientRect(); if (r.right > innerWidth - 4) { sm.style.left = 'auto'; sm.style.right = '100%'; } if (r.bottom > innerHeight - 4) sm.style.top = Math.min(0, innerHeight - 4 - r.bottom) + 'px'; }
+function cmOpen(items, x, y, title) {
+  cmClose(); if (!items.length) return; const m = cmBuild(items, title); document.body.appendChild(m);
+  const r = m.getBoundingClientRect(); m.style.left = Math.max(4, Math.min(x, innerWidth - r.width - 4)) + 'px'; m.style.top = Math.max(4, Math.min(y, innerHeight - r.height - 4)) + 'px';
+  const f = m.querySelector('.cmi:not(:disabled)'); if (f) f.focus({ preventScroll: true });
+}
+document.addEventListener('pointerdown', e => { if (!e.target.closest || !e.target.closest('.cmenu')) cmClose(); }, true);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.querySelector('.cmenu')) { cmClose(); e.stopPropagation(); } }, true);
+window.addEventListener('blur', cmClose); window.addEventListener('resize', cmClose);
+document.addEventListener('wheel', e => { if (!e.target.closest || !e.target.closest('.cmenu')) cmClose(); }, { capture: true, passive: true });
+// listes d'actions selon l'objet visé
+function cmVector(in3d) {
+  const ss = selShapes(), us = units(ss), oneGroup = us.length === 1 && !!(ss[0] && ss[0].g), nc = ss.filter(x => x.closed).length;
+  const title = trf(ss.length > 1 ? '{n} vecteurs' : '{n} vecteur', { n: ss.length });
+  return [title, [
+    { label: 'Usiner', ico: 'mach', sub: [{ label: 'Profil', fn: () => tpNew('profile') }, { label: 'Poche', fn: () => tpNew('pocket'), off: !nc }, { label: 'V-carve', fn: () => tpNew('vcarve'), off: !nc }, { label: 'Perçage', fn: () => tpNew('drill') }] },
+    '-',
+    { label: 'Dupliquer', ico: 'dup', kbd: 'Ctrl+D', fn: () => act('dup') },
+    oneGroup ? { label: 'Dégrouper', ico: 'ungroup', kbd: 'Ctrl+Maj+G', fn: () => act('ungroup') } : { label: 'Grouper', ico: 'group', kbd: 'Ctrl+G', fn: () => act('group'), off: us.length < 2 },
+    { label: 'Souder', ico: 'boolU', fn: () => act('boolU'), off: nc < 2 },
+    { label: 'Contour décalé…', ico: 'offset', fn: () => { setTab('dessin'); dSec('offset'); } },
+    { label: 'Miroir…', ico: 'mirror', fn: () => { setTab('dessin'); dSec('mirror'); } },
+    { label: 'Rotation…', ico: 'rotate', fn: () => { setTab('dessin'); dSec('rotate'); } },
+    { label: 'Centrer sur le brut', ico: 'ctr', fn: () => act('center') },
+    '-',
+    { label: 'Créer un relief', sub: [{ label: 'Dôme', fn: () => relFromDrawing('dome'), off: !nc }, { label: 'Extrusion', fn: () => relFromDrawing('extrude') }] },
+    { label: 'Mettre sur le calque', sub: S.layers.map(l => ({ label: l.name, fn: () => { ss.forEach(s => s.layer = l.id); commit(false); renderLayers(); renderSel(); draw(); toast(trf('Déplacé sur le calque « {n} ».', { n: l.name })); } })) },
+    '-',
+    { label: 'Supprimer', ico: 'del', kbd: 'Suppr', danger: true, fn: () => act('del') }]];
+}
+function cmImage() {
+  const im = S.imgSel && imgById(S.imgSel); if (!im) return null;
+  return [tr('Image') + ' · ' + im.name, [
+    { label: 'Vectoriser…', ico: 'traceOutline', fn: () => { setTab('dessin'); act('traceOutline'); } },
+    { label: 'Transformer en relief (niveaux de gris)', fn: () => imgAct('relGray') },
+    '-',
+    { label: 'Ajuster au brut', ico: 'fit', fn: () => imgAct('imgFit') },
+    { label: 'Centrer', ico: 'ctr', fn: () => imgAct('imgCenter') },
+    { label: 'Premier plan', fn: () => act('zFront') }, { label: 'Arrière-plan', fn: () => act('zBack') },
+    { label: im.locked ? 'Déverrouiller' : 'Verrouiller', fn: () => imgAct('imgLock') },
+    '-',
+    { label: 'Supprimer', ico: 'del', danger: true, fn: () => imgAct('imgDel') }]];
+}
+function cmRelief(in3d) {
+  const it = relCur(); if (!it) return null;
+  const finish = () => { tpNew('relief'); const b = document.querySelector('#tpForm [data-f="rlOp"] button[value="finish"]'); if (b) b.click(); };
+  const L = [
+    { label: 'Parcours d’ébauche', ico: 'mach', fn: () => tpNew('relief') },
+    { label: 'Parcours de finition', fn: finish },
+    { label: 'Parcours de profil (détourer)', fn: () => tpNew('profile') },
+    { label: 'Créer le contour', ico: 'traceOutline', fn: () => relOutline(it) },
+    '-'];
+  if (in3d) L.push({ label: 'Déplacer', fn: () => { RV.tool = 'move'; rvToolsSync(); rvReq(); } }, { label: 'Tourner', fn: () => { RV.tool = 'rotate'; rvToolsSync(); rvReq(); } }, { label: 'Redimensionner', fn: () => { RV.tool = 'scale'; rvToolsSync(); rvReq(); } }, { label: 'Poser au fond du brut', fn: () => act('rvDropB') }, { label: 'Aligner sur le dessus du brut', fn: () => act('rvDropT') }, '-');
+  L.push({ label: 'Dupliquer', ico: 'dup', fn: () => relDup() }, { label: 'Ajuster au brut', ico: 'fit', fn: () => imgAct('relFit') }, { label: 'Centrer', ico: 'ctr', fn: () => imgAct('relCenter') }, { label: 'Masquer', ico: 'eye', fn: () => { it.visible = false; relBump(); relDirty = true; commit(false); relPanel(); draw(); } }, '-', { label: 'Supprimer', ico: 'del', danger: true, fn: () => imgAct('relDel') });
+  return [tr('Relief') + ' · ' + it.name, L];
+}
+function cm2D(e) {
+  const r = cv.getBoundingClientRect(), X = e.clientX - r.left, Y = e.clientY - r.top, p = [wx(X), wy(Y)];
+  const h = hitShape(p) || hitSelInside(p);
+  if (h) { if (!S.sel.has(h.id)) { S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (S.relSel) { S.relSel = null; relPanel(); } S.sel.clear(); groupIds(h).forEach(id => S.sel.add(id)); renderSel(); dRefresh(); draw(); } const [t, L] = cmVector(false); cmOpen(L, e.clientX, e.clientY, t); return; }
+  const hi = imgHit(p); if (hi) { if (S.imgSel !== hi.id) selectImg(hi.id); const c = cmImage(); if (c) cmOpen(c[1], e.clientX, e.clientY, c[0]); return; }
+  const hr = relHit(p); if (hr) { if (S.relSel !== hr.id) selectRel(hr.id); const c = cmRelief(false); if (c) cmOpen(c[1], e.clientX, e.clientY, c[0]); return; }
+  cmOpen([{ label: 'Recentrer la vue', ico: 'fit', fn: () => fit() }, { label: 'Tout sélectionner', kbd: 'Ctrl+A', fn: () => act('selAll') }, ...(S.sel.size ? [{ label: 'Tout désélectionner', fn: () => { S.sel.clear(); renderSel(); dRefresh(); draw(); } }] : [])], e.clientX, e.clientY);
+}
+function cm3D(e, mx, my) {
+  const sh = rvPickShape(mx, my); if (sh) { if (!S.sel.has(sh.id)) rvSelectShape(sh, false); const [t, L] = cmVector(true); cmOpen(L, e.clientX, e.clientY, t); return; }
+  const id = rvPick(mx, my); if (id) { if (S.relSel !== id) selectRel(id); const c = cmRelief(true); if (c) cmOpen(c[1], e.clientX, e.clientY, c[0]); return; }
+  cmOpen([{ label: 'Recentrer', ico: 'fit', fn: () => rvFit(true) }, { label: 'Vue de dessus', fn: () => v3AnimTo(-Math.PI / 2, 1.5703, RV, rvReq) }, { label: 'Vue de face', fn: () => v3AnimTo(-Math.PI / 2, 0, RV, rvReq) }], e.clientX, e.clientY);
+}
 
 function previewShape(D) {
   const a = D.p0, b = D.p1; if (!a || !b) return null; let nodes = null;
@@ -3815,7 +3918,7 @@ function endPointer(e) {
   else if (D.mode === 'measure') showMeasure();
   snapMark = null; draw();
 }
-$('#cw').addEventListener('contextmenu', e => { if (e.target.closest('input, select, textarea')) return; e.preventDefault(); if (lastPtrType === 'touch' || pointers.size > 1) return; rightClick(); });
+$('#cw').addEventListener('contextmenu', e => { if (e.target.closest('input, select, textarea')) return; e.preventDefault(); if (lastPtrType === 'touch' || pointers.size > 1) return; if (e.target === cv && S.ui.tool === 'select' && !pen.length && !arcSt.length && !dimSt.length && !drag) { cm2D(e); return; } rightClick(); });
 cv.addEventListener('pointerup', endPointer); cv.addEventListener('pointercancel', endPointer);
 cv.addEventListener('pointerleave', () => { hover = null; if (!drag) { hoverCorner = null; hoverEdge = null; snapMark = null; draw(); } });
 cv.addEventListener('dblclick', e => {
@@ -4384,8 +4487,9 @@ $('#shClose').onclick = () => { $('#sheet').hidden = true; };
 $('#shSave').onclick = () => { if (!sheetLast) sheetRefresh(); const nm = (S.meta && S.meta.name ? S.meta.name.replace(/[^\w\-]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() : 'copo') || 'copo'; saveFile('fiche-' + nm + '.html', sheetLast, tr('Fiche de gamme')); };
 $('#shPrint').onclick = () => { try { $('#shFrame').contentWindow.focus(); $('#shFrame').contentWindow.print(); } catch (e) { toast('Impression impossible ici : enregistrez la fiche puis imprimez-la depuis votre navigateur.'); } };
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#sheet').hidden && e.target.tagName !== 'TEXTAREA') $('#sheet').hidden = true; });
-let CTX3 = null; // position du pointeur (vue 3D) quand la sélection vient d'un clic dans la vue 3D
+let CTX3 = null; // (barre flottante remplacée par le menu du clic droit)
 function placeCtx() {
+  { const b = $('#ctxbar'); if (b) b.hidden = true; return; }
   const bar = $('#ctxbar'), ss = selShapes();
   if (CTX3 && (!VIEWS.d3 || !ss.length || !ss.some(x => CTX3.ids.includes(x.id)))) CTX3 = null;
   const host = CTX3 ? $('#rv3') : $('#cw'); if (bar.parentElement !== host) host.appendChild(bar);
@@ -5190,7 +5294,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.147', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.148', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6767,6 +6871,7 @@ function rvInit() {
     else { RV.yaw -= dx * 0.008; RV.pitch = Math.max(-1.5703, Math.min(1.5703, RV.pitch + dy * 0.008)); }
     rvReq(); });
   const end = e => { if (drag && drag.gz) { if (drag.moved) rvGizmoEnd(drag); drag = null; return; }
+    if (drag && e && e.button === 2 && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 4) { const d0 = drag; drag = null; c.style.cursor = 'grab'; cm3D(e, d0.mx, d0.my); return; }
     if (drag && e && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 4 && !drag.pan) { const sh = rvPickShape(drag.mx, drag.my); if (sh) rvSelectShape(sh, e.shiftKey, drag.mx, drag.my); else { CTX3 = null; const id = rvPick(drag.mx, drag.my); if (id && !$('#tpWin').hidden) { tpRelPick(id); drag = null; return; } if (!id && S.sel.size && !e.shiftKey) { S.sel.clear(); renderSel(); dRefresh(); } if (id !== (S.relSel || null)) { if (id) selectRel(id); else { S.relSel = null; relPanel(); } } RELBAR = null; if (id) relBarShow('rv3', drag.mx, drag.my); draw(); rvSync(); rvReq(); } }
     drag = null; c.style.cursor = 'grab'; };
   c.addEventListener('pointerup', end); c.addEventListener('pointercancel', () => { drag = null; });
