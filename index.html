@@ -461,7 +461,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         <button data-act="sample">Ouvrir l'exemple</button>
         <button data-act="open">Ouvrir un projet…<kbd>Ctrl+O</kbd></button>
         <button data-act="save">Enregistrer le projet<kbd>Ctrl+S</kbd></button><button data-act="saveAs">Enregistrer sous…<kbd>Ctrl+Maj+S</kbd></button>
-        <hr><button data-act="imgInsert">Insérer une image…</button><button data-act="import">Importer un SVG ou un DXF…</button><button data-act="fontDir">Ouvrir un dossier de polices…</button>
+        <hr><button data-act="imgInsert">Insérer une image…</button><button data-act="import">Importer un SVG ou un DXF…</button><button data-act="relStl">Importer un STL (relief)…</button><button data-act="fontDir">Ouvrir un dossier de polices…</button>
         <hr><button data-act="svgAll">Exporter le dessin en SVG</button><button data-act="svgSel">Exporter la sélection en SVG</button>
         <hr><button data-act="gcExport">Enregistrer le G-code</button><button data-act="sheetPdf">Enregistrer la fiche de gamme en PDF</button>
       </div></div>
@@ -517,6 +517,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
       <button data-tool="fillet" title="Congé sur un coin (F)" aria-label="Congé"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20v-8a8 8 0 0 1 8-8h8"/></svg></button>
       <button data-tool="dogbone" title="Dégagement dogbone / T-bone sur un coin (B)" aria-label="Dégagement dogbone / T-bone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 20V11"/><path d="M11 4h9"/><path d="M4 11a4 4 0 1 1 7-7"/></svg></button>
       <button data-tool="trim" title="Ajuster aux intersections (X)" aria-label="Ajuster"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M8.5 7.5 20 17M8.5 16.5 20 7"/></svg></button>
+      <button data-tool="extend" title="Étendre les tracés : prolonger deux vecteurs jusqu’à leur point commun" aria-label="Étendre les tracés"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 20l6-6M21 20l-6-6"/><path d="M9 14l3-3M15 14l-3-3" stroke-dasharray="1.6 2.2"/><circle cx="12" cy="10.5" r="1.4" fill="currentColor" stroke="none"/></svg></button>
       <button data-tool="cut" title="Couper un vecteur (U)" aria-label="Couper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12h7M14 12h7"/><path d="M12 4v4M12 16v4"/></svg></button>
       <div class="psep"></div>
       <button data-tool="measure" title="Mesurer (M)" aria-label="Mesurer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="8" width="19" height="8" rx="1"/><path d="M6 8v3M10 8v4M14 8v3M18 8v4"/></svg></button>
@@ -534,6 +535,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <div class="stg" role="group" aria-label="Afficher"><span class="stg-h" title="Afficher"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></svg></span><button class="tg" data-act="tgl" data-tgl="showGrid" title="Afficher la grille" aria-label="Afficher la grille"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h18v18H3zM9 3v18M15 3v18M3 9h18M3 15h18"/></svg></button><button class="tg" data-act="tgl" data-tgl="showTP" title="Afficher les parcours d’outils" aria-label="Afficher les parcours"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="4"/><rect x="7.5" y="9" width="9" height="6" rx="1.5" class="dim"/></svg></button><button class="tg" data-act="tgl" data-tgl="showCut" title="Afficher la matière enlevée" aria-label="Afficher la matière enlevée"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 13.5l10-10M3.5 20.5l17-17M10.5 20.5l10-10" class="dim"/></svg></button><button class="tg" data-act="tgl" data-tgl="showOver" title="Afficher les traits superposés (surlignés en rose)" aria-label="Afficher les traits superposés"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18M3 14h18"/><path d="M3 12h18" class="dim" stroke-width="5" style="opacity:.3"/></svg></button></div>
         </div>
         <div class="fbar fbfit"><button data-act="fit" title="Recadrer la vue 2D sur le brut et le dessin" aria-label="Recentrer la vue 2D"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><circle cx="12" cy="12" r="2.5"/></svg></button></div>
+<div class="ctxbar" id="relbar" hidden><span class="grip"></span><button data-act="relBarMachine" title="Créer l’ébauche de relief (onglet Parcours)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v10M8 9l4 4 4-4M5 20h14"/></svg>Usiner…</button><button data-act="relBarProfile" title="Parcours Profil autour du relief, profondeur au bas du relief">Détourer</button><button data-act="relOutline" title="Créer un vecteur qui suit le pourtour du relief">Contour</button><button data-act="relBarDup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>Dupliquer</button><button data-act="relDel" title="Supprimer ce relief" aria-label="Supprimer ce relief"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div>
 <div class="ctxbar" id="ctxbar" hidden><span class="grip"></span><button data-act="dup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>Dupliquer</button><button data-act="group" id="cxGroup">Grouper</button><button data-act="boolU" id="cxWeld">Souder</button><button data-act="tabParcours"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v10M8 9l4 4 4-4M5 20h14"/></svg>Usiner…</button><button data-act="del" title="Supprimer" aria-label="Supprimer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div></div>
       <div class="rv3" id="rv3" hidden><canvas id="rvc" aria-label="Vue 3D du relief"></canvas><canvas id="rvcube" width="120" height="120" aria-label="Cube d’orientation"></canvas>
         <div class="rvtools fbar" role="toolbar" aria-label="Affichage 3D">
@@ -920,7 +922,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.144</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.145</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1336,6 +1338,7 @@ Object.assign(I18N_EN, {"seuil {t} · lissage {l}": "threshold {t} · smoothing 
 Object.assign(I18N_EN, {"Le relief de ce parcours a été supprimé ou n’a pas d’emprise sur le brut.": "The relief of this toolpath was deleted or does not overlap the stock.", "L’usinage de relief utilise tous les reliefs visibles : inutile de sélectionner le relief.": "Relief machining uses all visible reliefs: no need to select the relief.", "Un relief se choisit pour un parcours Profil : la fraise suit son contour. Pour projeter ce parcours sur le relief, cochez « Projeter sur le relief ».": "A relief can be picked for a Profile toolpath: the cutter follows its outline. To project this toolpath onto the relief, tick “Project onto the relief”.", "Relief « {n} » choisi : le profil suivra son contour. Cliquez « {b} ».": "Relief “{n}” picked: the profile will follow its outline. Click “{b}”.", "Relief « {n} » retiré du parcours.": "Relief “{n}” removed from the toolpath.", "Contour du relief : {n}": "Relief outline: {n}", "Aucun vecteur sélectionné : cliquez sur le plan les formes à usiner (Maj pour en ajouter), ou cliquez un relief (2D ou 3D) pour suivre son contour.": "No vector selected: click the shapes to machine on the canvas (Shift to add more), or click a relief (2D or 3D) to follow its outline.", "Calculer autour du relief": "Compute around the relief"});
 Object.assign(I18N_EN, {"Profondeur réglée sur le bas du relief : {d} mm.": "Depth set to the bottom of the relief: {d} mm."});
 Object.assign(I18N_EN, {"Supprimer ce relief": "Delete this relief", "Contour : vectoriser l’image sélectionnée ou créer le contour du relief sélectionné": "Outline: vectorize the selected image or create the outline of the selected relief", "Réglez le seuil et le lissage, puis cliquez « Créer les contours ».": "Adjust the threshold and smoothing, then click “Create outlines”.", "Sélectionnez d’abord une image (sur le plan) ou un relief (sur le plan, dans la vue 3D ou dans l’onglet Relief).": "First select an image (on the canvas) or a relief (on the canvas, in the 3D view or in the Relief tab).", "Miroir": "Mirror", "Retourne la sélection par rapport à un bord de son cadre, à son centre, au centre du brut ou à une ligne.": "Flips the selection about an edge of its frame, its center, the stock center or a line.", "Retourner horizontalement": "Flip horizontally", "Retourner verticalement": "Flip vertically", "Retourner sur le centre du brut": "Flip about the stock center", "Retourner sur la ligne": "Flip about the line", "« Retourner sur la ligne » : sélectionnez les formes et une ligne droite (2 points) qui sert d’axe.": "“Flip about the line”: select the shapes and a straight line (2 points) used as the axis.", "Créer une copie en miroir (l’original reste en place)": "Create a mirror copy (the original stays in place)", "Carrés": "Square", "Rayon externe": "External radius", "Rayon interne": "Internal radius", "Point central": "Center point", "Point": "Point", "Type de coin": "Corner type", "Largeur (X)": "Width (X)", "Hauteur (Y)": "Height (Y)", "Diamètre": "Diameter", "Rayon": "Radius", "À travers 3 points": "Through 3 points", "Centre, départ, arrivée": "Center, start, end", "Point de départ": "Start point", "Point d’arrivée": "End point", "Tracez à la souris ou saisissez les valeurs. Les valeurs modifient la forme qui vient d’être tracée (tant qu’elle est sélectionnée) ; « Créer » en ajoute une nouvelle.": "Draw with the mouse or type the values. The values change the shape you just drew (while it is selected); “Create” adds a new one.", "Valeurs incomplètes : indiquez une taille.": "Incomplete values: enter a size.", "Forme créée.": "Shape created.", "Sélectionnez les formes à retourner et une seule ligne droite (2 points) qui sert d’axe.": "Select the shapes to flip and a single straight line (2 points) used as the axis.", "{n} copie(s) en miroir créée(s).": "{n} mirror copy(ies) created.", "Sélection retournée.": "Selection flipped.", "Clic : départ · clic : arrivée · déplacez la souris pour le bombé puis cliquez (mode « Centre » : clic au centre, au départ puis à l’arrivée)": "Click: start · click: end · move the mouse for the bulge then click (“Center” mode: click the center, the start then the end)"});
+Object.assign(I18N_EN, {"Importer un STL (relief)…": "Import an STL (relief)…", "Étendre les tracés : prolonger deux vecteurs jusqu’à leur point commun": "Extend vectors: lengthen two vectors to their common point", "Étendre les tracés": "Extend vectors", "Cliquez sur deux vecteurs ouverts, près de l’extrémité à prolonger : ils sont étendus jusqu’à leur point commun, dans le prolongement de leurs tracés (tangentes)": "Click two open vectors, near the end to lengthen: they are extended to their common point, following their tangents", "Cliquez sur un vecteur ouvert, près de l’extrémité à prolonger.": "Click an open vector, near the end to lengthen.", "Ce vecteur est fermé : il n’a pas d’extrémité à prolonger.": "This vector is closed: it has no end to lengthen.", "Cliquez maintenant le second vecteur.": "Now click the second vector.", "Choisissez une autre extrémité.": "Pick another end.", "Les deux tracés sont parallèles : ils ne se rejoignent pas.": "The two paths are parallel: they never meet.", "Les prolongements ne se croisent pas en avant des extrémités choisies.": "The extensions do not cross ahead of the chosen ends.", "Tracés prolongés jusqu’à leur point commun.": "Paths extended to their common point.", "Créer l’ébauche de relief (onglet Parcours)": "Create the relief roughing (Toolpaths tab)", "Détourer": "Cut out", "Parcours Profil autour du relief, profondeur au bas du relief": "Profile toolpath around the relief, depth to the bottom of the relief", "Contour": "Outline", "Créer un vecteur qui suit le pourtour du relief": "Create a vector that follows the edge of the relief", "Relief encore en chargement.": "Relief still loading.", "Relief dupliqué (décalé de 10 mm).": "Relief duplicated (offset by 10 mm)."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -2765,6 +2768,7 @@ function render() {
   const tpMode = !$('#tpWin').hidden;
   if (S.ui.showTP) for (const tp of S.tps) { if (!tp.visible || !tp.moves) continue; TPA = tpMode && tp.id !== S.editTp ? 0.15 : 1; ctx.globalAlpha = TPA; drawTP(tp, { profile: C.pf, pocket: C.pk, vcarve: C.vc, drill: C.dr, thread: C.th, relief: C.rl }[tp.type], tp.id === S.activeTp); ctx.globalAlpha = 1; TPA = 1; }
   if (tpMode && S.tpRels && S.tpRels.size && (S.form || {}).type === 'profile') { ctx.save(); ctx.strokeStyle = C.acc || tok('--accent'); ctx.lineWidth = 2; ctx.setLineDash([6, 4]); for (const id of S.tpRels) { const it = S.relief.items.find(x => x.id === id); for (const lp of relOutLoops(it)) { ctx.beginPath(); lp.forEach((q, i) => i ? ctx.lineTo(sx(q[0]), sy(q[1])) : ctx.moveTo(sx(q[0]), sy(q[1]))); ctx.closePath(); ctx.stroke(); } } ctx.restore(); }
+  drawExt();
   drawOverlaps(); // halo sous les traits superposés
   // formes
   for (const s of S.shapes) {
@@ -2803,7 +2807,7 @@ function render() {
   drawSnapMark(C);
   if (S.ui.tool === 'tabedit') { const tp = tabTpCur(); if (tp && tp.loops) { ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]); for (const l of tp.loops) { pathOf(l, true); ctx.stroke(); } ctx.setLineDash([]); for (const t of tp.tabs || []) { ctx.beginPath(); ctx.arc(sx(t.x), sy(t.y), 7, 0, 7); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 2; ctx.stroke(); } ctx.restore(); } }
   drawRulers(C);
-  placeCtx();
+  placeCtx(); placeRelBar();
 }
 function drawDirArrow(s, col) {
   const P = s.pts; let L = 0, k = 1; const want = Math.min(28 / S.view.s, cumLen(P)[P.length - 1] * 0.4);
@@ -2976,6 +2980,43 @@ function mirrorSel(a) {
   S.sel = new Set(out.map(o => o.id)); commit(); renderSel(); draw(); toast(S.ui.mirCopy ? trf('{n} copie(s) en miroir créée(s).', { n: out.length }) : tr('Sélection retournée.'));
 }
 
+
+// ===== étendre les tracés : prolonger deux vecteurs ouverts jusqu'au croisement de leurs tangentes d'extrémité =====
+let extSt = null;
+function extEnd(s, p) { // extrémité la plus proche du clic, point et direction sortante
+  const n = s.nodes.length, A = s.nodes[0], Z = s.nodes[n - 1], dA = Math.hypot(p[0] - A.x, p[1] - A.y), dZ = Math.hypot(p[0] - Z.x, p[1] - Z.y), last = dZ <= dA;
+  const N = last ? Z : A, M = last ? s.nodes[n - 2] : s.nodes[1]; let d;
+  if (last) d = N.i ? [-N.i[0], -N.i[1]] : M.o ? [N.x - (M.x + M.o[0]), N.y - (M.y + M.o[1])] : [N.x - M.x, N.y - M.y];
+  else d = N.o ? [-N.o[0], -N.o[1]] : M.i ? [N.x - (M.x + M.i[0]), N.y - (M.y + M.i[1])] : [N.x - M.x, N.y - M.y];
+  return { sid: s.id, last, P: [N.x, N.y], d: nrm(d) };
+}
+function extClick(p) {
+  const s = hitEdge(p, 8); if (!s) { toast(tr('Cliquez sur un vecteur ouvert, près de l’extrémité à prolonger.')); return; }
+  if (s.closed || s.nodes.length < 2) { toast(tr('Ce vecteur est fermé : il n’a pas d’extrémité à prolonger.')); return; }
+  const e = extEnd(s, p);
+  if (!extSt) { extSt = e; draw(); toast(tr('Cliquez maintenant le second vecteur.')); return; }
+  if (extSt.sid === e.sid && extSt.last === e.last) { toast(tr('Choisissez une autre extrémité.')); return; }
+  const a = extSt, b = e; extSt = null;
+  const den = a.d[0] * b.d[1] - a.d[1] * b.d[0]; if (Math.abs(den) < 1e-9) { draw(); toast(tr('Les deux tracés sont parallèles : ils ne se rejoignent pas.')); return; }
+  const w = [b.P[0] - a.P[0], b.P[1] - a.P[1]], t = (w[0] * b.d[1] - w[1] * b.d[0]) / den, u = (w[0] * a.d[1] - w[1] * a.d[0]) / den;
+  const L = Math.max(S.stock.w, S.stock.h) * 4; if (t < -1e-6 || u < -1e-6 || t > L || u > L) { draw(); toast(tr('Les prolongements ne se croisent pas en avant des extrémités choisies.')); return; }
+  const X = [a.P[0] + a.d[0] * t, a.P[1] + a.d[1] * t];
+  for (const [q, k] of [[a, t], [b, u]]) { if (k < 1e-6) continue; const sh = shapeById(q.sid); if (!sh) continue; if (q.last) { const N = sh.nodes[sh.nodes.length - 1]; N.o = null; sh.nodes.push(NODE(X[0], X[1])); } else { const N = sh.nodes[0]; N.i = null; sh.nodes.unshift(NODE(X[0], X[1])); } refresh(sh); }
+  if (typeof snapVer !== 'undefined') snapVer++; renderSel(); commit(); draw(); toast(tr('Tracés prolongés jusqu’à leur point commun.'));
+}
+function drawExt() { if (S.ui.tool !== 'extend' || !extSt) return; const sh = shapeById(extSt.sid); if (!sh) return; ctx.save(); ctx.strokeStyle = tok('--accent'); ctx.lineWidth = 3; pathOf(sh.pts, sh.closed); ctx.stroke(); ctx.setLineDash([5, 4]); ctx.lineWidth = 1.5; const P = extSt.P, L = 60 / S.view.s; ctx.beginPath(); ctx.moveTo(sx(P[0]), sy(P[1])); ctx.lineTo(sx(P[0] + extSt.d[0] * L), sy(P[1] + extSt.d[1] * L)); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = tok('--accent'); ctx.beginPath(); ctx.arc(sx(P[0]), sy(P[1]), 5, 0, 7); ctx.fill(); ctx.restore(); }
+// ===== petite barre près du pointeur quand on clique un relief (2D ou 3D) =====
+let RELBAR = null;
+function relBarShow(host, x, y) { const it = relCur(); RELBAR = it ? { host, x, y, id: it.id } : null; placeRelBar(); }
+function placeRelBar() {
+  const bar = $('#relbar'); if (!bar) return;
+  if (!RELBAR || S.relSel !== RELBAR.id || !$('#tpWin').hidden || (RELBAR.host === 'rv3' && !VIEWS.d3) || (RELBAR.host === 'cw' && !VIEWS.d2)) { bar.hidden = true; return; }
+  const host = $('#' + RELBAR.host); if (bar.parentElement !== host) host.appendChild(bar);
+  bar.hidden = false; const hw = host.clientWidth, hh = host.clientHeight, bw = bar.offsetWidth || 320, bh = bar.offsetHeight || 40;
+  bar.style.left = Math.max(bw / 2 + 6, Math.min(hw - bw / 2 - 6, RELBAR.x)) + 'px'; bar.style.top = Math.max(6, Math.min(hh - bh - 6, RELBAR.y + 18)) + 'px';
+}
+function relDup() { const it = relCur(); if (!it) return; const g = relGrid[it.id]; if (!g) return toast(tr('Relief encore en chargement.')); const c = JSON.parse(JSON.stringify(it)); delete c.id; c.name = it.name + ' ' + tr('(copie)'); c.x = it.x + 10; c.y = it.y - 10; if (c.kind === 'image') c.linked = false; const oldMesh = relMesh[it.id]; relAdd(c, typeof structuredClone === 'function' ? structuredClone(g) : g); if (oldMesh) { relMesh[c.id] = oldMesh; idbPutImg('relm_' + c.id, oldMesh).catch(() => { }); } toast(tr('Relief dupliqué (décalé de 10 mm).')); }
+
 function previewShape(D) {
   const a = D.p0, b = D.p1; if (!a || !b) return null; let nodes = null;
   if (D.mode === 'rect') { if (Math.abs(b[0] - a[0]) < 1e-6 || Math.abs(b[1] - a[1]) < 1e-6) return null; return refresh({ nodes: cfRectNodes(Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[0], b[0]), Math.max(a[1], b[1])), closed: true }); }
@@ -3065,10 +3106,11 @@ const HINTS = {
   chamfer: 'Cliquez près d’un coin vif (entre droites, arcs ou courbes)', fillet: 'Cliquez près d’un coin vif (entre droites, arcs ou courbes)',
   trim: 'Cliquez sur la portion de vecteur à supprimer entre deux intersections',
   cut: 'Cliquez sur un vecteur pour le couper à cet endroit',
+  extend: 'Cliquez sur deux vecteurs ouverts, près de l’extrémité à prolonger : ils sont étendus jusqu’à leur point commun, dans le prolongement de leurs tracés (tangentes)',
   tabedit: 'Clic sur le parcours : ajouter un pont · clic sur un pont : le retirer · glisser un pont : le déplacer le long du parcours · Échap ou Terminer pour finir',
   measure: 'Glissez pour mesurer', dim: 'Clic : 1er point · clic : 2e point · clic : position de la cote · une extrémité accrochée à un nœud, un milieu ou un centre (point plein) suit l’objet',
 };
-const TNAME = { dogbone: 'Dégagement', select: 'Sélection', nodes: 'Nœuds', pan: 'Vue', rect: 'Rectangle', ellipse: 'Ellipse', circle: 'Cercle', polygon: 'Polygone', poly: 'Plume', arc: 'Arc', text: 'Texte', chamfer: 'Chanfrein', fillet: 'Congé', trim: 'Ajuster', cut: 'Couper', tabedit: 'Ponts', measure: 'Mesure', dim: 'Cote' };
+const TNAME = { extend: 'Étendre les tracés', dogbone: 'Dégagement', select: 'Sélection', nodes: 'Nœuds', pan: 'Vue', rect: 'Rectangle', ellipse: 'Ellipse', circle: 'Cercle', polygon: 'Polygone', poly: 'Plume', arc: 'Arc', text: 'Texte', chamfer: 'Chanfrein', fillet: 'Congé', trim: 'Ajuster', cut: 'Couper', tabedit: 'Ponts', measure: 'Mesure', dim: 'Cote' };
 const DBL_TOOLS = ['select', 'pan', 'rect', 'ellipse', 'circle', 'polygon', 'arc', 'dim', 'measure'];
 // clic droit : termine la ligne en cours, annule le tracé, revient à la sélection, puis désélectionne
 function rightClick() {
@@ -3084,7 +3126,7 @@ function rightClick() {
 function setTool(t) {
   if (pen.length && t !== 'poly') finishPen(false);
   if (t !== 'text') textPick = null;
-  arcSt = []; dimSt = []; if (t !== 'measure') S.measure = null;
+  arcSt = []; dimSt = []; extSt = null; if (t !== 'measure') S.measure = null;
   if (t === 'nodes') { const s = selShapes(); S.ne = s.length === 1 ? { sid: s[0].id, ni: null, seg: null } : null; } else S.ne = null;
   S.ui.tool = t; $$('.palette button, #dgrid [data-tool]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === t));
   const ob = $('#optbar'); let extra = '';
@@ -3558,7 +3600,7 @@ cv.addEventListener('pointerdown', e => {
       renderSel(); drag = { mode: 'move', X0: X, Y0: Y, anc: moveAnchor(p), praw: p.slice(), p0: snap(p, S.sel), bb0: bbox(selShapes()), orig: selShapes().map(s => [s, s.nodes.map(cloneNode)]), moved: false, wasSel, piv0: PIV && PIV.key === selKey() ? PIV.p.slice() : null };
     } else {
       const dm = hitDim(p), gd = hitGuide(X, Y);
-      const hi = !dm && !gd ? imgHit(p) : null, hr = !dm && !gd && !hi ? relHit(p) : null;
+      RELBAR = null; const hi = !dm && !gd ? imgHit(p) : null, hr = !dm && !gd && !hi ? relHit(p) : null;
       if (dm) { S.selDim = dm.id; S.sel.clear(); renderSel(); }
       else if (gd) { drag = { mode: 'guide', axis: gd.axis, i: gd.i }; }
       else if (hi) { const was = S.imgSel === hi.id; if (!was) { IXF = false; selectImg(hi.id); } drag = { mode: 'imove', im: hi, off: [hi.x - p[0], hi.y - p[1]], toggleXf: was, X0: X, Y0: Y }; }
@@ -3610,6 +3652,7 @@ cv.addEventListener('pointerdown', e => {
     const pieces = trimPieces(s, S.shapes.filter(o => o !== s && shown(o)), p);
     if (pieces === null) { toast('Il faut au moins deux intersections pour ajuster un contour fermé.'); return; }
     replaceShape(s, pieces.map(n => ({ nodes: n, closed: false }))); hoverEdge = null; renderSel(); commit();
+  } else if (t === 'extend') { extClick(p); return;
   } else if (t === 'cut') {
     const s = hitEdge(p, 8); if (!s) { toast('Cliquez sur un vecteur.'); return; }
     const pieces = cutPieces(s, paramAt(s, p).u); if (!pieces) { toast('Impossible de couper à l’extrémité d’un vecteur ouvert.'); return; }
@@ -3696,7 +3739,7 @@ function endPointer(e) {
   else if (D.mode === 'srot') { cv.style.cursor = 'grab'; if (D.moved) { for (const [s, , r0] of D.orig) s.rot = normDeg(r0 + D.ang); commit(); renderSel(); } }
   else if (D.mode === 'sscale') { if (D.moved) { commit(); renderSel(); } }
   else if (D.mode === 'tabdrag') { if (!D.moved) D.tp.p.tabPts.splice(D.idx, 1); tabChanged(D.tp); }
-  else if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot' || D.mode === 'iedge') { if (D.rel) { if (D.moved) { relBump(); relDirty = true; commit(false); draw(); } else if (D.toggleXf) { RXF = !RXF; draw(); } relPanel(); } else { if (D.moved) commit(false); else if (D.toggleXf) { IXF = !IXF; draw(); } renderImgPanel(); } }
+  else if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot' || D.mode === 'iedge') { if (D.rel) { if (D.moved) { relBump(); relDirty = true; commit(false); draw(); } else { if (D.toggleXf) { RXF = !RXF; draw(); } relBarShow('cw', X, Y); } relPanel(); } else { if (D.moved) commit(false); else if (D.toggleXf) { IXF = !IXF; draw(); } renderImgPanel(); } }
   else if (D.mode === 'node' || D.mode === 'handle') { if (D.moved) commit(); }
   else if (D.mode === 'nband') {
     if (Math.abs(D.sx1 - D.sx0) + Math.abs(D.sy1 - D.sy0) <= 4) { if (!D.add) { S.ne = null; S.sel.clear(); renderSel(); } }
@@ -4358,6 +4401,9 @@ function act(a, btn) {
       const it = relCur(); if (it) { relOutline(it); return; }
       toast(tr('Sélectionnez d’abord une image (sur le plan) ou un relief (sur le plan, dans la vue 3D ou dans l’onglet Relief).')); return; }
     case 'cfCreate': cfCreate(); return;
+    case 'relBarMachine': { RELBAR = null; tpNew('relief'); return; }
+    case 'relBarProfile': { RELBAR = null; tpNew('profile'); return; }
+    case 'relBarDup': relDup(); return;
     case 'reverse': { if (!ss.length) return toast('Sélectionnez des vecteurs.'); ss.forEach(s => { s.nodes = reverseNodes(s.nodes); refresh(s); }); commit(); draw(); toast('Sens inversé.'); return; }
     case 'zFront': case 'zUp': case 'zDown': case 'zBack': arrange(a); return;
     case 'group': { if (ss.length < 2) return toast('Sélectionnez au moins deux vecteurs.'); const g = uid(); ss.forEach(s => s.g = g); commit(false); renderSel(); toast('Groupe créé (' + ss.length + ' vecteurs).'); return; }
@@ -4644,12 +4690,12 @@ const DI = {
   il: SVG24('<path class="bo" d="M3 7h6l3 5 3-5h6"/><path class="bo bd" d="M3 17h6l3-5 3 5h6"/>'),
 };
 DI.mirror = DI.mirH;
-DI.traceOutline = SVG24('<path class="bf" d="M8.5 7.5c2.6-2.4 7.5-1.6 7.5 2.6 0 4-2.2 6.4-5.4 6.4-3.6 0-4.6-5.8-2.1-9z"/><path class="bo bd" d="M5.6 5.4c4-4.2 13.4-3.2 13.4 4.6 0 6.5-4 10.5-8.6 10.5C4.2 20.5 1.8 9.6 5.6 5.4z"/>');
+DI.traceOutline = SVG24('<path class="bo" d="M6.5 16.5l3.4-5.2 2.4 2.8 2-2.6 3.2 5"/><path class="bo" stroke-dasharray="2.6 2" d="M3.5 7.5a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-11a3 3 0 0 1-3-3z"/>');
 const DGRID = [
   ['Sélection', [['t', 'select'], ['t', 'nodes'], ['t', 'pan']]],
   ['Combiner', [['a', 'boolU', 'Souder', 2], ['a', 'boolS', 'Soustraire (à partir de la première forme sélectionnée)', 2], ['a', 'boolI', 'Intersection (à partir de la première forme sélectionnée)', 2], ['a', 'group', 'Grouper (Ctrl+G)', 2], ['a', 'ungroup', 'Dégrouper (Ctrl+Maj+G)', 1]]],
   ['Créer', [['t', 'poly'], ['t', 'rect'], ['t', 'ellipse'], ['t', 'circle'], ['t', 'polygon'], ['t', 'arc'], ['t', 'text'], ['s', 'img', 'Importer (image / vectoriel)'], ['a', 'traceOutline', 'Contour : vectoriser l’image sélectionnée ou créer le contour du relief sélectionné', 0]]],
-  ['Modifier', [['t', 'chamfer'], ['t', 'fillet'], ['t', 'dogbone'], ['t', 'trim'], ['t', 'cut'], ['s', 'join', 'Joindre et relier des vecteurs'], ['s', 'fit', 'Lisser (adapter des courbes)'], ['s', 'offset', 'Contour décalé'], ['a', 'neExplode', 'Scinder : couper le profil à chaque nœud', 1]]],
+  ['Modifier', [['t', 'chamfer'], ['t', 'fillet'], ['t', 'dogbone'], ['t', 'trim'], ['t', 'cut'], ['t', 'extend'], ['s', 'join', 'Joindre et relier des vecteurs'], ['s', 'fit', 'Lisser (adapter des courbes)'], ['s', 'offset', 'Contour décalé'], ['a', 'neExplode', 'Scinder : couper le profil à chaque nœud', 1]]],
   ['Disposer', [['s', 'align', 'Aligner et répartir'], ['s', 'rotate', 'Rotation'], ['s', 'array', 'Copie en réseau'], ['a', 'arrPath', 'Répéter le long d’une courbe', 2], ['s', 'nest', 'Imbrication'], ['a', 'center', 'Centrer sur le brut', 1], ['s', 'mirror', 'Miroir']]],
   ['Mesurer', [['t', 'measure'], ['t', 'dim'], ['s', 'guides', 'Repères et cotes']]],
   ['Gadgets', [['a', 'fbOpen', 'Touche de guitare…', 0], ['a', 'ilOpen', 'Incrustation en V (inlay)…', 1], ['a', 'boxOpen', 'Boîte à entures…', 0]]],
@@ -5081,7 +5127,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.144', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.145', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6658,7 +6704,7 @@ function rvInit() {
     else { RV.yaw -= dx * 0.008; RV.pitch = Math.max(-1.5703, Math.min(1.5703, RV.pitch + dy * 0.008)); }
     rvReq(); });
   const end = e => { if (drag && drag.gz) { if (drag.moved) rvGizmoEnd(drag); drag = null; return; }
-    if (drag && e && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 4 && !drag.pan) { const sh = rvPickShape(drag.mx, drag.my); if (sh) rvSelectShape(sh, e.shiftKey, drag.mx, drag.my); else { CTX3 = null; const id = rvPick(drag.mx, drag.my); if (id && !$('#tpWin').hidden) { tpRelPick(id); drag = null; return; } if (!id && S.sel.size && !e.shiftKey) { S.sel.clear(); renderSel(); dRefresh(); } if (id !== (S.relSel || null)) { if (id) selectRel(id); else { S.relSel = null; relPanel(); } } draw(); rvSync(); rvReq(); } }
+    if (drag && e && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 4 && !drag.pan) { const sh = rvPickShape(drag.mx, drag.my); if (sh) rvSelectShape(sh, e.shiftKey, drag.mx, drag.my); else { CTX3 = null; const id = rvPick(drag.mx, drag.my); if (id && !$('#tpWin').hidden) { tpRelPick(id); drag = null; return; } if (!id && S.sel.size && !e.shiftKey) { S.sel.clear(); renderSel(); dRefresh(); } if (id !== (S.relSel || null)) { if (id) selectRel(id); else { S.relSel = null; relPanel(); } } RELBAR = null; if (id) relBarShow('rv3', drag.mx, drag.my); draw(); rvSync(); rvReq(); } }
     drag = null; c.style.cursor = 'grab'; };
   c.addEventListener('pointerup', end); c.addEventListener('pointercancel', () => { drag = null; });
   c.addEventListener('wheel', e => { e.preventDefault(); RV.dist = Math.max(5, Math.min(1e5, RV.dist * Math.exp(e.deltaY * 0.0012))); rvReq(); }, { passive: false });
