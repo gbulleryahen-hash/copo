@@ -186,7 +186,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.142</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.143</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -217,7 +217,7 @@ footer p{max-width:none}
       <li><div><b>Réglez le projet</b>Onglet <span class="ui">Projet</span> : dimensions et matière du brut, point d'origine X0 Y0, zéro Z (dessus du brut ou table), unités et machine.</div></li>
       <li><div><b>Dessinez ou importez</b>Tracez avec les icônes de l'onglet Dessin, importez un SVG, un DXF ou une image (icône <span class="ui">Importer</span> du groupe Créer, ou menu Fichier) ou écrivez un texte.</div></li>
       <li><div><b>Vérifiez vos outils</b>Choisissez le matériau dans l'onglet Projet, puis vérifiez dans la <span class="ui">Bibliothèque d'outils</span> (onglet Parcours) la vitesse, l'avance, la profondeur de passe et le pas latéral de chaque fraise.</div></li>
-      <li><div><b>Créez les parcours</b>Sélectionnez les formes sur le plan, ouvrez l'onglet <span class="ui">Parcours</span>, choisissez Profil, Poche, V-carving ou Perçage, réglez puis cliquez sur <span class="ui">Calculer</span>.</div></li>
+      <li><div><b>Créez les parcours</b>Sélectionnez les formes sur le plan, ouvrez l'onglet <span class="ui">Parcours</span>, choisissez Profil, Poche, V-carve ou Perçage, réglez puis cliquez sur <span class="ui">Calculer</span>.</div></li>
       <li><div><b>Contrôlez en 3D</b>Le bouton <span class="ui">Simulation de l’usinage</span> (onglet Parcours) ou <span class="ui">Affichage › Aperçu 3D de l'usinage</span> montre le brut usiné. Rejouez l'usinage pour repérer une erreur de profondeur ou d'outil.</div></li>
       <li><div><b>Enregistrez le G-code</b>Onglet <span class="ui">G-code</span> : choisissez le post-processeur, puis <span class="ui">Enregistrer le G-code</span>. Faites toujours un passage à vide avant d'usiner.</div></li>
     </ol>
@@ -359,7 +359,7 @@ footer p{max-width:none}
 
     <h2 id="fr-parcours" class="pb">Parcours d'outils</h2>
     <figure><img src="img/fr-03-parcours.webp" alt="Formulaire de modification du parcours de détourage extérieur, avec ponts d'attache." width="1800" height="1125" loading="lazy"><figcaption>Cliquez un parcours dans la liste pour le modifier : son tracé est mis en évidence sur le plan. Le texte sous le formulaire résume ce que fera la machine.</figcaption></figure>
-    <p>En haut de l'onglet, les quatre boutons <span class="ui">Profil</span>, <span class="ui">Poche</span>, <span class="ui">V-carving</span> et <span class="ui">Perçage</span> créent un parcours : sélectionnez les formes sur le plan (même fenêtre ouverte), puis cliquez sur l'opération. Ses réglages s'ouvrent dans une fenêtre flottante, déplaçable par son titre ; COPO retient sa position. Cliquer un parcours de la liste ouvre la même fenêtre pour le modifier.</p>
+    <p>En haut de l'onglet, les quatre boutons <span class="ui">Profil</span>, <span class="ui">Poche</span>, <span class="ui">V-carve</span> et <span class="ui">Perçage</span> créent un parcours : sélectionnez les formes sur le plan (même fenêtre ouverte), puis cliquez sur l'opération. Ses réglages s'ouvrent dans une fenêtre flottante, déplaçable par son titre ; COPO retient sa position. Cliquer un parcours de la liste ouvre la même fenêtre pour le modifier.</p>
     <p>Tant que la fenêtre du parcours est ouverte, le reste du dessin et les autres parcours sont <strong>estompés</strong> : seuls les vecteurs sélectionnés et le parcours en cours ressortent. Tout redevient normal à la fermeture. Au bas de la fenêtre, une <strong>ligne d'état</strong> dit ce qui sera usiné, par exemple « 3 vecteurs sélectionnés (2 fermés, 1 ouvert) » ; elle passe en rouge s'il n'y a rien de sélectionné, et prévient quand une poche, un V-carving ou un perçage ignorera des vecteurs ouverts.</p>
     <h3>Les quatre types</h3>
     <ul>
@@ -540,7 +540,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.142 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.143 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -576,7 +576,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.142</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.143</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -607,7 +607,7 @@ M30</pre>
       <li><div><b>Set up the project</b><span class="ui">Project</span> tab: stock size and material, X0 Y0 origin point, Z zero (top of stock or table), units and machine.</div></li>
       <li><div><b>Draw or import</b>Draw with the icons of the Drawing tab, import an SVG, a DXF or an image (the <span class="ui">Import</span> icon in the Create group, or the File menu) or type some text.</div></li>
       <li><div><b>Check your tools</b>Choose the material in the Project tab, then check in the <span class="ui">Tool library</span> (Toolpaths tab) the speed, feed, pass depth and stepover of each bit.</div></li>
-      <li><div><b>Create the toolpaths</b>Select shapes on the canvas, open the <span class="ui">Toolpaths</span> tab, choose Profile, Pocket, V-carving or Drilling, adjust, then click <span class="ui">Calculate</span>.</div></li>
+      <li><div><b>Create the toolpaths</b>Select shapes on the canvas, open the <span class="ui">Toolpaths</span> tab, choose Profile, Pocket, V-carve or Drilling, adjust, then click <span class="ui">Calculate</span>.</div></li>
       <li><div><b>Check in 3D</b>The <span class="ui">Machining simulation</span> button (Toolpaths tab) or <span class="ui">View › 3D machining preview</span> shows the machined stock. Play the job back to spot a wrong depth or tool.</div></li>
       <li><div><b>Save the G-code</b><span class="ui">G-code</span> tab: choose the post-processor, then <span class="ui">Save G-code</span>. Always do a dry run before cutting.</div></li>
     </ol>
@@ -749,7 +749,7 @@ M30</pre>
 
     <h2 id="en-toolpaths" class="pb">Toolpaths</h2>
     <figure><img src="img/en-03-parcours.webp" alt="Edit form of the outside cut-out toolpath, with tabs." width="1800" height="1125" loading="lazy"><figcaption>Click a toolpath in the list to edit it: its path is highlighted on the canvas. The text under the form sums up what the machine will do.</figcaption></figure>
-    <p>At the top of the tab, the four buttons <span class="ui">Profile</span>, <span class="ui">Pocket</span>, <span class="ui">V-carving</span> and <span class="ui">Drilling</span> create a toolpath: select the shapes on the canvas (even with the window open), then click the operation. Its settings open in a floating window you can move by its title; COPO remembers its position. Clicking a toolpath in the list opens the same window to edit it.</p>
+    <p>At the top of the tab, the four buttons <span class="ui">Profile</span>, <span class="ui">Pocket</span>, <span class="ui">V-carve</span> and <span class="ui">Drilling</span> create a toolpath: select the shapes on the canvas (even with the window open), then click the operation. Its settings open in a floating window you can move by its title; COPO remembers its position. Clicking a toolpath in the list opens the same window to edit it.</p>
     <p>While the toolpath window is open, the rest of the drawing and the other toolpaths are <strong>dimmed</strong>: only the selected vectors and the current toolpath stand out. Everything returns to normal when the window closes. At the bottom of the window, a <strong>status line</strong> says what will be machined, for example “3 vectors selected (2 closed, 1 open)”; it turns red when nothing is selected, and warns when a pocket, V-carving or drilling will ignore open vectors.</p>
     <h3>The four types</h3>
     <ul>
@@ -930,7 +930,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.142 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.143 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
