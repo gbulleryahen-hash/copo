@@ -935,7 +935,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.151</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.152</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -3837,7 +3837,7 @@ cv.addEventListener('pointermove', e => {
     if (D.mode === 'node') { const q = snap(p, new Set([D.s.id])), dx = q[0] - D.p0[0], dy = q[1] - D.p0[1]; D.ids.forEach((i, k) => { const n = D.s.nodes[i]; if (n) { n.x = D.orig[k][0] + dx; n.y = D.orig[k][1] + dy; } }); refresh(D.s); D.moved = true; setCoords(q, D.ids.length > 1 ? 'Δ ' + fr(dx) + ' / ' + fr(dy) : ''); draw(); return; }
     if (D.mode === 'nband') { D.sx1 = X; D.sy1 = Y; draw(); return; }
     if (D.mode === 'handle') { const n = D.s.nodes[D.i], v = [p[0] - n.x, p[1] - n.y]; n[D.w] = v; const ow = D.w === 'i' ? 'o' : 'i'; if (n.sm && !D.alt && !e.altKey && n[ow]) { const L = Math.hypot(n[ow][0], n[ow][1]), u = nrm(v); n[ow] = [-u[0] * L, -u[1] * L]; } else if (e.altKey || D.alt) n.sm = false; refresh(D.s); D.moved = true; draw(); return; }
-    if (D.mode === 'pen') { const v = [p[0] - D.p0[0], p[1] - D.p0[1]]; if (Math.hypot(v[0], v[1]) * S.view.s > 4) { D.node.o = v; D.node.i = [-v[0], -v[1]]; D.node.sm = true; } draw(); return; }
+    if (D.mode === 'pen') { const v = [p[0] - D.p0[0], p[1] - D.p0[1]]; if (Math.hypot(v[0], v[1]) * S.view.s > DRAG_MIN() + 4) { D.node.o = v; D.node.i = [-v[0], -v[1]]; D.node.sm = true; } else { D.node.o = null; D.node.i = null; D.node.sm = false; } draw(); return; } // petit tremblement au clic : point anguleux, pas de poignée
     if (D.mode === 'measure') { const q = snap(p); S.measure.b = q; showMeasure(); draw(); return; }
     if (['rect', 'ellipse', 'circle', 'polygon'].includes(D.mode)) { D.p1 = snap(p); D.shift = e.shiftKey; const q = D.p1, a = D.p0; setCoords(q, D.mode === 'circle' || D.mode === 'polygon' ? 'R ' + fr(hyp(q, a)) + ' mm' : fr(Math.abs(q[0] - a[0])) + ' × ' + fr(Math.abs(q[1] - a[1])) + ' mm'); draw(); return; }
   }
@@ -5256,7 +5256,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.151', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.152', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
