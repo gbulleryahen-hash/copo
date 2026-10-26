@@ -901,7 +901,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.139</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.141</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1314,6 +1314,7 @@ Object.assign(I18N_EN, {"Horizontale": "Horizontal", "Verticale": "Vertical"});
 Object.assign(I18N_EN, {"La projection sur le relief utilise tous les reliefs visibles : inutile de sélectionner le relief. Sélectionnez seulement les vecteurs du parcours.": "Projection onto the relief uses all visible reliefs: no need to select the relief. Only select the toolpath’s vectors.", "Projeter sur le relief (tous les reliefs visibles)": "Project onto the relief (all visible reliefs)"});
 Object.assign(I18N_EN, {"Profondeur où commence l’usinage : 0 = dessus du brut, positive = sous la surface, négative = au-dessus (premières passes à vide, pour une surface irrégulière ou un brut plus épais que prévu)": "Depth where machining starts: 0 = stock top, positive = below the surface, negative = above it (first passes in the air, for an uneven surface or thicker stock than planned)", "Profondeur où commence l’usinage : 0 = dessus du brut, positive = sous la surface (fond d’une poche), négative = au-dessus": "Depth where machining starts: 0 = stock top, positive = below the surface (pocket floor), negative = above it"});
 Object.assign(I18N_EN, {"seuil {t} · lissage {l}": "threshold {t} · smoothing {l}", "Afficher l’aide": "Show help", "Actions sur l’image": "Image actions", "Retirer l’image": "Remove the image"});
+Object.assign(I18N_EN, {"Le relief de ce parcours a été supprimé ou n’a pas d’emprise sur le brut.": "The relief of this toolpath was deleted or does not overlap the stock.", "L’usinage de relief utilise tous les reliefs visibles : inutile de sélectionner le relief.": "Relief machining uses all visible reliefs: no need to select the relief.", "Un relief se choisit pour un parcours Profil : la fraise suit son contour. Pour projeter ce parcours sur le relief, cochez « Projeter sur le relief ».": "A relief can be picked for a Profile toolpath: the cutter follows its outline. To project this toolpath onto the relief, tick “Project onto the relief”.", "Relief « {n} » choisi : le profil suivra son contour. Cliquez « {b} ».": "Relief “{n}” picked: the profile will follow its outline. Click “{b}”.", "Relief « {n} » retiré du parcours.": "Relief “{n}” removed from the toolpath.", "Contour du relief : {n}": "Relief outline: {n}", "Aucun vecteur sélectionné : cliquez sur le plan les formes à usiner (Maj pour en ajouter), ou cliquez un relief (2D ou 3D) pour suivre son contour.": "No vector selected: click the shapes to machine on the canvas (Shift to add more), or click a relief (2D or 3D) to follow its outline.", "Calculer autour du relief": "Compute around the relief"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -2739,6 +2740,7 @@ function render() {
   // parcours
   const tpMode = !$('#tpWin').hidden;
   if (S.ui.showTP) for (const tp of S.tps) { if (!tp.visible || !tp.moves) continue; TPA = tpMode && tp.id !== S.editTp ? 0.15 : 1; ctx.globalAlpha = TPA; drawTP(tp, { profile: C.pf, pocket: C.pk, vcarve: C.vc, drill: C.dr, thread: C.th, relief: C.rl }[tp.type], tp.id === S.activeTp); ctx.globalAlpha = 1; TPA = 1; }
+  if (tpMode && S.tpRels && S.tpRels.size && (S.form || {}).type === 'profile') { ctx.save(); ctx.strokeStyle = C.acc || tok('--accent'); ctx.lineWidth = 2; ctx.setLineDash([6, 4]); for (const id of S.tpRels) { const it = S.relief.items.find(x => x.id === id); for (const lp of relOutLoops(it)) { ctx.beginPath(); lp.forEach((q, i) => i ? ctx.lineTo(sx(q[0]), sy(q[1])) : ctx.moveTo(sx(q[0]), sy(q[1]))); ctx.closePath(); ctx.stroke(); } } ctx.restore(); }
   drawOverlaps(); // halo sous les traits superposés
   // formes
   for (const s of S.shapes) {
@@ -2880,7 +2882,7 @@ function previewShape(D) {
 // ---------- historique ----------
 let hist = [], hi = -1;
 const snapState = () => JSON.stringify({ meta: S.meta || {}, stock: S.stock, shapes: S.shapes.map(({ pts, map, ...r }) => r), tps: S.tps.map(tpDef), tools: S.tools, layers: S.layers, layerActive: S.layerActive, guides: S.guides, dims: S.dims, images: S.images, relief: S.relief });
-function tpDef(t) { return { id: t.id, name: t.name, type: t.type, toolId: t.toolId, shapeIds: t.shapeIds, p: t.p, visible: t.visible, face: t.face === 2 ? 2 : 1 }; }
+function tpDef(t) { return { id: t.id, name: t.name, type: t.type, toolId: t.toolId, shapeIds: t.shapeIds, ...(t.relIds && t.relIds.length ? { relIds: t.relIds } : {}), p: t.p, visible: t.visible, face: t.face === 2 ? 2 : 1 }; }
 function commit(recompute = true) { snapVer++; if (S.relief && S.relief.items.some(i => i.clip)) relDirty = true; const s = snapState(); if (hist[hi] === s) return; hist = hist.slice(0, hi + 1); hist.push(s); if (hist.length > 120) hist.shift(); hi = hist.length - 1; if (recompute) recomputeAll(); autosave(); }
 function restore(s) {
   const o = JSON.parse(s); S.meta = o.meta || {}; S.stock = { offX: 0, offY: 0, ...o.stock }; S.stock.originXY = originKey(S.stock); S.layers = o.layers && o.layers.length ? o.layers : DEFAULT_LAYERS(); S.layerActive = S.layers.find(l => l.id === o.layerActive) ? o.layerActive : S.layers[0].id;
@@ -2898,12 +2900,12 @@ let asT = 0; function autosave() { clearTimeout(asT); asT = setTimeout(() => { L
 // ---------- calcul des parcours ----------
 function flipPt(q, st) { st = st || S.stock; return st.flip === 'y' ? [st.w - q[0], q[1]] : [q[0], st.h - q[1]]; }
 function computeTP(tp) {
-  const tool = S.tools.find(t => t.id === tp.toolId); const shapes = tp.shapeIds.map(shapeById).filter(Boolean);
+  const tool = S.tools.find(t => t.id === tp.toolId); const shapes = tp.shapeIds.map(shapeById).filter(Boolean).concat(tp.type === 'profile' ? tpRelShapes(tp) : []);
   tp.err = null; tp.warns = []; tp.moves = []; tp.info = '';
   try {
     if (!window.ClipperLib) throw new Error('Bibliothèque de calcul absente.');
     if (!tool) throw new Error("L'outil de ce parcours n'existe plus.");
-    if (!shapes.length && (tp.type !== 'relief' || tp.shapeIds.length)) throw new Error('Les formes de ce parcours ont été supprimées.');
+    if (!shapes.length && (tp.type !== 'relief' || tp.shapeIds.length)) throw new Error(tp.relIds && tp.relIds.length ? tr('Le relief de ce parcours a été supprimé ou n’a pas d’emprise sur le brut.') : 'Les formes de ce parcours ont été supprimées.');
     const fn = { profile: buildProfile, pocket: buildPocket, vcarve: buildVcarve, drill: buildDrill, thread: buildThread, relief: buildRelief }[tp.type];
     const f2 = tp.face === 2, sh = f2 ? shapes.map(sp => ({ ...sp, pts: sp.pts.map(q => flipPt(q)) })) : shapes;
     let pp = f2 && tp.p.openSide && tp.p.openSide !== 'on' ? { ...tp.p, openSide: tp.p.openSide === 'left' ? 'right' : 'left' } : tp.p; if (f2) pp = { ...pp, f2: true };
@@ -2917,7 +2919,7 @@ function computeTP(tp) {
       else { r.moves = projectMoves(r.moves, relProjector(tool)); r.info = (r.info ? r.info + ' · ' : '') + tr('projeté sur le relief'); tp.relVer = S.relief.ver || 0; }
     }
     if (z0) { const cz = S.machine.clearZ - 1e-9; r.moves = r.moves.map(m => typeof m.z === 'number' && m.z < cz ? { ...m, z: m.z - z0 } : m); r.info = (r.info ? r.info + ' · ' : '') + trf('départ à {d} mm', { d: LANG === 'fr' ? fr(z0, 2) : z0.toFixed(2) }); }
-    tp.moves = r.moves; tp.warns = r.warns; tp.info = r.info; if (tp.type === 'relief') tp.relVer = S.relief.ver || 0;
+    tp.moves = r.moves; tp.warns = r.warns; tp.info = r.info; if (tp.type === 'relief' || (tp.relIds && tp.relIds.length)) tp.relVer = S.relief.ver || 0;
     tp.dmoves = f2 ? r.moves.map(m => { const q = flipPt([m.x, m.y]); return { ...m, x: q[0], y: q[1] }; }) : null;
     tp.loops = r.loops ? (f2 ? r.loops.map(l => l.map(q => flipPt(q))) : r.loops) : null;
     tp.holes = r.holes ? (f2 ? r.holes.map(q => flipPt(q)) : r.holes) : null;
@@ -3452,7 +3454,7 @@ cv.addEventListener('pointerdown', e => {
       if (dm) { S.selDim = dm.id; S.sel.clear(); renderSel(); }
       else if (gd) { drag = { mode: 'guide', axis: gd.axis, i: gd.i }; }
       else if (hi) { const was = S.imgSel === hi.id; if (!was) { IXF = false; selectImg(hi.id); } drag = { mode: 'imove', im: hi, off: [hi.x - p[0], hi.y - p[1]], toggleXf: was, X0: X, Y0: Y }; }
-      else if (hr && !$('#tpWin').hidden) { toast(tr('La projection sur le relief utilise tous les reliefs visibles : inutile de sélectionner le relief. Sélectionnez seulement les vecteurs du parcours.')); }
+      else if (hr && !$('#tpWin').hidden) { tpRelPick(hr.id); }
       else if (hr) { const was = S.relSel === hr.id; if (!was) { RXF = false; selectRel(hr.id); if (curTab !== 'relief') setTab('relief'); } drag = { mode: 'imove', im: hr, off: [hr.x - p[0], hr.y - p[1]], rel: true, toggleXf: was, X0: X, Y0: Y }; }
       else { S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (S.relSel) { S.relSel = null; relPanel(); } if (!e.shiftKey) S.sel.clear(); renderSel(); drag = { mode: 'band', sx0: X, sy0: Y, sx1: X, sy1: Y }; }
     }
@@ -4780,7 +4782,7 @@ function fwOpen(id, anchor) { if (id === 'tpWin') setTimeout(() => { if (typeof 
   x = Math.max(4, Math.min(x, innerWidth - r.width - 4)); y = Math.max(4, Math.min(y, innerHeight - 80));
   w.style.left = x + 'px'; w.style.top = y + 'px';
 }
-function fwClose(id) { const w = $('#' + id); if (w) w.hidden = true; if (id === 'tpWin') { draw(); if (typeof rvReq === 'function') rvReq(); } }
+function fwClose(id) { const w = $('#' + id); if (w) w.hidden = true; if (id === 'tpWin') { if (S.tpRels) S.tpRels.clear(); draw(); if (typeof rvReq === 'function') rvReq(); } }
 document.querySelectorAll('.fwin-head').forEach(h => h.addEventListener('pointerdown', e => {
   if (e.target.closest('button')) return; const w = h.parentElement, r = w.getBoundingClientRect(), dx = e.clientX - r.left, dy = e.clientY - r.top; h.setPointerCapture(e.pointerId);
   const mv = ev => { const x = Math.max(4, Math.min(ev.clientX - dx, innerWidth - r.width - 4)), y = Math.max(4, Math.min(ev.clientY - dy, innerHeight - 40)); w.style.left = x + 'px'; w.style.top = y + 'px'; };
@@ -4788,7 +4790,7 @@ document.querySelectorAll('.fwin-head').forEach(h => h.addEventListener('pointer
   h.addEventListener('pointermove', mv); h.addEventListener('pointerup', up);
 }));
 function tpNew(type) {
-  setTab('parcours'); S.editTp = null; S.activeTp = null; const f = newForm(); f.type = type;
+  setTab('parcours'); S.editTp = null; S.activeTp = null; const f = newForm(); f.type = type; S.tpRels = new Set(type === 'profile' && S.relSel ? [S.relSel] : []);
   const os = selShapes(); if (type === 'profile' && os.length && os.every(x => !x.closed)) f.side = 'on';
   if (type === 'thread') { const t = S.tools.find(t => t.type === 'thread'); if (t) f.toolId = t.id; f.depth = 10; }
   if (type === 'relief') { const fl = S.tools.filter(t => t.type === 'flat').sort((a, b) => b.dia - a.dia)[0]; if (fl) f.toolId = fl.id; }
@@ -4958,7 +4960,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.139', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.141', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5072,7 +5074,7 @@ function renderTpList() { if (typeof libCardSync === 'function') libCardSync();
     const li = document.createElement('li'); li.className = 'tpitem' + (tp.id === S.activeTp ? ' on' : '') + (tp.visible ? '' : ' off'); li.tabIndex = 0;
     li.style.setProperty('--c', 'var(' + { profile: '--pf', pocket: '--pk', vcarve: '--vc', drill: '--dr', thread: '--th', relief: '--rl' }[tp.type] + ')');
     const sub = (tp.face === 2 ? 'Face 2 · ' : '') + TYPE_LBL[tp.type] + (tp.type === 'profile' ? ' ' + SIDE_LBL[tp.p.side] : '') + ' · ' + (tool ? tool.name : '?') + (tp.info ? ' · ' + tp.info : '') + (tp.stats && tp.stats.min ? ' · ' + fmtTime(tp.stats.min) : '');
-    const wl = [...((tp.type === 'relief' || (tp.p.proj && tp.relVer !== undefined)) && tp.relVer !== (S.relief.ver || 0) ? [tr('Relief modifié depuis le calcul : mettez à jour le parcours.')] : []), ...(tp.warns || [])];
+    const wl = [...((tp.type === 'relief' || ((tp.p.proj || (tp.relIds && tp.relIds.length)) && tp.relVer !== undefined)) && tp.relVer !== (S.relief.ver || 0) ? [tr('Relief modifié depuis le calcul : mettez à jour le parcours.')] : []), ...(tp.warns || [])];
     li.innerHTML = '<span class="sw"></span><div class="tpt"><b></b>' + (tp.err ? '<i class="tpbad err" aria-label="Erreur">!</i>' : wl.length ? '<i class="tpbad wrn" aria-label="Avertissement">!</i>' : '') + '</div><div class="acts">'
       + '<button class="iconbtn" data-a="up" title="Monter" aria-label="Monter"' + (idx ? '' : ' disabled') + '><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 15 6-6 6 6"/></svg></button>'
       + '<button class="iconbtn" data-a="vis" title="' + (tp.visible ? 'Masquer et exclure du G-code' : 'Afficher et inclure') + '" aria-label="Visibilité"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>' + (tp.visible ? '' : '<path d="M4 4l16 16"/>') + '</svg></button>'
@@ -5085,7 +5087,7 @@ function renderTpList() { if (typeof libCardSync === 'function') libCardSync();
         if (a.dataset.a === 'up' && idx) { S.tps.splice(idx - 1, 0, S.tps.splice(idx, 1)[0]); commit(false); gcDirty = true; renderTpList(); }
         return; }
       S.editTp = tp.id; S.activeTp = tp.id; S.form = { ...newForm(), ...clone(tp.p), type: tp.type, toolId: tp.toolId, name: tp.name, face: String(tp.face === 2 ? 2 : 1) };
-      S.sel = new Set(tp.shapeIds.filter(id => shapeById(id))); renderSel(); renderForm(); renderTpList(); draw(); fwOpen('tpWin');
+      S.sel = new Set(tp.shapeIds.filter(id => shapeById(id))); S.tpRels = new Set(tp.relIds || []); renderSel(); renderForm(); renderTpList(); draw(); fwOpen('tpWin');
     };
     li.onkeydown = e => { if (e.key === 'Enter') li.click(); };
     li.onmouseenter = () => { RV.hoverTp = tp.id; if (typeof rvReq === 'function') rvReq(); }; li.onmouseleave = () => { if (RV.hoverTp === tp.id) { RV.hoverTp = null; rvReq(); } };
@@ -5096,9 +5098,11 @@ function renderTpList() { if (typeof libCardSync === 'function') libCardSync();
 }
 function tpSelInfo() {
   const el = document.getElementById('tpSelInfo'); if (!el) return; const ss = selShapes(), nc = ss.filter(x => x.closed).length, no = ss.length - nc, F = S.form || {};
+  const rn = F.type === 'profile' ? [...(S.tpRels || [])].map(id => S.relief.items.find(x => x.id === id)).filter(Boolean).map(x => x.name) : [];
+  if (rn.length) { el.classList.remove('bad'); el.textContent = trf('Contour du relief : {n}', { n: rn.join(', ') }) + (ss.length ? ' + ' + trf(ss.length > 1 ? '{n} vecteurs sélectionnés' : '{n} vecteur sélectionné', { n: ss.length }) : ''); return; }
   el.classList.toggle('bad', !ss.length && (F.type !== 'relief' || F.rlBound === 'sel'));
   if (!ss.length && F.type === 'relief' && F.rlBound !== 'sel') { el.textContent = tr('Aucun tracé nécessaire pour cette limite.'); return; }
-  if (!ss.length) { el.textContent = tr('Aucun vecteur sélectionné : cliquez sur le plan les formes à usiner (Maj pour en ajouter).'); return; }
+  if (!ss.length) { el.textContent = F.type === 'profile' && S.relief.items.length ? tr('Aucun vecteur sélectionné : cliquez sur le plan les formes à usiner (Maj pour en ajouter), ou cliquez un relief (2D ou 3D) pour suivre son contour.') : tr('Aucun vecteur sélectionné : cliquez sur le plan les formes à usiner (Maj pour en ajouter).'); return; }
   const parts = []; if (nc) parts.push(trf(nc > 1 ? '{n} fermés' : '{n} fermé', { n: nc })); if (no) parts.push(trf(no > 1 ? '{n} ouverts' : '{n} ouvert', { n: no }));
   let t = trf(ss.length > 1 ? '{n} vecteurs sélectionnés' : '{n} vecteur sélectionné', { n: ss.length }) + ' (' + parts.join(', ') + ')';
   el.textContent = t;
@@ -5108,7 +5112,7 @@ function tpSelInfo() {
 function renderForm() {
   const F = S.form || (S.form = newForm()), root = $('#tpForm');
   $('#tpFormTitle').textContent = S.editTp ? 'Modifier le parcours' : 'Nouveau parcours';
-  $('#tpApply').textContent = S.editTp ? 'Mettre à jour' : (F.type === 'relief' && (!S.sel.size || F.rlBound !== 'sel') ? tr('Calculer') : 'Calculer sur la sélection (' + S.sel.size + ')');
+  $('#tpApply').textContent = S.editTp ? 'Mettre à jour' : (F.type === 'relief' && (!S.sel.size || F.rlBound !== 'sel') ? tr('Calculer') : (S.sel.size || F.type !== 'profile' || !(S.tpRels && S.tpRels.size) ? 'Calculer sur la sélection (' + S.sel.size + ')' : tr('Calculer autour du relief')));
   $('#tpCancel').hidden = !S.editTp;
   { const by = f => S.tools.filter(f), mill = t => t.type === 'flat' || t.type === 'ball', list = F.type === 'vcarve' ? [...by(t => t.type === 'v'), ...by(mill)] : F.type === 'drill' ? [...by(t => t.type === 'drill'), ...by(mill), ...by(t => t.type === 'v')] : F.type === 'thread' ? by(t => t.type === 'thread') : F.type === 'relief' ? (F.rlOp === 'finish' ? [...by(t => t.type === 'ball'), ...by(t => t.type === 'v'), ...by(t => t.type === 'flat')] : [...by(t => t.type === 'flat'), ...by(t => t.type === 'ball')]) : [...by(mill), ...by(t => t.type === 'v')];
   if (!S.tools.find(t => t.id === F.toolId)) F.toolId = list[0] && list[0].id; }
@@ -5158,13 +5162,13 @@ $('#tpForm').addEventListener('click', e => { const b = e.target.closest('.seg b
 $('#tpForm').addEventListener('input', e => { const k = e.target.dataset.f; if (!k) return; const el = e.target; S.form[k] = el.type === 'checkbox' ? el.checked : el.type === 'number' ? (el.value === '' ? '' : +el.value) : el.value; clearTimeout(renderForm.t); renderForm.t = setTimeout(renderForm, 250); });
 $('#tpForm').addEventListener('change', e => { if (e.target.dataset.f) renderForm(); });
 function applyForm() {
-  const F = S.form, ids = [...S.sel];
+  const F = S.form, ids = [...S.sel], rids = F.type === 'profile' ? [...(S.tpRels || [])].filter(id => S.relief.items.some(x => x.id === id)) : [];
   const p = { side: F.side, depth: +F.depth || 0, pass: F.pass === '' ? '' : +F.pass, allow: +F.allow || 0, finish: F.finish, dir: F.dir, entry: F.entry, rampLen: +F.rampLen || 0, arcR: +F.arcR || 0, vstep: +F.vstep || 0.2, vstart: +F.vstart || 0, zrel: 1, peck: +F.peck || 0, dwell: +F.dwell || 0, openSide: F.openSide || 'on', tabs: !!F.tabs, proj: !!F.proj, tabN: +F.tabN || 4, tabL: F.tabL === '' ? 8 : +F.tabL, tabH: +F.tabH || 2, tabShape: F.tabShape || 'rect', tabMode: F.tabMode === 'manual' ? 'manual' : 'auto', tabPts: F.tabMode === 'manual' && Array.isArray(F.tabPts) ? clone(F.tabPts) : null, strategy: F.strategy || 'rings', rasterAng: +F.rasterAng || 0, rest: !!F.rest, restTool: F.restTool || '', restDia: (S.tools.find(t => t.id === F.restTool) || {}).dia || 0, helixPitch: +F.helixPitch || 1, helixHoles: F.helixHoles !== false, thSide: F.thSide === 'out' ? 'out' : 'in', thPitch: Math.max(0.2, +F.thPitch || 1.25), thD: Math.max(0, +F.thD || 0), thHand: F.thHand === 'L' ? 'L' : 'R', thPasses: Math.max(1, Math.min(10, Math.round(+F.thPasses || 1))), rlOp: F.rlOp === 'finish' ? 'finish' : 'rough', rlStep: Math.max(2, Math.min(95, +F.rlStep || 40)), rlAng: +F.rlAng || 0, rlAllow: Math.max(0, +F.rlAllow || 0), rlCross: !!F.rlCross, rlBound: ['model', 'stock', 'sel'].includes(F.rlBound) ? F.rlBound : 'model', rlOff: +F.rlOff || 0, rlRStrat: F.rlRStrat === 'raster' ? 'raster' : 'z', rlFStrat: F.rlFStrat === 'offset' ? 'offset' : 'raster', rlDir: F.rlDir === 'conv' ? 'conv' : 'climb', rlEdge: F.rlEdge === 'center' ? 'center' : 'inside', rlItems: Array.isArray(F.rlItems) ? F.rlItems.slice() : null };
   const autoFace = sh => sh.length && sh.every(x => faceOf(x) === 2) ? 2 : 1, faceFor = idl => F.face === 'auto' || !F.face ? autoFace(idl.map(shapeById).filter(Boolean)) : +F.face;
-  if (S.editTp) { const tp = S.tps.find(t => t.id === S.editTp); if (!tp) return; tp.face = faceFor(ids.length ? ids : tp.shapeIds); tp.type = F.type; tp.toolId = F.toolId; tp.p = p; if (ids.length) tp.shapeIds = ids; tp.name = F.name || tp.name; computeTP(tp); commit(false); gcDirty = true; renderTpList(); draw(); toast(tp.err ? tp.err : 'Parcours mis à jour.'); return; }
-  if (!ids.length && (F.type !== 'relief' || F.rlBound === 'sel')) { toast(F.type === 'relief' ? tr('Limite « Tracés sélectionnés » : sélectionnez d’abord les formes fermées sur le plan.') : 'Sélectionnez d’abord les formes à usiner sur le plan.'); return; }
+  if (S.editTp) { const tp = S.tps.find(t => t.id === S.editTp); if (!tp) return; tp.face = faceFor(ids.length ? ids : tp.shapeIds); tp.type = F.type; tp.toolId = F.toolId; tp.p = p; if (ids.length || rids.length) { tp.shapeIds = ids; tp.relIds = rids; } tp.name = F.name || tp.name; computeTP(tp); commit(false); gcDirty = true; renderTpList(); draw(); toast(tp.err ? tp.err : 'Parcours mis à jour.'); return; }
+  if (!ids.length && !rids.length && (F.type !== 'relief' || F.rlBound === 'sel')) { toast(F.type === 'relief' ? tr('Limite « Tracés sélectionnés » : sélectionnez d’abord les formes fermées sur le plan.') : 'Sélectionnez d’abord les formes à usiner sur le plan.'); return; }
   const n = S.tps.filter(t => t.type === F.type).length + 1;
-  const fc = F.type === 'relief' ? 1 : faceFor(ids), tp = { id: uid(), name: F.name || ((fc === 2 ? 'F2 · ' : '') + (F.type === 'relief' ? tr(F.rlOp === 'finish' ? 'Finition relief' : 'Ébauche relief') : tr(TYPE_LBL[F.type] + (F.type === 'profile' ? ' ' + SIDE_LBL[F.side] : ''))) + ' ' + n), type: F.type, toolId: F.toolId, shapeIds: ids, p, visible: true, face: fc };
+  const fc = F.type === 'relief' || (!ids.length && rids.length) ? 1 : faceFor(ids), tp = { id: uid(), name: F.name || ((fc === 2 ? 'F2 · ' : '') + (F.type === 'relief' ? tr(F.rlOp === 'finish' ? 'Finition relief' : 'Ébauche relief') : tr(TYPE_LBL[F.type] + (F.type === 'profile' ? ' ' + SIDE_LBL[F.side] : ''))) + ' ' + n), type: F.type, toolId: F.toolId, shapeIds: ids, relIds: rids, p, visible: true, face: fc };
   computeTP(tp); S.tps.push(tp); S.activeTp = tp.id; S.editTp = tp.id; S.form.name = tp.name; commit(false); gcDirty = true; renderTpList(); renderForm(); draw();
   toast(tp.err ? tp.err : 'Parcours calculé' + (tp.stats && tp.stats.min ? ' · ' + fmtTime(tp.stats.min) : '') + '.');
 }
@@ -6301,6 +6305,19 @@ function stlRaster(T, orient, rx, ry) {
   return { g: { nx, ny, d }, W, H: Hh, Z, tris: n };
 }
 // contour d'un relief vu de dessus (son empreinte) en vecteurs fermés, pour le détourer avec un parcours Profil
+// contour d'un relief (boucles fermées, en mm), mis en cache tant que le relief ne change pas
+const relOutC = new Map();
+function relOutLoops(it) {
+  if (!it || !relGrid[it.id]) return [];
+  const key = JSON.stringify([it.x, it.y, it.w, it.h, it.rot, it.rx, it.ry, it.zH, it.mode, it.invert, relGrid[it.id].nx, relGrid[it.id].ny, typeof relClipSig === 'function' ? relClipSig(it) : '', S.stock.w, S.stock.h]), c0 = relOutC.get(it.id);
+  if (c0 && c0.key === key) return c0.loops;
+  const st = S.stock; let c = Math.max(0.08, Math.min(0.25, Math.max(it.w, it.h) / 1200)); while ((st.w / c + 1) * (st.h / c + 1) > 9e6) c *= 1.25;
+  const R = reliefCompose(c, true, [it.id]), { nx, ny, cx, cy, M } = R, g = new Float32Array(nx * ny); let n = 0; for (let q = 0; q < g.length; q++) if (M[q]) { g[q] = 1; n++; }
+  const loops = n ? vzTrace({ W: nx, H: ny, g, blur: new Map() }, 0.5, true, 2).map(lp => lp.map(p => [(p[0] - 0.5) * cx, (p[1] - 0.5) * cy])) : [];
+  relOutC.set(it.id, { key, loops }); return loops;
+}
+// pseudo-vecteurs fermés suivant le contour des reliefs d'un parcours (non ajoutés au dessin)
+function tpRelShapes(tp) { const out = []; for (const id of tp.relIds || []) { const it = S.relief.items.find(x => x.id === id); if (!it) continue; relOutLoops(it).forEach((pts, k) => out.push({ id: 'rel_' + id + '_' + k, pts, closed: true, nodes: pts.map(p => NODE(p[0], p[1])), layer: S.layerActive })); } return out; }
 function relOutline(it) {
   const st = S.stock; let c = Math.max(0.08, Math.min(0.25, Math.max(it.w, it.h) / 1200)); while ((st.w / c + 1) * (st.h / c + 1) > 9e6) c *= 1.25;
   const R = reliefCompose(c, true, [it.id]), { nx, ny, cx, cy, M } = R, g = new Float32Array(nx * ny); let n = 0; for (let q = 0; q < g.length; q++) if (M[q]) { g[q] = 1; n++; }
@@ -6520,7 +6537,7 @@ function rvInit() {
     else { RV.yaw -= dx * 0.008; RV.pitch = Math.max(-1.5703, Math.min(1.5703, RV.pitch + dy * 0.008)); }
     rvReq(); });
   const end = e => { if (drag && drag.gz) { if (drag.moved) rvGizmoEnd(drag); drag = null; return; }
-    if (drag && e && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 4 && !drag.pan) { const sh = rvPickShape(drag.mx, drag.my); if (sh) rvSelectShape(sh, e.shiftKey); else { const id = rvPick(drag.mx, drag.my); if (!id && S.sel.size && !e.shiftKey) { S.sel.clear(); renderSel(); dRefresh(); } if (id !== (S.relSel || null)) { if (id) selectRel(id); else { S.relSel = null; relPanel(); } } draw(); rvSync(); rvReq(); } }
+    if (drag && e && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 4 && !drag.pan) { const sh = rvPickShape(drag.mx, drag.my); if (sh) rvSelectShape(sh, e.shiftKey); else { const id = rvPick(drag.mx, drag.my); if (id && !$('#tpWin').hidden) { tpRelPick(id); drag = null; return; } if (!id && S.sel.size && !e.shiftKey) { S.sel.clear(); renderSel(); dRefresh(); } if (id !== (S.relSel || null)) { if (id) selectRel(id); else { S.relSel = null; relPanel(); } } draw(); rvSync(); rvReq(); } }
     drag = null; c.style.cursor = 'grab'; };
   c.addEventListener('pointerup', end); c.addEventListener('pointercancel', () => { drag = null; });
   c.addEventListener('wheel', e => { e.preventDefault(); RV.dist = Math.max(5, Math.min(1e5, RV.dist * Math.exp(e.deltaY * 0.0012))); rvReq(); }, { passive: false });
@@ -6614,6 +6631,15 @@ function rvSelectShape(sh, add) {
   if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (S.relSel) { S.relSel = null; RXF = false; relPanel(); } S.selDim = null;
   const ids = groupIds(sh); if (add) { const has = S.sel.has(sh.id); ids.forEach(id => has ? S.sel.delete(id) : S.sel.add(id)); } else { S.sel.clear(); ids.forEach(id => S.sel.add(id)); }
   renderSel(); dRefresh(); draw(); rvSync(); rvReq();
+}
+// parcours en cours de réglage : un clic sur un relief l'ajoute (profil autour de son contour) ou le retire
+function tpRelPick(id) {
+  const F = S.form || {}, it = S.relief.items.find(x => x.id === id); if (!it) return;
+  if (F.type !== 'profile') { toast(F.type === 'relief' ? tr('L’usinage de relief utilise tous les reliefs visibles : inutile de sélectionner le relief.') : tr('Un relief se choisit pour un parcours Profil : la fraise suit son contour. Pour projeter ce parcours sur le relief, cochez « Projeter sur le relief ».')); return; }
+  S.tpRels = S.tpRels || new Set(); const on = !S.tpRels.has(id); on ? S.tpRels.add(id) : S.tpRels.delete(id);
+  if (on && !relOutLoops(it).length) { S.tpRels.delete(id); toast(tr('Ce relief n’a pas d’emprise sur le brut.')); return; }
+  tpSelInfo(); renderForm(); draw(); if (typeof rvReq === 'function') rvReq();
+  toast(on ? trf('Relief « {n} » choisi : le profil suivra son contour. Cliquez « {b} ».', { n: it.name, b: $('#tpApply').textContent }) : trf('Relief « {n} » retiré du parcours.', { n: it.name }));
 }
 function rvPick(mx, my) {
   const R = rvRay(mx, my); let best = null, ba = Infinity;
@@ -6821,7 +6847,7 @@ function bindImgPanel() {
 }
 async function idbPutImg(id, src) { const db = await idb(); return new Promise((res, rej) => { const tx = db.transaction('images', 'readwrite'); tx.objectStore('images').put({ id, src }); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); }
 async function idbGetImgs() { const db = await idb(); return new Promise((res, rej) => { const q = db.transaction('images').objectStore('images').getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => rej(q.error); }); }
-async function loadImgData() { try { for (const r of await idbGetImgs()) { if (r.id.startsWith('rel_')) relGrid[r.id.slice(4)] = relUnpack(r.src); else if (r.id.startsWith('relm_')) relMesh[r.id.slice(5)] = r.src; else if (r.id !== 'send_dir' && r.id !== 'proj_handle') imgData[r.id] = r.src; } } catch (e) { } relRegenOld(); relDirty = true; { const T = S.tps.filter(t => t.type === 'relief' || (t.p && t.p.proj)); if (T.length) { T.forEach(computeTP); gcDirty = true; renderTpList(); } } relPanel(); renderImgPanel(); draw(); } // au démarrage, les reliefs arrivent après le calcul des parcours : on recalcule ceux qui en dépendent
+async function loadImgData() { try { for (const r of await idbGetImgs()) { if (r.id.startsWith('rel_')) relGrid[r.id.slice(4)] = relUnpack(r.src); else if (r.id.startsWith('relm_')) relMesh[r.id.slice(5)] = r.src; else if (r.id !== 'send_dir' && r.id !== 'proj_handle') imgData[r.id] = r.src; } } catch (e) { } relRegenOld(); relDirty = true; { const T = S.tps.filter(t => t.type === 'relief' || (t.p && t.p.proj) || (t.relIds && t.relIds.length)); if (T.length) { T.forEach(computeTP); gcDirty = true; renderTpList(); } } relPanel(); renderImgPanel(); draw(); } // au démarrage, les reliefs arrivent après le calcul des parcours : on recalcule ceux qui en dépendent
 function imgAct(a) {
   if (a === 'relImg') { $('#fRelImg').click(); return true; }
   if (a === 'relStl') { $('#fRelStl').click(); return true; }
