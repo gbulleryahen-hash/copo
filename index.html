@@ -935,7 +935,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.153</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.154</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -5257,7 +5257,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.153', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.154', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6943,11 +6943,17 @@ function tpRelPick(id) {
   tpSelInfo(); renderForm(); draw(); if (typeof rvReq === 'function') rvReq();
   toast(on ? trf('Relief « {n} » choisi : le profil suivra son contour. Cliquez « {b} ».', { n: it.name, b: $('#tpApply').textContent }) + (dep ? ' ' + trf('Profondeur réglée sur le bas du relief : {d} mm.', { d: fr(dep, 2) }) : '') : trf('Relief « {n} » retiré du parcours.', { n: it.name }));
 }
-function rvPick(mx, my) {
-  const R = rvRay(mx, my); let best = null, ba = Infinity;
-  for (const it of S.relief.items) { if (!it.visible || !relGrid[it.id] || Math.abs(R.d[2]) < 1e-9) continue; const Z = rvZ(it), t = (Z.top - (+it.zH || 0) * 0.3 - R.o[2]) / R.d[2]; if (t <= 0) continue; // point visé à hauteur du relief
-    const q = [R.o[0] + R.d[0] * t, R.o[1] + R.d[1] * t], l = imgLocal(it, q); if (Math.abs(l[0]) > it.w / 2 || Math.abs(l[1]) > it.h / 2) continue; if (!relNear(it, l[0], l[1], Math.max(1.5, Math.max(S.stock.w, S.stock.h) / 150))) continue; const a = it.w * it.h; if (a < ba) { ba = a; best = it.id; } }
-  return best;
+function rvPick(mx, my) { // relief touché par le rayon du pointeur : dessus, flancs ou fond (premier rencontré)
+  const R = rvRay(mx, my), its = S.relief.items.filter(it => it.visible && relGrid[it.id]); if (!its.length) return null;
+  let x0 = Infinity, y0 = Infinity, z0 = Infinity, x1 = -Infinity, y1 = -Infinity, z1 = -Infinity; const Zs = new Map();
+  for (const it of its) { const Z = rvZ(it); Zs.set(it.id, Z); for (const c of imgFrame(it).corners) { x0 = Math.min(x0, c[0]); x1 = Math.max(x1, c[0]); y0 = Math.min(y0, c[1]); y1 = Math.max(y1, c[1]); } z0 = Math.min(z0, Z.bot); z1 = Math.max(z1, Z.top); }
+  let ta = -Infinity, tb = Infinity; const lo = [x0 - 1, y0 - 1, z0 - 1], hi = [x1 + 1, y1 + 1, z1 + 1];
+  for (let k = 0; k < 3; k++) { if (Math.abs(R.d[k]) < 1e-12) { if (R.o[k] < lo[k] || R.o[k] > hi[k]) return null; continue; } let a = (lo[k] - R.o[k]) / R.d[k], b = (hi[k] - R.o[k]) / R.d[k]; if (a > b) [a, b] = [b, a]; ta = Math.max(ta, a); tb = Math.min(tb, b); }
+  if (!(tb > ta)) return null; const N = 500, tol = Math.max(1.5, Math.max(S.stock.w, S.stock.h) / 150);
+  for (let n = 0; n <= N; n++) { const t = ta + (tb - ta) * n / N, q = [R.o[0] + R.d[0] * t, R.o[1] + R.d[1] * t, R.o[2] + R.d[2] * t]; let best = null, ba = Infinity;
+    for (const it of its) { const Z = Zs.get(it.id); if (q[2] > Z.top + 0.5 || q[2] < Z.bot - 0.5) continue; const l = imgLocal(it, q); if (Math.abs(l[0]) > it.w / 2 || Math.abs(l[1]) > it.h / 2) continue; if (!relNear(it, l[0], l[1], tol)) continue; const a = it.w * it.h; if (a < ba) { ba = a; best = it.id; } }
+    if (best) return best; }
+  return null;
 }
 // géométrie des poignées de l'élément sélectionné (en pixels), calculée à chaque rendu
 function rvGizmo() {
