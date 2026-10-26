@@ -901,7 +901,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.141</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.142</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1315,6 +1315,7 @@ Object.assign(I18N_EN, {"La projection sur le relief utilise tous les reliefs vi
 Object.assign(I18N_EN, {"Profondeur où commence l’usinage : 0 = dessus du brut, positive = sous la surface, négative = au-dessus (premières passes à vide, pour une surface irrégulière ou un brut plus épais que prévu)": "Depth where machining starts: 0 = stock top, positive = below the surface, negative = above it (first passes in the air, for an uneven surface or thicker stock than planned)", "Profondeur où commence l’usinage : 0 = dessus du brut, positive = sous la surface (fond d’une poche), négative = au-dessus": "Depth where machining starts: 0 = stock top, positive = below the surface (pocket floor), negative = above it"});
 Object.assign(I18N_EN, {"seuil {t} · lissage {l}": "threshold {t} · smoothing {l}", "Afficher l’aide": "Show help", "Actions sur l’image": "Image actions", "Retirer l’image": "Remove the image"});
 Object.assign(I18N_EN, {"Le relief de ce parcours a été supprimé ou n’a pas d’emprise sur le brut.": "The relief of this toolpath was deleted or does not overlap the stock.", "L’usinage de relief utilise tous les reliefs visibles : inutile de sélectionner le relief.": "Relief machining uses all visible reliefs: no need to select the relief.", "Un relief se choisit pour un parcours Profil : la fraise suit son contour. Pour projeter ce parcours sur le relief, cochez « Projeter sur le relief ».": "A relief can be picked for a Profile toolpath: the cutter follows its outline. To project this toolpath onto the relief, tick “Project onto the relief”.", "Relief « {n} » choisi : le profil suivra son contour. Cliquez « {b} ».": "Relief “{n}” picked: the profile will follow its outline. Click “{b}”.", "Relief « {n} » retiré du parcours.": "Relief “{n}” removed from the toolpath.", "Contour du relief : {n}": "Relief outline: {n}", "Aucun vecteur sélectionné : cliquez sur le plan les formes à usiner (Maj pour en ajouter), ou cliquez un relief (2D ou 3D) pour suivre son contour.": "No vector selected: click the shapes to machine on the canvas (Shift to add more), or click a relief (2D or 3D) to follow its outline.", "Calculer autour du relief": "Compute around the relief"});
+Object.assign(I18N_EN, {"Profondeur réglée sur le bas du relief : {d} mm.": "Depth set to the bottom of the relief: {d} mm."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4794,6 +4795,7 @@ function tpNew(type) {
   const os = selShapes(); if (type === 'profile' && os.length && os.every(x => !x.closed)) f.side = 'on';
   if (type === 'thread') { const t = S.tools.find(t => t.type === 'thread'); if (t) f.toolId = t.id; f.depth = 10; }
   if (type === 'relief') { const fl = S.tools.filter(t => t.type === 'flat').sort((a, b) => b.dia - a.dia)[0]; if (fl) f.toolId = fl.id; }
+  if (type === 'profile' && S.tpRels.size) { const d = tpRelDepth(S.tpRels); if (d) f.depth = d; }
   S.form = f; renderForm(); renderTpList(); draw(); fwOpen('tpWin');
 }
 document.querySelectorAll('#tpNew [data-newtp]').forEach(b => { b.insertAdjacentHTML('afterbegin', ICO['type_' + b.dataset.newtp] || ''); b.onclick = () => tpNew(b.dataset.newtp); });
@@ -4960,7 +4962,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.141', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.142', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6632,14 +6634,17 @@ function rvSelectShape(sh, add) {
   const ids = groupIds(sh); if (add) { const has = S.sel.has(sh.id); ids.forEach(id => has ? S.sel.delete(id) : S.sel.add(id)); } else { S.sel.clear(); ids.forEach(id => S.sel.add(id)); }
   renderSel(); dRefresh(); draw(); rvSync(); rvReq();
 }
+// profondeur d'un profil autour de reliefs : jusqu'au bas du relief le plus profond (sans dépasser l'épaisseur du brut)
+function tpRelDepth(ids) { let d = 0; for (const id of ids) { const it = S.relief.items.find(x => x.id === id); if (it) d = Math.max(d, (+it.top || 0) + (+it.zH || 0)); } return d > 0 ? +Math.min(d, S.stock.t).toFixed(2) : 0; }
 // parcours en cours de réglage : un clic sur un relief l'ajoute (profil autour de son contour) ou le retire
 function tpRelPick(id) {
   const F = S.form || {}, it = S.relief.items.find(x => x.id === id); if (!it) return;
   if (F.type !== 'profile') { toast(F.type === 'relief' ? tr('L’usinage de relief utilise tous les reliefs visibles : inutile de sélectionner le relief.') : tr('Un relief se choisit pour un parcours Profil : la fraise suit son contour. Pour projeter ce parcours sur le relief, cochez « Projeter sur le relief ».')); return; }
   S.tpRels = S.tpRels || new Set(); const on = !S.tpRels.has(id); on ? S.tpRels.add(id) : S.tpRels.delete(id);
   if (on && !relOutLoops(it).length) { S.tpRels.delete(id); toast(tr('Ce relief n’a pas d’emprise sur le brut.')); return; }
+  const dep = on ? tpRelDepth(S.tpRels) : 0; if (dep) F.depth = dep;
   tpSelInfo(); renderForm(); draw(); if (typeof rvReq === 'function') rvReq();
-  toast(on ? trf('Relief « {n} » choisi : le profil suivra son contour. Cliquez « {b} ».', { n: it.name, b: $('#tpApply').textContent }) : trf('Relief « {n} » retiré du parcours.', { n: it.name }));
+  toast(on ? trf('Relief « {n} » choisi : le profil suivra son contour. Cliquez « {b} ».', { n: it.name, b: $('#tpApply').textContent }) + (dep ? ' ' + trf('Profondeur réglée sur le bas du relief : {d} mm.', { d: fr(dep, 2) }) : '') : trf('Relief « {n} » retiré du parcours.', { n: it.name }));
 }
 function rvPick(mx, my) {
   const R = rvRay(mx, my); let best = null, ba = Infinity;
