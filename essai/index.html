@@ -474,7 +474,10 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 .pane.setm>*{flex:none}
 .pane[data-pane="dessin"].setm:not(.peek)>#dgrid,.pane[data-pane="dessin"].setm .layersblk,.pane[data-pane="dessin"].setm #dEmpty{display:none!important}
 .pane[data-pane="dessin"].setm.peek>#dgrid{padding-bottom:10px;margin-bottom:6px;border-bottom:1px solid var(--line)}
-.pane.imgsel [data-sec="img"]>.dsec-h,.pane.imgsel [data-sec="img"]>.impgrid,.pane.imgsel #hImp{display:none!important}
+.pane.setm.imgsel [data-sec="img"]>.dsec-h,.pane.setm.imgsel [data-sec="img"]>.impgrid,.pane.setm.imgsel #hImp{display:none!important}
+.setx{position:relative;top:2px;display:grid;place-items:center;width:30px;height:28px;padding:0;border:0;border-radius:7px;background:var(--accent);color:#fff;cursor:pointer;box-shadow:0 3px 8px rgb(0 0 0/.25)}
+.setx svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
+.setx:hover{filter:brightness(1.12)}.setx:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .setfoot{display:none}
 .pane.setm .setfoot{display:flex;justify-content:flex-end;margin-top:auto;position:sticky;bottom:-18px;padding:10px 0 12px;background:var(--panel);border-top:1px solid var(--line);z-index:5}
 .setfoot button{height:32px;padding:0 16px}
@@ -684,7 +687,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         </section>
       </div>
       <div class="pane" data-pane="dessin">
-        <div class="peekrow"><button type="button" class="peektab" data-peek="dessin" title="Afficher les outils de dessin" aria-label="Afficher les outils de dessin" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
+        <div class="peekrow"><button type="button" class="setx" data-act="setClose" title="Fermer (ou clic droit dans le dessin)" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
         <div class="dgrid" id="dgrid" role="toolbar" aria-label="Fonctions de dessin"></div>
         <p class="hint dempty" id="dEmpty">Choisissez une fonction ci-dessus, ou cliquez sur un objet du plan pour le modifier.</p>
         <section class="blk toolblk" id="toolBlk" aria-live="polite">
@@ -876,7 +879,6 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <ul class="layers" id="layerList"></ul>
           <div class="row"><button data-act="layerAdd">Nouveau calque</button><button data-act="layerMove">Sélection → calque actif</button></div>
         </details>
-        <div class="setfoot"><button type="button" data-act="setClose">Fermer</button></div>
       </div>
       <div class="pane" data-pane="relief" hidden>
         <section class="blk"><h3>Créer / importer un relief</h3>
@@ -1396,6 +1398,7 @@ Object.assign(I18N_EN, {"Tracé prolongé jusqu’au croisement.": "Path extende
 Object.assign(I18N_EN, {"Usiner": "Machine", "Miroir…": "Mirror…", "Mettre sur le calque": "Move to layer", "Déplacé sur le calque « {n} ».": "Moved to layer “{n}”.", "{n} vecteurs": "{n} vectors", "{n} vecteur": "{n} vector", "Vectoriser…": "Vectorize…", "Transformer en relief (niveaux de gris)": "Turn into a relief (grayscale)", "Parcours d’ébauche": "Roughing toolpath", "Parcours de finition": "Finishing toolpath", "Parcours de profil (détourer)": "Profile toolpath (cut out)", "Poser au fond du brut": "Drop to the stock bottom", "Aligner sur le dessus du brut": "Align to the stock top", "Recentrer la vue": "Recenter the view", "Tout désélectionner": "Deselect all", "Vue de dessus": "Top view", "Vue de face": "Front view"});
 Object.assign(I18N_EN, {"Créer / importer un relief": "Create / import a relief"});
 Object.assign(I18N_EN, {"Afficher les outils de dessin": "Show the drawing tools", "Afficher les opérations et la liste des parcours": "Show the operations and the toolpath list", "Type :": "Type:", "changer": "change", "Sélectionnez les formes sur le plan, puis choisissez l'opération : ses réglages s'affichent dans ce panneau.": "Select the shapes on the canvas, then choose the operation: its settings appear in this panel.", "Version d’essai de la nouvelle interface : la version normale reste sur la page principale.": "Trial version of the new interface: the regular version stays on the main page."});
+Object.assign(I18N_EN, {"Fermer (ou clic droit dans le dessin)": "Close (or right-click in the drawing)"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4566,7 +4569,7 @@ function act(a, btn) {
     case 'rotApply': rotApply(); return;
     case 'fitApply': fitApply(); return;
     case 'dsecClose': S.ui.dsec = null; dRefresh(); draw(); return;
-    case 'setClose': { if (pen.length) finishPen(false); if (!['select', 'pan'].includes(S.ui.tool)) setTool('select'); S.ui.dsec = null; S.sel.clear(); S.selDim = null; S.ne = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } renderSel(); dRefresh(); draw(); return; }
+    case 'setClose': { if (pen.length) finishPen(false); arcSt = []; dimSt = []; if (!['select', 'pan'].includes(S.ui.tool)) setTool('select'); S.ui.dsec = null; dRefresh(); draw(); return; }
     case 'mirH': case 'mirV': case 'mirT': case 'mirB': case 'mirL': case 'mirR': case 'mirLine': mirrorSel(a); return;
     case 'traceOutline': {
       if (S.imgSel) { S.ui.dsec = null; if (S.ui.tool !== 'select') setTool('select'); dRefresh(); const d = $('#vzBox'); if (d) { d.open = true; d.scrollIntoView({ block: 'nearest' }); } toast(tr('Réglez le seuil et le lissage, puis cliquez « Créer les contours ».')); return; }
@@ -4904,7 +4907,7 @@ function dRefresh() {
   pane.querySelectorAll('#dgrid [data-tool]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === t));
   pane.querySelectorAll('#dgrid [data-sec]').forEach(b => b.setAttribute('aria-pressed', !toolForm && b.dataset.sec === show && !!S.ui.dsec));
   pane.querySelectorAll('#dgrid [data-dact]').forEach(b => { b.disabled = n < +b.dataset.need; });
-  { const setm = !!(toolForm || show); pane.classList.toggle('setm', setm); pane.classList.toggle('imgsel', !!S.imgSel); if (!setm) peekSet(pane, false); }
+  { const setm = !!(toolForm || S.ui.dsec); pane.classList.toggle('setm', setm); pane.classList.toggle('imgsel', !!S.imgSel); if (!setm) peekSet(pane, false); }
   rotSync(); joinSync(); fitPreview(); draw();
 }
 
