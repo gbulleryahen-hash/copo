@@ -798,6 +798,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             <label>Profondeur de poche (a) (mm)<input data-u="len" type="number" id="ipD" step="0.5" min="0.2"></label>
             <label><span id="ipBL">Hauteur du mâle sous le support (b) (mm)</span><input data-u="len" type="number" id="ipB" step="0.5" min="0.2"></label>
             <label id="ipCRow">Débord du support (c) (mm)<input data-u="len" type="number" id="ipC" step="1" min="0" placeholder="auto"></label>
+            <label id="ipCutRow">Profondeur de découpe (mm)<input data-u="len" type="number" id="ipCut" step="0.1" min="0.1" placeholder="= b"></label>
           </div></div>
           <canvas id="ipCv" aria-label="Aperçu du contour commun"></canvas>
           <label class="chk"><input type="checkbox" id="ipTp" checked> Créer les parcours d’outils (poche et pièce rapportée)</label>
@@ -1024,7 +1025,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.168</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.169</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1470,6 +1471,7 @@ Object.assign(I18N_EN, {"Pièce mâle sur support (à araser après collage)": "
 Object.assign(I18N_EN, {"Profondeur de poche (a) (mm)": "Pocket depth (a) (mm)", "Hauteur du mâle sous le support (b) (mm)": "Male height below the backing (b) (mm)", "Débord du support (c) (mm)": "Backing overhang (c) (mm)", "Épaisseur de la pièce mâle (b) (mm)": "Male piece thickness (b) (mm)", "Jeu au fond (g) (mm)": "Bottom gap (g) (mm)", "La hauteur du mâle sous le support (b) doit dépasser la profondeur de poche (a).": "The male height below the backing (b) must exceed the pocket depth (a).", "Indiquez l’épaisseur de la pièce mâle (b).": "Enter the male piece thickness (b).", "Le débord du support (c) doit être plus grand que le diamètre de la fraise ({d} mm).": "The backing overhang (c) must be larger than the cutter diameter ({d} mm).", "La hauteur du mâle (b) doit dépasser la profondeur de poche moins le jeu (a − g), pour qu’il reste un écart à raboter.": "The male height (b) must exceed the pocket depth minus the gap (a − g), so there is something left to plane off."});
 Object.assign(I18N_EN, {"Fraise de dégagement (fonds plats)": "Clearance tool (flat areas)", "Aucune (la fraise en V vide les fonds plats)": "None (the V-bit clears flat areas)", "Gravure en {n} palier(s) de {p} mm au plus (profondeur de passe, celle de l’outil si vide).": "Carved in {n} step(s) of at most {p} mm (pass depth, the tool’s if empty).", "Les fonds plats sont d’abord vidés à la fraise droite (parcours « dégagement » ajouté avant celui-ci) ; la fraise en V ne reprend que le bord.": "Flat areas are first cleared with the flat end mill (a “clearance” toolpath is added before this one); the V-bit only cleans up the edge.", "Fonds plats vidés à la fraise « {n} » (parcours de dégagement).": "Flat areas cleared with “{n}” (clearance toolpath).", "Pas de fond plat assez large : rien à dégager.": "No flat area wide enough: nothing to clear.", "Parcours de dégagement lié : réglez-le dans le V-carve.": "Linked clearance toolpath: set it up in the V-carve.", "dégagement": "clearance"});
 Object.assign(I18N_EN, {"La pièce mâle est découpée dans une planchette d’épaisseur b = {b} mm : la fraise la traverse et descend à {h} mm (0,2 mm de plus, pour la détacher), avec des ponts.": "The male piece is cut out of a board of thickness b = {b} mm: the cutter goes through it, down to {h} mm (0.2 mm more, to free it), with tabs.", "Attention : b est plus petit que a, la pièce restera {d} mm sous la surface.": "Warning: b is smaller than a, the piece will sit {d} mm below the surface.", "Elle dépassera de {d} mm : à poncer après collage.": "It will stand {d} mm proud: sand it after gluing."});
+Object.assign(I18N_EN, {"Profondeur de découpe (mm)": "Cut-out depth (mm)", "Pièce mâle découpée dans une planchette d’épaisseur b = {b} mm, à {h} mm de profondeur, avec des ponts.": "Male piece cut out of a board of thickness b = {b} mm, {h} mm deep, with tabs.", "La découpe ne traverse pas la planchette : il faudra finir à la main.": "The cut does not go through the board: you will have to finish by hand.", "Pour traverser franchement, mettez un peu plus que b (par exemple b + 0,2 mm) si votre martyr le permet.": "To cut cleanly through, use a little more than b (for example b + 0.2 mm) if your spoilboard allows it.", "Parcours supprimé avec les contours qu’il avait créés.": "Toolpath deleted along with the outlines it created."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -5414,9 +5416,9 @@ function ilMake() {
   const mb = bbox(made), frame = mkShape(rectNodes(mb.x0 - margin, mb.y0 - margin, mb.x1 + margin, mb.y1 + margin), true, { layer: lm.id, g });
   if (v.tp) {
     const fem = { id: uid(), name: v.name + ' · ' + tr('femelle'), type: 'vcarve', toolId: v.tool.id, shapeIds: ss.map(x => x.id), p: { ...nf0, depth: v.D, vstart: 0, zrel: 1 }, visible: true, face };
-    const male = { id: uid(), name: v.name + ' · ' + tr('mâle'), type: 'vcarve', toolId: v.tool.id, shapeIds: [frame.id, ...made.map(x => x.id)], p: { ...nf0, depth: v.Sg, vstart: v.S, zrel: 1 }, visible: false, face: 1 };
+    const male = { ownShapes: true, id: uid(), name: v.name + ' · ' + tr('mâle'), type: 'vcarve', toolId: v.tool.id, shapeIds: [frame.id, ...made.map(x => x.id)], p: { ...nf0, depth: v.Sg, vstart: v.S, zrel: 1 }, visible: false, face: 1 };
     if (v.clr && v.clrTool) { // fonds plats vidés d'abord à la fraise droite : là où le V atteindrait la profondeur maximale
-      const lc = lay(tr('Incrustation · dégagement'), '#7a8a99', false), mk = (L, name, depth, vis, fc) => { const sh = L.map(l => mkShape(dedupe(l, true).map(q => NODE(q[0], q[1])), true, { layer: lc.id })).filter(Boolean); if (!sh.length) return null; return { id: uid(), name, type: 'pocket', toolId: v.clrTool.id, shapeIds: sh.map(x => x.id), p: { ...newForm(), type: 'pocket', depth, vstart: 0, zrel: 1, allow: 0, dir: 'climb' }, visible: vis, face: fc }; };
+      const lc = lay(tr('Incrustation · dégagement'), '#7a8a99', false), mk = (L, name, depth, vis, fc) => { const sh = L.map(l => mkShape(dedupe(l, true).map(q => NODE(q[0], q[1])), true, { layer: lc.id })).filter(Boolean); if (!sh.length) return null; return { ownShapes: true, id: uid(), name, type: 'pocket', toolId: v.clrTool.id, shapeIds: sh.map(x => x.id), p: { ...newForm(), type: 'pocket', depth, vstart: 0, zrel: 1, allow: 0, dir: 'climb' }, visible: vis, face: fc }; };
       const cf = mk(offLoops(baseLoops(ss), -v.D * th), v.name + ' · ' + tr('femelle, dégagement'), v.D, true, face);
       const cm = mk(offLoops(baseLoops([frame, ...made]), -v.F * th), v.name + ' · ' + tr('mâle, dégagement'), v.Sg, false, 1);
       if (cf) out.push(cf); out.push(fem); if (cm) out.push(cm); out.push(male);
@@ -5441,22 +5443,22 @@ function ipOpen() {
   const ss = ilSel(); if (!ss.length) return toast(tr('Sélectionnez d’abord le motif à incruster (formes fermées).'));
   let o = { D: 3, gap: 0.1, kind: 'plug', c: '', tp: true }; try { const q = JSON.parse(LS.get('copo.inlayPocket') || '{}'); o = { ...o, ...q }; if (o.b == null) o.b = o.kind === 'cut' ? (o.th || o.D + 0.5) : o.D + (o.over || 1.5); } catch { o.b = 4.5; }
   ipTools(o.tool); $('#ipTp').checked = o.tp !== false; $('#ipSup').checked = o.kind !== 'cut';
-  $('#ipD').value = o.D; $('#ipGap').value = o.gap; $('#ipKind').value = o.kind; $('#ipB').value = o.b; $('#ipC').value = o.c === '' || o.c == null ? '' : o.c;
+  $('#ipD').value = o.D; $('#ipGap').value = o.gap; $('#ipKind').value = o.kind; $('#ipB').value = o.b; $('#ipC').value = o.c === '' || o.c == null ? '' : o.c; $('#ipCut').value = o.cut === '' || o.cut == null ? '' : o.cut;
   $('#ipSel').textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ss.length });
   gadSec('ip'); requestAnimationFrame(ipInfo);
 }
-function ipVals() { const D = +$('#ipD').value, b = +$('#ipB').value, cv = $('#ipC').value; return { tool: S.tools.find(t => t.id === $('#ipTool').value), D, b, gap: Math.max(0, +$('#ipGap').value || 0), kind: $('#ipKind').value, over: b - D, th: b, c: cv === '' ? null : Math.max(0, +cv || 0) }; }
+function ipVals() { const D = +$('#ipD').value, b = +$('#ipB').value, cv = $('#ipC').value, kv = $('#ipCut').value; return { tool: S.tools.find(t => t.id === $('#ipTool').value), D, b, gap: Math.max(0, +$('#ipGap').value || 0), kind: $('#ipKind').value, over: b - D, th: b, c: cv === '' ? null : Math.max(0, +cv || 0), cut: kv === '' ? b : Math.max(0.1, +kv || b), cutSet: kv !== '' }; }
 function ipCheck(v) {
   if (!v.tool) return tr('Choisissez une fraise droite.'); if (!(v.D > 0)) return tr('Indiquez la profondeur de la poche.');
   if (v.kind === 'plug' && !(v.over > 0)) return tr('La hauteur du mâle sous le support (b) doit dépasser la profondeur de poche (a).');
   if (v.kind === 'cut' && !(v.th > 0)) return tr('Indiquez l’épaisseur de la pièce mâle (b).');
   if (v.kind === 'plug' && v.c != null && v.c < v.tool.dia + 0.2) return trf('Le débord du support (c) doit être plus grand que le diamètre de la fraise ({d} mm).', { d: fr(v.tool.dia, 2) });
-  const fl = +v.tool.flen || 0, need = v.kind === 'plug' ? v.D + v.over : v.th + 0.2; if (fl > 0 && Math.max(v.D, need) > fl + 1e-6) return trf('Trop profond pour cette fraise (longueur utile {f} mm).', { f: fr(fl, 1) });
+  const fl = +v.tool.flen || 0, need = v.kind === 'plug' ? v.D + v.over : v.cut; if (fl > 0 && Math.max(v.D, need) > fl + 1e-6) return trf('Trop profond pour cette fraise (longueur utile {f} mm).', { f: fr(fl, 1) });
   return '';
 }
 function ipGeom(v) { const base = baseLoops(ilSel()), r = v.tool.dia / 2, C = ipCommon(base, r), M = v.gap > 0 ? offLoops(C, -v.gap) : C; return { base, C, M, r }; }
 function ipInfo() {
-  const v = ipVals(); $('#ipSup').checked = v.kind === 'plug'; $('#ipCRow').hidden = v.kind !== 'plug'; $('#ipBL').textContent = tr(v.kind === 'plug' ? 'Hauteur du mâle sous le support (b) (mm)' : 'Épaisseur de la pièce mâle (b) (mm)'); { const f = $('#ipFig'); if (f.dataset.k !== v.kind) { f.innerHTML = IP_FIG[v.kind]; f.dataset.k = v.kind; } }
+  const v = ipVals(); $('#ipSup').checked = v.kind === 'plug'; $('#ipCRow').hidden = v.kind !== 'plug'; $('#ipCutRow').hidden = v.kind !== 'cut'; $('#ipBL').textContent = tr(v.kind === 'plug' ? 'Hauteur du mâle sous le support (b) (mm)' : 'Épaisseur de la pièce mâle (b) (mm)'); { const f = $('#ipFig'); if (f.dataset.k !== v.kind) { f.innerHTML = IP_FIG[v.kind]; f.dataset.k = v.kind; } }
   $('#ipHelp').textContent = tr(v.kind === 'plug' ? 'Pièce mâle sur support : le motif est usiné en miroir, en relief, sur un support épais (pièce placée à droite, sur un calque à part). Collez-la retournée dans la poche, puis sciez ou rabotez le support le long du trait rouge.' : 'Pièce mâle sans support : le motif est découpé dans une planchette, avec des ponts d’attache (pièce placée à droite, sur un calque à part). Cassez les ponts, poncez, puis collez la pièce dans la poche.');
   $('#ipSel').textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ilSel().length }); if (!ilSel().length) { $('#ipInfo').textContent = tr('Sélectionnez sur le plan le motif à incruster (formes fermées).'); return; }
   const e = ipCheck(v), info = $('#ipInfo'); if (e) { info.textContent = e; return; }
@@ -5471,29 +5473,29 @@ function ipInfo() {
   const F = x => LANG === 'fr' ? fr(x, 2) : x.toFixed(2), lost = a0 > 0 ? Math.abs(a0 - a1) / a0 * 100 : 0, gone = G.base.filter(l => area(l) > 0).length - G.C.filter(l => area(l) > 0).length;
   info.textContent = trf('Rayon de la fraise {r} mm : tous les angles sont arrondis à au moins {r} mm (en bleu ; en pointillés rouges, le dessin d’origine). Surface modifiée : {p} %.', { r: F(G.r), p: lost < 0.05 ? '0' : (LANG === 'fr' ? fr(lost, 1) : lost.toFixed(1)) })
     + (gone > 0 ? ' ' + trf('Attention : {n} partie(s) plus fine(s) que la fraise disparaissent.', { n: gone }) : '')
-    + ' ' + (v.kind === 'plug' ? trf('Bouchon en relief de {h} mm.', { h: F(v.D + v.over) }) : trf('La pièce mâle est découpée dans une planchette d’épaisseur b = {b} mm : la fraise la traverse et descend à {h} mm (0,2 mm de plus, pour la détacher), avec des ponts.', { b: F(v.th), h: F(v.th + 0.2) }) + (v.th < v.D - 1e-9 ? ' ' + trf('Attention : b est plus petit que a, la pièce restera {d} mm sous la surface.', { d: F(v.D - v.th) }) : v.th > v.D + 1e-9 ? ' ' + trf('Elle dépassera de {d} mm : à poncer après collage.', { d: F(v.th - v.D) }) : ''));
+    + ' ' + (v.kind === 'plug' ? trf('Bouchon en relief de {h} mm.', { h: F(v.D + v.over) }) : trf('Pièce mâle découpée dans une planchette d’épaisseur b = {b} mm, à {h} mm de profondeur, avec des ponts.', { b: F(v.th), h: F(v.cut) }) + (v.cut < v.th - 1e-9 ? ' ' + tr('La découpe ne traverse pas la planchette : il faudra finir à la main.') : v.cut <= v.th + 1e-9 ? ' ' + tr('Pour traverser franchement, mettez un peu plus que b (par exemple b + 0,2 mm) si votre martyr le permet.') : '') + (v.th < v.D - 1e-9 ? ' ' + trf('Attention : b est plus petit que a, la pièce restera {d} mm sous la surface.', { d: F(v.D - v.th) }) : v.th > v.D + 1e-9 ? ' ' + trf('Elle dépassera de {d} mm : à poncer après collage.', { d: F(v.th - v.D) }) : ''));
 }
-['#ipTool', '#ipD', '#ipGap', '#ipKind', '#ipB', '#ipC'].forEach(id => { const el = document.querySelector(id); if (el) { el.addEventListener('input', ipInfo); el.addEventListener('change', ipInfo); } });
+['#ipTool', '#ipD', '#ipGap', '#ipKind', '#ipB', '#ipC', '#ipCut'].forEach(id => { const el = document.querySelector(id); if (el) { el.addEventListener('input', ipInfo); el.addEventListener('change', ipInfo); } });
 function ipMake() {
   const v = ipVals(), e = ipCheck(v); if (e) return toast(e);
-  const wantTp = $('#ipTp').checked; try { LS.set('copo.inlayPocket', JSON.stringify({ tool: v.tool.id, D: v.D, gap: v.gap, kind: v.kind, b: v.b, c: v.c == null ? '' : v.c, tp: wantTp })); } catch { }
+  const wantTp = $('#ipTp').checked; try { LS.set('copo.inlayPocket', JSON.stringify({ tool: v.tool.id, D: v.D, gap: v.gap, kind: v.kind, b: v.b, c: v.c == null ? '' : v.c, cut: v.cutSet ? v.cut : '', tp: wantTp })); } catch { }
   const ss = ilSel(), G = ipGeom(v); if (!G.C.length) return toast(tr('Le motif est plus fin que la fraise : rien à usiner. Choisissez une fraise plus petite.'));
   const lay = (name, color) => { let l = S.layers.find(x => x.name === name); if (!l) { l = { id: uid(), name, visible: true, locked: false, color }; S.layers.push(l); } return l; };
   const lf = lay(tr('Inlay poche · femelle'), '#d18a3a'), lm = lay(tr('Inlay poche · mâle'), '#9b3ad1'), face = faceOf(ss[0]) === 2 ? 2 : 1;
   const toShapes = (L, layer, g, f) => L.map(l => { const n = mkShape(dedupe(l, true).map(q => { const p = f ? f(q) : q; return NODE(p[0], p[1]); }), true, { layer: layer.id, g }); return n; }).filter(Boolean);
   // femelle : poche sur le contour commun
   const fem = toShapes(G.C, lf, G.C.length > 1 ? uid() : null), nf = newForm();
-  const tf = { id: uid(), name: tr('Inlay poche · femelle'), type: 'pocket', toolId: v.tool.id, shapeIds: fem.map(x => x.id), p: { ...nf, type: 'pocket', depth: v.D, vstart: 0, zrel: 1, allow: 0, dir: 'climb' }, visible: true, face };
+  const tf = { ownShapes: true, id: uid(), name: tr('Inlay poche · femelle'), type: 'pocket', toolId: v.tool.id, shapeIds: fem.map(x => x.id), p: { ...nf, type: 'pocket', depth: v.D, vstart: 0, zrel: 1, allow: 0, dir: 'climb' }, visible: true, face };
   // mâle, placé à droite du motif
   const bb = bbox(ss), margin = v.c != null && v.kind === 'plug' ? v.c : Math.max(3, v.tool.dia * 1.6 + 1), cx = bb.x0 + bb.w / 2, dx = bb.w + 2 * margin + 10, g = uid();
   let tm, made;
   if (v.kind === 'plug') {
     made = toShapes(G.M, lm, g, q => [2 * cx - q[0] + dx, q[1]]); // miroir : la planche est retournée pour le collage
     const mb = bbox(made), frame = mkShape(rectNodes(mb.x0 - margin, mb.y0 - margin, mb.x1 + margin, mb.y1 + margin), true, { layer: lm.id, g }); made.push(frame);
-    tm = { id: uid(), name: tr('Inlay poche · mâle (bouchon à araser)'), type: 'pocket', toolId: v.tool.id, shapeIds: made.map(x => x.id), p: { ...nf, type: 'pocket', depth: v.D + v.over, vstart: 0, zrel: 1, allow: 0, dir: 'climb' }, visible: false, face: 1 };
+    tm = { ownShapes: true, id: uid(), name: tr('Inlay poche · mâle (bouchon à araser)'), type: 'pocket', toolId: v.tool.id, shapeIds: made.map(x => x.id), p: { ...nf, type: 'pocket', depth: v.D + v.over, vstart: 0, zrel: 1, allow: 0, dir: 'climb' }, visible: false, face: 1 };
   } else {
     made = toShapes(G.M, lm, g, q => [q[0] + dx, q[1]]);
-    tm = { id: uid(), name: tr('Inlay poche · mâle (pièce découpée)'), type: 'profile', toolId: v.tool.id, shapeIds: made.map(x => x.id), p: { ...nf, type: 'profile', side: 'out', depth: v.th + 0.2, vstart: 0, zrel: 1, allow: 0, tabs: true, tabMode: 'auto', tabN: 3, tabL: 6, tabH: Math.min(1.5, v.th / 2) }, visible: false, face: 1 };
+    tm = { ownShapes: true, id: uid(), name: tr('Inlay poche · mâle (pièce découpée)'), type: 'profile', toolId: v.tool.id, shapeIds: made.map(x => x.id), p: { ...nf, type: 'profile', side: 'out', depth: v.cut, vstart: 0, zrel: 1, allow: 0, tabs: true, tabMode: 'auto', tabN: 3, tabL: 6, tabH: Math.min(1.5, v.th / 2) }, visible: false, face: 1 };
   }
   if (wantTp) { computeTP(tf); computeTP(tm); S.tps.push(tf, tm); } S.sel = new Set(made.map(x => x.id));
   gadSec(null); commit(); gcDirty = true; renderLayers(); renderTpList(); renderSel(); draw();
@@ -5501,7 +5503,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle (parcours visible) et pièce rapportée (parcours masqué, calque à part).' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.168', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.169', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5623,7 +5625,7 @@ function renderTpList() { if (typeof libCardSync === 'function') libCardSync();
     li.querySelector('b').textContent = tp.name; li.querySelector('.tpt').dataset.tip = [tp.name, sub, tp.err ? '⚠ ' + tp.err : '', ...wl.map(w => '⚠ ' + w)].filter(Boolean).join('\n'); // titre seul, détails au survol
     li.onclick = e => {
       const a = e.target.closest('[data-a]'); if (a) { e.stopPropagation();
-        if (a.dataset.a === 'del') { S.tps = S.tps.filter(x => x !== tp && x.vclrOf !== tp.id); if (S.editTp === tp.id) { S.editTp = null; S.form = newForm(); fwClose('tpWin'); } commit(false); gcDirty = true; renderTpList(); renderForm(); draw(); }
+        if (a.dataset.a === 'del') { S.tps = S.tps.filter(x => x !== tp && x.vclrOf !== tp.id); if (tp.ownShapes) { const used = new Set(S.tps.flatMap(x => x.shapeIds)), ids = new Set(tp.shapeIds.filter(id => !used.has(id))); if (ids.size) { const lids = new Set(S.shapes.filter(x => ids.has(x.id)).map(x => x.layer)); S.shapes = S.shapes.filter(x => !ids.has(x.id)); for (const id of ids) S.sel.delete(id); S.layers = S.layers.filter(l => !lids.has(l.id) || S.shapes.some(x => x.layer === l.id) || S.layers.length < 2); if (!S.layers.some(l => l.id === S.layerActive) && S.layers[0]) S.layerActive = S.layers[0].id; renderLayers(); renderSel(); toast(tr('Parcours supprimé avec les contours qu’il avait créés.')); } } if (S.editTp === tp.id) { S.editTp = null; S.form = newForm(); fwClose('tpWin'); } commit(false); gcDirty = true; renderTpList(); renderForm(); draw(); }
         if (a.dataset.a === 'vis') { tp.visible = !tp.visible; commit(false); gcDirty = true; renderTpList(); draw(); }
         if (a.dataset.a === 'up' && idx) { S.tps.splice(idx - 1, 0, S.tps.splice(idx, 1)[0]); commit(false); gcDirty = true; renderTpList(); }
         return; }
