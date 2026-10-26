@@ -460,6 +460,46 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 .cml{flex:1}.cmi kbd{font:500 10.5px var(--f-mono);color:var(--muted);margin-left:14px}.cmar{color:var(--muted);margin-left:10px}
 .cmsep{height:1px;background:var(--line);margin:4px 6px}
 .cmsub{position:absolute;left:100%;top:-5px;display:none}.cmsub.on{display:grid}
+
+/* ===== réglages à la place des outils (comme Aspire), croix bleue pour fermer ===== */
+.peekrow{position:sticky;top:-4px;height:0;z-index:7;display:flex;justify-content:flex-end;margin:0 -6px 0 0}
+.pane:not(.setm) .peekrow{display:none}
+.peektab{position:relative;top:0;display:grid;place-items:center;width:38px;height:24px;padding:0;border:0;border-radius:0 0 8px 8px;background:var(--accent);color:#fff;cursor:pointer;box-shadow:0 3px 8px rgb(0 0 0/.25)}
+.peektab svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.pane.peek .peektab svg{transform:rotate(180deg)}
+.peektab:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.pane.setm{display:flex;flex-direction:column;padding-top:28px}
+.pane.setm>*{flex:none}
+.pane[data-pane="dessin"].setm:not(.peek)>#dgrid,.pane[data-pane="dessin"].setm .layersblk,.pane[data-pane="dessin"].setm #dEmpty{display:none!important}
+.pane[data-pane="dessin"].setm.peek>#dgrid{padding-bottom:10px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+.pane.setm.imgsel [data-sec="img"]>.dsec-h,.pane.setm.imgsel [data-sec="img"]>.impgrid,.pane.setm.imgsel #hImp{display:none!important}
+.setx{position:relative;top:2px;display:grid;place-items:center;width:30px;height:28px;padding:0;border:0;border-radius:7px;background:var(--accent);color:#fff;cursor:pointer;box-shadow:0 3px 8px rgb(0 0 0/.25)}
+.setx svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
+.setx:hover{filter:brightness(1.12)}.setx:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.setfoot{display:none}
+.pane.setm .setfoot{display:flex;justify-content:flex-end;margin-top:auto;position:sticky;bottom:-18px;padding:10px 0 12px;background:var(--panel);border-top:1px solid var(--line);z-index:5}
+.setfoot button{height:32px;padding:0 16px}
+/* relief */
+.pane[data-pane="relief"].setm>section.blk:first-of-type{display:none}
+/* parcours */
+.pane[data-pane="parcours"].setm:not(.peek)>section.blk{display:none}
+.pane[data-pane="parcours"].setm.peek>section.blk:last-of-type{padding-bottom:10px;border-bottom:1px solid var(--line)}
+#tpWin.docked{position:static!important;inset:auto!important;left:auto!important;top:auto!important;width:auto!important;max-width:none!important;max-height:none!important;box-shadow:none!important;border:0!important;background:transparent!important;border-radius:0!important;display:block;z-index:auto}
+#tpWin.docked[hidden]{display:none!important}
+#tpWin.docked .fwin-head{padding:4px 0 2px;border:0;background:none;cursor:default;min-height:0}
+#tpWin.docked .fwin-head .grip,#tpWin.docked .fwin-x{display:none}
+#tpWin.docked #tpFormTitle{font:600 12px var(--f-head);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+#tpWin.docked .fwin-body{overflow:visible;padding:4px 0 0;max-height:none}
+#tpWin.docked .seg[data-f="type"]{display:none}
+#tpWin.docked.chgtype .seg[data-f="type"]{display:flex}
+.tptype{display:none;margin:-4px 0 2px;font-size:12px;color:var(--muted)}
+#tpWin.docked .tptype{display:block}
+#tpWin.docked #tpCancel{display:none!important}
+.tptype a{color:var(--accent);text-decoration:underline;cursor:pointer;margin-left:6px}
+#tpWin.docked #tpForm>.row:last-child{position:sticky;bottom:-18px;z-index:5;background:var(--panel);margin:4px 0 0;padding:10px 0 12px;border-top:1px solid var(--line)}
+@media (max-width:920px){#tpWin.docked{left:auto!important;right:auto;bottom:auto}}
+@media (prefers-reduced-motion:reduce){.peektab svg{transition:none}}
+.selline{display:flex;align-items:center;justify-content:space-between;gap:8px}.dsec-h .infoi{margin-left:auto}
 </style>
 
 <div class="app" id="app">
@@ -530,7 +570,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
       <button data-tool="fillet" title="Congé sur un coin (F)" aria-label="Congé"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20v-8a8 8 0 0 1 8-8h8"/></svg></button>
       <button data-tool="dogbone" title="Dégagement dogbone / T-bone sur un coin (B)" aria-label="Dégagement dogbone / T-bone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 20V11"/><path d="M11 4h9"/><path d="M4 11a4 4 0 1 1 7-7"/></svg></button>
       <button data-tool="trim" title="Ajuster aux intersections (X)" aria-label="Ajuster"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M8.5 7.5 20 17M8.5 16.5 20 7"/></svg></button>
-      <button data-tool="extend" title="Étendre les tracés : prolonger un trait jusqu’à un autre vecteur" aria-label="Étendre les tracés"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 20l6-6M21 20l-6-6"/><path d="M9 14l3-3M15 14l-3-3" stroke-dasharray="1.6 2.2"/><circle cx="12" cy="10.5" r="1.4" fill="currentColor" stroke="none"/></svg></button>
+      <button data-tool="extend" title="Étendre les tracés : prolonger un trait jusqu’à un autre vecteur" aria-label="Étendre les tracés"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M3.5 18.5L18 4"/><path d="M20.5 20.5l-4.6-4.6"/><path d="M13.6 13.6L12 12" stroke="var(--accent)" stroke-width="2.4"/><circle cx="10.5" cy="10.5" r="2" fill="var(--accent)" stroke="none"/></svg></button>
       <button data-tool="cut" title="Couper un vecteur (U)" aria-label="Couper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12h7M14 12h7"/><path d="M12 4v4M12 16v4"/></svg></button>
       <div class="psep"></div>
       <button data-tool="measure" title="Mesurer (M)" aria-label="Mesurer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="8" width="19" height="8" rx="1"/><path d="M6 8v3M10 8v4M14 8v3M18 8v4"/></svg></button>
@@ -648,6 +688,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         </section>
       </div>
       <div class="pane" data-pane="dessin">
+        <div class="peekrow"><button type="button" class="setx" data-act="setClose" title="Fermer (ou clic droit dans le dessin)" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
         <div class="dgrid" id="dgrid" role="toolbar" aria-label="Fonctions de dessin"></div>
         <p class="hint dempty" id="dEmpty">Choisissez une fonction ci-dessus, ou cliquez sur un objet du plan pour le modifier.</p>
         <section class="blk toolblk" id="toolBlk" aria-live="polite">
@@ -687,7 +728,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             </details>
           </div>
         </section>
-        <section class="dsec" data-sec="sel" hidden><h3 class="dsec-h">Sélection <span class="chip" id="selCount">0</span></h3>
+        <section class="dsec" data-sec="sel" hidden><h3 class="dsec-h">Sélection <span class="chip" id="selCount">0</span><button type="button" class="infoi" data-info="hSel" aria-label="Afficher l’aide" title="Afficher l’aide" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.4"/></svg></button></h3>
           <div class="orow">
             <div class="ogrid sm" id="selAnchor" role="group" aria-label="Point de référence de la sélection">
               <button data-a="tl" title="Coin haut gauche" aria-label="Coin haut gauche"></button><button data-a="tc" title="Milieu haut" aria-label="Milieu haut"></button><button data-a="tr" title="Coin haut droit" aria-label="Coin haut droit"></button>
@@ -701,10 +742,9 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
               <label>Hauteur<input data-u="len" type="number" id="selH" step="0.1" min="0.01"></label>
             </div>
           </div>
-          <p class="hint" id="selHint"></p>
-          <label class="chk"><input type="checkbox" id="selLock" checked> Garder les proportions</label>
-          <p class="hint">Cliquez une seconde fois sur la sélection pour afficher les poignées : carrés pour redimensionner, ronds pour tourner (Maj : par pas de 15°), cercle orange = pivot déplaçable.</p>
-          <div class="row"><button data-act="dup">Dupliquer</button><button data-act="del" class="danger">Supprimer</button></div>
+          <div class="selline"><label class="chk"><input type="checkbox" id="selLock" checked> Garder les proportions</label><span class="irow"><button data-act="dup" title="Dupliquer (Ctrl+D)" aria-label="Dupliquer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button><button data-act="del" class="danger" title="Supprimer (Suppr)" aria-label="Supprimer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></span></div>
+          <div id="hSel" hidden><p class="hint" id="selHint"></p>
+          <p class="hint">Cliquez une seconde fois sur la sélection pour afficher les poignées : carrés pour redimensionner, ronds pour tourner (Maj : par pas de 15°), cercle orange = pivot déplaçable.</p></div>
         </section>
         <section class="dsec" data-sec="rotate" hidden><h3 class="dsec-h">Rotation</h3>
           <p class="hint">Faites glisser le pivot (cercle orange) sur le plan : il s’accroche aux objets, aux repères et à la grille. Ou choisissez un point ci-dessous.</p>
@@ -841,6 +881,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         </details>
       </div>
       <div class="pane" data-pane="relief" hidden>
+        <div class="peekrow"><button type="button" class="setx" data-act="relSetClose" title="Fermer (ou clic droit dans le dessin)" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
         <section class="blk"><h3>Créer / importer un relief</h3>
           <div class="rbtns">
             <button data-act="relStl" class="rbtn" title="Importer un modèle 3D (STL binaire ou texte) : il est vu de dessus et projeté en hauteurs, à l’échelle du fichier."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><b>Fichier STL</b></button>
@@ -902,9 +943,10 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         </section>
       </div>
       <div class="pane" data-pane="parcours" hidden>
+        <div class="peekrow"><button type="button" class="setx" data-act="tpCancel" title="Fermer (ou clic droit dans le dessin)" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
         <section class="blk"><h3>Nouveau parcours</h3>
           <div class="seg ico tpnew" id="tpNew"><button data-newtp="profile">Profil</button><button data-newtp="pocket">Poche</button><button data-newtp="vcarve">V-carve</button><button data-newtp="drill">Perçage</button><button data-newtp="thread">Filetage</button><button data-newtp="relief">Relief</button></div>
-          <p class="hint">Sélectionnez les formes sur le plan, puis choisissez l'opération : ses réglages s'ouvrent dans une fenêtre que vous pouvez déplacer.</p>
+          <p class="hint">Sélectionnez les formes sur le plan, puis choisissez l'opération : ses réglages s'affichent dans ce panneau.</p>
         </section>
         <section class="blk"><h3>Outils</h3>
           <button type="button" class="libcard" data-act="libOpen"><span class="lc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h4v5l-2 2-2-2z"/><path d="M9 10v11"/><path d="M15 3h3v9l-1.5 3-1.5-3z"/><path d="M16.5 15v6"/></svg></span><span class="lc-t"><b>Bibliothèque d’outils</b><small id="libCardSub"></small></span><span class="lc-go" aria-hidden="true">›</span></button>
@@ -935,7 +977,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.154</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.157</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -997,6 +1039,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 <div class="fwin" id="tpWin" hidden role="dialog" aria-labelledby="tpFormTitle">
   <div class="fwin-head"><span class="grip" aria-hidden="true"></span><b id="tpFormTitle">Nouveau parcours</b><button class="iconbtn fwin-x" data-act="tpCancel" title="Fermer" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
         <section class="fwin-body" id="tpForm">
+          <p class="tptype" id="tpTypeLine"></p>
           <div class="seg" data-f="type"><button value="profile">Profil</button><button value="pocket">Poche</button><button value="vcarve">V-carve</button><button value="drill">Perçage</button><button value="thread">Filetage</button><button value="relief">Relief</button></div>
           <div class="g2">
             <label>Nom<input type="text" data-f="name" placeholder="automatique"></label>
@@ -1355,6 +1398,8 @@ Object.assign(I18N_EN, {"Importer un STL (relief)…": "Import an STL (relief)�
 Object.assign(I18N_EN, {"Tracé prolongé jusqu’au croisement.": "Path extended to the crossing.", "Approchez la souris d’une extrémité : le prolongement s’affiche en pointillés. Cliquez son croisement avec un autre vecteur.": "Move the mouse near an end: the extension shows as a dashed line. Click where it crosses another vector.", "Cliquez sur un point de croisement (rond) du prolongement en pointillés.": "Click a crossing point (circle) of the dashed extension.", "Le prolongement de ce côté ne croise aucun vecteur.": "The extension on this side crosses no vector.", "Cliquez d’abord le trait ouvert à prolonger.": "First click the open line to extend.", "Cliquez le trait ouvert à prolonger, puis approchez la souris d’une de ses extrémités : son prolongement apparaît en pointillés avec ses croisements (ronds). Cliquez un croisement pour prolonger le trait jusque-là. Échap : choisir un autre trait": "Click the open line to extend, then move the mouse near one of its ends: its extension shows as a dashed line with its crossings (circles). Click a crossing to extend the line up to it. Esc: pick another line", "Étendre les tracés : prolonger un trait jusqu’à un autre vecteur": "Extend vectors: lengthen a line up to another vector"});
 Object.assign(I18N_EN, {"Usiner": "Machine", "Miroir…": "Mirror…", "Mettre sur le calque": "Move to layer", "Déplacé sur le calque « {n} ».": "Moved to layer “{n}”.", "{n} vecteurs": "{n} vectors", "{n} vecteur": "{n} vector", "Vectoriser…": "Vectorize…", "Transformer en relief (niveaux de gris)": "Turn into a relief (grayscale)", "Parcours d’ébauche": "Roughing toolpath", "Parcours de finition": "Finishing toolpath", "Parcours de profil (détourer)": "Profile toolpath (cut out)", "Poser au fond du brut": "Drop to the stock bottom", "Aligner sur le dessus du brut": "Align to the stock top", "Recentrer la vue": "Recenter the view", "Tout désélectionner": "Deselect all", "Vue de dessus": "Top view", "Vue de face": "Front view"});
 Object.assign(I18N_EN, {"Créer / importer un relief": "Create / import a relief"});
+Object.assign(I18N_EN, {"Afficher les outils de dessin": "Show the drawing tools", "Afficher les opérations et la liste des parcours": "Show the operations and the toolpath list", "Type :": "Type:", "changer": "change", "Sélectionnez les formes sur le plan, puis choisissez l'opération : ses réglages s'affichent dans ce panneau.": "Select the shapes on the canvas, then choose the operation: its settings appear in this panel.", "Fermer (ou clic droit dans le dessin)": "Close (or right-click in the drawing)"});
+Object.assign(I18N_EN, {"Dupliquer (Ctrl+D)": "Duplicate (Ctrl+D)", "Supprimer (Suppr)": "Delete (Del)"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4525,6 +4570,8 @@ function act(a, btn) {
     case 'rotApply': rotApply(); return;
     case 'fitApply': fitApply(); return;
     case 'dsecClose': S.ui.dsec = null; dRefresh(); draw(); return;
+    case 'relSetClose': { RXF = false; S.relSel = null; if (typeof RV !== 'undefined') RV.tool = null; relPanel(); draw(); return; }
+    case 'setClose': { if (pen.length) finishPen(false); arcSt = []; dimSt = []; if (!['select', 'pan'].includes(S.ui.tool)) setTool('select'); S.ui.dsec = null; dRefresh(); draw(); return; }
     case 'mirH': case 'mirV': case 'mirT': case 'mirB': case 'mirL': case 'mirR': case 'mirLine': mirrorSel(a); return;
     case 'traceOutline': {
       if (S.imgSel) { S.ui.dsec = null; if (S.ui.tool !== 'select') setTool('select'); dRefresh(); const d = $('#vzBox'); if (d) { d.open = true; d.scrollIntoView({ block: 'nearest' }); } toast(tr('Réglez le seuil et le lissage, puis cliquez « Créer les contours ».')); return; }
@@ -4862,6 +4909,7 @@ function dRefresh() {
   pane.querySelectorAll('#dgrid [data-tool]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === t));
   pane.querySelectorAll('#dgrid [data-sec]').forEach(b => b.setAttribute('aria-pressed', !toolForm && b.dataset.sec === show && !!S.ui.dsec));
   pane.querySelectorAll('#dgrid [data-dact]').forEach(b => { b.disabled = n < +b.dataset.need; });
+  { const setm = !!(toolForm || S.ui.dsec); pane.classList.toggle('setm', setm); pane.classList.toggle('imgsel', !!S.imgSel); if (!setm) peekSet(pane, false); }
   rotSync(); joinSync(); fitPreview(); draw();
 }
 
@@ -5257,7 +5305,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.154', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.157', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5406,7 +5454,7 @@ function tpSelInfo() {
   if (no && F.type && F.type !== 'profile') el.insertAdjacentHTML('beforeend', ' <small>' + escH(tr(nc ? 'Les vecteurs ouverts sont ignorés par ce parcours.' : 'Ce parcours demande des formes fermées.')) + '</small>');
   if (no && !nc && F.type && F.type !== 'profile') el.classList.add('bad');
 }
-function renderForm() {
+function renderForm() { setTimeout(tpTypeSync, 0);
   const F = S.form || (S.form = newForm()), root = $('#tpForm');
   $('#tpFormTitle').textContent = S.editTp ? 'Modifier le parcours' : 'Nouveau parcours';
   $('#tpApply').textContent = S.editTp ? 'Mettre à jour' : (F.type === 'relief' && (!S.sel.size || F.rlBound !== 'sel') ? tr('Calculer') : (S.sel.size || F.type !== 'profile' || !(S.tpRels && S.tpRels.size) ? 'Calculer sur la sélection (' + S.sel.size + ')' : tr('Calculer autour du relief')));
@@ -6793,7 +6841,7 @@ function relFromDrawing(type) {
     toast(tr('Forme créée : réglez le profil, la largeur et l’épaisseur Z.')); } catch (e) { toast(e.message); }
 }
 // ---------- VUES 2D / 3D (zone centrale scindée) et visionneuse 3D du relief ----------
-var VIEWS = (() => { try { const o = JSON.parse(LS.get('copo.views') || 'null'); if (o) return { d2: o.d2 !== false, d3: !!o.d3, split: o.split === 'h' ? 'h' : 'v' }; } catch { } return { d2: true, d3: false, split: 'v' }; })();
+var VIEWS = (() => { try { const o = JSON.parse(LS.get('copo.views') || 'null'); if (o) return { d2: true, d3: true, split: o.split === 'h' ? 'h' : 'v' }; } catch { } return { d2: true, d3: true, split: 'v' }; })(); // à l'ouverture : plan 2D et vue 3D côte à côte
 function viewsApply() {
   const v = $('#views'); if (!v) return; if (!VIEWS.d2 && !VIEWS.d3) VIEWS.d2 = true;
   $('#cw').hidden = !VIEWS.d2; $('#rv3').hidden = !VIEWS.d3; v.classList.toggle('both', VIEWS.d2 && VIEWS.d3); v.classList.toggle('v', VIEWS.split === 'v'); v.classList.toggle('h', VIEWS.split === 'h');
@@ -7103,6 +7151,36 @@ function vzNodes(lp, l, map) {
     else out.push(NODE(p[0], p[1]));
   }
   return out;
+}
+
+// ===== croix de fermeture et formulaire de parcours dans le panneau =====
+function peekSet(pane, on) { if (!pane) return; pane.classList.toggle('peek', !!on); const b = pane.querySelector('.peektab'); if (b) { b.setAttribute('aria-expanded', !!on); const t = on ? tr('Masquer') : (pane.dataset.pane === 'dessin' ? tr('Afficher les outils de dessin') : tr('Afficher les opérations et la liste des parcours')); b.title = t; b.setAttribute('aria-label', t); } }
+(() => {
+  document.querySelectorAll('.peektab').forEach(b => {
+    const pane = b.closest('.pane'), zone = pane.dataset.pane === 'dessin' ? [b, pane.querySelector('#dgrid')] : [b, ...pane.querySelectorAll(':scope > section.blk')]; let t = 0;
+    const open = () => { clearTimeout(t); if (pane.classList.contains('setm')) peekSet(pane, true); };
+    const later = () => { clearTimeout(t); t = setTimeout(() => peekSet(pane, false), 400); };
+    b.addEventListener('mouseenter', open);
+    b.addEventListener('click', () => { clearTimeout(t); peekSet(pane, !pane.classList.contains('peek')); });
+    zone.forEach(z => { if (!z) return; z.addEventListener('mouseenter', () => { if (pane.classList.contains('peek')) clearTimeout(t); }); z.addEventListener('mouseleave', e => { if (e.pointerType === 'touch') return; later(); }); });
+    zone.slice(1).forEach(z => z && z.addEventListener('click', e => { if (e.target.closest('button,[data-tool],li')) setTimeout(() => peekSet(pane, false), 0); }));
+  });
+  // formulaire de parcours : intégré au panneau Parcours
+  const w = $('#tpWin'), pp = document.querySelector('[data-pane="parcours"]'); if (!w || !pp) return;
+  w.classList.add('docked'); w.setAttribute('role', 'region'); pp.appendChild(w);
+  const sync = () => { const on = !w.hidden; pp.classList.toggle('setm', on); if (!on) { peekSet(pp, false); w.classList.remove('chgtype'); } else pp.scrollTop = 0; };
+  new MutationObserver(sync).observe(w, { attributes: true, attributeFilter: ['hidden'] }); sync();
+  $('#tpTypeLine').addEventListener('click', e => { if (e.target.closest('a')) { e.preventDefault(); w.classList.toggle('chgtype'); } });
+  w.addEventListener('click', e => { if (e.target.closest('.seg[data-f="type"] button')) setTimeout(() => w.classList.remove('chgtype'), 0); });
+})();
+function relSetm() { const p = document.querySelector('[data-pane="relief"]'); if (p) p.classList.toggle('setm', !!(typeof relCur === 'function' && relCur())); }
+{ const _rp = relPanel; relPanel = function (...a) { const r = _rp.apply(this, a); relSetm(); return r; }; }
+{ const _rc = rightClick; rightClick = function () { if (!$('#tpWin').hidden) { act('tpCancel'); return; } if (S.relSel && curTab === 'relief') { act('relSetClose'); } return _rc(); }; }
+function tpTypeSync() {
+  const F = S.form || {}, b = document.querySelector('#tpForm .seg[data-f="type"] button[value="' + F.type + '"]'), el = $('#tpTypeLine'); if (!el) return;
+  const nm = b ? b.textContent.trim() : '', tp = S.editTp && S.tps.find(x => x.id === S.editTp);
+  el.innerHTML = '<span></span><a role="button" tabindex="0"></a>'; el.firstChild.textContent = tr('Type :') + ' ' + nm; el.lastChild.textContent = tr('changer');
+  if (tp) $('#tpFormTitle').textContent = tp.name;
 }
 let vzRaf = 0;
 document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('.infoi'); if (!b) return; e.preventDefault(); e.stopPropagation(); const el = document.getElementById(b.dataset.info); if (!el) return; el.hidden = !el.hidden; b.setAttribute('aria-expanded', !el.hidden); }, true);
