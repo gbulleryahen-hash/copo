@@ -186,7 +186,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.157</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.159</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -426,6 +426,15 @@ footer p{max-width:none}
     </ul>
     <p>Retournez le mâle, collez-le dans la femelle, puis rabotez ou poncez le surplus. Le réglage <span class="ui">Profondeur de départ</span> du V-carving est aussi disponible à la main dans le formulaire des parcours.</p>
 
+    <h3>Inlay en poche (fraise droite)</h3>
+    <p>Sélectionnez le motif (formes fermées), puis <span class="ui">Gadgets › Inlay en poche…</span> ou, au clic droit, <span class="ui">Incrustation › En poche</span>. Choisissez la <strong>fraise droite</strong>, la <strong>profondeur de la poche</strong>, le <strong>jeu pour la colle</strong> (0,1 mm par défaut) et le type de pièce rapportée.</p>
+    <p>Une fraise droite ne fait pas d’angle plus vif que son rayon. COPO calcule donc un <strong>contour commun</strong> dont tous les angles, rentrants comme saillants, sont arrondis au moins au rayon de la fraise : la poche et la pièce rapportée s’usinent exactement sur ce tracé et s’emboîtent sans retouche. L’aperçu montre ce contour en bleu, le dessin d’origine en pointillés rouges, et la part de surface modifiée ; un avertissement signale les parties plus fines que la fraise, qui disparaissent.</p>
+    <ul>
+      <li><strong>Bouchon arasé</strong> (par défaut) : le motif est usiné en miroir, en relief, dans une planche épaisse, à la hauteur de la poche plus le dépassement à araser. Collez la planche retournée dans la poche, puis sciez ou rabotez le surplus. Tous les morceaux du motif restent liés et se posent d’un coup.</li>
+      <li><strong>Pièce découpée</strong> : le motif est découpé dans une planchette de l’épaisseur indiquée, avec des ponts d’attache. Cassez les ponts, poncez, puis collez la pièce dans la poche.</li>
+    </ul>
+    <p>COPO crée la poche sur le calque « Inlay poche · femelle » (parcours visible) et la pièce rapportée à droite du motif, sur le calque « Inlay poche · mâle » (parcours masqué : affichez-le pour l’usiner).</p>
+
     <h2 id="fr-boite">Boîte à entures</h2>
     <p>Dans le groupe <span class="ui">Gadgets</span> de l'onglet Dessin (ou <span class="ui">Dessin › Boîte à entures…</span>), ce module dessine une boîte assemblée par tenons droits, à la façon du « Box Creator » de Vectric. Réglez les <strong>dimensions extérieures</strong> (largeur X, profondeur Y, hauteur Z), l'<strong>épaisseur du matériau</strong> (celle du brut par défaut), la <strong>largeur des tenons</strong> (leur nombre, toujours impair, s'en déduit), le <strong>jeu d'assemblage</strong> (0,1 à 0,2 mm dans le bois), la <strong>fraise de découpe</strong>, l'<strong>assemblage du dessus</strong> (<em>à entures</em> pour une boîte fermée, par défaut, ou <em>posé à plat</em> pour un couvercle amovible) et les <strong>faces à usiner</strong> (Dessus, Fond de boîte, Côtés, Bouts). Les tenons sont répartis à égalité entre les coins : la zone de coin, de l'épaisseur du matériau, n'existe que là où un autre panneau s'assemble, si bien qu'une boîte ouverte garde le même pas jusqu'en haut. Les tenons peuvent être plus étroits que l'épaisseur ; COPO prévient si les creux deviennent plus étroits que la fraise. L'option <em>Dégagements dogbone</em> ajoute au fond de chaque creux un arc du diamètre de la fraise, pour que les tenons à angles vifs entrent.</p>
     <p>L'aperçu montre les panneaux posés à plat. <span class="ui">Créer la boîte</span> les place sur le brut, espacés pour la fraise : usinez-les en profil extérieur, avec des ponts d'attache. Les volumes des panneaux s'emboîtent exactement : aucun recouvrement ni manque aux coins.</p>
@@ -545,7 +554,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.157 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.159 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -581,7 +590,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.157</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.159</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -821,6 +830,15 @@ M30</pre>
     </ul>
     <p>Flip the plug, glue it into the female pocket, then plane or sand off the excess. The V-carving <span class="ui">Start depth</span> setting is also available by hand in the toolpath form.</p>
 
+    <h3>Pocket inlay (flat end mill)</h3>
+    <p>Select the design (closed shapes), then <span class="ui">Gadgets › Pocket inlay…</span> or, with a right click, <span class="ui">Inlay › Pocket</span>. Choose the <strong>flat end mill</strong>, the <strong>pocket depth</strong>, the <strong>glue gap</strong> (0.1 mm by default) and the type of insert.</p>
+    <p>A flat end mill cannot cut a corner sharper than its radius. COPO therefore computes a <strong>common outline</strong> whose corners, inside and outside, are all rounded to at least the cutter radius: the pocket and the insert are machined exactly on this outline and fit without touch-up. The preview shows this outline in blue, the original drawing in dashed red, and the share of area changed; a warning flags parts thinner than the cutter, which disappear.</p>
+    <ul>
+      <li><strong>Flush-cut plug</strong> (default): the design is machined mirrored, raised, in a thick board, at the pocket depth plus the extra to flush off. Glue the board upside down into the pocket, then saw or plane off the excess. All parts of the design stay joined and go in at once.</li>
+      <li><strong>Cut-out piece</strong>: the design is cut out of a thin board of the given thickness, with holding tabs. Break the tabs, sand, then glue the piece into the pocket.</li>
+    </ul>
+    <p>COPO creates the pocket on the “Pocket inlay · female” layer (visible toolpath) and the insert to the right of the design, on the “Pocket inlay · male” layer (hidden toolpath: show it to machine it).</p>
+
     <h2 id="en-box">Finger-joint box</h2>
     <p>In the <span class="ui">Gadgets</span> group of the Drawing tab (or <span class="ui">Drawing › Finger-joint box…</span>), this module draws a box assembled with straight finger joints, like Vectric's “Box Creator”. Set the <strong>outer dimensions</strong> (width X, depth Y, height Z), the <strong>material thickness</strong> (the stock's by default), the <strong>finger width</strong> (their number, always odd, follows), the <strong>joint allowance</strong> (0.1 to 0.2 mm in wood), the <strong>cutting bit</strong>, the <strong>top joint</strong> (<em>finger-jointed</em> for a closed box, the default, or <em>laid flat</em> for a removable lid) and the <strong>faces to machine</strong> (Top, Bottom, Sides, Ends). Fingers are spread evenly between the corners: the corner zone, as thick as the material, only exists where another panel joins, so an open box keeps the same pitch up to the top. Fingers may be narrower than the thickness; COPO warns when the slots become narrower than the bit. The <em>Dogbone reliefs</em> option adds an arc the size of the bit at the bottom of each slot so square fingers fit.</p>
     <p>The preview shows the panels laid flat. <span class="ui">Create the box</span> places them on the stock, spaced for the bit: cut them with an outside profile and tabs. The panel volumes fit exactly: no overlap or gap at the corners.</p>
@@ -940,7 +958,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.157 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.159 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
