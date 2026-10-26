@@ -481,6 +481,8 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 .setfoot{display:none}
 .pane.setm .setfoot{display:flex;justify-content:flex-end;margin-top:auto;position:sticky;bottom:-18px;padding:10px 0 12px;background:var(--panel);border-top:1px solid var(--line);z-index:5}
 .setfoot button{height:32px;padding:0 16px}
+/* relief */
+.pane[data-pane="relief"].setm>section.blk:first-of-type{display:none}
 /* parcours */
 .pane[data-pane="parcours"].setm:not(.peek)>section.blk{display:none}
 .pane[data-pane="parcours"].setm.peek>section.blk:last-of-type{padding-bottom:10px;border-bottom:1px solid var(--line)}
@@ -494,7 +496,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 #tpWin.docked.chgtype .seg[data-f="type"]{display:flex}
 .tptype{display:none;margin:-4px 0 2px;font-size:12px;color:var(--muted)}
 #tpWin.docked .tptype{display:block}
-#tpWin.docked #tpCancel[hidden]{display:inline-flex!important}
+#tpWin.docked #tpCancel{display:none!important}
 .tptype a{color:var(--accent);text-decoration:underline;cursor:pointer;margin-left:6px}
 #tpWin.docked #tpForm>.row:last-child{position:sticky;bottom:-18px;z-index:5;background:var(--panel);margin:4px 0 0;padding:10px 0 12px;border-top:1px solid var(--line)}
 @media (max-width:920px){#tpWin.docked{left:auto!important;right:auto;bottom:auto}}
@@ -881,6 +883,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         </details>
       </div>
       <div class="pane" data-pane="relief" hidden>
+        <div class="peekrow"><button type="button" class="setx" data-act="relSetClose" title="Fermer (ou clic droit dans le dessin)" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
         <section class="blk"><h3>Créer / importer un relief</h3>
           <div class="rbtns">
             <button data-act="relStl" class="rbtn" title="Importer un modèle 3D (STL binaire ou texte) : il est vu de dessus et projeté en hauteurs, à l’échelle du fichier."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><b>Fichier STL</b></button>
@@ -942,7 +945,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         </section>
       </div>
       <div class="pane" data-pane="parcours" hidden>
-        <div class="peekrow"><button type="button" class="peektab" data-peek="parcours" title="Afficher les opérations et la liste des parcours" aria-label="Afficher les opérations et la liste des parcours" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
+        <div class="peekrow"><button type="button" class="setx" data-act="tpCancel" title="Fermer (ou clic droit dans le dessin)" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
         <section class="blk"><h3>Nouveau parcours</h3>
           <div class="seg ico tpnew" id="tpNew"><button data-newtp="profile">Profil</button><button data-newtp="pocket">Poche</button><button data-newtp="vcarve">V-carve</button><button data-newtp="drill">Perçage</button><button data-newtp="thread">Filetage</button><button data-newtp="relief">Relief</button></div>
           <p class="hint">Sélectionnez les formes sur le plan, puis choisissez l'opération : ses réglages s'affichent dans ce panneau.</p>
@@ -4569,6 +4572,7 @@ function act(a, btn) {
     case 'rotApply': rotApply(); return;
     case 'fitApply': fitApply(); return;
     case 'dsecClose': S.ui.dsec = null; dRefresh(); draw(); return;
+    case 'relSetClose': { RXF = false; S.relSel = null; if (typeof RV !== 'undefined') RV.tool = null; relPanel(); draw(); return; }
     case 'setClose': { if (pen.length) finishPen(false); arcSt = []; dimSt = []; if (!['select', 'pan'].includes(S.ui.tool)) setTool('select'); S.ui.dsec = null; dRefresh(); draw(); return; }
     case 'mirH': case 'mirV': case 'mirT': case 'mirB': case 'mirL': case 'mirR': case 'mirLine': mirrorSel(a); return;
     case 'traceOutline': {
@@ -7171,6 +7175,9 @@ function peekSet(pane, on) { if (!pane) return; pane.classList.toggle('peek', !!
   $('#tpTypeLine').addEventListener('click', e => { if (e.target.closest('a')) { e.preventDefault(); w.classList.toggle('chgtype'); } });
   w.addEventListener('click', e => { if (e.target.closest('.seg[data-f="type"] button')) setTimeout(() => w.classList.remove('chgtype'), 0); });
 })();
+function relSetm() { const p = document.querySelector('[data-pane="relief"]'); if (p) p.classList.toggle('setm', !!(typeof relCur === 'function' && relCur())); }
+{ const _rp = relPanel; relPanel = function (...a) { const r = _rp.apply(this, a); relSetm(); return r; }; }
+{ const _rc = rightClick; rightClick = function () { if (!$('#tpWin').hidden) { act('tpCancel'); return; } if (S.relSel && curTab === 'relief') { act('relSetClose'); } return _rc(); }; }
 function tpTypeSync() {
   const F = S.form || {}, b = document.querySelector('#tpForm .seg[data-f="type"] button[value="' + F.type + '"]'), el = $('#tpTypeLine'); if (!el) return;
   const nm = b ? b.textContent.trim() : '', tp = S.editTp && S.tps.find(x => x.id === S.editTp);
