@@ -102,7 +102,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .toolpick{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;text-align:left;padding:6px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--raised);color:var(--ink);cursor:pointer}.toolpick small{color:var(--accent);flex:none}.toolpick.bad{border-color:var(--danger)}.toolpick span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media (max-width:760px){.libbody{grid-template-columns:1fr;grid-template-rows:minmax(180px,40%) minmax(0,1fr)}.libleft{border-right:0;border-bottom:1px solid var(--line)}}
 .impgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.impgrid.one{grid-template-columns:1fr}
-.rbtns{display:grid;grid-template-columns:1fr 1fr;gap:6px}.rbtn{display:flex;align-items:center;gap:9px;padding:7px 10px;border:1px solid var(--line);border-radius:7px;background:var(--raised);color:var(--ink);cursor:pointer;text-align:left}.rbtn:hover{border-color:var(--accent)}.rbtn svg{width:20px;height:20px;flex:none;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.rbtn b{font-weight:600;font-size:13px}
+.rbtns{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.rbtn{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;padding:8px 2px;text-align:center!important;min-height:58px;border:1px solid var(--line);border-radius:7px;background:var(--raised);color:var(--ink);cursor:pointer;text-align:left}.rbtn:hover{border-color:var(--accent)}.rbtn svg{width:20px;height:20px;flex:none;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.rbtn b{font-weight:600;font-size:11.5px;line-height:1.2}
 .zhrow{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:end;margin:6px 0}.zhrow svg{width:58px;height:34px}.zhrow .zs{fill:#8a8f96;fill-opacity:.3;stroke:#9aa0a6;stroke-width:1}.zhrow .zr,.mtn{fill:#b07a5c;stroke:#1f7fd6;stroke-width:2.6;stroke-linejoin:round}.zhrow .za{stroke:var(--accent);stroke-width:1.5;fill:none}.impbtn{display:grid;justify-items:center;gap:3px;padding:12px 8px;border:1px solid var(--line);border-radius:8px;background:var(--raised);text-align:center;cursor:pointer;color:var(--ink)}.impbtn:hover{border-color:var(--accent)}.impbtn svg{width:28px;height:28px;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.impbtn small{color:var(--muted);font-size:11.5px;line-height:1.3}.sw-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}.sw-col{display:grid;gap:8px;align-content:start}.sw-h{margin:0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.sw-h label.chk{text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink)}.sw-sub{margin-left:22px}label.sw-sub:not(.chk){display:grid;gap:4px}.sw-r{display:grid;gap:4px}.sw-rr{display:flex;align-items:center;gap:8px}.sw-rr input{flex:1}.sw-body{display:grid;gap:14px}@media (max-width:560px){.sw-cols{grid-template-columns:1fr}}.tp-selinfo{margin:0;font-size:12.5px;font-weight:600;color:var(--ink)}.tp-selinfo.bad{color:var(--danger)}.tp-selinfo small{font-weight:400;color:var(--muted)}
 .fwin-wide{width:560px}.fwin-ico svg{width:18px;height:18px;display:block;fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.fwin-body.fb-card{max-width:none}.fwin-body .row{justify-content:flex-end}.fwin-head{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 10px;border-bottom:1px solid var(--line);cursor:move;user-select:none;touch-action:none}
 .fwin-head b{flex:1;font:600 14px var(--f-ui)}.fwin-head .grip{width:10px;height:16px;background:radial-gradient(circle,var(--muted) 1.2px,transparent 1.4px) 0 0/5px 5px;opacity:.7}
@@ -415,6 +415,28 @@ label.inl input{width:70px}
 .rvxf.fbar{left:50%;bottom:10px;transform:translateX(-50%);gap:3px}
 .rvxf.fbar button{width:32px;height:32px;padding:0}
 .rvxf .rvsep{width:1px;align-self:stretch;background:var(--line);margin:3px}
+
+/* panneau image compact */
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px 8px}.g3 label{min-width:0}.g3 input{min-width:0;width:100%}
+.imf input[type=range]{padding:0;margin-top:9px;accent-color:var(--accent)}
+.irow{display:flex;flex-wrap:wrap;gap:2px;align-items:center}
+.irow button{width:29px;height:30px;display:grid;place-items:center;padding:0;background:var(--raised);border:1px solid var(--line);border-radius:6px;color:var(--ink);cursor:pointer}
+.irow button:hover{border-color:var(--accent)}.irow button.danger{color:var(--danger,#e5534b)}
+.irow button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.irow svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.irow .isep{width:1px;height:22px;background:var(--line);margin:0 3px}
+.infoi{display:inline-grid;place-items:center;width:20px;height:20px;padding:0;margin-left:auto;border:0;background:none;color:var(--muted);cursor:pointer;border-radius:50%;vertical-align:middle}
+.infoi:hover,.infoi[aria-expanded="true"]{color:var(--accent)}
+.infoi svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.sw-h{display:flex;align-items:center}
+details.vz{display:block}details.vz>*:not(summary){margin-top:7px}
+details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}.vz>.chk{display:flex}
+.vz summary{display:flex;align-items:center;gap:6px;cursor:pointer;list-style:none}.vz summary::-webkit-details-marker{display:none}
+.vz summary::before{content:"";width:6px;height:6px;border-right:1.6px solid var(--muted);border-bottom:1.6px solid var(--muted);transform:rotate(-45deg);margin:0 4px 0 1px;transition:transform .15s}
+.vz[open] summary::before{transform:rotate(45deg)}
+.vz summary em{font-style:normal;font-weight:400;font-size:11.5px;color:var(--muted);margin-left:auto}.vz summary em+.infoi{margin-left:4px}
+.vz[open] summary em{display:none}.vz[open] summary .infoi{margin-left:auto}
+#vzCv{width:auto!important;margin:0 auto}
 </style>
 
 <div class="app" id="app">
@@ -608,38 +630,37 @@ label.inl input{width:70px}
           <div class="tb-wrap"><div class="tb-body" id="tbBody"></div><span class="ill tb-fig" data-ill="curtool"></span></div>
           <p class="hint" id="tbHint"></p>
         </section>
-        <section class="dsec" data-sec="img" hidden><h3 class="dsec-h">Importer</h3>
+        <section class="dsec" data-sec="img" hidden><h3 class="dsec-h">Importer<button type="button" class="infoi" data-info="hImp" aria-label="Afficher l’aide" title="Afficher l’aide" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.4"/></svg></button></h3>
           <div class="impgrid">
             <button data-act="import" class="impbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18c3-9 7-12 16-12"/><circle cx="4" cy="18" r="1.8"/><circle cx="20" cy="6" r="1.8"/><path d="M9 9.5l2.2 2.2M13 6.5l1 2.8"/></svg><b>Vectoriel</b><small>SVG, DXF : tracés prêts à usiner</small></button>
             <button data-act="imgInsert" class="impbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="M3.5 17l5-5 4 4 3-3 5 5"/></svg><b>Image</b><small>PNG, JPG… : modèle à décalquer ou à vectoriser</small></button>
           </div>
-          <p class="hint">Un fichier vectoriel devient des vecteurs sélectionnés, à l’échelle du fichier. Une image est posée sous le dessin comme modèle ; sélectionnez-la pour la régler ou la vectoriser.</p>
-          <p class="sw-h">Images de référence</p>
+          <p class="hint" id="hImp" hidden>Un fichier vectoriel devient des vecteurs sélectionnés, à l’échelle du fichier. Une image est posée sous le dessin comme modèle ; sélectionnez-la pour la régler ou la vectoriser.</p>
+          <p class="sw-h">Images de référence<button type="button" class="infoi" data-info="hImg" aria-label="Afficher l’aide" title="Afficher l’aide" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.4"/></svg></button></p>
+          <p class="hint" id="hImg" hidden>Image de référence pour dessiner par-dessus : elle n'est pas usinée (sauf si vous en faites un relief en niveaux de gris). Sur le plan : un clic la sélectionne et vous pouvez la glisser ; un deuxième clic affiche les poignées, comme pour un objet : carrés pour redimensionner (proportions gardées si la case est cochée, Maj pour déformer), ronds pour tourner (Maj : par 15°).</p>
           <ul class="imglist" id="imgList"></ul>
           <div id="imgProps" hidden>
-            <div class="g2">
+            <div class="g3 imf">
               <label>Centre X<input data-u="len" type="number" id="imX" step="0.5"></label>
               <label>Centre Y<input data-u="len" type="number" id="imY" step="0.5"></label>
+              <label>Angle (°)<input type="number" id="imR" step="1"></label>
               <label>Largeur<input data-u="len" type="number" id="imW" step="0.5" min="1"></label>
               <label>Hauteur<input data-u="len" type="number" id="imH" step="0.5" min="1"></label>
-              <label>Angle (°)<input type="number" id="imR" step="1"></label>
               <label>Opacité <span id="imOv" class="mono"></span><input type="range" id="imO" min="5" max="100" step="5"></label>
             </div>
             <label class="chk"><input type="checkbox" id="imLockR" checked> Garder les proportions</label>
-            <div class="row"><button data-act="imgFit">Ajuster au brut</button><button data-act="imgCenter">Centrer</button><button data-act="imgReset">Angle 0°</button><button data-act="imgLock" id="imLockBtn">Verrouiller</button><button data-act="imgDel" class="danger">Retirer</button></div>
-            <div class="zrow" role="group" aria-label="Disposition"><button data-act="zFront" title="Premier plan (Ctrl+Maj+])"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 19V8M7 12l5-5 5 5M5 4h14"/></svg>Premier plan</button><button data-act="zUp" title="Monter (Ctrl+])"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 19V6M7 11l5-5 5 5"/></svg>Monter</button><button data-act="zDown" title="Descendre (Ctrl+[)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v13M7 13l5 5 5-5"/></svg>Descendre</button><button data-act="zBack" title="Arrière-plan (Ctrl+Maj+[)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v11M7 12l5 5 5-5M5 20h14"/></svg>Arrière-plan</button></div>
-            <div class="vz">
-              <b class="vz-h">Vectoriser : contours de l'image</b>
-              <label>Seuil <span id="vzTv" class="mono"></span><input type="range" id="vzT" min="1" max="254" step="1"></label>
-              <label>Lissage <span id="vzLv" class="mono"></span><input type="range" id="vzL" min="0" max="10" step="1"></label>
+                        <div class="irow" role="toolbar" aria-label="Actions sur l’image"><button data-act="imgFit" title="Ajuster au brut" aria-label="Ajuster au brut"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><rect x="8.5" y="8.5" width="7" height="7" rx="1"/></svg></button><button data-act="imgCenter" title="Centrer sur le brut" aria-label="Centrer sur le brut"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v5M12 16v5M3 12h5M16 12h5"/></svg></button><button data-act="imgReset" title="Angle 0°" aria-label="Angle 0°"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18h16M4 18L15 7"/><path d="M10 18a6 6 0 0 0-1.8-4.2"/></svg></button><i class="isep"></i><button data-act="zFront" title="Premier plan (Ctrl+Maj+])"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 19V8M7 12l5-5 5 5M5 4h14"/></svg></button><button data-act="zUp" title="Monter (Ctrl+])"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 19V6M7 11l5-5 5 5"/></svg></button><button data-act="zDown" title="Descendre (Ctrl+[)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v13M7 13l5 5 5-5"/></svg></button><button data-act="zBack" title="Arrière-plan (Ctrl+Maj+[)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v11M7 12l5 5 5-5M5 20h14"/></svg></button><i class="isep"></i><button data-act="imgLock" id="imLockBtn" title="Verrouiller" aria-label="Verrouiller"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button><button data-act="imgDel" class="danger" title="Retirer l’image" aria-label="Retirer l’image"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg></button></div>
+            <details class="vz" id="vzBox">
+              <summary class="vz-h"><span>Vectoriser : contours de l'image</span><em id="vzSum" class="mono"></em><button type="button" class="infoi" data-info="hVz" aria-label="Afficher l’aide" title="Afficher l’aide" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.4"/></svg></button></summary>
+              <div class="vz2"><label>Seuil <span id="vzTv" class="mono"></span><input type="range" id="vzT" min="1" max="254" step="1"></label>
+              <label>Lissage <span id="vzLv" class="mono"></span><input type="range" id="vzL" min="0" max="10" step="1"></label></div>
               <label class="chk"><input type="checkbox" id="vzInv"> Inverser (contours des zones claires)</label>
               <canvas id="vzCv" aria-label="Aperçu des contours"></canvas>
               <p class="hint mono" id="vzInfo"></p>
               <div class="row"><button data-act="imgTraceAuto">Seuil automatique</button><button data-act="imgTrace" class="primary">Créer les contours</button></div>
-              <p class="hint">Seuil : ce qui est plus sombre devient la forme. Lissage : arrondit les contours et retire les petits détails. Les contours sont créés groupés, dans le calque actif, à l'emplacement de l'image.</p>
-            </div>
+              <p class="hint" id="hVz" hidden>Seuil : ce qui est plus sombre devient la forme. Lissage : arrondit les contours et retire les petits détails. Les contours sont créés groupés, dans le calque actif, à l'emplacement de l'image.</p>
+            </details>
           </div>
-          <p class="hint">Image de référence pour dessiner par-dessus : elle n'est pas usinée (sauf si vous en faites un relief en niveaux de gris). Sur le plan : un clic la sélectionne et vous pouvez la glisser ; un deuxième clic affiche les poignées, comme pour un objet : carrés pour redimensionner (proportions gardées si la case est cochée, Maj pour déformer), ronds pour tourner (Maj : par 15°).</p>
         </section>
         <section class="dsec" data-sec="sel" hidden><h3 class="dsec-h">Sélection <span class="chip" id="selCount">0</span></h3>
           <div class="orow">
@@ -880,7 +901,7 @@ label.inl input{width:70px}
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.136</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.137</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1292,6 +1313,7 @@ Object.assign(I18N_EN, {"Écriture directe dans le fichier impossible ({e}) : le
 Object.assign(I18N_EN, {"Horizontale": "Horizontal", "Verticale": "Vertical"});
 Object.assign(I18N_EN, {"La projection sur le relief utilise tous les reliefs visibles : inutile de sélectionner le relief. Sélectionnez seulement les vecteurs du parcours.": "Projection onto the relief uses all visible reliefs: no need to select the relief. Only select the toolpath’s vectors.", "Projeter sur le relief (tous les reliefs visibles)": "Project onto the relief (all visible reliefs)"});
 Object.assign(I18N_EN, {"Profondeur où commence l’usinage : 0 = dessus du brut, positive = sous la surface, négative = au-dessus (premières passes à vide, pour une surface irrégulière ou un brut plus épais que prévu)": "Depth where machining starts: 0 = stock top, positive = below the surface, negative = above it (first passes in the air, for an uneven surface or thicker stock than planned)", "Profondeur où commence l’usinage : 0 = dessus du brut, positive = sous la surface (fond d’une poche), négative = au-dessus": "Depth where machining starts: 0 = stock top, positive = below the surface (pocket floor), negative = above it"});
+Object.assign(I18N_EN, {"seuil {t} · lissage {l}": "threshold {t} · smoothing {l}", "Afficher l’aide": "Show help", "Actions sur l’image": "Image actions", "Retirer l’image": "Remove the image"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4936,7 +4958,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.136', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.137', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6143,7 +6165,7 @@ function renderImgPanel(soft) {
   if (im) {
     const o = outXY(im.x, im.y), set = (id, v) => { const el = $(id); if (document.activeElement !== el) el.value = v; };
     set('#imX', +o[0].toFixed(2)); set('#imY', +o[1].toFixed(2)); set('#imW', +im.w.toFixed(2)); set('#imH', +im.h.toFixed(2)); set('#imR', +(im.rot || 0).toFixed(1)); set('#imO', Math.round((im.opacity ?? 0.6) * 100));
-    $('#imOv').textContent = Math.round((im.opacity ?? 0.6) * 100) + ' %'; $('#imLockBtn').textContent = im.locked ? 'Déverrouiller' : 'Verrouiller';
+    $('#imOv').textContent = Math.round((im.opacity ?? 0.6) * 100) + ' %'; { const lb = $('#imLockBtn'), lt = tr(im.locked ? 'Déverrouiller' : 'Verrouiller'); lb.title = lt; lb.setAttribute('aria-label', lt); lb.setAttribute('aria-pressed', !!im.locked); lb.querySelector('path').setAttribute('d', im.locked ? 'M8 11V8a4 4 0 0 1 8 0v3' : 'M8 11V8a4 4 0 0 1 7.5-2'); }
     if (!soft) vzSync(im);
   }
   if (soft) return;
@@ -6725,13 +6747,16 @@ function vzNodes(lp, l, map) {
   return out;
 }
 let vzRaf = 0;
+document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('.infoi'); if (!b) return; e.preventDefault(); e.stopPropagation(); const el = document.getElementById(b.dataset.info); if (!el) return; el.hidden = !el.hidden; b.setAttribute('aria-expanded', !el.hidden); }, true);
+(() => { const d = document.getElementById('vzBox'); if (!d) return; try { d.open = LS.get('copo.vzOpen') === '1'; } catch { } d.addEventListener('toggle', () => { try { LS.set('copo.vzOpen', d.open ? '1' : '0'); } catch { } if (d.open && S.imgSel) { const im = imgById(S.imgSel); if (im) vzSync(im); } }); })();
+
 function vzSync(im) {
   const p = vzP(im), G = vzGray(im), cvs = $('#vzCv'); if (!cvs) return;
   if (!G) { $('#vzInfo').textContent = tr('Image en cours de chargement…'); const el = ensureImg(im.id); if (el && !el.complete) el.addEventListener('load', () => { if (S.imgSel === im.id) vzSync(im); }, { once: true }); return; }
   if (p.t == null) p.t = vzOtsu(G);
-  $('#vzT').value = p.t; $('#vzL').value = p.l; $('#vzInv').checked = !!p.inv; $('#vzTv').textContent = p.t; $('#vzLv').textContent = p.l;
+  $('#vzT').value = p.t; $('#vzL').value = p.l; { const sm = $('#vzSum'); if (sm) sm.textContent = trf('seuil {t} · lissage {l}', { t: p.t, l: p.l }); } $('#vzInv').checked = !!p.inv; $('#vzTv').textContent = p.t; $('#vzLv').textContent = p.l;
   cancelAnimationFrame(vzRaf); vzRaf = requestAnimationFrame(() => {
-    const loops = vzTrace(G, p.t, p.inv, p.l), Wc = Math.max(160, Math.round(cvs.parentElement.clientWidth - 22 || 280)), k = Wc / G.W, Hc = Math.round(G.H * k);
+    const loops = vzTrace(G, p.t, p.inv, p.l), Wc = Math.max(80, Math.min(Math.round(cvs.parentElement.clientWidth - 22 || 280), Math.round(170 * G.W / G.H))), k = Wc / G.W, Hc = Math.round(G.H * k);
     cvs.width = Wc * devicePixelRatio; cvs.height = Hc * devicePixelRatio; cvs.style.height = Hc + 'px';
     const c = cvs.getContext('2d'); c.setTransform(devicePixelRatio * k, 0, 0, devicePixelRatio * k, 0, 0); c.fillStyle = '#fff'; c.fillRect(0, 0, G.W, G.H);
     c.globalAlpha = 0.35; c.drawImage(ensureImg(im.id), 0, 0, G.W, G.H); c.globalAlpha = 1;
