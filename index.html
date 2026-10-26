@@ -437,6 +437,16 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 .vz summary em{font-style:normal;font-weight:400;font-size:11.5px;color:var(--muted);margin-left:auto}.vz summary em+.infoi{margin-left:4px}
 .vz[open] summary em{display:none}.vz[open] summary .infoi{margin-left:auto}
 #vzCv{width:auto!important;margin:0 auto}
+
+/* réglages chiffrés des outils, miroir */
+.cfform{display:grid;gap:8px}.cfh{font:600 12px var(--f-ui);color:var(--muted);margin-top:2px}
+.cfform .orow{grid-template-columns:auto minmax(0,1fr);align-items:center}.cfform .g2{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px}
+.cfform label{display:grid;gap:3px;font-size:12.5px;color:var(--muted)}.cfform input{min-width:0;width:100%}
+.cfseg{display:flex}.cfseg button{flex:1}
+.cfrow{justify-content:flex-start}
+.ogrid button[aria-pressed="true"]::after{background:var(--accent);border-color:var(--accent)}
+.mirpad{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center;justify-items:center;max-width:300px}
+.mirpad button{min-width:84px;background:var(--raised);border:1px solid var(--line);border-radius:var(--r);padding:5px 10px;color:var(--ink);font-weight:500;cursor:pointer}.mirpad button:hover{border-color:var(--accent)}.mirP{font:700 30px var(--f-head);color:var(--accent);line-height:1}
 </style>
 
 <div class="app" id="app">
@@ -693,6 +703,15 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <p class="hint" id="rotInfo"></p>
           <div class="row"><button data-act="rot90" data-q="90" title="Tourner de 90° dans le sens inverse des aiguilles d’une montre">↺ 90°</button><button data-act="rot90" data-q="-90" title="Tourner de 90° dans le sens des aiguilles d’une montre">↻ 90°</button><button data-act="rotApply" class="primary">Appliquer</button><button data-act="dsecClose">Fermer</button></div>
         </section>
+        <section class="dsec" data-sec="mirror" hidden><h3 class="dsec-h">Miroir</h3>
+          <p class="hint">Retourne la sélection par rapport à un bord de son cadre, à son centre, au centre du brut ou à une ligne.</p>
+          <div class="mirpad"><span></span><button data-act="mirT">Dessus</button><span></span><button data-act="mirL">Gauche</button><span class="mirP" aria-hidden="true">P</span><button data-act="mirR">Droite</button><span></span><button data-act="mirB">Dessous</button><span></span></div>
+          <div class="row"><button data-act="mirH">Retourner horizontalement</button><button data-act="mirV">Retourner verticalement</button></div>
+          <label class="chk"><input type="checkbox" data-k="mirStock"> Retourner sur le centre du brut</label>
+          <div class="row"><button data-act="mirLine">Retourner sur la ligne</button></div>
+          <p class="hint">« Retourner sur la ligne » : sélectionnez les formes et une ligne droite (2 points) qui sert d’axe.</p>
+          <label class="chk"><input type="checkbox" data-k="mirCopy"> Créer une copie en miroir (l’original reste en place)</label>
+        </section>
         <section class="dsec" data-sec="align" hidden><h3 class="dsec-h">Aligner et répartir</h3>
           <div class="iconrow">
             <button data-act="alignL" title="Aligner à gauche" aria-label="Aligner à gauche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 3v18"/><rect x="7" y="6" width="12" height="4"/><rect x="7" y="14" width="7" height="4"/></svg></button>
@@ -858,7 +877,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             </div>
             <label class="chk"><input type="checkbox" id="rlLock" checked> Garder les proportions (Z suit la taille)</label>
             <label class="chk" id="rlInvRow"><input type="checkbox" id="rlInv"> Inverser (le foncé est en haut)</label>
-            <div class="row"><button data-act="relOutline" class="primary" title="Crée un vecteur fermé qui suit le pourtour du relief sélectionné (vu de dessus). Utilisez-le ensuite avec un parcours Profil (extérieur) pour détourer la pièce, ou avec Contour décalé.">Créer le contour</button><button data-act="relFit">Ajuster au brut</button><button data-act="relCenter">Centrer</button><button data-act="relRot0">Angle 0°</button><button data-act="relDel" class="danger">Retirer</button></div>
+            <div class="row"><button data-act="relOutline" class="primary" title="Crée un vecteur fermé qui suit le pourtour du relief sélectionné (vu de dessus). Utilisez-le ensuite avec un parcours Profil (extérieur) pour détourer la pièce, ou avec Contour décalé.">Créer le contour</button><button data-act="relFit">Ajuster au brut</button><button data-act="relCenter">Centrer</button><button data-act="relRot0">Angle 0°</button></div>
             <p class="hint" id="rlInfo"></p>
           </div>
         </section>
@@ -901,7 +920,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.143</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.144</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1316,6 +1335,7 @@ Object.assign(I18N_EN, {"Profondeur où commence l’usinage : 0 = dessus du bru
 Object.assign(I18N_EN, {"seuil {t} · lissage {l}": "threshold {t} · smoothing {l}", "Afficher l’aide": "Show help", "Actions sur l’image": "Image actions", "Retirer l’image": "Remove the image"});
 Object.assign(I18N_EN, {"Le relief de ce parcours a été supprimé ou n’a pas d’emprise sur le brut.": "The relief of this toolpath was deleted or does not overlap the stock.", "L’usinage de relief utilise tous les reliefs visibles : inutile de sélectionner le relief.": "Relief machining uses all visible reliefs: no need to select the relief.", "Un relief se choisit pour un parcours Profil : la fraise suit son contour. Pour projeter ce parcours sur le relief, cochez « Projeter sur le relief ».": "A relief can be picked for a Profile toolpath: the cutter follows its outline. To project this toolpath onto the relief, tick “Project onto the relief”.", "Relief « {n} » choisi : le profil suivra son contour. Cliquez « {b} ».": "Relief “{n}” picked: the profile will follow its outline. Click “{b}”.", "Relief « {n} » retiré du parcours.": "Relief “{n}” removed from the toolpath.", "Contour du relief : {n}": "Relief outline: {n}", "Aucun vecteur sélectionné : cliquez sur le plan les formes à usiner (Maj pour en ajouter), ou cliquez un relief (2D ou 3D) pour suivre son contour.": "No vector selected: click the shapes to machine on the canvas (Shift to add more), or click a relief (2D or 3D) to follow its outline.", "Calculer autour du relief": "Compute around the relief"});
 Object.assign(I18N_EN, {"Profondeur réglée sur le bas du relief : {d} mm.": "Depth set to the bottom of the relief: {d} mm."});
+Object.assign(I18N_EN, {"Supprimer ce relief": "Delete this relief", "Contour : vectoriser l’image sélectionnée ou créer le contour du relief sélectionné": "Outline: vectorize the selected image or create the outline of the selected relief", "Réglez le seuil et le lissage, puis cliquez « Créer les contours ».": "Adjust the threshold and smoothing, then click “Create outlines”.", "Sélectionnez d’abord une image (sur le plan) ou un relief (sur le plan, dans la vue 3D ou dans l’onglet Relief).": "First select an image (on the canvas) or a relief (on the canvas, in the 3D view or in the Relief tab).", "Miroir": "Mirror", "Retourne la sélection par rapport à un bord de son cadre, à son centre, au centre du brut ou à une ligne.": "Flips the selection about an edge of its frame, its center, the stock center or a line.", "Retourner horizontalement": "Flip horizontally", "Retourner verticalement": "Flip vertically", "Retourner sur le centre du brut": "Flip about the stock center", "Retourner sur la ligne": "Flip about the line", "« Retourner sur la ligne » : sélectionnez les formes et une ligne droite (2 points) qui sert d’axe.": "“Flip about the line”: select the shapes and a straight line (2 points) used as the axis.", "Créer une copie en miroir (l’original reste en place)": "Create a mirror copy (the original stays in place)", "Carrés": "Square", "Rayon externe": "External radius", "Rayon interne": "Internal radius", "Point central": "Center point", "Point": "Point", "Type de coin": "Corner type", "Largeur (X)": "Width (X)", "Hauteur (Y)": "Height (Y)", "Diamètre": "Diameter", "Rayon": "Radius", "À travers 3 points": "Through 3 points", "Centre, départ, arrivée": "Center, start, end", "Point de départ": "Start point", "Point d’arrivée": "End point", "Tracez à la souris ou saisissez les valeurs. Les valeurs modifient la forme qui vient d’être tracée (tant qu’elle est sélectionnée) ; « Créer » en ajoute une nouvelle.": "Draw with the mouse or type the values. The values change the shape you just drew (while it is selected); “Create” adds a new one.", "Valeurs incomplètes : indiquez une taille.": "Incomplete values: enter a size.", "Forme créée.": "Shape created.", "Sélectionnez les formes à retourner et une seule ligne droite (2 points) qui sert d’axe.": "Select the shapes to flip and a single straight line (2 points) used as the axis.", "{n} copie(s) en miroir créée(s).": "{n} mirror copy(ies) created.", "Sélection retournée.": "Selection flipped.", "Clic : départ · clic : arrivée · déplacez la souris pour le bombé puis cliquez (mode « Centre » : clic au centre, au départ puis à l’arrivée)": "Click: start · click: end · move the mouse for the bulge then click (“Center” mode: click the center, the start then the end)"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -2409,6 +2429,9 @@ function arcNodes(C, r, a0, sweep) {
 const polyNodes = (c, r, n, rot) => Array.from({ length: n }, (_, i) => { const a = rot + 2 * Math.PI * i / n; return NODE(c[0] + r * Math.cos(a), c[1] + r * Math.sin(a)); });
 const starNodes = (c, r1, r2, n, rot) => Array.from({ length: 2 * n }, (_, i) => { const a = rot + Math.PI * i / n, r = i % 2 ? r2 : r1; return NODE(c[0] + r * Math.cos(a), c[1] + r * Math.sin(a)); });
 const rectNodes = (x0, y0, x1, y1) => [NODE(x0, y0), NODE(x1, y0), NODE(x1, y1), NODE(x0, y1)];
+// rectangle à coins en rayon interne (arcs creusés, centrés sur les coins)
+function rectInnerNodes(x0, y0, x1, y1, r) { r = Math.max(0, Math.min(r, (x1 - x0) / 2 - 1e-6, (y1 - y0) / 2 - 1e-6)); if (!(r > 0)) return rectNodes(x0, y0, x1, y1); const P = Math.PI, h = -P / 2;
+  return [...arcNodes([x0, y0], r, P / 2, h), ...arcNodes([x1, y0], r, P, h), ...arcNodes([x1, y1], r, -P / 2, h), ...arcNodes([x0, y1], r, 0, h)].filter((n, i, A) => !i || Math.hypot(n.x - A[i - 1].x, n.y - A[i - 1].y) > 1e-9); }
 function circle3(a, b, c) {
   const d = 2 * (a[0] * (b[1] - c[1]) + b[0] * (c[1] - a[1]) + c[0] * (a[1] - b[1])); if (Math.abs(d) < 1e-9) return null;
   const A = a[0] * a[0] + a[1] * a[1], B = b[0] * b[0] + b[1] * b[1], Cc = c[0] * c[0] + c[1] * c[1];
@@ -2772,7 +2795,7 @@ function render() {
   if (pen.length) { const tmp = refresh({ nodes: pen.map(cloneNode).concat(hover && !(D && D.mode === 'pen') ? [NODE(hover[0], hover[1])] : []), closed: false }); pathOf(tmp.pts, false); ctx.stroke(); ctx.fillStyle = C.acc; for (const n of pen) ctx.fillRect(sx(n.x) - 3, sy(n.y) - 3, 6, 6); }
   if (S.ui.tool === 'text' && textPick) { const ts = shapeById(textPick); if (ts) { ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 3; pathOf(ts.pts, ts.closed); ctx.stroke(); ctx.restore(); } } // courbe du bas choisie
   if (S.ui.tool === 'poly' && ciPrev) { ctx.save(); ctx.strokeStyle = C.acc; ctx.setLineDash([5, 4]); ctx.lineWidth = 1.3; if (pen.length) { const l = pen[pen.length - 1]; ctx.beginPath(); ctx.moveTo(sx(l.x), sy(l.y)); ctx.lineTo(sx(ciPrev[0]), sy(ciPrev[1])); ctx.stroke(); } ctx.setLineDash([]); ctx.beginPath(); ctx.arc(sx(ciPrev[0]), sy(ciPrev[1]), 4.5, 0, 7); ctx.stroke(); ctx.restore(); } // aperçu du point saisi au clavier
-  if (arcSt.length && hover) { const a = arcSt[0]; if (arcSt.length === 1) { pathOf([a, hover], false); ctx.stroke(); } else { const tmp = refresh({ nodes: arc3Nodes(a, arcSt[1], hover), closed: false }); pathOf(tmp.pts, false); ctx.stroke(); } ctx.fillStyle = C.acc; for (const p of arcSt) ctx.fillRect(sx(p[0]) - 3, sy(p[1]) - 3, 6, 6); }
+  if (arcSt.length && hover) { const a = arcSt[0]; if (arcSt.length === 1) { pathOf([a, hover], false); ctx.stroke(); } else { const tmp = refresh({ nodes: arcByMode(a, arcSt[1], hover).nodes, closed: false }); pathOf(tmp.pts, false); ctx.stroke(); } ctx.fillStyle = C.acc; for (const p of arcSt) ctx.fillRect(sx(p[0]) - 3, sy(p[1]) - 3, 6, 6); }
   if (dimSt.length && hover) { if (dimSt.length === 1) { pathOf([dimSt[0], hover], false); ctx.stroke(); } else drawDim(dimPreview(hover), C.acc, C.mono); }
   if (S.measure) { const m = S.measure; ctx.strokeStyle = C.danger; ctx.setLineDash([5, 3]); pathOf([m.a, m.b], false); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = C.danger; for (const p of [m.a, m.b]) { ctx.beginPath(); ctx.arc(sx(p[0]), sy(p[1]), 3, 0, 7); ctx.fill(); } }
   if (hoverCorner) { ctx.strokeStyle = C.danger; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(sx(hoverCorner.p[0]), sy(hoverCorner.p[1]), 8, 0, 7); ctx.stroke(); }
@@ -2871,9 +2894,91 @@ function drawNodeEdit(C) {
   const neS = new Set(neSel());
   s.nodes.forEach((nd, i) => { const X = sx(nd.x), Y = sy(nd.y), selN = neS.has(i); ctx.fillStyle = selN ? C.acc : '#ffffff'; ctx.strokeStyle = C.acc; ctx.lineWidth = 1.5; ctx.beginPath(); if (nd.sm) ctx.arc(X, Y, 4.5, 0, 7); else if (nd.i || nd.o) { ctx.moveTo(X, Y - 5.5); ctx.lineTo(X + 5.5, Y); ctx.lineTo(X, Y + 5.5); ctx.lineTo(X - 5.5, Y); ctx.closePath(); } else ctx.rect(X - 4, Y - 4, 8, 8); ctx.fill(); ctx.stroke(); });
 }
+
+// ===== réglages chiffrés des outils de dessin (comme dans Aspire) =====
+const CF_T = ['circle', 'ellipse', 'rect', 'polygon', 'arc'];
+const CF_DEF = { circle: { x: 0, y: 0, dm: 'r', v: 25 }, ellipse: { anc: 'mc', x: 0, y: 0, w: 60, h: 40 }, rect: { anc: 'bl', x: 0, y: 0, w: 80, h: 50 }, polygon: { x: 0, y: 0, r: 30, rot: 90 }, arc: { x0: -30, y0: 0, x1: 30, y1: 0, r: 30, h: 30 } };
+let cfLast = null, cfT = 0;
+function cfP(t) { S.ui.cf = S.ui.cf || {}; return S.ui.cf[t] = { ...CF_DEF[t], ...(S.ui.cf[t] || {}) }; }
+function cfRectNodes(x0, y0, x1, y1) { const k = S.ui.rectCorner, r = +S.ui.rectR || 0; if (k === 'inner' && r > 0) return rectInnerNodes(x0, y0, x1, y1, r); const s = refresh({ nodes: rectNodes(x0, y0, x1, y1), closed: true }); if (k && k !== 'none' && r > 0) cornerAllNodes(s, k, r); return s.nodes; }
+const CF_FX = { l: 0, c: 0.5, r: 1 }, CF_FY = { b: 0, m: 0.5, t: 1 };
+function cfBox(P) { const fx = CF_FX[P.anc[1]], fy = CF_FY[P.anc[0]], w = Math.max(0.01, +P.w || 0), h = Math.max(0.01, +P.h || 0), q = inXY(+P.x || 0, +P.y || 0); return { x0: q[0] - fx * w, y0: q[1] - fy * h, w, h }; }
+function arcFromChord(S0, E, h) { const d = [E[0] - S0[0], E[1] - S0[1]], c = Math.hypot(d[0], d[1]); if (c < 1e-9 || Math.abs(h) < 1e-9) return [NODE(S0[0], S0[1]), NODE(E[0], E[1])]; const nl = [-d[1] / c, d[0] / c], M = [(S0[0] + E[0]) / 2 + nl[0] * h, (S0[1] + E[1]) / 2 + nl[1] * h]; return arc3Nodes(S0, E, M); }
+function cfNodes(t, P) {
+  if (t === 'circle') { const r = P.dm === 'd' ? (+P.v || 0) / 2 : +P.v || 0; if (!(r > 0)) return null; return { nodes: ellipseNodes(inXY(+P.x || 0, +P.y || 0), r, r), closed: true }; }
+  if (t === 'ellipse') { const b = cfBox(P); return { nodes: ellipseNodes([b.x0 + b.w / 2, b.y0 + b.h / 2], b.w / 2, b.h / 2), closed: true }; }
+  if (t === 'rect') { const b = cfBox(P); return { nodes: cfRectNodes(b.x0, b.y0, b.x0 + b.w, b.y0 + b.h), closed: true }; }
+  if (t === 'polygon') { const r = +P.r || 0; if (!(r > 0)) return null; const c = inXY(+P.x || 0, +P.y || 0), n = Math.max(3, Math.min(100, Math.round(+S.ui.polyN) || 6)), rot = (+P.rot || 0) * Math.PI / 180; return { nodes: S.ui.polyStar ? starNodes(c, r, r * Math.max(0.05, Math.min(0.95, (+S.ui.polyInner || 50) / 100)), n, rot) : polyNodes(c, r, n, rot), closed: true }; }
+  if (t === 'arc') return { nodes: arcFromChord(inXY(+P.x0 || 0, +P.y0 || 0), inXY(+P.x1 || 0, +P.y1 || 0), +P.h || 0), closed: false };
+  return null;
+}
+function arcByMode(a, b, c) { // 3 points (départ, arrivée, bombé) ou centre, départ, arrivée
+  if (S.ui.arcMode !== 'center') return { nodes: arc3Nodes(a, b, c), S: a, E: b, M: c };
+  const r = hyp(a, b), a0 = Math.atan2(b[1] - a[1], b[0] - a[0]), a1 = Math.atan2(c[1] - a[1], c[0] - a[0]), tw = 2 * Math.PI; let sw = ((a1 - a0) % tw + tw) % tw; if (sw < 1e-6) sw = tw - 1e-6;
+  const E = [a[0] + r * Math.cos(a1), a[1] + r * Math.sin(a1)], am = a0 + sw / 2; return { nodes: r > 1e-9 ? arcNodes(a, r, a0, sw) : [NODE(b[0], b[1])], S: b, E, M: [a[0] + r * Math.cos(am), a[1] + r * Math.sin(am)] };
+}
+// hauteur (flèche) signée de l'arc S→E passant par M, et rayon
+function arcHR(S0, E, M) { const d = [E[0] - S0[0], E[1] - S0[1]], c = Math.hypot(d[0], d[1]); if (c < 1e-9) return { h: 0, r: 0 }; const k = circle3(S0, E, M); if (!k) return { h: 0, r: 0 }; const nl = [-d[1] / c, d[0] / c], side = Math.sign((M[0] - S0[0]) * nl[0] + (M[1] - S0[1]) * nl[1]) || 1, mid = [(S0[0] + E[0]) / 2, (S0[1] + E[1]) / 2], cs = (k.C[0] - mid[0]) * nl[0] + (k.C[1] - mid[1]) * nl[1];
+  const h = Math.abs(k.r - cs * side); return { h: side * h, r: k.r }; }
+function cfOut(q) { const o = outXY(q[0], q[1]); return [+o[0].toFixed(3), +o[1].toFixed(3)]; }
+function cfFromDrag(D, s) {
+  const t = D.mode; if (!CF_T.includes(t)) return; const P = cfP(t);
+  if (t === 'rect' || t === 'ellipse') { const b = bbox([s]), q = anchorPt(b, P.anc), o = cfOut(q); P.x = o[0]; P.y = o[1]; P.w = +b.w.toFixed(3); P.h = +b.h.toFixed(3); }
+  if (t === 'circle') { const o = cfOut(D.p0), r = hyp(D.p0, D.p1); P.x = o[0]; P.y = o[1]; P.v = +(P.dm === 'd' ? 2 * r : r).toFixed(3); }
+  if (t === 'polygon') { const o = cfOut(D.p0); P.x = o[0]; P.y = o[1]; P.r = +hyp(D.p0, D.p1).toFixed(3); P.rot = +(Math.atan2(D.p1[1] - D.p0[1], D.p1[0] - D.p0[0]) * 180 / Math.PI).toFixed(2); }
+  cfLast = { t, id: s.id }; cfFill(t);
+}
+function cfFromArc(A, s) { const P = cfP('arc'), a = cfOut(A.S), b = cfOut(A.E), k = arcHR(A.S, A.E, A.M); P.x0 = a[0]; P.y0 = a[1]; P.x1 = b[0]; P.y1 = b[1]; P.h = +k.h.toFixed(3); P.r = +k.r.toFixed(3); cfLast = { t: 'arc', id: s.id }; cfFill('arc'); }
+function cfHTML(t, extra) {
+  const L = (lbl, k, more = '') => '<label>' + lbl + '<input data-u="len" type="number" data-cf="' + k + '" step="0.1"' + more + '></label>';
+  const anc = '<div class="ogrid sm cfanc" role="group" aria-label="Point de référence">' + ['tl', 'tc', 'tr', 'ml', 'mc', 'mr', 'bl', 'bc', 'br'].map(a => '<button type="button" data-cfa="' + a + '"></button>').join('') + '</div>';
+  let h = '';
+  if (t === 'circle') h = '<div class="cfh">Point central</div><div class="g2">' + L('X', 'x') + L('Y', 'y') + '</div><div class="seg cfseg" data-cfseg="dm"><button type="button" value="r">Rayon</button><button type="button" value="d">Diamètre</button></div><div class="g2">' + L('<span><span id="cfRL">Rayon</span> (mm)</span>', 'v', ' min="0"') + '</div>';
+  if (t === 'ellipse' || t === 'rect') h = '<div class="cfh">Point</div><div class="orow">' + anc + '<div class="g2">' + L('X', 'x') + L('Y', 'y') + '</div></div><div class="cfh">Taille</div><div class="g2">' + L('Largeur (X)', 'w', ' min="0.01"') + L('Hauteur (Y)', 'h', ' min="0.01"') + '</div>' + (t === 'rect' ? '<div class="cfh">Type de coin</div>' + extra : '');
+  if (t === 'polygon') h = extra + '<div class="cfh">Centre</div><div class="g2">' + L('X', 'x') + L('Y', 'y') + L('Rayon (mm)', 'r', ' min="0"') + '<label>Angle (°)<input type="number" data-cf="rot" step="1"></label></div>';
+  if (t === 'arc') h = '<div class="seg cfseg" data-cfseg="arcMode"><button type="button" value="3p">À travers 3 points</button><button type="button" value="center">Centre, départ, arrivée</button></div><div class="cfh">Point de départ</div><div class="g2">' + L('X', 'x0') + L('Y', 'y0') + '</div><div class="cfh">Point d’arrivée</div><div class="g2">' + L('X', 'x1') + L('Y', 'y1') + '</div><div class="g2">' + L('Rayon (mm)', 'r', ' min="0"') + L('Hauteur (mm)', 'h') + '</div>';
+  return '<div class="cfform" data-cft="' + t + '">' + h + '<div class="row cfrow"><button type="button" class="primary" data-act="cfCreate">Créer</button></div><p class="hint">' + tr('Tracez à la souris ou saisissez les valeurs. Les valeurs modifient la forme qui vient d’être tracée (tant qu’elle est sélectionnée) ; « Créer » en ajoute une nouvelle.') + '</p></div>';
+}
+function cfFill(t) {
+  const f = document.querySelector('.cfform[data-cft="' + t + '"]'); if (!f) return; const P = cfP(t);
+  f.querySelectorAll('[data-cf]').forEach(el => { if (document.activeElement !== el) el.value = P[el.dataset.cf] ?? ''; });
+  f.querySelectorAll('[data-cfa]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cfa === P.anc));
+  const dm = f.querySelector('[data-cfseg="dm"]'); if (dm) { dm.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.value === (P.dm || 'r'))); const rl = $('#cfRL'); if (rl) rl.textContent = tr(P.dm === 'd' ? 'Diamètre' : 'Rayon'); }
+  const am = f.querySelector('[data-cfseg="arcMode"]'); if (am) am.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.value === (S.ui.arcMode === 'center' ? 'center' : '3p')));
+}
+function cfLive(t, final) {
+  const sh = cfLast && cfLast.t === t && S.sel.size === 1 && S.sel.has(cfLast.id) ? shapeById(cfLast.id) : null; if (!sh) return; const r = cfNodes(t, cfP(t)); if (!r || r.nodes.length < 2) return;
+  sh.nodes = r.nodes.map(cloneNode); refresh(sh); if (typeof snapVer !== 'undefined') snapVer++; renderSel(); draw();
+  clearTimeout(cfT); if (final) commit(); else cfT = setTimeout(() => commit(), 700);
+}
+function cfCreate() { const t = S.ui.tool; if (!CF_T.includes(t)) return; const r = cfNodes(t, cfP(t)); if (!r || r.nodes.length < 2) return toast(tr('Valeurs incomplètes : indiquez une taille.')); const s = mkShape(r.nodes.map(cloneNode), r.closed); if (!s) return; S.sel.clear(); S.sel.add(s.id); cfLast = { t, id: s.id }; renderSel(); commit(); draw(); toast(tr('Forme créée.')); }
+function cfBind(t) {
+  const f = document.querySelector('.cfform[data-cft="' + t + '"]'); if (!f) return; uAttrs(f); cfFill(t);
+  f.addEventListener('input', e => { const k = e.target.dataset.cf; if (!k) return; const P = cfP(t), v = parseFloat(String(e.target.value).replace(',', '.')); if (!isFinite(v)) return; P[k] = v;
+    if (t === 'arc') { const c = Math.hypot((P.x1 - P.x0), (P.y1 - P.y0)); if (k === 'h') { P.r = Math.abs(P.h) > 1e-9 ? +((c * c / 4 + P.h * P.h) / (2 * Math.abs(P.h))).toFixed(3) : 0; } else if (k === 'r') { const r = Math.max(P.r, c / 2), big = Math.abs(P.h) > c / 2, sg = Math.sign(P.h) || 1; P.h = +(sg * (r + (big ? 1 : -1) * Math.sqrt(Math.max(0, r * r - c * c / 4)))).toFixed(3); } else { P.r = Math.abs(P.h) > 1e-9 ? +((c * c / 4 + P.h * P.h) / (2 * Math.abs(P.h))).toFixed(3) : 0; } cfFill(t); }
+    cfLive(t); });
+  f.addEventListener('change', e => { if (e.target.dataset.cf) cfLive(t, true); });
+  f.addEventListener('click', e => {
+    const a = e.target.closest('[data-cfa]'); if (a) { const P = cfP(t), old = cfBox(P); P.anc = a.dataset.cfa; const q = anchorPt({ x0: old.x0, y0: old.y0, x1: old.x0 + old.w, y1: old.y0 + old.h }, P.anc), o = cfOut(q); P.x = o[0]; P.y = o[1]; cfFill(t); return; }
+    const sb = e.target.closest('.cfseg button'); if (sb) { const g = sb.parentElement.dataset.cfseg, P = cfP(t); if (g === 'dm' && P.dm !== sb.value) { P.v = +(sb.value === 'd' ? (+P.v || 0) * 2 : (+P.v || 0) / 2).toFixed(3); P.dm = sb.value; } if (g === 'arcMode') { S.ui.arcMode = sb.value; arcSt = []; } cfFill(t); return; }
+  });
+}
+// ===== miroir =====
+function mirrorSel(a) {
+  let ss = selShapes(); if (!ss.length) return toast('Sélectionnez une forme.');
+  let f = null;
+  if (a === 'mirLine') { const isLine = x => !x.closed && x.nodes.length === 2 && !x.nodes[0].o && !x.nodes[1].i; const ax = ss.filter(isLine); if (ax.length !== 1 || ss.length < 2) return toast(tr('Sélectionnez les formes à retourner et une seule ligne droite (2 points) qui sert d’axe.')); const L = ax[0], A = [L.nodes[0].x, L.nodes[0].y], B = [L.nodes[1].x, L.nodes[1].y], u = nrm([B[0] - A[0], B[1] - A[1]]); ss = ss.filter(x => x !== L); f = q => { const d = [q[0] - A[0], q[1] - A[1]], k = d[0] * u[0] + d[1] * u[1], P = [A[0] + u[0] * k, A[1] + u[1] * k]; return [2 * P[0] - q[0], 2 * P[1] - q[1]]; }; }
+  else { const b = bbox(ss), st = S.stock, cx = S.ui.mirStock ? st.w / 2 : b.x0 + b.w / 2, cy = S.ui.mirStock ? st.h / 2 : b.y0 + b.h / 2;
+    f = { mirH: q => [2 * cx - q[0], q[1]], mirV: q => [q[0], 2 * cy - q[1]], mirL: q => [2 * b.x0 - q[0], q[1]], mirR: q => [2 * (b.x0 + b.w) - q[0], q[1]], mirT: q => [q[0], 2 * (b.y0 + b.h) - q[1]], mirB: q => [q[0], 2 * b.y0 - q[1]] }[a]; }
+  const out = [];
+  if (S.ui.mirCopy) { const gm = new Map(); for (const o of ss) { const g = o.g ? (gm.get(o.g) || (gm.set(o.g, uid()), gm.get(o.g))) : undefined; const n = mkShape(o.nodes.map(cloneNode), o.closed, { layer: o.layer, ...(g ? { g } : {}) }); if (n) { transformShape(n, f); out.push(n); } } }
+  else ss.forEach(o => { transformShape(o, f); if (o.rot) o.rot = normDeg(-o.rot); out.push(o); });
+  S.sel = new Set(out.map(o => o.id)); commit(); renderSel(); draw(); toast(S.ui.mirCopy ? trf('{n} copie(s) en miroir créée(s).', { n: out.length }) : tr('Sélection retournée.'));
+}
+
 function previewShape(D) {
   const a = D.p0, b = D.p1; if (!a || !b) return null; let nodes = null;
-  if (D.mode === 'rect') { if (Math.abs(b[0] - a[0]) < 1e-6 || Math.abs(b[1] - a[1]) < 1e-6) return null; nodes = rectNodes(Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[0], b[0]), Math.max(a[1], b[1])); const s = refresh({ nodes, closed: true }); if (S.ui.rectCorner !== 'none' && +S.ui.rectR > 0) cornerAllNodes(s, S.ui.rectCorner, +S.ui.rectR); return s; }
+  if (D.mode === 'rect') { if (Math.abs(b[0] - a[0]) < 1e-6 || Math.abs(b[1] - a[1]) < 1e-6) return null; return refresh({ nodes: cfRectNodes(Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[0], b[0]), Math.max(a[1], b[1])), closed: true }); }
   if (D.mode === 'ellipse') { let rx = Math.abs(b[0] - a[0]) / 2, ry = Math.abs(b[1] - a[1]) / 2; if (D.shift) rx = ry = Math.max(rx, ry); if (rx < 1e-6 || ry < 1e-6) return null; const c = D.shift ? [a[0] + Math.sign(b[0] - a[0]) * rx, a[1] + Math.sign(b[1] - a[1]) * ry] : [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; nodes = ellipseNodes(c, rx, ry); }
   if (D.mode === 'circle') { const r = hyp(a, b); if (r < 1e-6) return null; nodes = ellipseNodes(a, r, r); }
   if (D.mode === 'polygon') { const r = hyp(a, b); if (r < 1e-6) return null; const rot = Math.atan2(b[1] - a[1], b[0] - a[0]), n = Math.max(3, Math.min(100, Math.round(+S.ui.polyN) || 6)); nodes = S.ui.polyStar ? starNodes(a, r, r * Math.max(0.05, Math.min(0.95, (+S.ui.polyInner || 50) / 100)), n, rot) : polyNodes(a, r, n, rot); }
@@ -2954,7 +3059,7 @@ const HINTS = {
   rect: 'Glissez pour tracer', ellipse: 'Glissez le cadre de l’ellipse · Maj : cercle', circle: 'Cliquez au centre puis glissez jusqu’au rayon',
   polygon: 'Cliquez au centre puis glissez : rayon et orientation',
   poly: 'Clic : point anguleux · cliquer-glisser : point courbe · près de l’horizontale ou de la verticale du point précédent, le trait s’y aligne (Maj : angle par pas de 15°) · barre d’espace : termine la ligne et en commence une nouvelle · clic droit : terminer et quitter la plume · clic sur le 1er point : fermer · Échap : annuler. Ou tapez le point suivant ci-dessus : X/Y, angle et longueur, ou dx/dy, puis Entrée.',
-  arc: 'Clic : départ · clic : arrivée · déplacez la souris pour le bombé puis cliquez',
+  arc: 'Clic : départ · clic : arrivée · déplacez la souris pour le bombé puis cliquez (mode « Centre » : clic au centre, au départ puis à l’arrivée)',
   text: 'Cliquez pour placer la ligne de base du texte · « Sur une courbe » : cliquez sur un contour, le texte s’y centre · « Entre deux courbes » : cliquez la courbe du bas puis celle du haut, le texte remplit l’espace entre elles',
   dogbone: 'Cliquez près d’un coin vif entre deux segments droits : dogbone en diagonale, T-bone le long du côté le plus long',
   chamfer: 'Cliquez près d’un coin vif (entre droites, arcs ou courbes)', fillet: 'Cliquez près d’un coin vif (entre droites, arcs ou courbes)',
@@ -2983,7 +3088,7 @@ function setTool(t) {
   if (t === 'nodes') { const s = selShapes(); S.ne = s.length === 1 ? { sid: s[0].id, ni: null, seg: null } : null; } else S.ne = null;
   S.ui.tool = t; $$('.palette button, #dgrid [data-tool]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === t));
   const ob = $('#optbar'); let extra = '';
-  if (t === 'rect') extra = '<label>Coins<select data-k="rectCorner"><option value="none">Vifs</option><option value="fillet">Arrondis</option><option value="chamfer">Chanfreinés</option></select></label><label>Rayon / distance (mm)<input data-u="len" type="number" data-k="rectR" step="0.5" min="0"></label>';
+  if (t === 'rect') extra = '<label>Coins<select data-k="rectCorner"><option value="none">Carrés</option><option value="fillet">Rayon externe</option><option value="inner">Rayon interne</option><option value="chamfer">Chanfreinés</option></select></label><label>Rayon / distance (mm)<input data-u="len" type="number" data-k="rectR" step="0.5" min="0"></label>';
   if (t === 'polygon') extra = '<label>Côtés ou branches<input type="number" data-k="polyN" step="1" min="3" max="100"></label><label class="chk"><input type="checkbox" data-k="polyStar"> Étoile</label><label>Rayon intérieur (%)<input type="number" data-k="polyInner" step="5" min="5" max="95"></label>';
   if (t === 'chamfer') extra = '<label>Distance (mm)<input data-u="len" type="number" data-k="chamfer" step="0.5" min="0"></label><button data-act="chamferAll">Tous les coins de la sélection</button>';
   if (t === 'fillet') extra = '<label>Rayon (mm)<input data-u="len" type="number" data-k="fillet" step="0.5" min="0"></label><button data-act="filletAll">Tous les coins de la sélection</button>';
@@ -2991,6 +3096,7 @@ function setTool(t) {
   if (t === 'text') extra = '<label>Placement<select data-k="textMode"><option value="line">Ligne droite</option><option value="curve">Sur une courbe</option><option value="between">Entre deux courbes</option></select></label>' + (S.ui.textMode === 'between' ? '<span class="hint" id="tbHint">' + (textPick ? tr('Cliquez maintenant la courbe du haut.') : tr('Cliquez la courbe du bas (ligne de base), puis la courbe du haut.')) + '</span>' : '') + (S.ui.textMode === 'curve' ? '<label>Côté<select data-k="textSide"><option value="up">Au-dessus</option><option value="down">En dessous</option></select></label><label>Espacement (mm)<input data-u="len" type="number" data-k="textSpace" step="0.5"></label>' : '') + '<button data-act="fpGoto" class="fp-mini">' + (S.font ? escHtml(S.fontLabel || 'Police') : 'Choisir une police…') + '</button>';
   if (t === 'poly') extra = '<div class="ptnext"><b>Point suivant</b><div class="ptg"><label>X<input data-u="len" type="number" id="ciX" step="0.1"></label><label>Y<input data-u="len" type="number" id="ciY" step="0.1"></label><label>Angle<input type="number" id="ciAng" step="1" title="Angle en degrés depuis le dernier point (0° = vers la droite, 90° = vers le haut)"></label><label>L<input data-u="len" type="number" id="ciLen" step="0.1" min="0" title="Longueur depuis le dernier point"></label><label>dx<input data-u="len" type="number" id="ciDx" step="0.1"></label><label>dy<input data-u="len" type="number" id="ciDy" step="0.1"></label></div><div class="ptb"><button data-act="ciAdd" class="primary" id="ciAddB" disabled>Ajouter</button><button data-act="ciUndo">Annuler</button><button data-act="ciClose">Fermer</button><button data-act="ciEnd">Terminer</button></div></div>';
   if (t === 'nodes') extra = '<span class="nebar"><label class="inl">X<input data-u="len" type="number" id="neX" step="0.1"></label><label class="inl">Y<input data-u="len" type="number" id="neY" step="0.1"></label><button data-act="neSmooth" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17c4-10 14-10 18 0"/><path d="M5 9h14" class="nh"/><circle cx="5" cy="9" r="1.4" class="nf"/><circle cx="19" cy="9" r="1.4" class="nf"/><rect x="10" y="7" width="4" height="4" class="nf"/></svg>Lisse</button><button data-act="neCusp" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18c3-6 6-9 9-9M12 9c3 0 6 3 9 9"/><path d="M12 9L6 4M12 9l6-5" class="nh"/><rect x="10" y="7" width="4" height="4" class="nf"/></svg>Brisé</button><button data-act="neCorner" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19l9-11 9 11"/><rect x="10" y="6" width="4" height="4" class="nf"/></svg>Coin vif</button><button data-act="neLine" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18L20 6"/><rect x="2" y="16" width="4" height="4" class="nf"/><rect x="18" y="4" width="4" height="4" class="nf"/></svg>Segment droit</button><button data-act="neCurve" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18C6 6 14 18 20 6"/><rect x="2" y="16" width="4" height="4" class="nf"/><rect x="18" y="4" width="4" height="4" class="nf"/></svg>Segment courbe</button><button data-act="neAdd" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17c4-8 14-8 18 0"/><path d="M12 3v8M8 7h8" class="nh"/></svg>Ajouter</button><button data-act="neDel" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17c4-8 14-8 18 0"/><path d="M8 7h8" class="nh"/></svg>Supprimer</button><button data-act="neSplit" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16c3-5 5-6 7-6M14 10c2 0 4 1 7 6"/><path d="M10 6l4 8M14 6l-4 8" class="nh"/></svg>Couper</button><button data-act="neClose" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z" stroke-dasharray="3 2.4"/></svg>Ouvrir / fermer</button><button data-act="neExplode" class="nebtn" title="Coupe le profil à chaque nœud : chaque segment devient un vecteur séparé"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 19.5l3.5-7M9.5 9h5M18 12.5l3.5 7"/><path d="M5 11.5l2 2M17 11.5l2 2" class="nh"/><circle cx="7.6" cy="9.6" r="1" class="nf"/><circle cx="16.4" cy="9.6" r="1" class="nf"/></svg>Scinder</button></span>';
+  if (CF_T.includes(t)) extra = cfHTML(t, extra);
   if (t === 'measure') extra = '<span class="mono meas" id="measOut">Glissez sur le plan</span>';
   if (t === 'tabedit') extra = '<span class="mono meas" id="tabCount"></span><button data-act="tabDone" class="primary">Terminer</button>';
   // réglages de l'outil : en tête du panneau Dessin ; la barre au-dessus du plan ne sert plus qu'au placement des ponts
@@ -3007,6 +3113,7 @@ function setTool(t) {
   if (wasHidden !== ob.hidden) requestAnimationFrame(resize);
   if (typeof dRefresh === 'function') dRefresh();
   if (t === 'poly') ciBind();
+  if (CF_T.includes(t)) cfBind(t);
   if (t === 'nodes') { ['#neX', '#neY'].forEach(id => $(id).addEventListener('change', neFromInputs)); syncNe(); }
   hoverCorner = null; hoverEdge = null; cv.style.cursor = t === 'pan' ? 'grab' : (t === 'select' || t === 'nodes') ? 'default' : 'crosshair'; draw();
 }
@@ -3467,7 +3574,7 @@ cv.addEventListener('pointerdown', e => {
     const n = NODE(q[0], q[1]); pen.push(n); drag = { mode: 'pen', node: n, p0: q };
   } else if (t === 'arc') {
     const q = snap(p); arcSt.push(q);
-    if (arcSt.length === 3) { const s = mkShape(arc3Nodes(arcSt[0], arcSt[1], arcSt[2]), false); arcSt = []; if (s) { S.sel.clear(); S.sel.add(s.id); renderSel(); commit(); } }
+    if (arcSt.length === 3) { const A = arcByMode(arcSt[0], arcSt[1], arcSt[2]), s = mkShape(A.nodes, false); arcSt = []; if (s) { S.sel.clear(); S.sel.add(s.id); renderSel(); commit(); cfFromArc(A, s); } }
   } else if (t === 'dim') {
     const q = snap(p); if (dimSt.length < 2) { if (dimSt.length === 1 && hyp(q, dimSt[0]) < 1e-6) return; if (!dimSt.length) dimRefs = []; dimRefs[dimSt.length] = snapRefOf(snapMark); dimSt.push(q); } else { const d = dimPreview(q), nd = { id: uid(), a: d.a, b: d.b, off: d.off }; if (dimRefs[0]) nd.ra = dimRefs[0]; if (dimRefs[1]) nd.rb = dimRefs[1]; S.dims.push(nd); dimSt = []; dimRefs = []; commit(false); }
   } else if (t === 'measure') { const q = snap(p); S.measure = { a: q, b: q }; drag = { mode: 'measure' }; }
@@ -3601,7 +3708,7 @@ function endPointer(e) {
     if (Math.abs(D.sx1 - D.sx0) + Math.abs(D.sy1 - D.sy0) > 4) for (const s of S.shapes) { if (!editable(s)) continue; const bb = bbox([s]); if (bb.x0 >= a[0] && bb.x1 <= b[0] && bb.y0 >= a[1] && bb.y1 <= b[1]) groupIds(s).forEach(id => S.sel.add(id)); }
     renderSel();
   }
-  else if (['rect', 'ellipse', 'circle', 'polygon'].includes(D.mode)) { const tmp = previewShape(D); if (tmp && tmp.pts.length > 2) { const s = mkShape(tmp.nodes, true); if (s) { S.sel.clear(); S.sel.add(s.id); renderSel(); commit(); } } }
+  else if (['rect', 'ellipse', 'circle', 'polygon'].includes(D.mode)) { const tmp = previewShape(D); if (tmp && tmp.pts.length > 2) { const s = mkShape(tmp.nodes, true); if (s) { S.sel.clear(); S.sel.add(s.id); renderSel(); commit(); cfFromDrag(D, s); } } }
   else if (D.mode === 'measure') showMeasure();
   snapMark = null; draw();
 }
@@ -4173,8 +4280,13 @@ $('#shClose').onclick = () => { $('#sheet').hidden = true; };
 $('#shSave').onclick = () => { if (!sheetLast) sheetRefresh(); const nm = (S.meta && S.meta.name ? S.meta.name.replace(/[^\w\-]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() : 'copo') || 'copo'; saveFile('fiche-' + nm + '.html', sheetLast, tr('Fiche de gamme')); };
 $('#shPrint').onclick = () => { try { $('#shFrame').contentWindow.focus(); $('#shFrame').contentWindow.print(); } catch (e) { toast('Impression impossible ici : enregistrez la fiche puis imprimez-la depuis votre navigateur.'); } };
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#sheet').hidden && e.target.tagName !== 'TEXTAREA') $('#sheet').hidden = true; });
+let CTX3 = null; // position du pointeur (vue 3D) quand la sélection vient d'un clic dans la vue 3D
 function placeCtx() {
   const bar = $('#ctxbar'), ss = selShapes();
+  if (CTX3 && (!VIEWS.d3 || !ss.length || !ss.some(x => CTX3.ids.includes(x.id)))) CTX3 = null;
+  const host = CTX3 ? $('#rv3') : $('#cw'); if (bar.parentElement !== host) host.appendChild(bar);
+  if (CTX3) { if (S.ui.tool !== 'select' || !$('#tpWin').hidden) { bar.hidden = true; return; } const us = units(ss), oneGroup = us.length === 1 && !!ss[0].g, gb = $('#cxGroup'); gb.hidden = !(oneGroup || us.length > 1); gb.dataset.act = oneGroup ? 'ungroup' : 'group'; gb.textContent = oneGroup ? 'Dégrouper' : 'Grouper'; $('#cxWeld').hidden = ss.filter(x => x.closed).length < 2;
+    bar.hidden = false; const hw = host.clientWidth, hh = host.clientHeight, bw = bar.offsetWidth || 300, bh = bar.offsetHeight || 40; bar.style.left = Math.max(bw / 2 + 6, Math.min(hw - bw / 2 - 6, CTX3.x)) + 'px'; bar.style.top = Math.max(6, Math.min(hh - bh - 6, CTX3.y + 18)) + 'px'; return; }
   if (S.ui.tool !== 'select' || !ss.length || !$('#tpWin').hidden || (drag && (drag.mode === 'move' || drag.mode === 'band'))) { bar.hidden = true; return; }
   const b = bbox(ss), us = units(ss), oneGroup = us.length === 1 && !!ss[0].g;
   const gb = $('#cxGroup'); gb.hidden = !(oneGroup || us.length > 1); gb.dataset.act = oneGroup ? 'ungroup' : 'group'; gb.textContent = oneGroup ? 'Dégrouper' : 'Grouper';
@@ -4240,7 +4352,12 @@ function act(a, btn) {
     case 'rotApply': rotApply(); return;
     case 'fitApply': fitApply(); return;
     case 'dsecClose': S.ui.dsec = null; dRefresh(); draw(); return;
-    case 'mirH': case 'mirV': { if (!ss.length) return toast('Sélectionnez une forme.'); const b = bbox(ss), cx = b.x0 + b.w / 2, cy = b.y0 + b.h / 2; ss.forEach(o => { transformShape(o, q => a === 'mirH' ? [2 * cx - q[0], q[1]] : [q[0], 2 * cy - q[1]]); if (o.rot) o.rot = normDeg(-o.rot); }); commit(); renderSel(); draw(); return; }
+    case 'mirH': case 'mirV': case 'mirT': case 'mirB': case 'mirL': case 'mirR': case 'mirLine': mirrorSel(a); return;
+    case 'traceOutline': {
+      if (S.imgSel) { S.ui.dsec = null; if (S.ui.tool !== 'select') setTool('select'); dRefresh(); const d = $('#vzBox'); if (d) { d.open = true; d.scrollIntoView({ block: 'nearest' }); } toast(tr('Réglez le seuil et le lissage, puis cliquez « Créer les contours ».')); return; }
+      const it = relCur(); if (it) { relOutline(it); return; }
+      toast(tr('Sélectionnez d’abord une image (sur le plan) ou un relief (sur le plan, dans la vue 3D ou dans l’onglet Relief).')); return; }
+    case 'cfCreate': cfCreate(); return;
     case 'reverse': { if (!ss.length) return toast('Sélectionnez des vecteurs.'); ss.forEach(s => { s.nodes = reverseNodes(s.nodes); refresh(s); }); commit(); draw(); toast('Sens inversé.'); return; }
     case 'zFront': case 'zUp': case 'zDown': case 'zBack': arrange(a); return;
     case 'group': { if (ss.length < 2) return toast('Sélectionnez au moins deux vecteurs.'); const g = uid(); ss.forEach(s => s.g = g); commit(false); renderSel(); toast('Groupe créé (' + ss.length + ' vecteurs).'); return; }
@@ -4526,12 +4643,14 @@ const DI = {
   box: SVG24('<path class="bo" d="M3 8l9-4 9 4v9l-9 4-9-4z"/><path class="bo" d="M3 8l9 4 9-4M12 12v9"/><path class="bo bd" d="M6 10.5v2.5M9 12v2.5M15 12v2.5M18 10.5v2.5"/>'),
   il: SVG24('<path class="bo" d="M3 7h6l3 5 3-5h6"/><path class="bo bd" d="M3 17h6l3-5 3 5h6"/>'),
 };
+DI.mirror = DI.mirH;
+DI.traceOutline = SVG24('<path class="bf" d="M8.5 7.5c2.6-2.4 7.5-1.6 7.5 2.6 0 4-2.2 6.4-5.4 6.4-3.6 0-4.6-5.8-2.1-9z"/><path class="bo bd" d="M5.6 5.4c4-4.2 13.4-3.2 13.4 4.6 0 6.5-4 10.5-8.6 10.5C4.2 20.5 1.8 9.6 5.6 5.4z"/>');
 const DGRID = [
   ['Sélection', [['t', 'select'], ['t', 'nodes'], ['t', 'pan']]],
   ['Combiner', [['a', 'boolU', 'Souder', 2], ['a', 'boolS', 'Soustraire (à partir de la première forme sélectionnée)', 2], ['a', 'boolI', 'Intersection (à partir de la première forme sélectionnée)', 2], ['a', 'group', 'Grouper (Ctrl+G)', 2], ['a', 'ungroup', 'Dégrouper (Ctrl+Maj+G)', 1]]],
-  ['Créer', [['t', 'poly'], ['t', 'rect'], ['t', 'ellipse'], ['t', 'circle'], ['t', 'polygon'], ['t', 'arc'], ['t', 'text'], ['s', 'img', 'Importer (image / vectoriel)']]],
+  ['Créer', [['t', 'poly'], ['t', 'rect'], ['t', 'ellipse'], ['t', 'circle'], ['t', 'polygon'], ['t', 'arc'], ['t', 'text'], ['s', 'img', 'Importer (image / vectoriel)'], ['a', 'traceOutline', 'Contour : vectoriser l’image sélectionnée ou créer le contour du relief sélectionné', 0]]],
   ['Modifier', [['t', 'chamfer'], ['t', 'fillet'], ['t', 'dogbone'], ['t', 'trim'], ['t', 'cut'], ['s', 'join', 'Joindre et relier des vecteurs'], ['s', 'fit', 'Lisser (adapter des courbes)'], ['s', 'offset', 'Contour décalé'], ['a', 'neExplode', 'Scinder : couper le profil à chaque nœud', 1]]],
-  ['Disposer', [['s', 'align', 'Aligner et répartir'], ['s', 'rotate', 'Rotation'], ['s', 'array', 'Copie en réseau'], ['a', 'arrPath', 'Répéter le long d’une courbe', 2], ['s', 'nest', 'Imbrication'], ['a', 'center', 'Centrer sur le brut', 1], ['a', 'mirH', 'Miroir horizontal', 1], ['a', 'mirV', 'Miroir vertical', 1]]],
+  ['Disposer', [['s', 'align', 'Aligner et répartir'], ['s', 'rotate', 'Rotation'], ['s', 'array', 'Copie en réseau'], ['a', 'arrPath', 'Répéter le long d’une courbe', 2], ['s', 'nest', 'Imbrication'], ['a', 'center', 'Centrer sur le brut', 1], ['s', 'mirror', 'Miroir']]],
   ['Mesurer', [['t', 'measure'], ['t', 'dim'], ['s', 'guides', 'Repères et cotes']]],
   ['Gadgets', [['a', 'fbOpen', 'Touche de guitare…', 0], ['a', 'ilOpen', 'Incrustation en V (inlay)…', 1], ['a', 'boxOpen', 'Boîte à entures…', 0]]],
 ];
@@ -4962,7 +5081,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.143', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.144', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6359,9 +6478,9 @@ function relPanel(soft) {
   ul.innerHTML = ''; if (!S.relief.items.length) { ul.innerHTML = '<li class="hint">' + tr('Aucun élément. Importez une image en niveaux de gris ou un modèle STL.') + '</li>'; return; }
   S.relief.items.forEach((x, k) => {
     const li = document.createElement('li'); li.className = 'imgrow' + (x.id === S.relSel ? ' on' : '');
-    li.innerHTML = '<span class="relk"></span><span></span><button class="iconbtn" data-i="up" title="' + tr('Monter') + '" aria-label="' + tr('Monter') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 14l5-5 5 5"/></svg></button><button class="iconbtn" data-i="vis" title="' + tr(x.visible ? 'Masquer' : 'Afficher') + '" aria-label="' + tr('Visibilité') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/>' + (x.visible ? '<circle cx="12" cy="12" r="3"/>' : '<path d="M4 20L20 4"/>') + '</svg></button>';
+    li.innerHTML = '<span class="relk"></span><span></span><button class="iconbtn" data-i="up" title="' + tr('Monter') + '" aria-label="' + tr('Monter') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 14l5-5 5 5"/></svg></button><button class="iconbtn" data-i="vis" title="' + tr(x.visible ? 'Masquer' : 'Afficher') + '" aria-label="' + tr('Visibilité') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/>' + (x.visible ? '<circle cx="12" cy="12" r="3"/>' : '<path d="M4 20L20 4"/>') + '</svg></button><button class="iconbtn" data-i="del" title="' + tr('Supprimer ce relief') + '" aria-label="' + tr('Supprimer ce relief') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>';
     li.querySelector('.relk').textContent = x.kind === 'stl' ? 'STL' : x.gen ? { dome: 'DÔME', extrude: 'EXTR', sweep: 'RAIL' }[x.gen.type] : 'IMG'; li.children[1].textContent = x.name + ' · ' + tr({ add: 'Ajouter', sub: 'Soustraire', max: 'Garder le plus haut', min: 'Garder le plus bas', blend: 'Mélanger' }[x.mode || 'add']);
-    li.onclick = e => { const b = e.target.closest('[data-i]'); if (b) { e.stopPropagation(); if (b.dataset.i === 'vis') x.visible = !x.visible; else if (k > 0) { const A = S.relief.items; [A[k - 1], A[k]] = [A[k], A[k - 1]]; } relBump(); relDirty = true; commit(false); relPanel(); draw(); return; } S.relSel = x.id; relPanel(); draw(); };
+    li.onclick = e => { const b = e.target.closest('[data-i]'); if (b) { e.stopPropagation(); if (b.dataset.i === 'del') { S.relSel = x.id; imgAct('relDel'); return; } if (b.dataset.i === 'vis') x.visible = !x.visible; else if (k > 0) { const A = S.relief.items; [A[k - 1], A[k]] = [A[k], A[k - 1]]; } relBump(); relDirty = true; commit(false); relPanel(); draw(); return; } S.relSel = x.id; relPanel(); draw(); };
     ul.appendChild(li);
   });
 }
@@ -6539,7 +6658,7 @@ function rvInit() {
     else { RV.yaw -= dx * 0.008; RV.pitch = Math.max(-1.5703, Math.min(1.5703, RV.pitch + dy * 0.008)); }
     rvReq(); });
   const end = e => { if (drag && drag.gz) { if (drag.moved) rvGizmoEnd(drag); drag = null; return; }
-    if (drag && e && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 4 && !drag.pan) { const sh = rvPickShape(drag.mx, drag.my); if (sh) rvSelectShape(sh, e.shiftKey); else { const id = rvPick(drag.mx, drag.my); if (id && !$('#tpWin').hidden) { tpRelPick(id); drag = null; return; } if (!id && S.sel.size && !e.shiftKey) { S.sel.clear(); renderSel(); dRefresh(); } if (id !== (S.relSel || null)) { if (id) selectRel(id); else { S.relSel = null; relPanel(); } } draw(); rvSync(); rvReq(); } }
+    if (drag && e && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 4 && !drag.pan) { const sh = rvPickShape(drag.mx, drag.my); if (sh) rvSelectShape(sh, e.shiftKey, drag.mx, drag.my); else { CTX3 = null; const id = rvPick(drag.mx, drag.my); if (id && !$('#tpWin').hidden) { tpRelPick(id); drag = null; return; } if (!id && S.sel.size && !e.shiftKey) { S.sel.clear(); renderSel(); dRefresh(); } if (id !== (S.relSel || null)) { if (id) selectRel(id); else { S.relSel = null; relPanel(); } } draw(); rvSync(); rvReq(); } }
     drag = null; c.style.cursor = 'grab'; };
   c.addEventListener('pointerup', end); c.addEventListener('pointercancel', () => { drag = null; });
   c.addEventListener('wheel', e => { e.preventDefault(); RV.dist = Math.max(5, Math.min(1e5, RV.dist * Math.exp(e.deltaY * 0.0012))); rvReq(); }, { passive: false });
@@ -6629,9 +6748,10 @@ function rvPickShape(mx, my) {
     for (let k = 0; k < n; k++) { const b = a[(k + 1) % a.length], pb = rvProj([b[0], b[1], 0.02]); if (pa[2] > 0 && pb[2] > 0) { const vx = pb[0] - pa[0], vy = pb[1] - pa[1], L = vx * vx + vy * vy, t = L ? Math.max(0, Math.min(1, ((mx - pa[0]) * vx + (my - pa[1]) * vy) / L)) : 0, d = Math.hypot(mx - pa[0] - vx * t, my - pa[1] - vy * t); if (d < bd) { bd = d; best = sh; } } pa = pb; } }
   return best;
 }
-function rvSelectShape(sh, add) {
+function rvSelectShape(sh, add, mx, my) {
   if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (S.relSel) { S.relSel = null; RXF = false; relPanel(); } S.selDim = null;
   const ids = groupIds(sh); if (add) { const has = S.sel.has(sh.id); ids.forEach(id => has ? S.sel.delete(id) : S.sel.add(id)); } else { S.sel.clear(); ids.forEach(id => S.sel.add(id)); }
+  CTX3 = mx != null && S.sel.size ? { x: mx, y: my, ids: [...S.sel] } : null;
   renderSel(); dRefresh(); draw(); rvSync(); rvReq();
 }
 // profondeur d'un profil autour de reliefs : jusqu'au bas du relief le plus profond (sans dépasser l'épaisseur du brut)
