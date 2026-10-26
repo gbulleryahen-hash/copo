@@ -554,7 +554,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
       <button data-tool="fillet" title="Congé sur un coin (F)" aria-label="Congé"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20v-8a8 8 0 0 1 8-8h8"/></svg></button>
       <button data-tool="dogbone" title="Dégagement dogbone / T-bone sur un coin (B)" aria-label="Dégagement dogbone / T-bone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 20V11"/><path d="M11 4h9"/><path d="M4 11a4 4 0 1 1 7-7"/></svg></button>
       <button data-tool="trim" title="Ajuster aux intersections (X)" aria-label="Ajuster"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M8.5 7.5 20 17M8.5 16.5 20 7"/></svg></button>
-      <button data-tool="extend" title="Étendre les tracés : prolonger deux vecteurs jusqu’à leur point commun" aria-label="Étendre les tracés"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 20l6-6M21 20l-6-6"/><path d="M9 14l3-3M15 14l-3-3" stroke-dasharray="1.6 2.2"/><circle cx="12" cy="10.5" r="1.4" fill="currentColor" stroke="none"/></svg></button>
+      <button data-tool="extend" title="Étendre les tracés : prolonger un trait jusqu’à un autre vecteur" aria-label="Étendre les tracés"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 20l6-6M21 20l-6-6"/><path d="M9 14l3-3M15 14l-3-3" stroke-dasharray="1.6 2.2"/><circle cx="12" cy="10.5" r="1.4" fill="currentColor" stroke="none"/></svg></button>
       <button data-tool="cut" title="Couper un vecteur (U)" aria-label="Couper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12h7M14 12h7"/><path d="M12 4v4M12 16v4"/></svg></button>
       <div class="psep"></div>
       <button data-tool="measure" title="Mesurer (M)" aria-label="Mesurer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="8" width="19" height="8" rx="1"/><path d="M6 8v3M10 8v4M14 8v3M18 8v4"/></svg></button>
@@ -962,7 +962,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.146</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.147</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1380,6 +1380,7 @@ Object.assign(I18N_EN, {"Le relief de ce parcours a été supprimé ou n’a pas
 Object.assign(I18N_EN, {"Profondeur réglée sur le bas du relief : {d} mm.": "Depth set to the bottom of the relief: {d} mm."});
 Object.assign(I18N_EN, {"Supprimer ce relief": "Delete this relief", "Contour : vectoriser l’image sélectionnée ou créer le contour du relief sélectionné": "Outline: vectorize the selected image or create the outline of the selected relief", "Réglez le seuil et le lissage, puis cliquez « Créer les contours ».": "Adjust the threshold and smoothing, then click “Create outlines”.", "Sélectionnez d’abord une image (sur le plan) ou un relief (sur le plan, dans la vue 3D ou dans l’onglet Relief).": "First select an image (on the canvas) or a relief (on the canvas, in the 3D view or in the Relief tab).", "Miroir": "Mirror", "Retourne la sélection par rapport à un bord de son cadre, à son centre, au centre du brut ou à une ligne.": "Flips the selection about an edge of its frame, its center, the stock center or a line.", "Retourner horizontalement": "Flip horizontally", "Retourner verticalement": "Flip vertically", "Retourner sur le centre du brut": "Flip about the stock center", "Retourner sur la ligne": "Flip about the line", "« Retourner sur la ligne » : sélectionnez les formes et une ligne droite (2 points) qui sert d’axe.": "“Flip about the line”: select the shapes and a straight line (2 points) used as the axis.", "Créer une copie en miroir (l’original reste en place)": "Create a mirror copy (the original stays in place)", "Carrés": "Square", "Rayon externe": "External radius", "Rayon interne": "Internal radius", "Point central": "Center point", "Point": "Point", "Type de coin": "Corner type", "Largeur (X)": "Width (X)", "Hauteur (Y)": "Height (Y)", "Diamètre": "Diameter", "Rayon": "Radius", "À travers 3 points": "Through 3 points", "Centre, départ, arrivée": "Center, start, end", "Point de départ": "Start point", "Point d’arrivée": "End point", "Tracez à la souris ou saisissez les valeurs. Les valeurs modifient la forme qui vient d’être tracée (tant qu’elle est sélectionnée) ; « Créer » en ajoute une nouvelle.": "Draw with the mouse or type the values. The values change the shape you just drew (while it is selected); “Create” adds a new one.", "Valeurs incomplètes : indiquez une taille.": "Incomplete values: enter a size.", "Forme créée.": "Shape created.", "Sélectionnez les formes à retourner et une seule ligne droite (2 points) qui sert d’axe.": "Select the shapes to flip and a single straight line (2 points) used as the axis.", "{n} copie(s) en miroir créée(s).": "{n} mirror copy(ies) created.", "Sélection retournée.": "Selection flipped.", "Clic : départ · clic : arrivée · déplacez la souris pour le bombé puis cliquez (mode « Centre » : clic au centre, au départ puis à l’arrivée)": "Click: start · click: end · move the mouse for the bulge then click (“Center” mode: click the center, the start then the end)"});
 Object.assign(I18N_EN, {"Importer un STL (relief)…": "Import an STL (relief)…", "Étendre les tracés : prolonger deux vecteurs jusqu’à leur point commun": "Extend vectors: lengthen two vectors to their common point", "Étendre les tracés": "Extend vectors", "Cliquez sur deux vecteurs ouverts, près de l’extrémité à prolonger : ils sont étendus jusqu’à leur point commun, dans le prolongement de leurs tracés (tangentes)": "Click two open vectors, near the end to lengthen: they are extended to their common point, following their tangents", "Cliquez sur un vecteur ouvert, près de l’extrémité à prolonger.": "Click an open vector, near the end to lengthen.", "Ce vecteur est fermé : il n’a pas d’extrémité à prolonger.": "This vector is closed: it has no end to lengthen.", "Cliquez maintenant le second vecteur.": "Now click the second vector.", "Choisissez une autre extrémité.": "Pick another end.", "Les deux tracés sont parallèles : ils ne se rejoignent pas.": "The two paths are parallel: they never meet.", "Les prolongements ne se croisent pas en avant des extrémités choisies.": "The extensions do not cross ahead of the chosen ends.", "Tracés prolongés jusqu’à leur point commun.": "Paths extended to their common point.", "Créer l’ébauche de relief (onglet Parcours)": "Create the relief roughing (Toolpaths tab)", "Détourer": "Cut out", "Parcours Profil autour du relief, profondeur au bas du relief": "Profile toolpath around the relief, depth to the bottom of the relief", "Contour": "Outline", "Créer un vecteur qui suit le pourtour du relief": "Create a vector that follows the edge of the relief", "Relief encore en chargement.": "Relief still loading.", "Relief dupliqué (décalé de 10 mm).": "Relief duplicated (offset by 10 mm)."});
+Object.assign(I18N_EN, {"Tracé prolongé jusqu’au croisement.": "Path extended to the crossing.", "Approchez la souris d’une extrémité : le prolongement s’affiche en pointillés. Cliquez son croisement avec un autre vecteur.": "Move the mouse near an end: the extension shows as a dashed line. Click where it crosses another vector.", "Cliquez sur un point de croisement (rond) du prolongement en pointillés.": "Click a crossing point (circle) of the dashed extension.", "Le prolongement de ce côté ne croise aucun vecteur.": "The extension on this side crosses no vector.", "Cliquez d’abord le trait ouvert à prolonger.": "First click the open line to extend.", "Cliquez le trait ouvert à prolonger, puis approchez la souris d’une de ses extrémités : son prolongement apparaît en pointillés avec ses croisements (ronds). Cliquez un croisement pour prolonger le trait jusque-là. Échap : choisir un autre trait": "Click the open line to extend, then move the mouse near one of its ends: its extension shows as a dashed line with its crossings (circles). Click a crossing to extend the line up to it. Esc: pick another line", "Étendre les tracés : prolonger un trait jusqu’à un autre vecteur": "Extend vectors: lengthen a line up to another vector"});
 Object.assign(I18N_EN, {"Afficher les outils de dessin": "Show the drawing tools", "Afficher les opérations et la liste des parcours": "Show the operations and the toolpath list", "Type :": "Type:", "changer": "change", "Sélectionnez les formes sur le plan, puis choisissez l'opération : ses réglages s'affichent dans ce panneau.": "Select the shapes on the canvas, then choose the operation: its settings appear in this panel.", "Version d’essai de la nouvelle interface : la version normale reste sur la page principale.": "Trial version of the new interface: the regular version stays on the main page."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
@@ -3032,21 +3033,37 @@ function extEnd(s, p) { // extrémité la plus proche du clic, point et directio
   else d = N.o ? [-N.o[0], -N.o[1]] : M.i ? [N.x - (M.x + M.i[0]), N.y - (M.y + M.i[1])] : [N.x - M.x, N.y - M.y];
   return { sid: s.id, last, P: [N.x, N.y], d: nrm(d) };
 }
-function extClick(p) {
-  const s = hitEdge(p, 8); if (!s) { toast(tr('Cliquez sur un vecteur ouvert, près de l’extrémité à prolonger.')); return; }
-  if (s.closed || s.nodes.length < 2) { toast(tr('Ce vecteur est fermé : il n’a pas d’extrémité à prolonger.')); return; }
-  const e = extEnd(s, p);
-  if (!extSt) { extSt = e; draw(); toast(tr('Cliquez maintenant le second vecteur.')); return; }
-  if (extSt.sid === e.sid && extSt.last === e.last) { toast(tr('Choisissez une autre extrémité.')); return; }
-  const a = extSt, b = e; extSt = null;
-  const den = a.d[0] * b.d[1] - a.d[1] * b.d[0]; if (Math.abs(den) < 1e-9) { draw(); toast(tr('Les deux tracés sont parallèles : ils ne se rejoignent pas.')); return; }
-  const w = [b.P[0] - a.P[0], b.P[1] - a.P[1]], t = (w[0] * b.d[1] - w[1] * b.d[0]) / den, u = (w[0] * a.d[1] - w[1] * a.d[0]) / den;
-  const L = Math.max(S.stock.w, S.stock.h) * 4; if (t < -1e-6 || u < -1e-6 || t > L || u > L) { draw(); toast(tr('Les prolongements ne se croisent pas en avant des extrémités choisies.')); return; }
-  const X = [a.P[0] + a.d[0] * t, a.P[1] + a.d[1] * t];
-  for (const [q, k] of [[a, t], [b, u]]) { if (k < 1e-6) continue; const sh = shapeById(q.sid); if (!sh) continue; if (q.last) { const N = sh.nodes[sh.nodes.length - 1]; N.o = null; sh.nodes.push(NODE(X[0], X[1])); } else { const N = sh.nodes[0]; N.i = null; sh.nodes.unshift(NODE(X[0], X[1])); } refresh(sh); }
-  if (typeof snapVer !== 'undefined') snapVer++; renderSel(); commit(); draw(); toast(tr('Tracés prolongés jusqu’à leur point commun.'));
+let extHov = null; // côté visé : extrémité, direction, croisements du prolongement avec les autres vecteurs
+function extRay(sh, p) {
+  const e = extEnd(sh, p), L = Math.max(S.stock.w, S.stock.h) * 3 + 1000, hits = [];
+  for (const o of S.shapes) { if (o.id === sh.id || !shown(o) || !o.pts || o.pts.length < 2) continue; const A = o.pts, n = o.closed ? A.length : A.length - 1;
+    for (let k = 0; k < n; k++) { const a = A[k], b = A[(k + 1) % A.length], v = [b[0] - a[0], b[1] - a[1]], den = e.d[0] * v[1] - e.d[1] * v[0]; if (Math.abs(den) < 1e-12) continue;
+      const w = [a[0] - e.P[0], a[1] - e.P[1]], t = (w[0] * v[1] - w[1] * v[0]) / den, u = (w[0] * e.d[1] - w[1] * e.d[0]) / den; if (t > 1e-6 && t < L && u >= -1e-9 && u <= 1 + 1e-9) hits.push({ t, X: [e.P[0] + e.d[0] * t, e.P[1] + e.d[1] * t] }); } }
+  hits.sort((x, y) => x.t - y.t); const H = hits.filter((h, i) => !i || h.t - hits[i - 1].t > 1e-6); return { ...e, hits: H, L };
 }
-function drawExt() { if (S.ui.tool !== 'extend' || !extSt) return; const sh = shapeById(extSt.sid); if (!sh) return; ctx.save(); ctx.strokeStyle = tok('--accent'); ctx.lineWidth = 3; pathOf(sh.pts, sh.closed); ctx.stroke(); ctx.setLineDash([5, 4]); ctx.lineWidth = 1.5; const P = extSt.P, L = 60 / S.view.s; ctx.beginPath(); ctx.moveTo(sx(P[0]), sy(P[1])); ctx.lineTo(sx(P[0] + extSt.d[0] * L), sy(P[1] + extSt.d[1] * L)); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = tok('--accent'); ctx.beginPath(); ctx.arc(sx(P[0]), sy(P[1]), 5, 0, 7); ctx.fill(); ctx.restore(); }
+function extHover(p) {
+  if (!extSt) { const s = hitEdge(p, 8); hoverEdge = null; extHov = null; draw(); return; }
+  const sh = shapeById(extSt.sid); if (!sh) { extSt = null; extHov = null; return; }
+  const r = extRay(sh, p); let near = -1, bd = 12; r.hits.forEach((h, i) => { const d = Math.hypot(sx(h.X[0]) - sx(p[0]), sy(h.X[1]) - sy(p[1])); if (d < bd) { bd = d; near = i; } }); r.near = near; extHov = r; draw();
+}
+function extClick(p) {
+  if (extSt && extHov && extHov.near >= 0) { const sh = shapeById(extSt.sid), X = extHov.hits[extHov.near].X; if (sh) { const n = sh.nodes.length; if (extHov.last) { const N = sh.nodes[n - 1], M = sh.nodes[n - 2]; if (!N.i && !M.o) { N.x = X[0]; N.y = X[1]; } else { N.o = null; sh.nodes.push(NODE(X[0], X[1])); } } else { const N = sh.nodes[0], M = sh.nodes[1]; if (!N.o && !M.i) { N.x = X[0]; N.y = X[1]; } else { N.i = null; sh.nodes.unshift(NODE(X[0], X[1])); } } refresh(sh); if (typeof snapVer !== 'undefined') snapVer++; renderSel(); commit(); toast(tr('Tracé prolongé jusqu’au croisement.')); } extHover(p); return; }
+  const s = hitEdge(p, 8);
+  if (s && !s.closed && s.nodes.length >= 2) { extSt = { sid: s.id }; S.sel = new Set([s.id]); renderSel(); extHover(p); toast(tr('Approchez la souris d’une extrémité : le prolongement s’affiche en pointillés. Cliquez son croisement avec un autre vecteur.')); return; }
+  if (s && s.closed) { toast(tr('Ce vecteur est fermé : il n’a pas d’extrémité à prolonger.')); return; }
+  if (extSt) { toast(extHov && extHov.hits.length ? tr('Cliquez sur un point de croisement (rond) du prolongement en pointillés.') : tr('Le prolongement de ce côté ne croise aucun vecteur.')); return; }
+  toast(tr('Cliquez d’abord le trait ouvert à prolonger.'));
+}
+function drawExt() {
+  if (S.ui.tool !== 'extend' || !extSt) return; const sh = shapeById(extSt.sid); if (!sh) return; const ac = tok('--accent');
+  ctx.save(); ctx.strokeStyle = ac; ctx.lineWidth = 3; pathOf(sh.pts, sh.closed); ctx.stroke();
+  const r = extHov; if (r) { const end = r.hits.length ? r.hits[r.hits.length - 1].t : 0, Lv = Math.max(end + 20, 80 / S.view.s), P = r.P;
+    ctx.setLineDash([6, 5]); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(sx(P[0]), sy(P[1])); ctx.lineTo(sx(P[0] + r.d[0] * Lv), sy(P[1] + r.d[1] * Lv)); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = ac; ctx.beginPath(); ctx.arc(sx(P[0]), sy(P[1]), 4, 0, 7); ctx.fill();
+    r.hits.forEach((h, i) => { ctx.beginPath(); ctx.arc(sx(h.X[0]), sy(h.X[1]), i === r.near ? 7 : 4.5, 0, 7); ctx.fillStyle = i === r.near ? ac : '#fff'; ctx.strokeStyle = ac; ctx.lineWidth = 2; ctx.fill(); ctx.stroke(); });
+    if (r.near >= 0) { const X = r.hits[r.near].X; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(sx(P[0]), sy(P[1])); ctx.lineTo(sx(X[0]), sy(X[1])); ctx.stroke(); } }
+  ctx.restore();
+}
 // ===== petite barre près du pointeur quand on clique un relief (2D ou 3D) =====
 let RELBAR = null;
 function relBarShow(host, x, y) { const it = relCur(); RELBAR = it ? { host, x, y, id: it.id } : null; placeRelBar(); }
@@ -3148,7 +3165,7 @@ const HINTS = {
   chamfer: 'Cliquez près d’un coin vif (entre droites, arcs ou courbes)', fillet: 'Cliquez près d’un coin vif (entre droites, arcs ou courbes)',
   trim: 'Cliquez sur la portion de vecteur à supprimer entre deux intersections',
   cut: 'Cliquez sur un vecteur pour le couper à cet endroit',
-  extend: 'Cliquez sur deux vecteurs ouverts, près de l’extrémité à prolonger : ils sont étendus jusqu’à leur point commun, dans le prolongement de leurs tracés (tangentes)',
+  extend: 'Cliquez le trait ouvert à prolonger, puis approchez la souris d’une de ses extrémités : son prolongement apparaît en pointillés avec ses croisements (ronds). Cliquez un croisement pour prolonger le trait jusque-là. Échap : choisir un autre trait',
   tabedit: 'Clic sur le parcours : ajouter un pont · clic sur un pont : le retirer · glisser un pont : le déplacer le long du parcours · Échap ou Terminer pour finir',
   measure: 'Glissez pour mesurer', dim: 'Clic : 1er point · clic : 2e point · clic : position de la cote · une extrémité accrochée à un nœud, un milieu ou un centre (point plein) suit l’objet',
 };
@@ -3168,7 +3185,7 @@ function rightClick() {
 function setTool(t) {
   if (pen.length && t !== 'poly') finishPen(false);
   if (t !== 'text') textPick = null;
-  arcSt = []; dimSt = []; extSt = null; if (t !== 'measure') S.measure = null;
+  arcSt = []; dimSt = []; extSt = null; extHov = null; if (t !== 'measure') S.measure = null;
   if (t === 'nodes') { const s = selShapes(); S.ne = s.length === 1 ? { sid: s[0].id, ni: null, seg: null } : null; } else S.ne = null;
   S.ui.tool = t; $$('.palette button, #dgrid [data-tool]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === t));
   const ob = $('#optbar'); let extra = '';
@@ -3766,6 +3783,7 @@ cv.addEventListener('pointermove', e => {
   }
   if (t === 'chamfer' || t === 'fillet' || t === 'dogbone') { hoverCorner = findCorner(p); draw(); }
   if (t === 'trim') { const s = hitEdge(p, 8); hoverEdge = s ? edgePortion(s, p) : null; draw(); }
+  if (t === 'extend') extHover(p);
   if (t === 'select' && !spaceDown) cv.style.cursor = xfCursor(X, Y) || imgCursor(X, Y) || 'default';
   if (snapMark) { snapMark = null; draw(); }
   setCoords(p);
@@ -4122,6 +4140,7 @@ window.addEventListener('keydown', e => {
   if (k === 'Delete' || k === 'Backspace') { e.preventDefault(); if (S.imgSel && !S.sel.size) { imgAct('imgDel'); return; } if (S.relSel && !S.sel.size && (document.activeElement === document.body || document.activeElement === cv || (document.activeElement && document.activeElement.id === 'rvc'))) { imgAct('relDel'); return; } if (S.ui.tool === 'nodes' && S.ne && (neSel().length || (S.ne.seg !== null && S.ne.seg !== undefined))) act('neDel'); else if (S.selDim) { S.dims = S.dims.filter(d => d.id !== S.selDim); S.selDim = null; commit(false); draw(); } else act('del'); return; }
   if (k === 'Escape' && relClipPick) { act('relClipNo'); return; }
   if (k === 'Escape' && S.ui.tool === 'tabedit') { setTool('select'); return; }
+  if (k === 'Escape' && S.ui.tool === 'extend' && extSt) { extSt = null; extHov = null; draw(); return; }
   if (k === 'Escape' && S.ui.dsec && S.ui.tool === 'select' && !S.sel.size) { S.ui.dsec = null; dRefresh(); return; }
   if (k === 'Escape') { if (pen.length) { pen = []; } else if (arcSt.length || dimSt.length) { arcSt = []; dimSt = []; } else if (S.ui.tool === 'nodes') { setTool('select'); dRefresh(); } else { S.sel.clear(); S.selDim = null; if (S.ne) S.ne = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } renderSel(); } draw(); return; }
   if (k === 'Enter' && pen.length) { finishPen(false); return; }
@@ -5171,7 +5190,7 @@ function ilMake() {
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.146', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.147', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
