@@ -500,7 +500,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 @media (max-width:920px){#tpWin.docked{left:auto!important;right:auto;bottom:auto}}
 @media (prefers-reduced-motion:reduce){.peektab svg{transition:none}}
 .selline{display:flex;align-items:center;justify-content:space-between;gap:8px}.dsec-h .infoi{margin-left:auto}
-#ipCv{display:block;width:100%;max-width:100%;border:1px solid var(--line);border-radius:6px;background:var(--canvas);height:auto}
+#ipCv{position:static;inset:auto;touch-action:auto;display:block;width:100%;max-width:100%;border:1px solid var(--line);border-radius:6px;background:var(--canvas);height:auto}
 </style>
 
 <div class="app" id="app">
@@ -759,6 +759,35 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <p class="hint" id="rotInfo"></p>
           <div class="row"><button data-act="rot90" data-q="90" title="Tourner de 90° dans le sens inverse des aiguilles d’une montre">↺ 90°</button><button data-act="rot90" data-q="-90" title="Tourner de 90° dans le sens des aiguilles d’une montre">↻ 90°</button><button data-act="rotApply" class="primary">Appliquer</button><button data-act="dsecClose">Fermer</button></div>
         </section>
+        <section class="dsec" data-sec="il" hidden><h3 class="dsec-h">Incrustation en V (inlay)</h3>
+          <p class="hint">Crée la poche femelle dans votre pièce et la pièce mâle à découper dans le bois d'incrustation.</p>
+          <p class="hint" id="ilSel"></p>
+          <div class="g2">
+            <label>Fraise en V<select id="ilTool"></select></label>
+            <label>Profondeur de la poche femelle (mm)<input data-u="len" type="number" id="ilD" step="0.5" min="0.5"></label>
+            <label>Jeu pour la colle (mm)<input data-u="len" type="number" id="ilGap" step="0.1" min="0"></label>
+            <label>Profondeur de coupe du mâle (mm)<input data-u="len" type="number" id="ilF" step="0.5" min="0.5"></label>
+          </div>
+          <p class="hint mono" id="ilInfo"></p>
+          <p class="hint">La pièce mâle est le motif en miroir, entouré d'un cadre, placée à droite du motif sur un calque à part. Son parcours est créé masqué : pour l'usiner, affichez-le (œil) et masquez celui de la femelle, puis enregistrez le G-code. Collez le mâle retourné dans la femelle, puis rabotez ou poncez le surplus.</p>
+          <div class="row"><button data-act="ilMake" class="primary">Créer l'incrustation</button></div>
+        </section>
+        <section class="dsec" data-sec="ip" hidden><h3 class="dsec-h">Inlay en poche (fraise droite)</h3>
+          <p class="hint">Crée la poche dans votre pièce et la pièce rapportée qui s’y emboîte. Les angles sont arrondis au rayon de la fraise sur les deux pièces, pour qu’elles correspondent exactement.</p>
+          <p class="hint" id="ipSel"></p>
+          <div class="g2">
+            <label>Fraise droite<select id="ipTool"></select></label>
+            <label>Profondeur de la poche (mm)<input data-u="len" type="number" id="ipD" step="0.5" min="0.2"></label>
+            <label>Jeu pour la colle (mm)<input data-u="len" type="number" id="ipGap" step="0.05" min="0"></label>
+            <label>Pièce rapportée<select id="ipKind"><option value="plug">Bouchon arasé (planche épaisse)</option><option value="cut">Pièce découpée (planchette, avec ponts)</option></select></label>
+            <label id="ipOverRow">Dépassement à araser (mm)<input data-u="len" type="number" id="ipOver" step="0.5" min="0.2"></label>
+            <label id="ipThRow" hidden>Épaisseur de la planchette (mm)<input data-u="len" type="number" id="ipTh" step="0.5" min="0.2"></label>
+          </div>
+          <canvas id="ipCv" aria-label="Aperçu du contour commun"></canvas>
+          <p class="hint mono" id="ipInfo"></p>
+          <p class="hint" id="ipHelp"></p>
+          <div class="row"><button data-act="ipMake" class="primary">Créer l’inlay</button></div>
+        </section>
         <section class="dsec" data-sec="mirror" hidden><h3 class="dsec-h">Miroir</h3>
           <p class="hint">Retourne la sélection par rapport à un bord de son cadre, à son centre, au centre du brut ou à une ligne.</p>
           <div class="mirpad"><span></span><button data-act="mirT">Dessus</button><span></span><button data-act="mirL">Gauche</button><span class="mirP" aria-hidden="true">P</span><button data-act="mirR">Droite</button><span></span><button data-act="mirB">Dessous</button><span></span></div>
@@ -978,7 +1007,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.159</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.160</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1191,41 +1220,6 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
   </div>
 </div>
 <input type="file" id="fLib" accept=".vtdb,.json,application/json" hidden>
-<div class="fwin fwin-wide" id="il" hidden role="dialog" aria-labelledby="ilT">
-  <div class="fwin-head"><span class="grip" aria-hidden="true"></span><span class="fwin-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h7l2 4 2-4h7"/><path d="M3 17h7l2-4 2 4h7"/></svg></span><b id="ilT">Incrustation en V (inlay)</b><button class="iconbtn fwin-x" data-act="ilClose" title="Fermer" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-  <div class="fwin-body fb-card">
-    <p class="hint">Crée la poche femelle dans votre pièce et la pièce mâle à découper dans le bois d'incrustation.</p>
-    <p class="hint" id="ilSel"></p>
-    <div class="g2">
-      <label>Fraise en V<select id="ilTool"></select></label>
-      <label>Profondeur de la poche femelle (mm)<input data-u="len" type="number" id="ilD" step="0.5" min="0.5"></label>
-      <label>Jeu pour la colle (mm)<input data-u="len" type="number" id="ilGap" step="0.1" min="0"></label>
-      <label>Profondeur de coupe du mâle (mm)<input data-u="len" type="number" id="ilF" step="0.5" min="0.5"></label>
-    </div>
-    <p class="hint mono" id="ilInfo"></p>
-    <p class="hint">La pièce mâle est le motif en miroir, entouré d'un cadre, placée à droite du motif sur un calque à part. Son parcours est créé masqué : pour l'usiner, affichez-le (œil) et masquez celui de la femelle, puis enregistrez le G-code. Collez le mâle retourné dans la femelle, puis rabotez ou poncez le surplus.</p>
-    <div class="row"><button data-act="ilMake" class="primary">Créer l'incrustation</button></div>
-  </div>
-</div>
-<div class="fwin fwin-wide" id="ip" hidden role="dialog" aria-labelledby="ipT">
-  <div class="fwin-head"><span class="grip" aria-hidden="true"></span><span class="fwin-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h5v4h8V9h5"/><path d="M8 17h8"/><path d="M9 5h6v4H9z"/></svg></span><b id="ipT">Inlay en poche (fraise droite)</b><button class="iconbtn fwin-x" data-act="ipClose" title="Fermer" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-  <div class="fwin-body fb-card">
-    <p class="hint">Crée la poche dans votre pièce et la pièce rapportée qui s’y emboîte. Les angles sont arrondis au rayon de la fraise sur les deux pièces, pour qu’elles correspondent exactement.</p>
-    <p class="hint" id="ipSel"></p>
-    <div class="g2">
-      <label>Fraise droite<select id="ipTool"></select></label>
-      <label>Profondeur de la poche (mm)<input data-u="len" type="number" id="ipD" step="0.5" min="0.2"></label>
-      <label>Jeu pour la colle (mm)<input data-u="len" type="number" id="ipGap" step="0.05" min="0"></label>
-      <label>Pièce rapportée<select id="ipKind"><option value="plug">Bouchon arasé (planche épaisse)</option><option value="cut">Pièce découpée (planchette, avec ponts)</option></select></label>
-      <label id="ipOverRow">Dépassement à araser (mm)<input data-u="len" type="number" id="ipOver" step="0.5" min="0.2"></label>
-      <label id="ipThRow" hidden>Épaisseur de la planchette (mm)<input data-u="len" type="number" id="ipTh" step="0.5" min="0.2"></label>
-    </div>
-    <canvas id="ipCv" aria-label="Aperçu du contour commun"></canvas>
-    <p class="hint mono" id="ipInfo"></p>
-    <p class="hint" id="ipHelp"></p>
-    <div class="row"><button data-act="ipMake" class="primary">Créer l’inlay</button></div>
-  </div>
-</div>
 <div class="fwin fwin-wide" id="box" hidden role="dialog" aria-labelledby="boxT">
   <div class="fwin-head"><span class="grip" aria-hidden="true"></span><span class="fwin-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l9-4 9 4v9l-9 4-9-4z"/><path d="M3 8l9 4 9-4M12 12v9"/><path d="M6 10.5v2M9 12v2M15 12v2M18 10.5v2"/></svg></span><b id="boxT">Boîte à entures</b><button class="iconbtn fwin-x" data-act="boxClose" title="Fermer" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div class="fwin-body fb-card">
@@ -1421,6 +1415,7 @@ Object.assign(I18N_EN, {"Créer / importer un relief": "Create / import a relief
 Object.assign(I18N_EN, {"Afficher les outils de dessin": "Show the drawing tools", "Afficher les opérations et la liste des parcours": "Show the operations and the toolpath list", "Type :": "Type:", "changer": "change", "Sélectionnez les formes sur le plan, puis choisissez l'opération : ses réglages s'affichent dans ce panneau.": "Select the shapes on the canvas, then choose the operation: its settings appear in this panel.", "Fermer (ou clic droit dans le dessin)": "Close (or right-click in the drawing)"});
 Object.assign(I18N_EN, {"Dupliquer (Ctrl+D)": "Duplicate (Ctrl+D)", "Supprimer (Suppr)": "Delete (Del)"});
 Object.assign(I18N_EN, {"Inlay en poche (fraise droite)": "Pocket inlay (flat end mill)", "Inlay en poche (fraise droite)…": "Pocket inlay (flat end mill)…", "Crée la poche dans votre pièce et la pièce rapportée qui s’y emboîte. Les angles sont arrondis au rayon de la fraise sur les deux pièces, pour qu’elles correspondent exactement.": "Creates the pocket in your part and the insert that fits into it. Corners are rounded to the cutter radius on both parts so they match exactly.", "Profondeur de la poche (mm)": "Pocket depth (mm)", "Pièce rapportée": "Insert", "Bouchon arasé (planche épaisse)": "Flush-cut plug (thick board)", "Pièce découpée (planchette, avec ponts)": "Cut-out piece (thin board, with tabs)", "Dépassement à araser (mm)": "Extra to flush off (mm)", "Épaisseur de la planchette (mm)": "Thin board thickness (mm)", "Créer l’inlay": "Create the inlay", "Aperçu du contour commun": "Preview of the common outline", "Ajoutez une fraise droite dans la bibliothèque d’outils.": "Add a flat end mill to the tool library.", "Choisissez une fraise droite.": "Choose a flat end mill.", "Indiquez la profondeur de la poche.": "Enter the pocket depth.", "Indiquez le dépassement à araser.": "Enter the extra to flush off.", "Indiquez l’épaisseur de la planchette.": "Enter the thin board thickness.", "Trop profond pour cette fraise (longueur utile {f} mm).": "Too deep for this cutter (cutting length {f} mm).", "Bouchon arasé : le motif est usiné en miroir, en relief, dans une planche épaisse (pièce placée à droite, sur un calque à part). Collez la planche retournée dans la poche, puis sciez ou rabotez le surplus.": "Flush-cut plug: the design is machined mirrored, raised, in a thick board (placed to the right, on its own layer). Glue the board upside down into the pocket, then saw or plane off the excess.", "Pièce découpée : le motif est découpé dans une planchette, avec des ponts d’attache (pièce placée à droite, sur un calque à part). Cassez les ponts, poncez, puis collez la pièce dans la poche.": "Cut-out piece: the design is cut out of a thin board, with holding tabs (placed to the right, on its own layer). Break the tabs, sand, then glue the piece into the pocket.", "Rayon de la fraise {r} mm : tous les angles sont arrondis à au moins {r} mm (en bleu ; en pointillés rouges, le dessin d’origine). Surface modifiée : {p} %.": "Cutter radius {r} mm: every corner is rounded to at least {r} mm (in blue; dashed red, the original drawing). Area changed: {p} %.", "Attention : {n} partie(s) plus fine(s) que la fraise disparaissent.": "Warning: {n} part(s) thinner than the cutter disappear.", "Bouchon en relief de {h} mm.": "Raised plug {h} mm high.", "Découpe de la planchette sur {h} mm.": "Thin board cut {h} mm deep.", "Le motif est plus fin que la fraise : rien à usiner. Choisissez une fraise plus petite.": "The design is thinner than the cutter: nothing to machine. Choose a smaller cutter.", "Inlay poche · femelle": "Pocket inlay · female", "Inlay poche · mâle": "Pocket inlay · male", "Inlay poche · mâle (bouchon à araser)": "Pocket inlay · male (plug to flush off)", "Inlay poche · mâle (pièce découpée)": "Pocket inlay · male (cut-out piece)", "Inlay créé : poche femelle (parcours visible) et pièce rapportée (parcours masqué, calque à part).": "Inlay created: female pocket (visible toolpath) and insert (hidden toolpath, own layer).", "La pièce rapportée dépasse du brut : déplacez-la si besoin.": "The insert extends beyond the stock: move it if needed.", "Incrustation": "Inlay", "En V…": "V-carved…", "En poche (fraise droite)…": "Pocket (flat end mill)…"});
+Object.assign(I18N_EN, {"Sélectionnez sur le plan le motif à incruster (formes fermées).": "Select the design to inlay on the canvas (closed shapes)."});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4629,9 +4624,9 @@ function act(a, btn) {
     case 'boxReset': { const o = BOX_DEF(); o.t = S.stock.t; boxFill(o); boxDraw(); return; }
     case 'boxMake': boxMake(); return;
     case 'ilOpen': ilOpen(); return;
-    case 'ilClose': fwClose('il'); return;
+    case 'ilClose': gadSec(null); return;
     case 'ipOpen': ipOpen(); return;
-    case 'ipClose': fwClose('ip'); return;
+    case 'ipClose': gadSec(null); return;
     case 'ipMake': ipMake(); return;
     case 'ilMake': ilMake(); return;
     case 'fbClose': fwClose('fb'); return;
@@ -4936,7 +4931,7 @@ function dRefresh() {
   pane.querySelectorAll('#dgrid [data-sec]').forEach(b => b.setAttribute('aria-pressed', !toolForm && b.dataset.sec === show && !!S.ui.dsec));
   pane.querySelectorAll('#dgrid [data-dact]').forEach(b => { b.disabled = n < +b.dataset.need; });
   { const setm = !!(toolForm || S.ui.dsec); pane.classList.toggle('setm', setm); pane.classList.toggle('imgsel', !!S.imgSel); if (!setm) peekSet(pane, false); }
-  rotSync(); joinSync(); fitPreview(); draw();
+  rotSync(); joinSync(); fitPreview(); if (show === 'ip' && typeof ipInfo === 'function') ipInfo(); if (show === 'il' && typeof ilInfo === 'function') { const e = document.getElementById('ilSel'); if (e) e.textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ilSel().length }); ilInfo(); } draw();
 }
 
 // ---------- lisser : adapter des arcs, des courbes de Bézier ou des lignes aux tracés ----------
@@ -5302,7 +5297,7 @@ function ilOpen() {
   let o = { D: 4, gap: 1, F: 4 }; try { o = { ...o, ...JSON.parse(LS.get('copo.inlay') || '{}') }; } catch { }
   if (o.tool && vt.some(t => t.id === o.tool)) sel.value = o.tool;
   $('#ilD').value = o.D; $('#ilGap').value = o.gap; $('#ilF').value = o.F; $('#ilSel').textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ss.length });
-  fwOpen('il'); ilInfo();
+  gadSec('il'); ilInfo();
 }
 function ilVals() { const tool = S.tools.find(t => t.id === $('#ilTool').value), D = +$('#ilD').value, gap = Math.max(0, +$('#ilGap').value || 0), F = +$('#ilF').value; return { tool, D, gap, F, S: D - gap }; }
 function ilCheck(v) {
@@ -5327,7 +5322,7 @@ function ilMake() {
   const mb = bbox(made), frame = mkShape(rectNodes(mb.x0 - margin, mb.y0 - margin, mb.x1 + margin, mb.y1 + margin), true, { layer: lay.id, g });
   const male = { id: uid(), name: tr('Incrustation · mâle (bois d’incrustation)'), type: 'vcarve', toolId: v.tool.id, shapeIds: [frame.id, ...made.map(x => x.id)], p: { ...nf0, depth: v.F - v.S, vstart: v.S, zrel: 1 }, visible: false, face: 1 };
   computeTP(fem); computeTP(male); S.tps.push(fem, male); S.sel.clear(); made.forEach(m => S.sel.add(m.id)); S.sel.add(frame.id);
-  fwClose('il'); commit(); gcDirty = true; renderLayers(); renderTpList(); renderSel(); draw();
+  gadSec(null); commit(); gcDirty = true; renderLayers(); renderTpList(); renderSel(); draw();
   const err = fem.err || male.err; toast(err ? err : tr('Incrustation créée : parcours femelle (visible) et mâle (masqué).') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 
@@ -5336,6 +5331,7 @@ function ilMake() {
 // la poche (femelle) et la pièce rapportée (mâle) s'usinent alors exactement sur le même tracé
 function ipCommon(base, r) { if (!base.length || !(r > 0)) return base; const o = offLoops(offLoops(base, -r), r); return offLoops(offLoops(o, r), -r); }
 const ipArea = L => L.reduce((a, l) => a + area(l), 0);
+function gadSec(k) { if (k) { setTab('dessin'); if (S.ui.tool !== 'select') setTool('select'); } S.ui.dsec = k; dRefresh(); draw(); }
 function ipOpen() {
   const ss = ilSel(); if (!ss.length) return toast(tr('Sélectionnez d’abord le motif à incruster (formes fermées).'));
   const ft = S.tools.filter(t => t.type === 'flat'); if (!ft.length) return toast(tr('Ajoutez une fraise droite dans la bibliothèque d’outils.'));
@@ -5344,7 +5340,7 @@ function ipOpen() {
   if (o.tool && ft.some(t => t.id === o.tool)) sel.value = o.tool;
   $('#ipD').value = o.D; $('#ipGap').value = o.gap; $('#ipKind').value = o.kind; $('#ipOver').value = o.over; $('#ipTh').value = o.th;
   $('#ipSel').textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ss.length });
-  fwOpen('ip'); requestAnimationFrame(ipInfo);
+  gadSec('ip'); requestAnimationFrame(ipInfo);
 }
 function ipVals() { return { tool: S.tools.find(t => t.id === $('#ipTool').value), D: +$('#ipD').value, gap: Math.max(0, +$('#ipGap').value || 0), kind: $('#ipKind').value, over: +$('#ipOver').value, th: +$('#ipTh').value }; }
 function ipCheck(v) {
@@ -5358,11 +5354,12 @@ function ipGeom(v) { const base = baseLoops(ilSel()), r = v.tool.dia / 2, C = ip
 function ipInfo() {
   const v = ipVals(); $('#ipOverRow').hidden = v.kind !== 'plug'; $('#ipThRow').hidden = v.kind !== 'cut';
   $('#ipHelp').textContent = tr(v.kind === 'plug' ? 'Bouchon arasé : le motif est usiné en miroir, en relief, dans une planche épaisse (pièce placée à droite, sur un calque à part). Collez la planche retournée dans la poche, puis sciez ou rabotez le surplus.' : 'Pièce découpée : le motif est découpé dans une planchette, avec des ponts d’attache (pièce placée à droite, sur un calque à part). Cassez les ponts, poncez, puis collez la pièce dans la poche.');
+  $('#ipSel').textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ilSel().length }); if (!ilSel().length) { $('#ipInfo').textContent = tr('Sélectionnez sur le plan le motif à incruster (formes fermées).'); return; }
   const e = ipCheck(v), info = $('#ipInfo'); if (e) { info.textContent = e; return; }
   const G = ipGeom(v), a0 = Math.abs(ipArea(G.base)), a1 = Math.abs(ipArea(G.C)), cv2 = $('#ipCv');
   // aperçu : motif d'origine en pointillés rouges, contour commun rempli
   const all = G.base.flat(); if (all.length) { let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (const q of all) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); }
-    const W = Math.max(200, cv2.parentElement.clientWidth - 30), pad = 10, k = Math.min((W - 2 * pad) / Math.max(1e-6, x1 - x0), 220 / Math.max(1e-6, y1 - y0)), H = Math.round((y1 - y0) * k + 2 * pad);
+    const W = Math.max(160, cv2.parentElement.clientWidth || 300), pad = 8, k = Math.min((W - 2 * pad) / Math.max(1e-6, x1 - x0), 150 / Math.max(1e-6, y1 - y0)), H = Math.round((y1 - y0) * k + 2 * pad);
     cv2.width = W * devicePixelRatio; cv2.height = H * devicePixelRatio; cv2.style.height = H + 'px'; const c = cv2.getContext('2d'); c.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0); c.clearRect(0, 0, W, H);
     const X = x => pad + (x - x0) * k + (W - 2 * pad - (x1 - x0) * k) / 2, Y = y => H - pad - (y - y0) * k, path = L => { c.beginPath(); for (const l of L) l.forEach((q, i) => i ? c.lineTo(X(q[0]), Y(q[1])) : c.moveTo(X(q[0]), Y(q[1]))); };
     path(G.C); c.closePath(); c.fillStyle = '#c99a6b'; c.fill('evenodd'); c.strokeStyle = '#4f7dff'; c.lineWidth = 1.5; c.stroke();
@@ -5395,12 +5392,12 @@ function ipMake() {
     tm = { id: uid(), name: tr('Inlay poche · mâle (pièce découpée)'), type: 'profile', toolId: v.tool.id, shapeIds: made.map(x => x.id), p: { ...nf, type: 'profile', side: 'out', depth: v.th + 0.2, vstart: 0, zrel: 1, allow: 0, tabs: true, tabMode: 'auto', tabN: 3, tabL: 6, tabH: Math.min(1.5, v.th / 2) }, visible: false, face: 1 };
   }
   computeTP(tf); computeTP(tm); S.tps.push(tf, tm); S.sel = new Set(made.map(x => x.id));
-  fwClose('ip'); commit(); gcDirty = true; renderLayers(); renderTpList(); renderSel(); draw();
+  gadSec(null); commit(); gcDirty = true; renderLayers(); renderTpList(); renderSel(); draw();
   const mb = bbox(made), err = tf.err || tm.err;
   toast(err ? err : tr('Inlay créé : poche femelle (parcours visible) et pièce rapportée (parcours masqué, calque à part).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.159', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.160', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
