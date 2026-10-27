@@ -988,7 +988,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
               <label class="chk" id="rlGPrRow"><input type="checkbox" id="rlGPr"> Hauteur proportionnelle à la largeur entre les rails</label>
             </div>
             <label class="chk" id="rlInvRow"><input type="checkbox" id="rlInv"> Inverser (le foncé est en haut)</label>
-            <div class="row"><button data-act="relOutline" class="primary" title="Crée un vecteur fermé qui suit le pourtour du relief sélectionné (vu de dessus). Utilisez-le ensuite avec un parcours Profil (extérieur) pour détourer la pièce, ou avec Contour décalé.">Créer le contour</button><button data-act="relFit">Ajuster au brut</button><button data-act="relCenter">Centrer</button><button data-act="relRot0">Angle 0°</button></div>
+            <div class="row"><button data-act="relOutline" class="primary" title="Crée un vecteur fermé qui suit le pourtour du relief sélectionné (vu de dessus). Utilisez-le ensuite avec un parcours Profil (extérieur) pour détourer la pièce, ou avec Contour décalé.">Créer le contour</button><button data-act="relFit">Ajuster au brut</button><button data-act="relCenter">Centrer</button><button data-act="relRot0" title="Remet les angles X, Y et Z à 0°">Angles à 0°</button></div>
             <p class="hint" id="rlInfo"></p>
           </div>
         </section>
@@ -1032,7 +1032,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.185</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.186</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1485,6 +1485,7 @@ Object.assign(I18N_EN, {"Pas (P) (mm)": "Pitch (P) (mm)", "Diamètre nominal (M)
 Object.assign(I18N_EN, {"Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.": "Inlay created: female pocket and insert (separate layer), both toolpaths are visible."});
 Object.assign(I18N_EN, {"Angle X (°)": "X angle (°)", "Angle Y (°)": "Y angle (°)", "Angle Z (°)": "Z angle (°)", "Bascule le modèle autour de l’axe X (STL seulement)": "Tilts the model around the X axis (STL only)", "Bascule le modèle autour de l’axe Y (STL seulement)": "Tilts the model around the Y axis (STL only)", "Rotation à plat, autour de l’axe Z": "Flat rotation, around the Z axis"});
 Object.assign(I18N_EN, {"Marge gardée entre le texte et chacune des deux courbes": "Margin kept between the text and each of the two curves", "Distance entre la courbe et le texte": "Distance between the curve and the text"});
+Object.assign(I18N_EN, {"Angles à 0°": "Angles to 0°", "Remet les angles X, Y et Z à 0°": "Resets the X, Y and Z angles to 0°"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -5602,7 +5603,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.185', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.186', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -7554,7 +7555,7 @@ function imgAct(a) {
   if (a === 'relUnclip') { relSet(i => { delete i.clip; }); return true; }
   if (a === 'relOutline') { const it = relCur(); if (!it) { toast(tr('Sélectionnez d’abord un relief.')); return true; } relOutline(it); return true; }
   if (a === 'relCenter') { relSet(i => { i.x = S.stock.w / 2; i.y = S.stock.h / 2; }); return true; }
-  if (a === 'relRot0') { relSet(i => { i.rot = 0; }); return true; }
+  if (a === 'relRot0') { relSet(i => { const t = (+i.rx || 0) || (+i.ry || 0); i.rot = 0; i.rx = 0; i.ry = 0; if (t && i.kind === 'stl') rvReraster(i, true); }); return true; }
   if (a === 'relDel') { const it = relCur(); if (!it) return true; relBump(); S.relief.items = S.relief.items.filter(x => x !== it); S.relSel = null; relDirty = true; commit(false); relPanel(); draw(); return true; }
   if (a === 'relView') { VIEWS.d3 = true; VIEWS.userHid3 = false; viewsApply(); return true; }
   if (a === 'relGray') { relFromImage(); return true; }
