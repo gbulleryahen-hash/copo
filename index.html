@@ -1029,7 +1029,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.180</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.181</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -5027,7 +5027,7 @@ const ILL = {
     if (F.strategy === 'raster') { let d = 'M10 9'; for (let k = 0; k < 6; k++) { const y = 9 + k * 5.2; d += (k ? 'L' + (k % 2 ? 54 : 10) + ' ' + y.toFixed(1) : '') + 'L' + (k % 2 ? 10 : 54) + ' ' + y.toFixed(1); } return SVG64('<rect class="sh" x="5" y="4" width="54" height="36"/><path class="ac" d="' + d + '"/>' + ARW(32, 9, climb ? 0 : Math.PI) + '<circle class="tc" cx="54" cy="9" r="4"/>'); }
     return SVG64('<rect class="sh" x="5" y="4" width="54" height="36"/><rect class="ac" x="9.5" y="8.5" width="45" height="27" rx="1.5"/><rect class="ac" x="16" y="15" width="32" height="14"/><path class="ac" d="M22.5 21.5h19"/>' + ARW(32, 8.5, climb ? 0 : Math.PI) + '<circle class="tc" cx="9.5" cy="8.5" r="4"/>');
   },
-  dir(F) { return F.type === 'profile' ? FIG.dir(F) : ''; },
+  dir(F) { return F.type === 'profile' ? FIG.dir(F) : F.type === 'pocket' ? FIG.dir({ ...F, side: 'in' }) : ''; },
   entry(F) { return FIG.entry(F); },
   tabs() { return FIG.tabs(); },
   stock() { return FIG.stock(); },
@@ -5597,7 +5597,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.180', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.181', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
