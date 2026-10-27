@@ -164,6 +164,7 @@ footer p{max-width:none}
       <li><a href="#fr-interface">L'interface</a></li>
       <li><a href="#fr-dessin">Dessiner</a></li>
       <li><a href="#fr-brut">Onglet Projet</a></li>
+      <li><a href="#fr-param">Paramètres</a></li>
       <li><a href="#fr-outils">Outils</a></li>
       <li><a href="#fr-relief">Relief (modélisation)</a></li>
       <li><a href="#fr-parcours">Parcours d'outils</a></li>
@@ -186,7 +187,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.200</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.201</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -265,7 +266,7 @@ footer p{max-width:none}
       <li><strong>Position et taille exactes</strong> : bloc <span class="ui">Sélection</span>, avec un point de référence choisi parmi neuf (coins, milieux, centre).</li>
     </ul>
     <h3>Accrochage, repères et cotes</h3>
-    <p><span class="ui">Édition › Accroche…</span> ouvre la fenêtre <strong>Règles d'accroche</strong> : grille magnétique et son pas, <strong>repères</strong>, coins, milieux et centre du brut, rayon d'accroche (petit à grand), et accrochage aux objets avec ses six types de points (extrémités et nœuds, milieux, intersections, centres, tangentes, et <em>sur le tracé</em> : n’importe quel point d’une ligne ou d’une courbe, le plus proche du curseur). Les points précis (extrémité, milieu…) restent prioritaires sur « sur le tracé ». L’<strong>origine</strong> (X0 Y0) est toujours un point d’accroche. Quand vous déplacez un objet en le saisissant par un de ses points (nœud, coin, milieu, centre), c’est ce point qui s’accroche : glissez le coin d’un rectangle sur l’origine, il s’y pose exactement. Ces réglages sont mémorisés. Glissez depuis une règle pour créer un repère : les points dessinés s'y accrochent, et en déplaçant une sélection, ses bords et son centre s'alignent sur les repères (et sur le brut si cette case est cochée). Un symbole orange au curseur indique l'accroche trouvée. <span class="ui">Affichage › Afficher la grille</span> montre ou cache la grille du plan. L'outil <strong>Mesurer</strong> <kbd>M</kbd> donne une distance et l'outil <strong>Cote</strong> <kbd>D</kbd> pose une cote qui reste sur le plan. Une extrémité accrochée à un nœud, au milieu d'un segment ou au centre d'un arc ou d'un cercle (point plein au bout de la ligne d'attache) reste liée à l'objet : si vous le déplacez, le redimensionnez ou modifiez ses nœuds, la cote suit et sa valeur se met à jour. Une extrémité posée ailleurs (grille, intersection, point libre) reste fixe.</p>
+    <p><span class="ui">Édition › Paramètres › Accroche</span> regroupe les <strong>règles d'accroche</strong> : grille magnétique et son pas, <strong>repères</strong>, coins, milieux et centre du brut, rayon d'accroche (petit à grand), et accrochage aux objets avec ses six types de points (extrémités et nœuds, milieux, intersections, centres, tangentes, et <em>sur le tracé</em> : n’importe quel point d’une ligne ou d’une courbe, le plus proche du curseur). Les points précis (extrémité, milieu…) restent prioritaires sur « sur le tracé ». L’<strong>origine</strong> (X0 Y0) est toujours un point d’accroche. Quand vous déplacez un objet en le saisissant par un de ses points (nœud, coin, milieu, centre), c’est ce point qui s’accroche : glissez le coin d’un rectangle sur l’origine, il s’y pose exactement. Ces réglages sont mémorisés. Glissez depuis une règle pour créer un repère : les points dessinés s'y accrochent, et en déplaçant une sélection, ses bords et son centre s'alignent sur les repères (et sur le brut si cette case est cochée). Un symbole orange au curseur indique l'accroche trouvée. <span class="ui">Affichage › Afficher la grille</span> montre ou cache la grille du plan. L'outil <strong>Mesurer</strong> <kbd>M</kbd> donne une distance et l'outil <strong>Cote</strong> <kbd>D</kbd> pose une cote qui reste sur le plan. Une extrémité accrochée à un nœud, au milieu d'un segment ou au centre d'un arc ou d'un cercle (point plein au bout de la ligne d'attache) reste liée à l'objet : si vous le déplacez, le redimensionnez ou modifiez ses nœuds, la cote suit et sa valeur se met à jour. Une extrémité posée ailleurs (grille, intersection, point libre) reste fixe.</p>
     <h3>Calques, images et fichiers</h3>
     <ul>
       <li><strong>Calques</strong> : couleur des traits, visibilité, verrou et face usinée (F1 dessus, F2 dessous).</li>
@@ -286,18 +287,28 @@ footer p{max-width:none}
     </div>
 
     <h2 id="fr-brut">Onglet Projet</h2>
-    <figure><img src="img/fr-10-projet.webp" alt="Onglet Projet : résumé, brut, origine, double face, unités et machine." width="1800" height="1125" loading="lazy"><figcaption>L'onglet Projet regroupe tout ce qui se règle au début d'un travail. Le résumé en haut permet de tout vérifier d'un coup d'œil.</figcaption></figure>
+    <figure><img src="img/fr-10-projet.webp" alt="Onglet Projet : résumé, brut, origine et double face." width="1800" height="1125" loading="lazy"><figcaption>L'onglet Projet regroupe tout ce qui se règle au début d'un travail. Le résumé en haut permet de tout vérifier d'un coup d'œil.</figcaption></figure>
     <p>L'onglet <span class="ui">Projet</span>, le premier du panneau de gauche, s'ouvre tout seul quand vous créez un nouveau projet. Il contient :</p>
     <ul>
       <li><strong>Brut</strong> : largeur X, hauteur Y, épaisseur et matière (reprise par la fiche de gamme) ;</li>
       <li><strong>Origine</strong> : le point X0 Y0 sur la grille de neuf points, un décalage X/Y pour la placer hors du brut, et le zéro Z sur le dessus du brut ou sur la table ;</li>
       <li><strong>Double face</strong> : l'axe de retournement et les faces affichées ;</li>
-      <li><strong>Unités</strong> : millimètres ou pouces, unité d'avance ;</li>
       <li><strong>Axe rotatif (4ᵉ axe)</strong> : cochez <em>Pièce cylindrique sur un axe rotatif</em> pour usiner sur un cylindre. Le dessin se fait à plat : l’épaisseur du brut est le diamètre du cylindre, et la longueur du brut dans le sens enroulé est son tour (bouton <span class="ui">Ajuster le brut au tour du cylindre</span>). Choisissez l’axe du cylindre (le long de X : Y s’enroule ; le long de Y : X s’enroule) et le zéro Z (surface ou axe du cylindre). Avec un post-processeur « Wrap » ou « Rotary » (Mach2/3, CAMaster, DeskCNC, CNC Shark, WinCNC, WinPC-NC, ShopBot Indexer), la coordonnée enroulée sort en angle sur l’axe A ; COPO prévient si le post-processeur enroule l’autre axe. L’aperçu reste à plat.</li>
-      <li><strong>Machine</strong> : post-processeur, vitesse des rapides, <strong>avance de travail maximale</strong> (2000 mm/min par défaut : les avances des outils sont plafonnées à cette valeur), Z de sécurité et de dégagement, arcs G2/G3 et commentaires. La case <strong>Cycles de perçage G81/G82/G83</strong> écrit les perçages en cycles : G81 simple, G82 avec temporisation au fond, G83 avec débourrage, remontée G98 au Z de dégagement. G83 ne prévoit pas de temporisation : un perçage avec débourrage <em>et</em> temporisation reste écrit en G0/G1. Elle est cochée d’office pour grblHAL, LinuxCNC, Mach3/4, UCCNC et MASSO, et décochée pour GRBL, Carbide Motion, Onefinity et le post-processeur personnalisé (les perçages y sont écrits en G0/G1) ; on peut toujours la changer. Si le contrôleur ne connaît pas ces cycles, il s’arrête simplement sur une erreur.</li>
     </ul>
-    <p>Le point d'origine doit correspondre à l'endroit où vous faites X0 Y0 sur la machine. Le brut, l'origine et la matière sont enregistrés avec le projet ; les unités et la machine restent en mémoire dans le navigateur.</p>
+    <p>Le point d'origine doit correspondre à l'endroit où vous faites X0 Y0 sur la machine. Le brut, l'origine et la matière sont enregistrés avec le projet. Les unités et la machine se règlent dans <span class="ui">Édition › Paramètres</span> et restent en mémoire dans le navigateur.</p>
     <div class="note"><p>Exemple : avec l'origine au coin bas gauche, un carré dont le coin est à X0 Y0 sur le plan sera usiné à partir du coin bas gauche de votre panneau. La ligne sous la grille indique où tombe X0 Y0 du G-code.</p></div>
+
+    <h2 id="fr-param">Paramètres</h2>
+    <p><span class="ui">Édition › Paramètres…</span> (<kbd>Ctrl</kbd>+<kbd>,</kbd>) ouvre une fenêtre à rubriques : les titres à gauche, le contenu qui défile à droite (cliquez un titre pour y aller ; le titre de la partie affichée s’allume). Tout est enregistré dans le navigateur.</p>
+    <ul>
+      <li><strong>Général</strong> : langue de l’interface, écran d’accueil au démarrage, astuces des onglets (et <em>Réafficher toutes les astuces</em>), visite rapide.</li>
+      <li><strong>Unités</strong> : millimètres ou pouces, unité d'avance ;</li>
+      <li><strong>Machine</strong> : post-processeur, vitesse des rapides, <strong>avance de travail maximale</strong> (2000 mm/min par défaut : les avances des outils sont plafonnées à cette valeur), Z de sécurité et de dégagement, arcs G2/G3 et commentaires. La case <strong>Cycles de perçage G81/G82/G83</strong> écrit les perçages en cycles : G81 simple, G82 avec temporisation au fond, G83 avec débourrage, remontée G98 au Z de dégagement. G83 ne prévoit pas de temporisation : un perçage avec débourrage <em>et</em> temporisation reste écrit en G0/G1. Elle est cochée d’office pour grblHAL, LinuxCNC, Mach3/4, UCCNC et MASSO, et décochée pour GRBL, Carbide Motion, Onefinity et le post-processeur personnalisé (les perçages y sont écrits en G0/G1) ; on peut toujours la changer. Si le contrôleur ne connaît pas ces cycles, il s’arrête simplement sur une erreur.</li>
+      <li><strong>Accroche</strong> : grille magnétique et son pas, repères, brut, rayon d’accroche et accrochage aux objets (voir Dessiner). Le bouton d’accroche de la barre du plan ouvre directement cette rubrique.</li>
+      <li><strong>Affichage</strong> : <em>Qualité d’affichage du relief</em> (Fine, recommandée, ou Rapide pour un ordinateur modeste ; le parcours d’usinage n’est pas concerné), grille, parcours, matière enlevée, traits superposés, extrémités des lignes ouvertes, reliefs sur le plan.</li>
+      <li><strong>Simulation</strong> : qualité par défaut de l’aperçu 3D (Normale ou Fine).</li>
+    </ul>
+    <p>L’onglet G-code rappelle le post-processeur choisi ; <span class="ui">Changer…</span> ouvre la rubrique Machine.</p>
 
     <h2 id="fr-outils">Bibliothèque d'outils</h2>
     <figure><img src="img/fr-04-outils.webp" alt="Fenêtre Bibliothèque d'outils : matériau en haut, arbre des outils à gauche, réglages de la fraise sélectionnée à droite." width="1800" height="1125" loading="lazy"><figcaption>La bibliothèque d'outils : le matériau en haut, les outils rangés par système d'unités et par type à gauche, les réglages de l'outil pour ce matériau à droite.</figcaption></figure>
@@ -560,7 +571,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.200 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.201 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -574,6 +585,7 @@ M30</pre>
       <li><a href="#en-interface">The interface</a></li>
       <li><a href="#en-drawing">Drawing</a></li>
       <li><a href="#en-stock">Project tab</a></li>
+      <li><a href="#en-settings">Settings</a></li>
       <li><a href="#en-tools">Tools</a></li>
       <li><a href="#en-relief">Relief (modelling)</a></li>
       <li><a href="#en-toolpaths">Toolpaths</a></li>
@@ -596,7 +608,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.200</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.201</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -675,7 +687,7 @@ M30</pre>
       <li><strong>Exact position and size</strong>: <span class="ui">Selection</span> block, with a reference point chosen among nine (corners, middles, center).</li>
     </ul>
     <h3>Snapping, guides and dimensions</h3>
-    <p><span class="ui">Edit › Snapping…</span> opens the <strong>Snap settings</strong> window: snap to grid and its spacing, <strong>guides</strong>, stock corners, midpoints and centre, snap radius (small to large), and object snapping with its six kinds of points (ends and nodes, midpoints, intersections, centres, tangents, and <em>on path</em>: any point of a line or curve, the closest to the cursor). Precise points (end, midpoint…) take priority over “on path”. The <strong>origin</strong> (X0 Y0) is always a snap point. When you move an object by grabbing one of its points (node, corner, midpoint, centre), that point is the one that snaps: drag a rectangle’s corner onto the origin and it lands exactly there. These settings are remembered. Drag from a ruler to create a guide: drawn points snap to it, and when you move a selection its edges and centre line up with the guides (and with the stock if that box is ticked). An orange symbol at the cursor shows the snap found. <span class="ui">View › Show grid</span> shows or hides the canvas grid. The <strong>Measure</strong> tool <kbd>M</kbd> gives a distance and the <strong>Dimension</strong> tool <kbd>D</kbd> places a dimension that stays on the canvas. An end snapped to a node, a segment midpoint or the centre of an arc or circle (solid dot at the end of the extension line) stays attached to the object: move it, resize it or edit its nodes and the dimension follows, with its value updated. An end placed elsewhere (grid, intersection, free point) stays fixed.</p>
+    <p><span class="ui">Edit › Settings › Snapping</span> gathers the <strong>snap settings</strong>: snap to grid and its spacing, <strong>guides</strong>, stock corners, midpoints and centre, snap radius (small to large), and object snapping with its six kinds of points (ends and nodes, midpoints, intersections, centres, tangents, and <em>on path</em>: any point of a line or curve, the closest to the cursor). Precise points (end, midpoint…) take priority over “on path”. The <strong>origin</strong> (X0 Y0) is always a snap point. When you move an object by grabbing one of its points (node, corner, midpoint, centre), that point is the one that snaps: drag a rectangle’s corner onto the origin and it lands exactly there. These settings are remembered. Drag from a ruler to create a guide: drawn points snap to it, and when you move a selection its edges and centre line up with the guides (and with the stock if that box is ticked). An orange symbol at the cursor shows the snap found. <span class="ui">View › Show grid</span> shows or hides the canvas grid. The <strong>Measure</strong> tool <kbd>M</kbd> gives a distance and the <strong>Dimension</strong> tool <kbd>D</kbd> places a dimension that stays on the canvas. An end snapped to a node, a segment midpoint or the centre of an arc or circle (solid dot at the end of the extension line) stays attached to the object: move it, resize it or edit its nodes and the dimension follows, with its value updated. An end placed elsewhere (grid, intersection, free point) stays fixed.</p>
     <h3>Layers, images and files</h3>
     <ul>
       <li><strong>Layers</strong>: stroke color, visibility, lock and machined side (F1 top, F2 bottom).</li>
@@ -702,12 +714,22 @@ M30</pre>
       <li><strong>Stock</strong>: X width, Y height, thickness and material (used by the setup sheet);</li>
       <li><strong>Origin</strong>: the X0 Y0 point on the nine-point grid, an X/Y offset to place it outside the stock, and Z zero on the top of the stock or on the table;</li>
       <li><strong>Double-sided</strong>: the flip axis and the sides shown;</li>
-      <li><strong>Units</strong>: millimetres or inches, feed unit;</li>
       <li><strong>Rotary axis (4th axis)</strong>: tick <em>Cylindrical part on a rotary axis</em> to machine a cylinder. You draw flat: the stock thickness is the cylinder diameter, and the stock length in the wrapped direction is its circumference (<span class="ui">Fit the stock to the cylinder circumference</span> button). Choose the cylinder axis (along X: Y wraps; along Y: X wraps) and the Z zero (cylinder surface or axis). With a “Wrap” or “Rotary” post-processor (Mach2/3, CAMaster, DeskCNC, CNC Shark, WinCNC, WinPC-NC, ShopBot Indexer), the wrapped coordinate is output as an angle on the A axis; COPO warns if the post-processor wraps the other axis. The preview stays flat.</li>
-      <li><strong>Machine</strong>: post-processor, rapid speed, <strong>maximum cutting feed</strong> (2000 mm/min by default: tool feeds are capped at this value), safe and clearance Z, G2/G3 arcs and comments. The <strong>G81/G82/G83 drilling cycles</strong> box writes holes as canned cycles: G81 plain, G82 with a dwell at the bottom, G83 with pecking, G98 retract to clearance Z. G83 has no dwell: a hole with both pecking <em>and</em> dwell is written as G0/G1. It is ticked by default for grblHAL, LinuxCNC, Mach3/4, UCCNC and MASSO, and unticked for GRBL, Carbide Motion, Onefinity and the custom post-processor (holes are then written as G0/G1); you can always change it. If the controller does not know these cycles, it simply stops with an error.</li>
     </ul>
-    <p>The origin point must match the point where you set X0 Y0 on the machine. Stock, origin and material are saved with the project; units and machine settings are remembered in the browser.</p>
+    <p>The origin point must match the point where you set X0 Y0 on the machine. Stock, origin and material are saved with the project. Units and machine are set in <span class="ui">Edit › Settings</span> and remembered in the browser.</p>
     <div class="note"><p>Example: with the origin at the bottom left corner, a square whose corner sits at X0 Y0 on the canvas is cut from the bottom left corner of your sheet. The line under the grid tells you where the G-code X0 Y0 falls.</p></div>
+
+    <h2 id="en-settings">Settings</h2>
+    <p><span class="ui">Edit › Settings…</span> (<kbd>Ctrl</kbd>+<kbd>,</kbd>) opens a window with sections: titles on the left, content scrolling on the right (click a title to jump to it; the title of the part shown lights up). Everything is saved in the browser.</p>
+    <ul>
+      <li><strong>General</strong>: interface language, welcome screen at startup, tab tips (and <em>Show all tips again</em>), quick tour.</li>
+      <li><strong>Units</strong>: millimetres or inches, feed unit;</li>
+      <li><strong>Machine</strong>: post-processor, rapid speed, <strong>maximum cutting feed</strong> (2000 mm/min by default: tool feeds are capped at this value), safe and clearance Z, G2/G3 arcs and comments. The <strong>G81/G82/G83 drilling cycles</strong> box writes holes as canned cycles: G81 plain, G82 with a dwell at the bottom, G83 with pecking, G98 retract to clearance Z. G83 has no dwell: a hole with both pecking <em>and</em> dwell is written as G0/G1. It is ticked by default for grblHAL, LinuxCNC, Mach3/4, UCCNC and MASSO, and unticked for GRBL, Carbide Motion, Onefinity and the custom post-processor (holes are then written as G0/G1); you can always change it. If the controller does not know these cycles, it simply stops with an error.</li>
+      <li><strong>Snapping</strong>: snap to grid and its spacing, guides, stock, snap radius and object snapping (see Drawing). The snap button of the canvas bar opens this section directly.</li>
+      <li><strong>Display</strong>: <em>Relief display quality</em> (Fine, recommended, or Fast for a modest computer; toolpaths are not affected), grid, toolpaths, removed material, overlapping lines, ends of open lines, reliefs on the canvas.</li>
+      <li><strong>Simulation</strong>: default quality of the 3D preview (Normal or Fine).</li>
+    </ul>
+    <p>The G-code tab shows the selected post-processor; <span class="ui">Change…</span> opens the Machine section.</p>
 
     <h2 id="en-tools">Tool library</h2>
     <figure><img src="img/en-04-outils.webp" alt="Tool library window: material at the top, tool tree on the left, settings of the selected bit on the right." width="1800" height="1125" loading="lazy"><figcaption>The tool library: the material at the top, tools sorted by unit system and type on the left, the tool's settings for that material on the right.</figcaption></figure>
@@ -970,7 +992,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.200 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.201 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
