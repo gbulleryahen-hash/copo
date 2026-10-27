@@ -1146,7 +1146,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.202</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.203</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -2015,7 +2015,7 @@ function emitRaster(mb, region, step, ang, zTop, z, o, allowed, dia) {
 function buildPocket(p, tool, shapes, M) {
   const R = tool.dia / 2, o = commonOpts(p, tool), warns = [];
   if (!(+p.depth > 0)) throw new Error('Indiquez une profondeur.');
-  const rest = !!p.rest && +p.restDia > tool.dia + 1e-6, raster = (p.strategy === 'raster' || p.strategy === 'zigzag') && !rest, contour = p.strategy !== 'zigzag', inward = p.strategy === 'ringsIn', allow = rest ? 0 : Math.max(0, +p.allow || 0);
+  const rest = !!p.rest && +p.restDia > tool.dia + 1e-6, raster = (p.strategy === 'raster' || p.strategy === 'zigzag') && !rest, contour = p.strategy !== 'zigzag', inward = p.strategy === 'ringsIn', allow = rest || (raster && !contour) ? 0 : Math.max(0, +p.allow || 0);
   if (p.rest && !rest) warns.push('Reprise ignorée : choisissez une fraise précédente plus grosse que celle-ci.');
   const levels = depthLevels(+p.depth, +p.pass > 0 ? +p.pass : tool.pass), last = levels.length - 1;
   const step = tool.dia * Math.max(0.05, 1 - (+tool.over || 0) / 100);
@@ -5838,7 +5838,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.202', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.203', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6005,7 +6005,7 @@ function renderForm() { setTimeout(tpTypeSync, 0);
   $('#tabRow').hidden = $('#tabShapeRow').hidden = $('#tabEditRow').hidden = !F.tabs;
   { const man = F.tabMode === 'manual', ti = $('#tabModeInfo'); ti.hidden = !F.tabs; ti.textContent = man ? 'Ponts placés à la main : ' + ((F.tabPts || []).length) + '. « Nombre par contour » est ignoré.' : (S.editTp ? 'Répartition automatique. « Placer à la main » pour ajouter, retirer ou glisser des ponts sur le plan.' : 'Calculez le parcours, puis vous pourrez placer les ponts à la main.'); $('[data-f="tabN"]').disabled = man; }
   root.querySelectorAll('[data-entry]').forEach(el => { const ok = { ramp: ['ramp', 'rampzz'], arc: ['arc', 'arcramp', 'helix'], helix: ['helix'] }[el.dataset.entry] || []; el.hidden = !ok.includes(F.entry); });
-  $('#rasterAngRow').hidden = (F.strategy !== 'raster' && F.strategy !== 'zigzag') || !!F.rest; $('#restRow').hidden = !F.rest; { const ht = S.tools.find(x => x.id === F.toolId), flat = !!ht && ht.type === 'flat'; if (F.type === 'drill' && !flat) $('#helixHolesRow').hidden = true; $('#drillPitchRow').hidden = F.helixHoles === false || !flat;
+  $('#rasterAngRow').hidden = (F.strategy !== 'raster' && F.strategy !== 'zigzag') || !!F.rest; if (F.type === 'pocket' && F.strategy === 'zigzag' && !F.rest) $('#allowRow').hidden = true; /* aller-retour seul : aucune passe sur le bord, donc pas de surépaisseur */ $('#restRow').hidden = !F.rest; { const ht = S.tools.find(x => x.id === F.toolId), flat = !!ht && ht.type === 'flat'; if (F.type === 'drill' && !flat) $('#helixHolesRow').hidden = true; $('#drillPitchRow').hidden = F.helixHoles === false || !flat;
     let nb = 0; if (F.type === 'drill' && flat && F.helixHoles === false) { const ids = S.editTp ? ((S.tps.find(t => t.id === S.editTp) || {}).shapeIds || []) : [...S.sel]; for (const sh of ids.map(shapeById).filter(x => x && x.closed && x.pts && x.pts.length > 2)) { let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (const q of sh.pts) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); } if (Math.max(x1 - x0, y1 - y0) > ht.dia * 1.05) nb++; } }
     if (F.type === 'thread') { const ti = $('#thInfo'), tl = S.tools.find(x => x.id === F.toolId), ids = S.editTp ? ((S.tps.find(t => t.id === S.editTp) || {}).shapeIds || []) : [...S.sel], sh = ids.map(shapeById).find(x => x && x.closed && x.pts && x.pts.length > 2); let d0 = 0; if (sh) { let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity; for (const q of sh.pts) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); } d0 = Math.max(x1 - x0, y1 - y0); } const G = threadGeo(F, tl || { dia: 0 }, d0); ti.textContent = G.D > 0 ? (G.inner ? trf('M{d} × {p} : perçage préalable Ø{a} (fond de filet Ø{m}).', { d: fr(G.D, 2).replace(/,?0+$/, ''), p: String(+G.P.toFixed(3)).replace('.', ','), a: fr(G.tap, 2).replace(/,?0+$/, ''), m: fr(G.D1, 2) }) : trf('Vis Ø{d} × {p} : cylindre au Ø{d}, fond de filet Ø{m}.', { d: fr(G.D, 2).replace(/,?0+$/, ''), p: String(+G.P.toFixed(3)).replace('.', ','), m: fr(G.d3, 2) })) + (tl && G.inner && tl.dia >= G.D1 ? ' ' + tr('Fraise trop grosse pour ce diamètre.') : '') : tr('Sélectionnez un cercle ou indiquez le diamètre nominal.'); }
     if (F.type === 'relief') { const fin = F.rlOp === 'finish', fo = fin && F.rlFStrat === 'offset'; $('#rlPassRow').hidden = fin; $('#rlAllowRow').hidden = fin; $('#rlCrossRow').hidden = !fin || fo; $('#rlRStratRow').hidden = fin; $('#rlFStratRow').hidden = !fin; $('#rlDirRow').hidden = !fo; $('#rlAngRow').hidden = fo;
