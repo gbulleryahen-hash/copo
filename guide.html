@@ -187,7 +187,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.203</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.204</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -305,8 +305,8 @@ footer p{max-width:none}
       <li><strong>Unités</strong> : millimètres ou pouces, unité d'avance ;</li>
       <li><strong>Machine</strong> : post-processeur, vitesse des rapides, <strong>avance de travail maximale</strong> (2000 mm/min par défaut : les avances des outils sont plafonnées à cette valeur), Z de sécurité et de dégagement, arcs G2/G3 et commentaires. La case <strong>Cycles de perçage G81/G82/G83</strong> écrit les perçages en cycles : G81 simple, G82 avec temporisation au fond, G83 avec débourrage, remontée G98 au Z de dégagement. G83 ne prévoit pas de temporisation : un perçage avec débourrage <em>et</em> temporisation reste écrit en G0/G1. Elle est cochée d’office pour grblHAL, LinuxCNC, Mach3/4, UCCNC et MASSO, et décochée pour GRBL, Carbide Motion, Onefinity et le post-processeur personnalisé (les perçages y sont écrits en G0/G1) ; on peut toujours la changer. Si le contrôleur ne connaît pas ces cycles, il s’arrête simplement sur une erreur.</li>
       <li><strong>Accroche</strong> : grille magnétique et son pas, repères, brut, rayon d’accroche et accrochage aux objets (voir Dessiner). Le bouton d’accroche de la barre du plan ouvre directement cette rubrique.</li>
-      <li><strong>Affichage</strong> : <em>Qualité d’affichage du relief</em> (Fine, recommandée, ou Rapide pour un ordinateur modeste ; le parcours d’usinage n’est pas concerné), grille, parcours, matière enlevée, traits superposés, extrémités des lignes ouvertes, reliefs sur le plan.</li>
-      <li><strong>Simulation</strong> : qualité par défaut de l’aperçu 3D (Normale ou Fine).</li>
+      <li><strong>Affichage</strong> : <em>Résolution du relief</em>, comme dans Aspire : Standard (le plus rapide), Haute (environ 3 × plus lent, recommandée) ou Très haute (environ 7 × plus lent) ; le parcours d’usinage n’est pas concerné, grille, parcours, matière enlevée, traits superposés, extrémités des lignes ouvertes, reliefs sur le plan.</li>
+      <li><strong>Simulation</strong> : résolution par défaut de l’aperçu 3D (Standard, Haute ou Très haute).</li>
     </ul>
     <p>L’onglet G-code rappelle le post-processeur choisi ; <span class="ui">Changer…</span> ouvre la rubrique Machine.</p>
 
@@ -484,7 +484,7 @@ footer p{max-width:none}
 
     <h2 id="fr-3d">Aperçu 3D</h2>
     <figure><img src="img/fr-06-apercu3d.webp" alt="Aperçu 3D du projet d'exemple usiné." width="1800" height="1125" loading="lazy"><figcaption>Glisser pour tourner, clic droit ou Maj pour déplacer, molette pour zoomer, double-clic pour recentrer.</figcaption></figure>
-    <p><strong>Finesse</strong> : la simulation ne calcule que la zone réellement usinée (le reste du brut est affiché plein) ; plus la zone est petite, plus le rendu est fin. Le réglage <em>Qualité</em> (Normale ou Fine) augmente encore le nombre de points ; la résolution utilisée s'affiche en bas de la fenêtre.</p>
+    <p><strong>Finesse</strong> : la simulation ne calcule que la zone réellement usinée (le reste du brut est affiché plein) ; plus la zone est petite, plus le rendu est fin. Le réglage <em>Résolution</em> (Standard, Haute ou Très haute : 0,5, 1,5 ou 3,5 millions de points) augmente encore la finesse ; la résolution utilisée s'affiche en bas de la fenêtre.</p>
     <p>L'aperçu simule l'enlèvement de matière dans l'épaisseur réelle du brut, y compris les trous débouchants. Les boutons de lecture rejouent l'usinage : <strong>retour au début</strong>, <strong>pas en arrière</strong>, <strong>lecture / pause</strong>, <strong>pas en avant</strong> et <strong>aller à la fin</strong> ; un pas correspond à un déplacement de l'outil. Au clavier : flèches gauche et droite, Début, Fin et Espace. Le curseur permet d'aller à n'importe quel instant. Le temps écoulé et le temps total s’affichent en haut à gauche de la vue ; le bouton de recentrage est en bas à droite, comme dans les autres vues, et la croix en haut à droite ferme l’aperçu. L'aperçu demande WebGL 2 (Chrome, Edge ou Firefox récents).</p>
 
     <p><strong>Cube d’orientation</strong> (coin haut droit) : il tourne avec la vue et indique les faces (Dessus, Avant, Droite…) et les axes X, Y, Z. Cliquez une face pour la vue correspondante (Dessus = vue de plan, comme le dessin), ou un coin pour une vue isométrique. L’outil affiché reprend sa forme : fraise droite, hémisphérique, en V, foret ou fraise à fileter (dent à 60° en bout, col dégagé). Les filets d’un filetage apparaissent dans l’aperçu au fil de la dernière passe (profil ISO à 60°), dans le trou ou autour de la vis.</p>
@@ -571,7 +571,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.203 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.204 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -608,7 +608,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.203</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.204</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -726,8 +726,8 @@ M30</pre>
       <li><strong>Units</strong>: millimetres or inches, feed unit;</li>
       <li><strong>Machine</strong>: post-processor, rapid speed, <strong>maximum cutting feed</strong> (2000 mm/min by default: tool feeds are capped at this value), safe and clearance Z, G2/G3 arcs and comments. The <strong>G81/G82/G83 drilling cycles</strong> box writes holes as canned cycles: G81 plain, G82 with a dwell at the bottom, G83 with pecking, G98 retract to clearance Z. G83 has no dwell: a hole with both pecking <em>and</em> dwell is written as G0/G1. It is ticked by default for grblHAL, LinuxCNC, Mach3/4, UCCNC and MASSO, and unticked for GRBL, Carbide Motion, Onefinity and the custom post-processor (holes are then written as G0/G1); you can always change it. If the controller does not know these cycles, it simply stops with an error.</li>
       <li><strong>Snapping</strong>: snap to grid and its spacing, guides, stock, snap radius and object snapping (see Drawing). The snap button of the canvas bar opens this section directly.</li>
-      <li><strong>Display</strong>: <em>Relief display quality</em> (Fine, recommended, or Fast for a modest computer; toolpaths are not affected), grid, toolpaths, removed material, overlapping lines, ends of open lines, reliefs on the canvas.</li>
-      <li><strong>Simulation</strong>: default quality of the 3D preview (Normal or Fine).</li>
+      <li><strong>Display</strong>: <em>Relief resolution</em>, as in Aspire: Standard (fastest), High (about 3 × slower, recommended) or Very high (about 7 × slower); toolpaths are not affected, grid, toolpaths, removed material, overlapping lines, ends of open lines, reliefs on the canvas.</li>
+      <li><strong>Simulation</strong>: default resolution of the 3D preview (Standard, High or Very high).</li>
     </ul>
     <p>The G-code tab shows the selected post-processor; <span class="ui">Change…</span> opens the Machine section.</p>
 
@@ -905,7 +905,7 @@ M30</pre>
 
     <h2 id="en-3d">3D preview</h2>
     <figure><img src="img/en-06-apercu3d.webp" alt="3D preview of the machined sample project." width="1800" height="1125" loading="lazy"><figcaption>Drag to rotate, right-click or Shift to pan, wheel to zoom, double-click to recenter.</figcaption></figure>
-    <p><strong>Detail</strong>: the simulation only computes the area actually machined (the rest of the stock is drawn solid); the smaller the area, the finer the result. The <em>Quality</em> setting (Normal or Fine) raises the number of points further; the resolution used is shown at the bottom of the window.</p>
+    <p><strong>Detail</strong>: the simulation only computes the area actually machined (the rest of the stock is drawn solid); the smaller the area, the finer the result. The <em>Resolution</em> setting (Standard, High or Very high: 0.5, 1.5 or 3.5 million points) raises the detail further; the resolution used is shown at the bottom of the window.</p>
     <p>The preview simulates material removal through the real stock thickness, through-holes included. The playback buttons replay the machining: <strong>back to start</strong>, <strong>step back</strong>, <strong>play / pause</strong>, <strong>step forward</strong> and <strong>go to end</strong>; one step is one tool move. Keyboard: left and right arrows, Home, End and Space. The slider jumps to any moment. Elapsed and total time show at the top left of the view; the recentre button is at the bottom right, as in the other views, and the cross at the top right closes the preview.</p>
 
     <p><strong>View cube</strong> (top-right corner): it turns with the view and shows the faces (Top, Front, Right…) and the X, Y, Z axes. Click a face for that view (Top = plan view, like the drawing), or a corner for an isometric view. The tool shown keeps its shape: flat, ball-nose, V-bit, drill or thread mill (60° tooth at the tip, relieved neck). Threads appear in the preview as the last pass progresses (ISO 60° profile), inside the hole or around the screw.</p>
@@ -992,7 +992,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.203 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.204 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
