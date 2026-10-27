@@ -513,6 +513,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 #tpForm .figrow{grid-template-columns:64px minmax(0,1fr)}#tpForm .figrow.fdepth{grid-template-columns:88px minmax(0,1fr)}#tpForm .figrow.nofig{grid-template-columns:minmax(0,1fr)}.tpfig{display:block;width:100%;height:auto}.seg.strat button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px 6px}.seg.strat i{display:block;width:64px}.seg.strat button[aria-pressed="true"] .tpfig{outline:2px solid var(--accent-ink);outline-offset:1px}
 .clrrow{display:flex;gap:6px;align-items:center}.clrrow .toolpick{flex:1;min-width:0}
 [data-pane="projet"] .figrow{grid-template-columns:64px minmax(0,1fr)}
+.rseg svg.rico{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}.rseg svg .bl{stroke:var(--accent);stroke-width:1.6}.rseg svg .dsh{stroke-dasharray:2.6 2}.rseg button:hover{background:var(--accent-soft)}
 </style>
 
 <div class="app" id="app">
@@ -934,12 +935,12 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
       <div class="pane" data-pane="relief" hidden>
         <div class="peekrow"><button type="button" class="setx" data-act="relSetClose" title="Fermer (ou clic droit dans le dessin)" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
         <section class="blk"><h3>Créer / importer un relief</h3>
-          <div class="rbtns">
-            <button data-act="relStl" class="rbtn" title="Importer un modèle 3D (STL binaire ou texte) : il est vu de dessus et projeté en hauteurs, à l’échelle du fichier."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><b>Fichier STL</b></button>
-            <button data-act="relGray" class="rbtn" title="Sélectionnez sur le plan une image insérée dans l’onglet Dessin : elle est transformée en relief (le clair est en haut) et quitte la vue 2D."><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3.5 16c3-2 4-6 7-6s4 5 6.5 5 3-2 3.5-2.5"/></svg><b>Niveaux de gris</b></button>
-            <button data-act="relDome" class="rbtn" title="Sélectionnez une ou plusieurs formes fermées : la forme se bombe depuis le bord (les formes intérieures font des trous)."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19h18"/><path d="M4 19c0-6 3.6-10 8-10s8 4 8 10"/></svg><b>Dôme</b></button>
-            <button data-act="relExt" class="rbtn" title="Sélectionnez un ou plusieurs vecteurs : une moulure suit le tracé."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16c4-8 8 2 18-8"/><path d="M3 20c4-8 8 2 18-8" opacity=".5"/></svg><b>Extrusion</b></button>
-            <button data-act="relSweep" class="rbtn" title="Lissage entre deux rails. Sélectionnez les deux rails (vecteurs ouverts) et, si vous voulez, un ou plusieurs profils dessinés en travers, d’un rail à l’autre, là où chacun s’applique : la section passe d’un profil au suivant. Sans profil : section ronde."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5c5 2 11 2 16 0"/><path d="M4 19c5-3 11-3 16 0"/><path d="M8 6v11M12 6.5v10M16 6v11" opacity=".55"/></svg><b>Lissage</b></button>
+          <div class="seg ico tpnew rseg">
+            <button data-act="relStl" title="Importer un modèle 3D (STL binaire ou texte) : il est vu de dessus et projeté en hauteurs, à l’échelle du fichier."><svg viewBox="0 0 24 24" aria-hidden="true" class="rico"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>Fichier STL</button>
+            <button data-act="relGray" title="Sélectionnez sur le plan une image insérée dans l’onglet Dessin : elle est transformée en relief (le clair est en haut) et quitte la vue 2D."><svg viewBox="0 0 24 24" aria-hidden="true" class="rico"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path class="bl" d="M3.5 16c3-2 4-6 7-6s4 5 6.5 5 3-2 3.5-2.5"/></svg>Niveaux de gris</button>
+            <button data-act="relDome" title="Sélectionnez une ou plusieurs formes fermées : la forme se bombe depuis le bord (les formes intérieures font des trous)."><svg viewBox="0 0 24 24" aria-hidden="true" class="rico"><path d="M3 19h18"/><path d="M4 19c0-6 3.6-10 8-10s8 4 8 10"/></svg>Dôme</button>
+            <button data-act="relExt" title="Sélectionnez un ou plusieurs vecteurs : une moulure suit le tracé."><svg viewBox="0 0 24 24" aria-hidden="true" class="rico"><path d="M3 16c4-8 8 2 18-8"/><path class="bl dsh" d="M3 20c4-8 8 2 18-8"/></svg>Extrusion</button>
+            <button data-act="relSweep" title="Lissage entre deux rails. Sélectionnez les deux rails (vecteurs ouverts) et, si vous voulez, un ou plusieurs profils dessinés en travers, d’un rail à l’autre, là où chacun s’applique : la section passe d’un profil au suivant. Sans profil : section ronde."><svg viewBox="0 0 24 24" aria-hidden="true" class="rico"><path d="M4 5c5 2 11 2 16 0"/><path d="M4 19c5-3 11-3 16 0"/><path class="bl" d="M8 6v11M12 6.5v10M16 6v11"/></svg>Lissage</button>
           </div>
         </section>
         <section class="blk"><h3>Éléments du relief</h3>
@@ -1028,7 +1029,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.178</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.179</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -5596,7 +5597,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.178', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.179', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
