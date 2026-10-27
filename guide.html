@@ -186,7 +186,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.198</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.199</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -473,6 +473,7 @@ footer p{max-width:none}
 
     <h2 id="fr-3d">Aperçu 3D</h2>
     <figure><img src="img/fr-06-apercu3d.webp" alt="Aperçu 3D du projet d'exemple usiné." width="1800" height="1125" loading="lazy"><figcaption>Glisser pour tourner, clic droit ou Maj pour déplacer, molette pour zoomer, double-clic pour recentrer.</figcaption></figure>
+    <p><strong>Finesse</strong> : la simulation ne calcule que la zone réellement usinée (le reste du brut est affiché plein) ; plus la zone est petite, plus le rendu est fin. Le réglage <em>Qualité</em> (Normale ou Fine) augmente encore le nombre de points ; la résolution utilisée s'affiche en bas de la fenêtre.</p>
     <p>L'aperçu simule l'enlèvement de matière dans l'épaisseur réelle du brut, y compris les trous débouchants. Les boutons de lecture rejouent l'usinage : <strong>retour au début</strong>, <strong>pas en arrière</strong>, <strong>lecture / pause</strong>, <strong>pas en avant</strong> et <strong>aller à la fin</strong> ; un pas correspond à un déplacement de l'outil. Au clavier : flèches gauche et droite, Début, Fin et Espace. Le curseur permet d'aller à n'importe quel instant. Le temps écoulé et le temps total s’affichent en haut à gauche de la vue ; le bouton de recentrage est en bas à droite, comme dans les autres vues, et la croix en haut à droite ferme l’aperçu. L'aperçu demande WebGL 2 (Chrome, Edge ou Firefox récents).</p>
 
     <p><strong>Cube d’orientation</strong> (coin haut droit) : il tourne avec la vue et indique les faces (Dessus, Avant, Droite…) et les axes X, Y, Z. Cliquez une face pour la vue correspondante (Dessus = vue de plan, comme le dessin), ou un coin pour une vue isométrique. L’outil affiché reprend sa forme : fraise droite, hémisphérique, en V, foret ou fraise à fileter (dent à 60° en bout, col dégagé). Les filets d’un filetage apparaissent dans l’aperçu au fil de la dernière passe (profil ISO à 60°), dans le trou ou autour de la vis.</p>
@@ -559,7 +560,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.198 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.199 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -595,7 +596,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.198</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.199</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -882,6 +883,7 @@ M30</pre>
 
     <h2 id="en-3d">3D preview</h2>
     <figure><img src="img/en-06-apercu3d.webp" alt="3D preview of the machined sample project." width="1800" height="1125" loading="lazy"><figcaption>Drag to rotate, right-click or Shift to pan, wheel to zoom, double-click to recenter.</figcaption></figure>
+    <p><strong>Detail</strong>: the simulation only computes the area actually machined (the rest of the stock is drawn solid); the smaller the area, the finer the result. The <em>Quality</em> setting (Normal or Fine) raises the number of points further; the resolution used is shown at the bottom of the window.</p>
     <p>The preview simulates material removal through the real stock thickness, through-holes included. The playback buttons replay the machining: <strong>back to start</strong>, <strong>step back</strong>, <strong>play / pause</strong>, <strong>step forward</strong> and <strong>go to end</strong>; one step is one tool move. Keyboard: left and right arrows, Home, End and Space. The slider jumps to any moment. Elapsed and total time show at the top left of the view; the recentre button is at the bottom right, as in the other views, and the cross at the top right closes the preview.</p>
 
     <p><strong>View cube</strong> (top-right corner): it turns with the view and shows the faces (Top, Front, Right…) and the X, Y, Z axes. Click a face for that view (Top = plan view, like the drawing), or a corner for an isometric view. The tool shown keeps its shape: flat, ball-nose, V-bit, drill or thread mill (60° tooth at the tip, relieved neck). Threads appear in the preview as the last pass progresses (ISO 60° profile), inside the hole or around the screw.</p>
@@ -968,7 +970,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.198 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.199 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
