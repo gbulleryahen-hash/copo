@@ -1038,7 +1038,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.189</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.190</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -2485,7 +2485,7 @@ function originLabel(st) { const dx = +st.offX || 0, dy = +st.offY || 0; return 
 const nf = v => { const s = (Math.round(v * 1000) / 1000).toFixed(3).replace(/\.?0+$/, ''); return s === '-0' ? '0' : s; };
 // post-processeurs : tc = mode de changement d'outil ; m6 = format ; g911 = mode IJ incrémental explicite ; head = ligne de sécurité en tête
 // ---------- post-processeurs au format .pp (syntaxe des fichiers Vectric) ----------
-const VP_BLOCKS = ['HEADER', 'FOOTER', 'TOOLCHANGE', 'NEW_SEGMENT', 'RAPID_MOVE', 'FIRST_RAPID_MOVE', 'INITIAL_RAPID_MOVE', 'FIRST_FEED_MOVE', 'FEED_MOVE', 'PLUNGE_MOVE', 'RETRACT_MOVE', 'CW_ARC_MOVE', 'CCW_ARC_MOVE', 'FIRST_CW_ARC_MOVE', 'FIRST_CCW_ARC_MOVE', 'FEED_RATE_CHANGE'];
+const VP_BLOCKS = ['HEADER', 'FOOTER', 'TOOLCHANGE', 'NEW_SEGMENT', 'RAPID_MOVE', 'FIRST_RAPID_MOVE', 'INITIAL_RAPID_MOVE', 'FIRST_FEED_MOVE', 'FEED_MOVE', 'PLUNGE_MOVE', 'RETRACT_MOVE', 'CW_ARC_MOVE', 'CCW_ARC_MOVE', 'FIRST_CW_ARC_MOVE', 'FIRST_CCW_ARC_MOVE', 'FEED_RATE_CHANGE', 'CW_HELICAL_ARC_MOVE', 'CCW_HELICAL_ARC_MOVE', 'FIRST_CW_HELICAL_ARC_MOVE', 'FIRST_CCW_HELICAL_ARC_MOVE', 'PLUNGE_CW_HELICAL_ARC_MOVE', 'PLUNGE_CCW_HELICAL_ARC_MOVE', 'DWELL_MOVE', 'JET_TOOL_ON', 'JET_TOOL_OFF', 'JET_TOOL_POWER'];
 function vpParse(txt) {
   const d = { name: '', ext: 'nc', inch: false, eol: '\r\n', ln: { start: 0, inc: 10, max: 999999 }, vars: {}, blocks: {} };
   const codes = s => s.replace(/\[([0-9a-fA-F]{1,3})\]/g, (m, c) => String.fromCharCode(/^\d+$/.test(c) ? +c : parseInt(c, 16)));
@@ -2509,14 +2509,15 @@ function vpNum(v, sp) { let s = (v * (sp.mul || 1)).toFixed(sp.dec || 0); if (/^
 function makeGcodeVP(tps, tools, stock, M, d) {
   const [ox, oy] = originOf(stock), oz = stock.originZ === 'bottom' ? stock.t : 0, U = v => d.inch ? v / 25.4 : v, p = d.inch ? 4 : 3;
   const D0 = (pre, dec, mode) => ({ mode: mode || 'A', pre, dec, pad: 0, mul: 1 });
-  const DEF = { N: D0('N', 0), S: D0('S', 0), F: D0('F', 1, 'C'), FC: D0('F', 1, 'C'), FP: D0('F', 1, 'C'), X: D0('X', p, 'C'), Y: D0('Y', p, 'C'), Z: D0('Z', p, 'C'), XH: D0('X', p), YH: D0('Y', p), ZH: D0('Z', p), I: D0('I', p), J: D0('J', p), RADIUS: D0('R', p), SAFEZ: D0('Z', p) };
+  const DEF = { N: D0('N', 0), S: D0('S', 0), F: D0('F', 1, 'C'), FC: D0('F', 1, 'C'), FP: D0('F', 1, 'C'), X: D0('X', p, 'C'), Y: D0('Y', p, 'C'), Z: D0('Z', p, 'C'), XH: D0('X', p), YH: D0('Y', p), ZH: D0('Z', p), I: D0('I', p), J: D0('J', p), RADIUS: D0('R', p), SAFEZ: D0('Z', p), DWELL: D0('P', 2), POWER: D0('', 0), TOOL_DIA: D0('', p), TDIA: D0('', p), XMIN: D0('', p), XMAX: D0('', p), YMIN: D0('', p), YMAX: D0('', p), ZMIN: D0('', p), ZMAX: D0('', p), XLENGTH: D0('', p), YLENGTH: D0('', p), ZLENGTH: D0('', p) };
   const V = k => d.vars[k] || DEF[k], B = d.blocks, L = [], last = {}; let ln = d.ln.start, ctx = {};
   const reset = () => { for (const k of ['X', 'Y', 'Z', 'F', 'FC', 'FP']) delete last[k]; };
-  const val = k => ({ X: () => U(ctx.x), Y: () => U(ctx.y), Z: () => U(ctx.z), XH: () => 0, YH: () => 0, ZH: () => U(M.safeZ + oz), SAFEZ: () => U(M.safeZ + oz), F: () => U(ctx.f || 0), FC: () => U(+ctx.tool.feed || 0), FP: () => U(+ctx.tool.plunge || 0), S: () => Math.round(+ctx.tool.rpm || 0), I: () => U(ctx.i || 0), J: () => U(ctx.j || 0), RADIUS: () => U(ctx.r || 0) }[k] || (() => null))();
+  const val = k => ({ X: () => U(ctx.x), Y: () => U(ctx.y), Z: () => U(ctx.z), XH: () => 0, YH: () => 0, ZH: () => U(M.safeZ + oz), SAFEZ: () => U(M.safeZ + oz), F: () => U(ctx.f || 0), FC: () => U(+ctx.tool.feed || 0), FP: () => U(+ctx.tool.plunge || 0), S: () => Math.round(+ctx.tool.rpm || 0), I: () => U(ctx.i || 0), J: () => U(ctx.j || 0), RADIUS: () => U(ctx.r || 0), DWELL: () => +ctx.dwell || 0, POWER: () => +ctx.tool.power || 100, TOOL_DIA: () => U(+ctx.tool.dia || 0), TDIA: () => U(+ctx.tool.dia || 0),
+    XMIN: () => U(-ox), XMAX: () => U(stock.w - ox), YMIN: () => U(-oy), YMAX: () => U(stock.h - oy), ZMIN: () => U(oz - stock.t), ZMAX: () => U(oz), XLENGTH: () => U(stock.w), YLENGTH: () => U(stock.h), ZLENGTH: () => U(stock.t) }[k] || (() => null))();
   const rend = t => { let nTok = '', nv = 0, nvOut = 0; const s = t.replace(/\[([^\]]*)\]/g, (m, raw) => { const k = raw.trim().toUpperCase();
       if (k === 'N') { const sp = V('N'); nTok = sp.pre + vpNum(ln, { ...sp, mul: 1 }); return nTok; }
       if (k === 'T') return String(ctx.tool.num || 1);
-      if (k === 'TOOLPATH_NAME') return ctx.tpName || ''; if (k === 'TP_FILENAME') return (S.meta && S.meta.name) || 'copo'; if (k === 'TOOLNAME' || k === 'TOOL_NAME') return ctx.tool.name || '';
+      if (k === 'TOOLPATH_NAME') return ctx.tpName || ''; if (k === 'TP_FILENAME') return (S.meta && S.meta.name) || 'copo'; if (k === 'TOOLNAME' || k === 'TOOL_NAME') return ctx.tool.name || ''; if (k === 'DATE') { const t = new Date(); return String(t.getDate()).padStart(2, '0') + '/' + String(t.getMonth() + 1).padStart(2, '0') + '/' + t.getFullYear(); } if (k === 'TIME') { const t = new Date(); return String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0'); }
       const sp = V(k); if (sp) { const v = val(k); if (v === null) return ''; nv++; const str = vpNum(v, sp); if (sp.mode === 'C' && last[k] === str) return ''; last[k] = str; nvOut++; return sp.pre + str; }
       if (/^\d{1,3}$/.test(raw)) return String.fromCharCode(+raw); if (/^[0-9a-f]{1,2}$/i.test(raw) && /\d/.test(raw)) return String.fromCharCode(parseInt(raw, 16));
       return m; });
@@ -2532,19 +2533,23 @@ function makeGcodeVP(tps, tools, stock, M, d) {
     ctx.tool = tool; ctx.tpName = tp.name; const fc = tp.face === 2 ? 2 : 1;
     if (lastTool !== null) { if (tool.id !== lastTool || fc !== lastFace) { emit(B.TOOLCHANGE ? 'TOOLCHANGE' : 'NEW_SEGMENT'); reset(); } else emit('NEW_SEGMENT'); prev = null; }
     lastTool = tool.id; lastFace = fc;
-    const moves = (arcsOK ? fitArcs(tp.moves, 0.015) : tp.moves).filter(m => m.g !== 4);
+    const moves = arcsOK ? fitArcs(tp.moves, 0.015) : tp.moves; let jetOn = false, jetTool = null;
+    const jet = on => { if (!(B.JET_TOOL_ON || B.JET_TOOL_OFF)) return; if (on && !jetOn) { emit('JET_TOOL_ON'); if (jetTool !== tool.id) { emit('JET_TOOL_POWER'); jetTool = tool.id; } jetOn = true; } else if (!on && jetOn) { emit('JET_TOOL_OFF'); jetOn = false; } };
     const one = (m, x, y, z) => {
       const xyS = pos && Math.hypot(x - pos[0], y - pos[1]) < 1e-6, dz = pos ? z - pos[2] : 0; let blk;
-      if (m.g === 2 || m.g === 3) { const k = m.g === 2 ? 'cw' : 'ccw', A = m.g === 2 ? 'CW_ARC_MOVE' : 'CCW_ARC_MOVE'; blk = prev === k && m.f === ctx.fSeq ? pick(A, 'FIRST_' + A) : pick('FIRST_' + A, A); prev = k; ctx.fSeq = m.f;
+      if (m.g === 2 || m.g === 3) { const hx = Math.abs(dz) > 1e-6, H = m.g === 2 ? 'CW_HELICAL_ARC_MOVE' : 'CCW_HELICAL_ARC_MOVE', useH = hx && (B[H] || B['FIRST_' + H] || B['PLUNGE_' + H]), k = (m.g === 2 ? 'cw' : 'ccw') + (useH ? 'h' : ''), A = useH ? H : m.g === 2 ? 'CW_ARC_MOVE' : 'CCW_ARC_MOVE';
+        blk = useH && dz < 0 && B['PLUNGE_' + H] ? 'PLUNGE_' + H : prev === k && m.f === ctx.fSeq ? pick(A, 'FIRST_' + A) : pick('FIRST_' + A, A); if (!B[blk]) blk = pick(A, pick('FIRST_' + A, 'PLUNGE_' + A)); prev = k; ctx.fSeq = m.f;
         ctx.i = m.i; ctx.j = m.j; const cx = pos[0] + m.i, cy = pos[1] + m.j, r = Math.hypot(m.i, m.j); let sw = Math.atan2(y - cy, x - cx) - Math.atan2(pos[1] - cy, pos[0] - cx); if (m.g === 2) sw = -sw; sw = ((sw % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI); ctx.r = sw > Math.PI + 1e-9 ? -r : r; }
       else if (m.g === 0) { blk = xyS && dz > 0 && B.RETRACT_MOVE ? 'RETRACT_MOVE' : first && B.INITIAL_RAPID_MOVE ? 'INITIAL_RAPID_MOVE' : prev !== 'rapid' && B.FIRST_RAPID_MOVE ? 'FIRST_RAPID_MOVE' : 'RAPID_MOVE'; prev = 'rapid'; ctx.f = M.rapid; }
       else if (xyS && dz < 0 && B.PLUNGE_MOVE) { blk = 'PLUNGE_MOVE'; prev = 'plunge'; }
       else if (xyS && dz > 0 && B.RETRACT_MOVE) { blk = 'RETRACT_MOVE'; prev = 'retract'; }
       else { blk = prev === 'feed' && m.f === ctx.fSeq ? pick('FEED_MOVE', 'FIRST_FEED_MOVE') : pick('FIRST_FEED_MOVE', 'FEED_MOVE'); prev = 'feed'; ctx.fSeq = m.f; }
+      jet(m.g !== 0);
       if (m.g !== 0 && m.f) { if (B.FEED_RATE_CHANGE && m.f !== ctx.fOut) { ctx.f = m.f; emit('FEED_RATE_CHANGE'); ctx.fOut = m.f; } ctx.f = m.f; }
       ctx.x = x; ctx.y = y; ctx.z = z; emit(blk, true); pos = [x, y, z]; first = false;
     };
     for (const m of moves) {
+      if (m.g === 4) { if (B.DWELL_MOVE) { ctx.dwell = m.p; emit('DWELL_MOVE'); } continue; }
       const x = m.x - ox, y = m.y - oy, z = m.z + oz;
       if ((m.g === 0 || m.g === 1) && pos && Math.abs(x - pos[0]) < 1e-7 && Math.abs(y - pos[1]) < 1e-7 && Math.abs(z - pos[2]) < 1e-7) continue;
       if ((m.g === 2 || m.g === 3) && !pos) { one({ ...m, g: 1 }, x, y, z); continue; }
@@ -2552,6 +2557,7 @@ function makeGcodeVP(tps, tools, stock, M, d) {
         const cx = pos[0] + m.i, cy = pos[1] + m.j, mx = 2 * cx - pos[0], my = 2 * cy - pos[1], mz = (pos[2] + z) / 2; one({ ...m, i: cx - pos[0], j: cy - pos[1] }, mx, my, mz); one({ ...m, i: cx - mx, j: cy - my }, x, y, z); continue; }
       one(m, x, y, z);
     }
+    jet(false);
   }
   reset(); lastCore = null; emit('FOOTER');
   return L.join(d.eol) + d.eol;
@@ -5711,7 +5717,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.189', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.190', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
