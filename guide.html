@@ -186,7 +186,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.194</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.195</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -215,7 +215,7 @@ footer p{max-width:none}
     <h2 id="fr-etapes">Votre premier usinage en six étapes</h2>
     <ol class="steps">
       <li><div><b>Réglez le projet</b>Onglet <span class="ui">Projet</span> : dimensions et matière du brut, point d'origine X0 Y0, zéro Z (dessus du brut ou table), unités et machine.</div></li>
-      <li><div><b>Dessinez ou importez</b>Tracez avec les icônes de l'onglet Dessin, importez un SVG, un DXF ou une image (icône <span class="ui">Importer</span> du groupe Créer, ou menu Fichier) ou écrivez un texte.</div></li>
+      <li><div><b>Dessinez ou importez</b>Tracez avec les icônes de l'onglet Dessin, importez un SVG, un DXF, un PDF, un AI ou une image (icône <span class="ui">Importer</span> du groupe Créer, ou menu Fichier) ou écrivez un texte.</div></li>
       <li><div><b>Vérifiez vos outils</b>Choisissez le matériau dans l'onglet Projet, puis vérifiez dans la <span class="ui">Bibliothèque d'outils</span> (onglet Parcours) la vitesse, l'avance, la profondeur de passe et le pas latéral de chaque fraise.</div></li>
       <li><div><b>Créez les parcours</b>Sélectionnez les formes sur le plan, ouvrez l'onglet <span class="ui">Parcours</span>, choisissez Profil, Poche, V-carve ou Perçage, réglez puis cliquez sur <span class="ui">Calculer</span>.</div></li>
       <li><div><b>Contrôlez en 3D</b>Le bouton <span class="ui">Simulation de l’usinage</span> (onglet Parcours) ou <span class="ui">Affichage › Aperçu 3D de l'usinage</span> montre le brut usiné. Rejouez l'usinage pour repérer une erreur de profondeur ou d'outil.</div></li>
@@ -272,8 +272,9 @@ footer p{max-width:none}
       <li><strong>Images de référence</strong> (icône <span class="ui">Importer</span> › Image, <span class="ui">Fichier › Insérer une image…</span> ou glisser-déposer) : déplacez, redimensionnez et pivotez avec les poignées pour dessiner par-dessus. Elles ne sont jamais usinées.</li>
       <li><strong>Régler une image</strong> (panneau Dessin, image sélectionnée) : centre, angle, largeur, hauteur et opacité tiennent sur deux lignes ; la rangée d’icônes en dessous sert à ajuster au brut, centrer, remettre l’angle à 0°, changer l’ordre d’empilement, verrouiller et retirer l’image (le nom de chaque bouton s’affiche au survol). Les textes d’aide s’ouvrent avec l’icône ⓘ.</li>
       <li><strong>Vectoriser une image</strong> (section repliable <span class="ui">Vectoriser</span> sous les réglages de l’image ; repliée, elle rappelle le seuil et le lissage) : COPO trace les contours de l'image. Réglez le <em>seuil</em> (ce qui est plus sombre devient la forme ; « Seuil automatique » le calcule pour vous) et le <em>lissage</em> (contours plus doux, petits détails retirés), cochez <em>Inverser</em> pour contourner les zones claires. L'aperçu se met à jour en direct ; <span class="ui">Créer les contours</span> ajoute des formes fermées et groupées à l'emplacement de l'image, prêtes pour une poche, un profil ou un V-carving. Une image nette et bien contrastée (logo, dessin au trait, silhouette) donne le meilleur résultat.</li>
-      <li><strong>Importer</strong> : l'icône <span class="ui">Importer</span> du groupe Créer ouvre un panneau à deux choix, <em>Vectoriel</em> (SVG, DXF) et <em>Image</em> (modèle à décalquer ou à vectoriser).</li>
+      <li><strong>Importer</strong> : l'icône <span class="ui">Importer</span> du groupe Créer ouvre un panneau à deux choix, <em>Vectoriel</em> (SVG, DXF, PDF, AI) et <em>Image</em> (modèle à décalquer ou à vectoriser).</li>
       <li><strong>SVG</strong> : import en millimètres avec courbes conservées ; export du dessin entier ou de la sélection.</li>
+      <li><strong>PDF et AI</strong> : les tracés vectoriels de la première page sont importés à l'échelle (en mm), courbes conservées ; les zones de détourage, les images et les textes non vectorisés sont ignorés. Les fichiers Illustrator doivent avoir été enregistrés avec « Créer un fichier compatible PDF » (réglage par défaut) ; un très ancien AI (PostScript) est refusé avec un message. Vectorisez les textes avant l'export (Texte › Vectoriser).</li>
       <li><strong>DXF</strong> (texte/ASCII, toutes versions) : lignes, polylignes avec arcs, cercles, arcs, ellipses, splines et blocs. L'unité du fichier est respectée (mm, cm, pouces…) ; un fichier sans unité est lu en millimètres. Les segments qui se touchent sont reliés en contours, fermés quand c'est possible, et chaque calque DXF devient un calque COPO. Les textes, cotes, hachures et objets 3D sont ignorés (le message indique lesquels).</li>
     </ul>
 
@@ -558,7 +559,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.194 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.195 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -594,7 +595,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.194</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.195</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -623,7 +624,7 @@ M30</pre>
     <h2 id="en-steps">Your first job in six steps</h2>
     <ol class="steps">
       <li><div><b>Set up the project</b><span class="ui">Project</span> tab: stock size and material, X0 Y0 origin point, Z zero (top of stock or table), units and machine.</div></li>
-      <li><div><b>Draw or import</b>Draw with the icons of the Drawing tab, import an SVG, a DXF or an image (the <span class="ui">Import</span> icon in the Create group, or the File menu) or type some text.</div></li>
+      <li><div><b>Draw or import</b>Draw with the icons of the Drawing tab, import an SVG, DXF, PDF or AI file or an image (the <span class="ui">Import</span> icon in the Create group, or the File menu) or type some text.</div></li>
       <li><div><b>Check your tools</b>Choose the material in the Project tab, then check in the <span class="ui">Tool library</span> (Toolpaths tab) the speed, feed, pass depth and stepover of each bit.</div></li>
       <li><div><b>Create the toolpaths</b>Select shapes on the canvas, open the <span class="ui">Toolpaths</span> tab, choose Profile, Pocket, V-carve or Drilling, adjust, then click <span class="ui">Calculate</span>.</div></li>
       <li><div><b>Check in 3D</b>The <span class="ui">Machining simulation</span> button (Toolpaths tab) or <span class="ui">View › 3D machining preview</span> shows the machined stock. Play the job back to spot a wrong depth or tool.</div></li>
@@ -680,8 +681,9 @@ M30</pre>
       <li><strong>Reference images</strong> (<span class="ui">Import</span> icon › Image, <span class="ui">File › Insert an image…</span> or drag and drop): move, resize and rotate them with the handles to trace over them. They are never machined.</li>
       <li><strong>Adjusting an image</strong> (Drawing panel, image selected): center, angle, width, height and opacity fit on two rows; the row of icons below fits the image to the stock, centers it, resets the angle to 0°, changes the stacking order, locks and removes it (each button's name shows on hover). Help texts open with the ⓘ icon.</li>
       <li><strong>Vectorize an image</strong> (collapsible <span class="ui">Vectorize</span> section below the image settings; when collapsed it shows the threshold and smoothing): COPO traces the outlines of the image. Set the <em>threshold</em> (anything darker becomes the shape; “Auto threshold” works it out for you) and the <em>smoothing</em> (softer outlines, small details removed), tick <em>Invert</em> to outline light areas. The preview updates live; <span class="ui">Create outlines</span> adds closed, grouped shapes where the image is, ready for a pocket, a profile or V-carving. A sharp, high-contrast image (logo, line drawing, silhouette) gives the best result.</li>
-      <li><strong>Import</strong>: the <span class="ui">Import</span> icon in the Create group opens a panel with two choices, <em>Vector</em> (SVG, DXF) and <em>Image</em> (template to trace over or vectorize).</li>
+      <li><strong>Import</strong>: the <span class="ui">Import</span> icon in the Create group opens a panel with two choices, <em>Vector</em> (SVG, DXF, PDF, AI) and <em>Image</em> (template to trace over or vectorize).</li>
       <li><strong>SVG</strong>: import in millimetres with curves kept; export the whole drawing or the selection.</li>
+      <li><strong>PDF and AI</strong>: the vector paths of the first page are imported to scale (in mm), curves kept; clipping areas, images and text that is not outlined are ignored. Illustrator files must have been saved with “Create PDF Compatible File” (the default); a very old AI (PostScript) is refused with a message. Convert text to outlines before exporting (Type › Create Outlines).</li>
       <li><strong>DXF</strong> (text/ASCII, any version): lines, polylines with arcs, circles, arcs, ellipses, splines and blocks. The file's unit is respected (mm, cm, inches…); a file without a unit is read as millimetres. Touching segments are joined into outlines, closed when possible, and each DXF layer becomes a COPO layer. Text, dimensions, hatches and 3D objects are skipped (the message says which).</li>
     </ul>
 
@@ -966,7 +968,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.194 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.195 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 

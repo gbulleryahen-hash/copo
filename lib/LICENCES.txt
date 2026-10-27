@@ -14,6 +14,9 @@ d3-delaunay.js — regroupement des sources officielles / bundle of the official
 jspdf.umd.min.js — jsPDF 2.5.2 — James Hall, yWorks GmbH
     MIT License — voir / see LICENSE-jspdf.txt — https://github.com/parallax/jsPDF
 
+pdf.js, pdf.worker.js — PDF.js 3.11.174 — Mozilla Foundation (chargés seulement à l'import d'un PDF ou d'un AI / loaded only when importing a PDF or AI file)
+    Apache License 2.0 — voir / see LICENSE-pdfjs.txt — https://github.com/mozilla/pdf.js
+
 fonts/ — polices de l'interface / interface fonts : Source Sans 3, JetBrains Mono, Barlow Condensed — SIL Open Font License 1.1 (voir fonts/OFL-*.txt)
 
 Licence ISC (d3-delaunay, delaunator) :
