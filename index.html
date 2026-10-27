@@ -973,7 +973,6 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             <div class="g2">
               <label>Combinaison<select id="rlMode"><option value="add">Ajouter</option><option value="sub">Soustraire</option><option value="max">Garder le plus haut</option><option value="min">Garder le plus bas</option><option value="blend">Mélanger</option></select></label>
               <label>Adoucissement <span id="rlSv" class="mono"></span><input type="range" id="rlS" min="0" max="8" step="1"></label>
-              <label id="rlOrRow">Haut du modèle<select id="rlOr"><option value="z">+Z (dessus)</option><option value="-z">−Z (dessous)</option><option value="y">+Y</option><option value="-y">−Y</option><option value="x">+X</option><option value="-x">−X</option></select></label>
             </div>
             <div class="rlclip"><span id="rlClipT" class="hint"></span><div class="row" id="rlClipA"><button data-act="relClip" title="Choisissez sur le plan un ou plusieurs vecteurs fermés : le relief n’existe qu’à l’intérieur (les formes intérieures font des trous)">Limiter par des vecteurs…</button><button data-act="relUnclip" id="rlUnclip">Retirer la limite</button></div><div class="row" id="rlClipB" hidden><button data-act="relClipOk" class="primary" id="rlClipOk">Valider la limite</button><button data-act="relClipNo">Annuler</button></div></div>
             <div id="rlGen" class="tabbox" hidden>
@@ -1033,7 +1032,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.184</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.185</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -5603,7 +5602,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.184', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.185', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6936,10 +6935,19 @@ function stlParse(buf) {
   const txt = new TextDecoder().decode(new Uint8Array(buf)), re = /vertex\s+([-+\d.eE]+)\s+([-+\d.eE]+)\s+([-+\d.eE]+)/g, v = []; let m; while ((m = re.exec(txt))) v.push(+m[1], +m[2], +m[3]);
   if (v.length < 9) throw new Error(tr('Fichier STL illisible.')); return new Float32Array(v.slice(0, v.length - v.length % 9));
 }
+function relOrMigrate(it) {
+  if (!it || it.kind !== 'stl' || !it.orient || it.orient === 'z' || +it.rx || +it.ry) return;
+  const f0 = STL_OR[it.orient]; if (!f0) return; const B = [[1, 0, 0], [0, 1, 0], [0, 0, 1]], R = a => Math.round(a);
+  for (const a of [0, 90, 180, -90]) for (const b of [0, 90, 180, -90]) {
+    const ax = a * Math.PI / 180, ay = b * Math.PI / 180, cx = Math.cos(ax), sx = Math.sin(ax), cy = Math.cos(ay), sy = Math.sin(ay);
+    const ok = B.every(v => { let [p, q, r] = v; [q, r] = [q * cx - r * sx, q * sx + r * cx]; [p, r] = [p * cy + r * sy, -p * sy + r * cy]; const w = f0(...v); return R(p) === w[0] && R(q) === w[1] && R(r) === w[2]; });
+    if (ok) { it.orient = 'z'; it.rx = a; it.ry = b; return; }
+  }
+}
 var STL_OR = { z: (x, y, z) => [x, y, z], '-z': (x, y, z) => [x, -y, -z], y: (x, y, z) => [x, -z, y], '-y': (x, y, z) => [x, z, -y], x: (x, y, z) => [y, z, x], '-x': (x, y, z) => [y, -z, -x] };
 // rastérisation vue de dessus : tampon de profondeur (on garde le Z le plus haut)
 function stlRaster(T, orient, rx, ry) {
-  const f0 = STL_OR[orient] || STL_OR.z, ax = (+rx || 0) * Math.PI / 180, ay = (+ry || 0) * Math.PI / 180, cxr = Math.cos(ax), sxr = Math.sin(ax), cyr = Math.cos(ay), syr = Math.sin(ay);
+  const f0 = STL_OR[orient] || STL_OR.z, ax = (+rx || 0) * Math.PI / 180, ay = (+ry || 0) * Math.PI / 180, cl = v => Math.round(v * 1e12) / 1e12, cxr = cl(Math.cos(ax)), sxr = cl(Math.sin(ax)), cyr = cl(Math.cos(ay)), syr = cl(Math.sin(ay));
   const f = (ax || ay) ? (x, y, z) => { let [a, b, c] = f0(x, y, z); [b, c] = [b * cxr - c * sxr, b * sxr + c * cxr]; [a, c] = [a * cyr + c * syr, -a * syr + c * cyr]; return [a, b, c]; } : f0, n = T.length / 9, P = new Float32Array(T.length); let x0 = Infinity, y0 = Infinity, z0 = Infinity, x1 = -Infinity, y1 = -Infinity, z1 = -Infinity;
   for (let i = 0; i < n * 3; i++) { const q = f(T[i * 3], T[i * 3 + 1], T[i * 3 + 2]); P[i * 3] = q[0]; P[i * 3 + 1] = q[1]; P[i * 3 + 2] = q[2]; if (q[0] < x0) x0 = q[0]; if (q[0] > x1) x1 = q[0]; if (q[1] < y0) y0 = q[1]; if (q[1] > y1) y1 = q[1]; if (q[2] < z0) z0 = q[2]; if (q[2] > z1) z1 = q[2]; }
   const W = x1 - x0, Hh = y1 - y0, Z = Math.max(1e-6, z1 - z0), c = Math.max(W, Hh) / 1023 || 1, nx = Math.max(2, Math.round(W / c) + 1), ny = Math.max(2, Math.round(Hh / c) + 1), zb = new Float32Array(nx * ny).fill(-Infinity);
@@ -6992,10 +7000,10 @@ function relPanel(soft) {
   if (it) {
     const o = outXY(it.x, it.y), set = (id, v) => { const el = $(id); if (document.activeElement !== el) el.value = v; };
     const an = S.ui.relAnchor || 'mc', pa = anchorPt(relBox(it), an), oa = outXY(pa[0], pa[1]); $$('#rlAnchor button').forEach(b => b.setAttribute('aria-pressed', b.dataset.a === an));
-    set('#rlName', it.name); set('#rlX', +oa[0].toFixed(2)); set('#rlY', +oa[1].toFixed(2)); set('#rlW', +it.w.toFixed(2)); set('#rlH', +it.h.toFixed(2)); set('#rlTop', +(+it.top || 0).toFixed(2)); set('#rlBot', +(S.stock.t - (+it.top || 0) - (+it.zH || 0)).toFixed(2)); const lk = relLinked(it); $('#rlLinkRow').hidden = !(it.kind === 'image' && it.src && imgById(it.src)); $('#rlLink').checked = !!lk; set('#rlR', +(it.rot || 0).toFixed(1)); set('#rlRx', +(+it.rx || 0).toFixed(1)); set('#rlRy', +(+it.ry || 0).toFixed(1)); $('#rlRxRow').hidden = $('#rlRyRow').hidden = it.kind !== 'stl'; set('#rlZ', +(+it.zH).toFixed(2)); set('#rlS', it.smooth || 0); $('#rlSv').textContent = it.smooth || 0; $('#rlMode').value = it.mode || 'add'; $('#rlInv').checked = !!it.invert;
+    set('#rlName', it.name); set('#rlX', +oa[0].toFixed(2)); set('#rlY', +oa[1].toFixed(2)); set('#rlW', +it.w.toFixed(2)); set('#rlH', +it.h.toFixed(2)); set('#rlTop', +(+it.top || 0).toFixed(2)); set('#rlBot', +(S.stock.t - (+it.top || 0) - (+it.zH || 0)).toFixed(2)); const lk = relLinked(it); $('#rlLinkRow').hidden = !(it.kind === 'image' && it.src && imgById(it.src)); $('#rlLink').checked = !!lk; relOrMigrate(it); set('#rlR', +(it.rot || 0).toFixed(1)); set('#rlRx', +(+it.rx || 0).toFixed(1)); set('#rlRy', +(+it.ry || 0).toFixed(1)); $('#rlRxRow').hidden = $('#rlRyRow').hidden = it.kind !== 'stl'; set('#rlZ', +(+it.zH).toFixed(2)); set('#rlS', it.smooth || 0); $('#rlSv').textContent = it.smooth || 0; $('#rlMode').value = it.mode || 'add'; $('#rlInv').checked = !!it.invert;
     { const n = (it.clip || []).filter(id => { const x = shapeById(id); return x && x.closed; }).length, pk = relClipPick === it.id; $('#rlClipA').hidden = pk; $('#rlClipB').hidden = !pk; $('#rlClipT').textContent = pk ? trf('Cliquez sur le plan les vecteurs fermés qui limitent le relief ({n} choisi(s)), puis validez.', { n: S.sel.size }) : n ? trf('Limité par {n} vecteur(s) fermé(s) : pas de relief en dehors.', { n }) : tr('Aucune limite : le relief occupe tout son cadre.'); $('#rlUnclip').disabled = !n; if (pk) $('#rlClipOk').disabled = !S.sel.size; }
-    $('#rlOrRow').hidden = it.kind !== 'stl'; $('#rlInvRow').hidden = it.kind === 'stl' || !!it.gen;
-    { const G = it.gen; $('#rlGen').hidden = !G; if (G) { $('#rlGP').value = G.prof || 'round'; $('#rlGPRow').hidden = G.type === 'sweep'; $('#rlGSRow').hidden = !(G.type === 'sweep' && G.all); if (G.all) $('#rlGS').value = String(G.secIdx); set('#rlGW', +(+G.W || 0).toFixed(2)); $('#rlGWRow').hidden = G.type === 'sweep'; $('#rlGWL').textContent = tr(G.type === 'dome' ? 'Largeur du bord (mm, 0 = jusqu’au centre)' : 'Largeur (mm)'); $('#rlGERow').hidden = G.type !== 'sweep'; set('#rlGE', G.end ?? 100); $('#rlGPrRow').hidden = G.type !== 'sweep'; $('#rlGPr').checked = !!G.prop; $('#rlGFRow').hidden = !(G.all || G.profs); $('#rlGTRow').hidden = !(G.profs && G.profs.length > 1); $('#rlGT').checked = G.smoothT !== false; $('#rlGF').checked = !!G.secFlip; const pi = $('#rlGInfo'); if (pi) { pi.hidden = G.type !== 'sweep'; pi.textContent = G.type !== 'sweep' ? '' : G.profs ? trf('{n} profils, placés à {p} de la longueur des rails : la section passe de l’un à l’autre.', { n: G.profs.length, p: G.profs.map(q => Math.round(q.t * 100) + ' %').join(', ') }) : G.all ? tr('Un profil : la même section tout le long.') : tr('Sans profil : section ronde.'); } } } if (it.kind === 'stl') $('#rlOr').value = it.orient || 'z'; const g = relGrid[it.id];
+    $('#rlInvRow').hidden = it.kind === 'stl' || !!it.gen;
+    { const G = it.gen; $('#rlGen').hidden = !G; if (G) { $('#rlGP').value = G.prof || 'round'; $('#rlGPRow').hidden = G.type === 'sweep'; $('#rlGSRow').hidden = !(G.type === 'sweep' && G.all); if (G.all) $('#rlGS').value = String(G.secIdx); set('#rlGW', +(+G.W || 0).toFixed(2)); $('#rlGWRow').hidden = G.type === 'sweep'; $('#rlGWL').textContent = tr(G.type === 'dome' ? 'Largeur du bord (mm, 0 = jusqu’au centre)' : 'Largeur (mm)'); $('#rlGERow').hidden = G.type !== 'sweep'; set('#rlGE', G.end ?? 100); $('#rlGPrRow').hidden = G.type !== 'sweep'; $('#rlGPr').checked = !!G.prop; $('#rlGFRow').hidden = !(G.all || G.profs); $('#rlGTRow').hidden = !(G.profs && G.profs.length > 1); $('#rlGT').checked = G.smoothT !== false; $('#rlGF').checked = !!G.secFlip; const pi = $('#rlGInfo'); if (pi) { pi.hidden = G.type !== 'sweep'; pi.textContent = G.type !== 'sweep' ? '' : G.profs ? trf('{n} profils, placés à {p} de la longueur des rails : la section passe de l’un à l’autre.', { n: G.profs.length, p: G.profs.map(q => Math.round(q.t * 100) + ' %').join(', ') }) : G.all ? tr('Un profil : la même section tout le long.') : tr('Sans profil : section ronde.'); } } } const g = relGrid[it.id];
     $('#rlInfo').textContent = (it.kind === 'stl' ? trf('Modèle STL {w} × {h} × {z} mm, {n} triangles.', { w: fr(it.nat[0], 1), h: fr(it.nat[1], 1), z: fr(it.nat[2], 1), n: (it.tris || 0).toLocaleString() }) + ' ' : '') + (g ? trf('Grille source {a} × {b} points ({p} mm par point).', { a: g.nx, b: g.ny, p: fr(it.w / (g.nx - 1), 2) }) : tr('Données absentes : réimportez le fichier.'));
   }
   $('#relShow').checked = S.relief.show !== false;
@@ -7028,7 +7036,6 @@ function bindRelPanel() {
   $('#rlZ').onchange = () => relSet(i => { const v = num('#rlZ'); if (v >= 0) i.zH = v; });
   $('#rlS').oninput = () => { $('#rlSv').textContent = $('#rlS').value; }; $('#rlS').onchange = () => relSet(i => { i.smooth = +$('#rlS').value; });
   $('#rlMode').onchange = () => relSet(i => { i.mode = $('#rlMode').value; }); $('#rlInv').onchange = () => relSet(i => { i.invert = $('#rlInv').checked; });
-  $('#rlOr').onchange = () => { const it = relCur(); if (it) relReorient(it, $('#rlOr').value); };
   const regen = fn => { const it = relCur(); if (!it || !it.gen) return; fn(it.gen); try { relRegen(it); } catch (e) { toast(e.message); } relBump(); relDirty = true; commit(false); relPanel(true); draw(); };
   $('#rlGP').onchange = () => regen(G => { G.prof = $('#rlGP').value; });
   $('#rlGS').onchange = () => regen(G => { relSweepRoles(G, +$('#rlGS').value); });
