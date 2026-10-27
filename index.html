@@ -511,6 +511,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 .ipdim{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;align-items:center}.ipmini{width:96px;height:auto;background:#ffffff12;border-radius:5px}
 .ipdim{display:grid;grid-template-columns:88px minmax(0,1fr);gap:10px;align-items:center}.ipfig{width:88px;height:auto;display:block}.ipf{display:grid;gap:6px}.ipf label{font-size:12px}
 #tpForm .figrow{grid-template-columns:64px minmax(0,1fr)}#tpForm .figrow.fdepth{grid-template-columns:88px minmax(0,1fr)}#tpForm .figrow.nofig{grid-template-columns:minmax(0,1fr)}.tpfig{display:block;width:100%;height:auto}.seg.strat button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px 6px}.seg.strat i{display:block;width:64px}.seg.strat button[aria-pressed="true"] .tpfig{outline:2px solid var(--accent-ink);outline-offset:1px}
+.clrrow{display:flex;gap:6px;align-items:center}.clrrow .toolpick{flex:1;min-width:0}
 </style>
 
 <div class="app" id="app">
@@ -1026,7 +1027,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.171</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.172</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1103,7 +1104,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             <label data-show="profile pocket vcarve">Profondeur de passe (mm)<input data-u="len" type="number" data-f="pass" step="0.1" min="0.05" placeholder="celle de l'outil"></label>
             <label data-show="vcarve">Précision du calcul (mm)<input data-u="len" type="number" data-f="vstep" step="0.05" min="0.05"></label>
           </div></div>
-          <label data-show="vcarve">Fraise de dégagement (fonds plats)<span class="toolrow"><select data-f="clrTool" id="fClrTool"></select><button type="button" data-act="tpClrLib" title="Choisir dans la bibliothèque d’outils">Changer…</button></span></label>
+          <label data-show="vcarve">Fraise de dégagement (fonds plats)<span class="clrrow"><button type="button" class="toolpick" id="fClrBtn" data-act="tpClrLib" title="Choisir dans la bibliothèque d’outils"><span id="fClrName"></span><small>Changer…</small></button><button type="button" class="iconbtn" id="fClrX" data-act="tpClrNone" title="Aucune : la fraise en V vide les fonds plats" aria-label="Retirer la fraise de dégagement"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span></label>
           <div data-show="pocket"><p class="sw-h">Stratégie</p>
             <div class="seg strat" data-f="strategy"><button value="rings" title="Anneaux (contour parallèle)"><i data-sfig="rings"></i><span>Anneaux</span></button><button value="raster" title="Balayage parallèle"><i data-sfig="raster"></i><span>Balayage</span></button></div>
             <label id="rasterAngRow">Angle du balayage (°)<input type="number" data-f="rasterAng" step="15"></label>
@@ -1474,6 +1475,7 @@ Object.assign(I18N_EN, {"Fraise de dégagement (fonds plats)": "Clearance tool (
 Object.assign(I18N_EN, {"La pièce mâle est découpée dans une planchette d’épaisseur b = {b} mm : la fraise la traverse et descend à {h} mm (0,2 mm de plus, pour la détacher), avec des ponts.": "The male piece is cut out of a board of thickness b = {b} mm: the cutter goes through it, down to {h} mm (0.2 mm more, to free it), with tabs.", "Attention : b est plus petit que a, la pièce restera {d} mm sous la surface.": "Warning: b is smaller than a, the piece will sit {d} mm below the surface.", "Elle dépassera de {d} mm : à poncer après collage.": "It will stand {d} mm proud: sand it after gluing."});
 Object.assign(I18N_EN, {"Profondeur de découpe (mm)": "Cut-out depth (mm)", "Pièce mâle découpée dans une planchette d’épaisseur b = {b} mm, à {h} mm de profondeur, avec des ponts.": "Male piece cut out of a board of thickness b = {b} mm, {h} mm deep, with tabs.", "La découpe ne traverse pas la planchette : il faudra finir à la main.": "The cut does not go through the board: you will have to finish by hand.", "Pour traverser franchement, mettez un peu plus que b (par exemple b + 0,2 mm) si votre martyr le permet.": "To cut cleanly through, use a little more than b (for example b + 0.2 mm) if your spoilboard allows it.", "Parcours supprimé avec les contours qu’il avait créés.": "Toolpath deleted along with the outlines it created."});
 Object.assign(I18N_EN, {"Surépaisseur (a) (mm)": "Allowance (a) (mm)", "Anneaux": "Rings"});
+Object.assign(I18N_EN, {"Aucune : la fraise en V vide les fonds plats": "None: the V-bit clears flat areas"});
 Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
@@ -4723,6 +4725,7 @@ function act(a, btn) {
     case 'ipClose': gadSec(null); return;
     case 'ipMake': ipMake(); return;
     case 'ipLib': libOpen({ ftype: 'flatonly', toolId: $('#ipTool').value, cb: pt => { ipTools(pt.id); ipInfo(); toast(trf('Fraise « {n} » choisie.', { n: pt.name })); } }); return;
+    case 'tpClrNone': if (S.form) { S.form.clrTool = ''; renderForm(); } return;
     case 'tpClrLib': libOpen({ ftype: 'flatonly', toolId: S.form && S.form.clrTool, cb: pt => { S.form.clrTool = pt.id; renderForm(); toast(trf('Fraise « {n} » choisie.', { n: pt.name })); } }); return;
     case 'ilClrLib': libOpen({ ftype: 'flatonly', toolId: $('#ilClrTool').value, cb: pt => { ilFill('#ilClrTool', 'flat', pt.id); ilInfo(); toast(trf('Fraise « {n} » choisie.', { n: pt.name })); } }); return;
     case 'ilLib': libOpen({ ftype: 'vonly', toolId: $('#ilTool').value, cb: pt => { ilFill('#ilTool', 'v', pt.id); ilInfo(); toast(trf('Fraise « {n} » choisie.', { n: pt.name })); } }); return;
@@ -4935,6 +4938,13 @@ const FIG = {
     f.ln(+(xr(36) + G).toFixed(1), 36, 96, 36).ln(+(xr(48) + G).toFixed(1), 48, 96, 48).dv(92, 36, 48).tx(102, 47, 'P');
     return f.svg();
   },
+  drill(peck) { // perçage : départ D, longueur percée C (la pointe dépasse)
+    const G = 4, f = FB(132, 96).poly('M8 8H50V70L58 78L66 70V8H96V92H8Z', FGC.mat).dash(51, 28, 65);
+    f.raw('<path d="M55 0H61V10H55Z" fill="' + FGC.tool + '" stroke="' + FGC.out + '" stroke-width="1.2"/><path d="M52 10H64V56L58 62L52 56Z" fill="' + FGC.tool + '" stroke="' + FGC.out + '" stroke-width="1.2"/><path d="M52 18L64 14M52 28L64 24M52 38L64 34M52 48L64 44" stroke="#5c5850" stroke-width="1.2"/>');
+    if (peck) f.path('M36 30V58').arrow(36, 60, Math.PI / 2).path('M26 58V32').arrow(26, 30, -Math.PI / 2);
+    f.ln(96 + G, 8, 116, 8).ln(66 + G, 28, 116, 28).ln(66 + G, 70, 116, 70).dv(112, 8, 28).dv(112, 28, 70).tx(124, 23, 'D').tx(124, 54, 'C');
+    return f.svg();
+  },
   allow() { const G = 4; return FB(96, 78).poly('M6 28H40V74H6Z', FGC.mat).tool(52, 30, 16, 44).ln(40, 28 - G, 40, 10).ln(52, 30 - G, 52, 10).dh(14, 40, 52).tx(46, 10, 'a').svg(); },
   dir(F) {
     const climb = F.dir !== 'conv', side = F.side || 'out', ccw = side === 'in' ? !climb : climb, f = FB(96, 72);
@@ -4969,10 +4979,7 @@ const ILL = {
       return SVG64('<path class="st" d="M3 10h11l11 23h13l11-23h12v30H3z"/><path class="dl" d="M17.3 17h28.4M46 17h12"/>' + DIM(8, 10, 8, 17) + DIM(55, 17, 55, 33) + '<text class="tx" x="1" y="16">D</text><text class="tx" x="58" y="28">C</text>' + '<path class="tl" d="M26.5 0h10v4l-5 17-5-17z"/>');
     }
     if (F.type === 'thread') return SVG64('<path class="st" d="M3 12h22v24h14V12h22v28H3z"/><path class="ac" d="M27 34l10-3M27 29l10-3M27 24l10-3M27 19l10-3"/><path class="tl" d="M29 0h6v14h-6z"/><path class="tl" d="M27 14h10l-5 4z"/>' + DIM(57, 12, 57, 36));
-    if (F.type === 'drill') {
-      const pk = +F.peck > 0;
-      return SVG64('<path class="st" d="M3 12h22v20l6 5 6-5V12h24v28H3z"/><path class="tl" d="M26 0h10v20l-5 4-5-4z"/>' + FLUTE(26, 36, 0, 20) + (pk ? '<path class="ac" d="M44 14v16"/>' + ARW(44, 30, Math.PI / 2) + '<path class="ac" d="M49 30V18"/>' + ARW(49, 18, -Math.PI / 2) : '') + DIM(57, 12, 57, 37));
-    }
+    if (F.type === 'drill') return FIG.drill(+F.peck > 0);
     return SVG64('<path class="st" d="M3 10h11v7h7v16h22V17h7v-7h11v30H3z"/><path class="dl" d="M14 10h36M50 17h8"/><path class="tl" d="M27 0h10v33H27z"/>' + FLUTE(27, 37, 18, 33) + '<path class="ad" d="M21 22h22M21 27.5h22"/>' + DIM(8, 10, 8, 17) + DIM(55, 17, 55, 33) + '<text class="tx" x="1" y="16">D</text><text class="tx" x="58" y="28">C</text>');
   },
   allow() { return FIG.allow(); },
@@ -5551,7 +5558,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle (parcours visible) et pièce rapportée (parcours masqué, calque à part).' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.171', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.172', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -5727,7 +5734,7 @@ function renderForm() { setTimeout(tpTypeSync, 0);
       $('#rlTpInfo').textContent = F.rlBound === 'sel' ? (nb ? trf('Limite : {n} forme(s) fermée(s) sélectionnée(s).', { n: nb }) : tr('Sélectionnez sur le plan les formes fermées qui limitent l’usinage.')) : F.rlBound === 'stock' ? tr('Limite : tout le brut.') : tr('Limite : contour des reliefs cochés (sans le fond transparent des images).'); }
     const dw = $('#drillWarn'); dw.hidden = !nb; if (nb) dw.textContent = trf('{n} trou(s) plus grand(s) que la fraise : percé(s) à Ø{d} au lieu du diamètre dessiné (cochez l’usinage en hélice).', { n: nb, d: String(+(+ht.dia).toFixed(3)).replace('.', ',') }); }
   { const rs = $('#fRestTool'), cur = S.tools.find(t => t.id === F.toolId), big = S.tools.filter(t => t.type !== 'v' && cur && t.dia > cur.dia + 1e-6); rs.innerHTML = ''; if (!big.length) rs.innerHTML = '<option value="">Aucune fraise plus grosse dans la bibliothèque</option>'; for (const t of big) { const o = document.createElement('option'); o.value = t.id; o.textContent = t.name; rs.appendChild(o); } if (!big.find(t => t.id === F.restTool)) F.restTool = big[0] ? big[0].id : ''; rs.value = F.restTool; }
-  { const cs = $('#fClrTool'), fl = S.tools.filter(t => t.type === 'flat'); cs.innerHTML = ''; const o0 = document.createElement('option'); o0.value = ''; o0.textContent = 'Aucune (la fraise en V vide les fonds plats)'; cs.appendChild(o0); for (const t of fl) { const o = document.createElement('option'); o.value = t.id; o.textContent = t.name; cs.appendChild(o); } if (F.clrTool && !fl.find(t => t.id === F.clrTool)) F.clrTool = ''; cs.value = F.clrTool || ''; }
+  { const ct = F.clrTool && S.tools.find(t => t.id === F.clrTool && t.type === 'flat'); if (F.clrTool && !ct) F.clrTool = ''; $('#fClrName').textContent = ct ? ct.name : tr('Aucune (la fraise en V vide les fonds plats)'); $('#fClrX').hidden = !ct; }
   $('#depthLbl').textContent = tr(F.type === 'vcarve' ? 'Prof. coupe max (C) (0 = illimitée)' : F.type === 'thread' ? 'Longueur filetée (C) (mm)' : 'Prof. coupe (C) (mm)');
   const tool = S.tools.find(t => t.id === F.toolId); let h = '';
   if (tool) {
