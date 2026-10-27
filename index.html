@@ -113,7 +113,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .tb-head{display:flex;align-items:center;gap:8px}.tb-head b{font:600 12px var(--f-head);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}.tb-eye{font-size:12px;color:var(--muted)}.tb-ico svg{width:17px;height:17px;display:block;color:var(--accent)}
 .tb-wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}.tb-wrap:has(.tb-body:empty){display:none}.tb-fig{width:64px}
 .tb-body{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:flex-end;min-width:0}.tb-body:empty{display:none}
-.tb-body label:not(.chk){display:grid;gap:3px;font-size:12.5px;color:var(--muted)}.tb-body :is(input[type=number],input[data-num]),.tb-body input[type=text]{width:96px}
+.tb-body label:not(.chk){display:grid;gap:3px;font-size:12.5px;color:var(--muted)}.tb-body label.chk{display:flex;flex-direction:row;align-items:center;gap:6px;align-self:center;margin:0;padding-top:16px}.tb-body label.chk input{width:auto;margin:0}.tb-body :is(input[type=number],input[data-num]),.tb-body input[type=text]{width:96px}
 .tb-body .nebar,.tb-body .coordin{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:flex-end}.tb-body .nebar label.inl{display:flex;align-items:center;gap:5px}
 .tb-body button{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:5px 9px;color:var(--ink);cursor:pointer}.tb-body button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .tb-body .meas{font:500 13px var(--f-mono);color:var(--ink)}.tb-body .fp-mini{max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -818,9 +818,9 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             <label>Débord du support (c) (mm)<input data-u="len" type="number" id="ilMargin" step="1" min="0" placeholder="auto"></label>
           </div></div>
           <label>Nom<input type="text" id="ilName"></label>
-          <label>Fraise en V<span class="toolrow"><select id="ilTool"></select><button type="button" data-act="ilLib" title="Choisir dans la bibliothèque d’outils">Bibliothèque…</button></span></label>
+          <label>Fraise en V<select id="ilTool" hidden></select><button type="button" class="toolpick" data-act="ilLib" title="Choisir dans la bibliothèque d’outils"><span data-pickof="ilTool"></span><small>Changer…</small></button></label>
           <label class="chk"><input type="checkbox" id="ilClr"> Utiliser une fraise de dégagement (vide les fonds plats)</label>
-          <label id="ilClrRow" hidden>Fraise de dégagement<span class="toolrow"><select id="ilClrTool"></select><button type="button" data-act="ilClrLib" title="Choisir dans la bibliothèque d’outils">Bibliothèque…</button></span></label>
+          <label id="ilClrRow" hidden>Fraise de dégagement<select id="ilClrTool" hidden></select><button type="button" class="toolpick" data-act="ilClrLib" title="Choisir dans la bibliothèque d’outils"><span data-pickof="ilClrTool"></span><small>Changer…</small></button></label>
           <label class="chk"><input type="checkbox" id="ilTp" checked> Créer les parcours d’outils</label>
           <p class="hint mono" id="ilInfo"></p>
           <p class="hint">La pièce mâle est le motif en miroir, entouré d’un cadre (décalé de la valeur indiquée), placée à droite du motif sur un calque à part. Ses parcours sont créés masqués : pour l’usiner, affichez-les (œil) et masquez ceux de la femelle. Collez le mâle retourné dans la femelle, puis rabotez ou sciez le surplus.</p>
@@ -830,7 +830,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <p class="hint">Crée la poche dans votre pièce et la pièce rapportée qui s’y emboîte. Les angles sont arrondis au rayon de la fraise sur les deux pièces, pour qu’elles correspondent exactement.</p>
           <p class="hint" id="ipSel"></p>
           <div class="g2">
-            <label class="span2">Fraise droite<span class="toolrow"><select id="ipTool"></select><button type="button" data-act="ipLib" title="Choisir dans la bibliothèque d’outils">Bibliothèque…</button></span></label>
+            <label class="span2">Fraise droite<select id="ipTool" hidden></select><button type="button" class="toolpick" data-act="ipLib" title="Choisir dans la bibliothèque d’outils"><span data-pickof="ipTool"></span><small>Changer…</small></button></label>
             <label>Jeu pour la colle (mm)<input data-u="len" type="number" id="ipGap" step="0.05" min="0"></label>
             <select id="ipKind" hidden><option value="plug">Bouchon arasé (planche épaisse)</option><option value="cut">Pièce découpée (planchette, avec ponts)</option></select>
           </div>
@@ -1072,7 +1072,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.196</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.197</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -3651,7 +3651,7 @@ function buildSnapCache() {
   return { pts, arcs, shp: vis.filter(s => s.pts && s.pts.length > 1 && s.pts.length < 20000).map(s => ({ id: s.id, P: s.pts, closed: s.closed, bb: bbOf(s.pts) })) };
 }
 function getSnapCache() { if (snapCacheV !== snapVer) { snapCache = buildSnapCache(); snapCacheV = snapVer; } return snapCache; }
-function snapFrom() { if (pen.length) { const n = pen[pen.length - 1]; return [n.x, n.y]; } if (arcSt.length) return arcSt[arcSt.length - 1]; if (dimSt.length) return dimSt[dimSt.length - 1]; if (drag && (drag.mode === 'rect' || drag.mode === 'circle' || drag.mode === 'measure') && drag.p0) return drag.p0; return null; }
+function snapFrom() { if (pen.length) { const n = pen[pen.length - 1]; return [n.x, n.y]; } if (arcSt.length) return arcSt[arcSt.length - 1]; if (dimSt.length) return dimSt[dimSt.length - 1]; if (drag && (drag.mode === 'rect' || drag.mode === 'circle' || drag.mode === 'polygon' || drag.mode === 'measure') && drag.p0) return drag.p0; return null; }
 const stockPts = () => { const w = S.stock.w, h = S.stock.h; return [[0, 0], [w, 0], [w, h], [0, h], [w / 2, h / 2], [w / 2, 0], [w, h / 2], [w / 2, h], [0, h / 2]]; };
 const snapTol = () => (+S.ui.snapR || 9) / S.view.s;
 // point de la sélection saisi au clic (nœud, extrémité, milieu ou centre proche du curseur) : il servira de point d'accroche pendant le déplacement
@@ -3679,7 +3679,7 @@ function snap(p, excl) {
       for (const sg of [-1, 1]) { const T = [a.C[0] + a.r * Math.cos(base + sg * dl), a.C[1] + a.r * Math.sin(base + sg * dl)]; let md = Infinity; for (let k = 0; k <= 16; k++) md = Math.min(md, hyp(bez(a.g, k / 16), T)); if (md < Math.max(0.1, a.r * 0.15)) consider(T, 'tan'); }
     }
   }
-  const F0 = pen.length || arcSt.length || dimSt.length || (drag && drag.mode === 'measure') ? snapFrom() : null; // tracés de lignes seulement (pas les rectangles ni les cercles)
+  const F0 = pen.length || arcSt.length || dimSt.length || (drag && (drag.mode === 'measure' || drag.mode === 'polygon')) ? snapFrom() : null; // tracés de lignes et 2e point du polygone (pas les rectangles ni les cercles)
   if (F0 && ctrlHeld) { // Ctrl : angle par pas de 15° depuis le point précédent
     const dx = p[0] - F0[0], dy = p[1] - F0[1], L = Math.hypot(dx, dy); if (L > 1e-9) { const a = Math.round(Math.atan2(dy, dx) / (Math.PI / 12)) * (Math.PI / 12); let l = L; if (S.ui.snapGrid) l = Math.max(S.ui.gridStep, Math.round(l / S.ui.gridStep) * S.ui.gridStep); const q = [F0[0] + l * Math.cos(a), F0[1] + l * Math.sin(a)]; snapMark = { p: q.slice(), k: 'ang', from: F0, a: Math.round(a * 180 / Math.PI) }; return q; } }
   if (best) { snapMark = best; return best.p.slice(); }
@@ -5237,7 +5237,7 @@ const DI = {
 DI.mirror = DI.mirH;
 DI.traceOutline = SVG24('<path class="bo" d="M6.5 16.5l3.4-5.2 2.4 2.8 2-2.6 3.2 5"/><path class="bo" stroke-dasharray="2.6 2" d="M3.5 7.5a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-11a3 3 0 0 1-3-3z"/>');
 const DGRID = [
-  ['Sélection', [['t', 'select'], ['t', 'nodes'], ['t', 'pan']]],
+  ['Sélection', [['t', 'select'], ['t', 'nodes']]],
   ['Combiner', [['a', 'boolU', 'Souder', 2], ['a', 'boolS', 'Soustraire (à partir de la première forme sélectionnée)', 2], ['a', 'boolI', 'Intersection (à partir de la première forme sélectionnée)', 2], ['a', 'group', 'Grouper (Ctrl+G)', 2], ['a', 'ungroup', 'Dégrouper (Ctrl+Maj+G)', 1]]],
   ['Créer', [['t', 'poly'], ['t', 'rect'], ['t', 'ellipse'], ['t', 'circle'], ['t', 'polygon'], ['t', 'arc'], ['t', 'text'], ['s', 'img', 'Importer (image / vectoriel)'], ['a', 'traceOutline', 'Contour : vectoriser l’image sélectionnée ou créer le contour du relief sélectionné', 0]]],
   ['Modifier', [['t', 'chamfer'], ['t', 'fillet'], ['t', 'dogbone'], ['t', 'trim'], ['t', 'cut'], ['t', 'extend'], ['s', 'join', 'Joindre et relier des vecteurs'], ['s', 'fit', 'Lisser (adapter des courbes)'], ['s', 'offset', 'Contour décalé'], ['a', 'neExplode', 'Scinder : couper le profil à chaque nœud', 1]]],
@@ -5654,7 +5654,8 @@ function ilCheck(v) {
   if (v.clr && !v.clrTool) return tr('Choisissez la fraise de dégagement.');
   return '';
 }
-function ilInfo() { const v = ilVals(), e = ilCheck(v), F = x => LANG === 'fr' ? fr(x, 2) : x.toFixed(2); $('#ilClrRow').hidden = !$('#ilClr').checked; const sl = $('#ilSel'); if (sl) sl.textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ilSel().length }); $('#ilInfo').textContent = e || trf('Le mâle s’enfonce de {s} mm et laisse {g} mm de jeu au fond ; il dépasse de {p} mm avant rabotage.', { s: F(v.S), g: F(v.gap), p: F(v.Sg) }); }
+function pickSync() { document.querySelectorAll('[data-pickof]').forEach(sp => { const sel = document.getElementById(sp.dataset.pickof), o = sel && sel.selectedOptions[0]; sp.textContent = o && o.value ? o.textContent : tr('Choisir une fraise…'); sp.closest('.toolpick').classList.toggle('bad', !(o && o.value)); }); }
+function ilInfo() { pickSync(); const v = ilVals(), e = ilCheck(v), F = x => LANG === 'fr' ? fr(x, 2) : x.toFixed(2); $('#ilClrRow').hidden = !$('#ilClr').checked; const sl = $('#ilSel'); if (sl) sl.textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ilSel().length }); $('#ilInfo').textContent = e || trf('Le mâle s’enfonce de {s} mm et laisse {g} mm de jeu au fond ; il dépasse de {p} mm avant rabotage.', { s: F(v.S), g: F(v.gap), p: F(v.Sg) }); }
 ['#ilTool', '#ilD', '#ilGap', '#ilB', '#ilClr', '#ilClrTool', '#ilMargin'].forEach(id => { const el = document.querySelector(id); if (el) { el.addEventListener('input', ilInfo); el.addEventListener('change', ilInfo); } });
 function ilMake() {
   const v = ilVals(), e = ilCheck(v); if (e) return toast(e);
@@ -5722,7 +5723,7 @@ function ipRoughAdvice(v, G) {
   return { R, txt: trf('Dégrossissage conseillé : la poche fait jusqu’à {w} mm de large. Une fraise droite de {a} à {b} mm conviendrait : choisissez-la dans la bibliothèque (bouton Changer…).', { w: F(W), a: F(2 * d1), b: F(cap) }) };
 }
 function ipGeom(v) { const base = baseLoops(ilSel()), r = v.tool.dia / 2, C = ipCommon(base, r), M = v.gap > 0 ? offLoops(C, -v.gap) : C; return { base, C, M, r }; }
-function ipInfo() {
+function ipInfo() { pickSync();
   const v = ipVals(); $('#ipSup').checked = v.kind === 'plug'; $('#ipCRow').hidden = v.kind !== 'plug'; $('#ipCutRow').hidden = v.kind !== 'cut'; $('#ipBL').textContent = tr(v.kind === 'plug' ? 'Hauteur du mâle sous le support (b) (mm)' : 'Épaisseur de la pièce mâle (b) (mm)'); { const f = $('#ipFig'); if (f.dataset.k !== v.kind) { f.innerHTML = IP_FIG[v.kind]; f.dataset.k = v.kind; } }
   $('#ipHelp').textContent = tr(v.kind === 'plug' ? 'Pièce mâle sur support : le motif est usiné en miroir, en relief, sur un support épais (pièce placée à droite, sur un calque à part). Collez-la retournée dans la poche, puis sciez ou rabotez le support le long du trait rouge.' : 'Pièce mâle sans support : le motif est découpé dans une planchette, avec des ponts d’attache (pièce placée à droite, sur un calque à part). Cassez les ponts, poncez, puis collez la pièce dans la poche.');
   $('#ipSel').textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ilSel().length }); if (!ilSel().length) { $('#ipInfo').textContent = tr('Sélectionnez sur le plan le motif à incruster (formes fermées).'); return; }
@@ -5775,7 +5776,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.196', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.197', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
