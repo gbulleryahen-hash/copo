@@ -560,7 +560,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 .ilfig{width:100%;height:auto;background:#ffffff12;border-radius:6px}
 .ipdim{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;align-items:center}.ipmini{width:96px;height:auto;background:#ffffff12;border-radius:5px}
 .ipdim{display:grid;grid-template-columns:88px minmax(0,1fr);gap:10px;align-items:center}.ipfig{width:88px;height:auto;display:block}.ipf{display:grid;gap:6px}.ipf label{font-size:12px}
-#tpForm .figrow{grid-template-columns:64px minmax(0,1fr)}#tpForm .figrow.fdepth{grid-template-columns:88px minmax(0,1fr)}#tpForm .figrow.nofig{grid-template-columns:minmax(0,1fr)}.tpfig{display:block;width:100%;height:auto}.seg.strat button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px 6px}.seg.strat i{display:block;width:64px}.seg.strat4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}.seg.strat3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.seg.strat3 button{padding:6px 2px 5px;font-size:12px;line-height:1.2;text-align:center;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px}.seg.strat3 i{display:block;width:100%;max-width:64px}.seg.strat4 button{padding:6px 2px 5px;font-size:11px;line-height:1.2;text-align:center;min-width:0}.seg.strat4 i{width:100%;max-width:64px}.seg.strat button[aria-pressed="true"] .tpfig{outline:2px solid var(--accent-ink);outline-offset:1px}
+#tpForm .figrow{grid-template-columns:64px minmax(0,1fr)}#tpForm .figrow.fdepth{grid-template-columns:88px minmax(0,1fr)}#tpForm .figrow.nofig{grid-template-columns:minmax(0,1fr)}.tpfig{display:block;width:100%;height:auto}.seg.strat button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px 6px}.seg.strat i{display:block;width:64px}.orow .oxyill{display:none}.orow.rot{grid-template-columns:64px auto minmax(0,1fr)}.orow.rot .oxyill{display:block;width:64px;align-self:center}.seg.segcol{flex-direction:column}.seg.segcol button{display:grid;gap:1px;text-align:left;padding:7px 10px}.seg.segcol button small{font-size:11px;color:var(--muted);font-weight:400}.seg.segcol button[aria-pressed="true"] small{color:inherit;opacity:.8}#stRotZSec .seg button{padding:8px 6px}.seg.strat4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}.seg.strat3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.seg.strat3 button{padding:6px 2px 5px;font-size:12px;line-height:1.2;text-align:center;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px}.seg.strat3 i{display:block;width:100%;max-width:64px}.seg.strat4 button{padding:6px 2px 5px;font-size:11px;line-height:1.2;text-align:center;min-width:0}.seg.strat4 i{width:100%;max-width:64px}.seg.strat button[aria-pressed="true"] .tpfig{outline:2px solid var(--accent-ink);outline-offset:1px}
 .clrrow{display:flex;gap:6px;align-items:center}.clrrow .toolpick{flex:1;min-width:0}
 [data-pane="projet"] .figrow{grid-template-columns:64px minmax(0,1fr)}
 .rseg svg.rico{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}.rseg svg .bl{stroke:var(--accent);stroke-width:1.6}.rseg svg .dsh{stroke-dasharray:2.6 2}.rseg button:hover{background:var(--accent-soft)}
@@ -710,8 +710,11 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <div class="g2"><label>Matière<input type="text" id="pjMat" placeholder="Contreplaqué bouleau 18 mm"></label><label>Matériau des outils<select id="pjLibMat"></select></label></div>
           <p class="hint">Le matériau des outils choisit les vitesses et avances de la bibliothèque d’outils.</p>
         </section>
-        <section class="blk"><h3>Origine</h3>
-          <div class="orow">
+        <section class="blk" id="stRotZSec" hidden><h3>Zéro Z</h3>
+          <div class="figrow"><span class="ill" data-ill="rz0"></span><div class="seg" id="stRotZSeg" role="group" aria-label="Zéro Z"><button type="button" value="surface">Surface du cylindre</button><button type="button" value="axis">Axe du cylindre</button></div></div>
+        </section>
+        <section class="blk"><h3 id="stOriginT">Origine</h3>
+          <div class="orow"><span class="ill oxyill" data-ill="oxy"></span>
             <div class="ogrid" id="stOrigin" role="group" aria-label="Point d'origine sur le brut">
               <button data-o="tl" title="Coin haut gauche" aria-label="Coin haut gauche"></button><button data-o="tc" title="Milieu haut" aria-label="Milieu haut"></button><button data-o="tr" title="Coin haut droit" aria-label="Coin haut droit"></button>
               <button data-o="ml" title="Milieu gauche" aria-label="Milieu gauche"></button><button data-o="mc" title="Centre" aria-label="Centre"></button><button data-o="mr" title="Milieu droit" aria-label="Milieu droit"></button>
@@ -721,14 +724,13 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
               <label>Décalage X (mm)<input data-u="len" type="number" id="stOX" step="0.1"></label>
               <label>Décalage Y (mm)<input data-u="len" type="number" id="stOY" step="0.1"></label>
               <label id="stOZRow">Zéro Z<select id="stOZ"><option value="top">Dessus du brut</option><option value="bottom">Table (dessous)</option></select></label>
-              <label id="stRotZRow" hidden>Zéro Z<select id="stRotZ"><option value="surface">Surface du cylindre</option><option value="axis">Axe du cylindre</option></select></label>
               <span class="ill ill-sm" data-ill="zzero"></span>
             </div>
           </div>
           <p class="hint" id="originHint"></p>
         </section>
         <section class="blk" id="stOrient" hidden><h3>Orientation</h3>
-          <div class="g2"><label>Axe de rotation<select id="stRotAx"><option value="x">Le long de l’axe X (Y s’enroule)</option><option value="y">Le long de l’axe Y (X s’enroule)</option></select></label></div>
+          <div class="figrow"><span class="ill" data-ill="rax"></span><div class="seg segcol" id="stRotAxSeg" role="group" aria-label="Axe de rotation"><button type="button" value="x">Le long de l’axe X<small>Y s’enroule</small></button><button type="button" value="y">Le long de l’axe Y<small>X s’enroule</small></button></div></div>
           <label class="chk"><input type="checkbox" id="stRotView"> Vue 3D et simulation enroulées sur le cylindre</label>
           <p class="hint" id="stRotPost"></p>
         </section>
@@ -1186,7 +1188,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.208</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.209</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1519,6 +1521,7 @@ Object.assign(I18N_EN, {"Enregistrer le projet (Ctrl+S) : la première fois, cho
 Object.assign(I18N_EN, {"Bibliothèque de machines": "Machine library", "Choisir ou régler la machine (bibliothèque de machines)": "Choose or set up the machine (machine library)", "+ Nouvelle machine": "+ New machine", "Dupliquer": "Duplicate", "Supprimer": "Delete", "Confirmer ?": "Confirm?", "Nom de la machine": "Machine name", "Ma CNC": "My CNC", "Course X (mm)": "X travel (mm)", "Course Y (mm)": "Y travel (mm)", "Course Z (mm)": "Z travel (mm)", "Zone de travail : facultative. Si le brut est plus grand, l’onglet Projet le signale.": "Work area: optional. If the stock is larger, the Project tab warns you.", "Broche : vitesse mini (tr/min)": "Spindle: minimum speed (rpm)", "Broche : vitesse maxi (tr/min)": "Spindle: maximum speed (rpm)", "Les vitesses des outils sont ramenées dans cette plage dans le G-code.": "Tool speeds are clamped to this range in the G-code.", "Post-processeur et vitesses": "Post-processor and speeds", "Notes": "Notes", "Notes (pinces, martyr, réglages…)": "Notes (clamps, spoilboard, settings…)", "Chaque machine garde ses réglages dans ce navigateur. Celle qui est cochée sert au G-code.": "Each machine keeps its settings in this browser. The ticked one is used for the G-code.", "Machine par défaut": "Default machine", "Nouvelle machine {n}": "New machine {n}", "Machine « {m} » choisie.": "Machine “{m}” selected.", "Machine « {m} » supprimée.": "Machine “{m}” deleted.", "Le brut dépasse la course de « {m} » ({d} mm).": "The stock exceeds the travel of “{m}” ({d} mm).", "(onglet Projet, Machine › Changer…)": "(Project tab, Machine › Change…)"});
 Object.assign(I18N_EN, {"Type de projet": "Project type", "Simple face": "Single-sided", "Double face": "Double-sided", "Rotatif": "Rotary", "Simple face : la pièce est usinée par le dessus": "Single-sided: the part is machined from the top", "Double face : la pièce est retournée pour usiner le dessous": "Double-sided: the part is flipped to machine the underside", "Rotatif (4ᵉ axe) : pièce cylindrique qui tourne entre un mandrin et une contre-pointe ; on dessine sur la surface déroulée": "Rotary (4th axis): a cylindrical part turning between a chuck and a tailstock; you draw on the unrolled surface", "Taille du travail": "Job size", "Longueur (L)": "Length (L)", "Diamètre (D)": "Diameter (D)", "Orientation": "Orientation", "Axe de rotation": "Rotation axis", "Le long de l’axe X (Y s’enroule)": "Along the X axis (Y wraps)", "Le long de l’axe Y (X s’enroule)": "Along the Y axis (X wraps)", "Vue 3D et simulation enroulées sur le cylindre": "3D view and simulation wrapped on the cylinder", "Surface du cylindre": "Cylinder surface", "Axe du cylindre": "Cylinder axis", "Cylindre": "Cylinder", "en X": "along X", "en Y": "along Y", "Tour du cylindre : π × D = {c} mm. C’est la largeur de la feuille déroulée sur laquelle vous dessinez ({w}, de 0° à 360°) ; le milieu de la feuille est le dessus du cylindre.": "Cylinder circumference: π × D = {c} mm. This is the width of the unrolled sheet you draw on ({w}, from 0° to 360°); the middle of the sheet is the top of the cylinder.", "Le post-processeur de la machine sortira la coordonnée enroulée en angle A (en degrés), sans arcs G2/G3. Vérifiez que votre contrôleur pilote bien un axe A rotatif.": "The machine post-processor will output the wrapped coordinate as an A angle (degrees), without G2/G3 arcs. Check that your controller drives a rotary A axis.", "Attention : le post-processeur choisi enroule l’autre axe ; changez l’axe de rotation ou le post-processeur.": "Warning: the selected post-processor wraps the other axis; change the rotation axis or the post-processor.", "Projet rotatif : dessinez sur la surface déroulée du cylindre ({c} mm de tour).": "Rotary project: draw on the unrolled surface of the cylinder ({c} mm around).", "Projet double face : réglez le retournement ci-dessous.": "Double-sided project: set the flip below.", "Projet simple face.": "Single-sided project."});
 Object.assign(I18N_EN, {"axe du cylindre": "cylinder axis", "surface du cylindre": "cylinder surface", "rotatif, A": "rotary, A"});
+Object.assign(I18N_EN, {"Zéro Z": "Z zero", "Origine XY": "XY origin", "Le long de l’axe X": "Along the X axis", "Le long de l’axe Y": "Along the Y axis", "Y s’enroule": "Y wraps", "X s’enroule": "X wraps"});
 Object.assign(I18N_EN, {"Visite rapide": "Quick tour", "Réafficher les astuces": "Show tips again", "Astuces réactivées : elles s’afficheront à l’ouverture de chaque onglet.": "Tips turned back on: they will show when you open each tab."});
 Object.assign(I18N_EN, {"Aligner sur": "Align to", "La sélection": "The selection", "Le premier objet sélectionné": "The first selected object", "Le brut": "The stock", "Espacement (mm)": "Spacing (mm)", "Perçage": "Drilling", "« La sélection » : un seul objet s'aligne sur le brut, plusieurs s'alignent entre eux. « Le premier objet sélectionné » : il reste en place et les autres s'alignent sur lui ; Répartir les place à sa suite, dans l'ordre de sélection, avec l'espacement indiqué. Les groupes bougent d'un bloc.": "“The selection”: a single object aligns to the stock, several align with each other. “The first selected object”: it stays in place and the others align to it; Distribute places them after it, in selection order, with the given spacing. Groups move as one.", "Sélectionnez au moins deux objets : le premier sert de référence.": "Select at least two objects: the first one is the reference.", "Sélectionnez au moins deux objets : le premier sert de point de départ.": "Select at least two objects: the first one is the starting point.", "Les objets sont plus grands que le brut.": "The objects are larger than the stock.", "Profil sur la ligne 1": "On-line profile 1", "Profil sur la ligne 2": "On-line profile 2", "Poche 1": "Pocket 1", "F2 · Poche 2": "F2 · Pocket 2", "V-carving 2": "V-carving 2", "Foret 4 mm": "4 mm drill"});
 Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the nut / zero fret (mm)"});
@@ -5274,6 +5277,22 @@ const FIG = {
     else f.tool(43, 8, 10, 20);
     return f.svg();
   },
+  rz0() { // zéro Z rotatif : surface ou axe du cylindre (vue de côté)
+    const ax = ((S.stock.rotary || {}).z0 || 'surface') === 'axis', f = FB(96, 64).poly('M18 14H78A6 18 0 0 1 78 50H18A6 18 0 0 1 18 14Z', FGC.mat).raw('<ellipse cx="18" cy="32" rx="6" ry="18" fill="#e0a070" stroke="' + FGC.out + '" stroke-width="1.2"/>');
+    if (!ax) f.raw('<path d="M6 32H90" stroke="#fff" stroke-width="1.5" stroke-dasharray="4 3"/>');
+    const y = ax ? 32 : 14; return f.path('M8 ' + y + 'H90').dot(48, y, 3.5).tx(ax ? 70 : 60, ax ? 27 : 9, 'Z0').svg();
+  },
+  rax() { // axe de rotation : le long de X ou de Y
+    const y = ((S.stock.rotary || {}).axis || 'x') === 'y', f = FB(96, 64);
+    if (y) { f.poly('M33 18V52A15 6 0 0 0 63 52V18Z', FGC.mat).raw('<ellipse cx="48" cy="18" rx="15" ry="6" fill="#e0a070" stroke="' + FGC.out + '" stroke-width="1.2"/>').raw('<path d="M48 8V62" stroke="#fff" stroke-width="1.5" stroke-dasharray="4 3"/>').dv(76, 14, 56).tx(86, 40, 'Y'); f.path('M30 30A18 6 0 0 0 66 30').arrow(66, 30, -Math.PI / 2.4); }
+    else { f.poly('M18 24H74A6 12 0 0 1 74 48H18A6 12 0 0 1 18 24Z', FGC.mat).raw('<ellipse cx="18" cy="36" rx="6" ry="12" fill="#e0a070" stroke="' + FGC.out + '" stroke-width="1.2"/>').raw('<path d="M6 36H90" stroke="#fff" stroke-width="1.5" stroke-dasharray="4 3"/>').dh(12, 14, 80).tx(48, 9, 'X'); f.path('M84 26A7 12 0 1 1 84 48').arrow(84, 48, Math.PI * 0.95); }
+    return f.svg();
+  },
+  oxy() { // origine XY sur la feuille déroulée
+    const o = (typeof originKey === 'function' ? originKey(S.stock) : S.stock.originXY) || 'bl', vy = ((S.stock.rotary || {}).axis || 'x') === 'y', x0 = vy ? 28 : 16, x1 = vy ? 68 : 80, y0 = vy ? 6 : 12, y1 = vy ? 58 : 52, X = { l: x0, c: (x0 + x1) / 2, r: x1 }[o[1]], Y = { t: y0, m: (y0 + y1) / 2, b: y1 }[o[0]], f = FB(96, 64).poly('M' + x0 + ' ' + y0 + 'H' + x1 + 'V' + y1 + 'H' + x0 + 'Z', FGC.mat); // feuille déroulée : le pointillé est le dessus du cylindre
+    f.raw(vy ? '<path d="M48 ' + y0 + 'V' + y1 + '" stroke="#fff" stroke-width="1.2" stroke-dasharray="3 3"/>' : '<path d="M16 32H80" stroke="#fff" stroke-width="1.2" stroke-dasharray="3 3"/>').path('M' + X + ' ' + Y + 'h14').arrow(X + 15, Y, 0).path('M' + X + ' ' + Y + 'v-14').arrow(X, Y - 15, -Math.PI / 2).dot(X, Y, 4);
+    return f.svg();
+  },
   cyl() {
     const G = 4, f = FB(132, 96).poly('M20 30H96A10 18 0 0 1 96 66H20A10 18 0 0 1 20 30Z', FGC.mat).raw('<ellipse cx="20" cy="48" rx="10" ry="18" fill="#e0a070" stroke="' + FGC.out + '" stroke-width="1.2"/>');
     f.ln(10, 30 - G, 10, 12).ln(106, 30 - G, 106, 12).dh(16, 10, 106).tx(58, 12, 'L').ln(106 + G, 30, 124, 30).ln(106 + G, 66, 124, 66).dv(120, 30, 66).tx(112, 84, 'D', 'end');
@@ -5290,6 +5309,9 @@ const FIG = {
 };
 const ILL = {
   cyl() { return FIG.cyl(); },
+  rz0() { return FIG.rz0(); },
+  rax() { return FIG.rax(); },
+  oxy() { return (S.stock.rotary || {}).on ? FIG.oxy() : ''; },
   curtool() { const f = CURFIG[S.ui.tool]; return f ? f() : ''; },
   depth(F) {
     if (F.type === 'profile' || F.type === 'pocket') return FIG.profDepth();
@@ -5900,7 +5922,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.208', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.209', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -8284,8 +8306,8 @@ function setStMode(m) {
 }
 function pjModeSync() {
   const m = stMode(), rot = m === 'rotary', st = S.stock, R = st.rotary || {}; $$('#stMode button').forEach(b => b.setAttribute('aria-pressed', b.value === m));
-  $('#stFlatSize').hidden = rot; $('#stRotSize').hidden = $('#stRotInfo').hidden = !rot; $('#stDouble').hidden = m !== 'double'; $('#stOrient').hidden = !rot; $('#stOZRow').hidden = rot; $('#stRotZRow').hidden = !rot; $('#stSizeT').textContent = tr(rot ? 'Taille du travail' : 'Brut');
-  if (!rot) return; const d = rotDims(); $('#stRL').value = +d.L.toFixed(3); $('#stRD').value = +d.D.toFixed(3); $('#stRotAx').value = R.axis || 'x'; $('#stRotZ').value = R.z0 || 'surface'; $('#stRotView').checked = R.view3d !== false;
+  $('#stFlatSize').hidden = rot; $('#stRotSize').hidden = $('#stRotInfo').hidden = !rot; $('#stDouble').hidden = m !== 'double'; $('#stOrient').hidden = !rot; $('#stOZRow').hidden = rot; $('#stRotZSec').hidden = !rot; $('#stOriginT').textContent = tr(rot ? 'Origine XY' : 'Origine'); { const or = document.querySelector('[data-pane="projet"] .orow'); if (or) or.classList.toggle('rot', rot); } { const zz = document.querySelector('[data-pane="projet"] .ofields [data-ill="zzero"]'); if (zz) zz.hidden = rot; } $('#stSizeT').textContent = tr(rot ? 'Taille du travail' : 'Brut');
+  if (!rot) return; const d = rotDims(); $('#stRL').value = +d.L.toFixed(3); $('#stRD').value = +d.D.toFixed(3); $$('#stRotAxSeg button').forEach(b => b.setAttribute('aria-pressed', b.value === (R.axis || 'x'))); $$('#stRotZSeg button').forEach(b => b.setAttribute('aria-pressed', b.value === (R.z0 || 'surface'))); $('#stRotView').checked = R.view3d !== false;
   $('#stRotInfo').textContent = trf('Tour du cylindre : π × D = {c} mm. C’est la largeur de la feuille déroulée sur laquelle vous dessinez ({w}, de 0° à 360°) ; le milieu de la feuille est le dessus du cylindre.', { c: fr(Math.PI * d.D, 2), w: tr(R.axis === 'y' ? 'en X' : 'en Y') });
   const P = postOf(S.machine), W = P.vp ? vpGet(P.vp).wrap : null; $('#stRotPost').textContent = W ? (W.axis === (R.axis === 'y' ? 'X' : 'Y') ? tr('Le post-processeur choisi enroule bien cet axe : il sort en angle (axe A).') : tr('Attention : le post-processeur choisi enroule l’autre axe ; changez l’axe de rotation ou le post-processeur.')) : tr('Le post-processeur de la machine sortira la coordonnée enroulée en angle A (en degrés), sans arcs G2/G3. Vérifiez que votre contrôleur pilote bien un axe A rotatif.');
 }
@@ -8302,8 +8324,8 @@ function pfigInit() { document.querySelectorAll('[data-pfig]').forEach(el => { i
   pfigInit(); $$('#stMode button').forEach(b => b.onclick = () => setStMode(b.value));
   $('#stRL').addEventListener('change', e => { const L = +e.target.value; if (!(L > 0)) return; rotApply(L, rotDims().D); pjAfter(); });
   $('#stRD').addEventListener('change', e => { const D = +e.target.value; if (!(D > 0)) return; rotApply(rotDims().L, D); pjAfter(); });
-  $('#stRotAx').addEventListener('change', e => { const d = rotDims(); S.stock.rotary = { ...(S.stock.rotary || {}), axis: e.target.value }; rotApply(d.L, d.D); S.stock.originXY = e.target.value === 'y' ? 'bc' : 'ml'; pjAfter(); });
-  $('#stRotZ').addEventListener('change', e => { S.stock.rotary = { ...(S.stock.rotary || {}), z0: e.target.value }; commit(false); gcDirty = true; renderGcode(); pjModeSync(); });
+  $$('#stRotAxSeg button').forEach(b => b.onclick = () => { if (((S.stock.rotary || {}).axis || 'x') === b.value) return; const d = rotDims(); S.stock.rotary = { ...(S.stock.rotary || {}), axis: b.value }; rotApply(d.L, d.D); S.stock.originXY = b.value === 'y' ? 'bc' : 'ml'; pjAfter(); });
+  $$('#stRotZSeg button').forEach(b => b.onclick = () => { S.stock.rotary = { ...(S.stock.rotary || {}), z0: b.value }; commit(false); gcDirty = true; renderGcode(); pjModeSync(); pjSummary(); });
   $('#stRotView').addEventListener('change', e => { S.stock.rotary = { ...(S.stock.rotary || {}), view3d: e.target.checked }; commit(false); if (typeof RV !== 'undefined') { RV.sig = ''; RV.lsig = ''; RV.fsig = ''; RV.fitted = false; rvSync && rvSync(); rvReq && rvReq(); } });
   pjModeSync();
 })();
