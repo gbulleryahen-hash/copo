@@ -187,7 +187,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.216</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.217</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -337,6 +337,7 @@ X74.36 A14.181</pre>
       <li><strong>Général</strong> : langue de l’interface, écran d’accueil au démarrage, astuces des onglets (et <em>Réafficher toutes les astuces</em>), visite rapide.</li>
       <li><strong>Accroche</strong> : grille magnétique et son pas, repères, brut, rayon d’accroche et accrochage aux objets (voir Dessiner). Le bouton d’accroche de la barre du plan ouvre directement cette rubrique.</li>
       <li><strong>Affichage</strong> : <em>Résolution du relief</em>, comme dans Aspire : Standard (le plus rapide), Haute (environ 3 × plus lent, recommandée) ou Très haute (environ 7 × plus lent) ; quelle que soit la résolution, un relief que l’on déplace suit la souris immédiatement, affiché un peu moins fin, et l’affichage fin revient au lâcher ; le parcours d’usinage n’est pas concerné, grille, parcours, matière enlevée, traits superposés, extrémités des lignes ouvertes, reliefs sur le plan.</li>
+      <li><strong>Vues 3D</strong> : boutons de la souris (par défaut comme Fusion, FreeCAD, Tinkercad : clic droit maintenu = tourner, clic molette maintenu = déplacer ; ou Classique : clic gauche = tourner, clic droit = déplacer ; Maj + clic droit déplace sur un pavé tactile) et centre de rotation : Origine, Centre de la vue ou Sous le pointeur (par défaut).</li>
       <li><strong>Simulation</strong> : résolution par défaut de l’aperçu 3D (Standard, Haute ou Très haute).</li>
     </ul>
     <p>Les unités et la machine restent dans l’onglet Projet, à portée de main. L’onglet G-code rappelle le post-processeur choisi ; <span class="ui">Changer…</span> ouvre la bibliothèque de machines.</p>
@@ -501,7 +502,7 @@ X74.36 A14.181</pre>
 
     <h2 id="fr-vues">Vues 2D et 3D</h2>
     <p>Les boutons <span class="ui">2D</span> et <span class="ui">3D</span> en haut de l’écran fonctionnent comme deux interrupteurs : 2D seule (le dessin occupe toute la zone), 3D seule (le relief), ou les deux à la fois. Quand les deux vues sont affichées, les boutons voisins les placent côte à côte ou l’une au-dessus de l’autre. L’onglet Relief affiche la vue 3D automatiquement.</p>
-    <p>La vue 3D montre le relief dans le brut (en filaire), avec le dessin et le repère. La vue est en projection orthogonale (sans perspective), pratique de face ou de côté. Glisser : tourner ; clic droit ou Maj + glisser : déplacer ; molette : zoom ; double-clic : tout le brut. En haut à droite : le cube d’orientation. En bas, des barres d’icônes comme dans la vue 2D : à gauche, afficher ou masquer le dessin, le repère, le brut et les parcours d’outils (passes à la couleur de leur type, déplacements rapides en gris) ; au centre, les outils de transformation ; à droite, recentrer sur le relief. Le brut et les parcours sont affichés à chaque ouverture de COPO. Si vous masquez les parcours, celui que vous survolez dans la liste de l’onglet Parcours, ou celui que vous êtes en train de régler, reste visible en 3D.</p>
+    <p>La vue 3D montre le relief dans le brut (en filaire), avec le dessin et le repère. La vue est en projection orthogonale (sans perspective), pratique de face ou de côté. Clic droit maintenu : tourner (autour du point sous le pointeur, sans limite, on peut passer sous la pièce) ; clic molette maintenu : déplacer ; molette : zoom ; double-clic : tout le brut ; un clic gauche sélectionne. Comme dans Fusion, FreeCAD ou Tinkercad ; la souris se règle dans Paramètres › Vues 3D. En haut à droite : le cube d’orientation. En bas, des barres d’icônes comme dans la vue 2D : à gauche, afficher ou masquer le dessin, le repère, le brut et les parcours d’outils (passes à la couleur de leur type, déplacements rapides en gris) ; au centre, les outils de transformation ; à droite, recentrer sur le relief. Le brut et les parcours sont affichés à chaque ouverture de COPO. Si vous masquez les parcours, celui que vous survolez dans la liste de l’onglet Parcours, ou celui que vous êtes en train de régler, reste visible en 3D.</p>
     <p>Les vecteurs du dessin se sélectionnent aussi dans la vue 3D : cliquez sur un trait (le curseur devient une main). La sélection est la même dans les deux vues, en bleu ; Maj + clic ajoute ou retire un vecteur, un clic dans le vide désélectionne. Pratique pour choisir le contour d’un modèle STL avant de créer son parcours.</p>
     <p>À l’ouverture de COPO, le plan 2D et la vue 3D sont affichés côte à côte. La vue 3D s’ouvre aussi d’elle-même avec les onglets Relief et Parcours. Si vous l’avez fermée avec le bouton <span class="ui">3D</span>, COPO respecte ce choix jusqu’au prochain chargement de la page.</p>
     <p><strong>Transformer un relief en 3D.</strong> Cliquez un élément dans la vue 3D pour le sélectionner (coins de sa boîte en surbrillance ; la sélection est la même dans la vue 2D et dans la liste). La barre du bas propose trois outils, avec les cotes affichées en haut à gauche :</p>
@@ -514,7 +515,7 @@ X74.36 A14.181</pre>
     <p>Chaque transformation s’annule avec <span class="ui">Ctrl+Z</span> ; le panneau du relief garde les valeurs exactes.</p>
 
     <h2 id="fr-3d">Aperçu 3D</h2>
-    <figure><img src="img/fr-06-apercu3d.webp" alt="Aperçu 3D du projet d'exemple usiné." width="1800" height="1125" loading="lazy"><figcaption>Glisser pour tourner, clic droit ou Maj pour déplacer, molette pour zoomer, double-clic pour recentrer.</figcaption></figure>
+    <figure><img src="img/fr-06-apercu3d.webp" alt="Aperçu 3D du projet d'exemple usiné." width="1800" height="1125" loading="lazy"><figcaption>Clic droit maintenu pour tourner, clic molette pour déplacer, molette pour zoomer, double-clic pour recentrer.</figcaption></figure>
     <p><strong>Finesse</strong> : la simulation ne calcule que la zone réellement usinée (le reste du brut est affiché plein) ; plus la zone est petite, plus le rendu est fin. Le réglage <em>Résolution</em> (Standard, Haute ou Très haute : 0,5, 1,5 ou 3,5 millions de points) augmente encore la finesse ; la résolution utilisée s'affiche en bas de la fenêtre.</p>
     <p>L'aperçu simule l'enlèvement de matière dans l'épaisseur réelle du brut, y compris les trous débouchants. Les boutons de lecture rejouent l'usinage : <strong>retour au début</strong>, <strong>pas en arrière</strong>, <strong>lecture / pause</strong>, <strong>pas en avant</strong> et <strong>aller à la fin</strong> ; un pas correspond à un déplacement de l'outil. Au clavier : flèches gauche et droite, Début, Fin et Espace. Le curseur permet d'aller à n'importe quel instant. Le temps écoulé et le temps total s’affichent en haut à gauche de la vue ; le bouton de recentrage est en bas à droite, comme dans les autres vues, et la croix en haut à droite ferme l’aperçu. L'aperçu demande WebGL 2 (Chrome, Edge ou Firefox récents).</p>
 
@@ -602,7 +603,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.216 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.217 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -639,7 +640,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.216</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.217</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -789,6 +790,7 @@ X74.36 A14.181</pre>
       <li><strong>General</strong>: interface language, welcome screen at startup, tab tips (and <em>Show all tips again</em>), quick tour.</li>
       <li><strong>Snapping</strong>: snap to grid and its spacing, guides, stock, snap radius and object snapping (see Drawing). The snap button of the canvas bar opens this section directly.</li>
       <li><strong>Display</strong>: <em>Relief resolution</em>, as in Aspire: Standard (fastest), High (about 3 × slower, recommended) or Very high (about 7 × slower); whatever the resolution, a relief being moved follows the mouse immediately, shown slightly coarser, and the fine display returns on release; toolpaths are not affected, grid, toolpaths, removed material, overlapping lines, ends of open lines, reliefs on the canvas.</li>
+      <li><strong>3D views</strong>: mouse buttons (by default like Fusion, FreeCAD, Tinkercad: hold right button = orbit, hold middle button = pan; or Classic: left button = orbit, right button = pan; Shift + right button pans on a touchpad) and orbit centre: Origin, View centre or Under cursor (default).</li>
       <li><strong>Simulation</strong>: default resolution of the 3D preview (Standard, High or Very high).</li>
     </ul>
     <p>Units and machine stay in the Project tab, close at hand. The G-code tab shows the selected post-processor; <span class="ui">Change…</span> opens the machine library.</p>
@@ -953,7 +955,7 @@ X74.36 A14.181</pre>
 
     <h2 id="en-views">2D and 3D views</h2>
     <p>The <span class="ui">2D</span> and <span class="ui">3D</span> buttons at the top work as two switches: 2D only (the drawing fills the area), 3D only (the relief), or both at once. When both are shown, the buttons next to them place the views side by side or one above the other. The Relief tab shows the 3D view automatically.</p>
-    <p>The 3D view shows the relief in the stock (wireframe), with the drawing and the axes. The view uses an orthographic projection (no perspective), handy from the front or the side. Drag: rotate; right-click or Shift + drag: pan; wheel: zoom; double-click: whole stock. Top right: the view cube. At the bottom, icon bars like in the 2D view: on the left, show or hide the drawing, the axes, the stock and the toolpaths (cuts in their type’s colour, rapid moves in grey); in the middle, the transform tools; on the right, recentre on the relief. The stock and the toolpaths are shown every time COPO opens. If you hide the toolpaths, the one you hover in the Toolpaths tab list, or the one you are editing, stays visible in 3D.</p>
+    <p>The 3D view shows the relief in the stock (wireframe), with the drawing and the axes. The view uses an orthographic projection (no perspective), handy from the front or the side. Hold the right button: orbit (around the point under the cursor, unlimited, you can go under the part); hold the middle button: pan; wheel: zoom; double-click: whole stock; a left click selects. As in Fusion, FreeCAD or Tinkercad; the mouse is set in Settings › 3D views. Top right: the view cube. At the bottom, icon bars like in the 2D view: on the left, show or hide the drawing, the axes, the stock and the toolpaths (cuts in their type’s colour, rapid moves in grey); in the middle, the transform tools; on the right, recentre on the relief. The stock and the toolpaths are shown every time COPO opens. If you hide the toolpaths, the one you hover in the Toolpaths tab list, or the one you are editing, stays visible in 3D.</p>
     <p>Drawing vectors can also be selected in the 3D view: click a line (the cursor turns into a hand). The selection is shared by both views, in blue; Shift + click adds or removes a vector, a click on empty space deselects. Handy for picking the outline of an STL model before creating its toolpath.</p>
     <p>When COPO opens, the 2D canvas and the 3D view are shown side by side. The 3D view also opens by itself with the Relief and Toolpaths tabs. If you closed it with the <span class="ui">3D</span> button, COPO respects that choice until the page is reloaded.</p>
     <p><strong>Transforming a relief in 3D.</strong> Click an item in the 3D view to select it (its box corners are highlighted; the selection is shared with the 2D view and the list). The bottom bar offers three tools, with dimensions shown at the top left:</p>
@@ -966,7 +968,7 @@ X74.36 A14.181</pre>
     <p>Each transformation can be undone with <span class="ui">Ctrl+Z</span>; the relief panel keeps the exact values.</p>
 
     <h2 id="en-3d">3D preview</h2>
-    <figure><img src="img/en-06-apercu3d.webp" alt="3D preview of the machined sample project." width="1800" height="1125" loading="lazy"><figcaption>Drag to rotate, right-click or Shift to pan, wheel to zoom, double-click to recenter.</figcaption></figure>
+    <figure><img src="img/en-06-apercu3d.webp" alt="3D preview of the machined sample project." width="1800" height="1125" loading="lazy"><figcaption>Hold the right button to orbit, the middle button to pan, wheel to zoom, double-click to recenter.</figcaption></figure>
     <p><strong>Detail</strong>: the simulation only computes the area actually machined (the rest of the stock is drawn solid); the smaller the area, the finer the result. The <em>Resolution</em> setting (Standard, High or Very high: 0.5, 1.5 or 3.5 million points) raises the detail further; the resolution used is shown at the bottom of the window.</p>
     <p>The preview simulates material removal through the real stock thickness, through-holes included. The playback buttons replay the machining: <strong>back to start</strong>, <strong>step back</strong>, <strong>play / pause</strong>, <strong>step forward</strong> and <strong>go to end</strong>; one step is one tool move. Keyboard: left and right arrows, Home, End and Space. The slider jumps to any moment. Elapsed and total time show at the top left of the view; the recentre button is at the bottom right, as in the other views, and the cross at the top right closes the preview.</p>
 
@@ -1054,7 +1056,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.216 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.217 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
