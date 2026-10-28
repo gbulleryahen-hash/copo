@@ -1191,7 +1191,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.215</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.216</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -4159,7 +4159,7 @@ cv.addEventListener('pointerdown', e => {
       else if (gd) { drag = { mode: 'guide', axis: gd.axis, i: gd.i }; }
       else if (hi) { const was = S.imgSel === hi.id; if (!was) { IXF = false; selectImg(hi.id); } drag = { mode: 'imove', im: hi, off: [hi.x - p[0], hi.y - p[1]], toggleXf: was, X0: X, Y0: Y }; }
       else if (hr && !$('#tpWin').hidden) { tpRelPick(hr.id); }
-      else if (hr) { const was = S.relSel === hr.id; if (!was) { RXF = false; selectRel(hr.id); if (curTab !== 'relief') setTab('relief'); } drag = { mode: 'imove', im: hr, off: [hr.x - p[0], hr.y - p[1]], rel: true, toggleXf: was, X0: X, Y0: Y }; }
+      else if (hr) { const was = S.relSel === hr.id; if (!was) { RXF = false; selectRel(hr.id); if (curTab !== 'relief') setTab('relief'); } drag = { mode: 'imove', im: hr, off: [hr.x - p[0], hr.y - p[1]], rel: true, toggleXf: was, X0: X, Y0: Y }; relDragPrep(hr); }
       else { S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (S.relSel) { S.relSel = null; relPanel(); } if (!e.shiftKey) S.sel.clear(); renderSel(); drag = { mode: 'band', sx0: X, sy0: Y, sx1: X, sy1: Y }; }
     }
   } else if (t === 'nodes') nodesDown(p, e, X, Y);
@@ -5934,7 +5934,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.215', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.216', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -7160,7 +7160,7 @@ function drawImgHandles(C) {
 function imgCursor(X, Y) { const h = relHandleAt(X, Y) || imgHandleAt(X, Y); if (h) return h.kind === 'irot' ? 'grab' : h.kind === 'iedge' ? 'move' : 'nwse-resize'; return null; }
 function imgDragMove(D, p, e) {
   const im = D.im;
-  if (D.mode === 'imove') { if (D.rel && !D.rd) { D.rd = 1; relDragBegin(im); } const q = snap([p[0] + D.off[0], p[1] + D.off[1]]); im.x = q[0]; im.y = q[1]; setCoords(p, 'Centre ' + fr(outXY(im.x, im.y)[0]) + ' / ' + fr(outXY(im.x, im.y)[1])); }
+  if (D.mode === 'imove') { if (D.rel) relDragBegin(im); const q = snap([p[0] + D.off[0], p[1] + D.off[1]]); im.x = q[0]; im.y = q[1]; setCoords(p, 'Centre ' + fr(outXY(im.x, im.y)[0]) + ' / ' + fr(outXY(im.x, im.y)[1])); }
   else if (D.mode === 'iscale') {
     const r = (im.rot || 0) * Math.PI / 180, u = [Math.cos(r), Math.sin(r)], v = [-Math.sin(r), Math.cos(r)], d = [p[0] - D.anchor[0], p[1] - D.anchor[1]];
     let w = Math.max(1, (d[0] * u[0] + d[1] * u[1]) * D.sgn[0]), h = Math.max(1, (d[0] * v[0] + d[1] * v[1]) * D.sgn[1]);
@@ -7274,8 +7274,12 @@ function relClipMask(it, i0, i1, j0, j1, cx, cy, ox = 0, oy = 0) {
 // aperçu 2D : ombrage sous le dessin
 // déplacement d'un relief : le reste est figé et l'élément déplacé est affiché décalé, sans recalcul ; calcul complet au lâcher
 let RELDRAG = null;
-function relDragBegin(it) { if (RELDRAG || !it || (it.clip && it.clip.length) || relLinked(it)) return; RELDRAG = { id: it.id, x0: it.x, y0: it.y, t0: +it.top || 0 }; }
-function relDragEnd() { const d = RELDRAG; if (!d) return; RELDRAG = null; if (typeof RV !== 'undefined' && RV.dm) { for (const m of [RV.dm.a, RV.dm.b]) if (m) RV.gl.deleteVertexArray(m.vao); RV.dm = null; } relDirty = true; drawRelief.last = 0; drawRelief.t1 = 0; if (typeof RV !== 'undefined') { RV.lastBuild = 0; RV.lastEnd = 0; } }
+function relDragBegin(it) { const d0 = RELDRAG; if (d0) { if (!d0.q) { clearTimeout(d0.rt); d0.rt = setTimeout(() => relDragFine(d0), 350); } return; } if (!it || (it.clip && it.clip.length) || relLinked(it)) return; RELDRAG = { id: it.id, x0: it.x, y0: it.y, t0: +it.top || 0, q: 0 }; }
+/* couches préparées dès l'appui : la pièce suit la souris dès le premier mouvement */
+function relDragPrep(it) { relDragEnd(); relDragBegin(it); const d = RELDRAG; if (!d) return; const ids = S.relief.show !== false ? S.relief.items.filter(i => i.visible && relGrid[i.id] && (i.kind === 'stl' || i.kind === 'gen' || (i.kind === 'image' && !relLinked(i)))).map(i => i.id) : []; if (ids.length && VIEWS.d2) relDrag2D(ids); if (typeof rvSync === 'function') rvSync(); }
+/* départ immédiat avec des couches grossières ; affinées dès que la souris marque une pause */
+function relDragFine(d) { if (RELDRAG !== d || d.q) return; d.q = 1; d.l2 = null; if (typeof RV !== 'undefined' && RV.dm) { for (const m of [RV.dm.a, RV.dm.b]) if (m) RV.gl.deleteVertexArray(m.vao); RV.dm = null; } draw(); if (typeof rvReq === 'function') rvReq(); }
+function relDragEnd() { const d = RELDRAG; if (!d) return; clearTimeout(d.rt); RELDRAG = null; if (typeof RV !== 'undefined' && RV.dm) { for (const m of [RV.dm.a, RV.dm.b]) if (m) RV.gl.deleteVertexArray(m.vao); RV.dm = null; } const it = S.relief.items.find(i => i.id === d.id); if (!it || (it.x === d.x0 && it.y === d.y0 && (+it.top || 0) === d.t0)) return; /* simple clic : rien à recalculer */ relDirty = true; drawRelief.last = 0; drawRelief.t1 = 0; if (typeof RV !== 'undefined') { RV.lastBuild = 0; RV.lastEnd = 0; } }
 function relOnly(pred, fn) { const its = S.relief.items, sv = its.map(i => i.visible), d = RELDRAG, m = d && its.find(i => i.id === d.id), p = m && [m.x, m.y, m.top]; its.forEach(i => { if (!pred(i)) i.visible = false; }); if (m) { m.x = d.x0; m.y = d.y0; m.top = d.t0; } /* couches calculées à la position de départ, décalées ensuite à l'affichage */ try { return fn(); } finally { its.forEach((i, k) => { i.visible = sv[k]; }); if (m) { m.x = p[0]; m.y = p[1]; m.top = p[2]; } } }
 function relShade(R, cv, min, max) {
   const { nx, ny, cx, cy, H } = R; cv = cv || document.createElement('canvas'); cv.width = nx; cv.height = ny;
@@ -7287,7 +7291,7 @@ function relShade(R, cv, min, max) {
 }
 function relDrag2D(ids) {
   const d = RELDRAG, it = S.relief.items.find(i => i.id === d.id); if (!it) { RELDRAG = null; return null; }
-  if (!d.l2) { const b = [400000, 800000, 1200000][relLevel()], cf = (w, h) => Math.max(0.015, Math.sqrt(w * h / b)), oth = ids.filter(i => i !== d.id), mk = (pred, mids) => mids.length ? relOnly(pred, () => reliefCompose(cf, true, mids, true, true)) : null;
+  if (!d.l2) { const b = d.q ? [250000, 400000, 600000][relLevel()] : 90000, cf = (w, h) => Math.max(0.015, Math.sqrt(w * h / b)), oth = ids.filter(i => i !== d.id), mk = (pred, mids) => mids.length ? relOnly(pred, () => reliefCompose(cf, true, mids, true, true)) : null;
     const A = mk(i => i.id !== d.id, oth), B = mk(i => i.id === d.id, ids.includes(d.id) ? [d.id] : []), min = Math.min(A ? A.min : Infinity, B ? B.min : Infinity), max = Math.max(A ? A.max : -Infinity, B ? B.max : -Infinity);
     d.l2 = [A && { R: A, cv: relShade(A, null, min, max) }, B && { R: B, cv: relShade(B, null, min, max) }]; }
   const [A, B] = d.l2, out = []; if (A) out.push([A, 0, 0]); if (B) out.push([B, it.x - d.x0, it.y - d.y0]); return out;
@@ -7590,7 +7594,7 @@ function rvInit() {
   c.addEventListener('contextmenu', e => e.preventDefault());
   c.addEventListener('pointerdown', e => { c.setPointerCapture(e.pointerId); const r = c.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
     const gh = e.button === 0 ? rvGizmoHit(mx, my) : null;
-    if (gh) { drag = { gz: gh, mx, my, x0: e.clientX, y0: e.clientY, it: relCur(), st: rvSnapIt(relCur()), moved: false }; return; }
+    if (gh) { drag = { gz: gh, mx, my, x0: e.clientX, y0: e.clientY, it: relCur(), st: rvSnapIt(relCur()), moved: false }; if (gh.type === 'axis') relDragPrep(drag.it); return; }
     drag = { x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, mx, my, pan: e.button === 2 || e.shiftKey || e.button === 1 }; RV.touched = true; c.style.cursor = 'grabbing'; });
   c.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
     if (!drag) { const h = RV.tool ? rvGizmoHit(mx, my) : null, k = h ? h.k : null; if (k !== RV.hover) { RV.hover = k; rvReq(); } c.style.cursor = h || rvPickShape(mx, my) ? 'pointer' : 'grab'; return; }
@@ -7631,7 +7635,7 @@ function rvSync() {
   if (!VIEWS.d3 || !RV.gl) return; const st = S.stock; relSyncLinks();
   const dr = RELDRAG, sig = JSON.stringify([st.w, st.h, st.t, S.relief.items.map(i => [i.id, dr && i.id === dr.id ? dr.x0 : i.x, dr && i.id === dr.id ? dr.y0 : i.y, i.w, i.h, i.rot, i.zH, dr && i.id === dr.id ? dr.t0 : i.top, i.rx, i.ry, i.mode, i.visible, i.smooth, i.invert, !!relGrid[i.id], relGrid[i.id] && relGrid[i.id].nx, relClipSig(i)])]);
   if (sig !== RV.sig) { const now = performance.now(), wait = Math.max(60, RV.cost || 0) - (now - (RV.lastEnd || 0)); if (RV.sig && wait > 0) { clearTimeout(RV.thT); RV.thT = setTimeout(() => { rvSync(); rvReq(); }, wait + 5); } else { RV.sig = sig; rvBuildMesh(); RV.lastEnd = performance.now(); RV.cost = RV.lastEnd - now; rvReq(); } } /* pendant une manipulation : maillage refait au plus une fois par intervalle */
-  if (dr && !RV.dm) { const b = [150000, 400000, 700000][relLevel()]; RV.dm = { a: relOnly(i => i.id !== dr.id, () => rvMakeMesh(b)), b: relOnly(i => i.id === dr.id, () => rvMakeMesh(b)) }; rvReq(); } /* déplacement : deux maillages, l'élément déplacé est décalé à l'affichage */
+  if (dr && !RV.dm) { const b = dr.q ? [80000, 150000, 250000][relLevel()] : 30000; RV.dm = { a: relOnly(i => i.id !== dr.id, () => rvMakeMesh(b)), b: relOnly(i => i.id === dr.id, () => rvMakeMesh(b)) }; rvReq(); } /* déplacement : deux maillages, l'élément déplacé est décalé à l'affichage */
   if (!RV.fitted && $('#rvc').clientWidth > 10) { rvFit(true); RV.fitted = true; }
   const lsig = JSON.stringify(wrapInfo()) + '|' + ((st.rotary || {}).z0 || '') + '|' + (typeof snapVer !== 'undefined' ? snapVer : 0) + '|' + st.w + '|' + st.h + '|' + st.t + '|' + st.originXY + '|' + S.shapes.length + '|' + [...S.sel].join(',') + '|' + S.tps.map(t => t.id + (t.visible ? 1 : 0) + (t.moves ? t.moves.length : 0) + (t.face || 1)).join(',');
   if (lsig !== RV.lsig) { RV.lsig = lsig; rvBuildLines(); rvReq(); }
