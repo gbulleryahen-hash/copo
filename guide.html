@@ -187,7 +187,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.211</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.212</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -288,7 +288,7 @@ footer p{max-width:none}
     </div>
 
     <h2 id="fr-brut">Onglet Projet</h2>
-    <figure><img src="img/fr-10-projet.webp" alt="Onglet Projet : résumé, brut, origine, double face, unités et machine." width="1800" height="1125" loading="lazy"><figcaption>L'onglet Projet regroupe tout ce qui se règle au début d'un travail. Le résumé en haut permet de tout vérifier d'un coup d'œil.</figcaption></figure>
+    <figure><img src="img/fr-10-projet.webp" alt="Onglet Projet : résumé, machine, unités, type de projet, brut et origine." width="1800" height="1125" loading="lazy"><figcaption>L'onglet Projet regroupe tout ce qui se règle au début d'un travail. Le résumé en haut permet de tout vérifier d'un coup d'œil.</figcaption></figure>
     <p>L'onglet <span class="ui">Projet</span>, le premier du panneau de gauche, s'ouvre tout seul quand vous créez un nouveau projet. Il contient :</p>
     <ul>
       <li><strong>Type de projet</strong> : <em>Simple face</em>, <em>Double face</em> (le bloc Double face apparaît) ou <em>Rotatif</em> (4ᵉ axe). Les réglages en dessous changent selon le choix. Si la machine choisie n’a pas d’axe rotatif déclaré, un avertissement s’affiche sous le choix Rotatif, sans rien bloquer.</li>
@@ -301,6 +301,35 @@ footer p{max-width:none}
     </ul>
     <p>Le point d'origine doit correspondre à l'endroit où vous faites X0 Y0 sur la machine. Le brut, l'origine et la matière sont enregistrés avec le projet. Les unités et la machine restent en mémoire dans le navigateur.</p>
     <div class="note"><p>Exemple : avec l'origine au coin bas gauche, un carré dont le coin est à X0 Y0 sur le plan sera usiné à partir du coin bas gauche de votre panneau. La ligne sous la grille indique où tombe X0 Y0 du G-code.</p></div>
+
+    <h3 id="fr-rotatif">Projet rotatif (4ᵉ axe), avec l’exemple</h3>
+    <p><span class="ui">Fichier › Ouvrir l’exemple rotatif (4ᵉ axe)</span> charge un cylindre de hêtre de 90 mm de diamètre et 150 mm de long, avec le mot COPO en V-carving et un filet gravés tout autour. Suivez-le pour voir le principe :</p>
+    <figure><img src="img/fr-21-rotatif.webp" alt="Exemple rotatif : panneau Projet, feuille déroulée avec repères d’angle et vue 3D enroulée." width="1800" height="1125" loading="lazy"><figcaption>À gauche, le type <em>Rotatif</em> et la taille du travail ; au centre, la feuille déroulée (150 × 282,74 mm) avec les repères 0°, 90° et 270° ; à droite, la vue 3D enroulée sur le cylindre.</figcaption></figure>
+    <ol class="steps">
+      <li><div><b>Type de projet : Rotatif</b>Le brut devient un cylindre. Si la machine n’a pas d’axe rotatif déclaré, un avertissement orange s’affiche, sans rien bloquer.</div></li>
+      <li><div><b>Taille du travail</b>Longueur 150 mm, diamètre 90 mm : COPO calcule le tour (π × 90 = 282,74 mm), qui devient la largeur de la feuille déroulée.</div></li>
+      <li><div><b>Zéro Z, origine XY, orientation</b>Zéro Z à la surface du cylindre ; origine au milieu gauche (X0 au bout gauche de la pièce, A0 sur le dessus) ; axe de rotation le long de X, donc Y s’enroule.</div></li>
+      <li><div><b>Dessin et parcours</b>On dessine et on crée les parcours à plat, comme d’habitude. Le milieu de la feuille est le dessus du cylindre ; ses deux bords se rejoignent (0° = 360°).</div></li>
+      <li><div><b>Simulation et G-code</b>L’aperçu 3D montre la matière enlevée sur le cylindre. Dans le G-code, Y devient l’angle A, en degrés, et les arcs sont remplacés par de petits segments.</div></li>
+    </ol>
+    <figure><img src="img/fr-22-rotatif-simu.webp" alt="Simulation de l’exemple rotatif : COPO gravé sur le cylindre." width="1800" height="1125" loading="lazy"><figcaption>Simulation en résolution Haute : le texte en V-carving est creusé dans le cylindre.</figcaption></figure>
+    <pre><span class="c">(COPO FAO 2D)</span>
+<span class="c">(Cylindre L 150 x D 90 mm feuille deroulee 150 x 282.743)</span>
+<span class="c">(Origine XY : milieu gauche - Z0 : surface du cylindre)</span>
+G21 G90 G17 G94
+<span class="c">(Axe rotatif : Y enroule en A - diametre 90 mm - Z0 a la surface)</span>
+G0 Z10
+<span class="c">(Outil : Fraise hémisphérique 3 mm)</span>
+…
+<span class="c">(Axe rotatif : Y enroule en A - diametre 90 mm - Z0 a la surface)</span>
+G0 X50 A14.137
+X73.401 A14.14 F1000
+X73.722 A14.148
+X74.042 A14.162
+X74.36 A14.181</pre>
+    <h3 id="fr-machines">Bibliothèque de machines</h3>
+    <figure><img src="img/fr-23-machines.webp" alt="Bibliothèque de machines : liste à gauche, réglages à droite." width="1800" height="1125" loading="lazy"><figcaption>À gauche, les machines (celle qui est cochée sert au G-code) ; à droite, les réglages de la machine choisie, enregistrés automatiquement.</figcaption></figure>
+    <p>Dans l’onglet Projet, <span class="ui">Machine › Changer…</span> ouvre la bibliothèque. Chaque machine garde son post-processeur, ses vitesses, ses hauteurs de sécurité, sa course X/Y/Z, sa plage de broche et son axe rotatif (lettre A ou B). La machine par défaut utilise le post-processeur GRBL simple, et la remontée à un Z machine (G53) au changement d’outil est désactivée par défaut.</p>
 
     <h2 id="fr-param">Paramètres</h2>
     <p><span class="ui">Édition › Paramètres…</span> (<kbd>Ctrl</kbd>+<kbd>,</kbd>) ouvre une fenêtre à rubriques : les titres à gauche, le contenu qui défile à droite (cliquez un titre pour y aller ; le titre de la partie affichée s’allume). Tout est enregistré dans le navigateur.</p>
@@ -573,7 +602,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.211 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.212 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -610,7 +639,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.211</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.212</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -711,7 +740,7 @@ M30</pre>
     </div>
 
     <h2 id="en-stock">Project tab</h2>
-    <figure><img src="img/en-10-projet.webp" alt="Project tab: summary, stock, origin, double-sided, units and machine." width="1800" height="1125" loading="lazy"><figcaption>The Project tab gathers everything you set at the start of a job. The summary at the top lets you check it all at a glance.</figcaption></figure>
+    <figure><img src="img/en-10-projet.webp" alt="Project tab: summary, machine, units, project type, stock and origin." width="1800" height="1125" loading="lazy"><figcaption>The Project tab gathers everything you set at the start of a job. The summary at the top lets you check it all at a glance.</figcaption></figure>
     <p>The <span class="ui">Project</span> tab, first in the left panel, opens by itself when you create a new project. It contains:</p>
     <ul>
       <li><strong>Project type</strong>: <em>Single-sided</em>, <em>Double-sided</em> (the Double-sided block appears) or <em>Rotary</em> (4th axis). The settings below change with the choice. If the selected machine has no rotary axis declared, a warning appears under the Rotary choice, without blocking anything.</li>
@@ -724,6 +753,35 @@ M30</pre>
     </ul>
     <p>The origin point must match the point where you set X0 Y0 on the machine. Stock, origin and material are saved with the project. Units and machine settings are remembered in the browser.</p>
     <div class="note"><p>Example: with the origin at the bottom left corner, a square whose corner sits at X0 Y0 on the canvas is cut from the bottom left corner of your sheet. The line under the grid tells you where the G-code X0 Y0 falls.</p></div>
+
+    <h3 id="en-rotary">Rotary project (4th axis), with the sample</h3>
+    <p><span class="ui">File › Open the rotary sample (4th axis)</span> loads a beech cylinder, 90 mm in diameter and 150 mm long, with the word COPO V-carved and a flourish engraved all around. Follow it to see how it works:</p>
+    <figure><img src="img/en-21-rotatif.webp" alt="Rotary sample: Project panel, unrolled sheet with angle marks and wrapped 3D view." width="1800" height="1125" loading="lazy"><figcaption>Left, the <em>Rotary</em> type and the job size; centre, the unrolled sheet (150 × 282.74 mm) with the 0°, 90° and 270° marks; right, the 3D view wrapped on the cylinder.</figcaption></figure>
+    <ol class="steps">
+      <li><div><b>Project type: Rotary</b>The stock becomes a cylinder. If the machine has no rotary axis declared, an orange warning appears, without blocking anything.</div></li>
+      <li><div><b>Job size</b>Length 150 mm, diameter 90 mm: COPO computes the circumference (π × 90 = 282.74 mm), which becomes the width of the unrolled sheet.</div></li>
+      <li><div><b>Z zero, XY origin, orientation</b>Z zero on the cylinder surface; origin middle left (X0 at the left end of the part, A0 on top); rotation axis along X, so Y wraps.</div></li>
+      <li><div><b>Drawing and toolpaths</b>Draw and create toolpaths flat, as usual. The middle of the sheet is the top of the cylinder; its two edges meet (0° = 360°).</div></li>
+      <li><div><b>Simulation and G-code</b>The 3D preview shows the material removed on the cylinder. In the G-code, Y becomes the A angle, in degrees, and arcs are replaced with short segments.</div></li>
+    </ol>
+    <figure><img src="img/en-22-rotatif-simu.webp" alt="Simulation of the rotary sample: COPO carved on the cylinder." width="1800" height="1125" loading="lazy"><figcaption>Simulation at High resolution: the V-carved text is cut into the cylinder.</figcaption></figure>
+    <pre><span class="c">(COPO 2D CAM)</span>
+<span class="c">(Cylinder L 150 x D 90 mm unrolled sheet 150 x 282.743)</span>
+<span class="c">(XY origin: middle left - Z0: cylinder surface)</span>
+G21 G90 G17 G94
+<span class="c">(Rotary axis: Y wraps to A - diameter 90 mm - Z0 at the surface)</span>
+G0 Z10
+<span class="c">(Tool: Ball nose 3 mm)</span>
+…
+<span class="c">(Rotary axis: Y wraps to A - diameter 90 mm - Z0 at the surface)</span>
+G0 X50 A14.137
+X73.401 A14.14 F1000
+X73.722 A14.148
+X74.042 A14.162
+X74.36 A14.181</pre>
+    <h3 id="en-machines">Machine library</h3>
+    <figure><img src="img/en-23-machines.webp" alt="Machine library: list on the left, settings on the right." width="1800" height="1125" loading="lazy"><figcaption>Left, the machines (the ticked one is used for the G-code); right, the settings of the selected machine, saved automatically.</figcaption></figure>
+    <p>In the Project tab, <span class="ui">Machine › Change…</span> opens the library. Each machine keeps its post-processor, speeds, safe heights, X/Y/Z travel, spindle range and rotary axis (letter A or B). The default machine uses the plain GRBL post-processor, and rising to a machine Z (G53) at tool changes is off by default.</p>
 
     <h2 id="en-settings">Settings</h2>
     <p><span class="ui">Edit › Settings…</span> (<kbd>Ctrl</kbd>+<kbd>,</kbd>) opens a window with sections: titles on the left, content scrolling on the right (click a title to jump to it; the title of the part shown lights up). Everything is saved in the browser.</p>
@@ -996,7 +1054,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.211 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.212 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
