@@ -560,7 +560,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 .ilfig{width:100%;height:auto;background:#ffffff12;border-radius:6px}
 .ipdim{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;align-items:center}.ipmini{width:96px;height:auto;background:#ffffff12;border-radius:5px}
 .ipdim{display:grid;grid-template-columns:88px minmax(0,1fr);gap:10px;align-items:center}.ipfig{width:88px;height:auto;display:block}.ipf{display:grid;gap:6px}.ipf label{font-size:12px}
-#tpForm .figrow{grid-template-columns:64px minmax(0,1fr)}#tpForm .figrow.fdepth{grid-template-columns:88px minmax(0,1fr)}#tpForm .figrow.nofig{grid-template-columns:minmax(0,1fr)}.tpfig{display:block;width:100%;height:auto}.seg.strat button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px 6px}.seg.strat i{display:block;width:64px}.seg.strat4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}.seg.strat4 button{padding:6px 2px 5px;font-size:11px;line-height:1.2;text-align:center;min-width:0}.seg.strat4 i{width:100%;max-width:64px}.seg.strat button[aria-pressed="true"] .tpfig{outline:2px solid var(--accent-ink);outline-offset:1px}
+#tpForm .figrow{grid-template-columns:64px minmax(0,1fr)}#tpForm .figrow.fdepth{grid-template-columns:88px minmax(0,1fr)}#tpForm .figrow.nofig{grid-template-columns:minmax(0,1fr)}.tpfig{display:block;width:100%;height:auto}.seg.strat button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px 6px}.seg.strat i{display:block;width:64px}.seg.strat4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}.seg.strat3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.seg.strat3 button{padding:6px 2px 5px;font-size:12px;line-height:1.2;text-align:center;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px}.seg.strat3 i{display:block;width:100%;max-width:64px}.seg.strat4 button{padding:6px 2px 5px;font-size:11px;line-height:1.2;text-align:center;min-width:0}.seg.strat4 i{width:100%;max-width:64px}.seg.strat button[aria-pressed="true"] .tpfig{outline:2px solid var(--accent-ink);outline-offset:1px}
 .clrrow{display:flex;gap:6px;align-items:center}.clrrow .toolpick{flex:1;min-width:0}
 [data-pane="projet"] .figrow{grid-template-columns:64px minmax(0,1fr)}
 .rseg svg.rico{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}.rseg svg .bl{stroke:var(--accent);stroke-width:1.6}.rseg svg .dsh{stroke-dasharray:2.6 2}.rseg button:hover{background:var(--accent-soft)}
@@ -693,8 +693,16 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <button type="button" class="toolpick machpick" id="pjMachBtn" data-act="machOpen" title="Choisir ou régler la machine (bibliothèque de machines)"><span><b id="pjMachName"></b><small id="pjMachPost"></small></span><small>Changer…</small></button>
           <p class="hint" id="pjMachWarn" hidden></p>
         </section>
-        <section class="blk"><h3>Brut</h3>
-          <div class="figrow"><span class="ill" data-ill="stock"></span><div class="g3">
+        <section class="blk" id="pjType"><h3>Type de projet</h3>
+          <div class="seg strat strat3" id="stMode" role="group" aria-label="Type de projet"><button value="single" title="Simple face : la pièce est usinée par le dessus"><i data-pfig="single"></i><span>Simple face</span></button><button value="double" title="Double face : la pièce est retournée pour usiner le dessous"><i data-pfig="double"></i><span>Double face</span></button><button value="rotary" title="Rotatif (4ᵉ axe) : pièce cylindrique qui tourne entre un mandrin et une contre-pointe ; on dessine sur la surface déroulée"><i data-pfig="rotary"></i><span>Rotatif</span></button></div>
+        </section>
+        <section class="blk"><h3 id="stSizeT">Brut</h3>
+          <div class="figrow" id="stRotSize" hidden><span class="ill" data-ill="cyl"></span><div class="g2">
+            <label>Longueur (L)<input data-u="len" type="number" id="stRL" step="1" min="1"></label>
+            <label>Diamètre (D)<input data-u="len" type="number" id="stRD" step="0.1" min="1"></label>
+          </div></div>
+          <p class="hint" id="stRotInfo" hidden></p>
+          <div class="figrow" id="stFlatSize"><span class="ill" data-ill="stock"></span><div class="g3">
             <label>Largeur X<input data-u="len" type="number" id="stW" step="1" min="1"></label>
             <label>Hauteur Y<input data-u="len" type="number" id="stH" step="1" min="1"></label>
             <label>Épaisseur<input data-u="len" type="number" id="stT" step="0.1" min="0.1"></label>
@@ -712,27 +720,24 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             <div class="ofields">
               <label>Décalage X (mm)<input data-u="len" type="number" id="stOX" step="0.1"></label>
               <label>Décalage Y (mm)<input data-u="len" type="number" id="stOY" step="0.1"></label>
-              <label>Zéro Z<select id="stOZ"><option value="top">Dessus du brut</option><option value="bottom">Table (dessous)</option></select></label>
+              <label id="stOZRow">Zéro Z<select id="stOZ"><option value="top">Dessus du brut</option><option value="bottom">Table (dessous)</option></select></label>
+              <label id="stRotZRow" hidden>Zéro Z<select id="stRotZ"><option value="surface">Surface du cylindre</option><option value="axis">Axe du cylindre</option></select></label>
               <span class="ill ill-sm" data-ill="zzero"></span>
             </div>
           </div>
           <p class="hint" id="originHint"></p>
         </section>
-        <section class="blk"><h3>Double face</h3>
+        <section class="blk" id="stOrient" hidden><h3>Orientation</h3>
+          <div class="g2"><label>Axe de rotation<select id="stRotAx"><option value="x">Le long de l’axe X (Y s’enroule)</option><option value="y">Le long de l’axe Y (X s’enroule)</option></select></label></div>
+          <label class="chk"><input type="checkbox" id="stRotView"> Vue 3D et simulation enroulées sur le cylindre</label>
+          <p class="hint" id="stRotPost"></p>
+        </section>
+        <section class="blk" id="stDouble"><h3>Double face</h3>
           <div class="figrow"><span class="ill" data-ill="flip"></span><div class="g2">
             <label>Retournement (face 2)<select id="stFlip"><option value="x">Autour de l'axe X (haut ↔ bas)</option><option value="y">Autour de l'axe Y (gauche ↔ droite)</option></select></label>
             <label>Faces affichées<select id="faceView"><option value="all">Les deux faces</option><option value="1">Face 1 (dessus)</option><option value="2">Face 2 (dessous)</option></select></label>
           </div></div>
           <p class="hint">Double face : mettez les vecteurs de la face du dessous sur un calque réglé sur F2 (bouton F1/F2 dans Calques). Dessinez-les vus du dessus, par transparence : COPO les retourne pour le G-code de la face 2.</p>
-        </section>
-        <section class="blk"><h3>Axe rotatif (4ᵉ axe)</h3>
-          <label class="chk"><input type="checkbox" id="stRot"> Pièce cylindrique sur un axe rotatif</label>
-          <div class="g2" id="stRotRow" hidden>
-            <label>Axe du cylindre<select id="stRotAx"><option value="x">Le long de X (Y s’enroule)</option><option value="y">Le long de Y (X s’enroule)</option></select></label>
-            <label>Zéro Z<select id="stRotZ"><option value="surface">Surface du cylindre</option><option value="axis">Axe du cylindre</option></select></label>
-          </div>
-          <p class="hint" id="stRotInfo" hidden></p>
-          <div class="row" id="stRotBtns" hidden><button data-act="rotFit">Ajuster le brut au tour du cylindre</button></div>
         </section>
         <section class="blk"><h3>Unités</h3>
           <div class="g2">
@@ -1181,7 +1186,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.207</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.208</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1512,6 +1517,8 @@ Object.assign(I18N_EN, {"Spirale int. → ext.": "Spiral in → out", "Spirale e
 Object.assign(I18N_EN, {"Standard (le plus rapide)": "Standard (fastest)", "Haute (environ 3 × plus lent, recommandée)": "High (about 3 × slower, recommended)", "Très haute (environ 7 × plus lent)": "Very high (about 7 × slower)", "Haute (environ 3 × plus lent)": "High (about 3 × slower)", "Haute": "High", "Très haute": "Very high", "Plus la résolution est haute, plus le relief est net en 2D et en 3D, mais plus le calcul est long après chaque modification. Standard convient aux ordinateurs modestes. Le parcours d’usinage n’est pas concerné.": "The higher the resolution, the sharper the relief in 2D and 3D, but the longer the computation after each change. Standard suits modest computers. Toolpaths are not affected.", "Standard : 500 000 points, Haute : 1,5 million, Très haute : 3,5 millions. La simulation ne calcule que la zone réellement usinée : plus la pièce est petite, plus le rendu est fin.": "Standard: 500,000 points, High: 1.5 million, Very high: 3.5 million. The simulation only computes the area actually machined: the smaller the part, the finer the result.", "Résolution du relief": "Relief resolution", "Résolution par défaut": "Default resolution", "Résolution": "Resolution"});
 Object.assign(I18N_EN, {"Enregistrer le projet (Ctrl+S) : la première fois, choisissez où ; ensuite, le même fichier est réécrit": "Save the project (Ctrl+S): the first time, choose where; after that, the same file is overwritten", "Enregistrer le projet (Ctrl+S) : modifications non enregistrées": "Save the project (Ctrl+S): unsaved changes", "Enregistrer le projet (Ctrl+S)": "Save the project (Ctrl+S)", "Onglet Projet, bloc Machine": "Project tab, Machine block", "Brut, origine des coordonnées, unités et machine": "Stock, coordinate origin, units and machine"});
 Object.assign(I18N_EN, {"Bibliothèque de machines": "Machine library", "Choisir ou régler la machine (bibliothèque de machines)": "Choose or set up the machine (machine library)", "+ Nouvelle machine": "+ New machine", "Dupliquer": "Duplicate", "Supprimer": "Delete", "Confirmer ?": "Confirm?", "Nom de la machine": "Machine name", "Ma CNC": "My CNC", "Course X (mm)": "X travel (mm)", "Course Y (mm)": "Y travel (mm)", "Course Z (mm)": "Z travel (mm)", "Zone de travail : facultative. Si le brut est plus grand, l’onglet Projet le signale.": "Work area: optional. If the stock is larger, the Project tab warns you.", "Broche : vitesse mini (tr/min)": "Spindle: minimum speed (rpm)", "Broche : vitesse maxi (tr/min)": "Spindle: maximum speed (rpm)", "Les vitesses des outils sont ramenées dans cette plage dans le G-code.": "Tool speeds are clamped to this range in the G-code.", "Post-processeur et vitesses": "Post-processor and speeds", "Notes": "Notes", "Notes (pinces, martyr, réglages…)": "Notes (clamps, spoilboard, settings…)", "Chaque machine garde ses réglages dans ce navigateur. Celle qui est cochée sert au G-code.": "Each machine keeps its settings in this browser. The ticked one is used for the G-code.", "Machine par défaut": "Default machine", "Nouvelle machine {n}": "New machine {n}", "Machine « {m} » choisie.": "Machine “{m}” selected.", "Machine « {m} » supprimée.": "Machine “{m}” deleted.", "Le brut dépasse la course de « {m} » ({d} mm).": "The stock exceeds the travel of “{m}” ({d} mm).", "(onglet Projet, Machine › Changer…)": "(Project tab, Machine › Change…)"});
+Object.assign(I18N_EN, {"Type de projet": "Project type", "Simple face": "Single-sided", "Double face": "Double-sided", "Rotatif": "Rotary", "Simple face : la pièce est usinée par le dessus": "Single-sided: the part is machined from the top", "Double face : la pièce est retournée pour usiner le dessous": "Double-sided: the part is flipped to machine the underside", "Rotatif (4ᵉ axe) : pièce cylindrique qui tourne entre un mandrin et une contre-pointe ; on dessine sur la surface déroulée": "Rotary (4th axis): a cylindrical part turning between a chuck and a tailstock; you draw on the unrolled surface", "Taille du travail": "Job size", "Longueur (L)": "Length (L)", "Diamètre (D)": "Diameter (D)", "Orientation": "Orientation", "Axe de rotation": "Rotation axis", "Le long de l’axe X (Y s’enroule)": "Along the X axis (Y wraps)", "Le long de l’axe Y (X s’enroule)": "Along the Y axis (X wraps)", "Vue 3D et simulation enroulées sur le cylindre": "3D view and simulation wrapped on the cylinder", "Surface du cylindre": "Cylinder surface", "Axe du cylindre": "Cylinder axis", "Cylindre": "Cylinder", "en X": "along X", "en Y": "along Y", "Tour du cylindre : π × D = {c} mm. C’est la largeur de la feuille déroulée sur laquelle vous dessinez ({w}, de 0° à 360°) ; le milieu de la feuille est le dessus du cylindre.": "Cylinder circumference: π × D = {c} mm. This is the width of the unrolled sheet you draw on ({w}, from 0° to 360°); the middle of the sheet is the top of the cylinder.", "Le post-processeur de la machine sortira la coordonnée enroulée en angle A (en degrés), sans arcs G2/G3. Vérifiez que votre contrôleur pilote bien un axe A rotatif.": "The machine post-processor will output the wrapped coordinate as an A angle (degrees), without G2/G3 arcs. Check that your controller drives a rotary A axis.", "Attention : le post-processeur choisi enroule l’autre axe ; changez l’axe de rotation ou le post-processeur.": "Warning: the selected post-processor wraps the other axis; change the rotation axis or the post-processor.", "Projet rotatif : dessinez sur la surface déroulée du cylindre ({c} mm de tour).": "Rotary project: draw on the unrolled surface of the cylinder ({c} mm around).", "Projet double face : réglez le retournement ci-dessous.": "Double-sided project: set the flip below.", "Projet simple face.": "Single-sided project."});
+Object.assign(I18N_EN, {"axe du cylindre": "cylinder axis", "surface du cylindre": "cylinder surface", "rotatif, A": "rotary, A"});
 Object.assign(I18N_EN, {"Visite rapide": "Quick tour", "Réafficher les astuces": "Show tips again", "Astuces réactivées : elles s’afficheront à l’ouverture de chaque onglet.": "Tips turned back on: they will show when you open each tab."});
 Object.assign(I18N_EN, {"Aligner sur": "Align to", "La sélection": "The selection", "Le premier objet sélectionné": "The first selected object", "Le brut": "The stock", "Espacement (mm)": "Spacing (mm)", "Perçage": "Drilling", "« La sélection » : un seul objet s'aligne sur le brut, plusieurs s'alignent entre eux. « Le premier objet sélectionné » : il reste en place et les autres s'alignent sur lui ; Répartir les place à sa suite, dans l'ordre de sélection, avec l'espacement indiqué. Les groupes bougent d'un bloc.": "“The selection”: a single object aligns to the stock, several align with each other. “The first selected object”: it stays in place and the others align to it; Distribute places them after it, in selection order, with the given spacing. Groups move as one.", "Sélectionnez au moins deux objets : le premier sert de référence.": "Select at least two objects: the first one is the reference.", "Sélectionnez au moins deux objets : le premier sert de point de départ.": "Select at least two objects: the first one is the starting point.", "Les objets sont plus grands que le brut.": "The objects are larger than the stock.", "Profil sur la ligne 1": "On-line profile 1", "Profil sur la ligne 2": "On-line profile 2", "Poche 1": "Pocket 1", "F2 · Poche 2": "F2 · Pocket 2", "V-carving 2": "V-carving 2", "Foret 4 mm": "4 mm drill"});
 Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the nut / zero fret (mm)"});
@@ -2661,7 +2668,7 @@ function makeGcodeVP(tps, tools, stock, M, d) {
       return m; });
     return { s, core: nTok ? s.split(nTok).join('') : s, n: !!nTok, empty: nv > 0 && nvOut === 0 }; };
   let lastCore = null; const emit = (b, mv) => { for (const t of (B[b] || [])) { if (t === '') { L.push(''); lastCore = null; continue; } const r = rend(t); if (!r.core.trim()) continue; if (mv && (r.core === lastCore || r.empty)) continue; L.push(r.s); lastCore = r.core; if (r.n) { ln += d.ln.inc; if (ln > d.ln.max) ln = d.ln.start; } } }; // mv : mouvement identique au précédent (machine sans Z) non répété
-  const arcsOK = M.arcs !== false && (B.CW_ARC_MOVE || B.FIRST_CW_ARC_MOVE) && (B.CCW_ARC_MOVE || B.FIRST_CCW_ARC_MOVE);
+  const arcsOK = M.arcs !== false && !(stock.rotary && stock.rotary.on && d.wrap) && (B.CW_ARC_MOVE || B.FIRST_CW_ARC_MOVE) && (B.CCW_ARC_MOVE || B.FIRST_CCW_ARC_MOVE);
   const list = tps.map(tp => ({ tp, tool: tools.find(t => t.id === tp.toolId) })).filter(o => o.tool && o.tp.moves && o.tp.moves.length); if (!list.length) return '';
   ctx = { tool: list[0].tool, tp: list[0].tp, tpName: list[0].tp.name, f: +list[0].tool.feed || 0, x: 0, y: 0, z: M.safeZ + oz };
   emit('HEADER'); reset();
@@ -2723,8 +2730,10 @@ const vpUserList = () => { try { const a = JSON.parse(LS.get('copo.vposts') || '
 const postOf = M => { if (M.post && String(M.post).startsWith('vpu:') && M.vpText) { const d = vpGet(M.vpText); return { label: M.vpName || d.name || 'Post-processeur importé', short: (M.vpName || d.name || 'Importé').replace(/\s*\(\*\.\w+\)\s*$/, ''), tc: 'vp', vp: M.vpText, ext: d.ext, group: 'vpu' }; } return POSTS[M.post] || POSTS.grbl; };
 function makeGcode(tps, tools, stock, M, faceMode) {
   { const P0 = postOf(M); if (P0.vp) return makeGcodeVP(tps, tools, stock, M, vpGet(P0.vp)); }
-  const [ox, oy] = originOf(stock), oz = stock.originZ === 'bottom' ? stock.t : 0;
+  const RT = stock.rotary || {}, ROT = !!RT.on && +stock.t > 0, Dw = +stock.t || 0, angA = v => nf(v / (Math.PI * Dw) * 360);
+  const [ox, oy] = originOf(stock), oz = ROT ? (RT.z0 === 'axis' ? Dw / 2 : 0) : stock.originZ === 'bottom' ? stock.t : 0;
   const KU = M.g20 ? 1 / 25.4 : 1, nx = v => M.g20 ? (v2 => { const t = (Math.round(v2 * 10000) / 10000).toFixed(4).replace(/\.?0+$/, ''); return t === '-0' ? '0' : t; })(v * KU) : nf(v), fF = v => M.g20 ? nf(v / 25.4) : Math.round(v), UL = M.g20 ? ' in' : ' mm';
+  const cX = v => ROT && RT.axis === 'y' ? 'A' + angA(v) : 'X' + nx(v), cY = v => ROT && RT.axis !== 'y' ? 'A' + angA(v) : 'Y' + nx(v); // axe rotatif : la coordonnée enroulée sort en angle A (degrés)
   const L = [], cm = t => { if (M.comments) L.push('(' + String(typeof tr === 'function' ? tr(t) : t).replace(/[()]/g, '') + ')'); };
   cm('COPO FAO 2D'); cm('Brut ' + nx(stock.w) + ' x ' + nx(stock.h) + ' x ' + nx(stock.t) + UL);
   cm('Origine XY : ' + originLabel(stock) + ' - Z0 : ' + (stock.originZ === 'bottom' ? 'table' : 'dessus du brut'));
@@ -2735,7 +2744,8 @@ function makeGcode(tps, tools, stock, M, faceMode) {
   const tpl = (t, tool) => String(t || '').replace(/\{(\w+)\}/g, (m, k) => { const v = { UNITS: M.g20 ? 'G20' : 'G21', SAFEZ: nx(M.safeZ + oz), TCZ: nx(M.tcZ === undefined || M.tcZ === '' ? -10 : +M.tcZ), T: tool ? (tool.num || 1) : '', S: tool ? rpmClamp(tool.rpm || 0) : '', D: tool && tool.dia ? nx(tool.dia) : '', TOOL: tool ? String(tool.name).replace(/[()]/g, '') : '' }[k]; return v === undefined ? m : v; }).split('\n').filter(x => x.trim() !== '');
   if (MAN) cm('Changement manuel : remontee en ' + G53 + ' puis pause M0 avant chaque outil');
   if (CUS) L.push(...tpl(CP.head)); else { L.push((M.g20 ? 'G20' : 'G21') + ' G90 G17 G94' + (PP.head ? ' ' + PP.head : '')); }
-  if (M.arcs !== false && (CUS ? CP.g911 : PP.g911)) L.push('G91.1');
+  if (M.arcs !== false && !ROT && (CUS ? CP.g911 : PP.g911)) L.push('G91.1');
+  if (ROT) cm('Axe rotatif : ' + (RT.axis === 'y' ? 'X' : 'Y') + ' enroule en A - diametre ' + nx(Dw) + UL + ' - Z0 ' + (RT.z0 === 'axis' ? 'sur l axe' : 'a la surface'));
   if (!MAN && !CUS) L.push('G0 Z' + nx(M.safeZ + oz));
   let lastTool = null, curFace = null, flipTool = null, st = { g: null, x: null, y: null, z: null, f: null };
   const CYC = M.cycles === undefined ? !!PP.cyc : !!M.cycles; let inCyc = false, lastCy = null; const endCyc = () => { if (inCyc) { L.push('G80'); inCyc = false; lastCy = null; st.g = null; } };
@@ -2758,22 +2768,22 @@ function makeGcode(tps, tools, stock, M, faceMode) {
       lastTool = tool.id; flipTool = null;
     }
     cm('Parcours : ' + tp.name);
-    for (const m of (M.arcs === false ? tp.moves : fitArcs(tp.moves, 0.015))) {
+    for (const m of (M.arcs === false || ROT ? tp.moves : fitArcs(tp.moves, 0.015))) {
       if (CYC && m.cy) {
         if (m.cy === lastCy) continue;
         const c = m.cy, zc = M.clearZ + oz;
         if (!inCyc) { const X = c.x - ox, Y = c.y - oy; if (st.x === null || nx(st.x) !== nx(X) || nx(st.y) !== nx(Y)) L.push('G0 X' + nx(X) + ' Y' + nx(Y)); if (st.z === null || nx(st.z) !== nx(zc)) L.push('G0 Z' + nx(zc)); }
-        L.push((inCyc ? '' : 'G98 ') + (c.q > 0 ? 'G83' : c.p > 0 ? 'G82' : 'G81') + ' X' + nx(c.x - ox) + ' Y' + nx(c.y - oy) + ' Z' + nx(c.zb + oz) + ' R' + nx(c.r + oz) + (c.q > 0 ? ' Q' + nx(c.q) : c.p > 0 ? ' P' + nf(c.p) : '') + ' F' + fF(c.f));
+        L.push((inCyc ? '' : 'G98 ') + (c.q > 0 ? 'G83' : c.p > 0 ? 'G82' : 'G81') + ' ' + cX(c.x - ox) + ' ' + cY(c.y - oy) + ' Z' + nx(c.zb + oz) + ' R' + nx(c.r + oz) + (c.q > 0 ? ' Q' + nx(c.q) : c.p > 0 ? ' P' + nf(c.p) : '') + ' F' + fF(c.f));
         inCyc = true; lastCy = c; st = { ...st, g: null, x: c.x - ox, y: c.y - oy, z: zc, f: c.f }; continue;
       }
       endCyc();
       if (m.g === 4) { L.push('G4 P' + nf(m.p)); continue; }
       const x = m.x - ox, y = m.y - oy, z = m.z + oz, w = [];
-      if (m.g === 2 || m.g === 3) { w.push('G' + m.g, 'X' + nx(x), 'Y' + nx(y)); if (st.z === null || nx(z) !== nx(st.z)) w.push('Z' + nx(z)); w.push('I' + nx(m.i), 'J' + nx(m.j)); if (st.f !== m.f) { w.push('F' + fF(m.f)); st.f = m.f; } L.push(w.join(' ')); st = { ...st, g: m.g, x, y, z }; continue; }
-      if (m.g === 0 && st.x === null && st.z === null) { L.push('G0 X' + nx(x) + ' Y' + nx(y)); L.push('G0 Z' + nx(z)); st = { ...st, g: 0, x, y, z }; continue; }
+      if (m.g === 2 || m.g === 3) { w.push('G' + m.g, cX(x), cY(y)); if (st.z === null || nx(z) !== nx(st.z)) w.push('Z' + nx(z)); w.push('I' + nx(m.i), 'J' + nx(m.j)); if (st.f !== m.f) { w.push('F' + fF(m.f)); st.f = m.f; } L.push(w.join(' ')); st = { ...st, g: m.g, x, y, z }; continue; }
+      if (m.g === 0 && st.x === null && st.z === null) { L.push('G0 ' + cX(x) + ' ' + cY(y)); L.push('G0 Z' + nx(z)); st = { ...st, g: 0, x, y, z }; continue; }
       if (st.g !== m.g) w.push('G' + m.g);
-      if (st.x === null || nx(x) !== nx(st.x)) w.push('X' + nx(x));
-      if (st.y === null || nx(y) !== nx(st.y)) w.push('Y' + nx(y));
+      if (st.x === null || nx(x) !== nx(st.x)) w.push(cX(x));
+      if (st.y === null || nx(y) !== nx(st.y)) w.push(cY(y));
       if (st.z === null || nx(z) !== nx(st.z)) w.push('Z' + nx(z));
       if (w.length === 1 && w[0][0] === 'G') continue;
       if (!w.length) continue;
@@ -2783,7 +2793,7 @@ function makeGcode(tps, tools, stock, M, faceMode) {
     endCyc();
   }
   if (st.z === null || nx(st.z) !== nx(M.safeZ + oz)) L.push('G0 Z' + nx(M.safeZ + oz));
-  if (CUS) L.push(...tpl(CP.foot)); else { L.push('M5'); if (MAN) L.push(G53); L.push('G0 X0 Y0'); L.push('M30'); }
+  if (CUS) L.push(...tpl(CP.foot)); else { L.push('M5'); if (MAN) L.push(G53); L.push('G0 ' + cX(0) + ' ' + cY(0)); L.push('M30'); }
   return L.join('\n') + '\n';
 }
 function moveStats(moves, rapid) { let t = 0, cut = 0, px = null, py, pz; for (const m of moves) { if (m.g === 4) { t += (m.p || 0) / 60; continue; } if (px !== null) { const d = Math.hypot(m.x - px, m.y - py, m.z - pz); if (m.g === 0) t += d / rapid; else { t += d / m.f; cut += d; } } px = m.x; py = m.y; pz = m.z; } return { min: t, cut }; }
@@ -3171,6 +3181,7 @@ function render() {
   ctx.fillStyle = C.draw; ctx.font = '600 11px ' + C.mono; ctx.fillText('X', sx(Ox) + 31, sy(Oy) + 4); ctx.fillText('Y', sx(Ox) - 3, sy(Oy) - 32); ctx.beginPath(); ctx.arc(sx(Ox), sy(Oy), 4, 0, 7); ctx.fillStyle = C.acc; ctx.fill();
   drawRelief(C);
   drawImages(C);
+  drawRotGuides(C);
   // repères
   ctx.strokeStyle = C.guide; ctx.lineWidth = 1; ctx.setLineDash([6, 4]); ctx.beginPath();
   for (const gx of S.guides.x) { const X = Math.round(sx(gx)) + 0.5; ctx.moveTo(X, 0); ctx.lineTo(X, H); }
@@ -3612,7 +3623,7 @@ let curTab = 'dessin';
 function pjSummary() {
   const el = document.getElementById('pjSum'); if (!el) return; const st = S.stock, M = S.machine, has2 = S.layers.some(l => l.face === 2);
   const post = tr(postOf(M).short);
-  const f1 = v => LANG === 'fr' ? fr(v, 1) : v.toFixed(1); el.textContent = f1(st.w) + ' × ' + f1(st.h) + ' × ' + f1(st.t) + ' mm' + (S.meta && S.meta.material ? ' · ' + S.meta.material : '') + '\n' + tr('Origine') + ' : ' + tr(originLabel(st)) + ' · Z0 : ' + tr(st.originZ === 'bottom' ? 'table' : 'dessus du brut') + (has2 ? ' · ' + tr('double face') : '') + '\n' + post + ' · ' + UNIT.len + ' · ' + UNIT.feed;
+  const f1 = v => LANG === 'fr' ? fr(v, 1) : v.toFixed(1), RT = st.rotary || {}; el.textContent = (RT.on ? tr('Cylindre') + ' L ' + f1(RT.axis === 'y' ? st.h : st.w) + ' × Ø ' + f1(st.t) + ' mm' : f1(st.w) + ' × ' + f1(st.h) + ' × ' + f1(st.t) + ' mm') + (S.meta && S.meta.material ? ' · ' + S.meta.material : '') + '\n' + tr('Origine') + ' : ' + tr(originLabel(st)) + ' · Z0 : ' + (RT.on ? tr(RT.z0 === 'axis' ? 'axe du cylindre' : 'surface du cylindre') + ' · ' + tr('rotatif, A') : tr(st.originZ === 'bottom' ? 'table' : 'dessus du brut') + (has2 && stMode() === 'double' ? ' · ' + tr('double face') : '')) + '\n' + post + ' · ' + UNIT.len + ' · ' + UNIT.feed;
   illRefresh(); el.style.whiteSpace = 'pre-line'; if (typeof libMatSync === 'function') libMatSync(); const m = document.getElementById('pjMat'); if (m && document.activeElement !== m) m.value = (S.meta && S.meta.material) || '';
 }
 function setTab(t) { if (t !== 'parcours' && S.ui.tool !== 'tabedit') fwClose('tpWin'); if (t !== 'outils') fwClose('toolWin'); curTab = t; if (t === 'projet') pjSummary(); $$('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t)); $$('.pane').forEach(p => p.hidden = p.dataset.pane !== t); if (t === 'gcode') renderGcode(); if (t === 'parcours') { renderForm(); if (typeof VIEWS !== 'undefined' && !VIEWS.d3 && !VIEWS.userHid3) { VIEWS.d3 = true; viewsApply(); } } if (t === 'relief') { relPanel(); if (!VIEWS.d3 && !VIEWS.userHid3) { VIEWS.d3 = true; viewsApply(); } } draw(); coTabSoon(t); }
@@ -4634,13 +4645,7 @@ function syncStock() {
   $$('#stOrigin button').forEach(b => b.setAttribute('aria-pressed', b.dataset.o === st.originXY));
   const o = originOf(st); $('#originHint').textContent = 'X0 Y0 du G-code : ' + originLabel(st) + ', soit à ' + fr(o[0]) + ' / ' + fr(o[1]) + ' mm du coin bas gauche du brut.';
 }
-function rotAxSync() { const st = S.stock, R = st.rotary || {}, on = !!R.on; $('#stRot').checked = on; $('#stRotRow').hidden = $('#stRotInfo').hidden = $('#stRotBtns').hidden = !on; if (!on) return;
-  $('#stRotAx').value = R.axis || 'x'; $('#stRotZ').value = R.z0 || 'surface'; const D = +st.t || 0, C = Math.PI * D, P = postOf(S.machine), W = P.vp ? vpGet(P.vp).wrap : null, len = (R.axis || 'x') === 'x' ? st.h : st.w;
-  $('#stRotInfo').textContent = trf('Diamètre du cylindre = épaisseur du brut : {d} mm. Tour du cylindre : {c} mm (longueur du brut dans le sens enroulé : {l} mm).', { d: fr(D, 2), c: fr(C, 2), l: fr(len, 2) })
-    + ' ' + (W ? (W.axis === ((R.axis || 'x') === 'x' ? 'Y' : 'X') ? tr('Le post-processeur choisi enroule bien cet axe : il sort en angle (axe A).') : tr('Attention : le post-processeur choisi enroule l’autre axe ; changez l’axe du cylindre ou le post-processeur.')) : tr('Choisissez un post-processeur « Wrap » ou « Rotary » (onglet Projet, Machine › Changer…) : les autres ne savent pas piloter l’axe rotatif.')); }
-$('#stRot').onchange = e => { S.stock.rotary = { axis: 'x', z0: 'surface', ...(S.stock.rotary || {}), on: e.target.checked }; rotAxSync(); commit(false); gcDirty = true; };
-$('#stRotAx').onchange = e => { S.stock.rotary = { ...(S.stock.rotary || {}), axis: e.target.value }; rotAxSync(); commit(false); gcDirty = true; };
-$('#stRotZ').onchange = e => { S.stock.rotary = { ...(S.stock.rotary || {}), z0: e.target.value }; rotAxSync(); commit(false); gcDirty = true; };
+function rotAxSync() { if (typeof pjModeSync === 'function') pjModeSync(); }
 $('#stFlip').onchange = e => { S.stock.flip = e.target.value; illRefresh(); recomputeAll(); commit(false); };
 $('#faceView').onchange = e => { S.ui.faceView = e.target.value; snapVer++; for (const id of [...S.sel]) { const s = shapeById(id); if (s && !shown(s)) S.sel.delete(id); } renderSel(); draw(); };
 function originChanged() { syncStock(); commit(false); renderSel(); renderGuides(); draw(); gcDirty = true; if (curTab === 'gcode') renderGcode(); }
@@ -5261,6 +5266,19 @@ const FIG = {
     return f.path(d).arrow(83, 50, 0).svg();
   },
   tabs() { return FB(96, 64).poly('M4 6H92V60H4Z', FGC.mat).raw('<path d="M12 14H84V52H12Z" fill="' + FGC.halo + '" stroke="' + FGC.out + '" stroke-width="1.2"/>').poly('M18 20H78V46H18Z', FGC.mat).poly('M42 13H54V21H42Z', '#e0a070').svg(); },
+  ptype(k) {
+    const f = FB(96, 64);
+    if (k === 'rotary') { f.poly('M22 20H74A7 12 0 0 1 74 44H22A7 12 0 0 1 22 20Z', FGC.mat).raw('<ellipse cx="22" cy="32" rx="7" ry="12" fill="#e0a070" stroke="' + FGC.out + '" stroke-width="1.2"/>').path('M84 18A10 14 0 1 1 84 46').arrow(84, 46, Math.PI * 0.95).raw('<path d="M8 32H90" stroke="' + FGC.out + '" stroke-width="1" stroke-dasharray="4 3"/>'); return f.svg(); }
+    f.poly('M10 34H86V50H10Z', FGC.mat);
+    if (k === 'double') f.path('M24 26A24 16 0 0 1 72 26').arrow(72, 27, Math.PI * 0.42).poly('M10 34H86V38H10Z', '#e0a070');
+    else f.tool(43, 8, 10, 20);
+    return f.svg();
+  },
+  cyl() {
+    const G = 4, f = FB(132, 96).poly('M20 30H96A10 18 0 0 1 96 66H20A10 18 0 0 1 20 30Z', FGC.mat).raw('<ellipse cx="20" cy="48" rx="10" ry="18" fill="#e0a070" stroke="' + FGC.out + '" stroke-width="1.2"/>');
+    f.ln(10, 30 - G, 10, 12).ln(106, 30 - G, 106, 12).dh(16, 10, 106).tx(58, 12, 'L').ln(106 + G, 30, 124, 30).ln(106 + G, 66, 124, 66).dv(120, 30, 66).tx(112, 84, 'D', 'end');
+    return f.svg();
+  },
   strat(k) {
     const f = FB(96, 64).poly('M6 6H90V58H6Z', FGC.mat), A = (p, q) => Math.atan2(q[1] - p[1], q[0] - p[0]), D = P => 'M' + P.map(q => q.join(' ')).join('L');
     const SP = [[44, 32], [54, 32], [54, 40], [34, 40], [34, 24], [64, 24], [64, 48], [24, 48], [24, 16], [74, 16], [74, 50]];
@@ -5271,6 +5289,7 @@ const FIG = {
   },
 };
 const ILL = {
+  cyl() { return FIG.cyl(); },
   curtool() { const f = CURFIG[S.ui.tool]; return f ? f() : ''; },
   depth(F) {
     if (F.type === 'profile' || F.type === 'pocket') return FIG.profDepth();
@@ -5881,7 +5900,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.207', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.208', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6428,7 +6447,7 @@ function makeSim(stock, tps, tools, rapid, target) {
   for (const tp of tps) { const tool = tools.find(x => x.id === tp.toolId); if (!tool || !tp.moves) continue; const r = (+tool.dia || 6) / 2 + 2; let p = null;
     for (const m of (tp.dmoves || tp.moves)) { if (m.g === 4) continue; if (p && (m.z < 0 || p[2] < 0)) { X0 = Math.min(X0, m.x - r, p[0] - r); Y0 = Math.min(Y0, m.y - r, p[1] - r); X1 = Math.max(X1, m.x + r, p[0] + r); Y1 = Math.max(Y1, m.y + r, p[1] + r); } p = [m.x, m.y, m.z]; } }
   X0 = Math.max(0, X0); Y0 = Math.max(0, Y0); X1 = Math.min(w, X1); Y1 = Math.min(h, Y1);
-  if (!(X1 - X0 > 1 && Y1 - Y0 > 1) || (X1 - X0) * (Y1 - Y0) > 0.8 * w * h) { X0 = 0; Y0 = 0; X1 = w; Y1 = h; }
+  if (!(X1 - X0 > 1 && Y1 - Y0 > 1) || (X1 - X0) * (Y1 - Y0) > 0.8 * w * h || (stock.rotary && stock.rotary.on)) { X0 = 0; Y0 = 0; X1 = w; Y1 = h; } // rotatif : tout le cylindre
   const RW = X1 - X0, RH = Y1 - Y0, cell = Math.max(0.03, Math.sqrt(RW * RH / target));
   const nx = Math.max(2, Math.round(RW / cell) + 1), ny = Math.max(2, Math.round(RH / cell) + 1), cx = RW / (nx - 1), cy = RH / (ny - 1);
   const segs = [], cum = [], kern = new Map(), thr = []; let T = 0;
@@ -6479,23 +6498,28 @@ function glProg(gl, vs, fs) {
   const mk = (t, src) => { const s = gl.createShader(t); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
   const p = gl.createProgram(); gl.attachShader(p, mk(gl.VERTEX_SHADER, vs)); gl.attachShader(p, mk(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(p); if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p)); return p;
 }
+const WRAP_GLSL = `uniform vec4 uWrap;
+vec3 wrapP(vec3 p){ if (uWrap.x < 0.5) return p; float R = uWrap.w; if (uWrap.y < 0.5) { float th = (p.y - uWrap.z) / R, r = max(R + p.z, 0.0); return vec3(p.x, uWrap.z + r * sin(th), r * cos(th) - R); } float th = (p.x - uWrap.z) / R, r = max(R + p.z, 0.0); return vec3(uWrap.z + r * sin(th), p.y, r * cos(th) - R); }
+vec3 wrapN(vec3 p, vec3 n){ if (uWrap.x < 0.5) return n; if (uWrap.y < 0.5) { float th = (p.y - uWrap.z) / uWrap.w, c = cos(th), s = sin(th); return vec3(n.x, n.y * c + n.z * s, -n.y * s + n.z * c); } float th = (p.x - uWrap.z) / uWrap.w, c = cos(th), s = sin(th); return vec3(n.x * c + n.z * s, n.y, -n.x * s + n.z * c); }`;
 const V3_VS = `#version 300 es
 precision highp float; precision highp sampler2D;
+${WRAP_GLSL}
 in vec2 aGrid; in float aSide; in vec3 aN;
 uniform sampler2D uH; uniform sampler2D uB; uniform vec2 uCell; uniform vec2 uOrg; uniform ivec2 uDim; uniform mat4 uMVP; uniform mat4 uModel; uniform float uT; uniform float uBot; uniform float uOnly;
 out vec3 vN; out float vDepth; out float vThru; out float vRaw;
 float H(ivec2 p){ p = clamp(p, ivec2(0), uDim - 1); return texelFetch(uH, p, 0).r; }
 float Bv(ivec2 p){ p = clamp(p, ivec2(0), uDim - 1); return texelFetch(uB, p, 0).r; }
 void main(){
-  if (aSide > 2.5) { vN = mat3(uModel) * aN; vThru = 0.0; vDepth = 0.0; vRaw = 0.0; gl_Position = uMVP * uModel * vec4(aGrid, aSide > 3.5 ? -uT : 0.0, 1.0); return; }
+  if (aSide > 2.5) { vec3 q = vec3(aGrid, aSide > 3.5 ? -uT : 0.0); vN = mat3(uModel) * wrapN(q, aN); vThru = 0.0; vDepth = 0.0; vRaw = 0.0; gl_Position = uMVP * uModel * vec4(wrapP(q), 1.0); return; }
   ivec2 g = ivec2(aGrid + 0.5); float h = H(g), b = Bv(g), z; vec3 n;
   vThru = h <= b + 0.002 ? 1.0 : 0.0; vRaw = 0.0;
   if (aSide < 0.5 && uBot < 0.5) { z = h; n = normalize(vec3((H(g + ivec2(-1,0)) - H(g + ivec2(1,0))) / (2.0 * uCell.x), (H(g + ivec2(0,-1)) - H(g + ivec2(0,1))) / (2.0 * uCell.y), 1.0)); vDepth = clamp(-z / uT, 0.0, 1.0); vRaw = h > -0.002 ? 1.0 : 0.0; }
   else if (aSide < 0.5) { z = vThru > 0.5 ? h : b; n = normalize(vec3((Bv(g + ivec2(1,0)) - Bv(g + ivec2(-1,0))) / (2.0 * uCell.x), (Bv(g + ivec2(0,1)) - Bv(g + ivec2(0,-1))) / (2.0 * uCell.y), -1.0)); vDepth = clamp((z + uT) / uT, 0.0, 1.0); vRaw = b < -uT + 0.002 ? 1.0 : 0.0; }
   else { z = aSide < 1.5 ? h : b; n = aN; vThru = 0.0; vDepth = 0.0; vRaw = 1.0; }
   vRaw *= uOnly;
-  vN = mat3(uModel) * n;
-  gl_Position = uMVP * uModel * vec4(uOrg.x + float(g.x) * uCell.x, uOrg.y + float(g.y) * uCell.y, z, 1.0);
+  vec3 q = vec3(uOrg.x + float(g.x) * uCell.x, uOrg.y + float(g.y) * uCell.y, z);
+  vN = mat3(uModel) * wrapN(q, n);
+  gl_Position = uMVP * uModel * vec4(wrapP(q), 1.0);
 }`;
 const V3_FS = `#version 300 es
 precision highp float;
@@ -6505,14 +6529,16 @@ void main(){ if (vThru > 0.999 || vRaw > 0.5) discard; vec3 n = normalize(vN); f
   vec3 base = mix(uTop, mix(uTop * 0.93, uDeep, smoothstep(0.0, 1.0, vDepth)), cut); o = vec4(base * (0.38 + 0.62 * d), 1.0); }`;
 const V3_TVS = `#version 300 es
 precision highp float; in vec3 aP; in vec3 aN2; uniform mat4 uMVP; uniform mat4 uModel; uniform vec3 uOff; uniform float uTZ; out vec3 vN;
-void main(){ vN = mat3(uModel) * vec3(aN2.xy, aN2.z * uTZ); gl_Position = uMVP * uModel * vec4(vec3(aP.xy, aP.z * uTZ) + uOff, 1.0); }`;
+${WRAP_GLSL}
+void main(){ vec3 q = vec3(aP.xy, aP.z * uTZ) + uOff; vN = mat3(uModel) * wrapN(uOff, vec3(aN2.xy, aN2.z * uTZ)); gl_Position = uMVP * uModel * vec4(wrapP(q), 1.0); }`;
 const V3_TFS = `#version 300 es
 precision highp float; in vec3 vN; out vec4 o; uniform vec3 uL; uniform vec3 uC;
 void main(){ float d = abs(dot(normalize(vN), uL)); o = vec4(uC * (0.45 + 0.55 * d), 1.0); }`;
 const V3_LVS = `#version 300 es
 precision highp float; in vec3 aP; in vec3 aC; in float aT; in float aL; in float aR; uniform mat4 uMVP; uniform mat4 uModel; uniform float uLift;
 out vec3 vC; out float vT; out float vL; out float vR;
-void main(){ vC = aC; vT = aT; vL = aL; vR = aR; gl_Position = uMVP * uModel * vec4(aP, 1.0); gl_Position.z -= uLift * gl_Position.w; }`;
+${WRAP_GLSL}
+void main(){ vC = aC; vT = aT; vL = aL; vR = aR; gl_Position = uMVP * uModel * vec4(wrapP(aP), 1.0); gl_Position.z -= uLift * gl_Position.w; }`;
 const V3_LFS = `#version 300 es
 precision highp float; in vec3 vC; in float vT; in float vL; in float vR; out vec4 o; uniform float uNow;
 void main(){ if (vT > uNow) discard; if (vR > 0.5) { if (fract(vL / 3.0) > 0.5) discard; o = vec4(mix(vC, vec3(0.6), 0.45), 1.0); } else o = vec4(vC, 1.0); }`;
@@ -6524,7 +6550,7 @@ function v3BuildPaths() {
     if (one && sg.tp !== S.activeTp) return;
     const t1 = S3.cum[i], t0 = i ? S3.cum[i - 1] : 0, P = q => sg.face === 2 ? [q[0], q[1], -S3.t - q[2]] : q, a = P(sg.a), b = P(sg.b), c = col[sg.type] || [0.3, 0.5, 1], r = sg.g === 0 ? 1 : 0;
     if (!last || last !== sg.tp) L = 0; last = sg.tp; const len = Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]);
-    vb.push(a[0], a[1], a[2], c[0], c[1], c[2], t0, L, r, b[0], b[1], b[2], c[0], c[1], c[2], t1, L + len, r); L += len;
+    const nW = wrapN_(a, b); for (let k = 0; k < nW; k++) { const f0 = k / nW, f1 = (k + 1) / nW, A = [0, 1, 2].map(j => a[j] + (b[j] - a[j]) * f0), B = [0, 1, 2].map(j => a[j] + (b[j] - a[j]) * f1); vb.push(...A, c[0], c[1], c[2], t0 + (t1 - t0) * f0, L + len * f0, r, ...B, c[0], c[1], c[2], t0 + (t1 - t0) * f1, L + len * f1, r); } L += len;
   });
   if (!V3.lvao) { V3.lvao = gl.createVertexArray(); V3.lvbo = gl.createBuffer(); }
   gl.bindVertexArray(V3.lvao); gl.bindBuffer(gl.ARRAY_BUFFER, V3.lvbo); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vb), gl.STATIC_DRAW);
@@ -6534,7 +6560,7 @@ function v3BuildPaths() {
   { const db = [], ink = hex3(tok('--draw')); let n1 = 0;
     for (const pass of [1, 2]) { if (pass === 2) n1 = db.length / 9; for (const sh of S.shapes) { if (!shown(sh) || sh.pts.length < 2 || (faceOf(sh) === 2) !== (pass === 2)) continue; const f2 = pass === 2, lc = layerOf(sh).color ? hex3(layerOf(sh).color) : ink, n = sh.pts.length, m = sh.closed ? n : n - 1;
       const P = q => [q[0], q[1], f2 ? -S3.t : 0]; // même repère que la simulation (coordonnées du plan)
-      for (let i = 0; i < m; i++) { const a = P(sh.pts[i]), b = P(sh.pts[(i + 1) % n]); db.push(...a, ...lc, 0, 0, 0, ...b, ...lc, 0, 0, 0); } } }
+      for (let i = 0; i < m; i++) { const a = P(sh.pts[i]), b = P(sh.pts[(i + 1) % n]), nW = wrapN_(a, b); for (let k = 0; k < nW; k++) { const A = [0, 1, 2].map(j => a[j] + (b[j] - a[j]) * k / nW), B = [0, 1, 2].map(j => a[j] + (b[j] - a[j]) * (k + 1) / nW); db.push(...A, ...lc, 0, 0, 0, ...B, ...lc, 0, 0, 0); } } } }
     if (!V3.dvao) { V3.dvao = gl.createVertexArray(); V3.dvbo = gl.createBuffer(); }
     gl.bindVertexArray(V3.dvao); gl.bindBuffer(gl.ARRAY_BUFFER, V3.dvbo); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(db), gl.STATIC_DRAW);
     at('aP', 3, 0); at('aC', 3, 12); at('aT', 1, 24); at('aL', 1, 28); at('aR', 1, 32); gl.bindVertexArray(null); V3.nDraw = db.length / 9; V3.nDraw1 = n1; }
@@ -6657,7 +6683,7 @@ function v3Render() {
   if (V3.dirty) { gl.bindTexture(gl.TEXTURE_2D, V3.tex); gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, S3.nx, S3.ny, gl.RED, gl.FLOAT, v3HDisp(S3)); gl.bindTexture(gl.TEXTURE_2D, V3.texB); gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, S3.nx, S3.ny, gl.RED, gl.FLOAT, S3.B); V3.dirty = false; }
   const cp = Math.cos(V3.pitch), e = [V3.tgt[0] + V3.dist * cp * Math.cos(V3.yaw), V3.tgt[1] + V3.dist * cp * Math.sin(V3.yaw), V3.tgt[2] + V3.dist * Math.sin(V3.pitch)];
   const mvp = m4mul(m4persp(0.7, W / Hh, V3.dist * 0.01, V3.dist * 20), m4look(e, V3.tgt, [0, 0, 1])), L = v3n([0.35, -0.55, 0.85]);
-  gl.useProgram(V3.prog); const u = n => gl.getUniformLocation(V3.prog, n);
+  gl.useProgram(V3.prog); wrapU(gl, V3.prog); const u = n => gl.getUniformLocation(V3.prog, n);
   gl.uniformMatrix4fv(u('uMVP'), false, mvp); gl.uniform2f(u('uCell'), S3.cx, S3.cy); gl.uniform2f(u('uOrg'), S3.ox || 0, S3.oy || 0); gl.uniform2i(u('uDim'), S3.nx, S3.ny); gl.uniform1f(u('uT'), S3.t);
   gl.uniform3fv(u('uL'), L); gl.uniform3fv(u('uTop'), hex3(tok('--stock'))); gl.uniform3fv(u('uDeep'), [0.62, 0.47, 0.30]); gl.uniform1f(u('uOnly'), 0);
   const flipV = $('#v3Face').value === 'f2', model = !flipV ? [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1] : S.stock.flip === 'y' ? [-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, S3.w, 0, -S3.t, 1] : [1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, S3.h, -S3.t, 1];
@@ -6666,33 +6692,33 @@ function v3Render() {
   gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, V3.texB); gl.uniform1i(u('uB'), 1);
   const show = $('#v3Show').value;
   if (show !== 'paths') { gl.bindVertexArray(V3.vao); gl.uniform1f(u('uBot'), 0); gl.drawElements(gl.TRIANGLES, V3.onlyKeep ? V3.nNoFrame : V3.nIdx, gl.UNSIGNED_INT, 0);
-    gl.uniform1f(u('uBot'), 1); gl.drawElements(gl.TRIANGLES, V3.nGrid, gl.UNSIGNED_INT, 0); gl.bindVertexArray(null); }
+    if (!wrapInfo()) { gl.uniform1f(u('uBot'), 1); gl.drawElements(gl.TRIANGLES, V3.nGrid, gl.UNSIGNED_INT, 0); } gl.bindVertexArray(null); }
   if (show !== 'stock' && V3.lvao) {
-    gl.useProgram(V3.lprog); const lu = n => gl.getUniformLocation(V3.lprog, n);
+    gl.useProgram(V3.lprog); wrapU(gl, V3.lprog); const lu = n => gl.getUniformLocation(V3.lprog, n);
     gl.uniformMatrix4fv(lu('uMVP'), false, mvp); gl.uniformMatrix4fv(lu('uModel'), false, model); gl.uniform1f(lu('uLift'), show === 'both' ? 0.0015 : 0);
     if (show === 'paths') { gl.uniform1f(lu('uNow'), 1e12); gl.bindVertexArray(V3.bvao); gl.drawArrays(gl.LINES, 0, 24); }
     gl.uniform1f(lu('uNow'), V3.T + 1e-6); gl.bindVertexArray(V3.lvao); gl.drawArrays(gl.LINES, 0, V3.nLines); gl.bindVertexArray(null);
   }
   if ($('#v3Draw').checked && V3.dvao && V3.nDraw) {
-    gl.useProgram(V3.lprog); const lu = n => gl.getUniformLocation(V3.lprog, n);
+    gl.useProgram(V3.lprog); wrapU(gl, V3.lprog); const lu = n => gl.getUniformLocation(V3.lprog, n);
     gl.uniformMatrix4fv(lu('uMVP'), false, mvp); gl.uniformMatrix4fv(lu('uModel'), false, model); gl.uniform1f(lu('uLift'), 0.0003); gl.uniform1f(lu('uNow'), 1e12);
     // seuls les vecteurs de la face tournée vers le haut sont visibles
     gl.bindVertexArray(V3.dvao); if (flipV) gl.drawArrays(gl.LINES, V3.nDraw1, V3.nDraw - V3.nDraw1); else gl.drawArrays(gl.LINES, 0, V3.nDraw1); gl.bindVertexArray(null);
   }
   if ($('#v3Rel').checked && V3.rvao && V3.nRel && !flipV) {
-    gl.useProgram(V3.lprog); const lu = n => gl.getUniformLocation(V3.lprog, n);
+    gl.useProgram(V3.lprog); wrapU(gl, V3.lprog); const lu = n => gl.getUniformLocation(V3.lprog, n);
     gl.uniformMatrix4fv(lu('uMVP'), false, mvp); gl.uniformMatrix4fv(lu('uModel'), false, model); gl.uniform1f(lu('uLift'), 0.0006); gl.uniform1f(lu('uNow'), 1e12);
     gl.bindVertexArray(V3.rvao); gl.drawArrays(gl.LINES, 0, V3.nRel); gl.bindVertexArray(null);
   }
   if (show !== 'paths' && V3.thrMesh && V3.thrMesh.length) {
-    gl.useProgram(V3.tprog); const t = n => gl.getUniformLocation(V3.tprog, n), st = hex3(tok('--stock'));
+    gl.useProgram(V3.tprog); wrapU(gl, V3.tprog); const t = n => gl.getUniformLocation(V3.tprog, n), st = hex3(tok('--stock'));
     gl.uniformMatrix4fv(t('uMVP'), false, mvp); gl.uniformMatrix4fv(t('uModel'), false, model); gl.uniform3fv(t('uL'), L); gl.uniform3fv(t('uC'), [st[0] * 0.92, st[1] * 0.9, st[2] * 0.86]);
     for (const m of V3.thrMesh) { if (V3.T < m.t0) continue; const f = m.t1 > m.t0 ? Math.min(1, (V3.T - m.t0) / (m.t1 - m.t0)) : 1, cnt = Math.round(f * m.steps) * m.per; if (!cnt) continue;
       gl.uniform1f(t('uTZ'), m.face === 2 ? -1 : 1); gl.uniform3fv(t('uOff'), m.face === 2 ? [0, 0, -S3.t] : [0, 0, 0]); gl.bindVertexArray(m.vao); gl.drawArrays(gl.TRIANGLES, 0, cnt); }
     gl.bindVertexArray(null);
   }
   if ($('#v3Tool').checked && V3.cur && V3.cur.tool) {
-    const m = v3ToolMesh(V3.cur.tool); gl.useProgram(V3.tprog); const t = n => gl.getUniformLocation(V3.tprog, n);
+    const m = v3ToolMesh(V3.cur.tool); gl.useProgram(V3.tprog); wrapU(gl, V3.tprog); const t = n => gl.getUniformLocation(V3.tprog, n);
     const c2 = V3.cur.face === 2, tp_ = c2 ? [V3.cur.p[0], V3.cur.p[1], -S3.t - V3.cur.p[2]] : V3.cur.p; gl.uniformMatrix4fv(t('uMVP'), false, mvp); gl.uniformMatrix4fv(t('uModel'), false, model); gl.uniform1f(t('uTZ'), c2 ? -1 : 1); gl.uniform3fv(t('uOff'), tp_); gl.uniform3fv(t('uL'), L); gl.uniform3fv(t('uC'), [0.78, 0.8, 0.84]);
     gl.bindVertexArray(m.vao); gl.drawArrays(gl.TRIANGLES, 0, m.n); gl.bindVertexArray(null);
   }
@@ -6784,7 +6810,7 @@ function v3Snap(S3, face, W, H) {
   for (const x of [0, S3.w]) for (const y of [0, S3.h]) for (const z of [0, -S3.t]) { const vx = V[0] * x + V[4] * y + V[8] * z + V[12], vy = V[1] * x + V[5] * y + V[9] * z + V[13], vz = V[2] * x + V[6] * y + V[10] * z + V[14]; x0 = Math.min(x0, vx); x1 = Math.max(x1, vx); y0 = Math.min(y0, vy); y1 = Math.max(y1, vy); z0 = Math.min(z0, vz); z1 = Math.max(z1, vz); }
   const m = 0.06, cxv = (x0 + x1) / 2, cyv = (y0 + y1) / 2; let hw = (x1 - x0) / 2 * (1 + m), hh = (y1 - y0) / 2 * (1 + m); if (hw / hh > W / H) hh = hw * H / W; else hw = hh * W / H;
   const mvp = m4mul(m4ortho(cxv - hw, cxv + hw, cyv - hh, cyv + hh, -z1 - 10, -z0 + 10), V), L = v3n([0.35, -0.55, 0.85]);
-  gl.useProgram(V3.prog); const u = n => gl.getUniformLocation(V3.prog, n);
+  gl.useProgram(V3.prog); wrapU(gl, V3.prog); const u = n => gl.getUniformLocation(V3.prog, n);
   gl.uniformMatrix4fv(u('uMVP'), false, mvp); gl.uniform2f(u('uCell'), S3.cx, S3.cy); gl.uniform2f(u('uOrg'), S3.ox || 0, S3.oy || 0); gl.uniform2i(u('uDim'), S3.nx, S3.ny); gl.uniform1f(u('uT'), S3.t);
   gl.uniform3fv(u('uL'), L); gl.uniform3fv(u('uTop'), hex3(tok('--stock'))); gl.uniform3fv(u('uDeep'), [0.62, 0.47, 0.30]);
   const model = face !== 2 ? [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1] : S.stock.flip === 'y' ? [-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, S3.w, 0, -S3.t, 1] : [1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, S3.h, -S3.t, 1];
@@ -7489,13 +7515,15 @@ var RV = (() => { let o = {}; try { o = JSON.parse(LS.get('copo.rv') || '{}') ||
 function rvSave() { try { LS.set('copo.rv', JSON.stringify({ d: RV.showDraw, a: RV.showAxes, s: RV.showStock, t: RV.showTp })); } catch { } for (const [k, on] of [['rvDraw', RV.showDraw], ['rvAxes', RV.showAxes], ['rvStock', RV.showStock], ['rvTp', RV.showTp]]) { const b = document.querySelector('[data-act="' + k + '"]'); if (b) b.setAttribute('aria-pressed', on); } }
 const RV_VS = `#version 300 es
 precision highp float; in vec3 aP; in vec3 aN; uniform mat4 uMVP; out vec3 vN; out float vZ;
-void main(){ vN = aN; vZ = aP.z; gl_Position = uMVP * vec4(aP, 1.0); }`;
+${WRAP_GLSL}
+void main(){ vN = wrapN(aP, aN); vZ = aP.z; gl_Position = uMVP * vec4(wrapP(aP), 1.0); }`;
 const RV_FS = `#version 300 es
 precision highp float; in vec3 vN; in float vZ; out vec4 o; uniform vec3 uL; uniform vec3 uC;
 void main(){ float d = abs(dot(normalize(vN), uL)); o = vec4(uC * (0.35 + 0.65 * d), 1.0); }`;
 const RV_LVS = `#version 300 es
 precision highp float; in vec3 aP; in vec3 aC; uniform mat4 uMVP; out vec3 vC;
-void main(){ vC = aC; gl_Position = uMVP * vec4(aP, 1.0); gl_Position.z -= 0.0004 * gl_Position.w; }`;
+${WRAP_GLSL}
+void main(){ vC = aC; gl_Position = uMVP * vec4(wrapP(aP), 1.0); gl_Position.z -= 0.0004 * gl_Position.w; }`;
 const RV_LFS = `#version 300 es
 precision highp float; in vec3 vC; out vec4 o; void main(){ o = vec4(vC, 1.0); }`;
 function rvInit() {
@@ -7548,7 +7576,7 @@ function rvSync() {
   const sig = JSON.stringify([st.w, st.h, st.t, S.relief.items.map(i => [i.id, i.x, i.y, i.w, i.h, i.rot, i.zH, i.top, i.rx, i.ry, i.mode, i.visible, i.smooth, i.invert, !!relGrid[i.id], relGrid[i.id] && relGrid[i.id].nx, relClipSig(i)])]);
   if (sig !== RV.sig) { RV.sig = sig; rvBuildMesh(); rvReq(); }
   if (!RV.fitted && $('#rvc').clientWidth > 10) { rvFit(true); RV.fitted = true; }
-  const lsig = (typeof snapVer !== 'undefined' ? snapVer : 0) + '|' + st.w + '|' + st.h + '|' + st.t + '|' + st.originXY + '|' + S.shapes.length + '|' + [...S.sel].join(',') + '|' + S.tps.map(t => t.id + (t.visible ? 1 : 0) + (t.moves ? t.moves.length : 0) + (t.face || 1)).join(',');
+  const lsig = JSON.stringify(wrapInfo()) + '|' + (typeof snapVer !== 'undefined' ? snapVer : 0) + '|' + st.w + '|' + st.h + '|' + st.t + '|' + st.originXY + '|' + S.shapes.length + '|' + [...S.sel].join(',') + '|' + S.tps.map(t => t.id + (t.visible ? 1 : 0) + (t.moves ? t.moves.length : 0) + (t.face || 1)).join(',');
   if (lsig !== RV.lsig) { RV.lsig = lsig; rvBuildLines(); rvReq(); }
 }
 function rvBuildMesh() {
@@ -7583,7 +7611,7 @@ function rvBuildMesh() {
 }
 function rvBuildLines() {
   const gl = RV.gl, st = S.stock; for (const k of ['lStock', 'lAxes', 'lDraw', 'lTp']) if (RV[k]) gl.deleteVertexArray(RV[k].vao);
-  const mk = (segs) => { const d = new Float32Array(segs.length * 6); segs.forEach((v, k) => d.set(v, k * 6)); return segs.length ? { vao: rvBuf([[RV.lprog, 3, 'aP'], [RV.lprog, 3, 'aC']], d), n: segs.length } : null; };
+  const mk = (segs0) => { const segs = wrapSegs(segs0, 6); const d = new Float32Array(segs.length * 6); segs.forEach((v, k) => d.set(v, k * 6)); return segs.length ? { vao: rvBuf([[RV.lprog, 3, 'aP'], [RV.lprog, 3, 'aC']], d), n: segs.length } : null; };
   const g = hex3(tok('--muted')), P = [[0, 0], [st.w, 0], [st.w, st.h], [0, st.h]], S2 = [];
   for (let k = 0; k < 4; k++) { const a = P[k], b = P[(k + 1) % 4]; for (const z of [0, -st.t]) S2.push([a[0], a[1], z, ...g], [b[0], b[1], z, ...g]); S2.push([a[0], a[1], 0, ...g], [a[0], a[1], -st.t, ...g]); }
   RV.lStock = mk(S2);
@@ -7602,16 +7630,16 @@ function rvReq() { if (!RV.raf && VIEWS.d3) RV.raf = requestAnimationFrame(rvRen
 // parcours mis en avant (survolé dans la liste, ou en cours d'édition) : affiché même si « Parcours » est décoché
 function rvFocusTp() { const w = $('#tpWin'), id = RV.hoverTp || (w && !w.hidden && S.editTp) || null; return id ? S.tps.find(t => t.id === id && !t.err) || null : null; }
 function rvFocusSync() {
-  const tp = rvFocusTp(), sig = tp ? tp.id + '|' + (tp.moves ? tp.moves.length : 0) + '|' + (tp.face || 1) + '|' + S.stock.t : '';
+  const tp = rvFocusTp(), sig = tp ? tp.id + '|' + (tp.moves ? tp.moves.length : 0) + '|' + (tp.face || 1) + '|' + S.stock.t + '|' + JSON.stringify(wrapInfo()) : '';
   if (sig === RV.fsig) return; RV.fsig = sig; const gl = RV.gl; if (RV.lTpX) { gl.deleteVertexArray(RV.lTpX.vao); RV.lTpX = null; } if (!tp) return;
   const st = S.stock, f2 = tp.face === 2, mv = f2 && tp.dmoves ? tp.dmoves : tp.moves; if (!mv) return;
   const c = hex3(tok({ profile: '--pf', pocket: '--pk', vcarve: '--vc', drill: '--dr', thread: '--th', relief: '--rl' }[tp.type] || '--accent')), rg = hex3(tok('--muted')).map(v => v * 0.8), T = []; let pr = null;
   for (const m of mv) { if (typeof m.x !== 'number' || (m.g !== 0 && m.g !== 1)) continue; const q = [m.x, m.y, f2 ? -st.t - m.z : m.z]; if (pr) { const cc = m.g === 0 ? rg : c; T.push([...pr, ...cc], [...q, ...cc]); } pr = q; }
-  if (!T.length) return; const d = new Float32Array(T.length * 6); T.forEach((v, k) => d.set(v, k * 6)); RV.lTpX = { vao: rvBuf([[RV.lprog, 3, 'aP'], [RV.lprog, 3, 'aC']], d), n: T.length };
+  if (!T.length) return; const T2 = wrapSegs(T, 6), d = new Float32Array(T2.length * 6); T2.forEach((v, k) => d.set(v, k * 6)); RV.lTpX = { vao: rvBuf([[RV.lprog, 3, 'aP'], [RV.lprog, 3, 'aC']], d), n: T.length };
 }
 // ----- sélection et transformations dans la vue 3D -----
 function rvToolsSync() { for (const [k, t] of [['rvMove', 'move'], ['rvRotate', 'rotate'], ['rvScale', 'scale']]) { const b = document.querySelector('[data-act="' + k + '"]'); if (b) b.setAttribute('aria-pressed', RV.tool === t); } }
-function rvProj(p) { const m = RV.mvp, c = $('#rvc'); if (!m) return [0, 0, -1]; const x = m[0] * p[0] + m[4] * p[1] + m[8] * p[2] + m[12], y = m[1] * p[0] + m[5] * p[1] + m[9] * p[2] + m[13], w = m[3] * p[0] + m[7] * p[1] + m[11] * p[2] + m[15]; return [(x / w * 0.5 + 0.5) * c.clientWidth, (1 - (y / w * 0.5 + 0.5)) * c.clientHeight, w]; }
+function rvProj(p) { const m = RV.mvp, c = $('#rvc'); if (!m) return [0, 0, -1]; p = wrapPt(p); const x = m[0] * p[0] + m[4] * p[1] + m[8] * p[2] + m[12], y = m[1] * p[0] + m[5] * p[1] + m[9] * p[2] + m[13], w = m[3] * p[0] + m[7] * p[1] + m[11] * p[2] + m[15]; return [(x / w * 0.5 + 0.5) * c.clientWidth, (1 - (y / w * 0.5 + 0.5)) * c.clientHeight, w]; }
 function rvEye() { const cp = Math.cos(RV.pitch); return [RV.tgt[0] + RV.dist * cp * Math.cos(RV.yaw), RV.tgt[1] + RV.dist * cp * Math.sin(RV.yaw), RV.tgt[2] + RV.dist * Math.sin(RV.pitch)]; }
 function rvRay(mx, my) { const c = $('#rvc'), e = rvEye(), f = v3n(v3sub(RV.tgt, e)), rt = v3n(v3cross(f, [0, 0, 1])), up = v3cross(rt, f), hh = RV.dist * Math.tan(0.35), a = c.clientWidth / c.clientHeight, u = (mx / c.clientWidth * 2 - 1) * hh * a, v = (1 - my / c.clientHeight * 2) * hh; return { o: [e[0] + rt[0] * u + up[0] * v - f[0] * RV.dist * 10, e[1] + rt[1] * u + up[1] * v - f[1] * RV.dist * 10, e[2] + rt[2] * u + up[2] * v - f[2] * RV.dist * 10], d: f }; }
 const rvZ = it => { const top = -(+it.top || 0); return { top, bot: top - (+it.zH || 0), mid: top - (+it.zH || 0) / 2 }; };
@@ -7655,7 +7683,7 @@ function rvPick(mx, my) { // relief touché par le rayon du pointeur : dessus, f
   return null;
 }
 // géométrie des poignées de l'élément sélectionné (en pixels), calculée à chaque rendu
-function rvGizmo() {
+function rvGizmo() { if (wrapInfo()) return null; /* vue enroulée : pas de poignées (elles agissent sur le relief à plat) */
   const it = relCur(); if (!it || !RV.tool || !it.visible || !RV.mvp) return null; const Z = rvZ(it), c = [it.x, it.y, Z.mid], L = Math.max(it.w, it.h) * 0.6 + 6, G = { it, c, L, items: [] };
   if (RV.tool === 'move') for (const [k, d, col] of [['x', [1, 0, 0], '#e5484d'], ['y', [0, 1, 0], '#30a46c'], ['z', [0, 0, 1], '#3e7bfa']]) G.items.push({ k, type: 'axis', d, col, a: rvProj(c), b: rvProj([c[0] + d[0] * L, c[1] + d[1] * L, c[2] + d[2] * L]) });
   if (RV.tool === 'rotate') { const stl = it.kind === 'stl'; for (const [k, ax, col] of [['rz', 2, '#3e7bfa'], ['rx', 0, '#e5484d'], ['ry', 1, '#30a46c']]) { if (ax !== 2 && !stl) continue; const pts = []; for (let i = 0; i <= 64; i++) { const t = i / 64 * 2 * Math.PI, u = Math.cos(t) * L * 0.8, v = Math.sin(t) * L * 0.8, q = ax === 2 ? [c[0] + u, c[1] + v, c[2]] : ax === 0 ? [c[0], c[1] + u, c[2] + v] : [c[0] + u, c[1], c[2] + v]; pts.push(rvProj(q)); } G.items.push({ k, type: 'ring', ax, col, pts }); } }
@@ -7715,8 +7743,8 @@ function rvRender() {
   const cp = Math.cos(RV.pitch), e = [RV.tgt[0] + RV.dist * cp * Math.cos(RV.yaw), RV.tgt[1] + RV.dist * cp * Math.sin(RV.yaw), RV.tgt[2] + RV.dist * Math.sin(RV.pitch)];
   const hh = RV.dist * Math.tan(0.35), hw = hh * Wd / Hd, fa = RV.dist * 20, ortho = [1 / hw, 0, 0, 0, 0, 1 / hh, 0, 0, 0, 0, -2 / (2 * fa), 0, 0, 0, 0, 1]; // projection orthogonale (pas d'effet de perspective)
   const mvp = m4mul(ortho, m4look(e, RV.tgt, [0, 0, 1])); RV.mvp = mvp;
-  if (RV.mesh) { gl.useProgram(RV.prog); gl.uniformMatrix4fv(gl.getUniformLocation(RV.prog, 'uMVP'), false, mvp); gl.uniform3fv(gl.getUniformLocation(RV.prog, 'uL'), v3n([0.35, -0.55, 0.85])); const sc = hex3(tok('--stock')); gl.uniform3fv(gl.getUniformLocation(RV.prog, 'uC'), [sc[0] * 0.95, sc[1] * 0.9, sc[2] * 0.82]); gl.bindVertexArray(RV.mesh.vao); gl.drawElements(gl.TRIANGLES, RV.mesh.n, gl.UNSIGNED_INT, 0); gl.bindVertexArray(null); }
-  gl.useProgram(RV.lprog); gl.uniformMatrix4fv(gl.getUniformLocation(RV.lprog, 'uMVP'), false, mvp);
+  if (RV.mesh) { gl.useProgram(RV.prog); wrapU(gl, RV.prog); gl.uniformMatrix4fv(gl.getUniformLocation(RV.prog, 'uMVP'), false, mvp); gl.uniform3fv(gl.getUniformLocation(RV.prog, 'uL'), v3n([0.35, -0.55, 0.85])); const sc = hex3(tok('--stock')); gl.uniform3fv(gl.getUniformLocation(RV.prog, 'uC'), [sc[0] * 0.95, sc[1] * 0.9, sc[2] * 0.82]); gl.bindVertexArray(RV.mesh.vao); gl.drawElements(gl.TRIANGLES, RV.mesh.n, gl.UNSIGNED_INT, 0); gl.bindVertexArray(null); }
+  gl.useProgram(RV.lprog); wrapU(gl, RV.lprog); gl.uniformMatrix4fv(gl.getUniformLocation(RV.lprog, 'uMVP'), false, mvp);
   rvFocusSync(); for (const [k, on] of [['lStock', RV.showStock], ['lAxes', RV.showAxes], ['lDraw', RV.showDraw], ['lTp', RV.showTp], ['lTpX', !RV.showTp || !(rvFocusTp() || {}).visible]]) if (on && RV[k]) { gl.bindVertexArray(RV[k].vao); gl.drawArrays(gl.LINES, 0, RV[k].n); }
   gl.bindVertexArray(null); v3Cube($('#rvcube'), RV);
   const n = S.relief.items.filter(i => i.visible && relGrid[i.id]).length; if (!relCur()) $('#rvInfo').textContent = n ? trf('{n} élément(s) de relief · profondeur {d} mm', { n, d: fr(RV.depth || 0, 2) }) : tr('Aucun relief : importez un STL ou créez-en un dans l’onglet Relief.');
@@ -7999,7 +8027,7 @@ const CO_TIPS = {
   projet: [
     { sel: ['#stW', '#stOrigin'], up: 'section', fr: 'Indiquez la taille du brut et l’origine <b>Z0</b> (dessus ou dessous de la pièce) : tous les calculs en dépendent.', en: 'Set the stock size and the <b>Z0</b> origin (top or bottom of the part): every calculation depends on it.' },
     { sel: ['#pjMachBtn'], fr: 'Choisissez votre <b>machine</b> ici. Chacune garde son post-processeur (58 fournis, ou le vôtre en .pp), ses vitesses et ses hauteurs de sécurité : « Changer… » ouvre la bibliothèque de machines.', en: 'Choose your <b>machine</b> here. Each one keeps its post-processor (58 included, or your own .pp), its speeds and safe heights: “Change…” opens the machine library.' },
-    { sel: ['#stRot'], up: 'section', fr: 'Pièce cylindrique ? Cochez <b>Axe rotatif (4ᵉ axe)</b>.', en: 'Cylindrical part? Tick <b>Rotary axis (4th axis)</b>.' },
+    { sel: ['#stMode'], fr: '<b>Type de projet</b> : simple face, double face (pièce retournée) ou <b>rotatif</b> (4ᵉ axe, pièce cylindrique). Les réglages en dessous s’adaptent au choix.', en: '<b>Project type</b>: single-sided, double-sided (part flipped) or <b>rotary</b> (4th axis, cylindrical part). The settings below adapt to the choice.' },
   ],
   dessin: [
     { sel: ['#dgrid'], fr: 'Toutes les fonctions de dessin sont ici : créer (formes, texte, import SVG, DXF, PDF ou AI), modifier, disposer, mesurer. Cliquez sur un objet du plan pour saisir ses valeurs exactes.', en: 'All drawing functions are here: create (shapes, text, SVG, DXF, PDF or AI import), modify, arrange, measure. Click an object on the plan to type its exact values.' },
@@ -8236,6 +8264,48 @@ function machClose() { const w = $('#machWin'); if (w && !w.hidden) { w.hidden =
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#machWin').hidden && !document.querySelector('.cobub, .cowel')) { e.preventDefault(); machClose(); } });
   document.getElementById('pjMachine') && $('[data-pane="projet"]').addEventListener('change', () => setTimeout(machUi, 0));
   machLoad();
+})();
+
+// ---------- type de projet (simple face, double face, rotatif) et 4ᵉ axe ----------
+function wrapInfo() { const st = S.stock, R = st.rotary || {}; if (!R.on || R.view3d === false) return null; const D = +st.t || 0; if (!(D > 0)) return null; const ax = R.axis === 'y' ? 1 : 0; return { ax, c: ax ? st.w / 2 : st.h / 2, R: D / 2 }; }
+function wrapU(gl, prog) { const W = wrapInfo(), l = gl.getUniformLocation(prog, 'uWrap'); if (l) gl.uniform4f(l, W ? 1 : 0, W ? W.ax : 0, W ? W.c : 0, W ? W.R : 1); }
+function wrapPt(p) { const W = wrapInfo(); if (!W) return p; const r = Math.max(W.R + p[2], 0); if (!W.ax) { const th = (p[1] - W.c) / W.R; return [p[0], W.c + r * Math.sin(th), r * Math.cos(th) - W.R]; } const th = (p[0] - W.c) / W.R; return [W.c + r * Math.sin(th), p[1], r * Math.cos(th) - W.R]; }
+function wrapN_(a, b) { const W = wrapInfo(); if (!W) return 1; return Math.max(1, Math.min(400, Math.ceil(Math.abs((W.ax ? b[0] - a[0] : b[1] - a[1])) / 1.5))); } // nombre de morceaux pour suivre la courbure
+function wrapSegs(segs, st) { if (!wrapInfo()) return segs; const out = []; for (let k = 0; k + 1 < segs.length; k += 2) { const a = segs[k], b = segs[k + 1], n = wrapN_(a, b); for (let i = 0; i < n; i++) { const A = a.map((v, j) => j < 3 ? v + (b[j] - v) * i / n : v), B = a.map((v, j) => j < 3 ? v + (b[j] - v) * (i + 1) / n : b[j]); out.push(A, B); } } return out; }
+function stMode() { const st = S.stock; if ((st.rotary || {}).on) return 'rotary'; if (st.mode === 'single' || st.mode === 'double') return st.mode; return S.layers.some(l => l.face === 2) ? 'double' : 'single'; }
+function rotDims() { const st = S.stock, R = st.rotary || {}; return { L: R.axis === 'y' ? st.h : st.w, D: +st.t || 0 }; }
+function rotApply(L, D) { const st = S.stock, R = st.rotary || {}, C = +(Math.PI * D).toFixed(4); st.t = D; if (R.axis === 'y') { st.h = L; st.w = C; } else { st.w = L; st.h = C; } }
+function pjAfter() { syncStock(); commit(false); recomputeAll(); pjSummary(); gcDirty = true; renderGcode(); if (typeof RV !== 'undefined') { RV.fitted = false; RV.touched = false; } machUi && machUi(); draw(); }
+function setStMode(m) {
+  const st = S.stock, was = stMode(); if (m === was) return; st.mode = m === 'rotary' ? 'single' : m;
+  if (m === 'rotary') { st.flatDims = { w: st.w, h: st.h, t: st.t, o: st.originXY }; const L = st.w, D = st.t; st.rotary = { axis: 'x', z0: 'surface', view3d: true, ...(st.rotary || {}), on: true }; rotApply(L, D); st.originXY = st.rotary.axis === 'y' ? 'bc' : 'ml'; st.offX = 0; st.offY = 0; st.originZ = 'top'; }
+  else if (was === 'rotary') { st.rotary = { ...(st.rotary || {}), on: false }; if (st.flatDims) { st.w = st.flatDims.w; st.h = st.flatDims.h; st.t = st.flatDims.t; if (st.flatDims.o) st.originXY = st.flatDims.o; } } // retour au brut plat d'avant
+  pjAfter(); toast(m === 'rotary' ? trf('Projet rotatif : dessinez sur la surface déroulée du cylindre ({c} mm de tour).', { c: fr(Math.PI * st.t, 2) }) : m === 'double' ? tr('Projet double face : réglez le retournement ci-dessous.') : tr('Projet simple face.'));
+}
+function pjModeSync() {
+  const m = stMode(), rot = m === 'rotary', st = S.stock, R = st.rotary || {}; $$('#stMode button').forEach(b => b.setAttribute('aria-pressed', b.value === m));
+  $('#stFlatSize').hidden = rot; $('#stRotSize').hidden = $('#stRotInfo').hidden = !rot; $('#stDouble').hidden = m !== 'double'; $('#stOrient').hidden = !rot; $('#stOZRow').hidden = rot; $('#stRotZRow').hidden = !rot; $('#stSizeT').textContent = tr(rot ? 'Taille du travail' : 'Brut');
+  if (!rot) return; const d = rotDims(); $('#stRL').value = +d.L.toFixed(3); $('#stRD').value = +d.D.toFixed(3); $('#stRotAx').value = R.axis || 'x'; $('#stRotZ').value = R.z0 || 'surface'; $('#stRotView').checked = R.view3d !== false;
+  $('#stRotInfo').textContent = trf('Tour du cylindre : π × D = {c} mm. C’est la largeur de la feuille déroulée sur laquelle vous dessinez ({w}, de 0° à 360°) ; le milieu de la feuille est le dessus du cylindre.', { c: fr(Math.PI * d.D, 2), w: tr(R.axis === 'y' ? 'en X' : 'en Y') });
+  const P = postOf(S.machine), W = P.vp ? vpGet(P.vp).wrap : null; $('#stRotPost').textContent = W ? (W.axis === (R.axis === 'y' ? 'X' : 'Y') ? tr('Le post-processeur choisi enroule bien cet axe : il sort en angle (axe A).') : tr('Attention : le post-processeur choisi enroule l’autre axe ; changez l’axe de rotation ou le post-processeur.')) : tr('Le post-processeur de la machine sortira la coordonnée enroulée en angle A (en degrés), sans arcs G2/G3. Vérifiez que votre contrôleur pilote bien un axe A rotatif.');
+}
+function drawRotGuides(C) { // 2D : lignes tous les 90° et jonction (0° = 360°) sur la feuille déroulée
+  const st = S.stock, R = st.rotary || {}; if (!R.on || !(st.t > 0)) return; const ax = R.axis === 'y', tour = Math.PI * st.t, o = originOf(st), z = ax ? o[0] : o[1], len = ax ? st.w : st.h;
+  ctx.save(); ctx.font = '600 10px ' + C.mono; ctx.lineWidth = 1;
+  for (let k = -8; k <= 8; k++) { const v = z + k * tour / 4; if (v < -1e-6 || v > len + 1e-6) continue; const ang = ((k * 90) % 360 + 360) % 360, seam = Math.abs(v) < 1e-6 || Math.abs(v - len) < 1e-6;
+    ctx.strokeStyle = seam ? C.acc : 'rgba(80,120,220,.55)'; ctx.setLineDash(seam ? [] : [6, 5]); ctx.beginPath(); if (ax) { ctx.moveTo(sx(v), sy(0)); ctx.lineTo(sx(v), sy(st.h)); } else { ctx.moveTo(sx(0), sy(v)); ctx.lineTo(sx(st.w), sy(v)); } ctx.stroke();
+    ctx.fillStyle = C.acc; const lbl = ang + '°'; if (ax) ctx.fillText(lbl, sx(v) + 3, sy(st.h) + 12); else ctx.fillText(lbl, sx(st.w) + 4, sy(v) + 3); }
+  ctx.restore();
+}
+function pfigInit() { document.querySelectorAll('[data-pfig]').forEach(el => { if (!el.firstChild) el.innerHTML = FIG.ptype(el.dataset.pfig); }); }
+(function pjTypeInit() {
+  pfigInit(); $$('#stMode button').forEach(b => b.onclick = () => setStMode(b.value));
+  $('#stRL').addEventListener('change', e => { const L = +e.target.value; if (!(L > 0)) return; rotApply(L, rotDims().D); pjAfter(); });
+  $('#stRD').addEventListener('change', e => { const D = +e.target.value; if (!(D > 0)) return; rotApply(rotDims().L, D); pjAfter(); });
+  $('#stRotAx').addEventListener('change', e => { const d = rotDims(); S.stock.rotary = { ...(S.stock.rotary || {}), axis: e.target.value }; rotApply(d.L, d.D); S.stock.originXY = e.target.value === 'y' ? 'bc' : 'ml'; pjAfter(); });
+  $('#stRotZ').addEventListener('change', e => { S.stock.rotary = { ...(S.stock.rotary || {}), z0: e.target.value }; commit(false); gcDirty = true; renderGcode(); pjModeSync(); });
+  $('#stRotView').addEventListener('change', e => { S.stock.rotary = { ...(S.stock.rotary || {}), view3d: e.target.checked }; commit(false); if (typeof RV !== 'undefined') { RV.sig = ''; RV.lsig = ''; RV.fsig = ''; RV.fitted = false; rvSync && rvSync(); rvReq && rvReq(); } });
+  pjModeSync();
 })();
 </script>
 
