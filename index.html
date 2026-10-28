@@ -235,7 +235,7 @@ textarea#gcOut{height:260px;font:12px/1.5 var(--f-mono);resize:vertical;white-sp
 .cfg-nav .mach-it{display:grid;grid-template-columns:18px minmax(0,1fr);gap:4px 8px;align-items:start;text-align:left;padding:8px 10px;border:1px solid transparent;border-radius:7px;background:none;color:var(--ink);font:inherit;cursor:pointer}
 .cfg-nav .mach-it:hover{background:#ffffff0d}.cfg-nav .mach-it.on{border-color:var(--accent);background:#ffffff12}.mach-it .ck{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--muted);margin-top:2px}.mach-it.on .ck{border-color:var(--accent);background:radial-gradient(circle,var(--accent) 45%,transparent 50%)}
 .mach-it b{font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mach-it small{grid-column:2;color:var(--muted);font-size:11.5px;line-height:1.3}
-.mach-act{display:grid;gap:5px}.cfg-nav .mach-act button{display:block;text-align:center;padding:6px 8px;border-radius:var(--r);border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-size:13px;cursor:pointer}.cfg-nav .mach-act button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink,#fff)}
+.mach-act{display:grid;gap:5px}.mach-io{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:4px}.cfg-nav .mach-act button{display:block;text-align:center;padding:6px 8px;border-radius:var(--r);border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-size:13px;cursor:pointer}.cfg-nav .mach-act button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink,#fff)}
 @media (max-width:700px){.mach-nav{grid-template-rows:auto auto}.mach-list{flex-direction:row;overflow-x:auto}.mach-it{min-width:150px}.mach-act{grid-template-columns:repeat(3,auto)}}
 .savesw button{position:relative}.savesw .sdot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--accent);display:none}.savesw button.dirty .sdot{display:block}
 #pjMachine.flash{animation:pjfl 1.2s ease}@keyframes pjfl{0%,40%{box-shadow:inset 3px 0 0 var(--accent);background:#ffffff0d}100%{box-shadow:none;background:none}}
@@ -1089,7 +1089,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
     <div class="cfg-head"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="7" rx="1"/><path d="M12 10v5M9.5 15h5l-1 3h-3z"/><path d="M3 21h18"/></svg><b id="machT">Bibliothèque de machines</b><button class="iconbtn" data-act="machClose" title="Fermer (Échap)" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="cfg-main">
       <div class="cfg-nav mach-nav"><div id="machList" class="mach-list" role="listbox" aria-label="Machines"></div>
-        <div class="mach-act"><button data-act="machNew" class="primary">+ Nouvelle machine</button><button data-act="machDup">Dupliquer</button><button data-act="machDel" id="machDelBtn">Supprimer</button></div></div>
+        <div class="mach-act"><button data-act="machNew" class="primary">+ Nouvelle machine</button><button data-act="machDup">Dupliquer</button><button data-act="machDel" id="machDelBtn">Supprimer</button><span class="mach-io"><button data-act="machExport" title="Enregistre toutes les machines dans un fichier .json (pour un autre ordinateur ou une sauvegarde)">Exporter…</button><button data-act="machImport" title="Ajoute les machines d’un fichier exporté depuis COPO">Importer…</button></span><input type="file" id="fMach" accept=".json,application/json" hidden></div></div>
       <div class="cfg-body" id="machBody">
         <section class="cfg-sec"><h2>Machine</h2>
           <label>Nom de la machine<input type="text" id="mName" maxlength="60" placeholder="Ma CNC"></label>
@@ -1191,7 +1191,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.212</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.213</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1530,6 +1530,7 @@ Object.assign(I18N_EN, {"rotatif": "rotary"});
 Object.assign(I18N_EN, {"Remonter à un Z machine (G53) au changement d’outil": "Rise to a machine Z (G53) at tool changes", "Z machine du changement d’outil (G53)": "Machine Z for tool change (G53)", "Désactivé par défaut : avec G53, une valeur de Z mal réglée peut envoyer la broche en butée ou dans la pièce. Activez-le seulement si vous connaissez les coordonnées machine de votre CNC. Désactivé, la broche remonte simplement au Z de sécurité.": "Off by default: with G53, a wrong Z value can drive the spindle into its limit or into the part. Turn it on only if you know your CNC’s machine coordinates. When off, the spindle simply rises to the safe Z."});
 Object.assign(I18N_EN, {"Ouvrir l'exemple rotatif (4ᵉ axe)": "Open the rotary sample (4th axis)", "Exemple rotatif chargé : cylindre Ø 90 mm, texte en V-carving et filet enroulés autour.": "Rotary sample loaded: Ø 90 mm cylinder, V-carved text and flourish wrapped around.", "Exemple COPO rotatif": "COPO rotary sample", "Hêtre Ø 90 mm": "Beech Ø 90 mm"});
 Object.assign(I18N_EN, {"Axe rotatif": "Rotary axis", "feuille deroulee": "unrolled sheet", "enroule en": "wraps to", "diametre": "diameter", "a la surface": "at the surface", "sur l axe": "on the axis", "Cylindre L": "Cylinder L"});
+Object.assign(I18N_EN, {"Exporter…": "Export…", "Importer…": "Import…", "Enregistre toutes les machines dans un fichier .json (pour un autre ordinateur ou une sauvegarde)": "Saves all machines to a .json file (for another computer or a backup)", "Ajoute les machines d’un fichier exporté depuis COPO": "Adds the machines from a file exported from COPO", "Machines COPO": "COPO machines", "Fichier de machines illisible.": "Unreadable machine file.", "Aucune machine dans ce fichier.": "No machine in this file.", "(importée)": "(imported)", "{n} machine(s) importée(s) : cliquez sur une machine pour la choisir.": "{n} machine(s) imported: click a machine to select it.", "Ma machine (réglages précédents)": "My machine (previous settings)"});
 Object.assign(I18N_EN, {"Visite rapide": "Quick tour", "Réafficher les astuces": "Show tips again", "Astuces réactivées : elles s’afficheront à l’ouverture de chaque onglet.": "Tips turned back on: they will show when you open each tab."});
 Object.assign(I18N_EN, {"Aligner sur": "Align to", "La sélection": "The selection", "Le premier objet sélectionné": "The first selected object", "Le brut": "The stock", "Espacement (mm)": "Spacing (mm)", "Perçage": "Drilling", "« La sélection » : un seul objet s'aligne sur le brut, plusieurs s'alignent entre eux. « Le premier objet sélectionné » : il reste en place et les autres s'alignent sur lui ; Répartir les place à sa suite, dans l'ordre de sélection, avec l'espacement indiqué. Les groupes bougent d'un bloc.": "“The selection”: a single object aligns to the stock, several align with each other. “The first selected object”: it stays in place and the others align to it; Distribute places them after it, in selection order, with the given spacing. Groups move as one.", "Sélectionnez au moins deux objets : le premier sert de référence.": "Select at least two objects: the first one is the reference.", "Sélectionnez au moins deux objets : le premier sert de point de départ.": "Select at least two objects: the first one is the starting point.", "Les objets sont plus grands que le brut.": "The objects are larger than the stock.", "Profil sur la ligne 1": "On-line profile 1", "Profil sur la ligne 2": "On-line profile 2", "Poche 1": "Pocket 1", "F2 · Poche 2": "F2 · Pocket 2", "V-carving 2": "V-carving 2", "Foret 4 mm": "4 mm drill"});
 Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the nut / zero fret (mm)"});
@@ -5015,6 +5016,8 @@ function act(a, btn) {
     case 'machNew': machNew(); return;
     case 'machDup': machDup(); return;
     case 'machDel': machDel(); return;
+    case 'machExport': machExport(); return;
+    case 'machImport': $('#fMach').click(); return;
     case 'snapReset': Object.assign(S.ui, SNAP_DEF); snapSave(); snapBarSync(); snapFill(); draw(); return;
     case 'fbReset': fbFill(FB_DEF()); fbDraw(); return;
     case 'fbMake': fbMake(); return;
@@ -5931,7 +5934,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.212', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.213', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -8264,7 +8267,8 @@ const MACH = { list: [], id: null };
 function machStore() { const it = MACH.list.find(x => x.id === MACH.id); if (it) it.m = JSON.parse(JSON.stringify(S.machine)); LS.set('copo.machines', JSON.stringify(MACH.list)); LS.set('copo.machineId', MACH.id || ''); machUi(); if (typeof pjModeSync === 'function' && document.getElementById('stRotWarn')) pjModeSync(); }
 function machLoad() {
   try { MACH.list = JSON.parse(LS.get('copo.machines') || '[]') || []; } catch { MACH.list = []; }
-  if (!MACH.list.length) MACH.list = [{ id: 'm' + Date.now().toString(36), m: { ...JSON.parse(JSON.stringify(S.machine)), name: S.machine.name || tr('Machine par défaut') } }];
+  if (!MACH.list.length) { const def = { id: 'm' + Date.now().toString(36), m: { ...MACH_DEF, name: tr('Machine par défaut') } }; MACH.list = [def]; const old = S.machine; if (old && old.post && old.post !== 'grbl') { const it = { id: 'm' + (Date.now() + 1).toString(36), m: { ...JSON.parse(JSON.stringify(old)), name: old.name || tr('Ma machine (réglages précédents)') } }; MACH.list.push(it); MACH.id = it.id; LS.set('copo.machineId', it.id); } }
+  else if (!LS.get('copo.machFix1')) { const d = MACH.list.find(x => /^(Machine par défaut|Default machine)$/.test(x.m.name || '')); if (d && d.m.post !== 'grbl') { d.m.name = tr('Ma machine (réglages précédents)'); MACH.list.unshift({ id: 'm' + Date.now().toString(36), m: { ...MACH_DEF, name: tr('Machine par défaut') } }); } } LS.set('copo.machFix1', '1');
   MACH.id = LS.get('copo.machineId'); if (!MACH.list.some(x => x.id === MACH.id)) MACH.id = MACH.list[0].id;
   S.machine = { ...MACH_DEF, ...JSON.parse(JSON.stringify(MACH.list.find(x => x.id === MACH.id).m)) }; syncMachine(); machStore();
 }
@@ -8343,6 +8347,16 @@ function pfigInit() { document.querySelectorAll('[data-pfig]').forEach(el => { i
   $('#stRotView').addEventListener('change', e => { S.stock.rotary = { ...(S.stock.rotary || {}), view3d: e.target.checked }; commit(false); if (typeof RV !== 'undefined') { RV.sig = ''; RV.lsig = ''; RV.fsig = ''; RV.fitted = false; rvSync && rvSync(); rvReq && rvReq(); } });
   pjModeSync();
 })();
+
+function machExport() { machStore(); const data = JSON.stringify({ copo: 'machines', version: 1, machines: MACH.list.map(x => x.m) }, null, 1); saveFile('machines-copo.json', data, tr('Machines COPO')); }
+function machImportText(txt) {
+  let o; try { o = JSON.parse(txt); } catch { return toast(tr('Fichier de machines illisible.')); }
+  const arr = Array.isArray(o) ? o : Array.isArray(o.machines) ? o.machines : o && o.post ? [o] : null; if (!arr || !arr.length) return toast(tr('Aucune machine dans ce fichier.'));
+  machStore(); const names = new Set(MACH.list.map(x => x.m.name)); let n = 0;
+  for (const raw of arr) { const m0 = raw && raw.m ? raw.m : raw; if (!m0 || typeof m0 !== 'object' || !m0.post) continue; const m = { ...MACH_DEF, ...JSON.parse(JSON.stringify(m0)) }; let nm = m.name || tr('Machine'); if (names.has(nm)) nm += ' ' + tr('(importée)'); m.name = nm; names.add(nm); MACH.list.push({ id: 'm' + Date.now().toString(36) + (n++), m }); }
+  if (!n) return toast(tr('Aucune machine dans ce fichier.')); machStore(); machUi(); toast(trf('{n} machine(s) importée(s) : cliquez sur une machine pour la choisir.', { n }));
+}
+$('#fMach').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) f.text().then(machImportText); });
 </script>
 
 </body>

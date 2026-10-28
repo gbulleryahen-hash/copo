@@ -187,7 +187,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.212</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.213</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -329,7 +329,7 @@ X74.042 A14.162
 X74.36 A14.181</pre>
     <h3 id="fr-machines">Bibliothèque de machines</h3>
     <figure><img src="img/fr-23-machines.webp" alt="Bibliothèque de machines : liste à gauche, réglages à droite." width="1800" height="1125" loading="lazy"><figcaption>À gauche, les machines (celle qui est cochée sert au G-code) ; à droite, les réglages de la machine choisie, enregistrés automatiquement.</figcaption></figure>
-    <p>Dans l’onglet Projet, <span class="ui">Machine › Changer…</span> ouvre la bibliothèque. Chaque machine garde son post-processeur, ses vitesses, ses hauteurs de sécurité, sa course X/Y/Z, sa plage de broche et son axe rotatif (lettre A ou B). La machine par défaut utilise le post-processeur GRBL simple, et la remontée à un Z machine (G53) au changement d’outil est désactivée par défaut.</p>
+    <p>Dans l’onglet Projet, <span class="ui">Machine › Changer…</span> ouvre la bibliothèque. Chaque machine garde son post-processeur, ses vitesses, ses hauteurs de sécurité, sa course X/Y/Z, sa plage de broche et son axe rotatif (lettre A ou B). La machine par défaut utilise le post-processeur <em>GRBL (pause M0 au changement d’outil)</em>, et la remontée à un Z machine (G53) au changement d’outil est désactivée par défaut. <span class="ui">Exporter…</span> enregistre toutes les machines dans un fichier <code>machines-copo.json</code> (autre ordinateur, sauvegarde) ; <span class="ui">Importer…</span> ajoute les machines d’un tel fichier sans rien remplacer.</p>
 
     <h2 id="fr-param">Paramètres</h2>
     <p><span class="ui">Édition › Paramètres…</span> (<kbd>Ctrl</kbd>+<kbd>,</kbd>) ouvre une fenêtre à rubriques : les titres à gauche, le contenu qui défile à droite (cliquez un titre pour y aller ; le titre de la partie affichée s’allume). Tout est enregistré dans le navigateur.</p>
@@ -602,7 +602,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.212 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.213 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -639,7 +639,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.212</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.213</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -781,7 +781,7 @@ X74.042 A14.162
 X74.36 A14.181</pre>
     <h3 id="en-machines">Machine library</h3>
     <figure><img src="img/en-23-machines.webp" alt="Machine library: list on the left, settings on the right." width="1800" height="1125" loading="lazy"><figcaption>Left, the machines (the ticked one is used for the G-code); right, the settings of the selected machine, saved automatically.</figcaption></figure>
-    <p>In the Project tab, <span class="ui">Machine › Change…</span> opens the library. Each machine keeps its post-processor, speeds, safe heights, X/Y/Z travel, spindle range and rotary axis (letter A or B). The default machine uses the plain GRBL post-processor, and rising to a machine Z (G53) at tool changes is off by default.</p>
+    <p>In the Project tab, <span class="ui">Machine › Change…</span> opens the library. Each machine keeps its post-processor, speeds, safe heights, X/Y/Z travel, spindle range and rotary axis (letter A or B). The default machine uses the <em>GRBL (M0 pause at tool change)</em> post-processor, and rising to a machine Z (G53) at tool changes is off by default. <span class="ui">Export…</span> saves all machines to a <code>machines-copo.json</code> file (another computer, backup); <span class="ui">Import…</span> adds the machines from such a file without replacing anything.</p>
 
     <h2 id="en-settings">Settings</h2>
     <p><span class="ui">Edit › Settings…</span> (<kbd>Ctrl</kbd>+<kbd>,</kbd>) opens a window with sections: titles on the left, content scrolling on the right (click a title to jump to it; the title of the part shown lights up). Everything is saved in the browser.</p>
@@ -1054,7 +1054,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.212 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.213 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
