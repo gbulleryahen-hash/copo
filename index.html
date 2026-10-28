@@ -1191,7 +1191,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.214</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.215</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -4295,7 +4295,7 @@ function endPointer(e) {
   else if (D.mode === 'srot') { cv.style.cursor = 'grab'; if (D.moved) { for (const [s, , r0] of D.orig) s.rot = normDeg(r0 + D.ang); commit(); renderSel(); } }
   else if (D.mode === 'sscale') { if (D.moved) { commit(); renderSel(); } }
   else if (D.mode === 'tabdrag') { if (!D.moved) D.tp.p.tabPts.splice(D.idx, 1); tabChanged(D.tp); }
-  else if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot' || D.mode === 'iedge') { if (D.rel) { if (D.moved) { relBump(); relDirty = true; commit(false); draw(); } else { if (D.toggleXf) { RXF = !RXF; draw(); } relBarShow('cw', X, Y); } relPanel(); } else { if (D.moved) commit(false); else if (D.toggleXf) { IXF = !IXF; draw(); } renderImgPanel(); } }
+  else if (D.mode === 'imove' || D.mode === 'iscale' || D.mode === 'irot' || D.mode === 'iedge') { if (D.rel) { relDragEnd(); if (D.moved) { relBump(); relDirty = true; commit(false); draw(); } else { if (D.toggleXf) { RXF = !RXF; draw(); } relBarShow('cw', X, Y); } relPanel(); } else { if (D.moved) commit(false); else if (D.toggleXf) { IXF = !IXF; draw(); } renderImgPanel(); } }
   else if (D.mode === 'node' || D.mode === 'handle') { if (D.moved) commit(); }
   else if (D.mode === 'nband') {
     if (Math.abs(D.sx1 - D.sx0) + Math.abs(D.sy1 - D.sy0) <= 4) { if (!D.add) { S.ne = null; S.sel.clear(); renderSel(); } }
@@ -5934,7 +5934,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.214', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.215', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -7160,7 +7160,7 @@ function drawImgHandles(C) {
 function imgCursor(X, Y) { const h = relHandleAt(X, Y) || imgHandleAt(X, Y); if (h) return h.kind === 'irot' ? 'grab' : h.kind === 'iedge' ? 'move' : 'nwse-resize'; return null; }
 function imgDragMove(D, p, e) {
   const im = D.im;
-  if (D.mode === 'imove') { const q = snap([p[0] + D.off[0], p[1] + D.off[1]]); im.x = q[0]; im.y = q[1]; setCoords(p, 'Centre ' + fr(outXY(im.x, im.y)[0]) + ' / ' + fr(outXY(im.x, im.y)[1])); }
+  if (D.mode === 'imove') { if (D.rel && !D.rd) { D.rd = 1; relDragBegin(im); } const q = snap([p[0] + D.off[0], p[1] + D.off[1]]); im.x = q[0]; im.y = q[1]; setCoords(p, 'Centre ' + fr(outXY(im.x, im.y)[0]) + ' / ' + fr(outXY(im.x, im.y)[1])); }
   else if (D.mode === 'iscale') {
     const r = (im.rot || 0) * Math.PI / 180, u = [Math.cos(r), Math.sin(r)], v = [-Math.sin(r), Math.cos(r)], d = [p[0] - D.anchor[0], p[1] - D.anchor[1]];
     let w = Math.max(1, (d[0] * u[0] + d[1] * u[1]) * D.sgn[0]), h = Math.max(1, (d[0] * v[0] + d[1] * v[1]) * D.sgn[1]);
@@ -7272,19 +7272,39 @@ function relClipMask(it, i0, i1, j0, j1, cx, cy, ox = 0, oy = 0) {
   const d = g.getImageData(0, 0, w, h).data, m = new Uint8Array(w * h); for (let k = 0; k < m.length; k++) m[k] = d[k * 4 + 3] >= 128 ? 1 : 0; return m;
 }
 // aperçu 2D : ombrage sous le dessin
+// déplacement d'un relief : le reste est figé et l'élément déplacé est affiché décalé, sans recalcul ; calcul complet au lâcher
+let RELDRAG = null;
+function relDragBegin(it) { if (RELDRAG || !it || (it.clip && it.clip.length) || relLinked(it)) return; RELDRAG = { id: it.id, x0: it.x, y0: it.y, t0: +it.top || 0 }; }
+function relDragEnd() { const d = RELDRAG; if (!d) return; RELDRAG = null; if (typeof RV !== 'undefined' && RV.dm) { for (const m of [RV.dm.a, RV.dm.b]) if (m) RV.gl.deleteVertexArray(m.vao); RV.dm = null; } relDirty = true; drawRelief.last = 0; drawRelief.t1 = 0; if (typeof RV !== 'undefined') { RV.lastBuild = 0; RV.lastEnd = 0; } }
+function relOnly(pred, fn) { const its = S.relief.items, sv = its.map(i => i.visible), d = RELDRAG, m = d && its.find(i => i.id === d.id), p = m && [m.x, m.y, m.top]; its.forEach(i => { if (!pred(i)) i.visible = false; }); if (m) { m.x = d.x0; m.y = d.y0; m.top = d.t0; } /* couches calculées à la position de départ, décalées ensuite à l'affichage */ try { return fn(); } finally { its.forEach((i, k) => { i.visible = sv[k]; }); if (m) { m.x = p[0]; m.y = p[1]; m.top = p[2]; } } }
+function relShade(R, cv, min, max) {
+  const { nx, ny, cx, cy, H } = R; cv = cv || document.createElement('canvas'); cv.width = nx; cv.height = ny;
+  const g = cv.getContext('2d'), im = g.createImageData(nx, ny), span = Math.max(1e-6, max - min), L = v3n([-0.5, 0.6, 0.62]);
+  for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, hx = (H[j * nx + Math.min(nx - 1, i + 1)] - H[j * nx + Math.max(0, i - 1)]) / (2 * cx), hy = (H[Math.min(ny - 1, j + 1) * nx + i] - H[Math.max(0, j - 1) * nx + i]) / (2 * cy), n = v3n([-hx, -hy, 1]);
+    const sh = Math.max(0, n[0] * L[0] + n[1] * L[1] + n[2] * L[2]), lv = 0.35 + 0.65 * (H[q] - min) / span, c = Math.round(255 * Math.min(1, 0.25 + 0.75 * sh) * (0.55 + 0.45 * lv)), o = ((ny - 1 - j) * nx + i) * 4;
+    im.data[o] = c; im.data[o + 1] = Math.round(c * 0.96); im.data[o + 2] = Math.round(c * 0.9); im.data[o + 3] = R.M[q] ? 235 : 0; }
+  g.putImageData(im, 0, 0); return cv;
+}
+function relDrag2D(ids) {
+  const d = RELDRAG, it = S.relief.items.find(i => i.id === d.id); if (!it) { RELDRAG = null; return null; }
+  if (!d.l2) { const b = [400000, 800000, 1200000][relLevel()], cf = (w, h) => Math.max(0.015, Math.sqrt(w * h / b)), oth = ids.filter(i => i !== d.id), mk = (pred, mids) => mids.length ? relOnly(pred, () => reliefCompose(cf, true, mids, true, true)) : null;
+    const A = mk(i => i.id !== d.id, oth), B = mk(i => i.id === d.id, ids.includes(d.id) ? [d.id] : []), min = Math.min(A ? A.min : Infinity, B ? B.min : Infinity), max = Math.max(A ? A.max : -Infinity, B ? B.max : -Infinity);
+    d.l2 = [A && { R: A, cv: relShade(A, null, min, max) }, B && { R: B, cv: relShade(B, null, min, max) }]; }
+  const [A, B] = d.l2, out = []; if (A) out.push([A, 0, 0]); if (B) out.push([B, it.x - d.x0, it.y - d.y0]); return out;
+}
+// aperçu 2D : ombrage sous le dessin
 function drawRelief(C) {
   const shownIds = S.relief && S.relief.show !== false ? S.relief.items.filter(i => i.visible && relGrid[i.id] && (i.kind === 'stl' || i.kind === 'gen' || (i.kind === 'image' && !relLinked(i)))).map(i => i.id) : [];
   if (!shownIds.length) return;
-  const sk = S.stock.w + 'x' + S.stock.h + 'x' + S.stock.t;
-  if (relDirty || !relCache || relCache.sk !== sk) { // image d'ombrage limitée à l'emprise des reliefs (fine même sur un grand brut)
-    const st = S.stock, now = performance.now(), rapid = now - (drawRelief.last || 0) < 300, R = reliefCompose((w, h) => Math.max(0.015, Math.sqrt(w * h / (rapid ? 300000 : [400000, 1500000, 3000000][relLevel()]))), true, shownIds, true, true), { nx, ny, cx, cy, H, max, min } = R, cv = relCache && relCache.cv || document.createElement('canvas'); cv.width = nx; cv.height = ny;
-    const g = cv.getContext('2d'), im = g.createImageData(nx, ny), span = Math.max(1e-6, max - min), L = v3n([-0.5, 0.6, 0.62]);
-    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, hx = (H[j * nx + Math.min(nx - 1, i + 1)] - H[j * nx + Math.max(0, i - 1)]) / (2 * cx), hy = (H[Math.min(ny - 1, j + 1) * nx + i] - H[Math.max(0, j - 1) * nx + i]) / (2 * cy), n = v3n([-hx, -hy, 1]);
-      const sh = Math.max(0, n[0] * L[0] + n[1] * L[1] + n[2] * L[2]), lv = 0.35 + 0.65 * (H[q] - min) / span, c = Math.round(255 * Math.min(1, 0.25 + 0.75 * sh) * (0.55 + 0.45 * lv)), o = ((ny - 1 - j) * nx + i) * 4;
-      im.data[o] = c; im.data[o + 1] = Math.round(c * 0.96); im.data[o + 2] = Math.round(c * 0.9); im.data[o + 3] = R.M[q] ? 235 : 0; }
-    g.putImageData(im, 0, 0); relCache = { cv, R, sk }; relDirty = false; drawRelief.last = now; clearTimeout(drawRelief.fine); if (rapid) drawRelief.fine = setTimeout(() => { drawRelief.last = 0; relDirty = true; draw(); }, 320); // pendant une manipulation : image plus grossière, affinée à l'arrêt
+  const sk = S.stock.w + 'x' + S.stock.h + 'x' + S.stock.t, now = performance.now(), lay = RELDRAG ? relDrag2D(shownIds) : null;
+  if (!lay && relDirty && relCache && relCache.sk === sk && now - (drawRelief.t1 || 0) < Math.max(60, drawRelief.cost || 0)) { if (!drawRelief.th) drawRelief.th = setTimeout(() => { drawRelief.th = 0; draw(); }, Math.max(60, drawRelief.cost || 0)); } // recalcul au plus une fois par intervalle : l'image précédente reste affichée entre-temps
+  else if (!lay && (relDirty || !relCache || relCache.sk !== sk)) { // image d'ombrage limitée à l'emprise des reliefs (fine même sur un grand brut)
+    const rapid = now - (drawRelief.last || 0) < 300, R = reliefCompose((w, h) => Math.max(0.015, Math.sqrt(w * h / (rapid ? 300000 : [400000, 1500000, 3000000][relLevel()]))), true, shownIds, true, true), cv = relShade(R, relCache && relCache.cv, R.min, R.max);
+    relCache = { cv, R, sk }; relDirty = false; drawRelief.last = now; drawRelief.t1 = performance.now(); drawRelief.cost = drawRelief.t1 - now; clearTimeout(drawRelief.fine); if (rapid) drawRelief.fine = setTimeout(() => { drawRelief.last = 0; relDirty = true; draw(); }, 320); /* pendant une manipulation : image plus grossière, affinée à l'arrêt */
   }
-  ctx.save(); ctx.imageSmoothingEnabled = true; if (!$('#tpWin').hidden && (S.form || {}).type !== 'relief') ctx.globalAlpha = 0.3; { const Rc = relCache.R; ctx.drawImage(relCache.cv, sx(Rc.ox), sy(Rc.oy + Rc.dh), Rc.dw * S.view.s, Rc.dh * S.view.s); } ctx.restore();
+  ctx.save(); ctx.imageSmoothingEnabled = true; if (!$('#tpWin').hidden && (S.form || {}).type !== 'relief') ctx.globalAlpha = 0.3;
+  for (const [Ly, dx, dy] of lay || [[relCache, 0, 0]]) { const Rc = Ly.R; ctx.drawImage(Ly.cv, sx(Rc.ox + dx), sy(Rc.oy + Rc.dh + dy), Rc.dw * S.view.s, Rc.dh * S.view.s); }
+  ctx.restore();
   const it = curTab === 'relief' && S.ui.tool !== 'select' && relCur(); if (it) { const f = imgFrame(it), cs = f.corners.map(q => [sx(q[0]), sy(q[1])]); ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]); ctx.beginPath(); cs.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.stroke(); ctx.restore(); }
 }
 function relSummary() { const el = $('#relSum'); if (!el) return; const n = S.relief.items.length; if (!n) { el.textContent = tr('Aucun relief : importez un STL ou créez-en un à partir du dessin.'); return; } const R = reliefCompose(Math.max(1, Math.max(S.stock.w, S.stock.h) / 200)), dep = -R.min; const out = S.relief.items.some(i => { if (!i.visible) return false; const r = (i.rot || 0) * Math.PI / 180, ex = Math.abs(Math.cos(r)) * i.w / 2 + Math.abs(Math.sin(r)) * i.h / 2, ey = Math.abs(Math.sin(r)) * i.w / 2 + Math.abs(Math.cos(r)) * i.h / 2; return i.x - ex < -0.01 || i.y - ey < -0.01 || i.x + ex > S.stock.w + 0.01 || i.y + ey > S.stock.h + 0.01; }); el.textContent = trf('{n} élément(s) · profondeur du relief {d} mm (brut {t} mm).', { n, d: fr(dep, 2), t: fr(S.stock.t, 1) }) + (dep > S.stock.t + 1e-6 ? ' ⚠ ' + tr('Le relief dépasse l’épaisseur du brut : il sera coupé au fond. Augmentez l’épaisseur du brut (onglet Projet) ou réduisez l’épaisseur du relief.') : '') + (out ? ' ⚠ ' + tr('Un relief déborde du brut : la partie en dehors ne sera pas usinée.') : ''); el.classList.toggle('bad', dep > S.stock.t + 1e-6 || out); }
@@ -7551,7 +7571,8 @@ function rvSave() { try { LS.set('copo.rv', JSON.stringify({ d: RV.showDraw, a: 
 const RV_VS = `#version 300 es
 precision highp float; in vec3 aP; in vec3 aN; uniform mat4 uMVP; out vec3 vN; out float vZ;
 ${WRAP_GLSL}
-void main(){ vN = wrapN(aP, aN); vZ = aP.z; gl_Position = uMVP * vec4(wrapP(aP), 1.0); }`;
+uniform vec3 uOff;
+void main(){ vec3 p = aP + uOff; vN = wrapN(p, aN); vZ = p.z; gl_Position = uMVP * vec4(wrapP(p), 1.0); }`;
 const RV_FS = `#version 300 es
 precision highp float; in vec3 vN; in float vZ; out vec4 o; uniform vec3 uL; uniform vec3 uC;
 void main(){ float d = abs(dot(normalize(vN), uL)); o = vec4(uC * (0.35 + 0.65 * d), 1.0); }`;
@@ -7608,8 +7629,9 @@ function rvBuf(attrs, data, idx) { const gl = RV.gl, vao = gl.createVertexArray(
 // reconstruit le maillage quand le relief ou le brut change, et les traits quand le dessin change
 function rvSync() {
   if (!VIEWS.d3 || !RV.gl) return; const st = S.stock; relSyncLinks();
-  const sig = JSON.stringify([st.w, st.h, st.t, S.relief.items.map(i => [i.id, i.x, i.y, i.w, i.h, i.rot, i.zH, i.top, i.rx, i.ry, i.mode, i.visible, i.smooth, i.invert, !!relGrid[i.id], relGrid[i.id] && relGrid[i.id].nx, relClipSig(i)])]);
-  if (sig !== RV.sig) { RV.sig = sig; rvBuildMesh(); rvReq(); }
+  const dr = RELDRAG, sig = JSON.stringify([st.w, st.h, st.t, S.relief.items.map(i => [i.id, dr && i.id === dr.id ? dr.x0 : i.x, dr && i.id === dr.id ? dr.y0 : i.y, i.w, i.h, i.rot, i.zH, dr && i.id === dr.id ? dr.t0 : i.top, i.rx, i.ry, i.mode, i.visible, i.smooth, i.invert, !!relGrid[i.id], relGrid[i.id] && relGrid[i.id].nx, relClipSig(i)])]);
+  if (sig !== RV.sig) { const now = performance.now(), wait = Math.max(60, RV.cost || 0) - (now - (RV.lastEnd || 0)); if (RV.sig && wait > 0) { clearTimeout(RV.thT); RV.thT = setTimeout(() => { rvSync(); rvReq(); }, wait + 5); } else { RV.sig = sig; rvBuildMesh(); RV.lastEnd = performance.now(); RV.cost = RV.lastEnd - now; rvReq(); } } /* pendant une manipulation : maillage refait au plus une fois par intervalle */
+  if (dr && !RV.dm) { const b = [150000, 400000, 700000][relLevel()]; RV.dm = { a: relOnly(i => i.id !== dr.id, () => rvMakeMesh(b)), b: relOnly(i => i.id === dr.id, () => rvMakeMesh(b)) }; rvReq(); } /* déplacement : deux maillages, l'élément déplacé est décalé à l'affichage */
   if (!RV.fitted && $('#rvc').clientWidth > 10) { rvFit(true); RV.fitted = true; }
   const lsig = JSON.stringify(wrapInfo()) + '|' + ((st.rotary || {}).z0 || '') + '|' + (typeof snapVer !== 'undefined' ? snapVer : 0) + '|' + st.w + '|' + st.h + '|' + st.t + '|' + st.originXY + '|' + S.shapes.length + '|' + [...S.sel].join(',') + '|' + S.tps.map(t => t.id + (t.visible ? 1 : 0) + (t.moves ? t.moves.length : 0) + (t.face || 1)).join(',');
   if (lsig !== RV.lsig) { RV.lsig = lsig; rvBuildLines(); rvReq(); }
@@ -7619,12 +7641,15 @@ function rvBuildMesh() {
   if (!S.relief.items.some(i => i.visible && relGrid[i.id])) return;
   // grille d'affichage limitée à l'emprise des reliefs, assez fine pour un rendu lisse ; plus grossière pendant une manipulation, puis affinée à l'arrêt
   const now = performance.now(), rapid = now - (RV.lastBuild || 0) < 300; RV.lastBuild = now; if (rapid) RV.fineT = setTimeout(() => { RV.lastBuild = 0; rvBuildMesh(); rvReq(); }, 320);
-  const budget = rapid ? 150000 : [200000, 700000, 1600000][relLevel()];
+  const m = rvMakeMesh(rapid ? 150000 : [200000, 700000, 1600000][relLevel()]); if (m) { RV.mesh = m; RV.depth = m.depth; }
+}
+function rvMakeMesh(budget) {
+  const gl = RV.gl; if (!S.relief.items.some(i => i.visible && relGrid[i.id])) return null;
   const st = S.stock, R = reliefCompose((w, h) => Math.max(0.02, Math.sqrt(w * h / budget)), true, null, true, true), { nx, ny, cx, cy, H, M, ox, oy } = R, N = nx * ny, vb = new Float32Array(N * 6);
   for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, z = Math.max(-st.t, H[q]), hx = (H[j * nx + Math.min(nx - 1, i + 1)] - H[j * nx + Math.max(0, i - 1)]) / (2 * cx), hy = (H[Math.min(ny - 1, j + 1) * nx + i] - H[Math.max(0, j - 1) * nx + i]) / (2 * cy), n = v3n([-hx, -hy, 1]); vb.set([ox + i * cx, oy + j * cy, z, n[0], n[1], n[2]], q * 6); }
   const CW = nx - 1, CH = ny - 1, has = new Uint8Array(CW * CH); let nt = 0;
   for (let j = 0; j < CH; j++) for (let i = 0; i < CW; i++) { const a = j * nx + i, k = M[a] + M[a + 1] + M[a + nx + 1] + M[a + nx]; if (k >= 3) { has[j * CW + i] = k; nt += k === 4 ? 2 : 1; } } // 3 coins : un triangle (bord en diagonale au lieu d'escaliers)
-  if (!nt) return; RV.depth = -R.min;
+  if (!nt) return null;
   const ix = new Uint32Array(nt * 6), zb = Math.max(-st.t, R.base), ex = []; let p = 0;
   const T = (u, v, w) => { ix[p++] = u; ix[p++] = v; ix[p++] = w; ix[p++] = N + u; ix[p++] = N + w; ix[p++] = N + v; }; // dessus et dessous (dessous à la base du relief)
   const bot = new Float32Array(N * 6); for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) bot.set([ox + i * cx, oy + j * cy, zb, 0, 0, -1], (j * nx + i) * 6);
@@ -7642,7 +7667,7 @@ function rvBuildMesh() {
   for (let w = 0; w < WL.length; w += 2) { const a = WL[w], b = WL[w + 1], za = Math.max(-st.t, H[a]), zq = Math.max(-st.t, H[b]), A = [ox + (a % nx) * cx, oy + Math.floor(a / nx) * cy], B = [ox + (b % nx) * cx, oy + Math.floor(b / nx) * cy], na = nrm(a), nb = nrm(b), k = base + nv; ex.push(A[0], A[1], za, ...na, B[0], B[1], zq, ...nb, B[0], B[1], zb, ...nb, A[0], A[1], zb, ...na); nv += 4; wix.push(k, k + 1, k + 2, k, k + 2, k + 3); }
   const all = new Float32Array(N * 12 + ex.length); all.set(vb, 0); all.set(bot, N * 6); all.set(ex, N * 12);
   const idx = new Uint32Array(ix.length + wix.length); idx.set(ix, 0); idx.set(wix, ix.length);
-  RV.mesh = { vao: rvBuf([[RV.prog, 3, 'aP'], [RV.prog, 3, 'aN']], all, idx), n: idx.length };
+  return { vao: rvBuf([[RV.prog, 3, 'aP'], [RV.prog, 3, 'aN']], all, idx), n: idx.length, depth: -R.min };
 }
 function rvBuildLines() {
   const gl = RV.gl, st = S.stock; for (const k of ['lStock', 'lAxes', 'lDraw', 'lTp']) if (RV[k]) gl.deleteVertexArray(RV[k].vao);
@@ -7738,7 +7763,7 @@ function rvSnapIt(it) { return it ? { x: it.x, y: it.y, w: it.w, h: it.h, rot: i
 function rvPlane(mx, my, z) { const R = rvRay(mx, my); if (Math.abs(R.d[2]) < 1e-9) return null; const t = (z - R.o[2]) / R.d[2]; return t > 0 ? [R.o[0] + R.d[0] * t, R.o[1] + R.d[1] * t] : null; }
 function rvGizmoDrag(D, mx, my, shift, free) { // shift = pas (Ctrl), free = proportions libres (Maj)
   const it = D.it, g = D.gz, s0 = D.st; if (!it) return; const st = S.stock, rnd = v => shift ? Math.round(v) : v, snapT = snapPx(g.G, 12);
-  if (g.type === 'axis') { const a = g.a, b = g.b, ax = [b[0] - a[0], b[1] - a[1]], l2 = ax[0] * ax[0] + ax[1] * ax[1] || 1, t = ((mx - D.mx) * ax[0] + (my - D.my) * ax[1]) / l2 * g.G.L;
+  if (g.type === 'axis') { relDragBegin(it); const a = g.a, b = g.b, ax = [b[0] - a[0], b[1] - a[1]], l2 = ax[0] * ax[0] + ax[1] * ax[1] || 1, t = ((mx - D.mx) * ax[0] + (my - D.my) * ax[1]) / l2 * g.G.L;
     if (g.k === 'z') { let top = s0.top - t; if (shift) top = Math.round(top); if (Math.abs(top) < snapT) top = 0; if (Math.abs(st.t - top - it.zH) < snapT) top = st.t - it.zH; it.top = top; }
     else { const k = g.k === 'x' ? 0 : 1; let v = (k ? s0.y : s0.x) + t; if (shift) v = Math.round(v); if (k) it.y = v; else it.x = v; const b2 = relBox(it); // accroche aux bords du brut
       if (!k) { if (Math.abs(b2.x0) < snapT) it.x -= b2.x0; else if (Math.abs(b2.x1 - st.w) < snapT) it.x -= b2.x1 - st.w; } else { if (Math.abs(b2.y0) < snapT) it.y -= b2.y0; else if (Math.abs(b2.y1 - st.h) < snapT) it.y -= b2.y1 - st.h; } } }
@@ -7755,7 +7780,7 @@ function rvGizmoDrag(D, mx, my, shift, free) { // shift = pas (Ctrl), free = pro
   relAfterXf(it, false);
 }
 function rvReraster(it, final) { const T = relMesh[it.id]; if (!T || it.kind !== 'stl') return; const R = stlRaster(T, it.orient || 'z', it.rx, it.ry), k = it.w / (it.nat ? it.nat[0] : R.W), kz = (+it.zH || 0) / (it.nat ? it.nat[2] : R.Z); it.nat = [R.W, R.H, R.Z]; it.w = R.W * k; it.h = R.H * k; it.zH = R.Z * kz; if (final) relStore(it.id, R.g); else { relGrid[it.id] = R.g; relSm.delete(it.id); } }
-function rvGizmoEnd(D) { const it = D.it; if (!it) return; if (D.gz.type === 'ring' && D.gz.k !== 'rz') rvReraster(it, true); relAfterXf(it, true); }
+function rvGizmoEnd(D) { const it = D.it; if (!it) return; relDragEnd(); if (D.gz.type === 'ring' && D.gz.k !== 'rz') rvReraster(it, true); relAfterXf(it, true); }
 // après une transformation : image liée, panneau, 2D, 3D, historique
 function relAfterXf(it, done) { const im = relLinked(it); if (im) { im.x = it.x; im.y = it.y; im.w = it.w; im.h = it.h; im.rot = it.rot || 0; } relDirty = true; relPanel(true); draw(); rvReq(); if (done) { relBump(); commit(false); relPanel(); } }
 function rvOverlay() {
@@ -7779,7 +7804,7 @@ function rvRender() {
   const cp = Math.cos(RV.pitch), e = [RV.tgt[0] + RV.dist * cp * Math.cos(RV.yaw), RV.tgt[1] + RV.dist * cp * Math.sin(RV.yaw), RV.tgt[2] + RV.dist * Math.sin(RV.pitch)];
   const hh = RV.dist * Math.tan(0.35), hw = hh * Wd / Hd, fa = RV.dist * 20, ortho = [1 / hw, 0, 0, 0, 0, 1 / hh, 0, 0, 0, 0, -2 / (2 * fa), 0, 0, 0, 0, 1]; // projection orthogonale (pas d'effet de perspective)
   const mvp = m4mul(ortho, m4look(e, RV.tgt, [0, 0, 1])); RV.mvp = mvp;
-  if (RV.mesh) { gl.useProgram(RV.prog); wrapU(gl, RV.prog); gl.uniformMatrix4fv(gl.getUniformLocation(RV.prog, 'uMVP'), false, mvp); gl.uniform3fv(gl.getUniformLocation(RV.prog, 'uL'), v3n([0.35, -0.55, 0.85])); const sc = hex3(tok('--stock')); gl.uniform3fv(gl.getUniformLocation(RV.prog, 'uC'), [sc[0] * 0.95, sc[1] * 0.9, sc[2] * 0.82]); gl.bindVertexArray(RV.mesh.vao); gl.drawElements(gl.TRIANGLES, RV.mesh.n, gl.UNSIGNED_INT, 0); gl.bindVertexArray(null); }
+  if (RV.mesh || RV.dm) { gl.useProgram(RV.prog); wrapU(gl, RV.prog); gl.uniformMatrix4fv(gl.getUniformLocation(RV.prog, 'uMVP'), false, mvp); gl.uniform3fv(gl.getUniformLocation(RV.prog, 'uL'), v3n([0.35, -0.55, 0.85])); const sc = hex3(tok('--stock')); gl.uniform3fv(gl.getUniformLocation(RV.prog, 'uC'), [sc[0] * 0.95, sc[1] * 0.9, sc[2] * 0.82]); const uO = gl.getUniformLocation(RV.prog, 'uOff'), dr = RELDRAG && RV.dm, dit = dr && S.relief.items.find(i => i.id === RELDRAG.id); for (const [m, o] of dr ? [[RV.dm.a, [0, 0, 0]], [RV.dm.b, dit ? [dit.x - RELDRAG.x0, dit.y - RELDRAG.y0, RELDRAG.t0 - (+dit.top || 0)] : [0, 0, 0]]] : [[RV.mesh, [0, 0, 0]]]) { if (!m) continue; gl.uniform3fv(uO, o); gl.bindVertexArray(m.vao); gl.drawElements(gl.TRIANGLES, m.n, gl.UNSIGNED_INT, 0); } gl.uniform3fv(uO, [0, 0, 0]); gl.bindVertexArray(null); }
   gl.useProgram(RV.lprog); wrapU(gl, RV.lprog); gl.uniformMatrix4fv(gl.getUniformLocation(RV.lprog, 'uMVP'), false, mvp);
   rvFocusSync(); for (const [k, on] of [['lStock', RV.showStock], ['lAxes', RV.showAxes], ['lDraw', RV.showDraw], ['lTp', RV.showTp], ['lTpX', !RV.showTp || !(rvFocusTp() || {}).visible]]) if (on && RV[k]) { if (RV[k].flat) gl.uniform4f(gl.getUniformLocation(RV.lprog, 'uWrap'), 0, 0, 0, 1); gl.bindVertexArray(RV[k].vao); gl.drawArrays(gl.LINES, 0, RV[k].n); if (RV[k].flat) wrapU(gl, RV.lprog); }
   gl.bindVertexArray(null); v3Cube($('#rvcube'), RV);
