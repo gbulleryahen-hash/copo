@@ -7,7 +7,7 @@
 - **Mode d'emploi / User guide :** `guide.html` · PDF : `COPO-mode-emploi-FR.pdf`, `COPO-user-guide-EN.pdf`
 - **Bibliothèque libre / Free library :** `bibliotheque/` — 80 dessins 2D (SVG, contours fermés) et 63 reliefs en niveaux de gris (PNG 16 bits), rangés par catégorie, avec un fichier `bibliotheque-copo.copolib` à importer dans COPO. Sources et licences : `bibliotheque/CREDITS.md` / 80 2D drawings and 63 grayscale reliefs, sorted by category, plus a `.copolib` file to import into COPO.
 
-**Version 1.222**
+**Version 1.224**
 
 ## Fonctions / Features
 - Dessin : rectangle, ellipse, polygone/étoile, arc, plume (Bézier), texte (aussi sur une courbe), nœuds, chanfreins, congés, dégagements dogbone et T-bone, ajuster, couper, joindre, booléens, réseau, calques, repères, cotes, images de référence, vectorisation d'image (contours), import/export SVG, import DXF (calques, blocs, splines)
