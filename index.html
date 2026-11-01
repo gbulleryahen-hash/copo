@@ -284,6 +284,16 @@ textarea#gcOut{height:260px;font:12px/1.5 var(--f-mono);resize:vertical;white-sp
 @media (prefers-reduced-motion:reduce){.cohole{transition:none}}
 .fb-card{max-width:680px}.fb-card .g2 label.fb-chk{display:flex;align-self:end;color:var(--ink);padding-bottom:8px}.fb-card .g2 label{display:grid;gap:3px;font-size:13px;color:var(--muted)}.fb-card .g2 select{font:inherit;font-size:13px;color:var(--muted);background:transparent;border:0;padding:0;justify-self:start}
 #bxCv{position:static;inset:auto;height:auto;width:100%;display:block;border:1px solid var(--line);border-radius:6px;background:#f3eee4;touch-action:auto}.bx-faces{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;font-size:13px}.bx-faces>span{color:var(--muted);width:100%}
+.gr-sub{font-size:12px;font-weight:600;color:var(--ink);margin:10px 0 4px;text-transform:uppercase;letter-spacing:.04em}
+.ogrid.gr-ref{grid-template-rows:24px}
+.ogrid.gr-ref.v{grid-template-columns:24px;grid-template-rows:repeat(3,24px)}
+.gr-warn{color:#e08a2e}
+#grad{width:min(780px,calc(100vw - 16px))}
+#grad .fb-card{max-width:none}
+.gr-cols{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:16px;align-items:start}
+.gr-prev{position:sticky;top:0}
+@media (max-width:760px){.gr-cols{grid-template-columns:1fr}}
+#grCv{position:static;inset:auto;height:auto;width:100%;display:block;border:1px solid var(--line);border-radius:6px;background:var(--raised);touch-action:auto}
 #fbCv{position:static;inset:auto;height:auto;width:100%;display:block;border:1px solid var(--line);border-radius:6px;background:#f3eee4;touch-action:auto}
 .bug-card{max-width:600px;max-height:calc(100dvh - 32px);overflow:auto}
 .bug-card>label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
@@ -602,7 +612,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         <button data-act="tabParcours">Nouveau parcours sur la sélection</button><button data-act="libOpen">Bibliothèque d’outils…</button><button data-act="tabGcode">Voir le G-code</button><button data-act="v3d">Aperçu 3D de l’usinage</button><hr><button data-act="sheet">Fiche de gamme…</button>
       </div></div>
       <div class="menu"><button class="mtop" id="mExt" aria-expanded="false">Extensions</button><div class="mdrop" hidden>
-        <button data-act="fbOpen">Touche de guitare…</button><button data-act="ilOpen">Incrustation en V (inlay)…</button><button data-act="ipOpen">Incrustation en poche (inlay)…</button><button data-act="boxOpen">Boîte à entures…</button>
+        <button data-act="fbOpen">Touche de guitare…</button><button data-act="ilOpen">Incrustation en V (inlay)…</button><button data-act="ipOpen">Incrustation en poche (inlay)…</button><button data-act="boxOpen">Boîte à entures…</button><button data-act="grOpen">Graduations rotatives…</button>
       </div></div>
       <div class="menu"><button class="mtop" aria-expanded="false">Aide</button><div class="mdrop" hidden>
         <a class="mlink" id="guideLink" href="guide.html#fr" target="_blank" rel="noopener">Mode d'emploi</a>
@@ -1224,7 +1234,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.222</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.223</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1458,6 +1468,43 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
     <p class="hint mono" id="bxInfo"></p>
     <p class="hint">Le nombre de tenons est impair et calculé d'après leur largeur. Le jeu rétrécit chaque tenon pour un assemblage sans forcer (0,1 à 0,2 mm pour le bois). Usinez les panneaux en profil extérieur avec la fraise choisie et des ponts d'attache.</p>
     <div class="row"><button data-act="boxReset">Valeurs par défaut</button><button data-act="boxMake" class="primary">Créer la boîte</button></div>
+  </div>
+</div>
+<div class="fwin fwin-wide" id="grad" hidden role="dialog" aria-labelledby="grT">
+  <div class="fwin-head"><span class="grip" aria-hidden="true"></span><span class="fwin-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="6" cy="12" rx="3" ry="8"/><path d="M6 4h12M6 20h12"/><path d="M18 4a3 8 0 0 1 0 16"/><path d="M9 7.5h4M9.5 12h7M9 16.5h4"/></svg></span><b id="grT">Graduations rotatives</b><button class="iconbtn fwin-x" data-act="grClose" title="Fermer" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="fwin-body fb-card">
+    <p class="hint" id="grAxis"></p>
+    <p class="hint gr-warn" id="grWarn" hidden>Cette extension sert aux projets rotatifs (4ᵉ axe). Choisissez « Rotatif » dans l’onglet Projet › Type de projet.</p>
+    <div class="gr-cols"><div>
+    <div class="g2">
+      <label>Nombre de divisions<input type="number" id="grN" step="1" min="1" max="3600"></label>
+      <label>Étendue (°)<input type="number" id="grSpan" step="1" min="0.1" max="360"></label>
+      <label>Angle du premier trait (°)<input type="number" id="grA0" step="1"></label>
+      <label>Numéro du premier trait<input type="number" id="grOff" step="1" min="0"></label>
+    </div>
+    <p class="hint">360° : tour complet. Moins de 360° : un trait à chaque bout de l’étendue (vernier : 10 divisions sur 9°).</p>
+    <div class="gr-sub">Position et longueur des traits</div>
+    <div class="orow">
+      <div class="ogrid sm gr-ref" id="grRef" role="group" aria-label="Point de référence des traits"><button data-a="s"></button><button data-a="c"></button><button data-a="e"></button></div>
+      <div class="sfields">
+        <label><span id="grPosL">X</span><input data-u="len" type="number" id="grPos" step="0.1"></label>
+        <label>Longueur<input data-u="len" type="number" id="grL" step="0.1" min="0.01"></label>
+      </div>
+    </div>
+    <p class="hint" id="grRefHint"></p>
+    <div class="gr-sub">Traits plus longs</div>
+    <div class="g2">
+      <label>Traits moyens tous les (0 = aucun)<input type="number" id="grMe" step="1" min="0"></label>
+      <label>Longueur des traits moyens<input data-u="len" type="number" id="grML" step="0.1" min="0.01"></label>
+      <label>Traits longs tous les (0 = aucun)<input type="number" id="grLe" step="1" min="0"></label>
+      <label>Longueur des traits longs<input data-u="len" type="number" id="grLL" step="0.1" min="0.01"></label>
+    </div>
+    </div><div class="gr-prev">
+    <canvas id="grCv" aria-label="Aperçu des traits sur la surface déroulée"></canvas>
+    <p class="hint mono" id="grInfo"></p>
+    </div></div>
+    <p class="hint">Traits créés en groupe sur le calque actif ; à usiner en V-carving ou en profil « sur la ligne ».</p>
+    <div class="row"><button data-act="grReset">Valeurs par défaut</button><button data-act="grMake" class="primary" id="grMakeB">Créer les traits</button></div>
   </div>
 </div>
 <div class="about" id="bug" hidden role="dialog" aria-modal="true" aria-labelledby="bugT">
@@ -1703,6 +1750,8 @@ Object.assign(I18N_EN, {"Règles d’accroche…": "Snap settings…"});
 Object.assign(I18N_EN, {"Accroche": "Snap", "Afficher": "Show", "Accrocher les points à la grille": "Snap points to the grid", "Extrémités, milieux, intersections, centres, tangentes": "Ends, midpoints, intersections, centres, tangents", "Accrocher aux repères tirés des règles": "Snap to guides dragged from the rulers", "Afficher la matière enlevée": "Show removed material"});
 Object.assign(I18N_EN, {"Polices décoratives (fournies avec COPO)": "Decorative fonts (bundled with COPO)"});
 Object.assign(I18N_EN, {"Frette zéro": "Zero fret", "Début de touche → frette zéro (mm)": "Board start → zero fret (mm)", "largeur au début {w} mm": "start width {w} mm"});
+Object.assign(I18N_EN, {"Graduations rotatives…": "Rotary graduations…", "Graduations rotatives": "Rotary graduations", "Cette extension sert aux projets rotatifs (4ᵉ axe). Choisissez « Rotatif » dans l’onglet Projet › Type de projet.": "This extension is for rotary projects (4th axis). Choose “Rotary” in the Project tab › Project type.", "Nombre de divisions": "Number of divisions", "Étendue (°)": "Span (°)", "Angle du premier trait (°)": "First line angle (°)", "Numéro du premier trait": "First line number", "360° : tour complet. Moins de 360° : un trait à chaque bout de l’étendue (vernier : 10 divisions sur 9°).": "360°: full turn. Less than 360°: a line at each end of the span (vernier: 10 divisions over 9°).", "Position et longueur des traits": "Line position and length", "Point de référence des traits": "Line reference point", "Longueur": "Length", "Traits plus longs": "Longer lines", "Traits moyens tous les (0 = aucun)": "Medium lines every (0 = none)", "Longueur des traits moyens": "Medium line length", "Traits longs tous les (0 = aucun)": "Long lines every (0 = none)", "Longueur des traits longs": "Long line length", "Aperçu des traits sur la surface déroulée": "Preview of the lines on the unrolled surface", "Traits créés en groupe sur le calque actif ; à usiner en V-carving ou en profil « sur la ligne ».": "Lines created as a group on the active layer; machine them with V-carving or an “on the line” profile.", "Créer les traits": "Create the lines", "Début du trait (bas)": "Line start (bottom)", "Début du trait (gauche)": "Line start (left)", "Milieu du trait": "Line middle", "Fin du trait (haut)": "Line end (top)", "Fin du trait (droite)": "Line end (right)", "{a} : position du point « {p} » de chaque trait, par rapport à l’origine. Les traits plus longs partent du même point.": "{a}: position of the “{p}” point of each line, relative to the origin. Longer lines start from the same point.", "début": "start", "milieu": "middle", "fin": "end", "Traits parallèles à l’axe du cylindre ({a}), répartis sur le tour (Ø {d} mm, tour {c} mm) : graduations, vernier, cannelures, dents d’engrenage.": "Lines parallel to the cylinder axis ({a}), spread around the circumference (Ø {d} mm, circumference {c} mm): graduations, vernier, flutes, gear teeth.", "{n} traits (dont {m} moyens, {l} longs) · pas {a}° = {p} mm sur la surface": "{n} lines ({m} medium, {l} long) · pitch {a}° = {p} mm on the surface", "{k} traits sortent du brut": "{k} lines go beyond the stock", "le brut n’a pas la longueur du tour (Projet › ajuster)": "the stock does not match the circumference (Project › adjust)", "Passez le projet en rotatif (onglet Projet › Type de projet).": "Switch the project to rotary (Project tab › Project type).", "{n} traits créés (groupe).": "{n} lines created (group).", "{k} traits sortent du brut.": "{k} lines go beyond the stock."});
+
 Object.assign(I18N_EN, {"Mesurer": "Measure", "Gadgets": "Gadgets", "Boîte à entures…": "Finger-joint box…", "Boîte à entures": "Finger-joint box", "Boîte assemblée par tenons droits (entures). Dimensions extérieures ; les panneaux sont posés à plat sur le brut, prêts pour un profil extérieur.": "Box assembled with straight finger joints. Outer dimensions; the panels are laid flat on the stock, ready for an outside profile.", "Largeur X (mm)": "Width X (mm)", "Profondeur Y (mm)": "Depth Y (mm)", "Hauteur Z (mm)": "Height Z (mm)", "Épaisseur du matériau (mm)": "Material thickness (mm)", "Largeur des tenons (mm)": "Finger width (mm)", "Jeu d'assemblage (mm)": "Joint allowance (mm)", "Fraise de découpe": "Cutting bit", "Couvercle": "Lid", "Plat (posé sur la boîte)": "Flat (sits on the box)", "À tenons (assemblé)": "Finger-jointed (assembled)", "Dégagements dogbone au fond des creux (diamètre de la fraise)": "Dogbone reliefs at the bottom of the slots (bit diameter)", "Faces à usiner": "Faces to machine", "Fond de boîte": "Bottom", "Côté 1": "Side 1", "Côté 2": "Side 2", "Bout 1": "End 1", "Bout 2": "End 2", "Aperçu des panneaux": "Panel preview", "Le nombre de tenons est impair et calculé d'après leur largeur. Le jeu rétrécit chaque tenon pour un assemblage sans forcer (0,1 à 0,2 mm pour le bois). Usinez les panneaux en profil extérieur avec la fraise choisie et des ponts d'attache.": "The number of fingers is odd and based on their width. The allowance narrows each finger so the joint fits without forcing (0.1 to 0.2 mm for wood). Cut the panels with an outside profile using the chosen bit and tabs.", "Créer la boîte": "Create the box", "Vérifiez les valeurs : dimensions supérieures à 3 × l’épaisseur, largeur des tenons supérieure à la moitié de l’épaisseur.": "Check the values: dimensions above 3 × the thickness, finger width above half the thickness.", "{n} panneaux · tenons : {a} × {b} × {c} · surface utile {w} × {h} mm": "{n} panels · fingers: {a} × {b} × {c} · area used {w} × {h} mm", "plus grand que le brut": "larger than the stock", "épaisseur différente de celle du brut": "thickness differs from the stock", "Cochez au moins une face à usiner.": "Tick at least one face to machine.", "Boîte créée : {n} panneaux": "Box created: {n} panels", "{d} dégagements": "{d} reliefs", "Usinez-les en profil extérieur, avec des ponts.": "Cut them with an outside profile, with tabs.", "Ils dépassent du brut : agrandissez-le ou déplacez-les.": "They extend past the stock: enlarge it or move them."});
 Object.assign(I18N_EN, {"Retour au début (Début)": "Back to start (Home)", "Retour au début": "Back to start", "Pas en arrière (←)": "Step back (←)", "Pas en arrière": "Step back", "Lecture / pause (Espace)": "Play / pause (Space)", "Pas en avant (→)": "Step forward (→)", "Pas en avant": "Step forward", "Aller à la fin (Fin)": "Go to end (End)", "Aller à la fin": "Go to end", "Pause (Espace)": "Pause (Space)", "Lecture (Espace)": "Play (Space)", "Lecture": "Play"});
 Object.assign(I18N_EN, {"La pièce est conservée, l’outil passe à l’extérieur du tracé ; sur une ligne ouverte, à droite du tracé dans le sens où il a été dessiné.": "The part is kept, the tool runs outside the path; on an open line, to the right of the path in its drawing direction.", "L’intérieur du tracé est évidé ou découpé, l’outil passe à l’intérieur ; sur une ligne ouverte, à gauche du tracé dans le sens où il a été dessiné.": "The inside of the path is cleared or cut out, the tool runs inside; on an open line, to the left of the path in its drawing direction.", "Extérieur / droite": "Outside / right", "Intérieur / gauche": "Inside / left"});
@@ -5155,6 +5204,10 @@ function act(a, btn) {
     case 'boxClose': fwClose('box'); return;
     case 'boxReset': { const o = BOX_DEF(); o.t = S.stock.t; boxFill(o); boxDraw(); return; }
     case 'boxMake': boxMake(); return;
+    case 'grOpen': grOpen(); return;
+    case 'grClose': fwClose('grad'); return;
+    case 'grReset': grFill(GR_DEF()); grDraw(); return;
+    case 'grMake': grMake(); return;
     case 'ilOpen': ilOpen(); return;
     case 'ilClose': gadSec(null); return;
     case 'ipOpen': ipOpen(); return;
@@ -5554,6 +5607,7 @@ const DI = {
   dlibOpen: SVG24('<path class="bo" d="M5 4v16M9 4v16M13 4v16"/><path class="bo bd" d="M16.5 4.5l3.5 15"/>'),
   fb: SVG24('<path class="bo" d="M2 8l20-2v12L2 16z"/><path class="bo" d="M7 7.5v9M11 7.1v9.8M14.5 6.8v10.4M17.5 6.5v11"/>'),
   box: SVG24('<path class="bo" d="M3 8l9-4 9 4v9l-9 4-9-4z"/><path class="bo" d="M3 8l9 4 9-4M12 12v9"/><path class="bo bd" d="M6 10.5v2.5M9 12v2.5M15 12v2.5M18 10.5v2.5"/>'),
+  gr: SVG24('<ellipse class="bo" cx="6" cy="12" rx="3" ry="8"/><path class="bo" d="M6 4h12M6 20h12M18 4a3 8 0 0 1 0 16"/><path class="bo bd" d="M9 7.5h4M9.5 12h7M9 16.5h4"/>'),
   ip: SVG24('<path class="bo" d="M3 10h5v4h8v-4h5"/><path class="bo bd" d="M8.5 4.5h7v5h-7z"/>'),
   il: SVG24('<path class="bo" d="M3 7h6l3 5 3-5h6"/><path class="bo bd" d="M3 17h6l3-5 3 5h6"/>'),
 };
@@ -5578,7 +5632,7 @@ function dgInit() {
       const b = document.createElement('button'); b.type = 'button';
       if (kind === 't') { const pb = document.querySelector('.palette button[data-tool="' + key + '"]'); if (!pb) continue; b.dataset.tool = key; b.title = pb.title || pb.dataset.tip || ''; b.setAttribute('aria-label', pb.getAttribute('aria-label') || pb.title); b.innerHTML = pb.querySelector('svg').outerHTML; b.onclick = () => { S.ui.dsec = null; setTool(key); }; }
       else if (kind === 's') { b.dataset.sec = key; b.title = label; b.setAttribute('aria-label', label); b.innerHTML = (DI[key] || BICO[key] || '').replace('<svg', '<svg class="bico"'); b.onclick = () => dSec(key); }
-      else { b.dataset.dact = key; b.dataset.need = need || 0; b.title = label; b.setAttribute('aria-label', label); b.innerHTML = ((BICO[key] || DI[{ fbOpen: 'fb', ilOpen: 'il', ipOpen: 'ip', boxOpen: 'box' }[key] || key]) || '').replace('<svg', '<svg class="bico"'); b.onclick = () => act(key); }
+      else { b.dataset.dact = key; b.dataset.need = need || 0; b.title = label; b.setAttribute('aria-label', label); b.innerHTML = ((BICO[key] || DI[{ fbOpen: 'fb', ilOpen: 'il', ipOpen: 'ip', boxOpen: 'box', grOpen: 'gr' }[key] || key]) || '').replace('<svg', '<svg class="bico"'); b.onclick = () => act(key); }
       box.appendChild(b);
     }
     g.appendChild(grp);
@@ -5997,6 +6051,73 @@ function boxMake() {
 
 ['#bxW', '#bxD', '#bxH', '#bxT', '#bxJ', '#bxG', '#bxTool', '#bxLid', '#bxDog'].forEach(id => { const el = document.querySelector(id); if (el) { el.addEventListener('input', () => boxDraw()); el.addEventListener('change', () => boxDraw()); } });
 document.querySelectorAll('#box [data-face]').forEach(c => c.addEventListener('change', () => boxDraw()));
+// ---------- graduations rotatives (traits équidistants sur le tour, 4ᵉ axe) ----------
+const GR_DEF = () => ({ n: 36, span: 360, a0: 0, off: 0, ref: 's', pos: 0, L: 5, me: 5, mL: 7.5, le: 10, lL: 10 });
+const GR_IDS = { n: '#grN', span: '#grSpan', a0: '#grA0', off: '#grOff', pos: '#grPos', L: '#grL', me: '#grMe', mL: '#grML', le: '#grLe', lL: '#grLL' };
+function grLoad() { try { const o = JSON.parse(LS.get('copo.grad') || 'null'); if (o) return { ...GR_DEF(), ...o }; } catch { } return GR_DEF(); }
+function grRead() { const o = { ref: S.ui.grRef || 's' }; for (const [k, id] of Object.entries(GR_IDS)) o[k] = +$(id).value || 0; return o; }
+function grFill(o) { for (const [k, id] of Object.entries(GR_IDS)) $(id).value = o[k]; S.ui.grRef = o.ref || 's'; grPad(); }
+/* repère du cylindre : ax = axe le long de Y ; u = coordonnée le long de l'axe, v = coordonnée enroulée */
+function grRot() { const st = S.stock, R = st.rotary || {}; if (!R.on || !(st.t > 0)) return null; const ax = R.axis === 'y', o = originOf(st); return { ax, tour: Math.PI * st.t, D: +st.t, uo: ax ? o[1] : o[0], vo: ax ? o[0] : o[1], ulen: ax ? st.h : st.w, vlen: ax ? st.w : st.h }; }
+function grPad() {
+  const r = grRot(), ax = r ? r.ax : false, pad = $('#grRef'), ref = S.ui.grRef || 's';
+  pad.classList.toggle('v', ax);
+  /* axe le long de Y : début en bas, fin en haut ; on range les points de haut en bas */
+  const order = ax ? ['e', 'c', 's'] : ['s', 'c', 'e'];
+  order.forEach(a => pad.appendChild(pad.querySelector('[data-a="' + a + '"]')));
+  const L = { s: ax ? 'Début du trait (bas)' : 'Début du trait (gauche)', c: 'Milieu du trait', e: ax ? 'Fin du trait (haut)' : 'Fin du trait (droite)' };
+  pad.querySelectorAll('button').forEach(b => { const t = tr(L[b.dataset.a]); b.title = t; b.setAttribute('aria-label', t); b.setAttribute('aria-pressed', b.dataset.a === ref); });
+  $('#grPosL').textContent = ax ? 'Y' : 'X';
+  $('#grRefHint').textContent = trf('{a} : position du point « {p} » de chaque trait, par rapport à l’origine. Les traits plus longs partent du même point.', { a: ax ? 'Y' : 'X', p: tr({ s: 'début', c: 'milieu', e: 'fin' }[ref]) });
+}
+function grGeom(o, r) {
+  const N = Math.max(1, Math.round(o.n)), span = Math.min(360, Math.max(0.001, o.span || 360)), full = span >= 360 - 1e-9, cnt = Math.min(3600, full ? N : N + 1), step = span / N;
+  const md = (a, m) => ((a % m) + m) % m, off = Math.round(o.off || 0), me = Math.round(o.me || 0), le = Math.round(o.le || 0), segs = [];
+  let out = 0, nM = 0, nL = 0;
+  for (let i = 0; i < cnt; i++) {
+    const k = i + off, lvl = le > 0 && md(k, le) === 0 ? 2 : me > 0 && md(k, me) === 0 ? 1 : 0, L = Math.max(0.01, [o.L, o.mL, o.lL][lvl] || o.L);
+    const a = (o.a0 || 0) + i * step, v0 = md(r.vo + a / 360 * r.tour, r.tour), v = r.tour - v0 < 1e-3 ? 0 : v0, u = r.uo + (o.pos || 0), u0 = o.ref === 'c' ? u - L / 2 : o.ref === 'e' ? u - L : u, u1 = u0 + L;
+    if (v > r.vlen + 1e-3 || u0 < -1e-3 || u1 > r.ulen + 1e-3) out++;
+    if (lvl === 1) nM++; else if (lvl === 2) nL++;
+    segs.push({ lvl, a, p: r.ax ? [[v, u0], [v, u1]] : [[u0, v], [u1, v]] });
+  }
+  return { segs, cnt, step, out, nM, nL, pitch: step / 360 * r.tour };
+}
+function grOpen() { grFill(grLoad()); fwOpen('grad'); requestAnimationFrame(grDraw); }
+function grDraw() {
+  const r = grRot(), cv2 = $('#grCv'), info = $('#grInfo');
+  $('#grWarn').hidden = !!r; $('#grMakeB').disabled = !r; grPad();
+  $('#grAxis').textContent = r ? trf('Traits parallèles à l’axe du cylindre ({a}), répartis sur le tour (Ø {d} mm, tour {c} mm) : graduations, vernier, cannelures, dents d’engrenage.', { a: r.ax ? 'Y' : 'X', d: LANG === 'fr' ? fr(r.D, 1) : r.D.toFixed(1), c: LANG === 'fr' ? fr(r.tour, 2) : r.tour.toFixed(2) }) : '';
+  const c = cv2.getContext('2d');
+  if (!r) { info.textContent = ''; cv2.style.height = '0px'; cv2.width = 1; cv2.height = 1; return; }
+  const o = grRead(), G = grGeom(o, r), st = S.stock, W = Math.max(160, cv2.parentElement.clientWidth - 2), pad = 14, k = Math.min((W - 2 * pad - 30) / st.w, 380 / st.h), H = Math.round(st.h * k + 2 * pad);
+  cv2.width = W * devicePixelRatio; cv2.height = H * devicePixelRatio; cv2.style.height = H + 'px';
+  c.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0); c.clearRect(0, 0, W, H);
+  const X0 = (W - st.w * k) / 2 - 12, X = x => X0 + x * k, Y = y => H - pad - y * k;
+  c.fillStyle = '#f3efe4'; c.fillRect(X(0), Y(st.h), st.w * k, st.h * k); c.strokeStyle = '#9a8f78'; c.lineWidth = 1; c.strokeRect(X(0), Y(st.h), st.w * k, st.h * k);
+  /* repères tous les 90°, comme sur le plan */
+  c.font = '600 10px ui-monospace, monospace'; c.setLineDash([5, 4]);
+  for (let q = -8; q <= 8; q++) { const v = r.vo + q * r.tour / 4; if (v < -1e-6 || v > r.vlen + 1e-6) continue; c.strokeStyle = 'rgba(80,120,220,.6)'; c.beginPath(); if (r.ax) { c.moveTo(X(v), Y(0)); c.lineTo(X(v), Y(st.h)); } else { c.moveTo(X(0), Y(v)); c.lineTo(X(st.w), Y(v)); } c.stroke(); c.fillStyle = '#3a6fd8'; const lb = (((q * 90) % 360) + 360) % 360 + '°'; if (r.ax) c.fillText(lb, X(v) + 3, Y(st.h) - 3); else c.fillText(lb, X(st.w) + 4, Y(v) + 3); }
+  c.setLineDash([]); c.lineCap = 'round';
+  for (const g of G.segs) { c.strokeStyle = g.lvl === 2 ? '#1b1b1b' : g.lvl === 1 ? '#3a3a3a' : '#555'; c.lineWidth = g.lvl === 2 ? 1.8 : g.lvl === 1 ? 1.4 : 1.1; c.beginPath(); c.moveTo(X(g.p[0][0]), Y(g.p[0][1])); c.lineTo(X(g.p[1][0]), Y(g.p[1][1])); c.stroke(); }
+  /* origine */
+  const oo = originOf(st); c.fillStyle = '#1f6fe0'; c.beginPath(); c.arc(X(oo[0]), Y(oo[1]), 3, 0, 7); c.fill();
+  const F = (v, d) => LANG === 'fr' ? fr(v, d) : v.toFixed(d);
+  info.textContent = trf('{n} traits (dont {m} moyens, {l} longs) · pas {a}° = {p} mm sur la surface', { n: G.cnt, m: G.nM, l: G.nL, a: F(G.step, 3).replace(/[.,]?0+$/, ''), p: F(G.pitch, 3) })
+    + (G.out ? ' · ' + trf('{k} traits sortent du brut', { k: G.out }) : '')
+    + (Math.abs(r.vlen - r.tour) > 0.01 ? ' · ' + tr('le brut n’a pas la longueur du tour (Projet › ajuster)') : '');
+}
+function grMake() {
+  const r = grRot(); if (!r) return toast(tr('Passez le projet en rotatif (onglet Projet › Type de projet).'));
+  const o = grRead(); if (!(o.n >= 1) || !(o.L > 0)) return toast(tr('Vérifiez les valeurs.'));
+  try { LS.set('copo.grad', JSON.stringify(o)); } catch { }
+  const G = grGeom(o, r), g = uid(); S.sel.clear(); S.imgSel = null; let n = 0;
+  for (const sg of G.segs) { const sh = mkShape(sg.p.map(q => NODE(q[0], q[1])), false, { g }); if (sh) { S.sel.add(sh.id); n++; } }
+  fwClose('grad'); commit(); renderSel(); setTool('select'); draw();
+  toast(trf('{n} traits créés (groupe).', { n }) + (G.out ? ' ' + trf('{k} traits sortent du brut.', { k: G.out }) : ''));
+}
+$$('#grRef button').forEach(b => b.onclick = () => { S.ui.grRef = b.dataset.a; grDraw(); });
+Object.values(GR_IDS).forEach(id => { const el = $(id); if (el) { el.addEventListener('input', () => grDraw()); el.addEventListener('change', () => grDraw()); } });
 // ---------- touche de guitare ----------
 const FB_DEF = () => ({ L: 648, N: 22, Wn: 43, ref: '12', Wr: 52, over: 6, m: 2, dots: '3, 5, 7, 9, 15, 17, 19, 21', dots2: '12, 24', dia: 6, scale: true, zf: false, zd: 5 });
 const FB_IDS = { L: '#fbL', N: '#fbN', Wn: '#fbWn', ref: '#fbRef', Wr: '#fbWr', over: '#fbOver', m: '#fbM', dots: '#fbDots', dots2: '#fbDots2', dia: '#fbDia', scale: '#fbScale', zf: '#fbZf', zd: '#fbZd' };
@@ -6186,7 +6307,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.222', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.223', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });

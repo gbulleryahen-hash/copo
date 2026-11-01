@@ -171,6 +171,7 @@ footer p{max-width:none}
       <li><a href="#fr-texte">Texte et V-carving</a></li>
       <li><a href="#fr-lutherie">Lutherie</a></li>
       <li><a href="#fr-boite">Boîte à entures</a></li>
+      <li><a href="#fr-graduations">Graduations rotatives</a></li>
       <li><a href="#fr-imbrication">Imbrication</a></li>
       <li><a href="#fr-double">Double face</a></li>
       <li><a href="#fr-vues">Vues 2D et 3D</a></li>
@@ -187,7 +188,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.222</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.223</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -228,7 +229,7 @@ footer p{max-width:none}
     <p><strong>Premier lancement</strong> : un écran d'accueil propose une <strong>visite rapide</strong> (six bulles sur les zones principales), le projet d'exemple ou un projet vide. Ensuite, à la première ouverture de chaque onglet, une ou plusieurs <strong>astuces</strong> montrent l'essentiel. Passer la visite coupe aussi les astuces. Menu <strong>Aide › Visite rapide</strong> pour la revoir, <strong>Aide › Réafficher les astuces</strong> pour les remettre ; la case « Ne plus afficher au démarrage » masque l'écran d'accueil.</p>
     <ul>
       <li><strong>Bouton Enregistrer</strong> (disquette, à gauche de 2D/3D) : la première fois, il demande où enregistrer le projet ; ensuite il réécrit simplement le même fichier (comme <kbd>Ctrl</kbd>+<kbd>S</kbd>). Un point bleu signale des modifications non enregistrées.</li>
-      <li><strong>Barre de menus</strong> : Fichier, Édition, Dessin, Usinage, Extensions et Aide. Le menu Dessin range ses commandes en cinq catégories encadrées : Groupes, Combiner, Vecteurs, Coins et Disposer. Le menu <strong>Extensions</strong> regroupe les modules qui créent d’un coup dessins et parcours : touche de guitare, incrustation en V, incrustation en poche et boîte à entures. Le menu Aide ouvre ce mode d'emploi, permet de signaler un bug et affiche la licence. Les boutons <strong>FR / EN</strong>, tout à droite de la barre, changent la langue de l'interface ; le bouton qui les suit passe COPO en <strong>plein écran</strong> (Échap pour en sortir).</li>
+      <li><strong>Barre de menus</strong> : Fichier, Édition, Dessin, Usinage, Extensions et Aide. Le menu Dessin range ses commandes en cinq catégories encadrées : Groupes, Combiner, Vecteurs, Coins et Disposer. Le menu <strong>Extensions</strong> regroupe les modules qui créent d’un coup dessins et parcours : touche de guitare, incrustation en V, incrustation en poche, boîte à entures et graduations rotatives. Le menu Aide ouvre ce mode d'emploi, permet de signaler un bug et affiche la licence. Les boutons <strong>FR / EN</strong>, tout à droite de la barre, changent la langue de l'interface ; le bouton qui les suit passe COPO en <strong>plein écran</strong> (Échap pour en sortir).</li>
       <li><strong>Onglet Dessin</strong> : en haut, une grille d'icônes regroupe toutes les fonctions de dessin, en deux colonnes : à gauche Sélection et Bibliothèque, Créer, Disposer ; à droite Mesurer, Modifier, Combiner ; avec une infobulle et une lettre de raccourci pour chacune. Juste en dessous s'affiche ce dont vous avez besoin : les réglages de l'outil choisi (avec une aide et un petit schéma), le formulaire de la fonction cliquée (Aligner, Copie en réseau, Imbrication, Images…), ou le bloc Sélection quand un objet est sélectionné. Les icônes grisées demandent d'abord une sélection. Les calques restent en bas. Échap referme la fonction ouverte.</li>
       <li><strong>Plan de travail</strong> : le brut en beige, les règles en millimètres, la grille et l'origine (flèches X et Y).</li>
       <li><strong>Panneau de gauche</strong> en cinq onglets : <span class="ui">Projet</span>, <span class="ui">Dessin</span>, <span class="ui">Relief</span>, <span class="ui">Parcours</span> et <span class="ui">G-code</span>. Ils sont numérotés de 1 à 5 dans l’ordre habituel du travail. Dans les onglets Projet et Parcours et dans la bibliothèque d'outils, de petits schémas montrent ce que fait chaque réglage (profondeur, surépaisseur, sens de coupe, entrée de l'outil, ponts, forme de la fraise, zéro Z…) et se mettent à jour avec vos choix.</li>
@@ -493,6 +494,17 @@ X74.36 A14.181</pre>
     <p>Le menu <span class="ui">Extensions › Boîte à entures…</span> ouvre ce module, qui dessine une boîte assemblée par tenons droits, à la façon du « Box Creator » de Vectric. Réglez les <strong>dimensions extérieures</strong> (largeur X, profondeur Y, hauteur Z), l'<strong>épaisseur du matériau</strong> (celle du brut par défaut), la <strong>largeur des tenons</strong> (leur nombre, toujours impair, s'en déduit), le <strong>jeu d'assemblage</strong> (0,1 à 0,2 mm dans le bois), la <strong>fraise de découpe</strong>, l'<strong>assemblage du dessus</strong> (<em>à entures</em> pour une boîte fermée, par défaut, ou <em>posé à plat</em> pour un couvercle amovible) et les <strong>faces à usiner</strong> (Dessus, Fond de boîte, Côtés, Bouts). Les tenons sont répartis à égalité entre les coins : la zone de coin, de l'épaisseur du matériau, n'existe que là où un autre panneau s'assemble, si bien qu'une boîte ouverte garde le même pas jusqu'en haut. Les tenons peuvent être plus étroits que l'épaisseur ; COPO prévient si les creux deviennent plus étroits que la fraise. L'option <em>Dégagements dogbone</em> ajoute au fond de chaque creux un arc du diamètre de la fraise, pour que les tenons à angles vifs entrent.</p>
     <p>L'aperçu montre les panneaux posés à plat. <span class="ui">Créer la boîte</span> les place sur le brut, espacés pour la fraise : usinez-les en profil extérieur, avec des ponts d'attache. Les volumes des panneaux s'emboîtent exactement : aucun recouvrement ni manque aux coins.</p>
 
+    <h2 id="fr-graduations">Graduations rotatives</h2>
+    <figure><img src="img/fr-25-graduations.webp" alt="Fenêtre Graduations rotatives : 36 divisions, traits moyens tous les 5 et longs tous les 10, aperçu sur la feuille déroulée et traits enroulés en 3D." width="1800" height="1125" loading="lazy"><figcaption>36 divisions sur le tour d’un cylindre Ø 90 mm : un trait moyen tous les 5, un long tous les 10.</figcaption></figure>
+    <p>Dans un projet <strong>rotatif</strong>, <span class="ui">Extensions › Graduations rotatives…</span> dessine des traits équidistants autour du cylindre : graduations, vernier, cannelures, dents d’engrenage. Les traits sont toujours <strong>parallèles à l’axe du cylindre</strong> choisi dans l’onglet Projet (horizontaux si le cylindre est le long de X, verticaux s’il est le long de Y) et répartis sur le tour (π × D).</p>
+    <ul>
+      <li><strong>Nombre de divisions</strong> et <strong>étendue</strong> : à 360°, autant de traits que de divisions sur le tour complet. Sous 360°, les divisions couvrent l’étendue avec un trait à chaque bout ; pour un vernier au dixième, par exemple, 10 divisions sur 9°.</li>
+      <li><strong>Angle du premier trait</strong> : 0° est la ligne de l’origine, comme les repères 0°, 90°, 270° du plan.</li>
+      <li><strong>Position et longueur</strong> : comme dans le bloc Sélection, on choisit le point de référence du trait (début, milieu ou fin), puis sa position X (ou Y) par rapport à l’origine et sa longueur.</li>
+      <li><strong>Traits plus longs</strong> : un trait moyen tous les <em>n</em> traits et un trait long tous les <em>m</em> traits, chacun avec sa longueur ; ils partent du même point de référence. <em>Numéro du premier trait</em> décale ce comptage.</li>
+    </ul>
+    <p>L’aperçu montre la feuille déroulée et le pas, en degrés et en millimètres sur la surface. <span class="ui">Créer les traits</span> les pose en groupe sur le calque actif ; usinez-les en V-carving ou en profil « sur la ligne ».</p>
+
     <h2 id="fr-imbrication">Imbrication</h2>
     <figure><img src="img/fr-07-imbrication.webp" alt="Douze pièces imbriquées sur un panneau de 1000 × 600 mm, avec leurs parcours de détourage." width="1800" height="1125" loading="lazy"><figcaption>Quatre pièces en trois exemplaires sur un panneau de 1000 × 600 mm. Les L s'emboîtent, les copies reprennent les parcours des pièces d'origine.</figcaption></figure>
     <p><span class="ui">Dessin › Imbrication…</span> ouvre le bloc dans l'onglet Dessin. Sélectionnez les pièces (sans sélection, tout le dessin est pris) et réglez le nombre d'exemplaires, l'espacement, la marge du panneau, les rotations permises et la précision. COPO place les pièces selon leur forme réelle, les plus grandes d'abord, le plus en bas à gauche possible. Un groupe ou un texte reste d'un bloc. Les pièces qui ne tiennent pas restent sélectionnées et le taux d'occupation du panneau s'affiche.</p>
@@ -610,7 +622,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.222 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.223 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -631,6 +643,7 @@ M30</pre>
       <li><a href="#en-text">Text and V-carving</a></li>
       <li><a href="#en-lutherie">Lutherie</a></li>
       <li><a href="#en-box">Finger-joint box</a></li>
+      <li><a href="#en-graduations">Rotary graduations</a></li>
       <li><a href="#en-nesting">Nesting</a></li>
       <li><a href="#en-double">Double-sided</a></li>
       <li><a href="#en-views">2D and 3D views</a></li>
@@ -647,7 +660,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.222</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.223</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -688,7 +701,7 @@ M30</pre>
     <p><strong>First launch</strong>: a welcome screen offers a <strong>quick tour</strong> (six bubbles on the main areas), the sample project or an empty project. Then, the first time you open each tab, one or more <strong>tips</strong> show the essentials. Skipping the tour also turns tips off. Use <strong>Help › Quick tour</strong> to see it again and <strong>Help › Show tips again</strong> to bring the tips back; the “Don’t show at startup” box hides the welcome screen.</p>
     <ul>
       <li><strong>Save button</strong> (floppy disk, left of 2D/3D): the first time it asks where to save the project; after that it simply overwrites the same file (like <kbd>Ctrl</kbd>+<kbd>S</kbd>). A blue dot shows unsaved changes.</li>
-      <li><strong>Menu bar</strong>: File, Edit, Drawing, Machining, Extensions and Help. The Drawing menu sorts its commands into five framed categories: Groups, Combine, Vectors, Corners and Arrange. The <strong>Extensions</strong> menu gathers the modules that create drawings and toolpaths in one go: guitar fretboard, V inlay, pocket inlay and finger-joint box. The Help menu opens this guide, lets you report a bug and shows the licence. The <strong>FR / EN</strong> buttons, at the far right of the bar, switch the interface language; the button next to them puts COPO in <strong>full screen</strong> (Esc to leave).</li>
+      <li><strong>Menu bar</strong>: File, Edit, Drawing, Machining, Extensions and Help. The Drawing menu sorts its commands into five framed categories: Groups, Combine, Vectors, Corners and Arrange. The <strong>Extensions</strong> menu gathers the modules that create drawings and toolpaths in one go: guitar fretboard, V inlay, pocket inlay, finger-joint box and rotary graduations. The Help menu opens this guide, lets you report a bug and shows the licence. The <strong>FR / EN</strong> buttons, at the far right of the bar, switch the interface language; the button next to them puts COPO in <strong>full screen</strong> (Esc to leave).</li>
       <li><strong>Drawing tab</strong>: at the top, a grid of icons gathers every drawing function in two columns: on the left Selection and Library, Create, Arrange; on the right Measure, Modify, Combine; each with a tooltip and a shortcut letter. Just below appears what you need: the settings of the chosen tool (with a hint and a small diagram), the form of the clicked function (Align, Array copy, Nesting, Images…), or the Selection block when an object is selected. Greyed icons need a selection first. Layers stay at the bottom. Esc closes the open function.</li>
       <li><strong>Workspace</strong>: the stock in beige, rulers in millimetres, the grid and the origin (X and Y arrows).</li>
       <li><strong>Left panel</strong> with five tabs: <span class="ui">Project</span>, <span class="ui">Drawing</span>, <span class="ui">Relief</span>, <span class="ui">Toolpaths</span> and <span class="ui">G-code</span>. They are numbered 1 to 5 in the usual order of work. In the Project and Toolpaths tabs and in the tool library, small diagrams show what each setting does (depth, allowance, cut direction, tool entry, tabs, bit shape, Z zero…) and update with your choices.</li>
@@ -953,6 +966,17 @@ X74.36 A14.181</pre>
     <p>The <span class="ui">Extensions › Finger-joint box…</span> menu opens this module, which draws a box assembled with straight finger joints, like Vectric's “Box Creator”. Set the <strong>outer dimensions</strong> (width X, depth Y, height Z), the <strong>material thickness</strong> (the stock's by default), the <strong>finger width</strong> (their number, always odd, follows), the <strong>joint allowance</strong> (0.1 to 0.2 mm in wood), the <strong>cutting bit</strong>, the <strong>top joint</strong> (<em>finger-jointed</em> for a closed box, the default, or <em>laid flat</em> for a removable lid) and the <strong>faces to machine</strong> (Top, Bottom, Sides, Ends). Fingers are spread evenly between the corners: the corner zone, as thick as the material, only exists where another panel joins, so an open box keeps the same pitch up to the top. Fingers may be narrower than the thickness; COPO warns when the slots become narrower than the bit. The <em>Dogbone reliefs</em> option adds an arc the size of the bit at the bottom of each slot so square fingers fit.</p>
     <p>The preview shows the panels laid flat. <span class="ui">Create the box</span> places them on the stock, spaced for the bit: cut them with an outside profile and tabs. The panel volumes fit exactly: no overlap or gap at the corners.</p>
 
+    <h2 id="en-graduations">Rotary graduations</h2>
+    <figure><img src="img/en-25-graduations.webp" alt="Rotary graduations window: 36 divisions, medium lines every 5 and long lines every 10, preview on the unrolled sheet and lines wrapped in 3D." width="1800" height="1125" loading="lazy"><figcaption>36 divisions around a Ø 90 mm cylinder: a medium line every 5, a long one every 10.</figcaption></figure>
+    <p>In a <strong>rotary</strong> project, <span class="ui">Extensions › Rotary graduations…</span> draws evenly spaced lines around the cylinder: graduations, verniers, flutes, gear teeth. The lines are always <strong>parallel to the cylinder axis</strong> chosen in the Project tab (horizontal when the cylinder lies along X, vertical along Y) and spread around the circumference (π × D).</p>
+    <ul>
+      <li><strong>Number of divisions</strong> and <strong>span</strong>: at 360°, as many lines as divisions all the way round. Below 360°, the divisions cover the span with a line at each end; for a tenth vernier, for example, 10 divisions over 9°.</li>
+      <li><strong>First line angle</strong>: 0° is the origin line, like the 0°, 90°, 270° marks on the plan.</li>
+      <li><strong>Position and length</strong>: as in the Selection block, choose the line's reference point (start, middle or end), then its X (or Y) position relative to the origin and its length.</li>
+      <li><strong>Longer lines</strong>: a medium line every <em>n</em> lines and a long line every <em>m</em> lines, each with its own length; they start from the same reference point. <em>First line number</em> shifts this count.</li>
+    </ul>
+    <p>The preview shows the unrolled sheet and the pitch, in degrees and in millimetres on the surface. <span class="ui">Create the lines</span> places them as a group on the active layer; machine them with V-carving or an “on the line” profile.</p>
+
     <h2 id="en-nesting">Nesting</h2>
     <figure><img src="img/en-07-imbrication.webp" alt="Twelve parts nested on a 1000 × 600 mm sheet, with their cut-out toolpaths." width="1800" height="1125" loading="lazy"><figcaption>Four parts in three copies on a 1000 × 600 mm sheet. The L shapes interlock and the copies join the toolpaths of the original parts.</figcaption></figure>
     <p><span class="ui">Drawing › Nesting…</span> opens the block in the Drawing tab. Select the parts (with no selection, the whole drawing is used) and set the number of copies, the spacing, the sheet margin, the allowed rotations and the precision. COPO places the parts following their true shape, largest first, as far down and left as possible. A group or a text stays in one block. Parts that do not fit stay selected, and the sheet usage is shown.</p>
@@ -1070,7 +1094,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.222 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.223 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
