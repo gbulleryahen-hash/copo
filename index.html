@@ -69,7 +69,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .palette button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
 .palette .psep{height:1px;background:var(--line);margin:3px 4px}
 .stage{display:grid;grid-template-rows:auto minmax(0,1fr);background:var(--panel);border:1px solid var(--line);border-radius:8px;min-width:0;min-height:0;overflow:hidden}
-.dgrid{display:flex;flex-wrap:wrap;gap:6px 12px;padding:8px 0 10px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.dgrid{display:grid;grid-template-columns:auto auto 1fr;grid-template-areas:'sel lib mes' 'cre cre mod' 'dis dis com';justify-content:start;gap:8px 12px;padding:8px 0 10px;border-bottom:1px solid var(--line);margin-bottom:10px}.dgrid .dg-icons{display:grid;grid-template-columns:repeat(var(--n,4),34px);gap:3px}.dgrid .dg-group[style*='mes'],.dgrid .dg-group[style*='mod'],.dgrid .dg-group[style*='com']{padding-left:14px}
 .dg-group{display:grid;gap:3px;align-content:start}.dg-group>span{font:600 10.5px var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .dg-icons{display:flex;flex-wrap:wrap;gap:3px}
 .dg-icons button{width:34px;height:34px;border:1px solid transparent;border-radius:var(--r);background:var(--raised);display:grid;place-items:center;color:var(--ink);cursor:pointer;padding:0}
@@ -95,6 +95,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .libtools{display:flex;gap:4px;flex-wrap:wrap}.libmach{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px}
 .libright{overflow:auto;padding:12px 16px;min-height:0}.libform{display:grid;gap:10px;max-width:640px}.libform[hidden]{display:none}.libform textarea{resize:vertical}
 .libest{margin:0;padding:6px 10px;border-radius:6px;background:color-mix(in srgb,#ff9f1c 18%,transparent);font-size:12.5px;color:var(--ink)}
+.dlibdlg .libbody{grid-template-columns:minmax(220px,280px) minmax(0,1fr)}.dlibleft{grid-template-rows:auto minmax(0,1fr) auto}.dlibleft .libtools{display:grid;gap:5px}.dlib-where{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:40%}.dlgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--th,132px),1fr));gap:10px}.dlcard{position:relative;display:grid;grid-template-rows:auto auto;gap:5px;padding:6px;border:1.5px solid var(--line);border-radius:8px;background:var(--raised);cursor:pointer;text-align:left;color:var(--ink);font:inherit;font-size:12px;min-width:0}.dlcard:hover{border-color:var(--muted)}.dlcard.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}.dlcard .th{aspect-ratio:4/3;border-radius:5px;background:#f4f1ea;display:grid;place-items:center;overflow:hidden}.dlcard .th img{max-width:92%;max-height:92%;object-fit:contain}.dlcard .th svg{width:46%;height:46%;fill:none;stroke:#6b6f78;stroke-width:1.5}.dlcard .th b{font:700 13px var(--f-mono, monospace);color:#6b6f78}.dlcard span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dlcard.dir .th{background:var(--panel)}.dlcard.dir .th svg{stroke:var(--accent)}.dlcard .dx{position:absolute;top:4px;right:4px;display:none;width:22px;height:22px;border-radius:50%;border:0;background:var(--panel);color:var(--danger);place-items:center;cursor:pointer}.dlcard:hover .dx{display:grid}.dlcard .dx svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}.dlname{display:flex;gap:8px;align-items:end;margin-bottom:10px;flex-wrap:wrap}.dlname label{flex:1;min-width:200px}
 .libio{display:inline-flex;align-items:center;gap:6px}.libio svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .libcard{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;background:var(--raised);border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;cursor:pointer;color:var(--ink)}.libcard:hover{border-color:var(--accent)}.libcard .lc-ico svg{width:22px;height:22px;display:block;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.libcard b{display:block;font-weight:600}.libcard small{display:block;color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.libcard .lc-go{color:var(--muted);font-size:20px;line-height:1}
 .hint.warn{color:var(--ink);background:color-mix(in srgb,#ff9f1c 20%,transparent);border-left:3px solid #ff9f1c;padding:6px 10px;border-radius:4px}
@@ -127,7 +128,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .canvaswrap{position:relative;min-height:0;background:var(--canvas)}
 .views{display:grid;min-height:0;min-width:0;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr)}
 .views.both.v{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.views.both.h{grid-template-rows:minmax(0,1fr) minmax(0,1fr)}
-.views>[hidden]{display:none!important}
+.views>[hidden]{display:none!important}.views{position:relative}.vsplit{position:absolute;z-index:6;touch-action:none}.views.v>.vsplit{top:0;bottom:0;width:10px;margin-left:-1px;cursor:col-resize}.views.h>.vsplit{left:0;right:0;height:10px;margin-top:-1px;cursor:row-resize}.vsplit::after{content:'';position:absolute;inset:0;margin:auto;border-radius:2px;background:var(--line);transition:background .15s}.views.v>.vsplit::after{width:2px;height:40px}.views.h>.vsplit::after{height:2px;width:40px}.vsplit:hover::after,.vsplit.drag::after{background:var(--accent)}.views.v>.vsplit:hover::after,.views.v>.vsplit.drag::after{height:100%}.views.h>.vsplit:hover::after,.views.h>.vsplit.drag::after{width:100%}
 .rv3{position:relative;min-height:0;min-width:0;background:var(--canvas)}.views.both{gap:8px;background:var(--bg)}.views.both>.canvaswrap,.views.both>.rv3{box-shadow:0 0 0 1px var(--line)} /* gouttière sombre entre la 2D et la 3D */
 #rvc{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
 #rvov{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
@@ -353,10 +354,11 @@ details.blk>summary:hover{color:var(--ink)}
 .lcol::-webkit-color-swatch-wrapper{padding:0}
 .lcol::-webkit-color-swatch{border:1px solid var(--line);border-radius:4px}
 .lcol::-moz-color-swatch{border:1px solid var(--line);border-radius:4px}
-.guides li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px;align-items:center;font-size:12.5px;color:var(--muted)}
+.guides li.hl{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}.guides .glk[aria-pressed="true"]{color:var(--accent)}
+.guides li{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:6px;align-items:center;font-size:12.5px;color:var(--muted)}
 label.inl{display:flex;align-items:center;gap:6px}
 label.inl input{width:70px}
-.nebar{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.nebar{display:grid;gap:6px;justify-items:start}.nebar .nexy{display:flex;gap:10px}.nebar .nerow{display:flex;flex-wrap:wrap;gap:5px}.nemode{width:auto;min-width:180px}.nemode button{padding:4px 12px}
 .nebar label.inl input{width:76px}
 .fontpick{position:relative}
 .fp-btn{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--raised);border:1px solid var(--line);border-radius:5px;padding:7px 9px;cursor:pointer;color:var(--ink);font-size:16px;text-align:left}
@@ -498,7 +500,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 .cfrow{justify-content:flex-start}
 .ogrid button[aria-pressed="true"]::after{background:var(--accent);border-color:var(--accent)}
 .mirpad{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center;justify-items:center;max-width:300px}
-.mirpad button{min-width:84px;background:var(--raised);border:1px solid var(--line);border-radius:var(--r);padding:5px 10px;color:var(--ink);font-weight:500;cursor:pointer}.mirpad button:hover{border-color:var(--accent)}.mirP{font:700 30px var(--f-head);color:var(--accent);line-height:1}
+.mirpad button{min-width:84px;background:var(--raised);border:1px solid var(--line);border-radius:var(--r);padding:5px 10px;color:var(--ink);font-weight:500;cursor:pointer}.mirpad button:hover{border-color:var(--accent)}.mirP{display:grid;grid-template-columns:repeat(3,1fr);grid-template-areas:'. t .' 'l c r' '. b .';font:700 22px var(--f-head);color:var(--accent);line-height:1;gap:0 1px;justify-items:center}.mirP i{font-style:normal}.mirP .mp{grid-area:c;font-size:26px}.mirP .mf{opacity:.45}.mirP .v{transform:scaleY(-1)}.mirP .h{transform:scaleX(-1)}.mirP .v:first-child{grid-area:t}.mirP .h:nth-child(2){grid-area:l}.mirP .h:nth-child(4){grid-area:r}.mirP .v:last-child{grid-area:b}.miri{display:grid;grid-template-columns:48px minmax(0,1fr);gap:6px 10px;align-items:center;max-width:300px}.miri button{background:var(--raised);border:1px solid var(--line);border-radius:var(--r);padding:5px 10px;color:var(--ink);font-weight:500;cursor:pointer;text-align:left}.miri button:hover{border-color:var(--accent)}.miric{width:46px;height:27px}.miric text{font:700 22px var(--f-head)}.miric .mp{fill:var(--accent)}.miric .mf{fill:var(--accent);opacity:.45}.miric .ml{stroke:var(--muted);stroke-width:1.3;stroke-dasharray:3 2.5;fill:none}
 
 /* menu du clic droit */
 .cmenu{position:fixed;z-index:90;min-width:230px;padding:4px;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 10px 30px rgb(0 0 0/.35);display:grid;font-size:13px}
@@ -550,7 +552,9 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 #tpWin.docked #tpForm>.row:last-child{position:sticky;bottom:-18px;z-index:5;background:var(--panel);margin:4px 0 0;padding:10px 0 12px;border-top:1px solid var(--line)}
 @media (max-width:920px){#tpWin.docked{left:auto!important;right:auto;bottom:auto}}
 @media (prefers-reduced-motion:reduce){.peektab svg{transition:none}}
-.selline{display:flex;align-items:center;justify-content:space-between;gap:8px}.dsec-h .infoi{margin-left:auto}
+.tpadv{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px 0}.tpadv>summary{cursor:pointer;font-weight:600;font-size:13px;padding:4px 0;list-style:none;display:flex;align-items:center;gap:6px}.tpadv>summary::-webkit-details-marker{display:none}.tpadv>summary::before{content:'';width:6px;height:6px;border-right:1.8px solid currentColor;border-bottom:1.8px solid currentColor;transform:rotate(-45deg);transition:transform .15s;margin:0 3px}.tpadv[open]>summary::before{transform:rotate(45deg)}.tpadv-b{display:grid;gap:10px;padding-top:8px}
+.tipr .tipb{left:auto;right:0}.row .tipw{align-self:center}.row .tipi,.row .tipi:hover{background:none!important;border:0!important;padding:0!important;width:22px;height:22px;min-width:0}.dsec-h .tipw{margin-left:6px;text-transform:none;letter-spacing:0}.txh{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;margin-top:4px}.txmodes{display:grid;gap:3px}.txm{display:grid!important;grid-template-columns:auto 80px minmax(0,1fr);align-items:center;gap:8px;cursor:pointer;font-size:13px;padding:2px 4px;border-radius:6px}.txm:hover{background:#ffffff0a}.txm input{margin:0}.txil{width:80px;height:36px;background:#24272d;border-radius:5px}.txil .tl{fill:#fff;font:700 13px var(--f-head, sans-serif);letter-spacing:.5px}.txil .ts{font-size:11px}.txil .tb{fill:none;stroke:#4a8ef0;stroke-width:2;stroke-linecap:round}.txsub{display:grid;gap:3px}.txsh{font-size:12px;color:var(--muted)}.txwhat{margin:0;padding:6px 8px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:4px;font-size:12.5px}
+.selline{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:-4px}.selchk{display:grid;gap:2px}.tipw{position:relative;display:inline-flex;align-items:center;gap:4px}.tipi{border:0;background:none;padding:0;width:18px;height:18px;color:var(--muted);cursor:help;display:grid;place-items:center}.tipi svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}.tipb{display:none;position:absolute;z-index:40;left:0;top:calc(100% + 6px);width:250px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);box-shadow:0 8px 24px rgb(0 0 0 / .35);font-size:12px;line-height:1.4;color:var(--ink);font-weight:400}.tipw:hover .tipb,.tipi:focus+.tipb{display:grid;gap:6px}.tipb svg{width:100%;height:auto}.tipb .tf{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:4 3}.tipb .ts{fill:#e8833a33;stroke:#e8833a;stroke-width:1.6}.tipb .tt{font:600 11px var(--f-ui);fill:var(--muted);text-anchor:middle}.dsec-h .infoi{margin-left:auto}
 #ipCv{position:static;inset:auto;touch-action:auto;display:block;width:100%;max-width:100%;border:1px solid var(--line);border-radius:6px;background:var(--canvas);height:auto}
 .toolrow{display:flex;gap:6px;align-items:center}.toolrow select{flex:1;min-width:0}.toolrow button{flex:none;padding:5px 9px}
 .ipkinds{display:grid;grid-template-columns:1fr;gap:8px}
@@ -580,7 +584,8 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         <button data-act="sampleRot">Ouvrir l'exemple rotatif (4ᵉ axe)</button>
         <button data-act="open">Ouvrir un projet…<kbd>Ctrl+O</kbd></button>
         <button data-act="save">Enregistrer le projet<kbd>Ctrl+S</kbd></button><button data-act="saveAs">Enregistrer sous…<kbd>Ctrl+Maj+S</kbd></button>
-        <hr><button data-act="imgInsert">Insérer une image…</button><button data-act="import">Importer un SVG, DXF, PDF ou AI…</button><button data-act="relStl">Importer un STL (relief)…</button><button data-act="fontDir">Ouvrir un dossier de polices…</button>
+        <hr><button data-act="imgInsert">Insérer une image…</button><button data-act="import">Importer un SVG, DXF, PDF ou AI…</button><button data-act="relStl">Importer un STL (relief)…</button>
+        <hr><button data-act="dlibOpen">Bibliothèque de dessins et d’images…</button><button data-act="dlibSaveCurMenu">Ajouter le dessin en cours à la bibliothèque…</button>
         <hr><button data-act="svgAll">Exporter le dessin en SVG</button><button data-act="svgSel">Exporter la sélection en SVG</button>
         <hr><button data-act="gcExport">Enregistrer le G-code</button><button data-act="sheetPdf">Enregistrer la fiche de gamme en PDF</button>
       </div></div>
@@ -589,15 +594,14 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         <hr><button data-act="dup">Dupliquer<kbd>Ctrl+D</kbd></button><button data-act="selAll">Tout sélectionner<kbd>Ctrl+A</kbd></button><button data-act="del">Supprimer<kbd>Suppr</kbd></button>
         <hr><button data-act="cfgOpen">Paramètres…<kbd>Ctrl+,</kbd></button>
       </div></div>
-      <div class="menu"><button class="mtop" aria-expanded="false">Affichage</button><div class="mdrop" hidden>
-        <button data-act="v3d">Aperçu 3D de l’usinage</button><button data-act="fit">Ajuster la vue</button><button data-act="fullscreen" id="fsMenu">Plein écran</button>
-        <hr><button data-act="tgl" data-tgl="showGrid" data-keep="1">Afficher la grille</button><button data-act="tgl" data-tgl="showTP" data-keep="1">Afficher les parcours</button><button data-act="tgl" data-tgl="showCut" data-keep="1">Afficher la matière enlevée</button><button data-act="tgl" data-tgl="showOver" data-keep="1">Afficher les traits superposés</button><button data-act="tgl" data-tgl="showEnds" data-keep="1">Extrémités des lignes ouvertes</button>
-      </div></div>
       <div class="menu"><button class="mtop" aria-expanded="false">Dessin</button><div class="mdrop mcols" hidden>
-        <div class="mcol"><div class="mcat"><span class="mh">Groupes</span><button data-act="group">Grouper<kbd>Ctrl+G</kbd></button><button data-act="ungroup">Dégrouper<kbd>Ctrl+Maj+G</kbd></button></div><div class="mcat"><span class="mh">Combiner</span><button data-act="boolU">Souder</button><button data-act="boolS">Soustraire</button><button data-act="boolI">Intersection</button></div><div class="mcat"><span class="mh">Vecteurs</span><button data-act="join">Joindre les vecteurs</button><button data-act="close">Fermer les vecteurs</button><button data-act="reverse">Inverser le sens</button><button data-act="dsecGo" data-sec="join">Joindre et relier…</button><button data-act="dsecGo" data-sec="fit">Lisser (adapter des courbes)…</button><button data-act="dsecGo" data-sec="offset">Contour décalé…</button></div></div><div class="mcol"><div class="mcat"><span class="mh">Coins</span><button data-act="toolGo" data-tool="chamfer">Chanfrein (coin par coin)<kbd>K</kbd></button><button data-act="toolGo" data-tool="fillet">Congé (coin par coin)<kbd>F</kbd></button><button data-act="toolGo" data-tool="dogbone">Dégagement dogbone / T-bone<kbd>B</kbd></button><button data-act="chamferAll">Chanfreiner tous les coins</button><button data-act="filletAll">Arrondir tous les coins</button></div><div class="mcat"><span class="mh">Disposer</span><button data-act="dsecGo" data-sec="align">Aligner et répartir…</button><button data-act="dsecGo" data-sec="rotate">Rotation…</button><button data-act="mirH">Miroir horizontal</button><button data-act="mirV">Miroir vertical</button><button data-act="center">Centrer sur le brut</button><button data-act="dsecGo" data-sec="array">Copie en réseau…</button><button data-act="nestOpen">Imbrication…</button></div><div class="mcat"><span class="mh">Gadgets</span><button data-act="fbOpen">Touche de guitare…</button><button data-act="ilOpen">Incrustation en V (inlay)…</button><button data-act="boxOpen">Boîte à entures…</button></div></div>
+        <div class="mcol"><div class="mcat"><span class="mh">Groupes</span><button data-act="group">Grouper<kbd>Ctrl+G</kbd></button><button data-act="ungroup">Dégrouper<kbd>Ctrl+Maj+G</kbd></button></div><div class="mcat"><span class="mh">Combiner</span><button data-act="boolU">Souder</button><button data-act="boolS">Soustraire</button><button data-act="boolI">Intersection</button></div><div class="mcat"><span class="mh">Vecteurs</span><button data-act="join">Joindre les vecteurs</button><button data-act="close">Fermer les vecteurs</button><button data-act="reverse">Inverser le sens</button><button data-act="dsecGo" data-sec="join">Joindre et relier…</button><button data-act="dsecGo" data-sec="fit">Lisser (adapter des courbes)…</button><button data-act="dsecGo" data-sec="offset">Contour décalé…</button></div></div><div class="mcol"><div class="mcat"><span class="mh">Coins</span><button data-act="toolGo" data-tool="chamfer">Chanfrein (coin par coin)<kbd>K</kbd></button><button data-act="toolGo" data-tool="fillet">Congé (coin par coin)<kbd>F</kbd></button><button data-act="toolGo" data-tool="dogbone">Dégagement dogbone / T-bone<kbd>B</kbd></button><button data-act="chamferAll">Chanfreiner tous les coins</button><button data-act="filletAll">Arrondir tous les coins</button></div><div class="mcat"><span class="mh">Disposer</span><button data-act="dsecGo" data-sec="align">Aligner et répartir…</button><button data-act="dsecGo" data-sec="rotate">Rotation…</button><button data-act="mirH">Miroir horizontal</button><button data-act="mirV">Miroir vertical</button><button data-act="center">Centrer sur le brut</button><button data-act="dsecGo" data-sec="array">Copie en réseau…</button><button data-act="nestOpen">Imbrication…</button></div></div>
       </div></div>
       <div class="menu"><button class="mtop" aria-expanded="false">Usinage</button><div class="mdrop" hidden>
         <button data-act="tabParcours">Nouveau parcours sur la sélection</button><button data-act="libOpen">Bibliothèque d’outils…</button><button data-act="tabGcode">Voir le G-code</button><button data-act="v3d">Aperçu 3D de l’usinage</button><hr><button data-act="sheet">Fiche de gamme…</button>
+      </div></div>
+      <div class="menu"><button class="mtop" id="mExt" aria-expanded="false">Extensions</button><div class="mdrop" hidden>
+        <button data-act="fbOpen">Touche de guitare…</button><button data-act="ilOpen">Incrustation en V (inlay)…</button><button data-act="ipOpen">Incrustation en poche (inlay)…</button><button data-act="boxOpen">Boîte à entures…</button>
       </div></div>
       <div class="menu"><button class="mtop" aria-expanded="false">Aide</button><div class="mdrop" hidden>
         <a class="mlink" id="guideLink" href="guide.html#fr" target="_blank" rel="noopener">Mode d'emploi</a>
@@ -648,7 +652,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
     <section class="stage">
       <div class="optbar" id="optbar"></div>
       <div class="toast" id="toast" hidden></div>
-      <div class="views v" id="views">
+      <div class="views v" id="views"><div class="vsplit" id="vsplit" role="separator" aria-label="Séparation entre la vue 2D et la vue 3D" title="Glissez pour agrandir une des deux vues (double-clic : moitié-moitié)" hidden></div>
       <div class="canvaswrap" id="cw"><canvas id="cv" tabindex="0" aria-label="Plan de travail"></canvas><div class="cvinfo" aria-live="off"><span id="coords">X     0,00  Y     0,00</span><span id="coordsx"></span></div>
         <div class="stbar fbar" role="toolbar" aria-label="Plan 2D">
           <div class="stg" role="group" aria-label="Accroche"><span class="stg-h" title="Accroche"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v8a6 6 0 0 0 12 0V3"/><path d="M6 7h3M15 7h3"/></svg></span><button class="tg" data-act="tgl" data-tgl="snapGrid" title="Accroche à la grille" aria-label="Accroche à la grille"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM4 12h16M12 4v16" class="dim"/><circle cx="12" cy="12" r="2.6" class="fill"/></svg></button><select id="gridStep" aria-label="Pas de la grille" title="Pas de la grille d’accroche"><option value="0.5">0,5 mm</option><option value="1" selected>1 mm</option><option value="5">5 mm</option><option value="10">10 mm</option></select><button class="tg" data-act="tgl" data-tgl="snapVert" title="Accroche aux objets : extrémités, milieux, intersections, centres, tangentes et n’importe quel point des lignes" aria-label="Accroche aux objets"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19L12 6l9 13"/><rect x="9.6" y="3.6" width="4.8" height="4.8" class="fill"/></svg></button><button class="tg" data-act="tgl" data-tgl="snapGuide" title="Accroche aux repères tirés des règles" aria-label="Accroche aux repères"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v20M2 15h20" stroke-dasharray="3 2.2"/><circle cx="8" cy="15" r="2.4" class="fill"/></svg></button><button class="tg tgi" data-act="snapOpen" title="Règles d’accroche…" aria-label="Règles d’accroche…"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button></div>
@@ -807,7 +811,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
               <label>Hauteur<input data-u="len" type="number" id="selH" step="0.1" min="0.01"></label>
             </div>
           </div>
-          <div class="selline"><label class="chk"><input type="checkbox" id="selLock" checked> Garder les proportions</label><span class="irow"><button data-act="dup" title="Dupliquer (Ctrl+D)" aria-label="Dupliquer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button><button data-act="del" class="danger" title="Supprimer (Suppr)" aria-label="Supprimer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></span></div>
+          <div class="selline"><span class="selchk"><label class="chk"><input type="checkbox" id="selLock" checked> Garder les proportions</label><span class="chk tipw"><label class="chk"><input type="checkbox" id="selRotFrame"> Cadre rotatif</label><button type="button" class="tipi" aria-label="Qu’est-ce que le cadre rotatif ?"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></button><span class="tipb" role="tooltip"><svg viewBox="0 0 220 92" aria-hidden="true"><g transform="translate(55 46)"><rect x="-38" y="-34" width="76" height="68" class="tf"/><g transform="rotate(-30)"><rect x="-26" y="-14" width="52" height="28" rx="2" class="ts"/></g></g><g transform="translate(165 46)"><g transform="rotate(-30)"><rect x="-32" y="-20" width="64" height="40" class="tf"/><rect x="-26" y="-14" width="52" height="28" rx="2" class="ts"/></g></g><text x="55" y="90" class="tt">Décoché</text><text x="165" y="90" class="tt">Coché</text></svg><span>Le cadre des poignées suit l’angle de la forme tournée : on l’étire alors dans son propre sens. Pour une forme seule, ou des formes tournées du même angle.</span></span></span></span><span class="irow"><button data-act="txEdit" id="txEditB" title="Modifier ce texte (police, placement, alignement…)" aria-label="Modifier le texte" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M12 6v13M9 19h6"/></svg></button><button data-act="dup" title="Dupliquer (Ctrl+D)" aria-label="Dupliquer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button><button data-act="del" class="danger" title="Supprimer (Suppr)" aria-label="Supprimer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></span></div>
           <div id="hSel" hidden><p class="hint" id="selHint"></p>
           <p class="hint">Cliquez une seconde fois sur la sélection pour afficher les poignées : carrés pour redimensionner, ronds pour tourner (Ctrl : par pas de 15°), cercle orange = pivot déplaçable ; Maj sur un coin libère les proportions, Ctrl redimensionne au millimètre.</p></div>
         </section>
@@ -866,10 +870,10 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         </section>
         <section class="dsec" data-sec="mirror" hidden><h3 class="dsec-h">Miroir</h3>
           <p class="hint">Retourne la sélection par rapport à un bord de son cadre, à son centre, au centre du brut ou à une ligne.</p>
-          <div class="mirpad"><span></span><button data-act="mirT">Dessus</button><span></span><button data-act="mirL">Gauche</button><span class="mirP" aria-hidden="true">P</span><button data-act="mirR">Droite</button><span></span><button data-act="mirB">Dessous</button><span></span></div>
-          <div class="row"><button data-act="mirH">Retourner horizontalement</button><button data-act="mirV">Retourner verticalement</button></div>
+          <div class="mirpad"><span></span><button data-act="mirT">Dessus</button><span></span><button data-act="mirL">Gauche</button><span class="mirP" aria-hidden="true"><i class="mf v">P</i><i class="mf h">P</i><i class="mp">P</i><i class="mf h">P</i><i class="mf v">P</i></span><button data-act="mirR">Droite</button><span></span><button data-act="mirB">Dessous</button><span></span></div>
+          <div class="miri"><svg class="miric" viewBox="0 0 44 26" aria-hidden="true"><text x="4" y="21" class="mp">P</text><path class="ml" d="M22 1v24"/><g transform="matrix(-1 0 0 1 44 0)"><text x="4" y="21" class="mf">P</text></g></svg><button data-act="mirH">Retourner horizontalement</button><svg class="miric" viewBox="0 0 44 26" aria-hidden="true"><g transform="matrix(.62 0 0 .62 14 0)"><text x="4" y="17" class="mp">P</text><g transform="matrix(1 0 0 -1 0 42)"><text x="4" y="17" class="mf">P</text></g></g><path class="ml" d="M4 13h36"/></svg><button data-act="mirV">Retourner verticalement</button></div>
           <label class="chk"><input type="checkbox" data-k="mirStock"> Retourner sur le centre du brut</label>
-          <div class="row"><button data-act="mirLine">Retourner sur la ligne</button></div>
+          <div class="miri"><svg class="miric" viewBox="0 0 44 26" aria-hidden="true"><path class="ml" d="M10 25L34 1"/><g transform="matrix(.7 0 0 .7 4 1)"><text x="2" y="22" class="mp">P</text></g><g transform="matrix(0 -1 -1 0 44 26)"><g transform="matrix(.7 0 0 .7 4 1)"><text x="2" y="22" class="mf">P</text></g></g></svg><button data-act="mirLine">Retourner sur la ligne</button></div>
           <p class="hint">« Retourner sur la ligne » : sélectionnez les formes et une ligne droite (2 points) qui sert d’axe.</p>
           <label class="chk"><input type="checkbox" data-k="mirCopy"> Créer une copie en miroir (l’original reste en place)</label>
         </section>
@@ -958,12 +962,12 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <div class="row"><button data-act="nest">Imbriquer sur le brut</button></div>
           <p class="hint" id="nestInfo">Place la sélection (ou tout le dessin) sur le brut en suivant la forme réelle des pièces. Un groupe ou un texte reste d'un bloc. Prévoyez un espacement au moins égal au diamètre de la fraise de détourage.</p>
         </section>
-        <section class="dsec" data-sec="guides" hidden><h3 class="dsec-h">Repères et cotes</h3>
-          <p class="hint">Faites glisser depuis une règle du plan pour créer un repère magnétique ; ramenez-le sur la règle pour le supprimer.</p>
+        <section class="dsec" data-sec="guides" hidden><h3 class="dsec-h">Repères</h3>
+          <p class="hint">Faites glisser depuis une règle du plan pour créer un repère magnétique ; ramenez-le sur la règle pour le supprimer. Double-clic sur un repère : sa position s’ouvre ici. Le cadenas le bloque (il ne se déplace plus à la souris).</p>
           <ul class="guides" id="guideList"></ul>
           <div class="row"><button data-act="guideV">Repère vertical</button><button data-act="guideH">Repère horizontal</button><button data-act="guideClear">Effacer les repères</button><button data-act="dimClear">Effacer les cotes</button></div>
         </section>
-        <section class="dsec" data-sec="text" hidden><h3 class="dsec-h">Texte</h3>
+        <section class="dsec" data-sec="text" hidden>
           <label>Texte<input type="text" data-k="text"></label>
           <div class="fontpick" id="fontPick">
             <button class="fp-btn" id="fpBtn" data-act="fpOpen" aria-haspopup="listbox" aria-expanded="false"><span id="fontName">Choisir une police de l'ordinateur…</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
@@ -975,11 +979,18 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             </div>
           </div>
           <p class="hint" id="fpHint" hidden></p>
-          <label>Hauteur des majuscules (mm)<input data-u="len" type="number" data-k="textH" step="1" min="1"></label>
-          <div class="row"><button data-act="fontDir">Ouvrir un dossier de polices…</button><button data-act="font">Ajouter des polices…</button><button data-act="ufClear" id="ufClear" class="danger" hidden>Vider</button></div>
+          <div class="g2"><label>Hauteur des majuscules (mm)<input data-u="len" type="number" data-k="textH" step="1" min="1"></label><label>Espacement (mm)<input data-u="len" type="number" data-k="textSpace" step="0.5" title="Espace ajouté entre les lettres (négatif : les resserre)"></label></div>
+          <div class="row"><button data-act="fontDir">Ouvrir un dossier de polices…</button><button data-act="font">Ajouter des polices…</button><button data-act="ufClear" id="ufClear" class="danger" hidden>Vider</button><span class="tipw tipr"><button type="button" class="tipi" aria-label="Où ranger ses polices"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></button><span class="tipb" role="tooltip">Rangez vos polices (.ttf, .otf, .woff, ou .svg à trait unique) dans un dossier, par exemple « fonts » à côté de COPO.html, puis ouvrez-le ici : COPO les garde dans ce navigateur et les propose dans la liste, sans avoir à recommencer. Une soixantaine de polices à trait unique (Hershey, EMS, Relief…) sont déjà fournies : idéales pour graver vite avec un profil « Sur la ligne ».</span></span></div>
           <p class="hint"><a class="lnk" href="fonts/apercu-polices.html" target="_blank" rel="noopener">Voir le catalogue des polices à trait unique</a></p>
           <p class="hint" id="ufCount" hidden></p>
-          <p class="hint">Rangez vos polices (.ttf, .otf, .woff, ou .svg à trait unique) dans un dossier, par exemple « fonts » à côté de COPO.html, puis ouvrez-le ici : COPO les garde dans ce navigateur et les propose dans la liste, sans avoir à recommencer. Une soixantaine de polices à trait unique (Hershey, EMS, Relief…) sont déjà fournies : idéales pour graver vite avec un profil « Sur la ligne ».</p>
+          <div class="txh">Placement<span class="tipw tipr"><button type="button" class="tipi" aria-label="Aide sur le placement"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></button><span class="tipb" role="tooltip">Droit : cliquez sur le plan, au point de départ du texte. Au-dessus, sur ou sous la courbe : cliquez sur une courbe ou un contour (ligne, arc, cercle…). Entre deux courbes : cliquez la courbe du bas, puis celle du haut ; le texte remplit l’espace entre elles. Tant que l’outil Texte reste actif, chaque réglage change en direct le texte que vous venez de placer.</span></span></div>
+          <div class="txmodes" role="radiogroup" aria-label="Placement"><label class="txm"><input type="radio" name="txMode" value="line"><svg class="txil" viewBox="0 0 80 36" aria-hidden="true"><text class="tl" x="40" y="25" text-anchor="middle">COPO</text></svg><span>Droit</span></label><label class="txm"><input type="radio" name="txMode" value="above"><svg class="txil" viewBox="0 0 80 36" aria-hidden="true"><defs><path id="txa1" d="M6 32 Q40 8 74 32"/></defs><path class="tb" d="M6 32 Q40 8 74 32"/><text class="tl" dy="-3"><textPath href="#txa1" startOffset="50%" text-anchor="middle">COPO</textPath></text></svg><span>Au-dessus de la courbe</span></label><label class="txm"><input type="radio" name="txMode" value="on"><svg class="txil" viewBox="0 0 80 36" aria-hidden="true"><defs><path id="txa2" d="M6 30 Q40 6 74 30"/></defs><path class="tb" d="M6 30 Q40 6 74 30"/><text class="tl" dy="5"><textPath href="#txa2" startOffset="50%" text-anchor="middle">COPO</textPath></text></svg><span>Sur la courbe</span></label><label class="txm"><input type="radio" name="txMode" value="below"><svg class="txil" viewBox="0 0 80 36" aria-hidden="true"><defs><path id="txa3" d="M6 22 Q40 -2 74 22"/></defs><path class="tb" d="M6 22 Q40 -2 74 22"/><text class="tl" dy="12"><textPath href="#txa3" startOffset="50%" text-anchor="middle">COPO</textPath></text></svg><span>Sous la courbe</span></label><label class="txm"><input type="radio" name="txMode" value="between"><svg class="txil" viewBox="0 0 80 36" aria-hidden="true"><path class="tb" d="M6 33 Q40 21 74 33"/><path class="tb" d="M6 13 Q40 1 74 13"/><g transform="translate(40 25) scale(1.25 1.45)"><text class="tl" x="0" y="0" text-anchor="middle" style="font-size:13px">COPO</text></g></svg><span>Entre deux courbes</span></label></div>
+          <p class="txwhat" id="txWhat"></p>
+          <div id="txOffRow"><label>Décalage (mm)<input data-u="len" type="number" data-k="textOff" step="0.5" title="Distance entre la courbe et le texte (entre deux courbes : marge gardée de chaque côté)"></label></div>
+          <div class="txsub" id="txAlignRow"><span class="txsh">Alignement</span><div class="txmodes"><label class="txm"><input type="radio" name="txAlign" value="left"><svg class="txil" viewBox="0 0 80 36" aria-hidden="true"><defs><path id="txb1" d="M6 30 Q40 8 74 30"/></defs><path class="tb" d="M6 30 Q40 8 74 30"/><text class="tl ts" dy="-3"><textPath href="#txb1" startOffset="4%">COPO</textPath></text></svg><span>Gauche</span></label><label class="txm"><input type="radio" name="txAlign" value="mid"><svg class="txil" viewBox="0 0 80 36" aria-hidden="true"><defs><path id="txb2" d="M6 30 Q40 8 74 30"/></defs><path class="tb" d="M6 30 Q40 8 74 30"/><text class="tl ts" dy="-3"><textPath href="#txb2" startOffset="50%" text-anchor="middle">COPO</textPath></text></svg><span>Milieu</span></label><label class="txm"><input type="radio" name="txAlign" value="right"><svg class="txil" viewBox="0 0 80 36" aria-hidden="true"><defs><path id="txb3" d="M6 30 Q40 8 74 30"/></defs><path class="tb" d="M6 30 Q40 8 74 30"/><text class="tl ts" dy="-3"><textPath href="#txb3" startOffset="96%" text-anchor="end">COPO</textPath></text></svg><span>Droite</span></label></div></div>
+          <div class="txsub" id="txOrientRow"><span class="txsh">Lettres</span><div class="txmodes"><label class="txm"><input type="radio" name="txOrient" value="curve"><svg class="txil" viewBox="0 0 80 36" aria-hidden="true"><defs><path id="txc1" d="M6 32 Q40 4 74 32"/></defs><path class="tb" d="M6 32 Q40 4 74 32"/><text class="tl" dy="-3"><textPath href="#txc1" startOffset="50%" text-anchor="middle">COPO</textPath></text></svg><span>Aligner à la courbe</span></label><label class="txm"><input type="radio" name="txOrient" value="vertical"><svg class="txil" viewBox="0 0 80 36" aria-hidden="true"><path class="tb" d="M6 32 Q40 4 74 32"/><text class="tl" x="20" y="20">C</text><text class="tl" x="31" y="15">O</text><text class="tl" x="43" y="15">P</text><text class="tl" x="54" y="20">O</text></svg><span>Garder la verticale</span></label></div></div>
+          <label class="txm txflip" id="txFlipRow"><input type="checkbox" data-k="textFlip"><svg class="txil" viewBox="0 0 80 36" aria-hidden="true"><defs><path id="txd1" d="M74 8 Q40 32 6 8"/></defs><path class="tb" d="M6 8 Q40 32 74 8"/><text class="tl" dy="-3"><textPath href="#txd1" startOffset="50%" text-anchor="middle">COPO</textPath></text></svg><span>Texte de l’autre côté de la courbe</span></label>
+          <p class="hint" id="txLive" hidden>Les réglages s’appliquent en direct au texte que vous venez de placer.</p>
         </section>
               <details class="blk layersblk" open><summary>Calques</summary>
           <ul class="layers" id="layerList"></ul>
@@ -1184,9 +1195,17 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         <section class="cfg-sec" data-cfg="nav3d" data-ico="nav3d"><h2>Vues 3D</h2>
           <label>Boutons de la souris<select id="cfgMouse3d"><option value="cad">Comme Fusion, FreeCAD, Tinkercad : clic droit maintenu = tourner, clic molette maintenu = déplacer</option><option value="classic">Classique : clic gauche maintenu = tourner, clic droit maintenu = déplacer</option></select></label>
           <p class="hint">Molette = zoom, double-clic = tout voir. Sans bouton molette (pavé tactile), Maj + clic droit maintenu déplace la vue. Au doigt : glisser = tourner, deux doigts pour le zoom.</p>
+          <label>Zoom à la molette<select id="cfgZoom3d"><option value="cursor">Vers le pointeur</option><option value="center">Vers le centre de la vue</option></select></label>
           <div class="cfg-lbl">Tourner autour de</div>
           <div class="orb-cards" id="cfgOrbit"><button type="button" data-orb="origin"><svg viewBox="0 0 64 44" aria-hidden="true"><path class="ob-c" d="M32 8l12 6v13l-12 6-12-6V14z"/><path class="ob-l" d="M20 14l12 6 12-6M32 20v13"/><path class="ob-x" d="M12 36v-9M12 36l8 2.5M12 36l-5 3"/><circle class="ob-p" cx="12" cy="36" r="2.4"/><path class="ob-a" d="M3 37c3 5 15 5 19 0"/><path class="ob-a" d="M19 40l3-3 1 4"/></svg><span>Origine</span></button><button type="button" data-orb="center"><svg viewBox="0 0 64 44" aria-hidden="true"><path class="ob-c" d="M32 8l12 6v13l-12 6-12-6V14z"/><path class="ob-l" d="M20 14l12 6 12-6M32 20v13"/><circle class="ob-p" cx="32" cy="21" r="2.6"/><path class="ob-a" d="M22 31c4 5 16 5 20 0"/><path class="ob-a" d="M39 34l3-3 1 4"/></svg><span>Centre de la vue</span></button><button type="button" data-orb="cursor"><svg viewBox="0 0 64 44" aria-hidden="true"><path class="ob-c" d="M32 8l12 6v13l-12 6-12-6V14z"/><path class="ob-l" d="M20 14l12 6 12-6M32 20v13"/><circle class="ob-p" cx="50" cy="24" r="2.6"/><path class="ob-a" d="M40 32c4 4 14 4 18-1"/><path class="ob-a" d="M55 34l3-3 1 4"/><path class="ob-m" d="M52 27v11l3-3 3 5 2-1-3-5h4z"/></svg><span>Sous le pointeur</span></button></div>
           <p class="hint">La rotation n’est plus limitée : on peut passer par-dessus et par-dessous la pièce. Le cube de vue remet une orientation droite.</p>
+        </section>
+        <section class="cfg-sec" data-cfg="dlib" data-ico="dlib"><h2>Bibliothèque</h2>
+          <label>Emplacement de la bibliothèque de dessins et d’images<select id="cfgDlibMode"><option value="idb">Dans ce navigateur</option><option value="dir">Dans un dossier de l’ordinateur</option></select></label>
+          <div class="row cfg-left" id="cfgDlibDirRow"><button data-act="dlibPickDir">Choisir le dossier…</button><span class="hint" id="cfgDlibDir"></span></div>
+          <p class="hint" id="cfgDlibHint">Dans un dossier de l’ordinateur, la bibliothèque est faite de vrais fichiers (SVG, DXF, PDF, images) que vous pouvez aussi ranger avec l’explorateur de fichiers ou sauvegarder. Possible avec Chrome et Edge ; avec les autres navigateurs, elle reste dans le navigateur (pensez à l’exporter de temps en temps).</p>
+          <label>Taille des aperçus<select id="cfgDlibTh"><option value="104">Petits</option><option value="132">Moyens</option><option value="180">Grands</option></select></label>
+          <label class="chk"><input type="checkbox" id="cfgDlibDbl"> Double-clic sur un aperçu : l’ajouter au dessin et fermer la bibliothèque</label>
         </section>
         <section class="cfg-sec" data-cfg="sim" data-ico="sim"><h2>Simulation</h2>
           <label>Résolution par défaut<select id="cfgSimQ"><option value="1">Standard (le plus rapide)</option><option value="2">Haute (environ 3 × plus lent)</option><option value="3">Très haute (environ 7 × plus lent)</option></select></label>
@@ -1199,7 +1218,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.218</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.219</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1254,17 +1273,6 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             <div class="seg strat strat4" data-f="strategy"><button value="rings" title="Spirale de l’intérieur vers l’extérieur : part du milieu et s’élargit jusqu’au bord"><i data-sfig="rings"></i><span>Spirale int. → ext.</span></button><button value="ringsIn" title="Spirale de l’extérieur vers l’intérieur : suit d’abord le bord puis se resserre vers le milieu"><i data-sfig="ringsIn"></i><span>Spirale ext. → int.</span></button><button value="zigzag" title="Aller-retour : lignes parallèles, sans passe de contour (bords légèrement festonnés)"><i data-sfig="zigzag"></i><span>Aller-retour</span></button><button value="raster" title="Aller-retour avec contour : lignes parallèles puis un tour du bord pour le nettoyer"><i data-sfig="raster"></i><span>Aller-retour + contour</span></button></div>
             <label id="rasterAngRow">Angle du balayage (°)<input type="number" data-f="rasterAng" step="15"></label>
           </div>
-          <div data-show="pocket" class="tabbox">
-            <label class="chk"><input type="checkbox" data-f="rest"> Reprise de matière (coins non atteints par une fraise plus grosse)</label>
-            <label id="restRow">Fraise utilisée avant<select data-f="restTool" id="fRestTool"></select></label>
-          </div>
-          <label class="chk" data-show="drill" id="helixHolesRow"><input type="checkbox" data-f="helixHoles"> Trous plus grands que l'outil : usiner en hélice au bon diamètre</label>
-          <p class="hint fwarn" id="drillWarn" hidden></p>
-          <div class="g2" data-show="drill">
-            <label id="drillPitchRow">Descente par tour en hélice (mm)<input data-u="len" type="number" data-f="helixPitch" step="0.25" min="0.1"></label>
-            <label>Débourrage (mm, 0 = sans)<input data-u="len" type="number" data-f="peck" step="0.5" min="0"></label>
-            <label>Temporisation au fond (s, 0 = sans)<input type="number" data-f="dwell" step="0.1" min="0"></label>
-          </div>
           <div data-show="relief" class="thbox">
             <div class="seg" data-f="rlOp"><button value="rough">Ébauche</button><button value="finish">Finition</button></div>
             <p class="sw-h">Reliefs à usiner</p>
@@ -1300,6 +1308,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <div class="figrow" data-show="profile pocket vcarve"><span class="ill" data-ill="dir"></span><div class="g2">
             <label>Sens de coupe<select data-f="dir"><option value="climb">Avalant</option><option value="conv">Opposition</option></select></label>
           </div></div>
+          <details class="tpadv" id="tpAdv" data-show="profile pocket vcarve drill"><summary>Options avancées</summary><div class="tpadv-b">
           <div class="figrow" data-show="profile pocket" id="allowRow"><span class="ill" data-ill="allow"></span><div class="g2">
             <label>Surépaisseur (a) (mm)<input data-u="len" type="number" data-f="allow" step="0.05" min="0"></label>
             <label>Retrait de la surépaisseur<select data-f="finish"><option value="last">À la dernière passe</option><option value="full">Passe de finition pleine hauteur</option></select></label>
@@ -1311,6 +1320,18 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             <label data-entry="arc">Rayon de l'arc / de l'hélice (mm)<input data-u="len" type="number" data-f="arcR" step="0.5" min="0.1"></label>
             <label data-entry="helix">Descente par tour (mm)<input data-u="len" type="number" data-f="helixPitch" step="0.25" min="0.1"></label>
           </div></div>
+          <div data-show="pocket" class="tabbox">
+            <label class="chk"><input type="checkbox" data-f="rest"> Reprise de matière (coins non atteints par une fraise plus grosse)</label>
+            <label id="restRow">Fraise utilisée avant<select data-f="restTool" id="fRestTool"></select></label>
+          </div>
+          <label class="chk" data-show="drill" id="helixHolesRow"><input type="checkbox" data-f="helixHoles"> Trous plus grands que l'outil : usiner en hélice au bon diamètre</label>
+          <div class="g2" data-show="drill">
+            <label id="drillPitchRow">Descente par tour en hélice (mm)<input data-u="len" type="number" data-f="helixPitch" step="0.25" min="0.1"></label>
+            <label>Débourrage (mm, 0 = sans)<input data-u="len" type="number" data-f="peck" step="0.5" min="0"></label>
+            <label>Temporisation au fond (s, 0 = sans)<input type="number" data-f="dwell" step="0.1" min="0"></label>
+          </div>
+          </div></details>
+          <p class="hint fwarn" id="drillWarn" hidden></p>
           <div data-show="profile" id="tabBox" class="tabbox">
             <label class="chk"><input type="checkbox" data-f="tabs"> Ponts d'attache (maintiennent la pièce détourée)</label>
             <div class="figrow" id="tabRow"><span class="ill" data-ill="tabs"></span><div class="g2">
@@ -1327,6 +1348,26 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <div class="row"><button class="primary" data-act="tpApply" id="tpApply">Calculer</button><button data-act="tpCancel" id="tpCancel" hidden>Fermer</button></div>
         </section>
 </div>
+<div class="libback" id="dlib" hidden>
+  <div class="libdlg dlibdlg" role="dialog" aria-labelledby="dlibT">
+    <div class="libhead"><span class="fwin-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v16M9 4v16M13 4v16"/><path d="M16.5 4.5l3.5 15"/></svg></span><b id="dlibT">Bibliothèque de dessins et d’images</b><span class="dlib-where" id="dlibWhere"></span>
+      <span class="grow"></span><button class="iconbtn" data-act="dlibCfg" title="Réglages de la bibliothèque (emplacement…)" aria-label="Réglages de la bibliothèque"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.9 1.9M16.6 16.6l1.9 1.9M5.5 18.5l1.9-1.9M16.6 7.4l1.9-1.9"/></svg></button><button class="iconbtn" data-act="dlibClose" title="Fermer" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="libbody">
+      <div class="libleft dlibleft">
+        <input type="search" id="dlibSearch" placeholder="Rechercher" aria-label="Rechercher dans la bibliothèque">
+        <ul class="libtree" id="dlibTree" role="tree"></ul>
+        <div class="libtools"><button data-act="dlibMkdir" class="libio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 10v6M9 13h6"/></svg>Nouveau dossier</button><button data-act="dlibAddFiles" class="libio" title="Ajouter des fichiers de l’ordinateur (SVG, DXF, PDF, AI, PNG, JPG…) dans le dossier ouvert"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11M7.5 9.5 12 14l4.5-4.5"/><path d="M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg>Ajouter des fichiers…</button><button data-act="dlibAddDir" class="libio" title="Ajouter tout un dossier de dessins de l’ordinateur (avec ses sous-dossiers)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 9.5v6M9.5 13l2.5 2.5 2.5-2.5"/></svg>Ajouter un dossier…</button></div>
+      </div>
+      <div class="libright dlibright">
+        <div class="dlname" id="dlibName" hidden><label>Nom du dessin<input type="text" id="dlibNameIn" spellcheck="false"></label><button class="primary" data-act="dlibSaveOk">Enregistrer</button><button data-act="dlibSaveNo">Annuler</button></div>
+        <p class="hint" id="dlibInfo"></p>
+        <div class="dlgrid" id="dlibGrid"></div>
+      </div>
+    </div>
+    <div class="libfoot"><button data-act="dlibImport" class="libio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11M7.5 9.5 12 14l4.5-4.5"/><path d="M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg>Importer ma bibliothèque…</button><button data-act="dlibExport" class="libio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14V3M7.5 7.5 12 3l4.5 4.5"/><path d="M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg>Exporter ma bibliothèque…</button><span class="grow"></span><button data-act="dlibSaveCur" class="libio" title="Enregistre le dessin en cours (ou la sélection) en SVG dans le dossier ouvert"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h7V3M12 12v6M9 15h6"/></svg>Importer le dessin en cours</button><button data-act="dlibUse" class="primary" id="dlibUse" disabled>Ajouter au dessin</button></div>
+  </div>
+</div>
+<input type="file" id="dlibFiles" multiple accept=".svg,.dxf,.pdf,.ai,.png,.jpg,.jpeg,.webp,.gif,.bmp" hidden><input type="file" id="dlibDirIn" webkitdirectory multiple hidden><input type="file" id="dlibLibIn" accept=".copolib,.json" hidden>
 <div class="libback" id="lib" hidden>
   <div class="libdlg" role="dialog" aria-labelledby="libT">
     <div class="libhead"><span class="fwin-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h4v5l-2 2-2-2z"/><path d="M9 10v11"/><path d="M15 3h3v9l-1.5 3-1.5-3z"/><path d="M16.5 15v6"/></svg></span><b id="libT">Bibliothèque d’outils</b>
@@ -1373,6 +1414,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             <label>Pas latéral (% du Ø)<input type="number" data-t="stepPct" step="1" min="1" max="100"></label>
           </div>
           <div class="g2">
+            <label data-tshow="drill" title="Profondeur percée avant chaque remontée pour dégager les copeaux. Valeur proposée selon le matériau : aluminium, cuivre, laiton 0,5 × D ; aciers, fontes et plastiques 1 × D ; bois et MDF 2 × D.">Débourrage (mm, 0 = sans)<input data-u="len" type="number" data-t="peck" step="0.5" min="0"></label>
             <label data-tshow="flat ball v engrave taper">Avance par dent (mm)<input data-u="len" type="number" id="tFz" step="0.005" min="0.001"></label>
             <div class="calc" id="toolCalc"></div>
           </div>
@@ -1540,6 +1582,7 @@ Object.assign(I18N_EN, {"Ouvrir l'exemple rotatif (4ᵉ axe)": "Open the rotary 
 Object.assign(I18N_EN, {"Axe rotatif": "Rotary axis", "feuille deroulee": "unrolled sheet", "enroule en": "wraps to", "diametre": "diameter", "a la surface": "at the surface", "sur l axe": "on the axis", "Cylindre L": "Cylinder L"});
 Object.assign(I18N_EN, {"Exporter…": "Export…", "Importer…": "Import…", "Enregistre toutes les machines dans un fichier .json (pour un autre ordinateur ou une sauvegarde)": "Saves all machines to a .json file (for another computer or a backup)", "Ajoute les machines d’un fichier exporté depuis COPO": "Adds the machines from a file exported from COPO", "Machines COPO": "COPO machines", "Fichier de machines illisible.": "Unreadable machine file.", "Aucune machine dans ce fichier.": "No machine in this file.", "(importée)": "(imported)", "{n} machine(s) importée(s) : cliquez sur une machine pour la choisir.": "{n} machine(s) imported: click a machine to select it.", "Ma machine (réglages précédents)": "My machine (previous settings)"});
 Object.assign(I18N_EN, {"Vues 3D": "3D views", "Boutons de la souris": "Mouse buttons", "Comme Fusion, FreeCAD, Tinkercad : clic droit maintenu = tourner, clic molette maintenu = déplacer": "Like Fusion, FreeCAD, Tinkercad: hold right button = orbit, hold middle button = pan", "Classique : clic gauche maintenu = tourner, clic droit maintenu = déplacer": "Classic: hold left button = orbit, hold right button = pan", "Molette = zoom, double-clic = tout voir. Sans bouton molette (pavé tactile), Maj + clic droit maintenu déplace la vue. Au doigt : glisser = tourner, deux doigts pour le zoom.": "Wheel = zoom, double-click = view all. Without a middle button (touchpad), Shift + hold right button pans the view. With a finger: drag = orbit, two fingers to zoom.", "Tourner autour de": "Orbit around", "Origine": "Origin", "Centre de la vue": "View centre", "Sous le pointeur": "Under cursor", "La rotation n’est plus limitée : on peut passer par-dessus et par-dessous la pièce. Le cube de vue remet une orientation droite.": "Rotation is no longer limited: you can go over and under the part. The view cube restores an upright orientation."});
+Object.assign(I18N_EN, {"Extensions": "Extensions", "Incrustation en poche (inlay)…": "Pocket inlay…", "Bibliothèque": "Library", "Bibliothèque de dessins et d’images": "Drawing and image library", "Bibliothèque de dessins et d’images…": "Drawing and image library…", "Repères": "Guides", "Faites glisser depuis une règle du plan pour créer un repère magnétique ; ramenez-le sur la règle pour le supprimer. Double-clic sur un repère : sa position s’ouvre ici. Le cadenas le bloque (il ne se déplace plus à la souris).": "Drag from a ruler of the canvas to create a magnetic guide; drag it back onto the ruler to delete it. Double-click a guide: its position opens here. The padlock locks it (it no longer moves with the mouse).", "Débloquer le repère": "Unlock the guide", "Bloquer le repère (il ne se déplace plus à la souris)": "Lock the guide (it no longer moves with the mouse)", "Zoom à la molette": "Wheel zoom", "Vers le pointeur": "Towards the cursor", "Vers le centre de la vue": "Towards the view centre", "Séparation entre la vue 2D et la vue 3D": "Divider between the 2D and 3D views", "Glissez pour agrandir une des deux vues (double-clic : moitié-moitié)": "Drag to enlarge one of the two views (double-click: half and half)", "Cadre rotatif": "Rotating frame", "Qu’est-ce que le cadre rotatif ?": "What is the rotating frame?", "Décoché": "Unchecked", "Coché": "Checked", "Le cadre des poignées suit l’angle de la forme tournée : on l’étire alors dans son propre sens. Pour une forme seule, ou des formes tournées du même angle.": "The handle frame follows the angle of the rotated shape, so you stretch it along its own axes. For a single shape, or shapes rotated by the same angle.", "Absolu": "Absolute", "Relatif": "Relative", "Coordonnées": "Coordinates", "Relatif : tapez un déplacement puis Entrée (tous les nœuds sélectionnés)": "Relative: type an offset then Enter (all selected nodes)", "Absolu : position du nœud": "Absolute: node position", "Pas fin des flèches (selon le zoom) : {d}": "Fine arrow-key step (depends on zoom): {d}", "Options avancées": "Advanced options", "Profondeur percée avant chaque remontée pour dégager les copeaux. Valeur proposée selon le matériau : aluminium, cuivre, laiton 0,5 × D ; aciers, fontes et plastiques 1 × D ; bois et MDF 2 × D.": "Depth drilled before each retract to clear the chips. Suggested value by material: aluminium, copper, brass 0.5 × D; steels, cast iron and plastics 1 × D; wood and MDF 2 × D.", "Espace ajouté entre les lettres (négatif : les resserre)": "Space added between letters (negative: tightens them)", "Où ranger ses polices": "Where to keep your fonts", "Aide sur le placement": "Placement help", "Droit : cliquez sur le plan, au point de départ du texte. Au-dessus, sur ou sous la courbe : cliquez sur une courbe ou un contour (ligne, arc, cercle…). Entre deux courbes : cliquez la courbe du bas, puis celle du haut ; le texte remplit l’espace entre elles. Tant que l’outil Texte reste actif, chaque réglage change en direct le texte que vous venez de placer.": "Straight: click on the canvas at the start point of the text. Above, on or below the curve: click a curve or a contour (line, arc, circle…). Between two curves: click the bottom curve, then the top one; the text fills the space between them. While the Text tool stays active, every setting changes the text you have just placed, live.", "Placement": "Placement", "Droit": "Straight", "Au-dessus de la courbe": "Above the curve", "Sur la courbe": "On the curve", "Sous la courbe": "Below the curve", "Entre deux courbes": "Between two curves", "Distance entre la courbe et le texte (entre deux courbes : marge gardée de chaque côté)": "Distance between the curve and the text (between two curves: margin kept on each side)", "Alignement": "Alignment", "Gauche": "Left", "Milieu": "Centre", "Droite": "Right", "Lettres": "Letters", "Aligner à la courbe": "Align to the curve", "Garder la verticale": "Keep upright", "Texte de l’autre côté de la courbe": "Text on the other side of the curve", "Les réglages s’appliquent en direct au texte que vous venez de placer.": "Settings apply live to the text you have just placed.", "Le contour en pointillé montre où le texte sera placé. Réglez le texte, la police et le placement ci-dessous : le texte placé se met à jour en direct.": "The dashed outline shows where the text will be placed. Set the text, the font and the placement below: the placed text updates live.", "Cliquez sur le plan au point de départ du texte (alignement : gauche = le texte commence au clic).": "Click on the canvas at the start point of the text (alignment: left = the text starts at the click).", "Cliquez sur une courbe ou un contour : ligne, arc, cercle, rectangle…": "Click a curve or a contour: line, arc, circle, rectangle…", "Texte placé sur la courbe ({n} contours, groupés) : les réglages le modifient en direct.": "Text placed on the curve ({n} contours, grouped): the settings change it live.", "{n} contours de texte créés (groupés) : les réglages le modifient en direct.": "{n} text contours created (grouped): the settings change them live.", "Ce texte a été écrit avec la police « {f} » : choisissez-la si besoin, le texte suivra.": "This text was written with the font “{f}”: pick it if needed, the text will follow.", "Modifier ce texte (police, placement, alignement…)": "Edit this text (font, placement, alignment…)", "Modifier le texte": "Edit the text", "Réglages de la bibliothèque (emplacement…)": "Library settings (location…)", "Réglages de la bibliothèque": "Library settings", "Rechercher": "Search", "Rechercher dans la bibliothèque": "Search the library", "Nouveau dossier": "New folder", "Ajouter des fichiers…": "Add files…", "Ajouter un dossier…": "Add a folder…", "Ajouter des fichiers de l’ordinateur (SVG, DXF, PDF, AI, PNG, JPG…) dans le dossier ouvert": "Add files from the computer (SVG, DXF, PDF, AI, PNG, JPG…) to the open folder", "Ajouter tout un dossier de dessins de l’ordinateur (avec ses sous-dossiers)": "Add a whole folder of drawings from the computer (with its sub-folders)", "Nom du dessin": "Drawing name", "Enregistrer": "Save", "Annuler": "Cancel", "Importer ma bibliothèque…": "Import my library…", "Exporter ma bibliothèque…": "Export my library…", "Importer le dessin en cours": "Import the current drawing", "Enregistre le dessin en cours (ou la sélection) en SVG dans le dossier ouvert": "Saves the current drawing (or the selection) as SVG in the open folder", "Ajouter au dessin": "Add to drawing", "Ajouter le dessin en cours à la bibliothèque…": "Add the current drawing to the library…", "Emplacement de la bibliothèque de dessins et d’images": "Location of the drawing and image library", "Dans ce navigateur": "In this browser", "Dans un dossier de l’ordinateur": "In a folder on the computer", "Choisir le dossier…": "Choose the folder…", "Dans un dossier de l’ordinateur, la bibliothèque est faite de vrais fichiers (SVG, DXF, PDF, images) que vous pouvez aussi ranger avec l’explorateur de fichiers ou sauvegarder. Possible avec Chrome et Edge ; avec les autres navigateurs, elle reste dans le navigateur (pensez à l’exporter de temps en temps).": "In a folder on the computer, the library is made of real files (SVG, DXF, PDF, images) that you can also organise with the file explorer or back up. Possible with Chrome and Edge; with other browsers it stays in the browser (remember to export it from time to time).", "Taille des aperçus": "Preview size", "Petits": "Small", "Moyens": "Medium", "Grands": "Large", "Double-clic sur un aperçu : l’ajouter au dessin et fermer la bibliothèque": "Double-click a preview: add it to the drawing and close the library", "Ce navigateur ne permet pas d’utiliser un dossier de l’ordinateur : la bibliothèque reste dans le navigateur.": "This browser cannot use a folder on the computer: the library stays in the browser.", "Accès au dossier de la bibliothèque refusé : choisissez-le à nouveau dans Paramètres › Bibliothèque.": "Access to the library folder was refused: choose it again in Settings › Library.", "Bibliothèque : dossier « {d} ».": "Library: folder “{d}”.", "Dossier : {d}": "Folder: {d}", "Aucun dossier choisi.": "No folder chosen.", "Ma bibliothèque": "My library", "Dossier parent": "Parent folder", "Supprimer le dossier et son contenu": "Delete the folder and its content", "Dossier vide : ajoutez des fichiers (SVG, DXF, PDF, AI, PNG, JPG…), un dossier entier, ou enregistrez le dessin en cours.": "Empty folder: add files (SVG, DXF, PDF, AI, PNG, JPG…), a whole folder, or save the current drawing.", "{n} fichier(s). Cliquez un aperçu puis « Ajouter au dessin » (ou double-cliquez).": "{n} file(s). Click a preview then “Add to drawing” (or double-click).", "Supprimer le dossier « {n} » et tout son contenu ?": "Delete the folder “{n}” and all its content?", "Supprimer « {n} » de la bibliothèque ?": "Delete “{n}” from the library?", "Nom du nouveau dossier :": "Name of the new folder:", "{n} fichier(s) ajouté(s) à la bibliothèque.": "{n} file(s) added to the library.", "Fichier introuvable.": "File not found.", "Aucun vecteur à enregistrer.": "No vectors to save.", "Dessin": "Drawing", "sélection": "selection", "« {n} » enregistré dans la bibliothèque.": "“{n}” saved in the library.", "La bibliothèque est vide.": "The library is empty.", "Bibliothèque COPO": "COPO library", "Ce fichier n’est pas une bibliothèque COPO.": "This file is not a COPO library.", "{n} fichier(s) importé(s) dans la bibliothèque.": "{n} file(s) imported into the library."});
 Object.assign(I18N_EN, {"Visite rapide": "Quick tour", "Réafficher les astuces": "Show tips again", "Astuces réactivées : elles s’afficheront à l’ouverture de chaque onglet.": "Tips turned back on: they will show when you open each tab."});
 Object.assign(I18N_EN, {"Aligner sur": "Align to", "La sélection": "The selection", "Le premier objet sélectionné": "The first selected object", "Le brut": "The stock", "Espacement (mm)": "Spacing (mm)", "Perçage": "Drilling", "« La sélection » : un seul objet s'aligne sur le brut, plusieurs s'alignent entre eux. « Le premier objet sélectionné » : il reste en place et les autres s'alignent sur lui ; Répartir les place à sa suite, dans l'ordre de sélection, avec l'espacement indiqué. Les groupes bougent d'un bloc.": "“The selection”: a single object aligns to the stock, several align with each other. “The first selected object”: it stays in place and the others align to it; Distribute places them after it, in selection order, with the given spacing. Groups move as one.", "Sélectionnez au moins deux objets : le premier sert de référence.": "Select at least two objects: the first one is the reference.", "Sélectionnez au moins deux objets : le premier sert de point de départ.": "Select at least two objects: the first one is the starting point.", "Les objets sont plus grands que le brut.": "The objects are larger than the stock.", "Profil sur la ligne 1": "On-line profile 1", "Profil sur la ligne 2": "On-line profile 2", "Poche 1": "Pocket 1", "F2 · Poche 2": "F2 · Pocket 2", "V-carving 2": "V-carving 2", "Foret 4 mm": "4 mm drill"});
 Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the nut / zero fret (mm)"});
@@ -3140,7 +3183,7 @@ const S = {
   view: { s: 2, ox: 0, oy: 0 },
   form: null, editTp: null, activeTp: null, toolSel: 't2', font: null, ne: null, measure: null,
 };
-const newForm = () => ({ type: 'profile', name: '', vstart: 0, toolId: (S.tools.find(t => t.type === 'flat' || t.type === 'ball') || S.tools[0] || {}).id, side: 'out', depth: 6, pass: '', allow: 0.2, finish: 'last', dir: 'climb', entry: 'rampzz', rampLen: 20, arcR: 5, vstep: 0.1, clrTool: '', peck: 0, dwell: 0, openSide: 'on', face: 'auto', tabs: false, proj: false, tabN: 4, tabL: 8, tabH: 2, tabShape: 'rect', tabMode: 'auto', tabPts: null, strategy: 'rings', rasterAng: 0, rest: false, restTool: '', helixPitch: 1, helixHoles: true, thSide: 'in', thPitch: 1.25, thD: 0, thHand: 'R', thPasses: 2, rlOp: 'rough', rlStep: 40, rlAng: 0, rlAllow: 0.5, rlCross: false, rlBound: 'model', rlOff: 0, rlRStrat: 'z', rlFStrat: 'raster', rlDir: 'climb', rlItems: null, rlEdge: 'inside' });
+const newForm = () => ({ type: 'profile', name: '', vstart: 0, toolId: (S.tools.find(t => t.type === 'flat' || t.type === 'ball') || S.tools[0] || {}).id, side: 'out', depth: 6, pass: '', allow: 0, finish: 'last', dir: 'climb', entry: 'rampzz', rampLen: 20, arcR: 5, vstep: 0.1, clrTool: '', peck: 0, dwell: 0, openSide: 'on', face: 'auto', tabs: false, proj: false, tabN: 4, tabL: 8, tabH: 2, tabShape: 'rect', tabMode: 'auto', tabPts: null, strategy: 'rings', rasterAng: 0, rest: false, restTool: '', helixPitch: 1, helixHoles: false, thSide: 'in', thPitch: 1.25, thD: 0, thHand: 'R', thPasses: 2, rlOp: 'rough', rlStep: 40, rlAng: 0, rlAllow: 0.5, rlCross: false, rlBound: 'model', rlOff: 0, rlRStrat: 'z', rlFStrat: 'raster', rlDir: 'climb', rlItems: null, rlEdge: 'inside' });
 
 // ---------- calques et formes ----------
 const layerOf = s => S.layers.find(l => l.id === s.layer) || S.layers[0];
@@ -3205,7 +3248,7 @@ function render() {
   drawRotGuides(C);
   // repères
   ctx.strokeStyle = C.guide; ctx.lineWidth = 1; ctx.setLineDash([6, 4]); ctx.beginPath();
-  for (const gx of S.guides.x) { const X = Math.round(sx(gx)) + 0.5; ctx.moveTo(X, 0); ctx.lineTo(X, H); }
+  for (const gx of S.guides.x) { const X = Math.round(sx(gx)) + 0.5; ctx.moveTo(X, 0); ctx.lineTo(X, H); } /* bloqués : voir drawGuideLocks */
   for (const gy of S.guides.y) { const Y = Math.round(sy(gy)) + 0.5; ctx.moveTo(0, Y); ctx.lineTo(W, Y); }
   ctx.stroke(); ctx.setLineDash([]);
   // parcours
@@ -3228,7 +3271,7 @@ function render() {
   const ss = selShapes();
   if (ss.length && S.ui.tool !== 'nodes' && !tpMode && !xfOn()) { const b = bbox(ss); ctx.strokeStyle = C.acc; ctx.globalAlpha = 0.6; ctx.setLineDash([3, 3]); ctx.lineWidth = 1; ctx.strokeRect(sx(b.x0) - 4, sy(b.y1) - 4, b.w * S.view.s + 8, b.h * S.view.s + 8); ctx.setLineDash([]); ctx.globalAlpha = 1; const pa = anchorPt(b, S.ui.selAnchor), AX = sx(pa[0]), AY = sy(pa[1]); ctx.fillStyle = C.acc; ctx.beginPath(); ctx.moveTo(AX, AY - 6); ctx.lineTo(AX + 6, AY); ctx.lineTo(AX, AY + 6); ctx.lineTo(AX - 6, AY); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke(); }
   drawImgHandles(C); drawRelHandles(C);
-  drawXf(C);
+  drawXf(C); drawTxGhost(C);
   drawFitPrev(C);
   // cotes
   dimsSync(); for (const d of S.dims) drawDim(d, d.id === S.selDim ? C.acc : C.drawMuted, C.mono);
@@ -3661,7 +3704,7 @@ const HINTS = {
   polygon: 'Cliquez au centre puis glissez : rayon et orientation',
   poly: 'Clic : point anguleux · cliquer-glisser : point courbe · près de l’horizontale ou de la verticale du point précédent, le trait s’y aligne (Ctrl : angle par pas de 15°) · barre d’espace : termine la ligne et en commence une nouvelle · clic droit : terminer et quitter la plume · clic sur le 1er point : fermer · Échap : annuler. Ou tapez le point suivant ci-dessus : X/Y, angle et longueur, ou dx/dy, puis Entrée.',
   arc: 'Clic : départ · clic : arrivée · déplacez la souris pour le bombé puis cliquez (mode « Centre » : clic au centre, au départ puis à l’arrivée)',
-  text: 'Cliquez pour placer la ligne de base du texte · « Sur une courbe » : cliquez sur un contour, le texte s’y centre · « Entre deux courbes » : cliquez la courbe du bas puis celle du haut, le texte remplit l’espace entre elles',
+  text: 'Le contour en pointillé montre où le texte sera placé. Réglez le texte, la police et le placement ci-dessous : le texte placé se met à jour en direct.',
   dogbone: 'Cliquez près d’un coin vif entre deux segments droits : dogbone en diagonale, T-bone le long du côté le plus long',
   chamfer: 'Cliquez près d’un coin vif (entre droites, arcs ou courbes)', fillet: 'Cliquez près d’un coin vif (entre droites, arcs ou courbes)',
   trim: 'Cliquez sur la portion de vecteur à supprimer entre deux intersections',
@@ -3685,7 +3728,7 @@ function rightClick() {
 }
 function setTool(t) {
   if (pen.length && t !== 'poly') finishPen(false);
-  if (t !== 'text') textPick = null;
+  if (t !== 'text') { textPick = null; S.ui.liveTxt = null; txGhost = null; }
   arcSt = []; dimSt = []; extSt = null; extHov = null; if (t !== 'measure') S.measure = null;
   if (t === 'nodes') { const s = selShapes(); S.ne = s.length === 1 ? { sid: s[0].id, ni: null, seg: null } : null; } else S.ne = null;
   S.ui.tool = t; $$('.palette button, #dgrid [data-tool]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === t));
@@ -3695,9 +3738,9 @@ function setTool(t) {
   if (t === 'chamfer') extra = '<label>Distance (mm)<input data-u="len" type="number" data-k="chamfer" step="0.5" min="0"></label><button data-act="chamferAll">Tous les coins de la sélection</button>';
   if (t === 'fillet') extra = '<label>Rayon (mm)<input data-u="len" type="number" data-k="fillet" step="0.5" min="0"></label><button data-act="filletAll">Tous les coins de la sélection</button>';
   if (t === 'dogbone') extra = '<label>Type<select data-k="dogKind"><option value="dogbone">Dogbone</option><option value="tbone">T-bone</option></select></label><label>Diamètre de la fraise (mm)<input data-u="len" type="number" data-k="dogDia" step="0.1" min="0.1"></label>';
-  if (t === 'text') extra = '<label>Placement<select data-k="textMode"><option value="line">Ligne droite</option><option value="curve">Sur une courbe</option><option value="between">Entre deux courbes</option></select></label>' + (S.ui.textMode === 'curve' || S.ui.textMode === 'between' ? '<label title="' + tr(S.ui.textMode === 'between' ? 'Marge gardée entre le texte et chacune des deux courbes' : 'Distance entre la courbe et le texte') + '">' + tr('Décalage (mm)') + '<input data-u="len" type="number" data-k="textOff" step="0.5"></label>' : '') + (S.ui.textMode === 'between' ? '<span class="hint" id="tbHint">' + (textPick ? tr('Cliquez maintenant la courbe du haut.') : tr('Cliquez la courbe du bas (ligne de base), puis la courbe du haut.')) + '</span>' : '') + (S.ui.textMode === 'curve' ? '<label>Côté<select data-k="textSide"><option value="up">Au-dessus</option><option value="down">En dessous</option></select></label><label>Espacement (mm)<input data-u="len" type="number" data-k="textSpace" step="0.5"></label>' : '') + '<button data-act="fpGoto" class="fp-mini">' + (S.font ? escHtml(S.fontLabel || 'Police') : 'Choisir une police…') + '</button>';
+  if (t === 'text') extra = '';
   if (t === 'poly') extra = '<div class="ptnext"><b>Point suivant</b><div class="ptg"><label>X<input data-u="len" type="number" id="ciX" step="0.1"></label><label>Y<input data-u="len" type="number" id="ciY" step="0.1"></label><label>Angle<input type="number" id="ciAng" step="1" title="Angle en degrés depuis le dernier point (0° = vers la droite, 90° = vers le haut)"></label><label>L<input data-u="len" type="number" id="ciLen" step="0.1" min="0" title="Longueur depuis le dernier point"></label><label>dx<input data-u="len" type="number" id="ciDx" step="0.1"></label><label>dy<input data-u="len" type="number" id="ciDy" step="0.1"></label></div><div class="ptb"><button data-act="ciAdd" class="primary" id="ciAddB" disabled>Ajouter</button><button data-act="ciUndo">Annuler</button><button data-act="ciClose">Fermer</button><button data-act="ciEnd">Terminer</button></div></div>';
-  if (t === 'nodes') extra = '<span class="nebar"><label class="inl">X<input data-u="len" type="number" id="neX" step="0.1"></label><label class="inl">Y<input data-u="len" type="number" id="neY" step="0.1"></label><button data-act="neSmooth" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17c4-10 14-10 18 0"/><path d="M5 9h14" class="nh"/><circle cx="5" cy="9" r="1.4" class="nf"/><circle cx="19" cy="9" r="1.4" class="nf"/><rect x="10" y="7" width="4" height="4" class="nf"/></svg>Lisse</button><button data-act="neCusp" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18c3-6 6-9 9-9M12 9c3 0 6 3 9 9"/><path d="M12 9L6 4M12 9l6-5" class="nh"/><rect x="10" y="7" width="4" height="4" class="nf"/></svg>Brisé</button><button data-act="neCorner" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19l9-11 9 11"/><rect x="10" y="6" width="4" height="4" class="nf"/></svg>Coin vif</button><button data-act="neLine" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18L20 6"/><rect x="2" y="16" width="4" height="4" class="nf"/><rect x="18" y="4" width="4" height="4" class="nf"/></svg>Segment droit</button><button data-act="neCurve" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18C6 6 14 18 20 6"/><rect x="2" y="16" width="4" height="4" class="nf"/><rect x="18" y="4" width="4" height="4" class="nf"/></svg>Segment courbe</button><button data-act="neAdd" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17c4-8 14-8 18 0"/><path d="M12 3v8M8 7h8" class="nh"/></svg>Ajouter</button><button data-act="neDel" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17c4-8 14-8 18 0"/><path d="M8 7h8" class="nh"/></svg>Supprimer</button><button data-act="neSplit" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16c3-5 5-6 7-6M14 10c2 0 4 1 7 6"/><path d="M10 6l4 8M14 6l-4 8" class="nh"/></svg>Couper</button><button data-act="neClose" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z" stroke-dasharray="3 2.4"/></svg>Ouvrir / fermer</button><button data-act="neExplode" class="nebtn" title="Coupe le profil à chaque nœud : chaque segment devient un vecteur séparé"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 19.5l3.5-7M9.5 9h5M18 12.5l3.5 7"/><path d="M5 11.5l2 2M17 11.5l2 2" class="nh"/><circle cx="7.6" cy="9.6" r="1" class="nf"/><circle cx="16.4" cy="9.6" r="1" class="nf"/></svg>Scinder</button></span>';
+  if (t === 'nodes') extra = '<div class="nebar"><div class="nexy"><label class="inl">X<input data-u="len" type="number" id="neX" step="0.1"></label><label class="inl">Y<input data-u="len" type="number" id="neY" step="0.1"></label></div><div class="seg nemode" id="neMode" role="group" aria-label="Coordonnées"><button type="button" value="abs">Absolu</button><button type="button" value="rel">Relatif</button></div><div class="nerow"><button data-act="neCusp" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18c3-6 6-9 9-9M12 9c3 0 6 3 9 9"/><path d="M12 9L6 4M12 9l6-5" class="nh"/><rect x="10" y="7" width="4" height="4" class="nf"/></svg>Brisé</button><button data-act="neCorner" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19l9-11 9 11"/><rect x="10" y="6" width="4" height="4" class="nf"/></svg>Coin vif</button><button data-act="neSmooth" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17c4-10 14-10 18 0"/><path d="M5 9h14" class="nh"/><circle cx="5" cy="9" r="1.4" class="nf"/><circle cx="19" cy="9" r="1.4" class="nf"/><rect x="10" y="7" width="4" height="4" class="nf"/></svg>Lisse</button></div><div class="nerow"><button data-act="neCurve" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18C6 6 14 18 20 6"/><rect x="2" y="16" width="4" height="4" class="nf"/><rect x="18" y="4" width="4" height="4" class="nf"/></svg>Segment courbe</button><button data-act="neLine" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18L20 6"/><rect x="2" y="16" width="4" height="4" class="nf"/><rect x="18" y="4" width="4" height="4" class="nf"/></svg>Segment droit</button></div><div class="nerow"><button data-act="neAdd" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17c4-8 14-8 18 0"/><path d="M12 3v8M8 7h8" class="nh"/></svg>Ajouter</button><button data-act="neDel" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17c4-8 14-8 18 0"/><path d="M8 7h8" class="nh"/></svg>Supprimer</button><button data-act="neSplit" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16c3-5 5-6 7-6M14 10c2 0 4 1 7 6"/><path d="M10 6l4 8M14 6l-4 8" class="nh"/></svg>Couper</button></div><div class="nerow"><button data-act="neExplode" class="nebtn" title="Coupe le profil à chaque nœud : chaque segment devient un vecteur séparé"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 19.5l3.5-7M9.5 9h5M18 12.5l3.5 7"/><path d="M5 11.5l2 2M17 11.5l2 2" class="nh"/><circle cx="7.6" cy="9.6" r="1" class="nf"/><circle cx="16.4" cy="9.6" r="1" class="nf"/></svg>Scinder</button><button data-act="neClose" class="nebtn"><svg class="neico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z" stroke-dasharray="3 2.4"/></svg>Ouvrir / fermer</button></div></div>';
   if (CF_T.includes(t)) extra = cfHTML(t, extra);
   if (t === 'measure') extra = '<span class="mono meas" id="measOut">Glissez sur le plan</span>';
   if (t === 'tabedit') extra = '<span class="mono meas" id="tabCount"></span><button data-act="tabDone" class="primary">Terminer</button>';
@@ -3716,14 +3759,14 @@ function setTool(t) {
   if (typeof dRefresh === 'function') dRefresh();
   if (t === 'poly') ciBind();
   if (CF_T.includes(t)) cfBind(t);
-  if (t === 'nodes') { ['#neX', '#neY'].forEach(id => $(id).addEventListener('change', neFromInputs)); syncNe(); }
+  if (t === 'nodes') { ['#neX', '#neY'].forEach(id => $(id).addEventListener('change', neFromInputs)); $$('#neMode button').forEach(b => b.onclick = () => { S.ui.neRel = b.value === 'rel'; syncNe(); }); syncNe(); }
   hoverCorner = null; hoverEdge = null; cv.style.cursor = t === 'pan' ? 'grab' : (t === 'select' || t === 'nodes') ? 'default' : 'crosshair'; draw();
 }
 $$('.palette button').forEach(b => b.onclick = () => setTool(b.dataset.tool));
 function bindK(root = document) { root.querySelectorAll('[data-k]').forEach(el => { if (el.type === 'checkbox') el.checked = !!S.ui[el.dataset.k]; else el.value = S.ui[el.dataset.k]; }); arrVis(); }
 function readK(el) { return el.type === 'checkbox' ? el.checked : el.type === 'number' ? +el.value : el.value; }
-document.addEventListener('input', e => { const k = e.target.dataset && e.target.dataset.k; if (!k) return; S.ui[k] = readK(e.target); $$('[data-k="' + k + '"]').forEach(o => { if (o !== e.target) { if (o.type === 'checkbox') o.checked = e.target.checked; else o.value = e.target.value; } }); if (k === 'arrMode') arrVis(); });
-document.addEventListener('change', e => { const k = e.target.dataset && e.target.dataset.k; if (k) { S.ui[k] = readK(e.target); if (typeof illRefresh === 'function') illRefresh(); if (k === 'textMode' && S.ui.tool === 'text') setTimeout(() => setTool('text'), 0); if (k === 'arrMode') arrVis(); } });
+document.addEventListener('input', e => { const k = e.target.dataset && e.target.dataset.k; if (!k) return; S.ui[k] = readK(e.target); if (TX_KEYS.includes(k)) { txLive(); txGhost = null; if (txGhP) txGhostReq(txGhP); } $$('[data-k="' + k + '"]').forEach(o => { if (o !== e.target) { if (o.type === 'checkbox') o.checked = e.target.checked; else o.value = e.target.value; } }); if (k === 'arrMode') arrVis(); });
+document.addEventListener('change', e => { const k = e.target.dataset && e.target.dataset.k; if (k) { S.ui[k] = readK(e.target); if (typeof illRefresh === 'function') illRefresh(); if (TX_KEYS.includes(k)) { txLive(); txUi(); } if (k === 'arrMode') arrVis(); } });
 function arrVis() { $$('[data-arr]').forEach(el => el.hidden = el.dataset.arr !== S.ui.arrMode); $$('[data-arrfit]').forEach(el => el.hidden = !!S.ui.arrPFit); }
 
 // ---------- accrochage ----------
@@ -3869,7 +3912,10 @@ function hitEdge(p, px = 7) { const tol = px / S.view.s; let best = null, bd = t
 function hitShape(p) { return hitEdge(p, 6) || null; } // sélection sur le trait uniquement (les formes empilées restent accessibles)
 function hitSelInside(p) { let best = null, ba = Infinity; for (const s of selShapes()) if (editable(s) && s.closed && pip(p, s.pts)) { const a = Math.abs(area(s.pts)); if (a < ba) { ba = a; best = s; } } return best; } // glisser une sélection depuis l'intérieur
 function hitDim(p) { const tol = 6 / S.view.s; for (const d of S.dims) { const { A, B } = dimGeom(d); if (segDist(p, A, B) < tol) return d; } return null; }
-function hitGuide(X, Y) { for (let i = 0; i < S.guides.x.length; i++) if (Math.abs(sx(S.guides.x[i]) - X) < 4) return { axis: 'x', i }; for (let i = 0; i < S.guides.y.length; i++) if (Math.abs(sy(S.guides.y[i]) - Y) < 4) return { axis: 'y', i }; return null; }
+function guideLk(axis) { const g = S.guides, k = axis === 'x' ? 'lx' : 'ly'; if (!Array.isArray(g[k])) g[k] = []; while (g[k].length < g[axis].length) g[k].push(false); g[k].length = g[axis].length; return g[k]; }
+function guideDel(axis, i) { guideLk(axis).splice(i, 1); S.guides[axis].splice(i, 1); }
+function hitGuide(X, Y, all) { for (const axis of ['x', 'y']) { const L = guideLk(axis); for (let i = 0; i < S.guides[axis].length; i++) if (Math.abs((axis === 'x' ? sx(S.guides.x[i]) - X : sy(S.guides.y[i]) - Y)) < 4 && (all || !L[i])) return { axis, i }; } return null; }
+function guideOpen(gd) { if (curTab !== 'dessin') setTab('dessin'); if (S.ui.tool !== 'select') setTool('select'); S.ui.dsec = 'guides'; dRefresh(); renderGuides(); const li = $('#guideList').querySelector('[data-g="' + gd.axis + gd.i + '"]'); if (li) { li.classList.add('hl'); li.scrollIntoView({ block: 'nearest' }); const inp = li.querySelector('input'); if (inp) { inp.focus(); inp.select(); } setTimeout(() => li.classList.remove('hl'), 1500); } }
 function findCorner(p) { let best = null, bd = 12 / S.view.s; for (const s of S.shapes) { if (!editable(s)) continue; s.nodes.forEach((n, i) => { const d = Math.hypot(n.x - p[0], n.y - p[1]); if (d < bd && canCorner(s, i)) { bd = d; best = { s, i, p: [n.x, n.y] }; } }); } return best; }
 function edgePortion(s, p) { // portion qui serait supprimée par Ajuster (pour l'aperçu)
   const others = S.shapes.filter(o => o !== s && shown(o)), xs = intersParams(s, others), { u } = paramAt(s, p), ns = nseg(s);
@@ -4143,7 +4189,7 @@ cv.addEventListener('pointerdown', e => {
   const p = [wx(X), wy(Y)], t = S.ui.tool;
   if (e.button === 1 || t === 'pan' || spaceDown) { drag = { mode: 'pan', X, Y, ox: S.view.ox, oy: S.view.oy }; cv.style.cursor = 'grabbing'; return; }
   if (e.button !== 0) return;
-  if (X < RB || Y < RB) { if (X < RB && Y < RB) return; const axis = Y < RB ? 'y' : 'x'; S.guides[axis].push(axis === 'x' ? p[0] : p[1]); drag = { mode: 'guide', axis, i: S.guides[axis].length - 1 }; draw(); return; }
+  if (X < RB || Y < RB) { if (X < RB && Y < RB) return; const axis = Y < RB ? 'y' : 'x'; S.guides[axis].push(axis === 'x' ? p[0] : p[1]); guideLk(axis); drag = { mode: 'guide', axis, i: S.guides[axis].length - 1 }; draw(); return; }
   if (t === 'select') {
     const ih = relHandleAt(X, Y) || imgHandleAt(X, Y);
     const xh = xfHandleAt(X, Y);
@@ -4187,20 +4233,18 @@ cv.addEventListener('pointerdown', e => {
   else if (t === 'text') {
     if (!S.font) { toast('Choisissez d’abord une police.'); act('fpGoto'); return; }
     if (!String(S.ui.text).trim()) { toast('Saisissez le texte à graver.'); return; }
-    if (S.ui.textMode === 'between') { // texte entre deux courbes : 1er clic la base, 2e clic le haut
+    const m = txMode();
+    if (m === 'between') { // texte entre deux courbes : 1er clic la base, 2e clic le haut
       const cs = hitEdge(p, 12); if (!cs) { toast(tr(textPick ? 'Cliquez la courbe du haut.' : 'Cliquez la courbe du bas (ligne de base), puis la courbe du haut.')); return; }
-      if (!textPick) { textPick = cs.id; setTool('text'); draw(); toast(tr('Courbe du bas choisie : cliquez la courbe du haut.')); return; }
-      const A = shapeById(textPick); textPick = null; if (!A || A === cs) { setTool('text'); toast(tr('Choisissez deux courbes différentes.')); return; }
-      const r = textBetween(String(S.ui.text), A, cs); if (!r) { setTool('text'); return; } const gg = r.length > 1 ? uid() : null; S.sel.clear();
-      for (const l of r) { const n = mkShape(l.nodes, l.closed, { g: gg }); if (n) S.sel.add(n.id); } renderSel(); commit(); setTool('text'); toast(trf('Texte placé entre les deux courbes ({n} contours, groupés).', { n: r.length })); return;
+      if (!textPick) { textPick = cs.id; txUi(); draw(); toast(tr('Courbe du bas choisie : cliquez la courbe du haut.')); return; }
+      const a = textPick; textPick = null; if (a === cs.id) { txUi(); toast(tr('Choisissez deux courbes différentes.')); return; }
+      const n = txCreate({ a, b: cs.id }); if (n) toast(trf('Texte placé entre les deux courbes ({n} contours, groupés).', { n })); return;
     }
-    if (S.ui.textMode === 'curve') {
-      const cs = hitEdge(p, 12); if (!cs) { toast('Cliquez sur une courbe ou un contour : le texte s’y place, centré sur le point cliqué.'); return; }
-      const r = textOnCurve(String(S.ui.text), +S.ui.textH || 20, cs, p), gg = r.loops.length > 1 ? uid() : null; S.sel.clear();
-      for (const l of r.loops) { const n = mkShape(l, !l.open, { g: gg }); if (n) S.sel.add(n.id); } renderSel(); commit(); toast(r.warn ? 'Le texte dépasse la longueur de la courbe : la fin est coupée.' : 'Texte placé sur la courbe (' + r.loops.length + ' contours, groupés).'); return;
+    if (m !== 'line') {
+      const cs = hitEdge(p, 12); if (!cs) { toast(tr('Cliquez sur une courbe ou un contour : ligne, arc, cercle, rectangle…')); return; }
+      const n = txCreate({ cid: cs.id, click: p.slice() }); if (n) toast(trf('Texte placé sur la courbe ({n} contours, groupés) : les réglages le modifient en direct.', { n })); return;
     }
-    const q = snap(p), loops = textNodes(String(S.ui.text), +S.ui.textH || 20, q), g = loops.length > 1 ? uid() : null; S.sel.clear();
-    for (const l of loops) { const n = mkShape(l, !l.open, { g }); if (n) S.sel.add(n.id); } renderSel(); commit(); toast(S.font.singleLine ? trf('Texte à trait unique créé ({n} traits, groupés) : usinez-le avec un profil « Sur la ligne ».', { n: loops.length }) : loops.length + ' contours de texte créés (groupés).');
+    const n = txCreate({ at: snap(p) }); if (n) toast(S.font.singleLine ? trf('Texte à trait unique créé ({n} traits, groupés) : usinez-le avec un profil « Sur la ligne ».', { n }) : trf('{n} contours de texte créés (groupés) : les réglages le modifient en direct.', { n }));
   } else if (t === 'dogbone') {
     const c = findCorner(p); if (!c) { toast('Aucun coin vif à cet endroit.'); return; }
     const D = +S.ui.dogDia; if (!(D > 0)) { toast('Indiquez le diamètre de la fraise.'); return; }
@@ -4226,6 +4270,11 @@ cv.addEventListener('pointerdown', e => {
 // nœuds sélectionnés (plusieurs avec Maj ou un cadre)
 function neSel() { const ne = S.ne; if (!ne) return []; if (ne.ms && ne.ms.size > 1) return [...ne.ms]; return ne.ni !== null && ne.ni !== undefined ? [ne.ni] : []; }
 function neSetSel(list, primary) { const ne = S.ne; if (!ne) return; ne.ms = new Set(list); ne.ni = list.length ? (primary !== undefined && list.includes(primary) ? primary : list[list.length - 1]) : null; ne.seg = null; }
+// pas des flèches : 1 mm (1/16 po), Maj ×10 ; Ctrl : pas fin selon le zoom (≈ 1 pixel de l'écran, arrondi à 1, 2 ou 5), Ctrl+Maj : 10 pixels ; Alt : ÷10
+function nudgeStep(e) { const inch = UNIT.len === 'in', u = inch ? 25.4 : 1; let d;
+  if (e.ctrlKey || e.metaKey) { const px = (e.shiftKey ? 10 : 1) / S.view.s / u, k = Math.pow(10, Math.floor(Math.log10(px))), m = px / k; d = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * k * u; }
+  else d = inch ? (e.shiftKey ? 6.35 : 1.5875) : (e.shiftKey ? 10 : 1); if (e.altKey) d /= 10; NUDGE = d; return d; }
+let NUDGE = 0, NUDGE_T = 0; const nudgeTell = () => { if (NUDGE === NUDGE_T) return; NUDGE_T = NUDGE; toast(trf('Pas fin des flèches (selon le zoom) : {d}', { d: UNIT.len === 'in' ? fr(NUDGE / 25.4, 4) + ' po' : fr(NUDGE, 3) + ' mm' })); };
 function neMove(dx, dy) { const s = S.ne && shapeById(S.ne.sid), L = neSel(); if (!s || !L.length) return false; for (const i of L) { const n = s.nodes[i]; if (n) { n.x += dx; n.y += dy; } } refresh(s); return true; }
 function nodesDown(p, e, X, Y) {
   const tol = 7 / S.view.s, s = S.ne && shapeById(S.ne.sid);
@@ -4250,6 +4299,7 @@ cv.addEventListener('pointermove', e => {
   const [X, Y] = evPt(e); if (pointers.has(e.pointerId)) pointers.set(e.pointerId, [X, Y]);
   if (pinch && pointers.size === 2) { const [a, b] = [...pointers.values()]; const d = Math.hypot(a[0] - b[0], a[1] - b[1]), c = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; const s = Math.max(0.05, Math.min(200, pinch.s * d / pinch.d)); const wx0 = (pinch.c[0] - pinch.ox) / pinch.s, wy0 = (pinch.oy - pinch.c[1]) / pinch.s; S.view.s = s; S.view.ox = c[0] - wx0 * s; S.view.oy = c[1] + wy0 * s; draw(); return; }
   const p = [wx(X), wy(Y)], t = S.ui.tool, D = drag;
+  if (!D && t === 'text') txGhostReq(p);
   if (D) {
     if (D.mode === 'pan') { S.view.ox = D.ox + X - D.X; S.view.oy = D.oy + Y - D.Y; draw(); return; }
     if (D.mode === 'guide') { const q = snap(p); S.guides[D.axis][D.i] = D.axis === 'x' ? q[0] : q[1]; setCoords(q, 'repère'); draw(); return; }
@@ -4257,6 +4307,15 @@ cv.addEventListener('pointermove', e => {
     if (D.mode === 'tabdrag') { const pr = projectOnLoops(D.tp.loops, p); if (pr) { D.tp.p.tabPts[D.idx] = [pr.x, pr.y]; if (D.tp.tabs && D.tp.tabs[D.idx]) D.tp.tabs[D.idx] = { x: pr.x, y: pr.y, a: pr.a }; if (hyp(p, D.start) * S.view.s > 3) D.moved = true; draw(); } return; }
     if (D.mode === 'pivot') { const q = snap(p); PIV = { key: selKey(), p: q }; D.moved = true; const o = outXY(q[0], q[1]); setCoords(q, tr('Pivot') + ' ' + fr(o[0]) + ' / ' + fr(o[1])); rotSync(); draw(); return; }
     if (D.mode === 'srot') { let ang = (Math.atan2(p[1] - D.c[1], p[0] - D.c[0]) - D.a0) * 180 / Math.PI; ang = normDeg(ang); if (e.ctrlKey || e.metaKey) ang = Math.round(ang / 15) * 15; const f = rotPts(D.c, ang); for (const [s, o] of D.orig) { s.nodes = o.map(cloneNode); transformShape(s, f); } D.ang = ang; D.moved = D.moved || Math.abs(ang) > 1e-9; setCoords(p, tr('Rotation') + ' ' + fDeg(ang)); draw(); return; }
+    if (D.mode === 'sscale' && D.h.deg) { const h = D.h, a = h.deg * Math.PI / 180, c = Math.cos(a), sn = Math.sin(a), L = v => [v[0] * c + v[1] * sn, -v[0] * sn + v[1] * c], Wf = v => [v[0] * c - v[1] * sn, v[0] * sn + v[1] * c], q = L(snap(p, S.sel)), ax = h.la[0], ay = h.la[1], dxw = h.lw[0] - ax, dyw = h.lw[1] - ay;
+      let kx = h.cx && Math.abs(dxw) > 1e-9 ? (q[0] - ax) / dxw : 1, ky = h.cy && Math.abs(dyw) > 1e-9 ? (q[1] - ay) / dyw : 1;
+      if (h.cx && h.cy && ($('#selLock').checked !== e.shiftKey)) { const m = Math.abs(kx) > Math.abs(ky) ? kx : ky; kx = ky = m; }
+      if (e.ctrlKey || e.metaKey) { const rd = (k, d) => Math.abs(d) > 1e-9 ? Math.sign(k || 1) * Math.max(1, Math.round(Math.abs(k * d))) / Math.abs(d) : k; if (h.cx) kx = rd(kx, dxw); if (h.cy) ky = rd(ky, dyw); }
+      const cl = v => Math.abs(v) < 1e-3 ? (v < 0 ? -1e-3 : 1e-3) : v; kx = cl(kx); ky = cl(ky);
+      const f = v => { const u = L(v); return Wf([ax + (u[0] - ax) * kx, ay + (u[1] - ay) * ky]); };
+      for (const [s, o] of D.orig) { s.nodes = o.map(cloneNode); transformShape(s, f); }
+      if (D.piv0) PIV = { key: selKey(), p: f(D.piv0) };
+      D.moved = true; setCoords(p, fr(Math.abs((h.cx ? dxw * kx : 0) || (dyw * ky))) + ' mm'); draw(); return; }
     if (D.mode === 'sscale') {
       const h = D.h, q = snap(p, S.sel), ax = h.a[0], ay = h.a[1], dxw = h.w[0] - ax, dyw = h.w[1] - ay;
       let kx = h.cx && Math.abs(dxw) > 1e-9 ? (q[0] - ax) / dxw : 1, ky = h.cy && Math.abs(dyw) > 1e-9 ? (q[1] - ay) / dyw : 1;
@@ -4298,7 +4357,7 @@ function endPointer(e) {
   const D = drag; drag = null; if (!D) return;
   const [X, Y] = evPt(e);
   if (D.mode === 'pan') cv.style.cursor = restCursor();
-  else if (D.mode === 'guide') { if (X < RB || Y < RB || X > W || Y > H) S.guides[D.axis].splice(D.i, 1); renderGuides(); commit(false); }
+  else if (D.mode === 'guide') { if (X < RB || Y < RB || X > W || Y > H) guideDel(D.axis, D.i); renderGuides(); commit(false); }
   else if (D.mode === 'move') { if (D.moved) { commit(); renderSel(); } else if (D.wasSel) { S.xf = !xfOn(); S.xfKey = selKey(); draw(); } }
   else if (D.mode === 'pivot') { rotSync(); draw(); }
   else if (D.mode === 'srot') { cv.style.cursor = 'grab'; if (D.moved) { for (const [s, , r0] of D.orig) s.rot = normDeg(r0 + D.ang); commit(); renderSel(); } }
@@ -4322,9 +4381,10 @@ function endPointer(e) {
 }
 $('#cw').addEventListener('contextmenu', e => { if (e.target.closest('input, select, textarea')) return; e.preventDefault(); if (lastPtrType === 'touch' || pointers.size > 1) return; if (e.target === cv && S.ui.tool === 'select' && !pen.length && !arcSt.length && !dimSt.length && !drag) { cm2D(e); return; } rightClick(); });
 cv.addEventListener('pointerup', endPointer); cv.addEventListener('pointercancel', endPointer);
-cv.addEventListener('pointerleave', () => { hover = null; if (!drag) { hoverCorner = null; hoverEdge = null; snapMark = null; draw(); } });
+cv.addEventListener('pointerleave', () => { hover = null; if (txGhost) { txGhost = null; txGhP = null; } if (!drag) { hoverCorner = null; hoverEdge = null; snapMark = null; draw(); } });
 cv.addEventListener('dblclick', e => {
   const [X, Y] = evPt(e), p = [wx(X), wy(Y)];
+  if (S.ui.tool === 'select' && !hitShape(p)) { const gd = hitGuide(X, Y, true); if (gd) { guideOpen(gd); return; } }
   if (S.ui.tool === 'select' && !hitShape(p)) { const hr = relHit(p); if (hr && !imgHit(p)) { selectRel(hr.id); setTab('relief'); return; } }
   if (DBL_TOOLS.includes(S.ui.tool) && X > RB && Y > RB) {
     const h = hitShape(p);
@@ -4387,7 +4447,7 @@ let VF = [];
 function registerVF() { if (!Array.isArray(window.COPO_SVG_FONTS)) return; VF = window.COPO_SVG_FONTS.map(d => ({ kind: 'v', family: d.family, style: 'Regular', full: d.family, group: d.group, data: d, font: null })); }
 function vfFont(v) { return v.font || (v.font = svgFontFrom(v.data)); }
 function selectVF(v, silent, keepOpen) {
-  S.font = vfFont(v); S.fontLabel = v.full; fpCur = { kind: 'v', family: v.family };
+  S.font = vfFont(v); S.fontLabel = v.full; setTimeout(() => { txLive(); txUi(); }, 0); fpCur = { kind: 'v', family: v.family };
   const nm = $('#fontName'); nm.textContent = v.full; nm.style.fontFamily = '';
   LS.set('copo.font', 'v:' + v.family); fpMsg(''); if (!keepOpen) fpClose();
   if (!silent) toast('Police à trait unique « ' + v.full + ' » prête. Outil Texte : cliquez sur le plan, puis usinez avec un profil « Sur la ligne ».');
@@ -4438,7 +4498,7 @@ async function addFontFiles(files) {
   act('fpGoto'); fpOpen(true);
 }
 function selectUF(u, silent, keepOpen) {
-  S.font = u.font; S.fontLabel = u.full; fpCur = { kind: 'u', family: u.family };
+  S.font = u.font; S.fontLabel = u.full; setTimeout(() => { txLive(); txUi(); }, 0); fpCur = { kind: 'u', family: u.family };
   const nm = $('#fontName'); nm.textContent = u.full; nm.style.fontFamily = u.css ? '"' + u.css + '", sans-serif' : '';
   $$('#fpStyles button').forEach(b => b.classList.toggle('on', b.textContent === u.style));
   LS.set('copo.font', 'u:' + u.name); fpMsg('');
@@ -4497,7 +4557,7 @@ function fpPickFamily(kind, fam, li) {
 async function fpLoad(fd, silent, keepOpen) {
   try {
     if (!window.opentype) throw new Error('lib');
-    const buf = await (await fd.blob()).arrayBuffer(); S.font = parseFontBuf(buf, fd.postscriptName); S.fontLabel = fd.fullName; fpCur = { kind: 's', family: fd.family };
+    const buf = await (await fd.blob()).arrayBuffer(); S.font = parseFontBuf(buf, fd.postscriptName); S.fontLabel = fd.fullName; setTimeout(() => { txLive(); txUi(); }, 0); fpCur = { kind: 's', family: fd.family };
     const nm = $('#fontName'); nm.textContent = fd.fullName; nm.style.fontFamily = '"' + fd.family.replace(/"/g, '') + '", sans-serif';
     $$('#fpStyles button').forEach(b => b.classList.toggle('on', b.textContent === fd.style));
     LS.set('copo.font', 's:' + fd.postscriptName); fpMsg('');
@@ -4544,28 +4604,62 @@ function shapeToSvgD(s, X, Y) {
   for (let k = 0; k < nseg(s); k++) { const g = segOf(s, k); d += g.line ? ' L' + P(g.p3[0], g.p3[1]) : ' C' + P(g.c1[0], g.c1[1]) + ' ' + P(g.c2[0], g.c2[1]) + ' ' + P(g.p3[0], g.p3[1]); }
   return d + (s.closed ? ' Z' : '');
 }
-function exportSVG(onlySel) {
-  const list = onlySel ? selShapes() : S.shapes.filter(shown); if (!list.length) { toast(onlySel ? 'Sélectionnez d’abord des vecteurs.' : 'Aucun vecteur à exporter.'); return; }
+function exportSVG(onlySel) { const svg = svgString(onlySel); if (svg) saveFile(onlySel ? 'selection-copo.svg' : 'dessin-copo.svg', svg, 'SVG'); }
+function svgString(onlySel) {
+  const list = onlySel ? selShapes() : S.shapes.filter(shown); if (!list.length) { toast(onlySel ? 'Sélectionnez d’abord des vecteurs.' : 'Aucun vecteur à exporter.'); return null; }
   const b = bbox(list), x0 = onlySel ? b.x0 : Math.min(0, b.x0), y0 = onlySel ? b.y0 : Math.min(0, b.y0), x1 = onlySel ? b.x1 : Math.max(S.stock.w, b.x1), y1 = onlySel ? b.y1 : Math.max(S.stock.h, b.y1);
   const W = Math.max(0.01, x1 - x0), H = Math.max(0.01, y1 - y0), X = x => x - x0, Y = y => y1 - y, f = v => String(Math.round(v * 10000) / 10000), esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   let body = '';
   for (const l of S.layers) { const ss = list.filter(sh => (sh.layer || S.layers[0].id) === l.id); if (!ss.length) continue; body += '  <g id="' + esc(l.name.replace(/\s+/g, '_')) + '" data-name="' + esc(l.name) + '" fill="none" stroke="' + esc(l.color || '#000000') + '" stroke-width="0.25">\n' + ss.map(sh => '    <path d="' + shapeToSvgD(sh, X, Y) + '"/>').join('\n') + '\n  </g>\n'; }
-  const svg = '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="' + f(W) + 'mm" height="' + f(H) + 'mm" viewBox="0 0 ' + f(W) + ' ' + f(H) + '">\n  <title>COPO</title>\n' + body + '</svg>\n';
-  saveFile(onlySel ? 'selection-copo.svg' : 'dessin-copo.svg', svg, 'SVG');
+  return '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="' + f(W) + 'mm" height="' + f(H) + 'mm" viewBox="0 0 ' + f(W) + ' ' + f(H) + '">\n  <title>COPO</title>\n' + body + '</svg>\n';
 }
 var textPick = null;
 // texte déformé pour remplir l'espace entre une courbe du bas et une courbe du haut (enveloppe)
-function textBetween(str, A, B) {
-  const hb = +S.ui.textH || 20, loops = textNodes(str, hb, [0, 0]); if (!loops.length) { toast(tr('Rien à écrire.')); return null; }
+function textBetween(str, A, B, quiet) {
+  const hb = +S.ui.textH || 20, loops = (+S.ui.textSpace ? textLine(str, hb, [0, 0]).map(l => Object.assign(l.nodes, { open: !l.closed })) : textNodes(str, hb, [0, 0])); if (!loops.length) { if (!quiet) toast(tr('Rien à écrire.')); return null; }
   const polys = loops.map(l => { const sh = refresh({ nodes: l.map(cloneNode), closed: !l.open }), P = sh.pts.slice(); if (sh.closed && P.length > 1 && Math.hypot(P[0][0] - P[P.length - 1][0], P[0][1] - P[P.length - 1][1]) < 1e-9) P.pop(); return { P, closed: sh.closed }; });
   let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity; for (const { P } of polys) for (const q of P) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); }
   const W = Math.max(1e-6, x1 - x0), Hh = Math.max(1e-6, y1 - y0), dmax = Math.max(0.05, Math.min(W, Hh) / 60);
   const prep = sh => { let P = sh.pts.slice(); if (sh.closed) P.push(P[0]); if (P[P.length - 1][0] < P[0][0]) P = P.reverse(); const c = cumLen(P); return { P, c, L: c[c.length - 1] }; }, CA = prep(A), CB = prep(B);
-  if (CA.L < 1e-6 || CB.L < 1e-6) { toast(tr('Courbe trop courte.')); return null; }
+  if (CA.L < 1e-6 || CB.L < 1e-6) { if (!quiet) toast(tr('Courbe trop courte.')); return null; }
   const at = (C, u) => ptAtOpen(C.P, C.c, Math.max(0, Math.min(1, u)) * C.L), mg = Math.max(0, +S.ui.textOff || 0), map = q => { const u = (q[0] - x0) / W, v = (q[1] - y0) / Hh; let a = at(CA, u), b = at(CB, u); if (mg) { const L = Math.hypot(b[0] - a[0], b[1] - a[1]), m = Math.min(mg, L / 2 - 1e-3); if (L > 1e-9 && m > 0) { const ux = (b[0] - a[0]) / L, uy = (b[1] - a[1]) / L; a = [a[0] + ux * m, a[1] + uy * m]; b = [b[0] - ux * m, b[1] - uy * m]; } } return [a[0] + (b[0] - a[0]) * v, a[1] + (b[1] - a[1]) * v]; };
   return polys.map(({ P, closed }) => { const D = []; for (let i = 0; i < P.length; i++) { const a = P[i], b = P[(i + 1) % P.length]; D.push(a); if (!closed && i === P.length - 1) break; const n = Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / dmax); for (let k = 1; k < n; k++) D.push([a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n]); }
     return { nodes: D.map(q => { const m = map(q); return NODE(m[0], m[1]); }), closed }; }).filter(l => l.nodes.length > 1);
 }
+// placement du texte : 'line' (droit), 'above' / 'on' / 'below' (au-dessus, sur, sous la courbe), 'between' (entre deux courbes)
+function txMode() { let m = S.ui.textMode || 'line'; if (m === 'curve') m = S.ui.textSide === 'down' ? 'below' : 'above'; return ['line', 'above', 'on', 'below', 'between'].includes(m) ? m : 'line'; }
+const TX_KEYS = ['text', 'textH', 'textSpace', 'textOff', 'textMode', 'textAlign', 'textOrient', 'textFlip'];
+function txGlyphs(str, h) { const f = S.font, upm = f.unitsPerEm || 1000, cap = (f.tables.os2 && f.tables.os2.sCapHeight) || upm * 0.7, size = h * upm / cap, k = h / cap, sp = +S.ui.textSpace || 0, gl = f.stringToGlyphs(str), adv = gl.map((g, i) => (g.advanceWidth || 0) * k + (i < gl.length - 1 && f.getKerningValue ? f.getKerningValue(g, gl[i + 1]) * k : 0)), total = adv.reduce((a, b) => a + b, 0) + sp * Math.max(0, gl.length - 1); return { gl, adv, total, size, sp }; }
+function textLine(str, h, at) { const G = txGlyphs(str, h), al = S.ui.textAlign || 'left', x0 = al === 'mid' ? -G.total / 2 : al === 'right' ? -G.total : 0, out = []; let x = x0;
+  G.gl.forEach((g, i) => { for (const l of textNodes('', h, [at[0] + x, at[1]], g.getPath(0, 0, G.size).commands)) out.push({ nodes: l, closed: !l.open }); x += G.adv[i] + G.sp; }); return out; }
+function txGen(A) { const str = String(S.ui.text || ''), h = +S.ui.textH || 20, m = txMode(); if (!S.font || !str.trim()) return null;
+  if (m === 'line') return A.at ? textLine(str, h, A.at) : null;
+  if (m === 'between') { const a = shapeById(A.a), b = shapeById(A.b); return a && b && a !== b ? textBetween(str, a, b, true) : null; }
+  const c = shapeById(A.cid); if (!c || !A.click) return null; const r = textOnCurve(str, h, c, A.click); return r.loops.map(l => ({ nodes: l, closed: !l.open })); }
+// texte « vivant » : tant que l'outil Texte reste actif, le dernier texte placé suit les réglages
+function txShapes(tid) { return tid ? S.shapes.filter(x => x.txt && x.txt.tid === tid) : []; }
+function txSnap(A, tid) { const o = { tid, anchor: A }; for (const k of TX_KEYS) o[k] = S.ui[k]; o.textMode = txMode(); o.font = S.fontLabel || ''; return o; }
+function txCreate(A) { const loops = txGen(A); if (!loops || !loops.length) return null; const tid = uid(), g = loops.length > 1 ? uid() : null; S.sel.clear(); const tx = txSnap(A, tid);
+  for (const l of loops) { const n = mkShape(l.nodes, l.closed, { g }); if (n) { n.txt = tx; S.sel.add(n.id); } } S.ui.liveTxt = tid; renderSel(); commit(); txUi(); return loops.length; }
+let txRegT = 0, txComT = 0;
+function txLive() { if (!S.ui.liveTxt || S.ui.tool !== 'text') return; cancelAnimationFrame(txRegT); txRegT = requestAnimationFrame(txRegen); }
+function txRegen() { const tid = S.ui.liveTxt, old = txShapes(tid); if (!old.length) { S.ui.liveTxt = null; txUi(); return; } const A = old[0].txt.anchor, loops = txGen(A); if (!loops || !loops.length) return;
+  const lay = old[0].layer, g = loops.length > 1 ? (old[0].g || uid()) : null, ids = old.map(x => x.id), tx = txSnap(A, tid); S.shapes = S.shapes.filter(x => !(x.txt && x.txt.tid === tid)); S.sel.clear();
+  loops.forEach((l, i) => { const n = mkShape(l.nodes, l.closed, { g, layer: lay }); if (n) { if (i < ids.length) n.id = ids[i]; n.txt = tx; S.sel.add(n.id); } });
+  renderSel(); draw(); clearTimeout(txComT); txComT = setTimeout(() => commit(), 450); }
+function txEdit() { const ss = selShapes(), tid = ss.length && ss[0].txt && ss[0].txt.tid; if (!tid || !ss.every(x => x.txt && x.txt.tid === tid)) return; const t = ss[0].txt; for (const k of TX_KEYS) if (t[k] !== undefined) S.ui[k] = t[k]; setTool('text'); S.ui.liveTxt = tid; S.sel.clear(); txShapes(tid).forEach(x => S.sel.add(x.id)); renderSel(); bindK(); txUi(); if (t.font && t.font !== S.fontLabel) toast(trf('Ce texte a été écrit avec la police « {f} » : choisissez-la si besoin, le texte suivra.', { f: t.font })); }
+function txSelIsText() { const ss = selShapes(), tid = ss.length && ss[0].txt && ss[0].txt.tid; return !!tid && ss.every(x => x.txt && x.txt.tid === tid); }
+// aperçu en pointillé sous le pointeur
+let txGhost = null, txGhRaf = 0, txGhP = null;
+function txGhostReq(p) { txGhP = p; if (!txGhRaf) txGhRaf = requestAnimationFrame(() => { txGhRaf = 0; const p = txGhP, m = txMode(); let A = null;
+  if (p) { if (m === 'line') A = { at: snap(p) }; else { const cs = hitEdge(p, 12); if (cs && !(cs.txt && cs.txt.tid === S.ui.liveTxt)) A = m === 'between' ? (textPick && cs.id !== textPick ? { a: textPick, b: cs.id } : null) : { cid: cs.id, click: p }; } }
+  let L = null; try { L = A ? txGen(A) : null; } catch (e) { L = null; } txGhost = L ? L.map(l => refresh({ nodes: l.nodes.map(cloneNode), closed: l.closed })) : null; draw(); }); }
+function drawTxGhost(C) { if (S.ui.tool !== 'text' || !txGhost) return; ctx.save(); ctx.strokeStyle = C.acc; ctx.globalAlpha = 0.75; ctx.lineWidth = 1.2; ctx.setLineDash([4, 3]); for (const g of txGhost) { pathOf(g.pts, g.closed); ctx.stroke(); } ctx.restore(); }
+function txUi() { const m = txMode(), cur = m !== 'line' && m !== 'between';
+  $$('input[name="txMode"]').forEach(r => r.checked = r.value === m); $$('input[name="txAlign"]').forEach(r => r.checked = r.value === (S.ui.textAlign || (m === 'line' ? 'left' : 'mid'))); $$('input[name="txOrient"]').forEach(r => r.checked = r.value === (S.ui.textOrient || 'curve'));
+  const sh = (id, on) => { const e = $(id); if (e) e.hidden = !on; }; sh('#txOffRow', m !== 'line'); sh('#txAlignRow', m !== 'between'); sh('#txOrientRow', cur); sh('#txFlipRow', cur);
+  const w = $('#txWhat'); if (w) w.textContent = !S.font ? tr('Choisissez d’abord une police.') : m === 'line' ? tr('Cliquez sur le plan au point de départ du texte (alignement : gauche = le texte commence au clic).') : m === 'between' ? tr(textPick ? 'Cliquez maintenant la courbe du haut.' : 'Cliquez la courbe du bas (ligne de base), puis la courbe du haut.') : tr('Cliquez sur une courbe ou un contour : ligne, arc, cercle, rectangle…');
+  const lv = $('#txLive'); if (lv) lv.hidden = !(S.ui.liveTxt && S.ui.tool === 'text' && txShapes(S.ui.liveTxt).length); }
 function textOnCurve(str, h, s, click) {
   const f = S.font, upm = f.unitsPerEm || 1000, cap = (f.tables.os2 && f.tables.os2.sCapHeight) || upm * 0.7, size = h * upm / cap, k = h / cap, sp = +S.ui.textSpace || 0;
   const gl = f.stringToGlyphs(str), adv = gl.map((g, i) => (g.advanceWidth || 0) * k + (i < gl.length - 1 && f.getKerningValue ? f.getKerningValue(g, gl[i + 1]) * k : 0));
@@ -4575,16 +4669,16 @@ function textOnCurve(str, h, s, click) {
   let sc = 0, bd = Infinity; for (let i = 1; i < P.length; i++) { const a = P[i - 1], b = P[i], dx = b[0] - a[0], dy = b[1] - a[1], L2 = dx * dx + dy * dy || 1, t = Math.max(0, Math.min(1, ((click[0] - a[0]) * dx + (click[1] - a[1]) * dy) / L2)), d = Math.hypot(click[0] - a[0] - dx * t, click[1] - a[1] - dy * t); if (d < bd) { bd = d; sc = c[i - 1] + (c[i] - c[i - 1]) * t; } }
   const at = q => s.closed ? ptAtLoop(P, c, q) : ptAtOpen(P, c, q);
   const tA = at(sc - 0.5), tB = at(sc + 0.5);
-  if (tB[0] - tA[0] < 0) { P = P.slice().reverse(); c = cumLen(P); sc = per - sc; }
-  let start = sc - total / 2, warn = false;
-  if (!s.closed) { if (start < 0) start = 0; if (start + total > per) { warn = true; } }
+  if ((tB[0] - tA[0] < 0) !== !!S.ui.textFlip) { P = P.slice().reverse(); c = cumLen(P); sc = per - sc; } /* lecture de gauche à droite ; « de l'autre côté » : sens inversé */
+  const al = S.ui.textAlign || 'mid'; let start = s.closed ? (al === 'left' ? sc : al === 'right' ? sc - total : sc - total / 2) : (al === 'left' ? 0 : al === 'right' ? per - total : (per - total) / 2), warn = false;
+  if (!s.closed) { if (start < 0) { start = 0; } if (start + total > per + 1e-6) { warn = true; } }
   const out = []; let acc = 0;
   gl.forEach((g, i) => {
     const mid = start + acc + adv[i] / 2; acc += adv[i] + sp;
     if (!s.closed && (mid < 0 || mid > per)) return;
-    const Pt = at(mid), A = at(mid - 0.6), B = at(mid + 0.6), an = Math.atan2(B[1] - A[1], B[0] - A[0]), co = Math.cos(an), si = Math.sin(an), dOff = +S.ui.textOff || 0, off = S.ui.textSide === 'down' ? -h - dOff : dOff;
-    const loops = textNodes('', h, [0, 0], g.getPath(0, 0, size).commands);
-    for (const l of loops) { const sh = { nodes: l, closed: !l.open }; transformShape(sh, q => { const lx = q[0] - adv[i] / 2, ly = q[1] + off; return [Pt[0] + lx * co - ly * si, Pt[1] + lx * si + ly * co]; }); out.push(sh.nodes); }
+    const Pt = at(mid), A = at(mid - 0.6), B = at(mid + 0.6), an = Math.atan2(B[1] - A[1], B[0] - A[0]), co = Math.cos(an), si = Math.sin(an), dOff = +S.ui.textOff || 0, md = txMode(), off = md === 'below' ? -h - dOff : md === 'on' ? -h / 2 + dOff : dOff, up = S.ui.textOrient === 'vertical';
+    const loops = textNodes('', h, [0, 0], g.getPath(0, 0, size).commands), cx = Pt[0] - (off + h / 2) * si, cy = Pt[1] + (off + h / 2) * co;
+    for (const l of loops) { const sh = { nodes: l, closed: !l.open }; transformShape(sh, q => { const lx = q[0] - adv[i] / 2; if (up) return [cx + lx, cy + q[1] - h / 2]; const ly = q[1] + off; return [Pt[0] + lx * co - ly * si, Pt[1] + lx * si + ly * co]; }); out.push(sh.nodes); }
   });
   return { loops: out, warn };
 }
@@ -4618,8 +4712,8 @@ function ciAdd() {
   pen.push(NODE(q[0], q[1])); setCoords(q, pen.length + ' point' + (pen.length > 1 ? 's' : '')); ciClear(); draw(); const f = $('#ciX'); f.focus();
 }
 function ciUndo() { if (!pen.length) { toast('Aucun point à annuler.'); return; } pen.pop(); ciSync('ciX'); setCoords(pen.length ? [pen[pen.length - 1].x, pen[pen.length - 1].y] : [0, 0], pen.length ? pen.length + ' point' + (pen.length > 1 ? 's' : '') : ''); draw(); }
-function syncNe() { const X = $('#neX'), Y = $('#neY'); if (!X) return; const s = S.ne && shapeById(S.ne.sid), n = s && S.ne.ni !== null ? s.nodes[S.ne.ni] : null; X.disabled = Y.disabled = !n; if (!n) { if (document.activeElement !== X) X.value = ''; if (document.activeElement !== Y) Y.value = ''; return; } const o = outXY(n.x, n.y); if (document.activeElement !== X) X.value = +o[0].toFixed(3); if (document.activeElement !== Y) Y.value = +o[1].toFixed(3); }
-function neFromInputs() { const s = S.ne && shapeById(S.ne.sid); if (!s || S.ne.ni === null) return; const n = s.nodes[S.ne.ni], o = outXY(n.x, n.y), x = parseFloat(String($('#neX').value).replace(',', '.')), y = parseFloat(String($('#neY').value).replace(',', '.')); const q = inXY(isFinite(x) ? x : o[0], isFinite(y) ? y : o[1]); n.x = q[0]; n.y = q[1]; refresh(s); commit(); draw(); }
+function syncNe() { const X = $('#neX'), Y = $('#neY'); if (!X) return; $$('#neMode button').forEach(b => b.setAttribute('aria-pressed', (b.value === 'rel') === !!S.ui.neRel)); X.title = Y.title = tr(S.ui.neRel ? 'Relatif : tapez un déplacement puis Entrée (tous les nœuds sélectionnés)' : 'Absolu : position du nœud'); const s = S.ne && shapeById(S.ne.sid), n = s && neSel().length ? s.nodes[neSel()[0]] : null; X.disabled = Y.disabled = !n; if (n && S.ui.neRel) { if (document.activeElement !== X) X.value = 0; if (document.activeElement !== Y) Y.value = 0; return; } if (!n) { if (document.activeElement !== X) X.value = ''; if (document.activeElement !== Y) Y.value = ''; return; } const o = outXY(n.x, n.y); if (document.activeElement !== X) X.value = +o[0].toFixed(3); if (document.activeElement !== Y) Y.value = +o[1].toFixed(3); }
+function neFromInputs() { if (S.ui.neRel) { const pv = id => { const v = parseFloat(String($(id).value).replace(',', '.')); return isFinite(v) ? v : 0; }, d0 = inXY(0, 0), d1 = inXY(pv('#neX'), pv('#neY')); if (neMove(d1[0] - d0[0], d1[1] - d0[1])) { commit(); draw(); } syncNe(); return; } const s = S.ne && shapeById(S.ne.sid); if (!s || S.ne.ni === null) return; const n = s.nodes[S.ne.ni], o = outXY(n.x, n.y), x = parseFloat(String($('#neX').value).replace(',', '.')), y = parseFloat(String($('#neY').value).replace(',', '.')); const q = inXY(isFinite(x) ? x : o[0], isFinite(y) ? y : o[1]); n.x = q[0]; n.y = q[1]; refresh(s); commit(); draw(); }
 function finishPen(closed) {
   if ((closed && pen.length > 2) || (!closed && pen.length > 1)) { const s = mkShape(pen.map(cloneNode), closed); if (s) { S.sel.clear(); S.sel.add(s.id); renderSel(); commit(); } }
   pen = []; hover = null; draw();
@@ -4649,9 +4743,9 @@ window.addEventListener('keydown', e => {
   if (k === 'Escape' && S.ui.dsec && S.ui.tool === 'select' && !S.sel.size) { S.ui.dsec = null; dRefresh(); return; }
   if (k === 'Escape') { if (pen.length) { pen = []; } else if (arcSt.length || dimSt.length) { arcSt = []; dimSt = []; } else if (S.ui.tool === 'nodes') { setTool('select'); dRefresh(); } else { S.sel.clear(); S.selDim = null; if (S.ne) S.ne = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } renderSel(); } draw(); return; }
   if (k === 'Enter' && pen.length) { finishPen(false); return; }
-  if (k.startsWith('Arrow') && S.imgSel && !S.sel.size) { e.preventDefault(); const d = UNIT.len === 'in' ? (e.shiftKey ? 6.35 : 1.5875) : (e.shiftKey ? 10 : 1); imgSet(im => { im.x += k === 'ArrowLeft' ? -d : k === 'ArrowRight' ? d : 0; im.y += k === 'ArrowDown' ? -d : k === 'ArrowUp' ? d : 0; }); return; }
-  if (k.startsWith('Arrow') && S.ui.tool === 'nodes' && neSel().length) { e.preventDefault(); const d = UNIT.len === 'in' ? (e.shiftKey ? 6.35 : 1.5875) : (e.shiftKey ? 10 : 1) / (e.altKey ? 10 : 1); if (neMove(k === 'ArrowLeft' ? -d : k === 'ArrowRight' ? d : 0, k === 'ArrowDown' ? -d : k === 'ArrowUp' ? d : 0)) { commit(); syncNe(); draw(); } return; }
-  if (k.startsWith('Arrow') && S.sel.size) { e.preventDefault(); const d = UNIT.len === 'in' ? (e.shiftKey ? 6.35 : 1.5875) : (e.shiftKey ? 10 : 1); const dx = k === 'ArrowLeft' ? -d : k === 'ArrowRight' ? d : 0, dy = k === 'ArrowDown' ? -d : k === 'ArrowUp' ? d : 0; selShapes().forEach(s => transformShape(s, q => [q[0] + dx, q[1] + dy])); commit(); renderSel(); draw(); return; }
+  if (k.startsWith('Arrow') && S.imgSel && !S.sel.size) { e.preventDefault(); const d = nudgeStep(e); if (mod) nudgeTell(); imgSet(im => { im.x += k === 'ArrowLeft' ? -d : k === 'ArrowRight' ? d : 0; im.y += k === 'ArrowDown' ? -d : k === 'ArrowUp' ? d : 0; }); return; }
+  if (k.startsWith('Arrow') && S.ui.tool === 'nodes' && neSel().length) { e.preventDefault(); const d = nudgeStep(e); if (mod) nudgeTell(); if (neMove(k === 'ArrowLeft' ? -d : k === 'ArrowRight' ? d : 0, k === 'ArrowDown' ? -d : k === 'ArrowUp' ? d : 0)) { commit(); syncNe(); draw(); } return; }
+  if (k.startsWith('Arrow') && S.sel.size) { e.preventDefault(); const d = nudgeStep(e); if (mod) nudgeTell(); const dx = k === 'ArrowLeft' ? -d : k === 'ArrowRight' ? d : 0, dy = k === 'ArrowDown' ? -d : k === 'ArrowUp' ? d : 0; selShapes().forEach(s => transformShape(s, q => [q[0] + dx, q[1] + dy])); commit(); renderSel(); draw(); return; }
   if (mod) return;
   const map = { v: 'select', n: 'nodes', h: 'pan', r: 'rect', e: 'ellipse', c: 'circle', o: 'polygon', p: 'poly', a: 'arc', t: 'text', k: 'chamfer', f: 'fillet', b: 'dogbone', x: 'trim', u: 'cut', m: 'measure', d: 'dim' };
   if (map[k.toLowerCase()]) setTool(map[k.toLowerCase()]);
@@ -4683,6 +4777,7 @@ function renderSel() {
   if (!ss.length) { ids.forEach(i => { $(i).value = ''; $(i).disabled = true; }); $('#selHint').textContent = ''; return; }
   ids.forEach(i => $(i).disabled = false); const b = bbox(ss), pa = anchorPt(b, S.ui.selAnchor), o = outXY(pa[0], pa[1]);
   $('#selHint').textContent = 'X / Y : position du point « ' + ORIGIN_LBL[S.ui.selAnchor] + ' » de la sélection, par rapport à l’origine. Largeur et hauteur changent en gardant ce point fixe.';
+  { const b = $('#txEditB'); if (b) b.hidden = !txSelIsText(); }
   $('#selX').value = +o[0].toFixed(3); $('#selY').value = +o[1].toFixed(3); $('#selW').value = +b.w.toFixed(3); $('#selH').value = +b.h.toFixed(3);
   $('#selW').disabled = b.w < 1e-6; $('#selH').disabled = b.h < 1e-6;
   if (typeof dRefresh === 'function') dRefresh();
@@ -4728,11 +4823,12 @@ function renderGuides() {
   const ul = $('#guideList'); ul.innerHTML = ''; const all = [...S.guides.x.map((v, i) => ['x', i, v]), ...S.guides.y.map((v, i) => ['y', i, v])];
   if (!all.length) { ul.innerHTML = '<li class="hint">Aucun repère.</li>'; return; }
   for (const [axis, i, v] of all) {
-    const li = document.createElement('li'); li.innerHTML = '<span class="mono"></span><input data-u="len" type="number" step="0.1" aria-label="Position du repère"><button class="iconbtn" title="Supprimer" aria-label="Supprimer le repère"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg></button>';
+    const li = document.createElement('li'); li.dataset.g = axis + i; const lk = guideLk(axis); li.innerHTML = '<span class="mono"></span><input data-u="len" type="number" step="0.1" aria-label="Position du repère"><button class="iconbtn glk" aria-pressed="' + !!lk[i] + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="' + (lk[i] ? 'M8 11V8a4 4 0 0 1 8 0v3' : 'M8 11V8a4 4 0 0 1 7.5-2') + '"/></svg></button><button class="iconbtn gdel" title="Supprimer" aria-label="Supprimer le repère"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg></button>';
+    { const b = li.querySelector('.glk'), t = tr(lk[i] ? 'Débloquer le repère' : 'Bloquer le repère (il ne se déplace plus à la souris)'); b.title = t; b.setAttribute('aria-label', t); b.onclick = () => { lk[i] = !lk[i]; commit(false); renderGuides(); draw(); }; }
     li.querySelector('span').textContent = axis === 'x' ? 'Vertical X =' : 'Horizontal Y =';
     const inp = li.querySelector('input'); inp.value = +(axis === 'x' ? outXY(v, 0)[0] : outXY(0, v)[1]).toFixed(3);
     inp.onchange = () => { const w = axis === 'x' ? inXY(+inp.value, 0)[0] : inXY(0, +inp.value)[1]; S.guides[axis][i] = w; commit(false); draw(); };
-    li.querySelector('button').onclick = () => { S.guides[axis].splice(i, 1); commit(false); renderGuides(); draw(); };
+    li.querySelector('.gdel').onclick = () => { guideDel(axis, i); commit(false); renderGuides(); draw(); };
     ul.appendChild(li);
   }
 }
@@ -4918,6 +5014,21 @@ function act(a, btn) {
     }
     case 'v3d': v3Open(); return;
     case 'fpOpen': fpOpen(); return;
+    case 'txEdit': txEdit(); return;
+    case 'dlibOpen': dlibOpen(); return;
+    case 'dlibClose': $('#dlib').hidden = true; return;
+    case 'dlibCfg': cfgOpen('dlib'); return;
+    case 'dlibPickDir': dlibPickDir().then(() => { dlibCfgSync(); if (!$('#dlib').hidden) dlibRender(); }); return;
+    case 'dlibMkdir': dlibMkdir(); return;
+    case 'dlibAddFiles': $('#dlibFiles').click(); return;
+    case 'dlibAddDir': $('#dlibDirIn').click(); return;
+    case 'dlibImport': $('#dlibLibIn').click(); return;
+    case 'dlibExport': dlibExport(); return;
+    case 'dlibSaveCur': dlibSaveAsk(); return;
+    case 'dlibSaveCurMenu': dlibOpen().then(() => dlibSaveAsk()); return;
+    case 'dlibSaveOk': dlibSaveCur(); return;
+    case 'dlibSaveNo': $('#dlibName').hidden = true; return;
+    case 'dlibUse': dlibUse(DLB.sel); return;
     case 'fpGoto': { setTab('dessin'); if (S.ui.tool !== 'text') { S.ui.dsec = 'text'; setTool('select'); S.ui.dsec = 'text'; dRefresh(); } const d = document.querySelector('[data-sec="text"]'); d.scrollIntoView({ block: 'nearest' }); if ($('#fpPop').hidden) fpOpen(); return; }
     case 'tabEdit': { const tp = S.editTp && S.tps.find(x => x.id === S.editTp); if (!tp) return toast('Calculez d’abord le parcours.'); if (tp.type !== 'profile') return toast('Les ponts concernent les parcours de profil.'); if (!tp.p.tabs) { tp.p.tabs = true; if (S.form) S.form.tabs = true; computeTP(tp); } if (!tp.loops || !tp.loops.length) return toast('Ce parcours n’a pas de contour fermé.'); S.tabTp = tp.id; S.activeTp = tp.id; setTool('tabedit'); renderTpList(); return; }
     case 'tabAuto': { const tp = S.editTp && S.tps.find(x => x.id === S.editTp); if (!tp) return; tp.p.tabMode = 'auto'; tp.p.tabPts = null; if (S.form) { S.form.tabMode = 'auto'; S.form.tabPts = null; } computeTP(tp); commit(false); gcDirty = true; renderTpList(); renderForm(); draw(); toast('Ponts répartis automatiquement.'); return; }
@@ -5074,8 +5185,8 @@ function act(a, btn) {
     }
     case 'layerAdd': { const pal = ['#161616', '#c0392b', '#1f6fe0', '#12935a', '#9b3ad1', '#d35400', '#00838f', '#7f8c8d'], l = { id: uid(), name: tr('Calque') + ' ' + (S.layers.length + 1), visible: true, locked: false, color: pal[S.layers.length % pal.length] }; S.layers.push(l); S.layerActive = l.id; commit(false); renderLayers(); return; }
     case 'layerMove': { if (!ss.length) return toast('Sélectionnez des vecteurs.'); ss.forEach(s => s.layer = S.layerActive); commit(false); renderLayers(); draw(); toast(ss.length + ' vecteur(s) déplacé(s) sur le calque actif.'); return; }
-    case 'guideV': S.guides.x.push(S.stock.w / 2); commit(false); renderGuides(); draw(); return;
-    case 'guideH': S.guides.y.push(S.stock.h / 2); commit(false); renderGuides(); draw(); return;
+    case 'guideV': S.guides.x.push(S.stock.w / 2); guideLk('x'); commit(false); renderGuides(); draw(); return;
+    case 'guideH': S.guides.y.push(S.stock.h / 2); guideLk('y'); commit(false); renderGuides(); draw(); return;
     case 'guideClear': S.guides = { x: [], y: [] }; commit(false); renderGuides(); draw(); return;
     case 'dimClear': S.dims = []; S.selDim = null; commit(false); draw(); return;
     // nœuds
@@ -5396,6 +5507,7 @@ const DI = {
   mirH: SVG24('<path class="bo bd" d="M12 2v20"/><path class="bo" d="M9 6L3 18h6zM15 6l6 12h-6z"/>'),
   mirV: SVG24('<path class="bo bd" d="M2 12h20"/><path class="bo" d="M6 9L18 3v6zM6 15l12 6v-6z"/>'),
   guides: SVG24('<path class="bo bd" d="M8 2v20M2 15h20"/><path class="bo" d="M14 5h6M17 2v6"/>'),
+  dlibOpen: SVG24('<path class="bo" d="M5 4v16M9 4v16M13 4v16"/><path class="bo bd" d="M16.5 4.5l3.5 15"/>'),
   fb: SVG24('<path class="bo" d="M2 8l20-2v12L2 16z"/><path class="bo" d="M7 7.5v9M11 7.1v9.8M14.5 6.8v10.4M17.5 6.5v11"/>'),
   box: SVG24('<path class="bo" d="M3 8l9-4 9 4v9l-9 4-9-4z"/><path class="bo" d="M3 8l9 4 9-4M12 12v9"/><path class="bo bd" d="M6 10.5v2.5M9 12v2.5M15 12v2.5M18 10.5v2.5"/>'),
   ip: SVG24('<path class="bo" d="M3 10h5v4h8v-4h5"/><path class="bo bd" d="M8.5 4.5h7v5h-7z"/>'),
@@ -5403,21 +5515,21 @@ const DI = {
 };
 DI.mirror = DI.mirH;
 DI.traceOutline = SVG24('<path class="bo" d="M6.5 16.5l3.4-5.2 2.4 2.8 2-2.6 3.2 5"/><path class="bo" stroke-dasharray="2.6 2" d="M3.5 7.5a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-11a3 3 0 0 1-3-3z"/>');
-const DGRID = [
-  ['Sélection', [['t', 'select'], ['t', 'nodes']]],
-  ['Combiner', [['a', 'boolU', 'Souder', 2], ['a', 'boolS', 'Soustraire (à partir de la première forme sélectionnée)', 2], ['a', 'boolI', 'Intersection (à partir de la première forme sélectionnée)', 2], ['a', 'group', 'Grouper (Ctrl+G)', 2], ['a', 'ungroup', 'Dégrouper (Ctrl+Maj+G)', 1]]],
-  ['Créer', [['t', 'poly'], ['t', 'rect'], ['t', 'ellipse'], ['t', 'circle'], ['t', 'polygon'], ['t', 'arc'], ['t', 'text'], ['s', 'img', 'Importer (image / vectoriel)'], ['a', 'traceOutline', 'Contour : vectoriser l’image sélectionnée ou créer le contour du relief sélectionné', 0]]],
-  ['Modifier', [['t', 'chamfer'], ['t', 'fillet'], ['t', 'dogbone'], ['t', 'trim'], ['t', 'cut'], ['t', 'extend'], ['s', 'join', 'Joindre et relier des vecteurs'], ['s', 'fit', 'Lisser (adapter des courbes)'], ['s', 'offset', 'Contour décalé'], ['a', 'neExplode', 'Scinder : couper le profil à chaque nœud', 1]]],
-  ['Disposer', [['s', 'align', 'Aligner et répartir'], ['s', 'rotate', 'Rotation'], ['s', 'array', 'Copie en réseau'], ['a', 'arrPath', 'Répéter le long d’une courbe', 2], ['s', 'nest', 'Imbrication'], ['a', 'center', 'Centrer sur le brut', 1], ['s', 'mirror', 'Miroir']]],
-  ['Mesurer', [['t', 'measure'], ['t', 'dim'], ['s', 'guides', 'Repères et cotes']]],
-  ['Gadgets', [['a', 'fbOpen', 'Touche de guitare…', 0], ['a', 'ilOpen', 'Incrustation en V (inlay)…', 1], ['a', 'ipOpen', 'Inlay en poche (fraise droite)…', 1], ['a', 'boxOpen', 'Boîte à entures…', 0]]],
+const DGRID = [ // [titre, zone de la grille, colonnes, icônes]
+  ['Sélection', 'sel', 2, [['t', 'select'], ['t', 'nodes']]],
+  ['Bibliothèque', 'lib', 1, [['a', 'dlibOpen', 'Bibliothèque de dessins et d’images', 0]]],
+  ['Mesurer', 'mes', 3, [['t', 'measure'], ['t', 'dim'], ['s', 'guides', 'Repères']]],
+  ['Créer', 'cre', 4, [['t', 'poly'], ['t', 'rect'], ['t', 'circle'], ['t', 'arc'], ['t', 'ellipse'], ['t', 'polygon'], ['t', 'text'], ['s', 'offset', 'Contour décalé'], ['s', 'img', 'Importer (image / vectoriel)'], ['a', 'traceOutline', 'Contour : vectoriser l’image sélectionnée ou créer le contour du relief sélectionné', 0]]],
+  ['Modifier', 'mod', 3, [['t', 'chamfer'], ['t', 'fillet'], ['t', 'dogbone'], ['t', 'trim'], ['t', 'cut'], ['t', 'extend'], ['s', 'join', 'Joindre et relier des vecteurs'], ['s', 'fit', 'Lisser (adapter des courbes)'], ['a', 'neExplode', 'Scinder : couper le profil à chaque nœud', 1]]],
+  ['Disposer', 'dis', 4, [['s', 'align', 'Aligner et répartir'], ['s', 'rotate', 'Rotation'], ['s', 'array', 'Copie en réseau'], ['a', 'arrPath', 'Répéter le long d’une courbe', 2], ['s', 'nest', 'Imbrication'], ['a', 'center', 'Centrer sur le brut', 1], ['s', 'mirror', 'Miroir']]],
+  ['Combiner', 'com', 3, [['a', 'boolU', 'Souder', 2], ['a', 'boolS', 'Soustraire (à partir de la première forme sélectionnée)', 2], ['a', 'boolI', 'Intersection (à partir de la première forme sélectionnée)', 2], ['a', 'group', 'Grouper (Ctrl+G)', 2], ['a', 'ungroup', 'Dégrouper (Ctrl+Maj+G)', 1]]],
 ];
 function offSegSync() { const v = S.ui.offSide || 'out'; document.querySelectorAll('#offSeg button').forEach(b => b.setAttribute('aria-pressed', b.value === v)); }
 function dgInit() {
   document.querySelectorAll('#offSeg button').forEach(b => b.onclick = () => { S.ui.offSide = b.value; offSegSync(); }); offSegSync();
   const g = $('#dgrid'); if (!g || g.childElementCount) return;
-  for (const [title, items] of DGRID) {
-    const grp = document.createElement('div'); grp.className = 'dg-group'; grp.innerHTML = '<span>' + title + '</span><div class="dg-icons"></div>'; const box = grp.lastChild;
+  for (const [title, area, cols, items] of DGRID) {
+    const grp = document.createElement('div'); grp.className = 'dg-group'; grp.style.gridArea = area; grp.innerHTML = '<span>' + title + '</span><div class="dg-icons"></div>'; const box = grp.lastChild; box.style.setProperty('--n', cols);
     for (const [kind, key, label, need] of items) {
       const b = document.createElement('button'); b.type = 'button';
       if (kind === 't') { const pb = document.querySelector('.palette button[data-tool="' + key + '"]'); if (!pb) continue; b.dataset.tool = key; b.title = pb.title || pb.dataset.tip || ''; b.setAttribute('aria-label', pb.getAttribute('aria-label') || pb.title); b.innerHTML = pb.querySelector('svg').outerHTML; b.onclick = () => { S.ui.dsec = null; setTool(key); }; }
@@ -5445,7 +5557,7 @@ function dRefresh() {
   pane.querySelectorAll('#dgrid [data-sec]').forEach(b => b.setAttribute('aria-pressed', !toolForm && b.dataset.sec === show && !!S.ui.dsec));
   pane.querySelectorAll('#dgrid [data-dact]').forEach(b => { b.disabled = n < +b.dataset.need; });
   { const setm = !!(toolForm || S.ui.dsec); pane.classList.toggle('setm', setm); pane.classList.toggle('imgsel', !!S.imgSel); if (!setm) peekSet(pane, false); }
-  rotSync(); joinSync(); fitPreview(); if (show === 'ip' && typeof ipInfo === 'function') ipInfo(); if (show === 'il' && typeof ilInfo === 'function') { const e = document.getElementById('ilSel'); if (e) e.textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ilSel().length }); ilInfo(); } draw();
+  rotSync(); joinSync(); fitPreview(); if (show === 'text') txUi(); if (show === 'ip' && typeof ipInfo === 'function') ipInfo(); if (show === 'il' && typeof ilInfo === 'function') { const e = document.getElementById('ilSel'); if (e) e.textContent = trf('{n} forme(s) sélectionnée(s) comme motif.', { n: ilSel().length }); ilInfo(); } draw();
 }
 
 // ---------- lisser : adapter des arcs, des courbes de Bézier ou des lignes aux tracés ----------
@@ -5611,13 +5723,18 @@ function rotApply() {
   if (Math.abs(d) < 1e-9) return toast(tr('Angle nul : rien à faire.'));
   rotateSel(d); commit(); renderSel(); draw(); toast(trf('Rotation de {a} appliquée.', { a: fDeg(d) }));
 }
+for (const [nm, key] of [['txMode', 'textMode'], ['txAlign', 'textAlign'], ['txOrient', 'textOrient']]) $$('input[name="' + nm + '"]').forEach(r => r.addEventListener('change', () => { if (!r.checked) return; S.ui[key] = r.value; if (key === 'textMode') { textPick = null; if (!S.ui.textAlign || S.ui.textAlign === (r.value === 'line' ? 'mid' : 'left')) S.ui.textAlign = r.value === 'line' ? 'left' : 'mid'; } txUi(); txLive(); txGhost = null; if (txGhP) txGhostReq(txGhP); }));
+{ const c = document.getElementById('selRotFrame'); if (c) c.addEventListener('change', () => draw()); }
 $$('#rotMode button').forEach(b => b.onclick = () => { S.ui.rotMode = b.value; if (b.value === 'abs') $('#rotDeg').value = +selRot().toFixed(2); rotSync(); });
 $$('#rotAnchor button').forEach(b => b.onclick = () => { const ss = selShapes(); if (ss.length) pivotSet(anchorPt(bbox(ss), b.dataset.a)); });
 ['#rotX', '#rotY'].forEach(id => $(id).addEventListener('change', () => { if (!S.sel.size) return; pivotSet(inXY(+$('#rotX').value || 0, +$('#rotY').value || 0)); }));
 $('#rotDeg').addEventListener('keydown', e => { if (e.key === 'Enter') rotApply(); });
 // poignées : 8 carrés (redimensionner) et 4 ronds (tourner) autour de la sélection
+// cadre rotatif : le cadre des poignées prend l'angle commun des formes sélectionnées
+function xfAng() { const c = $('#selRotFrame'); if (!c || !c.checked) return 0; const ss = selShapes(); if (!ss.length) return 0; const r = +ss[0].rot || 0; return Math.abs(r) > 1e-6 && ss.every(o => Math.abs(normDeg((+o.rot || 0) - r)) < 1e-6) ? r : 0; }
+function oFrame(deg) { const a = deg * Math.PI / 180, c = Math.cos(a), sn = Math.sin(a), L = q => [q[0] * c + q[1] * sn, -q[0] * sn + q[1] * c], W = q => [q[0] * c - q[1] * sn, q[0] * sn + q[1] * c]; let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (const o of selShapes()) for (const q of o.pts) { const u = L(q); if (u[0] < x0) x0 = u[0]; if (u[0] > x1) x1 = u[0]; if (u[1] < y0) y0 = u[1]; if (u[1] > y1) y1 = u[1]; } return { x0, y0, x1, y1, L, W, c, sn }; }
 function xfHandles() {
-  if (!xfOn() || !pivotShown()) return []; const b = bbox(selShapes()), H = [], pad = 7, rp = 18;
+  if (!xfOn() || !pivotShown()) return []; const deg = xfAng(); if (deg) return xfHandlesRot(deg); const b = bbox(selShapes()), H = [], pad = 7, rp = 18;
   for (const cx of [-1, 0, 1]) for (const cy of [-1, 0, 1]) {
     if (!cx && !cy) continue;
     const wxp = cx < 0 ? b.x0 : cx > 0 ? b.x1 : (b.x0 + b.x1) / 2, wyp = cy < 0 ? b.y0 : cy > 0 ? b.y1 : (b.y0 + b.y1) / 2;
@@ -5627,19 +5744,101 @@ function xfHandles() {
   }
   return H;
 }
+function xfHandlesRot(deg) { const F = oFrame(deg), H = [], pad = 7, rp = 18;
+  for (const cx of [-1, 0, 1]) for (const cy of [-1, 0, 1]) { if (!cx && !cy) continue;
+    const lw = [cx < 0 ? F.x0 : cx > 0 ? F.x1 : (F.x0 + F.x1) / 2, cy < 0 ? F.y0 : cy > 0 ? F.y1 : (F.y0 + F.y1) / 2], la = [cx < 0 ? F.x1 : cx > 0 ? F.x0 : lw[0], cy < 0 ? F.y1 : cy > 0 ? F.y0 : lw[1]], w = F.W(lw), dir = F.W([cx, cy]), dl = Math.hypot(dir[0], dir[1]) || 1;
+    H.push({ k: 's', cx, cy, deg, lw, la, w, a: F.W(la), X: sx(w[0]) + dir[0] / dl * pad * (cx && cy ? 1.41 : 1), Y: sy(w[1]) - dir[1] / dl * pad * (cx && cy ? 1.41 : 1) });
+    if (cx && cy) H.push({ k: 'r', cx, cy, X: sx(w[0]) + dir[0] / dl * rp * 1.41, Y: sy(w[1]) - dir[1] / dl * rp * 1.41 }); }
+  return H; }
 function xfHandleAt(X, Y) { if (!pivotShown()) return null; const P = pivotPt(); if (P && Math.hypot(sx(P[0]) - X, sy(P[1]) - Y) < 9) return { k: 'p' }; let best = null, bd = 8; for (const h of xfHandles()) { const d = Math.hypot(h.X - X, h.Y - Y); if (d < bd) { bd = d; best = h; } } return best; }
 function xfCursor(X, Y) { const h = xfHandleAt(X, Y); if (!h) return null; if (h.k === 'p') return 'move'; if (h.k === 'r') return 'grab'; return !h.cx ? 'ns-resize' : !h.cy ? 'ew-resize' : h.cx * h.cy > 0 ? 'nesw-resize' : 'nwse-resize'; }
 function drawXf(C) {
   if (!pivotShown()) return;
   const hs = xfHandles();
   if (hs.length) {
-    const b = bbox(selShapes()); ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1; ctx.setLineDash([4, 3]); ctx.strokeRect(sx(b.x0) - 7, sy(b.y1) - 7, b.w * S.view.s + 14, b.h * S.view.s + 14); ctx.setLineDash([]);
+    const deg = xfAng(); ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+    if (deg) { const F = oFrame(deg), m = 7 / S.view.s; ctx.beginPath(); [[F.x0 - m, F.y0 - m], [F.x1 + m, F.y0 - m], [F.x1 + m, F.y1 + m], [F.x0 - m, F.y1 + m]].forEach((q, i) => { const w = F.W(q); i ? ctx.lineTo(sx(w[0]), sy(w[1])) : ctx.moveTo(sx(w[0]), sy(w[1])); }); ctx.closePath(); ctx.stroke(); }
+    else { const b = bbox(selShapes()); ctx.strokeRect(sx(b.x0) - 7, sy(b.y1) - 7, b.w * S.view.s + 14, b.h * S.view.s + 14); } ctx.setLineDash([]);
     for (const h of hs) { ctx.beginPath(); if (h.k === 's') ctx.rect(h.X - 4.5, h.Y - 4.5, 9, 9); else ctx.arc(h.X, h.Y, 5, 0, 7); ctx.fillStyle = h.k === 's' ? C.panel : C.acc; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = C.acc; ctx.stroke(); }
     ctx.restore();
   }
   const P = pivotPt(); if (!P) return; const X = sx(P[0]), Y = sy(P[1]);
   ctx.save(); ctx.strokeStyle = '#ff9f1c'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(X, Y, 7, 0, 7); ctx.moveTo(X - 11, Y); ctx.lineTo(X + 11, Y); ctx.moveTo(X, Y - 11); ctx.lineTo(X, Y + 11); ctx.stroke(); ctx.restore();
 }
+
+// ---------- bibliothèque de dessins et d'images : dans le navigateur (IndexedDB) ou dans un dossier de l'ordinateur ----------
+const DLIB_EXT = /\.(svg|dxf|pdf|ai|png|jpe?g|webp|gif|bmp)$/i, DLIB_IMG = /\.(png|jpe?g|webp|gif|bmp)$/i;
+const DLB = { cur: '', sel: null, open: new Set(['']), urls: [] };
+const DLIB = { mode: () => (LS.get('copo.dlibMode') === 'dir' && window.showDirectoryPicker) ? 'dir' : 'idb' };
+function dldb() { return new Promise((res, rej) => { const r = indexedDB.open('copo-dlib', 1); r.onupgradeneeded = () => { const db = r.result; db.createObjectStore('files', { keyPath: 'path' }); db.createObjectStore('dirs', { keyPath: 'path' }); db.createObjectStore('meta', { keyPath: 'k' }); }; r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); }
+async function dlTx(store, mode, fn) { const db = await dldb(); return new Promise((res, rej) => { const tx = db.transaction(store, mode), st = tx.objectStore(store); let out; const r = fn(st); if (r) r.onsuccess = () => { out = r.result; }; tx.oncomplete = () => res(out); tx.onerror = () => rej(tx.error); }); }
+const dlMetaGet = async k => { try { const r = await dlTx('meta', 'readonly', st => st.get(k)); return r ? r.v : null; } catch { return null; } };
+const dlMetaSet = (k, v) => dlTx('meta', 'readwrite', st => st.put({ k, v }));
+const dlJoin = (a, b) => a ? a + '/' + b : b, dlParent = p => p.includes('/') ? p.slice(0, p.lastIndexOf('/')) : '', dlBase = p => p.slice(p.lastIndexOf('/') + 1);
+async function dlRoot(ask) { const h = await dlMetaGet('dir'); if (!h) return null; let st = await h.queryPermission({ mode: 'readwrite' }); if (st !== 'granted' && ask) st = await h.requestPermission({ mode: 'readwrite' }); return st === 'granted' ? h : null; }
+async function dlDirH(path, create) { let h = await dlRoot(true); if (!h) throw new Error(tr('Accès au dossier de la bibliothèque refusé : choisissez-le à nouveau dans Paramètres › Bibliothèque.')); for (const p of path.split('/').filter(Boolean)) h = await h.getDirectoryHandle(p, { create: !!create }); return h; }
+// liste d'un dossier : { dirs: [noms], files: [{ name, path }] }
+async function dlList(path) {
+  if (DLIB.mode() === 'dir') { const h = await dlDirH(path), dirs = [], files = []; for await (const [n, e] of h.entries()) { if (n.startsWith('.')) continue; if (e.kind === 'directory') dirs.push(n); else if (DLIB_EXT.test(n)) files.push({ name: n, path: dlJoin(path, n) }); } return { dirs: dirs.sort((a, b) => a.localeCompare(b)), files: files.sort((a, b) => a.name.localeCompare(b.name)) }; }
+  const all = await dlTx('files', 'readonly', st => st.getAll()) || [], ds = await dlTx('dirs', 'readonly', st => st.getAll()) || [], dirs = new Set(), files = [];
+  for (const d of ds) if (dlParent(d.path) === path && d.path) dirs.add(dlBase(d.path));
+  for (const f of all) { const par = dlParent(f.path); if (par === path) files.push({ name: dlBase(f.path), path: f.path }); else if (par.startsWith(path ? path + '/' : '')) { const rest = par.slice(path ? path.length + 1 : 0); if (rest) dirs.add(rest.split('/')[0]); } }
+  return { dirs: [...dirs].sort((a, b) => a.localeCompare(b)), files: files.sort((a, b) => a.name.localeCompare(b.name)) };
+}
+async function dlRead(path) { if (DLIB.mode() === 'dir') { const h = await dlDirH(dlParent(path)); return (await h.getFileHandle(dlBase(path))).getFile(); } const r = await dlTx('files', 'readonly', st => st.get(path)); if (!r) throw new Error(tr('Fichier introuvable.')); return r.blob; }
+async function dlWrite(path, blob) { if (DLIB.mode() === 'dir') { const h = await dlDirH(dlParent(path), true), fh = await h.getFileHandle(dlBase(path), { create: true }), w = await fh.createWritable(); await w.write(blob); await w.close(); return; } await dlTx('files', 'readwrite', st => st.put({ path, blob, ts: Date.now() })); }
+async function dlMk(path) { if (DLIB.mode() === 'dir') { await dlDirH(path, true); return; } await dlTx('dirs', 'readwrite', st => st.put({ path })); }
+async function dlDel(path, isDir) { if (DLIB.mode() === 'dir') { const h = await dlDirH(dlParent(path)); await h.removeEntry(dlBase(path), { recursive: !!isDir }); return; }
+  if (!isDir) { await dlTx('files', 'readwrite', st => st.delete(path)); return; } const all = await dlTx('files', 'readonly', st => st.getAll()) || [], ds = await dlTx('dirs', 'readonly', st => st.getAll()) || [], pre = path + '/';
+  await dlTx('files', 'readwrite', st => { for (const f of all) if (f.path.startsWith(pre)) st.delete(f.path); }); await dlTx('dirs', 'readwrite', st => { for (const d of ds) if (d.path === path || d.path.startsWith(pre)) st.delete(d.path); }); }
+async function dlUnique(path) { const { files, dirs } = await dlList(dlParent(path)), names = new Set([...files.map(f => f.name.toLowerCase()), ...dirs.map(d => d.toLowerCase())]), b = dlBase(path), m = /^(.*?)(\.[^.]+)?$/.exec(b); let n = b, k = 2; while (names.has(n.toLowerCase())) n = m[1] + ' (' + k++ + ')' + (m[2] || ''); return dlJoin(dlParent(path), n); }
+async function dlibPickDir() { if (!window.showDirectoryPicker) { toast(tr('Ce navigateur ne permet pas d’utiliser un dossier de l’ordinateur : la bibliothèque reste dans le navigateur.')); return false; } try { const h = await showDirectoryPicker({ id: 'copo-dlib', mode: 'readwrite' }); await dlMetaSet('dir', h); LS.set('copo.dlibMode', 'dir'); DLB.cur = ''; DLB.open = new Set(['']); toast(trf('Bibliothèque : dossier « {d} ».', { d: h.name })); return true; } catch (e) { return false; } }
+async function dlibCfgSync() { const m = DLIB.mode(), h = await dlMetaGet('dir'), sel = $('#cfgDlibMode'); if (sel) sel.value = m; const row = $('#cfgDlibDirRow'); if (row) row.hidden = m !== 'dir'; const d = $('#cfgDlibDir'); if (d) d.textContent = h ? trf('Dossier : {d}', { d: h.name }) : tr('Aucun dossier choisi.'); const w = $('#dlibWhere'); if (w) w.textContent = m === 'dir' ? (h ? trf('Dossier : {d}', { d: h.name }) : '') : tr('Dans ce navigateur'); }
+function dlibThSync() { const g = $('#dlibGrid'); if (g) g.style.setProperty('--th', (LS.get('copo.dlibTh') || '132') + 'px'); }
+async function dlibOpen() { closeMenus && closeMenus(); $('#dlib').hidden = false; dlibThSync(); dlibCfgSync(); await dlibRender(); }
+const DLI = { dir: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>', file: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/>', del: '<path d="M6 6l12 12M18 6 6 18"/>' };
+async function dlibRender() {
+  const tree = $('#dlibTree'), grid = $('#dlibGrid'), info = $('#dlibInfo'), q = ($('#dlibSearch').value || '').trim().toLowerCase(); for (const u of DLB.urls) URL.revokeObjectURL(u); DLB.urls = [];
+  try {
+    // arbre des dossiers
+    tree.innerHTML = ''; const walk = async (path, dep) => { const { dirs } = await dlList(path); for (const d of dirs) { const p = dlJoin(path, d), op = DLB.open.has(p), li = document.createElement('li'); li.className = 'grp' + (DLB.cur === p ? ' on' : ''); li.style.paddingLeft = (6 + dep * 14) + 'px'; li.innerHTML = '<span class="tw">' + (op ? '▾' : '▸') + '</span><svg viewBox="0 0 24 24">' + DLI.dir + '</svg><span></span>'; li.lastChild.textContent = d; li.onclick = e => { if (e.target.classList.contains('tw')) { op ? DLB.open.delete(p) : DLB.open.add(p); } else { DLB.cur = p; DLB.open.add(p); DLB.sel = null; } dlibRender(); }; tree.appendChild(li); if (op) await walk(p, dep + 1); } };
+    { const li = document.createElement('li'); li.className = 'grp' + (DLB.cur === '' ? ' on' : ''); li.innerHTML = '<svg viewBox="0 0 24 24">' + '<path d="M5 4v16M9 4v16M13 4v16"/><path d="M16.5 4.5l3.5 15"/>' + '</svg><span></span>'; li.lastChild.textContent = tr('Ma bibliothèque'); li.onclick = () => { DLB.cur = ''; DLB.sel = null; dlibRender(); }; tree.appendChild(li); }
+    await walk('', 1);
+    // contenu du dossier ouvert
+    const { dirs, files } = await dlList(DLB.cur); grid.innerHTML = '';
+    if (DLB.cur) { const c = document.createElement('button'); c.type = 'button'; c.className = 'dlcard dir'; c.innerHTML = '<span class="th"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></span><span>' + escHtml(tr('Dossier parent')) + '</span>'; c.onclick = () => { DLB.cur = dlParent(DLB.cur); DLB.sel = null; dlibRender(); }; grid.appendChild(c); }
+    for (const d of dirs) { if (q && !d.toLowerCase().includes(q)) continue; const p = dlJoin(DLB.cur, d), c = document.createElement('button'); c.type = 'button'; c.className = 'dlcard dir'; c.innerHTML = '<span class="th"><svg viewBox="0 0 24 24">' + DLI.dir + '</svg></span><span></span><span class="dx" role="button" title="' + escHtml(tr('Supprimer le dossier et son contenu')) + '"><svg viewBox="0 0 24 24">' + DLI.del + '</svg></span>'; c.children[1].textContent = d; c.onclick = e => { if (e.target.closest('.dx')) { dlibDelete(p, true); return; } DLB.cur = p; DLB.open.add(p); DLB.sel = null; dlibRender(); }; grid.appendChild(c); }
+    let n = 0; for (const f of files) { if (q && !f.name.toLowerCase().includes(q)) continue; n++; const c = document.createElement('button'); c.type = 'button'; c.className = 'dlcard' + (DLB.sel === f.path ? ' on' : ''); c.title = f.name; c.innerHTML = '<span class="th"></span><span></span><span class="dx" role="button" title="' + escHtml(tr('Supprimer')) + '"><svg viewBox="0 0 24 24">' + DLI.del + '</svg></span>'; c.children[1].textContent = f.name.replace(/\.[^.]+$/, '');
+      c.onclick = e => { if (e.target.closest('.dx')) { dlibDelete(f.path, false); return; } DLB.sel = f.path; $$('#dlibGrid .dlcard').forEach(x => x.classList.toggle('on', x === c)); $('#dlibUse').disabled = false; };
+      c.ondblclick = () => { if (LS.get('copo.dlibDbl') !== '0') dlibUse(f.path, true); }; grid.appendChild(c); dlibThumb(f, c.firstChild); }
+    $('#dlibUse').disabled = !DLB.sel || !files.some(f => f.path === DLB.sel);
+    info.textContent = !dirs.length && !files.length ? tr('Dossier vide : ajoutez des fichiers (SVG, DXF, PDF, AI, PNG, JPG…), un dossier entier, ou enregistrez le dessin en cours.') : trf('{n} fichier(s). Cliquez un aperçu puis « Ajouter au dessin » (ou double-cliquez).', { n });
+  } catch (e) { grid.innerHTML = ''; info.textContent = e.message || String(e); }
+}
+async function dlibThumb(f, box) { const ext = (f.name.match(/\.([^.]+)$/) || [, ''])[1].toLowerCase();
+  try { if (DLIB_IMG.test(f.name) || ext === 'svg') { let b = await dlRead(f.path); if (ext === 'svg') { let t = await b.text(); t = t.replace(/(<svg[^>]*>)/i, '$1<style>*{vector-effect:non-scaling-stroke}path,line,polyline,polygon,circle,ellipse,rect{stroke-width:1.4px}</style>'); b = new Blob([t], { type: 'image/svg+xml' }); } const u = URL.createObjectURL(b); DLB.urls.push(u); const im = new Image(); im.alt = ''; im.src = u; box.appendChild(im); return; } } catch { }
+  box.innerHTML = '<b>' + escHtml(ext.toUpperCase()) + '</b>'; }
+async function dlibDelete(path, isDir) { const b = dlBase(path); if (!confirm(trf(isDir ? 'Supprimer le dossier « {n} » et tout son contenu ?' : 'Supprimer « {n} » de la bibliothèque ?', { n: b }))) return; try { await dlDel(path, isDir); if (DLB.sel === path) DLB.sel = null; if (isDir && (DLB.cur === path || DLB.cur.startsWith(path + '/'))) DLB.cur = dlParent(path); dlibRender(); } catch (e) { toast(e.message || String(e)); } }
+async function dlibMkdir() { const n = (prompt(tr('Nom du nouveau dossier :'), tr('Nouveau dossier')) || '').trim().replace(/[\\/:*?"<>|]/g, '-'); if (!n) return; try { const p = await dlUnique(dlJoin(DLB.cur, n)); await dlMk(p); DLB.open.add(DLB.cur); DLB.cur = p; dlibRender(); } catch (e) { toast(e.message || String(e)); } }
+async function dlibAddFiles(list, keepTree) { let n = 0; try { for (const f of list) { if (!DLIB_EXT.test(f.name)) continue; const rel = keepTree && f.webkitRelativePath ? f.webkitRelativePath : f.name, p = await dlUnique(dlJoin(DLB.cur, rel.split('/').map(x => x.replace(/[\\:*?"<>|]/g, '-')).join('/'))); if (keepTree) for (let d = dlParent(p); d && d !== DLB.cur; d = dlParent(d)) await dlMk(d); await dlWrite(p, f); n++; } } catch (e) { toast(e.message || String(e)); } toast(trf('{n} fichier(s) ajouté(s) à la bibliothèque.', { n })); dlibRender(); }
+// ajouter un fichier de la bibliothèque au dessin
+async function dlibUse(path, close) { if (!path) return; try { const b = await dlRead(path), name = dlBase(path), f = new File([b], name, { type: b.type || (DLIB_IMG.test(name) ? 'image/' + name.split('.').pop().toLowerCase().replace('jpg', 'jpeg') : '') });
+  if (DLIB_IMG.test(name)) { if (curTab !== 'dessin') setTab('dessin'); await insertImageFile(f); }
+  else if (/\.(pdf|ai)$/i.test(name)) await importPdfFile(f);
+  else importVecText(await b.text(), f);
+  if (close) $('#dlib').hidden = true; } catch (e) { toast(e.message || String(e)); } }
+// enregistrer le dessin en cours (ou la sélection) en SVG dans le dossier ouvert
+function dlibSaveAsk() { const has = S.shapes.some(shown); if (!has) { toast(tr('Aucun vecteur à enregistrer.')); return; } const b = $('#dlibName'); b.hidden = false; const i = $('#dlibNameIn'); i.value = ((S.meta && S.meta.name) || tr('Dessin')) + (S.sel.size ? ' – ' + tr('sélection') : ''); i.focus(); i.select(); }
+async function dlibSaveCur() { const nm = ($('#dlibNameIn').value || '').trim().replace(/[\\/:*?"<>|]/g, '-') || tr('Dessin'), svg = svgString(S.sel.size > 0); if (!svg) return; try { const p = await dlUnique(dlJoin(DLB.cur, nm + '.svg')); await dlWrite(p, new Blob([svg], { type: 'image/svg+xml' })); $('#dlibName').hidden = true; DLB.sel = p; toast(trf('« {n} » enregistré dans la bibliothèque.', { n: dlBase(p) })); dlibRender(); } catch (e) { toast(e.message || String(e)); } }
+// exporter / importer toute la bibliothèque (un fichier .copolib)
+async function dlibExport() { try { const out = { copolib: 1, dirs: [], files: [] }, walk = async path => { const { dirs, files } = await dlList(path); for (const d of dirs) { const p = dlJoin(path, d); out.dirs.push(p); await walk(p); } for (const f of files) { const b = await dlRead(f.path), u = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(b); }); out.files.push({ path: f.path, data: u }); } }; await walk(''); if (!out.files.length && !out.dirs.length) { toast(tr('La bibliothèque est vide.')); return; } saveFile('bibliotheque-copo.copolib', JSON.stringify(out), tr('Bibliothèque COPO')); } catch (e) { toast(e.message || String(e)); } }
+async function dlibImportLib(txt) { const o = JSON.parse(txt); if (!o || !o.copolib || !Array.isArray(o.files)) throw new Error(tr('Ce fichier n’est pas une bibliothèque COPO.')); let n = 0; for (const d of o.dirs || []) await dlMk(d); for (const f of o.files) { const r = await fetch(f.data), b = await r.blob(), p = await dlUnique(f.path); for (let d = dlParent(p); d; d = dlParent(d)) await dlMk(d); await dlWrite(p, b); n++; } toast(trf('{n} fichier(s) importé(s) dans la bibliothèque.', { n })); dlibRender(); }
+$('#dlibFiles').addEventListener('change', e => { const l = [...e.target.files]; e.target.value = ''; dlibAddFiles(l, false); });
+$('#dlibDirIn').addEventListener('change', e => { const l = [...e.target.files]; e.target.value = ''; dlibAddFiles(l, true); });
+$('#dlibLibIn').addEventListener('change', async e => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; try { await dlibImportLib(await f.text()); } catch (er) { toast(er.message || String(er)); } });
+$('#dlibSearch').addEventListener('input', () => dlibRender());
+$('#dlibNameIn').addEventListener('keydown', e => { if (e.key === 'Enter') dlibSaveCur(); else if (e.key === 'Escape') { e.stopPropagation(); $('#dlibName').hidden = true; } });
+$('#dlib').addEventListener('pointerdown', e => { if (e.target.id === 'dlib') $('#dlib').hidden = true; });
 // ---------- plein écran ----------
 const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement;
 const fsOk = () => !!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen) && (document.fullscreenEnabled !== false || document.webkitFullscreenEnabled);
@@ -5943,7 +6142,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.218', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.219', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6035,7 +6234,8 @@ if ('launchQueue' in window) launchQueue.setConsumer(async lp => { const h = lp.
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => { });
 let installEvt = null; addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; const b = document.querySelector('[data-act="install"]'); if (b) b.hidden = false; });
 addEventListener('appinstalled', () => { installEvt = null; const b = document.querySelector('[data-act="install"]'); if (b) b.hidden = true; toast(T('COPO est installé : les fichiers .copo s’ouvrent maintenant d’un double-clic.')); });
-readFile($('#fSvg'), (txt, f) => {
+readFile($('#fSvg'), (txt, f) => importVecText(txt, f));
+function importVecText(txt, f) {
   if (/\.dxf$/i.test(f.name) || (!/<svg[\s>]/i.test(txt) && /^\s*0\s*\r?\n\s*SECTION/m.test(txt))) {
     const r = importDXF(txt); commit(); renderSel(); fit(); setTool('select');
     const sk = Object.entries(r.skip).map(([k, v]) => v + ' ' + k).join(', ');
@@ -6043,7 +6243,7 @@ readFile($('#fSvg'), (txt, f) => {
     return;
   }
   const n = importSVG(txt); commit(); renderSel(); fit(); setTool('select'); toast(n + ' tracé(s) importé(s) en mm, courbes conservées' + (n > 1 ? ', groupés.' : '.'));
-});
+}
 { const fs = $('#fSvg'), txtHandler = fs.onchange; fs.onchange = e => { const f = fs.files[0]; if (f && /\.(pdf|ai)$/i.test(f.name)) { fs.value = ''; importPdfFile(f); return; } txtHandler.call(fs, e); }; }
 readFile($('#fTools'), function (txt) { return; /* remplacé par la bibliothèque */ }); void (txt => { const a = JSON.parse(txt); if (!Array.isArray(a) || !a.every(t => t && t.dia > 0)) throw new Error('Bibliothèque invalide.'); for (const t of a) { const i = S.tools.findIndex(x => x.id === t.id); if (i >= 0) S.tools[i] = t; else S.tools.push(t); } toolsChanged(); toast(a.length + ' outil(s) importé(s).'); });
 $('#fFont').onchange = e => { const f = [...e.target.files]; e.target.value = ''; addFontFiles(f); };
@@ -6094,13 +6294,14 @@ function tpSelInfo() {
   if (no && F.type && F.type !== 'profile') el.insertAdjacentHTML('beforeend', ' <small>' + escH(tr(nc ? 'Les vecteurs ouverts sont ignorés par ce parcours.' : 'Ce parcours demande des formes fermées.')) + '</small>');
   if (no && !nc && F.type && F.type !== 'profile') el.classList.add('bad');
 }
-function renderForm() { setTimeout(tpTypeSync, 0);
+function renderForm() { setTimeout(tpTypeSync, 0); { const d = $('#tpAdv'); if (d && !d.dataset.init) { d.dataset.init = 1; d.open = LS.get('copo.tpAdv') === '1'; d.addEventListener('toggle', () => LS.set('copo.tpAdv', d.open ? '1' : '0')); } }
   const F = S.form || (S.form = newForm()), root = $('#tpForm');
   $('#tpFormTitle').textContent = S.editTp ? 'Modifier le parcours' : 'Nouveau parcours';
   $('#tpApply').textContent = S.editTp ? 'Mettre à jour' : (F.type === 'relief' && (!S.sel.size || F.rlBound !== 'sel') ? tr('Calculer') : (S.sel.size || F.type !== 'profile' || !(S.tpRels && S.tpRels.size) ? 'Calculer sur la sélection (' + S.sel.size + ')' : tr('Calculer autour du relief')));
   $('#tpCancel').hidden = !S.editTp;
   { const by = f => S.tools.filter(f), mill = t => t.type === 'flat' || t.type === 'ball', list = F.type === 'vcarve' ? [...by(t => t.type === 'v'), ...by(mill)] : F.type === 'drill' ? [...by(t => t.type === 'drill'), ...by(mill), ...by(t => t.type === 'v')] : F.type === 'thread' ? by(t => t.type === 'thread') : F.type === 'relief' ? (F.rlOp === 'finish' ? [...by(t => t.type === 'ball'), ...by(t => t.type === 'v'), ...by(t => t.type === 'flat')] : [...by(t => t.type === 'flat'), ...by(t => t.type === 'ball')]) : [...by(mill), ...by(t => t.type === 'v')];
   if (!S.tools.find(t => t.id === F.toolId)) F.toolId = list[0] && list[0].id; }
+  if (F.type === 'drill') { const t = S.tools.find(x => x.id === F.toolId); if (F._peckTool === undefined && S.editTp) F._peckTool = F.toolId; else if (t && F._peckTool !== F.toolId) { F._peckTool = F.toolId; F.peck = t.peck ?? peckDef(t.dia, projMat()); } } /* perçage : débourrage repris de l'outil (selon le matériau) */
   { const t = S.tools.find(x => x.id === F.toolId); $('#fToolName').textContent = t ? t.name : tr('Choisir un outil…'); $('#fToolBtn').classList.toggle('bad', !t); }
   root.querySelectorAll('[data-f]').forEach(el => { const k = el.dataset.f; if (el.classList.contains('seg')) el.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.value === F[k])); else if (el.type === 'checkbox') el.checked = !!F[k]; else el.value = F[k] ?? ''; });
   root.querySelectorAll('[data-show]').forEach(el => { el.hidden = !el.dataset.show.split(' ').includes(F.type); });
@@ -6305,10 +6506,13 @@ const libMatName = id => { const m = LIB.materials.find(x => x.id === id); retur
 const libTool = id => LIB.tools.find(t => t.id === id);
 const pct = (a, b) => b > 0 ? Math.round(100 * a / b) : 0;
 // réglages de l'outil pour un matériau (repli : estimation, puis bois tendre, puis premier disponible)
+// débourrage conseillé selon le matériau : métaux à copeaux longs (aluminium, cuivre, laiton) 0,5 × D ; aciers et fontes 1 × D ; plastiques 1 × D (évite de fondre) ; bois et MDF 2 × D
+function peckK(mat) { const m = (LIB.materials.find(x => x.id === mat) || {}).name || mat || '', s = (mat + ' ' + m).toLowerCase(); return /alu|cuivre|copper|laiton|brass|bronze|zamak/.test(s) ? 0.5 : /acier|steel|fonte|iron|inox|titan/.test(s) ? 1 : /acryl|pvc|plast|pmma|polyc|abs|nylon|delrin|pom|hdpe|pehd/.test(s) ? 1 : 2; }
+const peckDef = (dia, mat) => Math.max(0.5, Math.round(peckK(mat) * (+dia || 0) * 2) / 2);
 function libCut(t, mat) { if (t.cut && t.cut[mat]) return { ...t.cut[mat], src: 'lib' }; const es = libEstimate(t, mat, t.cut || {}); if (es) return { ...es, src: 'est' }; const k = Object.keys(t.cut || {}); const c = t.cut.softwood || (k.length ? t.cut[k[0]] : null); return c ? { ...c, src: 'other' } : { rpm: 18000, feed: 1000, plunge: 300, pass: +(t.dia / 2).toFixed(2), step: +(t.dia * 0.4).toFixed(2), src: 'none' }; }
-function libFlat(t, mat) { const c = libCut(t, mat), step = +c.step || t.dia * 0.4; return { tipR: t.tipR || '', flen: t.flen || '', name: t.name, type: t.type, dia: t.dia, angle: t.angle || (t.type === 'drill' ? 118 : 90), flat: t.flat || 0, flutes: t.flutes || 2, num: t.num || '', notes: t.notes || '', rpm: c.rpm || 0, feed: c.feed || c.plunge || 0, plunge: c.plunge || Math.round((c.feed || 0) / 3), pass: c.pass || +(t.dia / 2).toFixed(2), step: +step.toFixed(3), stepPct: pct(step, t.dia), over: Math.max(0, Math.min(95, Math.round(100 * (1 - step / t.dia)))), src: c.src, est: !!c.est }; }
+function libFlat(t, mat) { const c = libCut(t, mat), step = +c.step || t.dia * 0.4; return { tipR: t.tipR || '', flen: t.flen || '', name: t.name, type: t.type, dia: t.dia, angle: t.angle || (t.type === 'drill' ? 118 : 90), flat: t.flat || 0, flutes: t.flutes || 2, num: t.num || '', notes: t.notes || '', peck: c.peck ?? peckDef(t.dia, mat), rpm: c.rpm || 0, feed: c.feed || c.plunge || 0, plunge: c.plunge || Math.round((c.feed || 0) / 3), pass: c.pass || +(t.dia / 2).toFixed(2), step: +step.toFixed(3), stepPct: pct(step, t.dia), over: Math.max(0, Math.min(95, Math.round(100 * (1 - step / t.dia)))), src: c.src, est: !!c.est }; }
 // outil de la bibliothèque → outil du projet (copie des réglages pour le matériau du projet)
-function libProjVals(t, mat) { const f = libFlat(t, mat), mx = (S.machine && +S.machine.maxFeed) || Infinity; return { name: t.name, type: (t.type === 'engrave' || t.type === 'taper' || t.type === 'engball') ? 'v' : t.type, dia: t.dia, angle: t.angle || (t.type === 'drill' ? 118 : t.type === 'thread' ? 60 : 90), flen: +t.flen || 0, tipR: t.type === 'taper' || t.type === 'engball' ? +t.tipR || 0 : 0, flat: t.type === 'engrave' ? +t.flat || 0 : 0, flutes: f.flutes, rpm: f.rpm, feed: Math.min(f.feed, mx), plunge: Math.min(f.plunge, mx), pass: f.pass, over: f.over }; }
+function libProjVals(t, mat) { const f = libFlat(t, mat), mx = (S.machine && +S.machine.maxFeed) || Infinity; return { name: t.name, type: (t.type === 'engrave' || t.type === 'taper' || t.type === 'engball') ? 'v' : t.type, dia: t.dia, angle: t.angle || (t.type === 'drill' ? 118 : t.type === 'thread' ? 60 : 90), flen: +t.flen || 0, tipR: t.type === 'taper' || t.type === 'engball' ? +t.tipR || 0 : 0, flat: t.type === 'engrave' ? +t.flat || 0 : 0, flutes: f.flutes, rpm: f.rpm, feed: Math.min(f.feed, mx), plunge: Math.min(f.plunge, mx), pass: f.pass, over: f.over, peck: f.peck }; }
 function libToProject(t, mat) {
   let pt = S.tools.find(x => x.libId === t.id); const v = libProjVals(t, mat || projMat());
   if (!pt) { let num = +t.num || 1; while (S.tools.some(x => +x.num === num)) num++; pt = { id: uid(), libId: t.id, num, ...v }; S.tools.push(pt); } else Object.assign(pt, v);
@@ -6557,6 +6761,8 @@ function orbitPivot(ST, mvp, W, H, mx, my, box, hf) {
   return at(v3dot(v3sub(ST.tgt, R.o), R.d)); /* dans le vide : à la profondeur du centre de la vue */
 }
 // rotation de la caméra autour d'un point (ou du centre de la vue) ; l'élévation n'est plus limitée
+// zoom à la molette : vers le point sous le pointeur (par défaut) ou vers le centre de la vue
+function camZoom(ST, e, c, mvp, f, dmin, dmax) { const d1 = Math.max(dmin, Math.min(dmax, ST.dist * f)), k = d1 / ST.dist; if ((LS.get('copo.zoom3d') || 'cursor') === 'cursor') { const r = c.getBoundingClientRect(), R = camRay(mvp, c.clientWidth, c.clientHeight, e.clientX - r.left, e.clientY - r.top); if (R) { const t = v3dot(v3sub(ST.tgt, R.o), R.d), P = [R.o[0] + R.d[0] * t, R.o[1] + R.d[1] * t, R.o[2] + R.d[2] * t]; ST.tgt = [0, 1, 2].map(i => P[i] + (ST.tgt[i] - P[i]) * k); } } ST.dist = d1; }
 function camOrbit(ST, dyaw, dpitch, P) { const y1 = ST.yaw + dyaw;
   if (P) { let v = v3sub(ST.tgt, P); const c = Math.cos(dyaw), sn = Math.sin(dyaw); v = [v[0] * c - v[1] * sn, v[0] * sn + v[1] * c, v[2]]; const r = [-Math.sin(y1), Math.cos(y1), 0], ct = Math.cos(-dpitch), st = Math.sin(-dpitch), rv = v3cross(r, v), rd = v3dot(r, v); v = [0, 1, 2].map(i => v[i] * ct + rv[i] * st + r[i] * rd * (1 - ct)); ST.tgt = [P[0] + v[0], P[1] + v[1], P[2] + v[2]]; }
   ST.yaw = y1; ST.pitch = ((ST.pitch + dpitch + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI; }
@@ -7105,7 +7311,7 @@ function v3Events(c) {
   });
   const end = e => { pts.delete(e.pointerId); if (pts.size < 2) pinch = null; drag = null; };
   c.addEventListener('pointerup', end); c.addEventListener('pointercancel', end);
-  c.addEventListener('wheel', e => { e.preventDefault(); V3.dist = Math.max(5, Math.min(20000, V3.dist * Math.exp(e.deltaY * 0.0012))); v3Req(); }, { passive: false });
+  c.addEventListener('wheel', e => { e.preventDefault(); camZoom(V3, e, c, V3.mvp, Math.exp(e.deltaY * 0.0012), 5, 20000); v3Req(); }, { passive: false });
   c.addEventListener('dblclick', v3ResetView);
   $('#v3Play').onclick = () => { if (!V3.playing && V3.T >= V3.S3.total - 1e-9) v3Seek(0); v3Play(!V3.playing); };
   $('#v3Pos').oninput = e => { v3Play(false); v3Seek(V3.S3.total * e.target.value / 1000); };
@@ -7594,15 +7800,24 @@ function relFromDrawing(type) {
     toast(tr('Forme créée : réglez le profil, la largeur et l’épaisseur Z.')); } catch (e) { toast(e.message); }
 }
 // ---------- VUES 2D / 3D (zone centrale scindée) et visionneuse 3D du relief ----------
-var VIEWS = (() => { try { const o = JSON.parse(LS.get('copo.views') || 'null'); if (o) return { d2: true, d3: true, split: o.split === 'h' ? 'h' : 'v' }; } catch { } return { d2: true, d3: true, split: 'v' }; })(); // à l'ouverture : plan 2D et vue 3D côte à côte
+var VIEWS = (() => { try { const o = JSON.parse(LS.get('copo.views') || 'null'); if (o) return { d2: true, d3: true, split: o.split === 'h' ? 'h' : 'v', f: +o.f > 0.1 && +o.f < 0.9 ? +o.f : 0.5 }; } catch { } return { d2: true, d3: true, split: 'v', f: 0.5 }; })(); // à l'ouverture : plan 2D et vue 3D côte à côte
 function viewsApply() {
   const v = $('#views'); if (!v) return; if (!VIEWS.d2 && !VIEWS.d3) VIEWS.d2 = true;
   $('#cw').hidden = !VIEWS.d2; $('#rv3').hidden = !VIEWS.d3; v.classList.toggle('both', VIEWS.d2 && VIEWS.d3); v.classList.toggle('v', VIEWS.split === 'v'); v.classList.toggle('h', VIEWS.split === 'h');
   const b2 = document.querySelector('[data-act="view2d"]'), b3 = document.querySelector('[data-act="view3d"]'); if (b2) b2.classList.toggle('on', VIEWS.d2); if (b3) b3.classList.toggle('on', VIEWS.d3);
   for (const [k, on] of [['splitV', VIEWS.split === 'v'], ['splitH', VIEWS.split === 'h']]) { const b = document.querySelector('[data-act="' + k + '"]'); if (b) { b.disabled = !(VIEWS.d2 && VIEWS.d3); b.setAttribute('aria-pressed', on && !b.disabled); } }
-  try { LS.set('copo.views', JSON.stringify({ d2: VIEWS.d2, d3: VIEWS.d3, split: VIEWS.split })); } catch { }
+  vsplitApply();
+  try { LS.set('copo.views', JSON.stringify({ d2: VIEWS.d2, d3: VIEWS.d3, split: VIEWS.split, f: VIEWS.f })); } catch { }
   if (VIEWS.d2) requestAnimationFrame(() => { resize(); }); if (VIEWS.d3) { if (!RV.gl) rvInit(); RV.sig = ''; RV.lsig = ''; rvSync(); rvReq(); }
 }
+// séparation entre les deux vues : position f (part de la vue 2D), glissable, double-clic = moitié-moitié
+function vsplitApply() { const v = $('#views'), sp = $('#vsplit'); if (!v || !sp) return; const both = VIEWS.d2 && VIEWS.d3, f = VIEWS.f || 0.5; sp.hidden = !both; v.style.gridTemplateColumns = both && VIEWS.split === 'v' ? 'minmax(0,' + f + 'fr) minmax(0,' + (1 - f) + 'fr)' : ''; v.style.gridTemplateRows = both && VIEWS.split === 'h' ? 'minmax(0,' + f + 'fr) minmax(0,' + (1 - f) + 'fr)' : ''; sp.style.left = VIEWS.split === 'v' ? 'calc((100% - 8px) * ' + f + ')' : ''; sp.style.top = VIEWS.split === 'h' ? 'calc((100% - 8px) * ' + f + ')' : ''; }
+(() => { const sp = document.getElementById('vsplit'); if (!sp) return; let on = false, raf = 0;
+  const upd = () => { raf = 0; vsplitApply(); if (VIEWS.d2) resize(); if (typeof rvReq === 'function') rvReq(); };
+  sp.addEventListener('pointerdown', e => { if (e.button !== 0) return; on = true; sp.setPointerCapture(e.pointerId); sp.classList.add('drag'); e.preventDefault(); });
+  sp.addEventListener('pointermove', e => { if (!on) return; const r = $('#views').getBoundingClientRect(), f = VIEWS.split === 'v' ? (e.clientX - r.left) / Math.max(1, r.width - 8) : (e.clientY - r.top) / Math.max(1, r.height - 8); VIEWS.f = Math.max(0.12, Math.min(0.88, f)); if (!raf) raf = requestAnimationFrame(upd); });
+  const end = () => { if (!on) return; on = false; sp.classList.remove('drag'); viewsApply(); }; sp.addEventListener('pointerup', end); sp.addEventListener('pointercancel', end);
+  sp.addEventListener('dblclick', () => { VIEWS.f = 0.5; viewsApply(); }); })();
 function viewToggle(k) { VIEWS[k] = !VIEWS[k]; if (!VIEWS.d2 && !VIEWS.d3) VIEWS[k === 'd2' ? 'd3' : 'd2'] = true; if (k === 'd3' && !VIEWS.d3) VIEWS.userHid3 = true; viewsApply(); }
 var RV = (() => { let o = {}; try { o = JSON.parse(LS.get('copo.rv') || '{}') || {}; } catch { } return { gl: null, yaw: -Math.PI / 2 + 0.35, pitch: 0.75, dist: 500, tgt: [150, 100, -9], sig: '', lsig: '', raf: 0, showDraw: o.d !== false, showAxes: o.a !== false, showStock: true, showTp: true, cubeHover: null, fitted: false }; })();
 function rvSave() { try { LS.set('copo.rv', JSON.stringify({ d: RV.showDraw, a: RV.showAxes, s: RV.showStock, t: RV.showTp })); } catch { } for (const [k, on] of [['rvDraw', RV.showDraw], ['rvAxes', RV.showAxes], ['rvStock', RV.showStock], ['rvTp', RV.showTp]]) { const b = document.querySelector('[data-act="' + k + '"]'); if (b) b.setAttribute('aria-pressed', on); } }
@@ -7644,7 +7859,7 @@ function rvInit() {
     if (drag && e && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 4 && drag.btn === 0) { const sh = rvPickShape(drag.mx, drag.my); if (sh) rvSelectShape(sh, e.shiftKey, drag.mx, drag.my); else { CTX3 = null; const id = rvPick(drag.mx, drag.my); if (id && !$('#tpWin').hidden) { tpRelPick(id); drag = null; return; } if (!id && S.sel.size && !e.shiftKey) { S.sel.clear(); renderSel(); dRefresh(); } if (id !== (S.relSel || null)) { if (id) selectRel(id); else { S.relSel = null; relPanel(); } } RELBAR = null; if (id) relBarShow('rv3', drag.mx, drag.my); draw(); rvSync(); rvReq(); } }
     drag = null; c.style.cursor = 'grab'; };
   c.addEventListener('pointerup', end); c.addEventListener('pointercancel', () => { drag = null; });
-  c.addEventListener('wheel', e => { e.preventDefault(); RV.touched = true; RV.dist = Math.max(5, Math.min(1e5, RV.dist * Math.exp(e.deltaY * 0.0012))); rvReq(); }, { passive: false });
+  c.addEventListener('wheel', e => { e.preventDefault(); RV.touched = true; camZoom(RV, e, c, RV.mvp, Math.exp(e.deltaY * 0.0012), 5, 1e5); rvReq(); }, { passive: false });
   c.addEventListener('dblclick', () => rvFit(true));
   const cv = $('#rvcube'), pos = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
   cv.addEventListener('pointermove', e => { const h = v3CubeHit(...pos(e), RV), k = h ? h.k : null; if (k !== RV.cubeHover) { RV.cubeHover = k; v3Cube(cv, RV); } });
@@ -8141,7 +8356,7 @@ const CO_TIPS = {
   dessin: [
     { sel: ['#dgrid'], fr: 'Toutes les fonctions de dessin sont ici : créer (formes, texte, import SVG, DXF, PDF ou AI), modifier, disposer, mesurer. Cliquez sur un objet du plan pour saisir ses valeurs exactes.', en: 'All drawing functions are here: create (shapes, text, SVG, DXF, PDF or AI import), modify, arrange, measure. Click an object on the plan to type its exact values.' },
     { sel: ['#dgrid [data-tool="text"]'], fr: 'Outil <b>Texte</b> : avec <b>Placement</b>, le texte peut suivre une ou deux courbes ; le <b>Décalage</b> l’en écarte.', en: '<b>Text</b> tool: with <b>Placement</b>, text can follow one or two curves; the <b>Offset</b> moves it away from them.' },
-    { sel: ['#dgrid [data-dact="ilOpen"]', '#dgrid [data-dact="ipOpen"]'], fr: 'Les <b>inlays</b> (en V ou en poche) sont dans les Gadgets : ils créent d’un coup la femelle, la pièce rapportée et leurs parcours.', en: '<b>Inlays</b> (V or pocket) are in Gadgets: they create the female, the insert and their toolpaths in one go.' },
+    { sel: ['#mExt'], fr: 'Les <b>inlays</b> (en V ou en poche), la touche de guitare et la boîte à entures sont dans le menu <b>Extensions</b> : ils créent d’un coup les dessins et leurs parcours.', en: '<b>Inlays</b> (V or pocket), the guitar fretboard and the finger-joint box are in the <b>Extensions</b> menu: they create the drawings and their toolpaths in one go.' },
   ],
   relief: [
     { sel: ['[data-pane="relief"] .rseg'], fr: 'Importez un modèle <b>STL</b> ou une image en <b>niveaux de gris</b>, ou créez un dôme, une extrusion, un lissage…', en: 'Import an <b>STL</b> model or a <b>grayscale</b> image, or create a dome, an extrusion, a sweep…' },
@@ -8302,7 +8517,7 @@ async function importPDFDoc(doc, lib) {
 
 // ---------- paramètres (Édition › Paramètres) : rubriques à gauche, contenu qui défile à droite ----------
 const relLevel = () => { const v = LS.get('copo.relQ'); return v === 'std' || v === 'fast' ? 0 : v === 'vhigh' ? 2 : 1; }; /* résolution d'affichage du relief : standard, haute (défaut), très haute */
-const CFG_ICO = { nav3d: '<path d="M12 3l7 4v8l-7 4-7-4V7z"/><path d="M5 7l7 4 7-4M12 11v8"/><path d="M3 18c3 3.5 15 3.5 18 0"/>', gen: '<circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.9 1.9M16.6 16.6l1.9 1.9M5.5 18.5l1.9-1.9M16.6 7.4l1.9-1.9"/>', units: '<path d="M3 16.5 16.5 3l4.5 4.5L7.5 21z"/><path d="M7 13l1.8 1.8M10 10l1.8 1.8M13 7l1.8 1.8"/>', machine: '<rect x="4" y="3" width="16" height="7" rx="1"/><path d="M12 10v5M9.5 15h5l-1 3h-3z"/><path d="M3 21h18"/>', snap: '<path d="M5 4v7a7 7 0 0 0 14 0V4"/><path d="M5 8h4M15 8h4"/>', view: '<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/>', sim: '<path d="M12 3 3.5 7.5v9L12 21l8.5-4.5v-9z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/>' };
+const CFG_ICO = { dlib: '<path d="M5 4v16M9 4v16M13 4v16"/><path d="M16.5 4.5l3.5 15"/>', nav3d: '<path d="M12 3l7 4v8l-7 4-7-4V7z"/><path d="M5 7l7 4 7-4M12 11v8"/><path d="M3 18c3 3.5 15 3.5 18 0"/>', gen: '<circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.9 1.9M16.6 16.6l1.9 1.9M5.5 18.5l1.9-1.9M16.6 7.4l1.9-1.9"/>', units: '<path d="M3 16.5 16.5 3l4.5 4.5L7.5 21z"/><path d="M7 13l1.8 1.8M10 10l1.8 1.8M13 7l1.8 1.8"/>', machine: '<rect x="4" y="3" width="16" height="7" rx="1"/><path d="M12 10v5M9.5 15h5l-1 3h-3z"/><path d="M3 21h18"/>', snap: '<path d="M5 4v7a7 7 0 0 0 14 0V4"/><path d="M5 8h4M15 8h4"/>', view: '<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/>', sim: '<path d="M12 3 3.5 7.5v9L12 21l8.5-4.5v-9z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/>' };
 function cfgFill() {
   $('#cfgWelcome').checked = LS.get('copo.welcomeOff') !== '1'; $('#cfgTips').checked = LS.get('copo.tipsOff') !== '1';
   $('#cfgRelQ').value = ['std', 'high', 'vhigh'][relLevel()]; $('#cfgSimQ').value = $('#v3Q').value || '1'; $('#cfgRelShow').checked = !!(S.relief && S.relief.show !== false);
@@ -8323,6 +8538,10 @@ function gcPostName() { const el = $('#gcPostName'); if (!el) return; const o = 
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#cfg').hidden && !document.querySelector('.cobub, .cowel')) { e.preventDefault(); cfgClose(); } else if ((e.ctrlKey || e.metaKey) && e.key === ',') { e.preventDefault(); $('#cfg').hidden ? cfgOpen() : cfgClose(); } });
   $('#cfgWelcome').onchange = e => LS.set('copo.welcomeOff', e.target.checked ? '' : '1');
   $('#cfgTips').onchange = e => { if (e.target.checked) { LS.set('copo.tipsOff', ''); } else LS.set('copo.tipsOff', '1'); };
+  $('#cfgDlibMode').value = DLIB.mode(); $('#cfgDlibMode').onchange = async e => { if (e.target.value === 'dir' && !window.showDirectoryPicker) { toast(tr('Ce navigateur ne permet pas d’utiliser un dossier de l’ordinateur : la bibliothèque reste dans le navigateur.')); e.target.value = 'idb'; return; } LS.set('copo.dlibMode', e.target.value); if (e.target.value === 'dir' && !(await dlMetaGet('dir'))) await dlibPickDir(); dlibCfgSync(); if (!$('#dlib').hidden) dlibRender(); };
+  $('#cfgDlibTh').value = LS.get('copo.dlibTh') || '132'; $('#cfgDlibTh').onchange = e => { LS.set('copo.dlibTh', e.target.value); dlibThSync(); };
+  $('#cfgDlibDbl').checked = LS.get('copo.dlibDbl') !== '0'; $('#cfgDlibDbl').onchange = e => LS.set('copo.dlibDbl', e.target.checked ? '1' : '0'); dlibCfgSync();
+  $('#cfgZoom3d').value = LS.get('copo.zoom3d') || 'cursor'; $('#cfgZoom3d').onchange = e => LS.set('copo.zoom3d', e.target.value);
   $('#cfgMouse3d').value = LS.get('copo.mouse3d') || 'cad'; $('#cfgMouse3d').onchange = e => LS.set('copo.mouse3d', e.target.value);
   { const sync = () => { const v = LS.get('copo.orbit') || 'cursor'; for (const b of $$('#cfgOrbit button')) b.setAttribute('aria-pressed', b.dataset.orb === v); }; for (const b of $$('#cfgOrbit button')) b.onclick = () => { LS.set('copo.orbit', b.dataset.orb); sync(); }; sync(); }
   $('#cfgRelQ').onchange = e => { LS.set('copo.relQ', e.target.value); relDirty = true; if (typeof RV !== 'undefined') { RV.sig = ''; RV.lastBuild = 0; rvSync(); rvReq(); } if (typeof drawRelief !== 'undefined') drawRelief.last = 0; draw(); };
