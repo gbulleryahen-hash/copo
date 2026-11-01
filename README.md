@@ -5,6 +5,7 @@
 
 - **Utiliser COPO / Use COPO :** `index.html` (page GitHub Pages de ce dépôt / this repository's GitHub Pages site)
 - **Mode d'emploi / User guide :** `guide.html` · PDF : `COPO-mode-emploi-FR.pdf`, `COPO-user-guide-EN.pdf`
+- **Bibliothèque libre / Free library :** `bibliotheque/` — 80 dessins 2D (SVG, contours fermés) et 63 reliefs en niveaux de gris (PNG 16 bits), rangés par catégorie, avec un fichier `bibliotheque-copo.copolib` à importer dans COPO. Sources et licences : `bibliotheque/CREDITS.md` / 80 2D drawings and 63 grayscale reliefs, sorted by category, plus a `.copolib` file to import into COPO.
 
 **Version 1.222**
 
@@ -51,5 +52,7 @@ Bibliothèques tierces / Third-party libraries, fournies dans / bundled in `lib/
 Polices à trait unique / Single-line fonts, dans / in `fonts/trait-unique` (regroupées par / collected by https://github.com/msurguy/cnc-text-tool) : EMS, Cutlings, Relief SingleLine, Shriinivas, Routed Gothic — SIL Open Font License 1.1 ; Hershey — licence Hershey (attribution au Dr A. V. Hershey, U.S. National Bureau of Standards). Voir / see `fonts/trait-unique/LICENCES.txt`.
 
 Polices décoratives / Decorative fonts, dans / in `fonts/decoratives` (téléchargées depuis / from https://github.com/google/fonts et / and https://github.com/ArtifexSoftware/urw-base35-fonts) : Alegreya (Juan Pablo del Peral), Cinzel Decorative (Natanael Gama), Pirata One (Rodrigo Fuenzalida, Nicolás Massi), Chicle (Angel Koziupa, Alejandro Paul), Comic Neue (Craig Rozynski), Protest Riot (Octavio Pardo), Great Vibes (Robert Leuschke) — SIL Open Font License 1.1 ; Smokum (Vernon Adams) — Apache License 2.0 ; URW Chancery (Z003, URW++) — GNU AGPL 3 avec exception pour les polices / with font exception. Voir / see `fonts/decoratives/LICENCES.txt`.
+
+Bibliothèque de dessins et reliefs / Drawing and relief library, dans / in `bibliotheque/` : créations COPO (GPL v3), reliefs FreeAlphas (CC0 1.0), dessins Openclipart / FreeSVG (domaine public / public domain). Détail fichier par fichier / file-by-file details : `bibliotheque/CREDITS.md`.
 
 Polices de l'interface / Interface fonts, dans / in `lib/fonts` : Source Sans 3 (Adobe), JetBrains Mono (JetBrains), Barlow Condensed (Jeremy Tribby) — SIL Open Font License 1.1, voir / see `lib/fonts/OFL-*.txt`.
