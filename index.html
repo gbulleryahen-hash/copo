@@ -1199,7 +1199,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.217</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.218</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -5943,7 +5943,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.217', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.218', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -7686,7 +7686,7 @@ function rvBuildMesh() {
 function rvMakeMesh(budget) {
   const gl = RV.gl; if (!S.relief.items.some(i => i.visible && relGrid[i.id])) return null;
   const st = S.stock, R = reliefCompose((w, h) => Math.max(0.02, Math.sqrt(w * h / budget)), true, null, true, true), { nx, ny, cx, cy, H, M, ox, oy } = R, N = nx * ny, vb = new Float32Array(N * 6);
-  for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, z = Math.max(-st.t, H[q]), hx = (H[j * nx + Math.min(nx - 1, i + 1)] - H[j * nx + Math.max(0, i - 1)]) / (2 * cx), hy = (H[Math.min(ny - 1, j + 1) * nx + i] - H[Math.max(0, j - 1) * nx + i]) / (2 * cy), n = v3n([-hx, -hy, 1]); vb.set([ox + i * cx, oy + j * cy, z, n[0], n[1], n[2]], q * 6); }
+  for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, z = Math.max(-st.t, H[q]), ir = i + 1 < nx && M[q + 1] ? i + 1 : i, il = i > 0 && M[q - 1] ? i - 1 : i, ju = j + 1 < ny && M[q + nx] ? j + 1 : j, jd = j > 0 && M[q - nx] ? j - 1 : j, hx = ir > il ? (H[j * nx + ir] - H[j * nx + il]) / ((ir - il) * cx) : 0, hy = ju > jd ? (H[ju * nx + i] - H[jd * nx + i]) / ((ju - jd) * cy) : 0, n = v3n([-hx, -hy, 1]); /* au bord : différence d'un seul côté (pas de liseré sombre en dents de scie) */ vb.set([ox + i * cx, oy + j * cy, z, n[0], n[1], n[2]], q * 6); }
   const CW = nx - 1, CH = ny - 1, has = new Uint8Array(CW * CH); let nt = 0;
   for (let j = 0; j < CH; j++) for (let i = 0; i < CW; i++) { const a = j * nx + i, k = M[a] + M[a + 1] + M[a + nx + 1] + M[a + nx]; if (k >= 3) { has[j * CW + i] = k; nt += k === 4 ? 2 : 1; } } // 3 coins : un triangle (bord en diagonale au lieu d'escaliers)
   if (!nt) return null;
@@ -7701,10 +7701,16 @@ function rvMakeMesh(budget) {
     if (k === 4) { T(a, b, c); T(a, c, d); }
     else if (!M[d]) { T(a, b, c); wall(c, a); } else if (!M[c]) { T(a, b, d); wall(b, d); } else if (!M[b]) { T(a, c, d); wall(a, c); } else { T(b, c, d); wall(d, b); }
     if (M[a] && M[b] && !hasC(i, j - 1)) wall(a, b); if (M[b] && M[c] && !hasC(i + 1, j)) wall(b, c); if (M[c] && M[d] && !hasC(i, j + 1)) wall(c, d); if (M[d] && M[a] && !hasC(i - 1, j)) wall(d, a); }
-  const NR = 3, nrm = v => { // normale de paroi : opposée au centre de gravité du masque autour du sommet (lisse le long des bords en escalier)
-    const vi = v % nx, vj = Math.floor(v / nx); let gx = 0, gy = 0; for (let dj = -NR; dj <= NR; dj++) { const jj = vj + dj; if (jj < 0 || jj >= ny) continue; for (let di = -NR; di <= NR; di++) { const ii = vi + di; if (ii < 0 || ii >= nx || di * di + dj * dj > NR * NR) continue; if (M[jj * nx + ii]) { gx += di * cx; gy += dj * cy; } } }
-    let l = Math.hypot(gx, gy); if (l < 1e-9) { const o = NA.get(v); l = Math.hypot(o[0], o[1]) || 1; return [o[0] / l, o[1] / l, 0]; } return [-gx / l, -gy / l, 0]; };
-  for (let w = 0; w < WL.length; w += 2) { const a = WL[w], b = WL[w + 1], za = Math.max(-st.t, H[a]), zq = Math.max(-st.t, H[b]), A = [ox + (a % nx) * cx, oy + Math.floor(a / nx) * cy], B = [ox + (b % nx) * cx, oy + Math.floor(b / nx) * cy], na = nrm(a), nb = nrm(b), k = base + nv; ex.push(A[0], A[1], za, ...na, B[0], B[1], zq, ...nb, B[0], B[1], zb, ...nb, A[0], A[1], zb, ...na); nv += 4; wix.push(k, k + 1, k + 2, k, k + 2, k + 3); }
+  // normale de paroi : opposée au gradient du masque flouté (flou gaussien approché par 3 flous de boîte, rayon ≈ 0,3 mm) ; lisse le long des bords en escalier, sans stries
+  const BL = WL.length ? (() => { const r = Math.max(1, Math.min(24, Math.round(0.4 / Math.min(cx, cy)))), N2 = nx * ny, A = new Float32Array(N2), T = new Float32Array(Math.max(nx, ny)); for (let q = 0; q < N2; q++) A[q] = M[q];
+    const pass = (n, cnt, idx) => { for (let l = 0; l < cnt; l++) { for (let it = 0; it < 3; it++) { let s = 0; for (let k = 0; k <= r && k < n; k++) s += A[idx(l, k)]; for (let k = 0; k < n; k++) { T[k] = s / (2 * r + 1); const ad = k + r + 1, rm = k - r; if (ad < n) s += A[idx(l, ad)]; if (rm >= 0) s -= A[idx(l, rm)]; } for (let k = 0; k < n; k++) A[idx(l, k)] = T[k]; } } };
+    pass(nx, ny, (j, i) => j * nx + i); pass(ny, nx, (i, j) => j * nx + i); return A; })() : null, NC = new Map();
+  const nrm = v => { const o0 = NC.get(v); if (o0) return o0; const vi = v % nx, vj = Math.floor(v / nx), at = (i, j) => BL[Math.max(0, Math.min(ny - 1, j)) * nx + Math.max(0, Math.min(nx - 1, i))];
+    const gx = (at(vi + 1, vj) - at(vi - 1, vj)) / cx, gy = (at(vi, vj + 1) - at(vi, vj - 1)) / cy; let l = Math.hypot(gx, gy), out;
+    if (l < 1e-9) { const o = NA.get(v); l = Math.hypot(o[0], o[1]) || 1; out = [o[0] / l, o[1] / l, 0, 0]; } else { const c0 = Math.min(cx, cy), d = Math.max(-c0, Math.min(c0, (at(vi, vj) - 0.5) / l)); out = [-gx / l, -gy / l, 0, d]; } NC.set(v, out); return out; };
+  const XY = v => { const n = nrm(v); return [ox + (v % nx) * cx + n[0] * n[3], oy + Math.floor(v / nx) * cy + n[1] * n[3]]; }; /* bord recalé sur le contour lissé : plus d'escalier */
+  for (let w = 0; w < WL.length; w += 2) { const a = WL[w], b = WL[w + 1], za = Math.max(-st.t, H[a]), zq = Math.max(-st.t, H[b]), A = XY(a), B = XY(b), na = nrm(a).slice(0, 3), nb = nrm(b).slice(0, 3), k = base + nv; ex.push(A[0], A[1], za, ...na, B[0], B[1], zq, ...nb, B[0], B[1], zb, ...nb, A[0], A[1], zb, ...na); nv += 4; wix.push(k, k + 1, k + 2, k, k + 2, k + 3); }
+  for (const v of NC.keys()) { const p = XY(v); vb[v * 6] = bot[v * 6] = p[0]; vb[v * 6 + 1] = bot[v * 6 + 1] = p[1]; } /* sommets du dessus et du dessous suivent le bord recalé */
   const all = new Float32Array(N * 12 + ex.length); all.set(vb, 0); all.set(bot, N * 6); all.set(ex, N * 12);
   const idx = new Uint32Array(ix.length + wix.length); idx.set(ix, 0); idx.set(wix, ix.length);
   return { vao: rvBuf([[RV.prog, 3, 'aP'], [RV.prog, 3, 'aN']], all, idx), n: idx.length, depth: -R.min, R };
