@@ -449,6 +449,172 @@
      ]
     },
     {
+     "id": "lutherie-corps",
+     "fr": "Lutherie – corps",
+     "en": "Lutherie – bodies",
+     "elements": [
+      {
+       "nom": "Corps acoustique type 00",
+       "fichier": "dessins/lutherie-corps/corps-acoustique-00.svg",
+       "apercu": "apercus/dessins/lutherie-corps/corps-acoustique-00.webp",
+       "taille": 11128
+      },
+      {
+       "nom": "Corps acoustique type OM",
+       "fichier": "dessins/lutherie-corps/corps-acoustique-om.svg",
+       "apercu": "apercus/dessins/lutherie-corps/corps-acoustique-om.webp",
+       "taille": 10408
+      },
+      {
+       "nom": "Corps guitare flamenca",
+       "fichier": "dessins/lutherie-corps/corps-guitare-flamenca.svg",
+       "apercu": "apercus/dessins/lutherie-corps/corps-guitare-flamenca.webp",
+       "taille": 10195
+      },
+      {
+       "nom": "Corps ukulélé concert",
+       "fichier": "dessins/lutherie-corps/corps-ukulele-concert.svg",
+       "apercu": "apercus/dessins/lutherie-corps/corps-ukulele-concert.webp",
+       "taille": 6557
+      },
+      {
+       "nom": "Corps ukulélé soprano",
+       "fichier": "dessins/lutherie-corps/corps-ukulele-soprano.svg",
+       "apercu": "apercus/dessins/lutherie-corps/corps-ukulele-soprano.webp",
+       "taille": 6707
+      }
+     ]
+    },
+    {
+     "id": "lutherie-gabarits",
+     "fr": "Lutherie – gabarits",
+     "en": "Lutherie – jigs",
+     "elements": [
+      {
+       "nom": "Gabarit tenon-mortaise D16",
+       "fichier": "dessins/lutherie-gabarits/gabarit-tenon-mortaise-d16.svg",
+       "apercu": "apercus/dessins/lutherie-gabarits/gabarit-tenon-mortaise-d16.webp",
+       "taille": 35426
+      },
+      {
+       "nom": "Gabarit tenon-mortaise D20",
+       "fichier": "dessins/lutherie-gabarits/gabarit-tenon-mortaise-d20.svg",
+       "apercu": "apercus/dessins/lutherie-gabarits/gabarit-tenon-mortaise-d20.webp",
+       "taille": 35970
+      },
+      {
+       "nom": "Gabarit tenon-mortaise queue d’aronde",
+       "fichier": "dessins/lutherie-gabarits/gabarit-tenon-mortaise-queue-d-aronde.svg",
+       "apercu": "apercus/dessins/lutherie-gabarits/gabarit-tenon-mortaise-queue-d-aronde.webp",
+       "taille": 35446
+      },
+      {
+       "nom": "Gabarit tenon-mortaise",
+       "fichier": "dessins/lutherie-gabarits/gabarit-tenon-mortaise.svg",
+       "apercu": "apercus/dessins/lutherie-gabarits/gabarit-tenon-mortaise.webp",
+       "taille": 35426
+      }
+     ]
+    },
+    {
+     "id": "lutherie-micros",
+     "fr": "Lutherie – micros",
+     "en": "Lutherie – pickups",
+     "elements": [
+      {
+       "nom": "Défonce micro double à oreilles",
+       "fichier": "dessins/lutherie-micros/defonce-micro-double-a-oreilles.svg",
+       "apercu": "apercus/dessins/lutherie-micros/defonce-micro-double-a-oreilles.webp",
+       "taille": 2356
+      },
+      {
+       "nom": "Défonce micro double (humbucker)",
+       "fichier": "dessins/lutherie-micros/defonce-micro-double-humbucker.svg",
+       "apercu": "apercus/dessins/lutherie-micros/defonce-micro-double-humbucker.webp",
+       "taille": 874
+      },
+      {
+       "nom": "Défonce micro simple rectangulaire",
+       "fichier": "dessins/lutherie-micros/defonce-micro-simple-rectangulaire.svg",
+       "apercu": "apercus/dessins/lutherie-micros/defonce-micro-simple-rectangulaire.webp",
+       "taille": 284
+      },
+      {
+       "nom": "Défonces micros simples (3 formes)",
+       "fichier": "dessins/lutherie-micros/defonces-micros-simples.svg",
+       "apercu": "apercus/dessins/lutherie-micros/defonces-micros-simples.webp",
+       "taille": 4610
+      },
+      {
+       "nom": "Micro de basse 8 plots",
+       "fichier": "dessins/lutherie-micros/micro-basse-8-plots.svg",
+       "apercu": "apercus/dessins/lutherie-micros/micro-basse-8-plots.webp",
+       "taille": 25853
+      },
+      {
+       "nom": "Plaque de micro à oreilles",
+       "fichier": "dessins/lutherie-micros/plaque-micro-a-oreilles.svg",
+       "apercu": "apercus/dessins/lutherie-micros/plaque-micro-a-oreilles.webp",
+       "taille": 3185
+      }
+     ]
+    },
+    {
+     "id": "lutherie-tetes",
+     "fr": "Lutherie – têtes",
+     "en": "Lutherie – headstocks",
+     "elements": [
+      {
+       "nom": "Tête 4+2 trapèze",
+       "fichier": "dessins/lutherie-tetes/tete-4-2-trapeze.svg",
+       "apercu": "apercus/dessins/lutherie-tetes/tete-4-2-trapeze.webp",
+       "taille": 728
+      },
+      {
+       "nom": "Tête 6 en ligne « lame »",
+       "fichier": "dessins/lutherie-tetes/tete-6-en-ligne-lame.svg",
+       "apercu": "apercus/dessins/lutherie-tetes/tete-6-en-ligne-lame.webp",
+       "taille": 718
+      },
+      {
+       "nom": "Tête de basse 2+2 arrondie",
+       "fichier": "dessins/lutherie-tetes/tete-basse-2-2-arrondie.svg",
+       "apercu": "apercus/dessins/lutherie-tetes/tete-basse-2-2-arrondie.webp",
+       "taille": 3175
+      },
+      {
+       "nom": "Tête classique à fentes",
+       "fichier": "dessins/lutherie-tetes/tete-classique-a-fentes.svg",
+       "apercu": "apercus/dessins/lutherie-tetes/tete-classique-a-fentes.webp",
+       "taille": 15639
+      },
+      {
+       "nom": "Tête écusson pointue",
+       "fichier": "dessins/lutherie-tetes/tete-ecusson-pointe.svg",
+       "apercu": "apercus/dessins/lutherie-tetes/tete-ecusson-pointe.webp",
+       "taille": 778
+      },
+      {
+       "nom": "Tête goutte 3+3",
+       "fichier": "dessins/lutherie-tetes/tete-goutte-3-3.svg",
+       "apercu": "apercus/dessins/lutherie-tetes/tete-goutte-3-3.webp",
+       "taille": 3179
+      },
+      {
+       "nom": "Tête hexagonale 3+3",
+       "fichier": "dessins/lutherie-tetes/tete-hexagonale-3-3.svg",
+       "apercu": "apercus/dessins/lutherie-tetes/tete-hexagonale-3-3.webp",
+       "taille": 732
+      },
+      {
+       "nom": "Tête pagaie symétrique",
+       "fichier": "dessins/lutherie-tetes/tete-pagaie-symetrique.svg",
+       "apercu": "apercus/dessins/lutherie-tetes/tete-pagaie-symetrique.webp",
+       "taille": 3318
+      }
+     ]
+    },
+    {
      "id": "noel",
      "fr": "Noël",
      "en": "Christmas",
