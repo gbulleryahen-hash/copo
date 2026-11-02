@@ -563,6 +563,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 #tpWin.docked #tpForm>.row:last-child{position:sticky;bottom:-18px;z-index:5;background:var(--panel);margin:4px 0 0;padding:10px 0 12px;border-top:1px solid var(--line)}
 @media (max-width:920px){#tpWin.docked{left:auto!important;right:auto;bottom:auto}}
 @media (prefers-reduced-motion:reduce){.peektab svg{transition:none}}
+.rlbound{display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:10px;align-items:start}.rlb-f{display:grid;gap:8px}.rlbfig svg{display:block;width:100%;height:auto;border-radius:6px}
 .tpadv{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px 0}.tpadv>summary{cursor:pointer;font-weight:600;font-size:13px;padding:4px 0;list-style:none;display:flex;align-items:center;gap:6px}.tpadv>summary::-webkit-details-marker{display:none}.tpadv>summary::before{content:'';width:6px;height:6px;border-right:1.8px solid currentColor;border-bottom:1.8px solid currentColor;transform:rotate(-45deg);transition:transform .15s;margin:0 3px}.tpadv[open]>summary::before{transform:rotate(45deg)}.tpadv-b{display:grid;gap:10px;padding-top:8px}
 .tipr .tipb{left:auto;right:0}.row .tipw{align-self:center}.row .tipi,.row .tipi:hover{background:none!important;border:0!important;padding:0!important;width:22px;height:22px;min-width:0}.dsec-h .tipw{margin-left:6px;text-transform:none;letter-spacing:0}.txh{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;margin-top:4px}.txmodes{display:grid;gap:3px}.txm{display:grid!important;grid-template-columns:auto 80px minmax(0,1fr);align-items:center;gap:8px;cursor:pointer;font-size:13px;padding:2px 4px;border-radius:6px}.txm:hover{background:#ffffff0a}.txm input{margin:0}.txil{width:80px;height:36px;background:#24272d;border-radius:5px}.txil .tl{fill:#fff;font:700 13px var(--f-head, sans-serif);letter-spacing:.5px}.txil .ts{font-size:11px}.txil .tb{fill:none;stroke:#4a8ef0;stroke-width:2;stroke-linecap:round}.txsub{display:grid;gap:3px}.txsh{font-size:12px;color:var(--muted)}.txwhat{margin:0;padding:6px 8px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:4px;font-size:12.5px}
 .selline{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:-4px}.selchk{display:grid;gap:2px}.tipw{position:relative;display:inline-flex;align-items:center;gap:4px}.tipi{border:0;background:none;padding:0;width:18px;height:18px;color:var(--muted);cursor:help;display:grid;place-items:center}.tipi svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}.tipb{display:none;position:absolute;z-index:40;left:0;top:calc(100% + 6px);width:250px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);box-shadow:0 8px 24px rgb(0 0 0 / .35);font-size:12px;line-height:1.4;color:var(--ink);font-weight:400}.tipw:hover .tipb,.tipi:focus+.tipb{display:grid;gap:6px}.tipb svg{width:100%;height:auto}.tipb .tf{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:4 3}.tipb .ts{fill:#e8833a33;stroke:#e8833a;stroke-width:1.6}.tipb .tt{font:600 11px var(--f-ui);fill:var(--muted);text-anchor:middle}.dsec-h .infoi{margin-left:auto}
@@ -1234,7 +1235,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.234</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.235</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1293,11 +1294,12 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             <div class="seg strat srow" data-f="rlOp"><button value="rough" title="Ébauche : enlève le gros de la matière en paliers, avec une fraise droite ; il reste une surépaisseur en escalier"><i data-sfig="rlRough"></i><span>Ébauche</span></button><button value="finish" title="Finition : la fraise (hémisphérique) suit la surface du relief, en passes fines"><i data-sfig="rlFinish"></i><span>Finition</span></button></div>
             <p class="sw-h">Reliefs à usiner</p>
             <div id="rlItemsBox" class="rlitems"></div>
-            <div class="g2">
+            <details class="tpadv" id="tpAdvR"><summary>Options avancées</summary><div class="tpadv-b">
+            <div class="rlbound"><div class="rlb-f">
               <label>Limite d’usinage<select data-f="rlBound"><option value="model">Contour du modèle</option><option value="stock">Contour du brut</option><option value="sel">Tracés sélectionnés</option></select></label>
               <label>Décalage du contour (mm)<input data-u="len" type="number" data-f="rlOff" step="0.5"></label>
               <label>Outil par rapport à la limite<select data-f="rlEdge"><option value="inside">Bord de l’outil à l’intérieur</option><option value="center">Centre de l’outil sur la limite</option></select></label>
-            </div>
+            </div><span class="rlbfig" id="rlBoundFig" aria-hidden="true"></span></div>
             <p class="sw-h">Stratégie</p>
             <div class="seg strat srow" data-f="rlRStrat" id="rlRStratRow"><button value="z" title="Niveaux Z : la matière est enlevée palier par palier, à plat, de haut en bas"><i data-sfig="rlZ"></i><span>Niveaux Z</span></button><button value="raster" title="Balayage 3D : des allers-retours qui suivent le relief en gardant la surépaisseur"><i data-sfig="rlRaster"></i><span>Balayage 3D</span></button></div>
             <div class="seg strat srow" data-f="rlFStrat" id="rlFStratRow"><button value="raster" title="Balayage : des allers-retours parallèles, à l’angle choisi"><i data-sfig="rlFRaster"></i><span>Balayage</span></button><button value="offset" title="Décalage : des passes qui suivent le contour du relief et se resserrent vers le centre"><i data-sfig="rlFOffset"></i><span>Décalage</span></button></div>
@@ -1309,6 +1311,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
               <label id="rlAllowRow">Surépaisseur (mm)<input data-u="len" type="number" data-f="rlAllow" step="0.1" min="0"></label>
             </div>
             <label class="chk" id="rlCrossRow"><input type="checkbox" data-f="rlCross"> Seconde passe croisée (à 90°)</label>
+            </div></details>
             <p class="hint" id="rlTpInfo"></p>
           </div>
           <div data-show="thread" class="thbox">
@@ -5531,6 +5534,16 @@ const FIG = {
     return f.svg();
   },
   // usinage de relief : coupes (ébauche en escalier, finition lisse, niveaux Z, balayage 3D) et vues de dessus (balayage, décalage)
+  rlBound(k) { // limite d'usinage du relief : trait bleu selon le choix
+    const wingL = 'M60 33C50 24 34 17 10 20L16 26L11 30L20 32L15 37L25 38L22 43L35 41L44 46L56 42Z', wingR = 'M60 33C70 24 86 17 110 20L104 26L109 30L100 32L105 37L95 38L98 43L85 41L76 46L64 42Z', body = 'M54 33C54 27 66 27 66 33L66 50L72 63L60 58L48 63L54 50Z', head = 'M56 27a4.5 4.5 0 1 0 9 0a4.5 4.5 0 1 0-9 0', bird = wingL + wingR + body + head;
+    const blue = (d, w) => '<path d="' + d + '" fill="none" stroke="#262626" stroke-width="' + (w + 2.2) + '" stroke-linejoin="round"/><path d="' + d + '" fill="none" stroke="#3aa0ff" stroke-width="' + w + '" stroke-linejoin="round"/>';
+    let b = '<rect x="1" y="1" width="118" height="78" rx="3" fill="#f1ece2"/>';
+    if (k === 'model') b += '<path d="' + bird + '" fill="none" stroke="#262626" stroke-width="9" stroke-linejoin="round"/><path d="' + bird + '" fill="none" stroke="#3aa0ff" stroke-width="6.6" stroke-linejoin="round"/>';
+    b += '<path d="' + bird + '" fill="#9b9690" stroke="#5e5a55" stroke-width=".8" stroke-linejoin="round"/>';
+    if (k === 'stock') b += blue('M5 5H115V75H5Z', 2.4);
+    if (k === 'sel') b += blue('M8 26C6 12 40 10 60 14C84 10 116 12 113 30C111 44 90 52 76 52C76 62 72 72 60 72C48 72 44 62 44 52C30 52 10 42 8 26Z', 2.4);
+    return '<svg viewBox="0 0 120 80" aria-hidden="true">' + b + '</svg>';
+  },
   relf(k) { // usinage de relief, d'après la maquette : montagne orange, marches d'ébauche en jaune, trajets bleus (blancs sur bouton sélectionné)
     const OR = '#f0802a', YE = '#ffd21a', B = 58, LV = [22, 33, 44], r = v => v.toFixed(1), id = 'rg' + (FIG.relf.n = (FIG.relf.n || 0) + 1);
     const prof = x => { const dx = x - 50, w = dx < 0 ? 25 : 19; return B - 36 / (1 + Math.pow(Math.abs(dx / w), 3.2)) + 1.2; };
@@ -6357,7 +6370,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.234', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.235', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6509,7 +6522,7 @@ function tpSelInfo() {
   if (no && F.type && F.type !== 'profile') el.insertAdjacentHTML('beforeend', ' <small>' + escH(tr(nc ? 'Les vecteurs ouverts sont ignorés par ce parcours.' : 'Ce parcours demande des formes fermées.')) + '</small>');
   if (no && !nc && F.type && F.type !== 'profile') el.classList.add('bad');
 }
-function renderForm() { setTimeout(tpTypeSync, 0); { const d = $('#tpAdv'); if (d && !d.dataset.init) { d.dataset.init = 1; d.open = LS.get('copo.tpAdv') === '1'; d.addEventListener('toggle', () => LS.set('copo.tpAdv', d.open ? '1' : '0')); } }
+function renderForm() { setTimeout(tpTypeSync, 0); { const d = $('#tpAdvR'); if (d && !d.dataset.init) { d.dataset.init = 1; d.open = LS.get('copo.tpAdvR') !== '0'; d.addEventListener('toggle', () => LS.set('copo.tpAdvR', d.open ? '1' : '0')); } } { const d = $('#tpAdv'); if (d && !d.dataset.init) { d.dataset.init = 1; d.open = LS.get('copo.tpAdv') === '1'; d.addEventListener('toggle', () => LS.set('copo.tpAdv', d.open ? '1' : '0')); } }
   const F = S.form || (S.form = newForm()), root = $('#tpForm');
   $('#tpFormTitle').textContent = S.editTp ? 'Modifier le parcours' : 'Nouveau parcours';
   $('#tpApply').textContent = S.editTp ? 'Mettre à jour' : (F.type === 'relief' && (!S.sel.size || F.rlBound !== 'sel') ? tr('Calculer') : (S.sel.size || F.type !== 'profile' || !(S.tpRels && S.tpRels.size) ? 'Calculer sur la sélection (' + S.sel.size + ')' : tr('Calculer autour du relief')));
@@ -6533,6 +6546,7 @@ function renderForm() { setTimeout(tpTypeSync, 0); { const d = $('#tpAdv'); if (
       { const box = $('#rlItemsBox'), its = S.relief.items.filter(i => relGrid[i.id]); box.innerHTML = ''; if (!its.length) box.innerHTML = '<span class="hint">' + tr('Aucun relief : importez-le dans l’onglet Relief.') + '</span>';
         for (const it of its) { const l = document.createElement('label'); l.className = 'chk'; const c = document.createElement('input'); c.type = 'checkbox'; c.checked = !Array.isArray(F.rlItems) || F.rlItems.includes(it.id); c.disabled = !it.visible; c.onchange = () => { const all = its.map(i => i.id); let cur = Array.isArray(F.rlItems) ? F.rlItems.slice() : all.slice(); cur = c.checked ? [...new Set([...cur, it.id])] : cur.filter(x => x !== it.id); F.rlItems = all.every(x => cur.includes(x)) ? null : cur; }; l.append(c, ' ' + it.name + (it.visible ? '' : ' (' + tr('masqué') + ')')); box.appendChild(l); } }
       const nb = (S.editTp ? ((S.tps.find(t => t.id === S.editTp) || {}).shapeIds || []) : [...S.sel]).map(shapeById).filter(x => x && x.closed).length;
+      { const f = $('#rlBoundFig'), k = F.rlBound || 'model'; if (f && f.dataset.k !== k) { f.innerHTML = FIG.rlBound(k); f.dataset.k = k; } }
       $('#rlTpInfo').textContent = F.rlBound === 'sel' ? (nb ? trf('Limite : {n} forme(s) fermée(s) sélectionnée(s).', { n: nb }) : tr('Sélectionnez sur le plan les formes fermées qui limitent l’usinage.')) : F.rlBound === 'stock' ? tr('Limite : tout le brut.') : tr('Limite : contour des reliefs cochés (sans le fond transparent des images).'); }
     const dw = $('#drillWarn'); dw.hidden = !nb; if (nb) dw.textContent = trf('{n} trou(s) plus grand(s) que la fraise : percé(s) à Ø{d} au lieu du diamètre dessiné (cochez l’usinage en hélice).', { n: nb, d: String(+(+ht.dia).toFixed(3)).replace('.', ',') }); }
   { const rs = $('#fRestTool'), cur = S.tools.find(t => t.id === F.toolId), big = S.tools.filter(t => t.type !== 'v' && cur && t.dia > cur.dia + 1e-6); rs.innerHTML = ''; if (!big.length) rs.innerHTML = '<option value="">Aucune fraise plus grosse dans la bibliothèque</option>'; for (const t of big) { const o = document.createElement('option'); o.value = t.id; o.textContent = t.name; rs.appendChild(o); } if (!big.find(t => t.id === F.restTool)) F.restTool = big[0] ? big[0].id : ''; rs.value = F.restTool; }
