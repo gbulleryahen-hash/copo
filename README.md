@@ -5,7 +5,7 @@
 
 - **Utiliser COPO / Use COPO :** `index.html` (page GitHub Pages de ce dépôt / this repository's GitHub Pages site)
 - **Mode d'emploi / User guide :** `guide.html` · PDF : `COPO-mode-emploi-FR.pdf`, `COPO-user-guide-EN.pdf`
-- **Bibliothèque libre / Free library :** `bibliotheque/` — 80 dessins 2D (SVG, contours fermés) et 63 reliefs en niveaux de gris (PNG 16 bits), rangés par catégorie, avec un fichier `bibliotheque-copo.copolib` à importer dans COPO. Sources et licences : `bibliotheque/CREDITS.md` / 80 2D drawings and 63 grayscale reliefs, sorted by category, plus a `.copolib` file to import into COPO.
+- **Bibliothèque libre / Free library :** `bibliotheque/` — 180 dessins 2D (SVG, contours fermés) et 87 reliefs en niveaux de gris (PNG 16 bits), rangés par catégorie, avec un fichier `bibliotheque-copo.copolib` à importer dans COPO. Sources et licences : `bibliotheque/CREDITS.md` / 180 2D drawings and 87 grayscale reliefs, sorted by category, plus a `.copolib` file to import into COPO.
 
 **Version 1.226**
 
