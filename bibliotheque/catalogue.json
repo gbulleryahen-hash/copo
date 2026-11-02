@@ -560,61 +560,6 @@
      ]
     },
     {
-     "id": "lutherie-tetes",
-     "fr": "Lutherie – têtes",
-     "en": "Lutherie – headstocks",
-     "elements": [
-      {
-       "nom": "Tête 4+2 trapèze",
-       "fichier": "dessins/lutherie-tetes/tete-4-2-trapeze.svg",
-       "apercu": "apercus/dessins/lutherie-tetes/tete-4-2-trapeze.webp",
-       "taille": 728
-      },
-      {
-       "nom": "Tête 6 en ligne « lame »",
-       "fichier": "dessins/lutherie-tetes/tete-6-en-ligne-lame.svg",
-       "apercu": "apercus/dessins/lutherie-tetes/tete-6-en-ligne-lame.webp",
-       "taille": 718
-      },
-      {
-       "nom": "Tête de basse 2+2 arrondie",
-       "fichier": "dessins/lutherie-tetes/tete-basse-2-2-arrondie.svg",
-       "apercu": "apercus/dessins/lutherie-tetes/tete-basse-2-2-arrondie.webp",
-       "taille": 3175
-      },
-      {
-       "nom": "Tête classique à fentes",
-       "fichier": "dessins/lutherie-tetes/tete-classique-a-fentes.svg",
-       "apercu": "apercus/dessins/lutherie-tetes/tete-classique-a-fentes.webp",
-       "taille": 15639
-      },
-      {
-       "nom": "Tête écusson pointue",
-       "fichier": "dessins/lutherie-tetes/tete-ecusson-pointe.svg",
-       "apercu": "apercus/dessins/lutherie-tetes/tete-ecusson-pointe.webp",
-       "taille": 778
-      },
-      {
-       "nom": "Tête goutte 3+3",
-       "fichier": "dessins/lutherie-tetes/tete-goutte-3-3.svg",
-       "apercu": "apercus/dessins/lutherie-tetes/tete-goutte-3-3.webp",
-       "taille": 3179
-      },
-      {
-       "nom": "Tête hexagonale 3+3",
-       "fichier": "dessins/lutherie-tetes/tete-hexagonale-3-3.svg",
-       "apercu": "apercus/dessins/lutherie-tetes/tete-hexagonale-3-3.webp",
-       "taille": 732
-      },
-      {
-       "nom": "Tête pagaie symétrique",
-       "fichier": "dessins/lutherie-tetes/tete-pagaie-symetrique.svg",
-       "apercu": "apercus/dessins/lutherie-tetes/tete-pagaie-symetrique.webp",
-       "taille": 3318
-      }
-     ]
-    },
-    {
      "id": "noel",
      "fr": "Noël",
      "en": "Christmas",
