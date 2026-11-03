@@ -188,7 +188,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.242</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.243</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -245,7 +245,7 @@ footer p{max-width:none}
     <h3>Formes et tracés</h3>
     <ul>
       <li><strong>Rectangle</strong> <kbd>R</kbd>, avec coins carrés, en rayon externe, en rayon interne (arcs creusés) ou chanfreinés. <strong>Ellipse</strong> <kbd>E</kbd> (Maj : cercle) et <strong>Cercle par le centre</strong> <kbd>C</kbd>.</li>
-      <li><strong>Valeurs chiffrées</strong> (cercle, ellipse, rectangle, polygone et étoile, arc) : le panneau de l’outil affiche des champs comme dans Aspire. Cercle : centre X/Y, rayon ou diamètre. Ellipse et rectangle : point de référence (grille de 9 points), X/Y, largeur et hauteur. Polygone et étoile : centre, rayon, angle. Arc : point de départ, point d’arrivée, rayon et hauteur (flèche), liés entre eux. Tracez à la souris ou saisissez les valeurs : elles modifient la forme qui vient d’être tracée, tant qu’elle est sélectionnée ; <span class="ui">Créer</span> en ajoute une nouvelle.</li>
+      <li><strong>Valeurs chiffrées</strong> (cercle, ellipse, rectangle, polygone et étoile, arc) : le panneau de l’outil affiche des champs comme dans Aspire. Cercle : centre X/Y, rayon ou diamètre. Ellipse et rectangle : point de référence (grille de 9 points), X/Y, largeur et hauteur. Polygone et étoile : centre, rayon, angle. Arc : point de départ, point d’arrivée, rayon et hauteur (flèche), liés entre eux. Tracez à la souris : la forme reste sélectionnée et les valeurs la modifient directement (coins et nombre de côtés compris) ; <span class="ui">Valider</span> la termine, vous pouvez tracer la suivante. Sans forme en cours, saisissez les valeurs puis <span class="ui">Créer</span>. Pour reprendre plus tard une forme tracée ainsi (même déplacée ou redimensionnée), sélectionnez-la et cliquez sur l’icône crayon <span class="ui">Modifier les cotes</span> de la section Sélection.</li>
       <li><strong>Polygone et étoile</strong> <kbd>O</kbd> : nombre de côtés ou de branches, rayon intérieur. Cliquez au centre puis glissez : le 2ᵉ point s’accroche à l’horizontale et à la verticale du centre (<kbd>Ctrl</kbd> : par pas de 15°).</li>
       <li><strong>Plume</strong> <kbd>P</kbd> (premier outil de la rangée Créer) : clic pour un point anguleux, cliquer-glisser pour un point courbe, clic sur le premier point pour fermer, double-clic pour terminer. Près de l’horizontale ou de la verticale du point précédent, le trait s’y aligne tout seul (repère « Horizontale » / « Verticale » et pointillés) ; avec <kbd>Ctrl</kbd>, l’angle avance par pas de 15° (0°, 45°, 90°…). La <kbd>barre d’espace</kbd> termine la ligne en cours et en commence une nouvelle ; le <em>clic droit</em> termine la ligne et quitte la plume. Le bloc <span class="ui">Point suivant</span> du panneau sert à créer les points au clavier : tapez <em>X</em> et <em>Y</em> (position absolue), ou un <em>angle</em> et une longueur <em>L</em>, ou <em>dx</em> et <em>dy</em> depuis le dernier point. Les six champs restent liés (en tapant l’angle et la longueur, X, Y, dx et dy se calculent) et un aperçu en pointillés montre le point. <kbd>Entrée</kbd> ou <span class="ui">Ajouter</span> le pose, <span class="ui">Annuler</span> retire le dernier point, <span class="ui">Fermer</span> et <span class="ui">Terminer</span> finissent le tracé.</li>
       <li><strong>Arc</strong> <kbd>A</kbd> : par 3 points (départ, arrivée, puis le bombé) ou, en mode <em>Centre, départ, arrivée</em>, clic au centre, au départ puis à l’arrivée : l’arc part du côté vers lequel vous tournez la souris autour du centre.</li>
@@ -623,7 +623,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC).</p>
-    <footer><p>COPO 1.242 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.243 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -661,7 +661,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.242</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.243</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -718,7 +718,7 @@ M30</pre>
     <h3>Shapes and paths</h3>
     <ul>
       <li><strong>Rectangle</strong> <kbd>R</kbd>, with square, external radius, internal radius (hollow arcs) or chamfered corners. <strong>Ellipse</strong> <kbd>E</kbd> (Shift: circle) and <strong>Circle from center</strong> <kbd>C</kbd>.</li>
-      <li><strong>Typed values</strong> (circle, ellipse, rectangle, polygon and star, arc): the tool panel shows fields as in Aspire. Circle: center X/Y, radius or diameter. Ellipse and rectangle: reference point (9-point grid), X/Y, width and height. Polygon and star: center, radius, angle. Arc: start point, end point, radius and height (sagitta), linked together. Draw with the mouse or type the values: they change the shape you just drew, while it is selected; <span class="ui">Create</span> adds a new one.</li>
+      <li><strong>Typed values</strong> (circle, ellipse, rectangle, polygon and star, arc): the tool panel shows fields as in Aspire. Circle: center X/Y, radius or diameter. Ellipse and rectangle: reference point (9-point grid), X/Y, width and height. Polygon and star: center, radius, angle. Arc: start point, end point, radius and height (sagitta), linked together. Draw with the mouse: the shape stays selected and the values change it directly (corners and number of sides included); <span class="ui">Confirm</span> finishes it, and you can draw the next one. With no shape in progress, type the values then <span class="ui">Create</span>. To come back later to a shape drawn this way (even moved or resized), select it and click the pencil icon <span class="ui">Edit dimensions</span> in the Selection section.</li>
       <li><strong>Polygon and star</strong> <kbd>O</kbd>: number of sides or points, inner radius. Click the centre then drag: the 2nd point snaps horizontally and vertically to the centre (<kbd>Ctrl</kbd>: 15° steps).</li>
       <li><strong>Pen</strong> <kbd>P</kbd> (first tool of the Create row): click for a corner point, click-drag for a curve point, click the first point to close, double-click to finish. Near the horizontal or vertical of the previous point, the line aligns to it by itself (“Horizontal” / “Vertical” marker and dashes); with <kbd>Ctrl</kbd>, the angle moves in 15° steps (0°, 45°, 90°…). The <kbd>space bar</kbd> ends the current line and starts a new one; a <em>right click</em> ends the line and leaves the pen. The <span class="ui">Next point</span> block in the panel creates points from the keyboard: type <em>X</em> and <em>Y</em> (absolute position), or an <em>angle</em> and a length <em>L</em>, or <em>dx</em> and <em>dy</em> from the last point. The six fields stay linked (typing the angle and length fills in X, Y, dx and dy) and a dashed preview shows the point. <kbd>Enter</kbd> or <span class="ui">Add</span> places it, <span class="ui">Undo</span> removes the last point, <span class="ui">Close</span> and <span class="ui">Finish</span> end the path.</li>
       <li><strong>Arc</strong> <kbd>A</kbd>: through 3 points (start, end, then the bulge) or, in <em>Center, start, end</em> mode, click the center, the start then the end: the arc goes the way you turn the mouse around the center.</li>
@@ -1096,7 +1096,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC).</p>
-    <footer><p>COPO 1.242 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.243 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 

@@ -506,7 +506,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 /* réglages chiffrés des outils, miroir */
 .cfform{display:grid;gap:8px}.cfh{font:600 12px var(--f-ui);color:var(--muted);margin-top:2px}
 .cfform .orow{grid-template-columns:auto minmax(0,1fr);align-items:center}.cfform .g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 10px}.g2>label{min-width:0}.g2>label:has(#fToolBtn){grid-column:1/-1}.g2 #fToolBtn{width:auto;justify-self:start}.g2 input,.g2 .toolpick{min-width:0;max-width:100%}
-.cfform label{display:grid;gap:3px;font-size:12.5px;color:var(--muted)}.cfform input{min-width:0;width:100%}
+.cfform label{display:grid;gap:3px;font-size:12.5px;color:var(--muted)}.cfform input{min-width:0;width:100%}.tb-body .cfform :is(input[type=number],input[type=text]){width:100%}
 .cfseg{display:flex}.cfseg button{flex:1}
 .cfrow{justify-content:flex-start}
 .ogrid button[aria-pressed="true"]::after{background:var(--accent);border-color:var(--accent)}
@@ -824,7 +824,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
               <label>Hauteur<input data-u="len" type="number" id="selH" step="0.1" min="0.01"></label>
             </div>
           </div>
-          <div class="selline"><span class="selchk"><label class="chk"><input type="checkbox" id="selLock" checked> Garder les proportions</label><span class="chk tipw"><label class="chk"><input type="checkbox" id="selRotFrame"> Cadre rotatif</label><button type="button" class="tipi" aria-label="Qu’est-ce que le cadre rotatif ?"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></button><span class="tipb" role="tooltip"><svg viewBox="0 0 220 92" aria-hidden="true"><g transform="translate(55 46)"><rect x="-38" y="-34" width="76" height="68" class="tf"/><g transform="rotate(-30)"><rect x="-26" y="-14" width="52" height="28" rx="2" class="ts"/></g></g><g transform="translate(165 46)"><g transform="rotate(-30)"><rect x="-32" y="-20" width="64" height="40" class="tf"/><rect x="-26" y="-14" width="52" height="28" rx="2" class="ts"/></g></g><text x="55" y="90" class="tt">Décoché</text><text x="165" y="90" class="tt">Coché</text></svg><span>Le cadre des poignées suit l’angle de la forme tournée : on l’étire alors dans son propre sens. Pour une forme seule, ou des formes tournées du même angle.</span></span></span></span><span class="irow"><button data-act="txEdit" id="txEditB" title="Modifier ce texte (police, placement, alignement…)" aria-label="Modifier le texte" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M12 6v13M9 19h6"/></svg></button><button data-act="dup" title="Dupliquer (Ctrl+D)" aria-label="Dupliquer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button><button data-act="del" class="danger" title="Supprimer (Suppr)" aria-label="Supprimer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></span></div>
+          <div class="selline"><span class="selchk"><label class="chk"><input type="checkbox" id="selLock" checked> Garder les proportions</label><span class="chk tipw"><label class="chk"><input type="checkbox" id="selRotFrame"> Cadre rotatif</label><button type="button" class="tipi" aria-label="Qu’est-ce que le cadre rotatif ?"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></button><span class="tipb" role="tooltip"><svg viewBox="0 0 220 92" aria-hidden="true"><g transform="translate(55 46)"><rect x="-38" y="-34" width="76" height="68" class="tf"/><g transform="rotate(-30)"><rect x="-26" y="-14" width="52" height="28" rx="2" class="ts"/></g></g><g transform="translate(165 46)"><g transform="rotate(-30)"><rect x="-32" y="-20" width="64" height="40" class="tf"/><rect x="-26" y="-14" width="52" height="28" rx="2" class="ts"/></g></g><text x="55" y="90" class="tt">Décoché</text><text x="165" y="90" class="tt">Coché</text></svg><span>Le cadre des poignées suit l’angle de la forme tournée : on l’étire alors dans son propre sens. Pour une forme seule, ou des formes tournées du même angle.</span></span></span></span><span class="irow"><button data-act="cfEdit" id="cfEditB" title="Modifier les cotes de cette forme (position, taille, coins…)" aria-label="Modifier les cotes" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><path d="M14.5 5.5l4 4L9 19H5v-4z"/></svg></button><button data-act="txEdit" id="txEditB" title="Modifier ce texte (police, placement, alignement…)" aria-label="Modifier le texte" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M12 6v13M9 19h6"/></svg></button><button data-act="dup" title="Dupliquer (Ctrl+D)" aria-label="Dupliquer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button><button data-act="del" class="danger" title="Supprimer (Suppr)" aria-label="Supprimer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></span></div>
           <div id="hSel" hidden><p class="hint" id="selHint"></p>
           <p class="hint">Cliquez une seconde fois sur la sélection pour afficher les poignées : carrés pour redimensionner, ronds pour tourner (Ctrl : par pas de 15°), cercle orange = pivot déplaçable ; Maj sur un coin libère les proportions, Ctrl redimensionne au millimètre.</p></div>
         </section>
@@ -1253,7 +1253,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.242</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.243</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1661,6 +1661,7 @@ Object.assign(I18N_EN, {"Recalculer tous les parcours": "Recompute all toolpaths
 Object.assign(I18N_EN, {"Ébauche : enlève le gros de la matière en paliers, avec une fraise droite ; il reste une surépaisseur en escalier": "Roughing: removes most of the material in steps, with a flat end mill; a stepped allowance is left", "Finition : la fraise (hémisphérique) suit la surface du relief, en passes fines": "Finishing: the (ball-nose) bit follows the relief surface in fine passes", "Niveaux Z : la matière est enlevée palier par palier, à plat, de haut en bas": "Z levels: material is removed level by level, flat, from top to bottom", "Balayage 3D : des allers-retours qui suivent le relief en gardant la surépaisseur": "3D raster: back-and-forth passes that follow the relief, keeping the allowance", "Balayage : des allers-retours parallèles, à l’angle choisi": "Raster: parallel back-and-forth passes, at the chosen angle", "Décalage : des passes qui suivent le contour du relief et se resserrent vers le centre": "Offset: passes that follow the relief outline and close in towards the centre"});
 Object.assign(I18N_EN, {"menu ⋮ en haut à droite → « Caster, enregistrer et partager » → « Installer la page en tant qu’application… ».": "⋮ menu at the top right → “Cast, save and share” → “Install page as app…”.", "menu … → « Applications » → « Installer ce site en tant qu’application ».": "… menu → “Apps” → “Install this site as an app”.", "menu ≡ → « Enregistrer et partager » → « Installer la page en tant qu’application… ».": "≡ menu → “Save and share” → “Install page as app…”.", "menu Fichier → « Ajouter au Dock ».": "File menu → “Add to Dock”.", "ne sait pas installer les applications web : utilisez l’un des navigateurs ci-dessus.": "cannot install web apps: use one of the browsers above."});
 Object.assign(I18N_EN, {"Installer COPO comme application": "Install COPO as an app", "COPO est déjà ouvert comme application installée.": "COPO is already open as an installed app.", "Votre navigateur ne propose pas l’installation directe depuis COPO. Faites-le depuis son menu :": "Your browser does not offer direct installation from COPO. Use its menu instead:", "Si COPO est déjà installé, le navigateur propose « Ouvrir dans COPO » à la place (icône à droite de la barre d’adresse). Pour le réinstaller, désinstallez-le d’abord depuis l’application (menu ⋮ → « Désinstaller COPO »).": "If COPO is already installed, the browser offers “Open in COPO” instead (icon at the right of the address bar). To reinstall it, first uninstall it from the app (⋮ menu → “Uninstall COPO”)."});
+Object.assign(I18N_EN, {"Valider": "Confirm", "Les valeurs modifient la forme sélectionnée. « Valider » la termine : tracez ensuite la suivante.": "The values change the selected shape. “Confirm” finishes it: then draw the next one.", "Tracez à la souris, ou saisissez les valeurs puis « Créer ».": "Draw with the mouse, or type the values then “Create”.", "Modifier les cotes de cette forme (position, taille, coins…)": "Edit this shape’s dimensions (position, size, corners…)", "Modifier les cotes": "Edit dimensions", "Cette forme a été modifiée autrement (nœuds, rotation…) : ses cotes d’origine ne s’appliquent plus.": "This shape was changed another way (nodes, rotation…): its original dimensions no longer apply."});
 Object.assign(I18N_EN, {"Visite rapide": "Quick tour", "Réafficher les astuces": "Show tips again", "Astuces réactivées : elles s’afficheront à l’ouverture de chaque onglet.": "Tips turned back on: they will show when you open each tab."});
 Object.assign(I18N_EN, {"Aligner sur": "Align to", "La sélection": "The selection", "Le premier objet sélectionné": "The first selected object", "Le brut": "The stock", "Espacement (mm)": "Spacing (mm)", "Perçage": "Drilling", "« La sélection » : un seul objet s'aligne sur le brut, plusieurs s'alignent entre eux. « Le premier objet sélectionné » : il reste en place et les autres s'alignent sur lui ; Répartir les place à sa suite, dans l'ordre de sélection, avec l'espacement indiqué. Les groupes bougent d'un bloc.": "“The selection”: a single object aligns to the stock, several align with each other. “The first selected object”: it stays in place and the others align to it; Distribute places them after it, in selection order, with the given spacing. Groups move as one.", "Sélectionnez au moins deux objets : le premier sert de référence.": "Select at least two objects: the first one is the reference.", "Sélectionnez au moins deux objets : le premier sert de point de départ.": "Select at least two objects: the first one is the starting point.", "Les objets sont plus grands que le brut.": "The objects are larger than the stock.", "Profil sur la ligne 1": "On-line profile 1", "Profil sur la ligne 2": "On-line profile 2", "Poche 1": "Pocket 1", "F2 · Poche 2": "F2 · Pocket 2", "V-carving 2": "V-carving 2", "Foret 4 mm": "4 mm drill"});
 Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the nut / zero fret (mm)"});
@@ -3479,6 +3480,28 @@ function drawNodeEdit(C) {
 const CF_T = ['circle', 'ellipse', 'rect', 'polygon', 'arc'];
 const CF_DEF = { circle: { x: 0, y: 0, dm: 'r', v: 25 }, ellipse: { anc: 'mc', x: 0, y: 0, w: 60, h: 40 }, rect: { anc: 'bl', x: 0, y: 0, w: 80, h: 50 }, polygon: { x: 0, y: 0, r: 30, rot: 90 }, arc: { x0: -30, y0: 0, x1: 30, y1: 0, r: 30, h: 30 } };
 let cfLast = null, cfT = 0;
+// chaque forme tracée avec ces outils garde ses réglages (s.cf) pour pouvoir les modifier plus tard
+const CF_UI = { circle: [], ellipse: [], rect: ['rectCorner', 'rectR'], polygon: ['polyN', 'polyStar', 'polyInner'], arc: ['arcMode'] };
+function cfStore(sh, t) { if (!sh) return; sh.cf = { t, P: JSON.parse(JSON.stringify(cfP(t))), u: Object.fromEntries(CF_UI[t].map(k => [k, S.ui[k]])) }; }
+const cfLinked = t => !!(cfLast && cfLast.t === t && S.sel.size === 1 && S.sel.has(cfLast.id) && shapeById(cfLast.id));
+function cfGen(t, P, u) { const keep = Object.fromEntries(CF_UI[t].map(k => [k, S.ui[k]])); Object.assign(S.ui, u || {}); try { return cfNodes(t, P); } finally { Object.assign(S.ui, keep); } }
+function cfSame(a, b) { if (!a || a.length !== b.length) return false; let m = 0; for (const n of b) m = Math.max(m, Math.abs(n.x), Math.abs(n.y)); const tol = 0.01 + m * 1e-5; return a.every((n, i) => Math.abs(n.x - b[i].x) < tol && Math.abs(n.y - b[i].y) < tol); }
+// réglages valables pour la forme telle qu'elle est maintenant (déplacée ou redimensionnée depuis : on les recalcule)
+function cfFor(sh) {
+  const c = sh && sh.cf; if (!c || !CF_T.includes(c.t)) return null; const t = c.t, cands = [c.P];
+  const g = cfGen(t, c.P, c.u); if (g && g.nodes.length === sh.nodes.length) { const dx = sh.nodes[0].x - g.nodes[0].x, dy = sh.nodes[0].y - g.nodes[0].y, P = { ...c.P }; for (const k of ['x', 'x0', 'x1']) if (k in P) P[k] = +(+P[k] + dx).toFixed(3); for (const k of ['y', 'y0', 'y1']) if (k in P) P[k] = +(+P[k] + dy).toFixed(3); cands.push(P); }
+  if (t === 'rect' || t === 'ellipse' || t === 'circle') { let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (const n of sh.nodes) { x0 = Math.min(x0, n.x); y0 = Math.min(y0, n.y); x1 = Math.max(x1, n.x); y1 = Math.max(y1, n.y); } const b = { x0, y0, x1, y1 }, P = { ...c.P };
+    if (t === 'circle') { const o = cfOut([(x0 + x1) / 2, (y0 + y1) / 2]), r = (x1 - x0) / 2; P.x = o[0]; P.y = o[1]; P.v = +(P.dm === 'd' ? 2 * r : r).toFixed(3); }
+    else { const o = cfOut(anchorPt(b, P.anc || 'bl')); P.x = o[0]; P.y = o[1]; P.w = +(x1 - x0).toFixed(3); P.h = +(y1 - y0).toFixed(3); }
+    cands.push(P); }
+  for (const P of cands) { const r = cfGen(t, P, c.u); if (r && cfSame(r.nodes, sh.nodes)) return { t, P, u: c.u }; }
+  return null;
+}
+function cfEdit() { const ss = selShapes(); const c = ss.length === 1 ? cfFor(ss[0]) : null; if (!c) return toast(tr('Cette forme a été modifiée autrement (nœuds, rotation…) : ses cotes d’origine ne s’appliquent plus.'));
+  const id = ss[0].id; S.ui.cf = S.ui.cf || {}; S.ui.cf[c.t] = { ...c.P }; Object.assign(S.ui, c.u); setTool(c.t); S.sel.clear(); S.sel.add(id); cfLast = { t: c.t, id }; cfFill(c.t); renderSel(); }
+function cfOk() { const t = S.ui.tool; clearTimeout(cfT); if (cfLinked(t)) commit(); cfLast = null; S.sel.clear(); renderSel(); cfBtns(t); draw(); }
+function cfBtns(t) { const f = document.querySelector('.cfform[data-cft="' + t + '"]'); if (!f) return; const on = cfLinked(t); f.querySelector('[data-act="cfCreate"]').hidden = on; f.querySelector('[data-act="cfOk"]').hidden = !on; f.classList.toggle('linked', on);
+  f.querySelector('.cfhint').textContent = tr(on ? 'Les valeurs modifient la forme sélectionnée. « Valider » la termine : tracez ensuite la suivante.' : 'Tracez à la souris, ou saisissez les valeurs puis « Créer ».'); }
 function cfP(t) { S.ui.cf = S.ui.cf || {}; return S.ui.cf[t] = { ...CF_DEF[t], ...(S.ui.cf[t] || {}) }; }
 function cfRectNodes(x0, y0, x1, y1) { const k = S.ui.rectCorner, r = +S.ui.rectR || 0; if (k === 'inner' && r > 0) return rectInnerNodes(x0, y0, x1, y1, r); const s = refresh({ nodes: rectNodes(x0, y0, x1, y1), closed: true }); if (k && k !== 'none' && r > 0) cornerAllNodes(s, k, r); return s.nodes; }
 const CF_FX = { l: 0, c: 0.5, r: 1 }, CF_FY = { b: 0, m: 0.5, t: 1 };
@@ -3503,16 +3526,16 @@ function arcByMode(a, b, c) { // 3 points (départ, arrivée, bombé) ou centre,
 }
 // hauteur (flèche) signée de l'arc S→E passant par M, et rayon
 function arcHR(S0, E, M) { const d = [E[0] - S0[0], E[1] - S0[1]], c = Math.hypot(d[0], d[1]); if (c < 1e-9) return { h: 0, r: 0 }; const k = circle3(S0, E, M); if (!k) return { h: 0, r: 0 }; const nl = [-d[1] / c, d[0] / c], side = Math.sign((M[0] - S0[0]) * nl[0] + (M[1] - S0[1]) * nl[1]) || 1, mid = [(S0[0] + E[0]) / 2, (S0[1] + E[1]) / 2], cs = (k.C[0] - mid[0]) * nl[0] + (k.C[1] - mid[1]) * nl[1];
-  const h = Math.abs(k.r - cs * side); return { h: side * h, r: k.r }; }
+  const h = Math.abs(k.r + cs * side); return { h: side * h, r: k.r }; }
 function cfOut(q) { const o = outXY(q[0], q[1]); return [+o[0].toFixed(3), +o[1].toFixed(3)]; }
 function cfFromDrag(D, s) {
   const t = D.mode; if (!CF_T.includes(t)) return; const P = cfP(t);
   if (t === 'rect' || t === 'ellipse') { const b = bbox([s]), q = anchorPt(b, P.anc), o = cfOut(q); P.x = o[0]; P.y = o[1]; P.w = +b.w.toFixed(3); P.h = +b.h.toFixed(3); }
   if (t === 'circle') { const o = cfOut(D.p0), r = hyp(D.p0, D.p1); P.x = o[0]; P.y = o[1]; P.v = +(P.dm === 'd' ? 2 * r : r).toFixed(3); }
   if (t === 'polygon') { const o = cfOut(D.p0); P.x = o[0]; P.y = o[1]; P.r = +hyp(D.p0, D.p1).toFixed(3); P.rot = +(Math.atan2(D.p1[1] - D.p0[1], D.p1[0] - D.p0[0]) * 180 / Math.PI).toFixed(2); }
-  cfLast = { t, id: s.id }; cfFill(t);
+  cfLast = { t, id: s.id }; cfStore(s, t); cfFill(t);
 }
-function cfFromArc(A, s) { const P = cfP('arc'), a = cfOut(A.S), b = cfOut(A.E), k = arcHR(A.S, A.E, A.M); P.x0 = a[0]; P.y0 = a[1]; P.x1 = b[0]; P.y1 = b[1]; P.h = +k.h.toFixed(3); P.r = +k.r.toFixed(3); cfLast = { t: 'arc', id: s.id }; cfFill('arc'); }
+function cfFromArc(A, s) { const P = cfP('arc'), a = cfOut(A.S), b = cfOut(A.E), k = arcHR(A.S, A.E, A.M); P.x0 = a[0]; P.y0 = a[1]; P.x1 = b[0]; P.y1 = b[1]; P.h = +k.h.toFixed(3); P.r = +k.r.toFixed(3); cfLast = { t: 'arc', id: s.id }; { const g = cfNodes('arc', P); if (g && g.nodes.length > 1) { s.nodes = g.nodes.map(cloneNode); refresh(s); } } cfStore(s, 'arc'); cfFill('arc'); }
 function cfHTML(t, extra) {
   const L = (lbl, k, more = '') => '<label>' + lbl + '<input data-u="len" type="number" data-cf="' + k + '" step="0.1"' + more + '></label>';
   const anc = '<div class="ogrid sm cfanc" role="group" aria-label="Point de référence">' + ['tl', 'tc', 'tr', 'ml', 'mc', 'mr', 'bl', 'bc', 'br'].map(a => '<button type="button" data-cfa="' + a + '"></button>').join('') + '</div>';
@@ -3521,7 +3544,7 @@ function cfHTML(t, extra) {
   if (t === 'ellipse' || t === 'rect') h = '<div class="cfh">Point</div><div class="orow">' + anc + '<div class="g2">' + L('X', 'x') + L('Y', 'y') + '</div></div><div class="cfh">Taille</div><div class="g2">' + L('Largeur (X)', 'w', ' min="0.01"') + L('Hauteur (Y)', 'h', ' min="0.01"') + '</div>' + (t === 'rect' ? '<div class="cfh">Type de coin</div>' + extra : '');
   if (t === 'polygon') h = extra + '<div class="cfh">Centre</div><div class="g2">' + L('X', 'x') + L('Y', 'y') + L('Rayon (mm)', 'r', ' min="0"') + '<label>Angle (°)<input type="number" data-cf="rot" step="1"></label></div>';
   if (t === 'arc') h = '<div class="seg cfseg" data-cfseg="arcMode"><button type="button" value="3p">À travers 3 points</button><button type="button" value="center">Centre, départ, arrivée</button></div><div class="cfh">Point de départ</div><div class="g2">' + L('X', 'x0') + L('Y', 'y0') + '</div><div class="cfh">Point d’arrivée</div><div class="g2">' + L('X', 'x1') + L('Y', 'y1') + '</div><div class="g2">' + L('Rayon (mm)', 'r', ' min="0"') + L('Hauteur (mm)', 'h') + '</div>';
-  return '<div class="cfform" data-cft="' + t + '">' + h + '<div class="row cfrow"><button type="button" class="primary" data-act="cfCreate">Créer</button></div><p class="hint">' + tr('Tracez à la souris ou saisissez les valeurs. Les valeurs modifient la forme qui vient d’être tracée (tant qu’elle est sélectionnée) ; « Créer » en ajoute une nouvelle.') + '</p></div>';
+  return '<div class="cfform" data-cft="' + t + '">' + h + '<div class="row cfrow"><button type="button" class="primary" data-act="cfCreate">Créer</button><button type="button" class="primary" data-act="cfOk" hidden>Valider</button></div><p class="hint cfhint"></p></div>';
 }
 function cfFill(t) {
   const f = document.querySelector('.cfform[data-cft="' + t + '"]'); if (!f) return; const P = cfP(t);
@@ -3529,19 +3552,21 @@ function cfFill(t) {
   f.querySelectorAll('[data-cfa]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cfa === P.anc));
   const dm = f.querySelector('[data-cfseg="dm"]'); if (dm) { dm.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.value === (P.dm || 'r'))); const rl = $('#cfRL'); if (rl) rl.textContent = tr(P.dm === 'd' ? 'Diamètre' : 'Rayon'); }
   const am = f.querySelector('[data-cfseg="arcMode"]'); if (am) am.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.value === (S.ui.arcMode === 'center' ? 'center' : '3p')));
+  cfBtns(t);
 }
 function cfLive(t, final) {
   const sh = cfLast && cfLast.t === t && S.sel.size === 1 && S.sel.has(cfLast.id) ? shapeById(cfLast.id) : null; if (!sh) return; const r = cfNodes(t, cfP(t)); if (!r || r.nodes.length < 2) return;
-  sh.nodes = r.nodes.map(cloneNode); refresh(sh); if (typeof snapVer !== 'undefined') snapVer++; renderSel(); draw();
+  sh.nodes = r.nodes.map(cloneNode); refresh(sh); cfStore(sh, t); if (typeof snapVer !== 'undefined') snapVer++; renderSel(); draw();
   clearTimeout(cfT); if (final) commit(); else cfT = setTimeout(() => commit(), 700);
 }
-function cfCreate() { const t = S.ui.tool; if (!CF_T.includes(t)) return; const r = cfNodes(t, cfP(t)); if (!r || r.nodes.length < 2) return toast(tr('Valeurs incomplètes : indiquez une taille.')); const s = mkShape(r.nodes.map(cloneNode), r.closed); if (!s) return; S.sel.clear(); S.sel.add(s.id); cfLast = { t, id: s.id }; renderSel(); commit(); draw(); toast(tr('Forme créée.')); }
+function cfCreate() { const t = S.ui.tool; if (!CF_T.includes(t)) return; const r = cfNodes(t, cfP(t)); if (!r || r.nodes.length < 2) return toast(tr('Valeurs incomplètes : indiquez une taille.')); const s = mkShape(r.nodes.map(cloneNode), r.closed); if (!s) return; cfStore(s, t); S.sel.clear(); S.sel.add(s.id); cfLast = { t, id: s.id }; renderSel(); commit(); draw(); toast(tr('Forme créée.')); }
 function cfBind(t) {
   const f = document.querySelector('.cfform[data-cft="' + t + '"]'); if (!f) return; uAttrs(f); cfFill(t);
   f.addEventListener('input', e => { const k = e.target.dataset.cf; if (!k) return; const P = cfP(t), v = parseFloat(String(e.target.value).replace(',', '.')); if (!isFinite(v)) return; P[k] = v;
     if (t === 'arc') { const c = Math.hypot((P.x1 - P.x0), (P.y1 - P.y0)); if (k === 'h') { P.r = Math.abs(P.h) > 1e-9 ? +((c * c / 4 + P.h * P.h) / (2 * Math.abs(P.h))).toFixed(3) : 0; } else if (k === 'r') { const r = Math.max(P.r, c / 2), big = Math.abs(P.h) > c / 2, sg = Math.sign(P.h) || 1; P.h = +(sg * (r + (big ? 1 : -1) * Math.sqrt(Math.max(0, r * r - c * c / 4)))).toFixed(3); } else { P.r = Math.abs(P.h) > 1e-9 ? +((c * c / 4 + P.h * P.h) / (2 * Math.abs(P.h))).toFixed(3) : 0; } cfFill(t); }
     cfLive(t); });
-  f.addEventListener('change', e => { if (e.target.dataset.cf) cfLive(t, true); });
+  f.addEventListener('change', e => { if (e.target.dataset.cf) cfLive(t, true); else if (e.target.dataset.k) setTimeout(() => cfLive(t, true), 0); });
+  f.addEventListener('input', e => { if (e.target.dataset.k) setTimeout(() => cfLive(t), 0); });
   f.addEventListener('click', e => {
     const a = e.target.closest('[data-cfa]'); if (a) { const P = cfP(t), old = cfBox(P); P.anc = a.dataset.cfa; const q = anchorPt({ x0: old.x0, y0: old.y0, x1: old.x0 + old.w, y1: old.y0 + old.h }, P.anc), o = cfOut(q); P.x = o[0]; P.y = o[1]; cfFill(t); return; }
     const sb = e.target.closest('.cfseg button'); if (sb) { const g = sb.parentElement.dataset.cfseg, P = cfP(t); if (g === 'dm' && P.dm !== sb.value) { P.v = +(sb.value === 'd' ? (+P.v || 0) * 2 : (+P.v || 0) / 2).toFixed(3); P.dm = sb.value; } if (g === 'arcMode') { S.ui.arcMode = sb.value; arcSt = []; } cfFill(t); return; }
@@ -4900,10 +4925,12 @@ function renderSel() {
   if (!S.editTp) $('#tpApply').textContent = 'Calculer sur la sélection (' + S.sel.size + ')';
   tpSelInfo(); rotSync(); fitSoon(); draw();
   $$('#selAnchor button').forEach(b => b.setAttribute('aria-pressed', b.dataset.a === S.ui.selAnchor));
-  if (!ss.length) { ids.forEach(i => { $(i).value = ''; $(i).disabled = true; }); $('#selHint').textContent = ''; return; }
+  if (!ss.length) { ids.forEach(i => { $(i).value = ''; $(i).disabled = true; }); $('#selHint').textContent = ''; { const b = $('#cfEditB'); if (b) b.hidden = true; } if (CF_T.includes(S.ui.tool)) cfBtns(S.ui.tool); return; }
   ids.forEach(i => $(i).disabled = false); const b = bbox(ss), pa = anchorPt(b, S.ui.selAnchor), o = outXY(pa[0], pa[1]);
   $('#selHint').textContent = 'X / Y : position du point « ' + ORIGIN_LBL[S.ui.selAnchor] + ' » de la sélection, par rapport à l’origine. Largeur et hauteur changent en gardant ce point fixe.';
   { const b = $('#txEditB'); if (b) b.hidden = !txSelIsText(); }
+  { const b = $('#cfEditB'); if (b) b.hidden = !(ss.length === 1 && ss[0].cf && cfFor(ss[0])); }
+  if (CF_T.includes(S.ui.tool)) cfBtns(S.ui.tool);
   $('#selX').value = +o[0].toFixed(3); $('#selY').value = +o[1].toFixed(3); $('#selW').value = +b.w.toFixed(3); $('#selH').value = +b.h.toFixed(3);
   $('#selW').disabled = b.w < 1e-6; $('#selH').disabled = b.h < 1e-6;
   if (typeof dRefresh === 'function') dRefresh();
@@ -5211,6 +5238,8 @@ function act(a, btn) {
       const it = relCur(); if (it) { relOutline(it); return; }
       toast(tr('Sélectionnez d’abord une image (sur le plan) ou un relief (sur le plan, dans la vue 3D ou dans l’onglet Relief).')); return; }
     case 'cfCreate': cfCreate(); return;
+    case 'cfOk': cfOk(); return;
+    case 'cfEdit': cfEdit(); return;
     case 'relBarMachine': { RELBAR = null; tpNew('relief'); return; }
     case 'relBarProfile': { RELBAR = null; tpNew('profile'); return; }
     case 'relBarDup': relDup(); return;
@@ -6385,7 +6414,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.242', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.243', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
