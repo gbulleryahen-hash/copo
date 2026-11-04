@@ -391,6 +391,7 @@ label.inl input{width:70px}
 .fp-styles button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .optbar .fp-mini{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
 .coordin{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.tpt{min-width:0;display:flex;align-items:center;gap:6px}.tpt b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tpbad{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;font:700 10px/1 sans-serif;font-style:normal;color:#111}.newhat{flex-basis:100%;font-size:12.5px;color:var(--muted)}.newhat b{color:#ff9f1c;font-weight:600}
+.tcmode{display:grid;gap:6px}.tcmode .tcl{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.tcmode input[type=text]{width:90px;font-family:var(--f-mono)}.tcmode .tcs{display:flex;align-items:center;gap:6px}.tcmode .tcfull{flex-basis:100%}.tcmode .tcind{margin-left:26px}
 .tpbad.stale{background:var(--accent);color:var(--accent-ink);font-size:11px}.tpprog{position:absolute;z-index:30;left:50%;top:44px;transform:translateX(-50%);width:min(420px,80%);padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);box-shadow:0 8px 24px rgb(0 0 0 / .35);display:grid;gap:6px;font-size:12.5px}.tpprog[hidden]{display:none}.tpprog i{display:block;position:relative;height:6px;border-radius:3px;background:var(--raised);overflow:hidden}.tpprog b{position:absolute;left:0;top:0;bottom:0;background:var(--accent);transition:width .2s}.tpprog b::after{content:'';position:absolute;left:100%;top:0;bottom:0;width:var(--w,10%);background:repeating-linear-gradient(45deg,var(--accent) 0 6px,transparent 6px 12px);opacity:.55;animation:tpst 1s linear infinite}@keyframes tpst{to{background-position:24px 0}}.tprecalc{width:100%;margin:6px 0}
 .tpbad.err{background:var(--danger)}.tpbad.wrn{background:#e8a33a}#relSum.bad{color:var(--danger);font-weight:500}.rlclip{display:grid;gap:6px;margin:8px 0}.ptb button:disabled{opacity:.45;cursor:default}.nebtn{display:inline-flex;align-items:center;gap:6px}.neico{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.neico .nf{fill:var(--accent);stroke:none}.neico .nh{stroke:var(--accent);stroke-width:1.3}.ptnext{display:grid;gap:8px}.ptnext>b{font-size:12.5px}.ptg{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px}.ptg label{display:grid;grid-template-columns:42px 1fr;align-items:center;gap:6px;font-size:12px;color:var(--muted)}.ptg input{width:100%;min-width:0}.ptb{display:flex;flex-wrap:wrap;gap:6px}
 .coordin input{width:80px}
@@ -1132,6 +1133,13 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             <label class="span2">Post-processeur<select id="mPost"></select></label>
             <label>Vitesse des rapides (mm/min)<input data-u="feed" type="number" id="mRapid" step="100" min="100"></label>
             <label>Avance de travail maximale (mm/min)<input data-u="feed" type="number" id="mMaxFeed" step="100" min="100"></label>
+            <div class="span2 tcmode" id="mTcBox"><div class="cfg-lbl">Changement d’outil</div>
+              <label class="chk"><input type="radio" name="mTcMode" value="post"> Selon le post-processeur</label>
+              <label class="chk"><input type="radio" name="mTcMode" value="none"> Aucune commande</label>
+              <div class="tcl"><label class="chk"><input type="radio" name="mTcMode" value="pause"> Commande de pause</label><input type="text" id="mTcPause" placeholder="M0" spellcheck="false"></div>
+              <div class="tcl"><label class="chk tcfull"><input type="radio" name="mTcMode" value="cmd"> Commande de changement</label><label class="tcs tcind">Commande de début<input type="text" id="mTcA" placeholder="T" spellcheck="false"></label><label class="chk tcs"><input type="checkbox" id="mTcN"> N° d’outil</label><label class="tcs">Commande de fin<input type="text" id="mTcB" placeholder=" M6" spellcheck="false"></label></div>
+              <p class="hint" id="mTcEx"></p>
+            </div>
             <div id="mTcRow" class="span2 tcrow"><label class="chk"><input type="checkbox" id="mTcOn"> Remonter à un Z machine (G53) au changement d’outil</label><label id="mTcZRow">Z machine du changement d’outil (G53)<input data-u="len" type="number" id="mTcZ" step="1"></label><p class="hint">Désactivé par défaut : avec G53, une valeur de Z mal réglée peut envoyer la broche en butée ou dans la pièce. Activez-le seulement si vous connaissez les coordonnées machine de votre CNC. Désactivé, la broche remonte simplement au Z de sécurité.</p></div>
           </div>
           <div class="g2">
@@ -1255,7 +1263,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.255</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.256</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1672,6 +1680,7 @@ Object.assign(I18N_EN, {"Symétrique": "Symmetric", "Nœud symétrique : poigné
 Object.assign(I18N_EN, {"Couleur du relief (vue 3D et simulation)": "Relief colour (3D view and simulation)", "Gris": "Grey", "Orange": "Orange", "Bleu": "Blue"});
 Object.assign(I18N_EN, {"Bronze": "Bronze", "Bois clair": "Light wood", "Bois foncé": "Dark wood", "Plastique": "Plastic"});
 Object.assign(I18N_EN, {"Ne pas enlever la surépaisseur": "Do not remove the allowance", " Surépaisseur laissée en place : à enlever par un autre parcours (finition).": " Allowance left in place: remove it with another toolpath (finishing)."});
+Object.assign(I18N_EN, {"Changement d’outil": "Tool change", "Selon le post-processeur": "As set by the post-processor", "Aucune commande": "No command", "Commande de pause": "Pause command", "Commande de changement": "Tool change command", "N° d’outil": "Tool no.", "Commande de début": "Start command", "Commande de fin": "End command", "aucune ligne (l’outil n’est indiqué qu’en commentaire)": "no line (the tool only appears in a comment)", "celui du post-processeur choisi": "the one of the chosen post-processor", "Exemple pour l’outil n° 6 :": "Example for tool no. 6:"});
 Object.assign(I18N_EN, {"Visite rapide": "Quick tour", "Réafficher les astuces": "Show tips again", "Astuces réactivées : elles s’afficheront à l’ouverture de chaque onglet.": "Tips turned back on: they will show when you open each tab."});
 Object.assign(I18N_EN, {"Aligner sur": "Align to", "La sélection": "The selection", "Le premier objet sélectionné": "The first selected object", "Le brut": "The stock", "Espacement (mm)": "Spacing (mm)", "Perçage": "Drilling", "« La sélection » : un seul objet s'aligne sur le brut, plusieurs s'alignent entre eux. « Le premier objet sélectionné » : il reste en place et les autres s'alignent sur lui ; Répartir les place à sa suite, dans l'ordre de sélection, avec l'espacement indiqué. Les groupes bougent d'un bloc.": "“The selection”: a single object aligns to the stock, several align with each other. “The first selected object”: it stays in place and the others align to it; Distribute places them after it, in selection order, with the given spacing. Groups move as one.", "Sélectionnez au moins deux objets : le premier sert de référence.": "Select at least two objects: the first one is the reference.", "Sélectionnez au moins deux objets : le premier sert de point de départ.": "Select at least two objects: the first one is the starting point.", "Les objets sont plus grands que le brut.": "The objects are larger than the stock.", "Profil sur la ligne 1": "On-line profile 1", "Profil sur la ligne 2": "On-line profile 2", "Poche 1": "Pocket 1", "F2 · Poche 2": "F2 · Pocket 2", "V-carving 2": "V-carving 2", "Foret 4 mm": "4 mm drill"});
 Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the nut / zero fret (mm)"});
@@ -2904,6 +2913,7 @@ function makeGcode(tps, tools, stock, M, faceMode) {
   const FL = stock.flip === 'y' ? "l'axe Y (gauche - droite)" : "l'axe X (haut - bas)", has2 = tps.some(t => t.face === 2), has1 = tps.some(t => t.face !== 2);
   if (has2 && !has1) cm('FACE 2 (dessous) - piece retournee autour de ' + FL + ', origine refaite au meme point');
   else if (has1 && has2) cm('Double face : face 1 puis pause M0 pour retourner la piece autour de ' + FL);
+  const TC = ['none', 'pause', 'cmd'].includes(M.tcMode) ? M.tcMode : null, tcCmd = tool => TC === 'pause' ? String(M.tcPause || 'M0') : TC === 'cmd' ? String(M.tcA ?? 'T') + (M.tcN !== false ? (tool.num || 1) : '') + String(M.tcB ?? ' M6') : ''; // changement d'outil choisi dans la machine (sinon celui du post-processeur)
   const PP = postOf(M), MAN = PP.tc === 'manual', CUS = PP.tc === 'custom', CP = { ...CUSTOM_POST(), ...(M.custom || {}) }, G53 = M.tcOn ? 'G53 G0 Z' + nx(M.tcZ === undefined || M.tcZ === '' ? -10 : +M.tcZ) : 'G0 Z' + nx(M.safeZ + oz); // G53 seulement si activé dans la machine (sinon Z de sécurité)
   const tpl = (t, tool) => String(t || '').replace(/\{(\w+)\}/g, (m, k) => { const v = { UNITS: M.g20 ? 'G20' : 'G21', SAFEZ: nx(M.safeZ + oz), TCZ: nx(M.tcZ === undefined || M.tcZ === '' ? -10 : +M.tcZ), T: tool ? (tool.num || 1) : '', S: tool ? rpmClamp(tool.rpm || 0) : '', D: tool && tool.dia ? nx(tool.dia) : '', TOOL: tool ? String(tool.name).replace(/[()]/g, '') : '' }[k]; return v === undefined ? m : v; }).split('\n').filter(x => x.trim() !== '' && (M.tcOn || !/G53/i.test(x))); // sans G53 activé, les lignes G53 des modèles sont retirées
   if (MAN) cm('Changement manuel : remontee en ' + G53 + ' puis pause M0 avant chaque outil');
@@ -2921,14 +2931,15 @@ function makeGcode(tps, tools, stock, M, faceMode) {
     if (lastTool !== tool.id) {
       if (MAN) {
         if (tool.id === flipTool) cm('Outil : ' + tool.name + ' (inchange)');
-        else { if (lastTool !== null) L.push('M5'); L.push(G53); cm("Mettre l'outil : " + tool.name + (tool.dia ? ' D' + nx(tool.dia) : '') + ' - refaire le zero Z puis reprendre'); L.push('M0'); }
+        else { if (lastTool !== null) L.push('M5'); L.push(G53); cm("Mettre l'outil : " + tool.name + (tool.dia ? ' D' + nx(tool.dia) : '') + ' - refaire le zero Z puis reprendre'); if (!TC) L.push('M0'); else if (TC !== 'none') L.push(tcCmd(tool)); }
         st = { g: null, x: null, y: null, z: null, f: null };
       } else if (lastTool !== null) { if (st.z === null || nx(st.z) !== nx(M.safeZ + oz)) L.push('G0 Z' + nx(M.safeZ + oz)); L.push('M5'); st.z = M.safeZ + oz; st.g = 0; }
       if (MAN) { }
+      else if (TC) { cm((TC === 'pause' && lastTool !== null ? "Changer d'outil : " : 'Outil : ') + tool.name); if (TC === 'cmd' || (TC === 'pause' && lastTool !== null)) L.push(tcCmd(tool)); }
       else if (CUS) { cm('Outil : ' + tool.name); L.push(...tpl(CP.tc, tool)); }
       else if (PP.tc === 'pause') { cm((lastTool === null ? 'Outil : ' : "Changer d'outil : ") + tool.name); if (lastTool !== null) L.push('M0'); }
       else { cm('Outil : ' + tool.name); L.push(PP.m6.replace('{T}', tool.num || 1)); }
-      if (!CUS) { L.push('S' + rpmClamp(tool.rpm || 0) + ' M3'); L.push('G4 P3'); }
+      if (!CUS || TC) { L.push('S' + rpmClamp(tool.rpm || 0) + ' M3'); L.push('G4 P3'); }
       lastTool = tool.id; flipTool = null;
     }
     cm('Parcours : ' + tp.name);
@@ -6483,7 +6494,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.255', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.256', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6951,6 +6962,9 @@ readFile($('#fLib'), (data, f) => {
 }, true);
 
 // ---------- panneau G-code ----------
+$$('input[name=mTcMode]').forEach(r => r.addEventListener('change', e => { if (!e.target.checked) return; S.machine.tcMode = e.target.value === 'post' ? undefined : e.target.value; tcSync(); autosave(); gcDirty = true; renderGcode(); }));
+[['#mTcPause', 'tcPause'], ['#mTcA', 'tcA'], ['#mTcB', 'tcB']].forEach(([id, k]) => $(id).addEventListener('change', e => { S.machine[k] = e.target.value; tcSync(); autosave(); gcDirty = true; renderGcode(); }));
+$('#mTcN').addEventListener('change', e => { S.machine.tcN = e.target.checked; tcSync(); autosave(); gcDirty = true; renderGcode(); });
 $('#mTcOn').addEventListener('change', e => { S.machine.tcOn = e.target.checked; $('#mTcZRow').hidden = !e.target.checked; autosave(); gcDirty = true; renderGcode(); });
 $('#mTcZ').addEventListener('change', e => { const v = +e.target.value; if (!isFinite(v)) return; S.machine.tcZ = v; autosave(); gcDirty = true; renderGcode(); });
 $('#uLen').onchange = e => setUnits({ len: e.target.value, feed: e.target.value === 'in' ? 'in/min' : 'mm/min' });
@@ -6967,10 +6981,15 @@ function postSelFill() {
 }
 function vpJetWarn(M) { const P = postOf(M || S.machine); if (!P.vp) return ''; const B = vpGet(P.vp).blocks, jetty = !!B.JET_TOOL_ON || (!!B.PLUNGE_MOVE && !B.PLUNGE_MOVE.some(t => /\[Z\]/i.test(t))); if (!jetty) return '';
   const bad = S.tps.filter(t => t.visible && (t.type === 'profile' || t.type === 'pocket') && (t.p.entry || 'plunge') !== 'plunge'); return bad.length ? trf('Ce post-processeur allume l’outil (jet, laser) à la plongée : {n} parcours ont une entrée en rampe, en arc ou en hélice, l’outil ne s’y allumerait pas. Choisissez « Plongée droite » pour ces parcours.', { n: bad.length }) : tr('Ce post-processeur allume l’outil (jet, laser) à la plongée : gardez l’entrée « Plongée droite » pour vos parcours.'); }
-function vpUiSync() { const P = postOf(S.machine), vp = !!P.vp, h = $('#mVpHint'); $('#vpRemove').hidden = !String(S.machine.post).startsWith('vpu:'); $('#mCycRow').hidden = vp; $('#mComments').closest('label').hidden = vp;
+function vpUiSync() { if (typeof tcSync === 'function') tcSync(); const P = postOf(S.machine), vp = !!P.vp, h = $('#mVpHint'); $('#vpRemove').hidden = !String(S.machine.post).startsWith('vpu:'); $('#mCycRow').hidden = vp; $('#mComments').closest('label').hidden = vp;
   if (h) { h.hidden = !vp; if (vp) { const d = vpGet(P.vp); h.textContent = trf('Post-processeur au format .pp : unités ({u}), format des nombres, en-tête, changement d’outil et fin du programme viennent de sa définition ; fichier .{e}.', { u: d.inch ? tr('pouces') : 'mm', e: d.ext }) + (d.ignored.length ? ' ' + trf('Blocs non gérés, ignorés : {b}.', { b: d.ignored.join(', ') }) : '') + (vpJetWarn() ? ' ' + vpJetWarn() : '') + (/Drilloffset/.test(P.vp) ? ' ' + tr('Perceuse pneumatique ShopBot : à utiliser seulement avec des parcours de Perçage ; la machine doit avoir ses fichiers de décalage des perceuses (C#,90) configurés.') : ''); } } }
+function tcSync() { const M = S.machine, P = postOf(M), m = ['none', 'pause', 'cmd'].includes(M.tcMode) ? M.tcMode : 'post'; const box = $('#mTcBox'); if (!box) return; box.hidden = !!P.vp;
+  box.querySelectorAll('input[name=mTcMode]').forEach(r => r.checked = r.value === m); $('#mTcPause').value = M.tcPause ?? 'M0'; $('#mTcA').value = M.tcA ?? 'T'; $('#mTcN').checked = M.tcN !== false; $('#mTcB').value = M.tcB ?? ' M6';
+  $('#mTcPause').disabled = m !== 'pause'; ['#mTcA', '#mTcN', '#mTcB'].forEach(id => $(id).disabled = m !== 'cmd');
+  const n = 6, ex = m === 'none' ? tr('aucune ligne (l’outil n’est indiqué qu’en commentaire)') : m === 'pause' ? '« ' + (M.tcPause || 'M0') + ' »' : m === 'cmd' ? '« ' + String(M.tcA ?? 'T') + (M.tcN !== false ? n : '') + String(M.tcB ?? ' M6') + ' »' : tr('celui du post-processeur choisi');
+  $('#mTcEx').textContent = tr('Exemple pour l’outil n° 6 :') + ' ' + ex; }
 function syncMachine() {
-  postSelFill();
+  postSelFill(); tcSync();
   if (!POSTS[S.machine.post] && !(String(S.machine.post).startsWith('vpu:') && S.machine.vpText)) S.machine.post = 'grbl';
   const cp = { ...CUSTOM_POST(), ...(S.machine.custom || {}) }; $('#mcHead').value = cp.head; $('#mcTc').value = cp.tc; $('#mcFoot').value = cp.foot; $('#mcExt').value = cp.ext; $('#mcG911').checked = !!cp.g911; $('#mCustom').hidden = S.machine.post !== 'custom';
   cycSync(); $('#mPost').value = S.machine.post; $('#mRapid').value = S.machine.rapid; $('#mMaxFeed').value = S.machine.maxFeed || 2000; $('#mSafe').value = S.machine.safeZ; $('#mClear').value = S.machine.clearZ; $('#mComments').checked = S.machine.comments; $('#mArcs').checked = S.machine.arcs !== false; $('#mTcZ').value = S.machine.tcZ === undefined ? -10 : S.machine.tcZ; $('#mTcRow').hidden = S.machine.post !== 'grblm' && S.machine.post !== 'custom'; $('#mTcOn').checked = !!S.machine.tcOn; $('#mTcZRow').hidden = !S.machine.tcOn; }
