@@ -1263,7 +1263,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.257-optim1</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.257-optim2</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -6495,7 +6495,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.257-optim1', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.257-optim2', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -7078,6 +7078,17 @@ function makeSim(stock, tps, tools, rapid, target) {
   }
   const B = new Float32Array(nx * ny); B.fill(-t); return { w, h, t, ox: X0, oy: Y0, nx, ny, cx, cy, H: new Float32Array(nx * ny), B, floor: -t - 0.01, segs, cum, thr, total: T, idx: 0, frac: 0, has2: segs.some(q => q.face === 2) };
 }
+/* petite empreinte (quelques dizaines de points) : le calcul direct est plus rapide */
+function simStampD(S3, x, y, z, K, face) {
+  const { nx, ny, cx, cy, H, B, floor, t } = S3, ci = Math.round((x - (S3.ox || 0)) / cx), cj = Math.round((y - (S3.oy || 0)) / cy), { di, dj, dz, n } = K;
+  if (face === 2) { for (let k = 0; k < n; k++) { const i = ci + di[k], j = cj + dj[k]; if (i < 0 || j < 0 || i >= nx || j >= ny) continue; const q = j * nx + i, v = -t - (z + dz[k]); if (v > B[q]) B[q] = v > 0.01 ? 0.01 : v; } return; }
+  for (let k = 0; k < n; k++) { const i = ci + di[k], j = cj + dj[k]; if (i < 0 || j < 0 || i >= nx || j >= ny) continue; const q = j * nx + i, v = z + dz[k]; if (v < H[q]) H[q] = v < floor ? floor : v; }
+}
+function simSegD(S3, s, f0, f1) {
+  const a = s.a, b = s.b; if (a[2] >= 0 && b[2] >= 0) return;
+  const len = Math.hypot(b[0] - a[0], b[1] - a[1]) * (f1 - f0), st = Math.max(1, Math.ceil(len / (Math.min(S3.cx, S3.cy) * 0.5)));
+  for (let k = 0; k <= st; k++) { const f = f0 + (f1 - f0) * k / st, z = a[2] + (b[2] - a[2]) * f; if (z >= 0) continue; simStampD(S3, a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, z, s.K, s.face); }
+}
 /* empreinte rangée par lignes (j) : début et longueur de chaque ligne, pour des boucles contiguës */
 function kRows(K) {
   if (K.rows) return K.rows; const { di, dj, n } = K, J = [], I0 = [], S0 = [], N = [];
@@ -7116,6 +7127,7 @@ function simStampC(S3, ci, cj, z, K, face) {
 function simStamp(S3, x, y, z, K, face) { simStampC(S3, Math.round((x - (S3.ox || 0)) / S3.cx), Math.round((y - (S3.oy || 0)) / S3.cy), z, K, face); }
 /* dans un même appel, l'ordre des tampons ne change rien (on garde toujours le plus bas) : les échantillons successifs sur la même maille sont fusionnés (seul le plus bas compte), et un segment qui descend est parcouru à l'envers, du point le plus bas au plus haut, pour que chaque tampon soit presque entièrement couvert par le précédent. L'état à la fin de l'appel est identique */
 function simSeg(S3, s, f0, f1) {
+  if (s.K.n < 30) return simSegD(S3, s, f0, f1);
   const a = s.a, b = s.b; if (a[2] >= 0 && b[2] >= 0) return;
   const len = Math.hypot(b[0] - a[0], b[1] - a[1]) * (f1 - f0), st = Math.max(1, Math.ceil(len / (Math.min(S3.cx, S3.cy) * 0.5))), ox = S3.ox || 0, oy = S3.oy || 0;
   let pi = 0, pj = 0, pz = 0, has = false;
