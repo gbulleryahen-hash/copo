@@ -1265,7 +1265,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.257-optim9</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.257-optim10</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -3434,12 +3434,14 @@ function drawRulers(C) {
   ctx.stroke(); ctx.fillStyle = C.panel; ctx.fillRect(0, 0, RB, RB);
 }
 let TPA = 1;
+/* nouvelle passe de largeur de coupe quand la largeur change de plus de 0,05 mm (ou 4 %) : le découpage, donc l'intensité des chevauchements, est le même à tous les zooms */
+const tpCutSplit = (wm, cw) => Math.abs(wm - cw) > Math.max(0.05, 0.04 * cw);
 function drawTPCut(c, mv, col, alpha, wOf) {
   c.save(); c.globalAlpha = alpha; c.strokeStyle = col; c.lineCap = 'round'; c.lineJoin = 'round';
   let pen_ = false, cw_ = -1; c.beginPath();
   for (let i = 1; i < mv.length; i++) {
     const a = mv[i - 1], b = mv[i];
-    if (b.g === 1 && (b.z < -1e-6 || a.z < -1e-6)) { const w = Math.max(1, wOf(Math.min(a.z, b.z)) * S.view.s); if (!pen_ || Math.abs(w - cw_) > 0.5) { c.stroke(); c.beginPath(); c.lineWidth = w; cw_ = w; c.moveTo(sx(a.x), sy(a.y)); pen_ = true; } c.lineTo(sx(b.x), sy(b.y)); }
+    if (b.g === 1 && (b.z < -1e-6 || a.z < -1e-6)) { const wm = wOf(Math.min(a.z, b.z)); if (!pen_ || tpCutSplit(wm, cw_)) { c.stroke(); c.beginPath(); c.lineWidth = Math.max(1, wm * S.view.s); cw_ = wm; c.moveTo(sx(a.x), sy(a.y)); pen_ = true; } c.lineTo(sx(b.x), sy(b.y)); }
     else pen_ = false;
   }
   c.stroke(); c.restore();
@@ -3450,6 +3452,16 @@ const TPCUT = new Map(), TPCUTBOX = new WeakMap(), TPJOB = new Map(); let tpcTim
 function tpcSoon() { clearTimeout(tpcTimer); tpcTimer = setTimeout(() => { tpcTimer = 0; for (const id of TPCUT.keys()) if (!S.tps.some(t => t.id === id)) TPCUT.delete(id); for (const [id, j] of TPJOB) if (!S.tps.some(t => t.id === id)) TPJOB.delete(id); tpJobWant = true; draw(); }, 150); }
 let tpJobWant = false, tpLastV = '';
 function tpMovBox(mv) { let b = TPCUTBOX.get(mv); if (!b) { b = [Infinity, Infinity, -Infinity, -Infinity]; for (const m of mv) { if (typeof m.x !== 'number') continue; if (m.x < b[0]) b[0] = m.x; if (m.y < b[1]) b[1] = m.y; if (m.x > b[2]) b[2] = m.x; if (m.y > b[3]) b[3] = m.y; } TPCUTBOX.set(mv, b); } return b; }
+/* traits du parcours dessinés directement pendant un zoom : lignes continues, points à moins d'un demi-pixel du précédent sautés (même aspect, beaucoup moins de segments) */
+function tpLinesLive(mv, col, active) {
+  const poly = (g, dash) => { ctx.beginPath(); let lx = NaN, ly = NaN, open = false;
+    for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; const on = g === 1 ? b.g === 1 : (b.g === 0 && (Math.abs(a.x - b.x) + Math.abs(a.y - b.y)) > 1e-6); if (!on) { if (open && (lx !== ex || ly !== ey)) ctx.lineTo(ex, ey); open = false; continue; }
+      const ax = sx(a.x), ay = sy(a.y), bx = sx(b.x), by = sy(b.y);
+      if (!open || Math.abs(ax - ex) > 1e-6 || Math.abs(ay - ey) > 1e-6) { if (open && (lx !== ex || ly !== ey)) ctx.lineTo(ex, ey); ctx.moveTo(ax, ay); lx = ax; ly = ay; open = true; }
+      ex = bx; ey = by; if (Math.abs(bx - lx) + Math.abs(by - ly) >= 0.5) { ctx.lineTo(bx, by); lx = bx; ly = by; } }
+    if (open && (lx !== ex || ly !== ey)) ctx.lineTo(ex, ey); ctx.stroke(); };
+  let ex = NaN, ey = NaN; ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = active ? 1.4 : 1; ctx.globalAlpha = TPA * (0.9); poly(1); ctx.globalAlpha = TPA * (0.45); ctx.setLineDash([3, 4]); poly(0); ctx.restore();
+}
 function tpTabs(tp, tool, col) { if (!tp.tabs) return; const L = Math.max(1.5, (+tp.p.tabL || 0)) * S.view.s, Wd = Math.max(3, tool.dia * S.view.s); ctx.save(); for (const t of tp.tabs) { ctx.save(); ctx.translate(sx(t.x), sy(t.y)); ctx.rotate(-t.a); ctx.fillStyle = col; ctx.globalAlpha = TPA * (0.85); ctx.fillRect(-L / 2, -Wd / 2, L, Wd); ctx.globalAlpha = TPA * (1); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.2; ctx.strokeRect(-L / 2, -Wd / 2, L, Wd); ctx.restore(); } ctx.restore(); }
 /* préparation d'une image nette pour la vue actuelle : zone du parcours entière si elle tient dans 2,5 fois la vue, sinon la vue élargie d'un quart de chaque côté */
 function tpJobNew(tp, mv, tool, col, active, key) {
@@ -3461,7 +3473,7 @@ function tpJobNew(tp, mv, tool, col, active, key) {
   const th = tool.type === 'v' ? Math.tan((+tool.angle || 90) * Math.PI / 360) : 0, wOf = z => tool.type === 'v' ? Math.min(tool.dia, 2 * Math.max(0, -z) * th) : tool.dia;
   const [cut, gc] = S.ui.showCut ? mk() : [null, null], [ln, gl] = mk();
   /* passes de la largeur de coupe, découpées exactement comme le dessin direct (nouvelle passe à chaque levée ou changement de largeur) */
-  const rs = [], re = [], rw = []; if (S.ui.showCut) { let pen = false, cw = -1; for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; if (b.g === 1 && (b.z < -1e-6 || a.z < -1e-6)) { const ww = Math.max(1, wOf(Math.min(a.z, b.z)) * s); if (!pen || Math.abs(ww - cw) > 0.5) { rs.push(i); re.push(i); rw.push(ww); cw = ww; pen = true; } else re[re.length - 1] = i; } else pen = false; } }
+  const rs = [], re = [], rw = []; if (S.ui.showCut) { let pen = false, cw = -1; for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; if (b.g === 1 && (b.z < -1e-6 || a.z < -1e-6)) { const wm = wOf(Math.min(a.z, b.z)); if (!pen || tpCutSplit(wm, cw)) { rs.push(i); re.push(i); rw.push(Math.max(1, wm * s)); cw = wm; pen = true; } else re[re.length - 1] = i; } else pen = false; } }
   if (gc) { gc.globalAlpha = TPA * (active ? 0.3 : 0.17); gc.strokeStyle = col; gc.lineCap = 'round'; gc.lineJoin = 'round'; }
   gl.strokeStyle = col; gl.lineWidth = active ? 1.4 : 1;
   /* vue (pour placer l'image) figée au début : les tranches suivantes dessinent avec les mêmes coordonnées */
@@ -3496,7 +3508,7 @@ function drawTP(tp, col, active) {
   if (!tool || !mv || mv.length <= 2000 || tp.holes || !faceShown(tp.face === 2 ? 2 : 1)) return drawTPDirect(tp, col, active);
   const s = S.view.s, key = [col, active, TPA, S.ui.showCut, tool.dia, tool.type, tool.angle, tool.tipR, tool.flat, DPR, W, H].join('|'); let c = TPCUT.get(tp.id);
   const blit = (c, k) => { const X = sx(c.wx), Y = sy(c.wy), w = c.w / DPR * k, h = c.h / DPR * k, px = k === 1 ? Math.round(X * DPR) / DPR : X, py = k === 1 ? Math.round(Y * DPR) / DPR : Y;
-    if (c.cut) ctx.drawImage(c.cut, px, py, w, h); tpTabs(tp, tool, col); ctx.save(); ctx.globalAlpha = TPA * 0.9; ctx.drawImage(c.ln, px, py, w, h); ctx.restore(); };
+    if (c.cut) ctx.drawImage(c.cut, px, py, w, h); tpTabs(tp, tool, col); if (k !== 1) { tpLinesLive(mv, col, active); return; } /* zoom en cours : traits à leur vraie épaisseur */ ctx.save(); ctx.globalAlpha = TPA * 0.9; ctx.drawImage(c.ln, px, py, w, h); ctx.restore(); };
   const ok = c && c.mv === mv && c.key === key, k = ok ? s / c.s : 0, covers = ok && k === 1 && (c.full || (() => { const X = sx(c.wx), Y = sy(c.wy); return X <= 0.5 && Y <= 0.5 && X + c.w / DPR >= W - 0.5 && Y + c.h / DPR >= H - 0.5; })());
   if (covers) { TPJOB.delete(tp.id); blit(c, 1); return; }
   if (!ok || k <= 0.2 || k >= 5) { /* rien d'utilisable (premier affichage, parcours recalculé) : image faite tout de suite */ TPJOB.delete(tp.id); const j = tpJobNew(tp, mv, tool, col, active, key); if (!j) return drawTPDirect(tp, col, active); tpJobStep(j, true); tpJobStep(j, true); tpJobStep(j, true); c = { mv, key, s, cut: j.cut, ln: j.ln, w: j.w, h: j.h, wx: j.wx, wy: j.wy, full: j.full }; TPCUT.set(tp.id, c); blit(c, 1); return; }
@@ -6622,7 +6634,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.257-optim9', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.257-optim10', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
