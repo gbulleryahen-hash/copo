@@ -1263,7 +1263,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.257</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.257-optim1</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -6495,7 +6495,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.257', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.257-optim1', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -7078,17 +7078,55 @@ function makeSim(stock, tps, tools, rapid, target) {
   }
   const B = new Float32Array(nx * ny); B.fill(-t); return { w, h, t, ox: X0, oy: Y0, nx, ny, cx, cy, H: new Float32Array(nx * ny), B, floor: -t - 0.01, segs, cum, thr, total: T, idx: 0, frac: 0, has2: segs.some(q => q.face === 2) };
 }
-function simStamp(S3, x, y, z, K, face) {
-  const { nx, ny, cx, cy, H, B, floor, t } = S3, ci = Math.round((x - (S3.ox || 0)) / cx), cj = Math.round((y - (S3.oy || 0)) / cy), { di, dj, dz, n } = K;
-  if (face === 2) { for (let k = 0; k < n; k++) { const i = ci + di[k], j = cj + dj[k]; if (i < 0 || j < 0 || i >= nx || j >= ny) continue; const q = j * nx + i, v = -t - (z + dz[k]); if (v > B[q]) B[q] = v > 0.01 ? 0.01 : v; } return; }
-  for (let k = 0; k < n; k++) { const i = ci + di[k], j = cj + dj[k]; if (i < 0 || j < 0 || i >= nx || j >= ny) continue; const q = j * nx + i, v = z + dz[k]; if (v < H[q]) H[q] = v < floor ? floor : v; }
+/* empreinte rangée par lignes (j) : début et longueur de chaque ligne, pour des boucles contiguës */
+function kRows(K) {
+  if (K.rows) return K.rows; const { di, dj, n } = K, J = [], I0 = [], S0 = [], N = [];
+  for (let k = 0; k < n; k++) { const r = J.length - 1; if (r >= 0 && dj[k] === J[r] && di[k] === I0[r] + N[r]) N[r]++; else { J.push(dj[k]); I0.push(di[k]); S0.push(k); N.push(1); } }
+  return (K.rows = { J: Int32Array.from(J), I0: Int32Array.from(I0), S0: Int32Array.from(S0), N: Int32Array.from(N), nr: J.length });
 }
+/* empreinte décalée d'une maille (sx, sy) depuis le tampon précédent. Pour chaque point : m = de combien la fraise était déjà plus basse au tampon précédent (Infinity s'il n'était pas couvert).
+   Un point ne peut changer que si m > écart de Z. On prépare, pour quelques seuils, la plage de chaque ligne à traiter (plage un peu trop large = toujours exact). */
+function kShift(K, sx, sy) {
+  const key = (sy + 1) * 3 + sx + 1; K.sh = K.sh || []; if (K.sh[key]) return K.sh[key];
+  const R = kRows(K), { di, dj, dz, n } = K; if (!K.at) { K.at = new Map(); for (let k = 0; k < n; k++) K.at.set((di[k] + 4096) * 8192 + dj[k] + 4096, k); }
+  const m = new Float64Array(n), fin = [];
+  for (let k = 0; k < n; k++) { const o = K.at.get((di[k] + sx + 4096) * 8192 + dj[k] + sy + 4096); m[k] = o === undefined ? Infinity : dz[o] - dz[k]; if (o !== undefined) fin.push(m[k]); }
+  fin.sort((a, b) => a - b); const lv = [0]; for (let q = 1; q < 24; q++) lv.push(fin[Math.floor((fin.length - 1) * q / 24)]); if (fin.length) lv.push(fin[fin.length - 1]);
+  const LV = Float64Array.from([...new Set(lv)].sort((a, b) => a - b)), nl = LV.length, lo = new Int32Array(nl * R.nr), hi = new Int32Array(nl * R.nr);
+  for (let t = 0; t < nl; t++) for (let r = 0; r < R.nr; r++) { let a = -1, b = -2; for (let u = 0; u < R.N[r]; u++) if (m[R.S0[r] + u] > LV[t]) { if (a < 0) a = u; b = u; } lo[t * R.nr + r] = a < 0 ? 0 : a; hi[t * R.nr + r] = b; }
+  return (K.sh[key] = { LV, lo, hi });
+}
+/* tampon de l'outil centré sur la maille (ci, cj) à la hauteur z. Résultat identique à l'empreinte complète : on saute seulement les points où le tampon précédent du même outil (une maille plus loin au plus) était déjà aussi bas */
+function simStampC(S3, ci, cj, z, K, face) {
+  const { nx, ny, H, B, floor, t } = S3, { dz } = K, R = kRows(K), L = S3.last; let sh = null, base = 0;
+  if (L && L.K === K && L.face === face && Math.abs(ci - L.ci) <= 1 && Math.abs(cj - L.cj) <= 1) {
+    const d = z - L.z, lim = d >= 0 ? Math.max(0, d - 1e-9) : d - 1e-9; /* Z égal ou plus haut et m <= 0 : rien ne change (comparaison exacte) */
+    if (lim >= 0 || ci !== L.ci || cj !== L.cj) { sh = kShift(K, ci - L.ci, cj - L.cj); const LV = sh.LV; let tl = -1; for (let q = LV.length - 1; q >= 0; q--) if (LV[q] <= lim) { tl = q; break; } if (tl < 0) sh = null; else base = tl * R.nr; }
+  }
+  if (L) { L.K = K; L.face = face; L.ci = ci; L.cj = cj; L.z = z; } else S3.last = { K, face, ci, cj, z };
+  for (let r = 0; r < R.nr; r++) {
+    const j = cj + R.J[r]; if (j < 0 || j >= ny) continue;
+    let a = 0, b = R.N[r] - 1; if (sh) { a = sh.lo[base + r]; b = sh.hi[base + r]; if (b < a) continue; }
+    const i0 = ci + R.I0[r]; if (i0 + a < 0) a = -i0; if (i0 + b > nx - 1) b = nx - 1 - i0; if (b < a) continue;
+    const row = j * nx + i0, s0 = R.S0[r];
+    if (face === 2) { for (let u = a; u <= b; u++) { const q = row + u, v = -t - (z + dz[s0 + u]); if (v > B[q]) B[q] = v > 0.01 ? 0.01 : v; } }
+    else for (let u = a; u <= b; u++) { const q = row + u, v = z + dz[s0 + u]; if (v < H[q]) H[q] = v < floor ? floor : v; }
+  }
+}
+function simStamp(S3, x, y, z, K, face) { simStampC(S3, Math.round((x - (S3.ox || 0)) / S3.cx), Math.round((y - (S3.oy || 0)) / S3.cy), z, K, face); }
+/* dans un même appel, l'ordre des tampons ne change rien (on garde toujours le plus bas) : les échantillons successifs sur la même maille sont fusionnés (seul le plus bas compte), et un segment qui descend est parcouru à l'envers, du point le plus bas au plus haut, pour que chaque tampon soit presque entièrement couvert par le précédent. L'état à la fin de l'appel est identique */
 function simSeg(S3, s, f0, f1) {
   const a = s.a, b = s.b; if (a[2] >= 0 && b[2] >= 0) return;
-  const len = Math.hypot(b[0] - a[0], b[1] - a[1]) * (f1 - f0), st = Math.max(1, Math.ceil(len / (Math.min(S3.cx, S3.cy) * 0.5)));
-  for (let k = 0; k <= st; k++) { const f = f0 + (f1 - f0) * k / st, z = a[2] + (b[2] - a[2]) * f; if (z >= 0) continue; simStamp(S3, a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, z, s.K, s.face); }
+  const len = Math.hypot(b[0] - a[0], b[1] - a[1]) * (f1 - f0), st = Math.max(1, Math.ceil(len / (Math.min(S3.cx, S3.cy) * 0.5))), ox = S3.ox || 0, oy = S3.oy || 0;
+  let pi = 0, pj = 0, pz = 0, has = false;
+  const down = b[2] < a[2];
+  for (let kk = 0; kk <= st; kk++) { const k = down ? st - kk : kk, f = f0 + (f1 - f0) * k / st, z = a[2] + (b[2] - a[2]) * f; if (z >= 0) continue;
+    const ci = Math.round((a[0] + (b[0] - a[0]) * f - ox) / S3.cx), cj = Math.round((a[1] + (b[1] - a[1]) * f - oy) / S3.cy);
+    if (has && ci === pi && cj === pj) { if (z < pz) pz = z; continue; }
+    if (has) simStampC(S3, pi, pj, pz, s.K, s.face); pi = ci; pj = cj; pz = z; has = true; }
+  if (has) simStampC(S3, pi, pj, pz, s.K, s.face);
 }
-function simReset(S3) { S3.H.fill(0); S3.B.fill(-S3.t); S3.idx = 0; S3.frac = 0; }
+function simReset(S3) { S3.last = null; S3.H.fill(0); S3.B.fill(-S3.t); S3.idx = 0; S3.frac = 0; }
 function simTo(S3, T) { // avance (seulement) jusqu'au temps T ; renvoie la position de l'outil
   const { segs, cum } = S3;
   while (S3.idx < segs.length) {
