@@ -1265,7 +1265,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.257-optim5</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.257-optim6</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -3329,6 +3329,8 @@ function migrateShape(s) { if (!s.nodes) s.nodes = nodesFromPts(s.pts || []); if
 
 // ---------- vue ----------
 const cv = $('#cv'), ctx = cv.getContext('2d'), cw = $('#cw');
+/* identifiant stable d'un objet (pour savoir si un parcours a été recalculé) */
+const OBJID = new WeakMap(); let objIdN = 0; const objId = o => { if (!o || typeof o !== 'object') return 0; let v = OBJID.get(o); if (!v) OBJID.set(o, v = ++objIdN); return v; };
 let W = 0, H = 0, DPR = 1;
 const sx = x => S.view.ox + x * S.view.s, sy = y => S.view.oy - y * S.view.s;
 const wx = X => (X - S.view.ox) / S.view.s, wy = Y => (S.view.oy - Y) / S.view.s;
@@ -3440,24 +3442,67 @@ function drawTPCut(c, mv, col, alpha, wOf) {
   }
   c.stroke(); c.restore();
 }
-/* gros parcours (plus de 2000 mouvements) : au repos, dessin direct (identique) puis copie de la zone à l'écran. Pendant un déplacement ou un zoom de la vue, on réaffiche cette copie (décalée ou mise à l'échelle) ; le dessin exact est refait dès qu'on s'arrête */
-const TPCUT = new Map(), TPCUTBOX = new WeakMap(); let tpcTimer = 0;
-function tpcSoon() { clearTimeout(tpcTimer); tpcTimer = setTimeout(() => { tpcTimer = 0; for (const [id, c] of TPCUT) { if (!S.tps.some(t => t.id === id)) TPCUT.delete(id); else c.stale = true; } draw(); }, 160); }
+/* gros parcours (plus de 2000 mouvements) : dessiné une fois par niveau de zoom dans deux images à part (largeur de coupe, trait + rapides), recollées tant que le parcours et le zoom ne changent pas :
+   déplacer la vue, éditer des nœuds ou survoler ne redessinent plus le parcours. Pendant un zoom, l'ancienne image est mise à l'échelle ; à la pause, l'image nette est refaite par petites tranches entre deux images (l'interface ne bloque pas) */
+const TPCUT = new Map(), TPCUTBOX = new WeakMap(), TPJOB = new Map(); let tpcTimer = 0, tpjRaf = 0;
+function tpcSoon() { clearTimeout(tpcTimer); tpcTimer = setTimeout(() => { tpcTimer = 0; for (const id of TPCUT.keys()) if (!S.tps.some(t => t.id === id)) TPCUT.delete(id); for (const [id, j] of TPJOB) if (!S.tps.some(t => t.id === id)) TPJOB.delete(id); tpJobWant = true; draw(); }, 150); }
+let tpJobWant = false, tpLastV = '';
 function tpMovBox(mv) { let b = TPCUTBOX.get(mv); if (!b) { b = [Infinity, Infinity, -Infinity, -Infinity]; for (const m of mv) { if (typeof m.x !== 'number') continue; if (m.x < b[0]) b[0] = m.x; if (m.y < b[1]) b[1] = m.y; if (m.x > b[2]) b[2] = m.x; if (m.y > b[3]) b[3] = m.y; } TPCUTBOX.set(mv, b); } return b; }
+function tpTabs(tp, tool, col) { if (!tp.tabs) return; const L = Math.max(1.5, (+tp.p.tabL || 0)) * S.view.s, Wd = Math.max(3, tool.dia * S.view.s); ctx.save(); for (const t of tp.tabs) { ctx.save(); ctx.translate(sx(t.x), sy(t.y)); ctx.rotate(-t.a); ctx.fillStyle = col; ctx.globalAlpha = TPA * (0.85); ctx.fillRect(-L / 2, -Wd / 2, L, Wd); ctx.globalAlpha = TPA * (1); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.2; ctx.strokeRect(-L / 2, -Wd / 2, L, Wd); ctx.restore(); } ctx.restore(); }
+/* préparation d'une image nette pour la vue actuelle : zone du parcours entière si elle tient dans 2,5 fois la vue, sinon la vue élargie d'un quart de chaque côté */
+function tpJobNew(tp, mv, tool, col, active, key) {
+  const s = S.view.s, r = Math.max(+tool.dia || 0, 2) + 4 / s, bx = tpMovBox(mv), BX0 = sx(bx[0] - r), BX1 = sx(bx[2] + r), BY0 = sy(bx[3] + r), BY1 = sy(bx[1] - r), big = (BX1 - BX0) * (BY1 - BY0) > 2.5 * W * H;
+  const RX0 = big ? Math.max(BX0, -W / 4) : BX0, RX1 = big ? Math.min(BX1, W * 1.25) : BX1, RY0 = big ? Math.max(BY0, -H / 4) : BY0, RY1 = big ? Math.min(BY1, H * 1.25) : BY1;
+  const X0 = Math.floor(RX0 * DPR) / DPR, Y0 = Math.floor(RY0 * DPR) / DPR, w = Math.max(1, Math.min(8192, Math.ceil((RX1 - X0) * DPR))), h = Math.max(1, Math.min(8192, Math.ceil((RY1 - Y0) * DPR)));
+  if (RX1 <= RX0 || RY1 <= RY0 || w * h > 40e6) return null;
+  const mk = () => { const cv = document.createElement('canvas'); cv.width = w; cv.height = h; const g = cv.getContext('2d'); g.setTransform(DPR, 0, 0, DPR, -X0 * DPR, -Y0 * DPR); return [cv, g]; };
+  const th = tool.type === 'v' ? Math.tan((+tool.angle || 90) * Math.PI / 360) : 0, wOf = z => tool.type === 'v' ? Math.min(tool.dia, 2 * Math.max(0, -z) * th) : tool.dia;
+  const [cut, gc] = S.ui.showCut ? mk() : [null, null], [ln, gl] = mk();
+  /* passes de la largeur de coupe, découpées exactement comme le dessin direct (nouvelle passe à chaque levée ou changement de largeur) */
+  const rs = [], re = [], rw = []; if (S.ui.showCut) { let pen = false, cw = -1; for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; if (b.g === 1 && (b.z < -1e-6 || a.z < -1e-6)) { const ww = Math.max(1, wOf(Math.min(a.z, b.z)) * s); if (!pen || Math.abs(ww - cw) > 0.5) { rs.push(i); re.push(i); rw.push(ww); cw = ww; pen = true; } else re[re.length - 1] = i; } else pen = false; } }
+  if (gc) { gc.globalAlpha = TPA * (active ? 0.3 : 0.17); gc.strokeStyle = col; gc.lineCap = 'round'; gc.lineJoin = 'round'; }
+  gl.strokeStyle = col; gl.lineWidth = active ? 1.4 : 1;
+  /* vue (pour placer l'image) figée au début : les tranches suivantes dessinent avec les mêmes coordonnées */
+  return { tp, mv, key, s, ox: S.view.ox, oy: S.view.oy, w, h, X0, Y0, cut, gc, ln, gl, wOf, col, rs, re, rw, r: 0, ri: 0, sc: null, ph: gc ? 0 : 1, i: 1, full: !big, wx: (X0 - S.view.ox) / s, wy: (S.view.oy - Y0) / s };
+}
+/* une tranche : dessine jusqu'à environ 10 ms ; le dessin est rendu effectif (getImageData) tous les 25 traits pour mesurer le vrai temps. all = tout d'un coup */
+function tpJobStep(j, all) {
+  const v = S.view, sv = [v.s, v.ox, v.oy]; v.s = j.s; v.ox = j.ox; v.oy = j.oy; const mv = j.mv, t0 = performance.now(), late = q => { if (all) return false; q.getImageData(0, 0, 1, 1); return performance.now() - t0 > 10; };
+  try {
+    if (j.ph === 0) { const g = j.gc, { rs, re, rw } = j; let r = j.r, k = 0;
+      while (r < rs.length) { const n = re[r] - rs[r] + 1;
+        if (n <= 1200) { g.beginPath(); g.lineWidth = rw[r]; let i = rs[r]; g.moveTo(sx(mv[i - 1].x), sy(mv[i - 1].y)); for (; i <= re[r]; i++) g.lineTo(sx(mv[i].x), sy(mv[i].y)); g.stroke(); r++; if (++k % 25 === 0 && late(g)) break; continue; }
+        /* passe très longue : morceaux opaques sur une image auxiliaire, recollée ensuite avec la transparence (même rendu qu'un seul trait) */
+        if (!j.sc) { const cv = document.createElement('canvas'); cv.width = j.w; cv.height = j.h; const q = cv.getContext('2d'); q.setTransform(DPR, 0, 0, DPR, -j.X0 * DPR, -j.Y0 * DPR); q.strokeStyle = j.col; q.lineCap = 'round'; q.lineJoin = 'round'; j.sc = q; }
+        const q = j.sc; if (!j.ri) j.ri = rs[r]; let stop = false;
+        while (j.ri <= re[r]) { const lim = Math.min(re[r], j.ri + 1199); q.beginPath(); q.lineWidth = rw[r]; q.moveTo(sx(mv[j.ri - 1].x), sy(mv[j.ri - 1].y)); for (let i = j.ri; i <= lim; i++) q.lineTo(sx(mv[i].x), sy(mv[i].y)); q.stroke(); j.ri = lim + 1; if (late(q)) { stop = true; break; } }
+        if (j.ri > re[r]) { g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(q.canvas, 0, 0); g.restore(); q.save(); q.setTransform(1, 0, 0, 1, 0, 0); q.clearRect(0, 0, j.w, j.h); q.restore(); j.ri = 0; r++; }
+        if (stop || late(g)) break; }
+      j.r = r; if (r >= rs.length) { j.ph = 1; j.i = 1; j.sc = null; }
+    } else if (j.ph === 1) { const g = j.gl; let i = j.i;
+      while (i < mv.length) { const lim = all ? mv.length : Math.min(mv.length, i + 1500); g.beginPath(); for (; i < lim; i++) { const a = mv[i - 1], b = mv[i]; if (b.g === 1) { g.moveTo(sx(a.x), sy(a.y)); g.lineTo(sx(b.x), sy(b.y)); } } g.stroke(); if (late(g)) break; }
+      j.i = i; if (i >= mv.length) j.ph = 2;
+    } else { const g = j.gl; g.save(); g.globalAlpha = 0.5; g.setLineDash([3, 4]); g.lineWidth = 1; g.beginPath(); for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; if (b.g === 0 && (Math.abs(a.x - b.x) + Math.abs(a.y - b.y)) > 1e-6) { g.moveTo(sx(a.x), sy(a.y)); g.lineTo(sx(b.x), sy(b.y)); } } g.stroke(); g.restore(); j.ph = 3; }
+  } finally { v.s = sv[0]; v.ox = sv[1]; v.oy = sv[2]; }
+  return j.ph === 3;
+}
+function tpJobsRun() { if (tpjRaf) return; tpjRaf = requestAnimationFrame(() => { tpjRaf = 0; const t0 = performance.now(); let more = false;
+  for (const [id, j] of TPJOB) { while (performance.now() - t0 < 10) { if (tpJobStep(j, false)) { TPJOB.delete(id); TPCUT.set(id, { mv: j.mv, key: j.key, s: j.s, cut: j.cut, ln: j.ln, w: j.w, h: j.h, wx: j.wx, wy: j.wy, full: j.full }); draw(); break; } } if (TPJOB.has(id)) more = true; }
+  if (more) tpJobsRun(); }); }
 function drawTP(tp, col, active) {
   const tool = S.tools.find(t => t.id === tp.toolId), mv = tp.dmoves || tp.moves;
   if (!tool || !mv || mv.length <= 2000 || tp.holes || !faceShown(tp.face === 2 ? 2 : 1)) return drawTPDirect(tp, col, active);
-  const s = S.view.s, key = [col, active, TPA, S.ui.showCut, tool.dia, tool.type, tool.angle, tool.tipR, tool.flat, (tp.tabs || []).length, tp.p && tp.p.tabL, DPR, W, H].join('|'); let c = TPCUT.get(tp.id);
-  if (c && c.mv === mv && c.key === key && !c.stale && (c.s !== s || c.ox !== S.view.ox || c.oy !== S.view.oy) && s / c.s > 0.2 && s / c.s < 5) {
-    if (c.cv) { const k = s / c.s; ctx.drawImage(c.cv, sx(c.wx), sy(c.wy), c.cv.width / DPR * k, c.cv.height / DPR * k); }
-    tpcSoon(); return;
-  }
-  drawTPDirect(tp, col, active);
-  const r = Math.max(+tool.dia || 0, 2) + (tp.tabs ? Math.max(1.5, +(tp.p && tp.p.tabL) || 0) : 0) + 4 / s, bx = tpMovBox(mv);
-  const X0 = Math.max(0, Math.floor(sx(bx[0] - r) * DPR)), X1 = Math.min(W * DPR, Math.ceil(sx(bx[2] + r) * DPR)), Y0 = Math.max(0, Math.floor(sy(bx[3] + r) * DPR)), Y1 = Math.min(H * DPR, Math.ceil(sy(bx[1] - r) * DPR));
-  const cv = c && c.cv; c = { mv, key, s, ox: S.view.ox, oy: S.view.oy, cv: null };
-  if (X1 > X0 && Y1 > Y0) { c.cv = cv || document.createElement('canvas'); c.cv.width = X1 - X0; c.cv.height = Y1 - Y0; c.cv.getContext('2d').drawImage(ctx.canvas, X0, Y0, X1 - X0, Y1 - Y0, 0, 0, X1 - X0, Y1 - Y0); c.wx = (X0 / DPR - S.view.ox) / s; c.wy = (S.view.oy - Y0 / DPR) / s; }
-  TPCUT.set(tp.id, c);
+  const s = S.view.s, key = [col, active, TPA, S.ui.showCut, tool.dia, tool.type, tool.angle, tool.tipR, tool.flat, DPR, W, H].join('|'); let c = TPCUT.get(tp.id);
+  const blit = (c, k) => { const X = sx(c.wx), Y = sy(c.wy), w = c.w / DPR * k, h = c.h / DPR * k, px = k === 1 ? Math.round(X * DPR) / DPR : X, py = k === 1 ? Math.round(Y * DPR) / DPR : Y;
+    if (c.cut) ctx.drawImage(c.cut, px, py, w, h); tpTabs(tp, tool, col); ctx.save(); ctx.globalAlpha = TPA * 0.9; ctx.drawImage(c.ln, px, py, w, h); ctx.restore(); };
+  const ok = c && c.mv === mv && c.key === key, k = ok ? s / c.s : 0, covers = ok && k === 1 && (c.full || (() => { const X = sx(c.wx), Y = sy(c.wy); return X <= 0.5 && Y <= 0.5 && X + c.w / DPR >= W - 0.5 && Y + c.h / DPR >= H - 0.5; })());
+  if (covers) { TPJOB.delete(tp.id); blit(c, 1); return; }
+  if (!ok || k <= 0.2 || k >= 5) { /* rien d'utilisable (premier affichage, parcours recalculé) : image faite tout de suite */ TPJOB.delete(tp.id); const j = tpJobNew(tp, mv, tool, col, active, key); if (!j) return drawTPDirect(tp, col, active); tpJobStep(j, true); tpJobStep(j, true); tpJobStep(j, true); c = { mv, key, s, cut: j.cut, ln: j.ln, w: j.w, h: j.h, wx: j.wx, wy: j.wy, full: j.full }; TPCUT.set(tp.id, c); blit(c, 1); return; }
+  /* zoom en cours ou vue sortie de l'image : ancienne image (mise à l'échelle) ; image nette préparée en tâche de fond quand la vue est stable */
+  blit(c, k); let j = TPJOB.get(tp.id); const vk = s + ',' + S.view.ox + ',' + S.view.oy; if (vk !== tpLastV) { tpLastV = vk; tpJobWant = false; } /* la vue bouge : on attend qu'elle soit stable */
+  if (j && (j.mv !== mv || j.key !== key || j.s !== s || j.ox !== S.view.ox || j.oy !== S.view.oy)) { TPJOB.delete(tp.id); j = null; }
+  if (!j && tpJobWant) { j = tpJobNew(tp, mv, tool, col, active, key); if (j) { TPJOB.set(tp.id, j); tpJobsRun(); } }
+  if (!j) tpcSoon();
 }
 function drawTPDirect(tp, col, active) {
   const tool = S.tools.find(t => t.id === tp.toolId); if (!tool) return;
@@ -6557,7 +6602,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Inlay créé : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Inlay créé : contours de la poche et de la pièce rapportée, sans parcours (calques « Inlay poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.257-optim5', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.257-optim6', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -8368,7 +8413,7 @@ function rvSync() {
   if (sig !== RV.sig) { const now = performance.now(), wait = Math.max(60, RV.cost || 0) - (now - (RV.lastEnd || 0)); if (RV.sig && wait > 0) { clearTimeout(RV.thT); RV.thT = setTimeout(() => { rvSync(); rvReq(); }, wait + 5); } else { RV.sig = sig; rvBuildMesh(); RV.lastEnd = performance.now(); RV.cost = RV.lastEnd - now; rvReq(); } } /* pendant une manipulation : maillage refait au plus une fois par intervalle */
   if (dr && !RV.dm) { const b = dr.q ? [80000, 150000, 250000][relLevel()] : 30000; RV.dm = { a: relOnly(i => i.id !== dr.id, () => rvMakeMesh(b)), b: relOnly(i => i.id === dr.id, () => rvMakeMesh(b)) }; rvReq(); } /* déplacement : deux maillages, l'élément déplacé est décalé à l'affichage */
   if (!RV.fitted && $('#rvc').clientWidth > 10) { rvFit(true); RV.fitted = true; }
-  const lsig = JSON.stringify(wrapInfo()) + '|' + ((st.rotary || {}).z0 || '') + '|' + (typeof snapVer !== 'undefined' ? snapVer : 0) + '|' + st.w + '|' + st.h + '|' + st.t + '|' + st.originXY + '|' + S.shapes.length + '|' + [...S.sel].join(',') + '|' + S.tps.map(t => t.id + (t.visible ? 1 : 0) + (t.moves ? t.moves.length : 0) + (t.face || 1)).join(',');
+  const lsig = JSON.stringify(wrapInfo()) + '|' + ((st.rotary || {}).z0 || '') + '|' + (typeof snapVer !== 'undefined' ? snapVer : 0) + '|' + st.w + '|' + st.h + '|' + st.t + '|' + st.originXY + '|' + S.shapes.length + '|' + [...S.sel].join(',') + '|' + S.tps.map(t => t.id + (t.visible ? 1 : 0) + (t.moves ? t.moves.length : 0) + (t.face || 1) + ':' + objId(t.moves) + ':' + objId(t.dmoves)).join(','); /* parcours recalculé avec le même nombre de mouvements : vu aussi */
   if (lsig !== RV.lsig) { RV.lsig = lsig; rvBuildLines(); rvReq(); }
 }
 function rvBuildMesh() {
@@ -8411,7 +8456,10 @@ function rvMakeMesh(budget) {
   return { vao: rvBuf([[RV.prog, 3, 'aP'], [RV.prog, 3, 'aN']], all, idx), n: idx.length, depth: -R.min, R };
 }
 function rvBuildLines() {
-  const gl = RV.gl, st = S.stock; for (const k of ['lStock', 'lAxes', 'lDraw', 'lTp']) if (RV[k]) gl.deleteVertexArray(RV[k].vao);
+  const gl = RV.gl, st = S.stock;
+  /* traits des parcours : refaits seulement si un parcours, sa visibilité, le brut, l'enroulement ou les couleurs changent (pas à chaque retouche du dessin) */
+  const tsig = S.tps.map(tp => [tp.id, tp.visible ? 1 : 0, tp.err ? 1 : 0, tp.face || 1, tp.type, objId(tp.moves), objId(tp.dmoves)].join(':')).join(',') + '|' + st.t + '|' + JSON.stringify(wrapInfo()) + '|' + ['--muted', '--pf', '--pk', '--vc', '--dr', '--th', '--rl'].map(tok).join(',') + '|' + objId(gl), keepTp = RV.lTp !== undefined && RV.tsig === tsig;
+  for (const k of ['lStock', 'lAxes', 'lDraw', 'lTp']) if (RV[k] && !(k === 'lTp' && keepTp)) gl.deleteVertexArray(RV[k].vao);
   const mk = (segs0) => { const segs = wrapSegs(segs0, 6); const d = new Float32Array(segs.length * 6); segs.forEach((v, k) => d.set(v, k * 6)); return segs.length ? { vao: rvBuf([[RV.lprog, 3, 'aP'], [RV.lprog, 3, 'aC']], d), n: segs.length } : null; };
   const g = hex3(tok('--muted')), P = [[0, 0], [st.w, 0], [st.w, st.h], [0, st.h]], S2 = [];
   for (let k = 0; k < 4; k++) { const a = P[k], b = P[(k + 1) % 4]; for (const z of [0, -st.t]) S2.push([a[0], a[1], z, ...g], [b[0], b[1], z, ...g]); S2.push([a[0], a[1], 0, ...g], [a[0], a[1], -st.t, ...g]); }
@@ -8423,6 +8471,7 @@ function rvBuildLines() {
   const dc0 = hex3(tok('--draw')), ac = hex3(tok('--accent')), D2 = []; for (const sh of S.shapes) { if (typeof shown === 'function' && !shown(sh)) continue; const a = sh.pts || [], on = S.sel.has(sh.id), dc = on ? ac : dc0, z = on ? 0.06 : 0.02; for (let k = 0; k + 1 < a.length; k++) D2.push([a[k][0], a[k][1], z, ...dc], [a[k + 1][0], a[k + 1][1], z, ...dc]); if (sh.closed && a.length > 2) D2.push([a[a.length - 1][0], a[a.length - 1][1], z, ...dc], [a[0][0], a[0][1], z, ...dc]); }
   RV.lDraw = mk(D2);
   // parcours d'outils visibles : passes en couleur du type, déplacements rapides en gris
+  if (keepTp) return; RV.tsig = tsig;
   const col = { profile: hex3(tok('--pf')), pocket: hex3(tok('--pk')), vcarve: hex3(tok('--vc')), drill: hex3(tok('--dr')), thread: hex3(tok('--th')), relief: hex3(tok('--rl')) }, rg = g.map(v => v * 0.8), T2 = [];
   for (const tp of S.tps) { if (!tp.visible || tp.err) continue; const f2 = tp.face === 2, mv = f2 && tp.dmoves ? tp.dmoves : tp.moves; if (!mv) continue; const c = col[tp.type] || [0.3, 0.5, 1]; let pr = null;
     for (const m of mv) { if (typeof m.x !== 'number' || (m.g !== 0 && m.g !== 1)) continue; const q = [m.x, m.y, f2 ? -st.t - m.z : m.z]; if (pr) { const cc = m.g === 0 ? rg : c; T2.push([...pr, ...cc], [...q, ...cc]); } pr = q; } }
