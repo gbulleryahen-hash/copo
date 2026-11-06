@@ -1,6 +1,6 @@
 // COPO — service worker : réseau d'abord (les mises à jour arrivent tout de suite), cache en secours hors ligne.
 const CACHE = 'copo-v1';
-const CORE = ['./', 'index.html', 'manifest.webmanifest', 'lib/clipper.js', 'lib/d3-delaunay.js', 'lib/jspdf.umd.min.js', 'lib/opentype.min.js',
+const CORE = ['./', 'index.html', 'manifest.webmanifest', 'lib/clipper.js', 'lib/d3-delaunay.js', 'lib/jspdf.umd.min.js', 'lib/opentype.min.js', 'lib/acorn.min.js',
   'lib/fonts/SourceSans3.ttf', 'lib/fonts/SourceSans3-Italic.ttf', 'lib/fonts/JetBrainsMono.ttf', 'lib/fonts/BarlowCondensed-Bold.ttf', 'lib/fonts/BarlowCondensed-SemiBold.ttf',
   'img/icon-192.png', 'img/icon-512.png', 'img/doc-copo-256.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).catch(() => { }).then(() => self.skipWaiting())); });
