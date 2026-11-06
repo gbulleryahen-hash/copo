@@ -14,6 +14,9 @@ d3-delaunay.js — regroupement des sources officielles / bundle of the official
 jspdf.umd.min.js — jsPDF 2.5.2 — James Hall, yWorks GmbH
     MIT License — voir / see LICENSE-jspdf.txt — https://github.com/parallax/jsPDF
 
+acorn.min.js — acorn 8.18.0 (minifié / minified) — Marijn Haverbeke et contributeurs / and contributors (chargé seulement par les calculs en tâche de fond / loaded only by background computations)
+    MIT License — Copyright (C) 2012-2022 by various contributors — https://github.com/acornjs/acorn
+
 pdf.js, pdf.worker.js — PDF.js 3.11.174 — Mozilla Foundation (chargés seulement à l'import d'un PDF ou d'un AI / loaded only when importing a PDF or AI file)
     Apache License 2.0 — voir / see LICENSE-pdfjs.txt — https://github.com/mozilla/pdf.js
 
