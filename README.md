@@ -7,7 +7,7 @@
 - **Mode d'emploi / User guide :** `guide.html` · PDF : `COPO-mode-emploi-FR.pdf`, `COPO-user-guide-EN.pdf`
 - **Bibliothèque libre / Free library :** `bibliotheque/` — 195 dessins 2D (SVG : formes, panneaux, lutherie…) et 87 reliefs en niveaux de gris (PNG 16 bits), rangés par catégorie, avec un fichier `bibliotheque-copo.copolib` à importer dans COPO. Sources et licences : `bibliotheque/CREDITS.md` / 195 2D drawings (shapes, panels, lutherie…) and 87 grayscale reliefs, sorted by category, plus a `.copolib` file to import into COPO.
 
-**Version 1.257**
+**Version 1.258**
 
 ## Fonctions / Features
 - Dessin : rectangle, ellipse, polygone/étoile, arc, plume (Bézier), texte (aussi sur une courbe), nœuds, chanfreins, congés, dégagements dogbone et T-bone, ajuster, couper, joindre, booléens, réseau, calques, repères, cotes, images de référence, vectorisation d'image (contours), import/export SVG, import DXF (calques, blocs, splines)
@@ -25,6 +25,7 @@
 - G-code : GRBL, GRBL changement manuel (G53 + pause), Carbide Motion, Onefinity, LinuxCNC, Mach3/4, UCCNC, MASSO, post-processeur personnalisé ; arcs G2/G3
 - Fiche de gamme imprimable : vues 2D des faces, vues dimétriques de la simulation, origine, outils, parcours, vitesses, points de vigilance, liste de contrôle
 - Unités en millimètres ou en pouces (fractions possibles), avances en mm/min, mm/s ou in/min, G-code G21 ou G20
+- Gros projets : parcours et simulations longs calculés en tâche de fond (l'interface reste utilisable), affichage fluide des gros dessins et des gros parcours, historique d'annulation léger
 - Interface en français et en anglais (boutons FR / EN en haut à droite)
 
 ## Usage hors ligne / Offline use
