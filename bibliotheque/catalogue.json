@@ -2052,6 +2052,16 @@
      "en": "Ribbons",
      "elements": [
       {
+       "nom": "Banderole à volutes",
+       "fichier": "reliefs/rubans/banderole-a-volutes.png",
+       "apercu": "apercus/reliefs/rubans/banderole-a-volutes.webp",
+       "taille": 1813248,
+       "px": [
+        1969,
+        645
+       ]
+      },
+      {
        "nom": "Banderole en arche",
        "fichier": "reliefs/rubans/banderole-en-arche.png",
        "apercu": "apercus/reliefs/rubans/banderole-en-arche.webp",
