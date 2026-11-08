@@ -19,6 +19,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
+<script>try{if(localStorage.getItem('copo.theme')==='light')document.documentElement.dataset.theme='light'}catch(e){}</script>
 <style>
 @font-face{font-family:"COPO Sans";font-style:normal;font-weight:200 900;font-display:swap;src:local("Source Sans 3"),url("lib/fonts/SourceSans3.ttf") format("truetype")}
 @font-face{font-family:"COPO Sans";font-style:italic;font-weight:200 900;font-display:swap;src:local("Source Sans 3 Italic"),url("lib/fonts/SourceSans3-Italic.ttf") format("truetype")}
@@ -33,7 +34,69 @@
   --f-head:"Source Sans 3","COPO Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"JetBrains Mono","COPO Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
   --r:5px; color-scheme:dark;
+  --input:var(--raised); --top:var(--bg); --accent-text:var(--ink); --canvas3d:var(--canvas); --shadow:rgb(0 0 0 / .35);
 }
+/* Thème clair « Établi clean » (choix dans Paramètres › Affichage ; le sombre reste par défaut) */
+:root[data-theme="light"]{
+  --bg:#FAF7F2; --panel:#F7F3ED; --raised:#EEE8DE; --input:#FCFAF6; --ink:#1E1C19; --muted:#5C564C; --line:#E6DFD3;
+  --accent:#3D6A9E; --accent-ink:#FFFDF8; --accent-soft:#D8DEE3; --accent-text:#2C5482; --top:#FAF7F2;
+  --canvas:#FAF7F2; --canvas3d:#FAF7F2; --grid:#EFE9DF; --grid2:#E3DCCF; --stock:#FFFDF8; --stock-edge:#C9B99C; --draw:#2B2925; --draw-muted:#5f5b55;
+  --pf:#c84a0c; --pk:#2F6FD6; --vc:#8a2fc0; --dr:#0f7d4d; --th:#ae3a0b; --rl:#0b877c; --danger:#c9402f; --warn:#d68a12; --guide:#0089b0;
+  --shadow:rgba(60,45,25,.10); --r:8px; color-scheme:light;
+}
+:root[data-theme="light"] :is(input[type=number],input[data-num],input[type=text],select,textarea){background:var(--input)}
+/* 1. outils du panneau sans cadre */
+:root[data-theme="light"] .dg-icons button{background:transparent;border-color:transparent;border-radius:8px}
+:root[data-theme="light"] .dg-icons button:hover:not(:disabled){background:var(--raised);border-color:transparent}
+:root[data-theme="light"] .dg-icons button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
+:root[data-theme="light"] [aria-pressed="true"] .ncur{fill:var(--accent);stroke:var(--accent)}
+/* 2. titres de groupe en petits labels */
+:root[data-theme="light"] .dg-group>span{font:500 11.5px var(--f-ui);letter-spacing:0;text-transform:none;color:var(--muted)}
+:root[data-theme="light"] .blk h3{font:500 12.5px var(--f-ui);letter-spacing:0;text-transform:none}
+/* 4. plus d'espace */
+:root[data-theme="light"] .dgrid{gap:16px 20px;padding:16px 0}
+:root[data-theme="light"] .dgrid .dg-icons{gap:2px}
+/* 5. onglets */
+:root[data-theme="light"] .tabs{background:var(--top)}
+:root[data-theme="light"] .tabs button{position:relative;letter-spacing:0;text-transform:none;font-weight:500;border:0;border-radius:8px 8px 0 0;white-space:nowrap}
+:root[data-theme="light"] .tabs button[aria-selected="true"]{background:var(--panel);color:var(--accent-text);font-weight:700;box-shadow:inset 0 2px 0 var(--accent-text),1px 0 0 var(--line),-1px 0 0 var(--line)}
+:root[data-theme="light"] .tabs button[aria-selected="true"] i{color:var(--accent-text)}
+/* 6. pas de bleu plein : bouton principal et interrupteurs */
+:root[data-theme="light"] button.primary,:root[data-theme="light"] .tb-body button.primary,:root[data-theme="light"] .v3d-bar button.primary,:root[data-theme="light"] .cowel .cw-btns button.primary,:root[data-theme="light"] .cobub button.primary,:root[data-theme="light"] .note button.primary,:root[data-theme="light"] .cfg-nav .mach-act button.primary{background:var(--accent-soft);color:var(--accent-text);border-color:#BCC8D3;font-weight:600}
+:root[data-theme="light"] .langsw button.on{background:var(--accent-soft);color:var(--accent-text)}
+:root[data-theme="light"] .seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent-text)}
+:root[data-theme="light"] .fbar button.tg.on,:root[data-theme="light"] .fbar button[aria-pressed="true"]{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+/* 7. calque actif */
+:root[data-theme="light"] .layer{border-color:transparent;border-radius:8px}
+:root[data-theme="light"] .layer.on{background:var(--accent-soft);border-color:transparent}
+:root[data-theme="light"] .layer input[type=text]{background:transparent}:root[data-theme="light"] .layer.on input[type=text]{color:var(--accent-text);font-weight:600}
+/* 3. coins arrondis ; 8. panneau / vues ; barres flottantes */
+:root[data-theme="light"] .panel{box-shadow:1px 0 0 var(--line),3px 0 10px rgba(60,45,25,.07);position:relative;z-index:1}
+:root[data-theme="light"] .fbar{border-radius:10px;box-shadow:0 2px 10px var(--shadow)}
+:root[data-theme="light"] .fbar button{border-radius:8px}
+/* 10. pas de trait au-dessus de l'aide « Choisissez une fonction… » */
+:root[data-theme="light"] .dgrid{border-bottom:0}
+/* boutons et recherches laissés au style du navigateur (bibliothèques) : même allure que le reste */
+:root[data-theme="light"] button.primary{border-style:solid;border-width:1px;border-radius:8px}
+:root[data-theme="light"] :is(#lib,#dlib) :is(button.libio,.libfoot button:not(.primary)){background:var(--raised);border:1px solid var(--line);border-radius:8px;padding:5px 10px;color:var(--ink);cursor:pointer}
+:root[data-theme="light"] :is(#lib,#dlib) :is(button.libio,.libfoot button:not(.primary)):hover:not(:disabled){border-color:#BCC8D3;background:#E7E0D4}
+:root[data-theme="light"] input[type=search],:root[data-theme="light"] #dlibSearch,:root[data-theme="light"] #libSearch{background:var(--input);border:1px solid var(--line);border-radius:8px;padding:5px 8px;color:var(--ink)}
+/* textes posés sur les vues 2D et 3D : sans ombre floue, gris foncé doux */
+:root[data-theme="light"] :is(.cvinfo,.rvinfo,.v3stat){text-shadow:none;color:var(--muted)}
+:root[data-theme="light"] .setx,:root[data-theme="light"] .peektab{background:var(--accent-soft);color:var(--accent-text);box-shadow:0 2px 6px var(--shadow)}
+:root[data-theme="light"] .setx:focus-visible{outline-color:var(--accent)}
+:root[data-theme="light"] .cfg-nav button:hover{background:var(--raised)}
+:root[data-theme="light"] .cfg-nav button.on{background:var(--accent-soft);color:var(--accent-text)}
+:root[data-theme="light"] .sh-view{background:#E9E3D8}
+:root[data-theme="light"] .txil{background:#E9E2D6}:root[data-theme="light"] .txil .tl{fill:#2B2925}:root[data-theme="light"] .txil .tb{stroke:#3D6A9E}
+/* oranges d'avertissement : un ton plus sombre pour rester lisibles sur fond clair */
+:root[data-theme="light"] .hint.warn{background:color-mix(in srgb,#d68a12 16%,transparent);border-left-color:#d68a12}
+:root[data-theme="light"] .libest{background:color-mix(in srgb,#d68a12 16%,transparent)}
+:root[data-theme="light"] .newhat b,:root[data-theme="light"] .gr-warn,:root[data-theme="light"] .pjwarn{color:#a85f00}
+:root[data-theme="light"] .tpbad.wrn{background:#d68a12}
+:root[data-theme="light"] #tip{background:#FFFDF8;box-shadow:0 4px 14px var(--shadow)}
+:root[data-theme="light"] .toast{box-shadow:0 4px 18px var(--shadow)}
+
 [hidden]{display:none!important}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.4 var(--f-ui);-webkit-text-size-adjust:100%}
@@ -129,7 +192,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .views{display:grid;min-height:0;min-width:0;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr)}
 .views.both.v{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.views.both.h{grid-template-rows:minmax(0,1fr) minmax(0,1fr)}
 .views>[hidden]{display:none!important}.views{position:relative}.vsplit{position:absolute;z-index:6;touch-action:none}.views.v>.vsplit{top:0;bottom:0;width:10px;margin-left:-1px;cursor:col-resize}.views.h>.vsplit{left:0;right:0;height:10px;margin-top:-1px;cursor:row-resize}.vsplit::after{content:'';position:absolute;inset:0;margin:auto;border-radius:2px;background:var(--line);transition:background .15s}.views.v>.vsplit::after{width:2px;height:40px}.views.h>.vsplit::after{height:2px;width:40px}.vsplit:hover::after,.vsplit.drag::after{background:var(--accent)}.views.v>.vsplit:hover::after,.views.v>.vsplit.drag::after{height:100%}.views.h>.vsplit:hover::after,.views.h>.vsplit.drag::after{width:100%}
-.rv3{position:relative;min-height:0;min-width:0;background:var(--canvas)}.views.both{gap:8px;background:var(--bg)}.views.both>.canvaswrap,.views.both>.rv3{box-shadow:0 0 0 1px var(--line)} /* gouttière sombre entre la 2D et la 3D */
+.rv3{position:relative;min-height:0;min-width:0;background:var(--canvas3d)}.views.both{gap:8px;background:var(--bg)}.views.both>.canvaswrap,.views.both>.rv3{box-shadow:0 0 0 1px var(--line)} /* gouttière sombre entre la 2D et la 3D */
 #rvc{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
 #rvov{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .rvxf{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;gap:4px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:4px;box-shadow:0 6px 18px rgb(0 0 0/.3)}
@@ -566,7 +629,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 .rlbound{display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:10px;align-items:start}.rlb-f{display:grid;gap:8px}.rlbfig svg{display:block;width:100%;height:auto;border-radius:6px}
 .tpadv{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px 0}.tpadv>summary{cursor:pointer;font-weight:600;font-size:13px;padding:4px 0;list-style:none;display:flex;align-items:center;gap:6px}.tpadv>summary::-webkit-details-marker{display:none}.tpadv>summary::before{content:'';width:6px;height:6px;border-right:1.8px solid currentColor;border-bottom:1.8px solid currentColor;transform:rotate(-45deg);transition:transform .15s;margin:0 3px}.tpadv[open]>summary::before{transform:rotate(45deg)}.tpadv-b{display:grid;gap:10px;padding-top:8px}
 .tipr .tipb{left:auto;right:0}.row .tipw{align-self:center}.row .tipi,.row .tipi:hover{background:none!important;border:0!important;padding:0!important;width:22px;height:22px;min-width:0}.dsec-h .tipw{margin-left:6px;text-transform:none;letter-spacing:0}.txh{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;margin-top:4px}.txmodes{display:grid;gap:3px}.txm{display:grid!important;grid-template-columns:auto 80px minmax(0,1fr);align-items:center;gap:8px;cursor:pointer;font-size:13px;padding:2px 4px;border-radius:6px}.txm:hover{background:#ffffff0a}.txm input{margin:0}.txil{width:80px;height:36px;background:#24272d;border-radius:5px}.txil .tl{fill:#fff;font:700 13px var(--f-head, sans-serif);letter-spacing:.5px}.txil .ts{font-size:11px}.txil .tb{fill:none;stroke:#4a8ef0;stroke-width:2;stroke-linecap:round}.txsub{display:grid;gap:3px}.txsh{font-size:12px;color:var(--muted)}.txwhat{margin:0;padding:6px 8px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:4px;font-size:12.5px}
-.selline{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:-4px}.selchk{display:grid;gap:2px}.tipw{position:relative;display:inline-flex;align-items:center;gap:4px;vertical-align:middle}.tipi{border:0;background:none;padding:0;width:18px;height:18px;min-width:0;color:var(--muted);cursor:help;display:inline-grid;place-items:center;vertical-align:middle}.tipi:hover,.tipw:focus-within .tipi{color:var(--accent);background:none}.tipi svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}.tipb{display:grid;gap:6px;visibility:hidden;position:fixed;z-index:200;left:-9999px;top:0;width:280px;max-width:calc(100vw - 16px);box-sizing:border-box;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);box-shadow:0 8px 24px rgb(0 0 0 / .35);font-size:12px;line-height:1.45;color:var(--ink);font-weight:400;font-style:normal;text-transform:none;letter-spacing:0;text-align:left;white-space:normal;pointer-events:auto}.tipb::before,.tipb::after{content:"";position:absolute;left:0;right:0;height:10px}.tipb::before{top:-10px}.tipb::after{bottom:-10px}.tipw:hover>.tipb,.tipw:focus-within>.tipb{visibility:visible}.hint .tipw{margin-left:2px}.roughrow{display:grid;gap:6px}.tipmore{justify-self:start;font-size:12px;color:var(--accent);text-decoration:none}.tipmore:hover{text-decoration:underline}.tipmore::after{content:' ›'}.dsec-h>.tipw,.sw-h>.tipw{margin-left:auto}.tipb svg{width:100%;height:auto}.tipb .tf{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:4 3}.tipb .ts{fill:#e8833a33;stroke:#e8833a;stroke-width:1.6}.tipb .tt{font:600 11px var(--f-ui);fill:var(--muted);text-anchor:middle}
+.selline{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:-4px}.selchk{display:grid;gap:2px}.tipw{position:relative;display:inline-flex;align-items:center;gap:4px;vertical-align:middle}.tipi{border:0;background:none;padding:0;width:18px;height:18px;min-width:0;color:var(--muted);cursor:help;display:inline-grid;place-items:center;vertical-align:middle}.tipi:hover,.tipw:focus-within .tipi{color:var(--accent);background:none}.tipi svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}.tipb{display:grid;gap:6px;visibility:hidden;position:fixed;z-index:200;left:-9999px;top:0;width:280px;max-width:calc(100vw - 16px);box-sizing:border-box;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);box-shadow:0 8px 24px rgb(0 0 0 / .35);font-size:12px;line-height:1.45;color:var(--ink);font-weight:400;font-style:normal;text-transform:none;letter-spacing:0;text-align:left;white-space:normal;pointer-events:auto}.tipb::before,.tipb::after{content:"";position:absolute;left:0;right:0;height:10px}.tipb::before{top:-10px}.tipb::after{bottom:-10px}.tipw:hover>.tipb,.tipw:focus-within>.tipb{visibility:visible}.hint .tipw{margin-left:2px}.clrlist{display:grid;gap:6px}.clrlist ol{margin:0;padding:0;list-style:none;display:grid;gap:4px}.clrlist li{display:flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--raised);font-size:12.5px}.clrlist li span{flex:1}.clrlist li b{font-weight:600;color:var(--muted);font-size:11px;min-width:14px}.clrlist li button{padding:0 6px;min-width:0;height:22px;border:0;background:none;color:var(--muted);cursor:pointer}.clrlist li button:hover{color:var(--danger)}.roughrow{display:grid;gap:6px}.tipmore{justify-self:start;font-size:12px;color:var(--accent);text-decoration:none}.tipmore:hover{text-decoration:underline}.tipmore::after{content:' ›'}.dsec-h>.tipw,.sw-h>.tipw{margin-left:auto}.tipb svg{width:100%;height:auto}.tipb .tf{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:4 3}.tipb .ts{fill:#e8833a33;stroke:#e8833a;stroke-width:1.6}.tipb .tt{font:600 11px var(--f-ui);fill:var(--muted);text-anchor:middle}
 #ipCv{position:static;inset:auto;touch-action:auto;display:block;width:100%;max-width:100%;border:1px solid var(--line);border-radius:6px;background:var(--canvas);height:auto}
 .toolrow{display:flex;gap:6px;align-items:center}.toolrow select{flex:1;min-width:0}.toolrow button{flex:none;padding:5px 9px}
 .ipkinds{display:grid;grid-template-columns:1fr;gap:8px}
@@ -850,8 +913,8 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           </div></div>
           <label>Nom<input type="text" id="ilName"></label>
           <label>Fraise en V<select id="ilTool" hidden></select><button type="button" class="toolpick" data-act="ilLib" title="Choisir dans la bibliothèque d’outils"><span data-pickof="ilTool"></span><small>Changer…</small></button></label>
-          <label class="chk"><input type="checkbox" id="ilClr"> Utiliser une fraise de dégagement (vide les fonds plats)</label>
-          <label id="ilClrRow" hidden>Fraise de dégagement<select id="ilClrTool" hidden></select><button type="button" class="toolpick" data-act="ilClrLib" title="Choisir dans la bibliothèque d’outils"><span data-pickof="ilClrTool"></span><small>Changer…</small></button></label>
+          <label class="chk"><input type="checkbox" id="ilClr"> Utiliser des fraises de dégagement (vident les fonds plats)</label>
+          <div id="ilClrRow" class="clrlist" hidden><ol id="ilClrList"></ol><button type="button" class="ghost" data-act="ilClrLib" title="Choisir dans la bibliothèque d’outils">+ Ajouter une fraise…</button><p class="hint">La plus grosse vide les fonds plats, chaque suivante reprend ce que la précédente n’a pas pu enlever.</p></div>
           <label class="chk"><input type="checkbox" id="ilTp" checked> Créer les parcours d’outils</label>
           <p class="hint mono" id="ilInfo"></p>
           <p class="hint">La pièce mâle est le motif en miroir, placé à droite du motif sur un calque à part. <span class="tipw"><button type="button" class="tipi" aria-label="En savoir plus"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.4"/></svg></button><span class="tipb" role="tooltip">Elle est entourée d’un cadre décalé de la valeur indiquée. Ses parcours sont créés masqués : pour l’usiner, affichez-les (œil) et masquez ceux de la femelle. Collez le mâle retourné dans la femelle, puis rabotez ou sciez le surplus.</span></span></p>
@@ -1207,6 +1270,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <div class="row cfg-left"><button data-act="snapReset">Valeurs par défaut de l’accroche</button></div>
         </section>
         <section class="cfg-sec" data-cfg="view" data-ico="view"><h2>Affichage</h2>
+          <label>Thème<select id="cfgTheme"><option value="dark">Sombre</option><option value="light">Clair</option></select></label>
           <label>Résolution du relief<select id="cfgRelQ"><option value="std">Standard (le plus rapide)</option><option value="high">Haute (environ 3 × plus lent, recommandée)</option><option value="vhigh">Très haute (environ 7 × plus lent)</option></select></label>
           <p class="hint">Plus la résolution est haute, plus le relief est net, mais plus le calcul est long. <span class="tipw"><button type="button" class="tipi" aria-label="En savoir plus"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.4"/></svg></button><span class="tipb" role="tooltip">Le calcul est refait après chaque modification. Standard convient aux ordinateurs modestes. Les parcours ne sont pas concernés.</span></span></p>
           <label class="chk"><input type="checkbox" data-cfgui="showGrid"> Afficher la grille</label>
@@ -1261,7 +1325,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.288</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.291</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1687,6 +1751,8 @@ Object.assign(I18N_EN, {"Valeurs de départ estimées pour une CNC de loisir (mi
 Object.assign(I18N_EN, {"Petite fraise de reprise": "Small rest-machining tool", "Après la grosse fraise": "After the larger tool", "Choisir…": "Choose…"});
 Object.assign(I18N_EN, {"Ébaucher avec une fraise plus grosse": "Rough with a larger tool", "Choisissez une fraise plus grosse que celle du parcours.": "Choose a tool larger than the toolpath’s.", "Parcours lié : réglez-le dans « {n} ».": "Linked toolpath: change it in “{n}”.", "Ébauche à la fraise « {t} » (parcours ajouté avant), puis reprise des coins avec celle-ci.": "Roughing with “{t}” (toolpath added before), then the corners with this tool.", "La grosse fraise laisse la surépaisseur sur les parois ; la petite reprend les coins et finit les parois.": "The larger tool leaves the allowance on the walls; the small one cleans the corners and finishes the walls.", "Les deux fraises laissent la surépaisseur sur les parois (« Ne pas enlever la surépaisseur »).": "Both tools leave the allowance on the walls (“Do not remove the allowance”).", "La grosse fraise usine jusqu’aux parois ; la petite ne reprend que les coins qu’elle n’a pas atteints.": "The larger tool cuts up to the walls; the small one only cleans the corners it could not reach.", "Le parcours d’ébauche est lié : il se règle ici et se met à jour avec cette poche.": "The roughing toolpath is linked: it is set here and updates with this pocket."});
 Object.assign(I18N_EN, {"Après le parcours": "After the toolpath", "Aucune poche avant, avec une fraise plus grosse": "No earlier pocket with a larger tool", "Nouvelle ébauche ({t})": "New roughing ({t})", "Faire un parcours…": "Create a toolpath…", "Reprise après « {p} » : seuls les restes de la fraise « {t} » sont usinés.": "Rest machining after “{p}”: only what the tool “{t}” left behind is machined.", "nouvelle ébauche": "new roughing", "Choisissez le parcours de départ, ou « Faire un parcours… ».": "Choose the starting toolpath, or “Create a toolpath…”.", "Une ébauche liée, avec la grosse fraise, sera créée avant ce parcours ; elle se règle ici.": "A linked roughing toolpath with the larger tool will be created before this one; it is set here.", "La petite fraise reprend les coins et finit les parois.": "The small tool cleans the corners and finishes the walls.", "La petite fraise reprend les coins en laissant la surépaisseur (« Ne pas enlever la surépaisseur »).": "The small tool cleans the corners and leaves the allowance (“Do not remove the allowance”).", "La petite fraise ne reprend que les coins que la grosse n’a pas atteints.": "The small tool only cleans the corners the larger one could not reach.", "Profondeur, surépaisseur et retrait sont repris du parcours de départ : gardez la même profondeur.": "Depth, allowance and its removal are taken from the starting toolpath: keep the same depth.", "Reprise : le parcours de départ n’existe plus. Choisissez-en un autre.": "Rest machining: the starting toolpath no longer exists. Choose another one.", "Reprise : le parcours de départ est placé après celui-ci dans la liste. Remontez la reprise sous lui.": "Rest machining: the starting toolpath comes after this one in the list. Move the rest machining below it."});
+Object.assign(I18N_EN, {"Utiliser des fraises de dégagement (vident les fonds plats)": "Use clearance tools (clear the flat bottoms)", "+ Ajouter une fraise…": "+ Add a tool…", "La plus grosse vide les fonds plats, chaque suivante reprend ce que la précédente n’a pas pu enlever.": "The largest clears the flat bottoms, each next one removes what the previous one could not.", "Fraise « {n} » ajoutée.": "Tool “{n}” added.", "Ajoutez au moins une fraise de dégagement.": "Add at least one clearance tool."});
+Object.assign(I18N_EN, {"Thème": "Theme", "Sombre": "Dark", "Clair": "Light"});
 Object.assign(I18N_EN, {"Visite rapide": "Quick tour", "Réafficher les astuces": "Show tips again", "Astuces réactivées : elles s’afficheront à l’ouverture de chaque onglet.": "Tips turned back on: they will show when you open each tab."});
 Object.assign(I18N_EN, {"Aligner sur": "Align to", "La sélection": "The selection", "Le premier vecteur sélectionné": "The first selected vector", "Le brut": "The stock", "Espacement (mm)": "Spacing (mm)", "Perçage": "Drilling", "Sélectionnez au moins deux vecteurs : le premier sert de référence.": "Select at least two vectors: the first one is the reference.", "Sélectionnez au moins deux vecteurs : le premier sert de point de départ.": "Select at least two vectors: the first one is the starting point.", "Les vecteurs sont plus grands que le brut.": "The vectors are larger than the stock.", "Profil sur la ligne 1": "On-line profile 1", "Profil sur la ligne 2": "On-line profile 2", "Poche 1": "Pocket 1", "F2 · Poche 2": "F2 · Pocket 2", "V-carving 2": "V-carving 2", "Foret 4 mm": "4 mm drill"});
 Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the nut / zero fret (mm)"});
@@ -3353,6 +3419,9 @@ function fit() {
   S.view.s = s; S.view.ox = RB + (aw - (x1 - x0) * s) / 2 - x0 * s; S.view.oy = H - (ah - (y1 - y0) * s) / 2 + y0 * s; draw();
 }
 const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+// thème : sombre par défaut, clair au choix (Paramètres › Affichage) ; la vue 2D se redessine d'elle-même (observateur de data-theme)
+function themeSet(v) { const L = v === 'light'; if (L) document.documentElement.dataset.theme = 'light'; else delete document.documentElement.dataset.theme; try { localStorage.setItem('copo.theme', L ? 'light' : 'dark'); } catch { }
+  const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = L ? '#FAF7F2' : '#262626'; setTimeout(() => { try { if (typeof rvReq === 'function') rvReq(); } catch { } window.dispatchEvent(new Event('resize')); }, 0); }
 let drawQueued = false;
 function draw() { if (drawQueued) return; drawQueued = true; requestAnimationFrame(() => { drawQueued = false; render(); }); }
 function pathOf(pts, closed) { ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(sx(p[0]), sy(p[1])) : ctx.moveTo(sx(p[0]), sy(p[1]))); if (closed) ctx.closePath(); }
@@ -3395,7 +3464,7 @@ function render() {
   const C = { dr: tok('--dr'), draw: tok('--draw'), drawMuted: tok('--draw-muted'), canvas: tok('--canvas'), grid: tok('--grid'), grid2: tok('--grid2'), stock: tok('--stock'), edge: tok('--stock-edge'), ink: tok('--ink'), muted: tok('--muted'), acc: tok('--accent'), pf: tok('--pf'), pk: tok('--pk'), vc: tok('--vc'), th: tok('--th'), rl: tok('--rl'), danger: tok('--danger'), panel: tok('--panel'), line: tok('--line'), guide: tok('--guide'), mono: tok('--f-mono') };
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.fillStyle = C.canvas; ctx.fillRect(0, 0, W, H);
   const [g, G] = gridSteps(), x0 = wx(0), x1 = wx(W), y0 = wy(H), y1 = wy(0);
-  const st = S.stock; ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = 14; ctx.shadowOffsetY = 3; ctx.fillStyle = C.stock; ctx.fillRect(sx(0), sy(st.h), st.w * S.view.s, st.h * S.view.s); ctx.restore();
+  const st = S.stock, LT = document.documentElement.dataset.theme === 'light'; for (const [c, b, y] of LT ? [['rgba(60,45,25,.10)', 3, 2], ['rgba(60,45,25,.08)', 14, 6]] : [['rgba(0,0,0,.35)', 14, 3]]) { ctx.save(); ctx.shadowColor = c; ctx.shadowBlur = b; ctx.shadowOffsetY = y; ctx.fillStyle = C.stock; ctx.fillRect(sx(0), sy(st.h), st.w * S.view.s, st.h * S.view.s); ctx.restore(); }
   ctx.lineWidth = 1;
   if (S.ui.showGrid !== false) for (const [step, col] of [[g, 'rgba(0,0,0,.07)'], [G, 'rgba(0,0,0,.15)']]) { ctx.strokeStyle = col; ctx.beginPath(); for (let x = Math.ceil(x0 / step) * step; x <= x1; x += step) { const X = Math.round(sx(x)) + 0.5; ctx.moveTo(X, 0); ctx.lineTo(X, H); } for (let y = Math.ceil(y0 / step) * step; y <= y1; y += step) { const Y = Math.round(sy(y)) + 0.5; ctx.moveTo(0, Y); ctx.lineTo(W, Y); } ctx.stroke(); }
   ctx.strokeStyle = C.edge; ctx.lineWidth = 1.2; ctx.strokeRect(sx(0), sy(st.h), st.w * S.view.s, st.h * S.view.s);
@@ -5629,7 +5698,7 @@ function act(a, btn) {
     case 'tpRoughLib': libOpen({ ftype: 'flatonly', toolId: S.form && S.form.roughTool, cb: pt => { const cur = S.tools.find(t => t.id === S.form.toolId); if (cur && pt.dia <= cur.dia + 1e-6) { toast(tr('Choisissez une fraise plus grosse que celle du parcours.')); return; } S.form.roughTool = pt.id; S.form.restFrom = '__new'; S.form.rest = true; renderForm(); toast(trf('Fraise « {n} » choisie.', { n: pt.name })); } }); return;
     case 'tpClrNone': if (S.form) { S.form.clrTool = ''; renderForm(); } return;
     case 'tpClrLib': libOpen({ ftype: 'flatonly', toolId: S.form && S.form.clrTool, cb: pt => { S.form.clrTool = pt.id; renderForm(); toast(trf('Fraise « {n} » choisie.', { n: pt.name })); } }); return;
-    case 'ilClrLib': libOpen({ ftype: 'flatonly', toolId: $('#ilClrTool').value, cb: pt => { ilFill('#ilClrTool', 'flat', pt.id); ilInfo(); toast(trf('Fraise « {n} » choisie.', { n: pt.name })); } }); return;
+    case 'ilClrLib': libOpen({ ftype: 'flatonly', cb: pt => { if (!ilClrIds.includes(pt.id)) ilClrIds.push(pt.id); ilClrRender(); ilInfo(); toast(trf('Fraise « {n} » ajoutée.', { n: pt.name })); } }); return;
     case 'ilLib': libOpen({ ftype: 'vonly', toolId: $('#ilTool').value, cb: pt => { ilFill('#ilTool', 'v', pt.id); ilInfo(); toast(trf('Fraise « {n} » choisie.', { n: pt.name })); } }); return;
     case 'ilMake': ilMake(); return;
     case 'fbClose': fwClose('fb'); return;
@@ -6635,25 +6704,28 @@ function ilFill(selId, type, pick) { const ft = S.tools.filter(t => t.type === t
 function ilOpen() {
   const ss = ilSel(); if (!ss.length) return toast('Sélectionnez d’abord le motif à incruster (formes fermées).');
   let o = { D: 4, gap: 0.5, Sg: 1.5, name: tr('Incrustation V'), clr: false, margin: '', tp: true }; try { const q = JSON.parse(LS.get('copo.inlay') || '{}'); if (q.F != null && q.Sg == null) q.Sg = Math.max(0, q.F - (q.D || 4) + (q.gap || 0)); o = { ...o, ...q }; } catch { }
-  ilFill('#ilTool', 'v', o.tool); ilFill('#ilClrTool', 'flat', o.clrTool);
+  ilFill('#ilTool', 'v', o.tool); ilClrIds = (o.clrTools || (o.clrTool ? [o.clrTool] : [])).filter(id => S.tools.some(t => t.id === id)); ilClrRender();
   $('#ilD').value = o.D; $('#ilGap').value = o.gap; $('#ilB').value = +(o.D - o.gap + o.Sg).toFixed(3); $('#ilName').value = o.name || tr('Incrustation V'); $('#ilClr').checked = !!o.clr; $('#ilMargin').value = o.margin === '' || o.margin == null ? '' : o.margin; $('#ilTp').checked = o.tp !== false;
   $('#ilSel').textContent = trf('{n} vecteur(s) sélectionné(s) comme motif.', { n: ss.length });
   gadSec('il'); ilInfo();
 }
-function ilVals() { const tool = S.tools.find(t => t.id === $('#ilTool').value), D = +$('#ilD').value, gap = Math.max(0, +$('#ilGap').value || 0), Sg = (+$('#ilB').value || 0) - (D - gap), clr = $('#ilClr').checked, clrTool = S.tools.find(t => t.id === $('#ilClrTool').value), mg = $('#ilMargin').value; return { tool, D, gap, Sg, S: D - gap, F: D - gap + Sg, clr, clrTool, margin: mg === '' ? null : Math.max(0, +mg || 0), name: $('#ilName').value.trim() || tr('Incrustation V'), tp: $('#ilTp').checked }; }
+let ilClrIds = [];
+function ilClrTools() { const seen = new Set(); return ilClrIds.map(id => S.tools.find(t => t.id === id)).filter(Boolean).sort((a, b) => b.dia - a.dia).filter(t => { const k = t.dia.toFixed(3); if (seen.has(k)) return false; seen.add(k); return true; }); } // une fraise par diamètre
+function ilClrRender() { const L = $('#ilClrList'); if (!L) return; const T = ilClrTools(); ilClrIds = T.map(t => t.id); L.innerHTML = ''; T.forEach((t, i) => { const li = document.createElement('li'); li.innerHTML = '<b>' + (i + 1) + '</b><span></span><button type="button" title="Retirer" aria-label="Retirer">✕</button>'; li.querySelector('span').textContent = t.name; li.querySelector('button').onclick = () => { ilClrIds = ilClrIds.filter(x => x !== t.id); ilClrRender(); ilInfo(); }; L.appendChild(li); }); }
+function ilVals() { const tool = S.tools.find(t => t.id === $('#ilTool').value), D = +$('#ilD').value, gap = Math.max(0, +$('#ilGap').value || 0), Sg = (+$('#ilB').value || 0) - (D - gap), clr = $('#ilClr').checked, clrTools = ilClrTools(), clrTool = clrTools[0], mg = $('#ilMargin').value; return { tool, D, gap, Sg, S: D - gap, F: D - gap + Sg, clr, clrTool, clrTools, margin: mg === '' ? null : Math.max(0, +mg || 0), name: $('#ilName').value.trim() || tr('Incrustation V'), tp: $('#ilTp').checked }; }
 function ilCheck(v) {
   if (!v.tool) return tr('Choisissez une fraise en V.'); if (!(v.D > 0)) return tr('Indiquez la profondeur de la poche femelle.');
   if (!(v.S > 0)) return tr('Le jeu doit être plus petit que la profondeur de la poche.'); if (!(v.Sg > 0)) return tr('La hauteur du mâle (b) doit dépasser la profondeur de poche moins le jeu (a − g), pour qu’il reste un écart à raboter.');
   const fl = v.tool.dia / 2 / Math.tan(v.tool.angle * Math.PI / 360); if (v.D > fl + 1e-6 || v.F > fl + 1e-6) return trf('Trop profond pour cette fraise ({f} mm max).', { f: fr(fl, 1) });
-  if (v.clr && !v.clrTool) return tr('Choisissez la fraise de dégagement.');
+  if (v.clr && !v.clrTools.length) return tr('Ajoutez au moins une fraise de dégagement.');
   return '';
 }
 function pickSync() { document.querySelectorAll('[data-pickof]').forEach(sp => { const sel = document.getElementById(sp.dataset.pickof), o = sel && sel.selectedOptions[0]; sp.textContent = o && o.value ? o.textContent : tr('Choisir une fraise…'); sp.closest('.toolpick').classList.toggle('bad', !(o && o.value)); }); }
 function ilInfo() { pickSync(); const v = ilVals(), e = ilCheck(v), F = x => LANG === 'fr' ? fr(x, 2) : x.toFixed(2); $('#ilClrRow').hidden = !$('#ilClr').checked; const sl = $('#ilSel'); if (sl) sl.textContent = trf('{n} vecteur(s) sélectionné(s) comme motif.', { n: ilSel().length }); $('#ilInfo').textContent = e || trf('Le mâle s’enfonce de {s} mm et laisse {g} mm de jeu au fond ; il dépasse de {p} mm avant rabotage.', { s: F(v.S), g: F(v.gap), p: F(v.Sg) }); }
-['#ilTool', '#ilD', '#ilGap', '#ilB', '#ilClr', '#ilClrTool', '#ilMargin'].forEach(id => { const el = document.querySelector(id); if (el) { el.addEventListener('input', ilInfo); el.addEventListener('change', ilInfo); } });
+['#ilTool', '#ilD', '#ilGap', '#ilB', '#ilClr', '#ilMargin'].forEach(id => { const el = document.querySelector(id); if (el) { el.addEventListener('input', ilInfo); el.addEventListener('change', ilInfo); } });
 function ilMake() {
   const v = ilVals(), e = ilCheck(v); if (e) return toast(e);
-  try { LS.set('copo.inlay', JSON.stringify({ tool: v.tool.id, D: v.D, gap: v.gap, Sg: v.Sg, name: v.name, clr: v.clr, clrTool: v.clrTool && v.clrTool.id, margin: v.margin == null ? '' : v.margin, tp: v.tp })); } catch { }
+  try { LS.set('copo.inlay', JSON.stringify({ tool: v.tool.id, D: v.D, gap: v.gap, Sg: v.Sg, name: v.name, clr: v.clr, clrTools: v.clrTools.map(t => t.id), margin: v.margin == null ? '' : v.margin, tp: v.tp })); } catch { }
   const ss = ilSel(), th = Math.tan(v.tool.angle * Math.PI / 360), bb = bbox(ss), margin = v.margin != null ? v.margin : Math.max(3, 2 * v.Sg * th + 1.5);
   const nf0 = { ...newForm(), type: 'vcarve', dir: 'climb', vstep: 0.1 }, face = faceOf(ss[0]) === 2 ? 2 : 1, out = [];
   const lay = (name, color, vis = true) => { let l = S.layers.find(x => x.name === name); if (!l) { l = { id: uid(), name, visible: vis, locked: false, color }; S.layers.push(l); } return l; };
@@ -6664,14 +6736,16 @@ function ilMake() {
   if (v.tp) {
     const fem = { id: uid(), name: v.name + ' · ' + tr('femelle'), type: 'vcarve', toolId: v.tool.id, shapeIds: ss.map(x => x.id), p: { ...nf0, depth: v.D, vstart: 0, zrel: 1 }, visible: true, face };
     const male = { ownShapes: true, id: uid(), name: v.name + ' · ' + tr('mâle'), type: 'vcarve', toolId: v.tool.id, shapeIds: [frame.id, ...made.map(x => x.id)], p: { ...nf0, depth: v.Sg, vstart: v.S, zrel: 1 }, visible: false, face: 1 };
-    if (v.clr && v.clrTool) { // fonds plats vidés d'abord à la fraise droite : là où le V atteindrait la profondeur maximale
-      const lc = lay(tr('Incrustation · dégagement'), '#7a8a99', false), mk = (L, name, depth, vis, fc) => { const sh = L.map(l => mkShape(dedupe(l, true).map(q => NODE(q[0], q[1])), true, { layer: lc.id })).filter(Boolean); if (!sh.length) return null; return { ownShapes: true, id: uid(), name, type: 'pocket', toolId: v.clrTool.id, shapeIds: sh.map(x => x.id), p: { ...newForm(), type: 'pocket', depth, vstart: 0, zrel: 1, allow: 0, dir: 'climb' }, visible: vis, face: fc }; };
-      const cf = mk(offLoops(baseLoops(ss), -v.D * th), v.name + ' · ' + tr('femelle, dégagement'), v.D, true, face);
-      const cm = mk(offLoops(baseLoops([frame, ...made]), -v.F * th), v.name + ' · ' + tr('mâle, dégagement'), v.Sg, false, 1);
-      if (cf) out.push(cf); out.push(fem); if (cm) out.push(cm); out.push(male);
-      if (!cf && !cm) toast(tr('Pas de fond plat assez large pour la fraise de dégagement : seule la fraise en V travaille.'));
+    if (v.clr && v.clrTools.length) { // fonds plats vidés d'abord : la plus grosse fraise, puis chaque suivante en reprise de la précédente
+      const lc = lay(tr('Incrustation · dégagement'), '#7a8a99', false), n = v.clrTools.length;
+      const chain = (L, base, depth, vis, fc) => { const sh = L.map(l => mkShape(dedupe(l, true).map(q => NODE(q[0], q[1])), true, { layer: lc.id })).filter(Boolean); if (!sh.length) return []; let prev = null;
+        return v.clrTools.map((t, i) => { const tp = { ownShapes: true, id: uid(), name: base + (n > 1 ? ' ' + (i + 1) + ' (' + t.name + ')' : ''), type: 'pocket', toolId: t.id, shapeIds: sh.map(x => x.id), p: { ...newForm(), type: 'pocket', depth, vstart: 0, zrel: 1, allow: 0, dir: 'climb', ...(prev ? { rest: true, restFrom: prev.id } : {}) }, visible: vis, face: fc }; prev = tp; return tp; }); };
+      const cf = chain(offLoops(baseLoops(ss), -v.D * th), v.name + ' · ' + tr('femelle, dégagement'), v.D, true, face);
+      const cm = chain(offLoops(baseLoops([frame, ...made]), -v.F * th), v.name + ' · ' + tr('mâle, dégagement'), v.Sg, false, 1);
+      out.push(...cf, fem, ...cm, male);
+      if (!cf.length && !cm.length) toast(tr('Pas de fond plat assez large pour la fraise de dégagement : seule la fraise en V travaille.'));
     } else out.push(fem, male);
-    out.forEach(computeTP); S.tps.push(...out);
+    S.tps.push(...out); out.forEach(computeTP); // les reprises trouvent leur parcours de départ dans la liste
   }
   S.sel.clear(); made.forEach(m => S.sel.add(m.id)); S.sel.add(frame.id);
   gadSec(null); commit(); gcDirty = true; renderLayers(); renderTpList(); renderSel(); draw();
@@ -6770,7 +6844,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.288', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.291', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -6951,7 +7025,7 @@ function renderForm() { setTimeout(tpTypeSync, 0); { const d = $('#tpAdvR'); if 
     const dw = $('#drillWarn'); dw.hidden = !nb; if (nb) dw.textContent = trf('{n} trou(s) plus grand(s) que la fraise : percé(s) à Ø{d} au lieu du diamètre dessiné (cochez l’usinage en hélice).', { n: nb, d: String(+(+ht.dia).toFixed(3)).replace('.', ',') }); }
   { const rs = $('#fRestFrom'), cur = S.tools.find(t => t.id === F.toolId), me = S.editTp ? S.tps.findIndex(t => t.id === S.editTp) : S.tps.length, own = S.editTp ? S.tps.find(x => x.vclrOf === S.editTp) : null;
     const ids = new Set(S.editTp ? ((S.tps.find(t => t.id === S.editTp) || {}).shapeIds || []) : [...S.sel]), tl = t => S.tools.find(x => x.id === t.toolId);
-    const ok = S.tps.slice(0, me < 0 ? S.tps.length : me).filter(t => t.type === 'pocket' && !(t.p && (t.p.rest || t.p.roughTool)) && (!t.vclrOf || t === own) && (t.shapeIds || []).some(i => ids.has(i)) && tl(t) && cur && tl(t).dia > cur.dia + 1e-6);
+    const ok = S.tps.slice(0, me < 0 ? S.tps.length : me).filter(t => t.type === 'pocket' && (!t.vclrOf || t === own) && (t.shapeIds || []).some(i => ids.has(i)) && tl(t) && cur && tl(t).dia > cur.dia + 1e-6);
     if (F.rest && F.restFrom !== '__new' && !ok.some(t => t.id === F.restFrom)) { // projets d'avant la 1.288 : la fraise indiquée retrouve sa poche
       const byTool = F.restTool && ok.filter(t => t.toolId === F.restTool).pop(); F.restFrom = (own && own.id) || (byTool && byTool.id) || (ok[ok.length - 1] || {}).id || ''; if (F.restFrom) restCopy(F); }
     if (F.restFrom !== '__new' && !(own && F.restFrom === own.id)) F.roughTool = '';
@@ -7699,7 +7773,7 @@ function v3Render() {
   const gl = V3.gl, c = $('#v3c'), S3 = V3.S3; if (!gl || !S3) return;
   const dpr = window.devicePixelRatio || 1, W = Math.max(1, Math.round(c.clientWidth * dpr)), Hh = Math.max(1, Math.round(c.clientHeight * dpr));
   if (c.width !== W || c.height !== Hh) { c.width = W; c.height = Hh; }
-  gl.viewport(0, 0, W, Hh); const bg = hex3(tok('--canvas')); gl.clearColor(bg[0], bg[1], bg[2], 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  gl.viewport(0, 0, W, Hh); const bg = hex3(tok('--canvas3d') || tok('--canvas')); gl.clearColor(bg[0], bg[1], bg[2], 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   if (V3.dirty) { gl.bindTexture(gl.TEXTURE_2D, V3.tex); gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, S3.nx, S3.ny, gl.RED, gl.FLOAT, v3HDisp(S3)); gl.bindTexture(gl.TEXTURE_2D, V3.texB); gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, S3.nx, S3.ny, gl.RED, gl.FLOAT, S3.B); V3.dirty = false; }
   const cp = Math.cos(V3.pitch), e = [V3.tgt[0] + V3.dist * cp * Math.cos(V3.yaw), V3.tgt[1] + V3.dist * cp * Math.sin(V3.yaw), V3.tgt[2] + V3.dist * Math.sin(V3.pitch)];
   const mvp = m4mul(m4persp(0.7, W / Hh, V3.dist * 0.01, V3.dist * 20), m4look(e, V3.tgt, camUp(V3))); V3.mvp = mvp; const L = v3n([0.35, -0.55, 0.85]);
@@ -8828,7 +8902,7 @@ function rvOverlay() {
 function rvRender() {
   RV.raf = 0; const gl = RV.gl, c = $('#rvc'); if (!gl || !VIEWS.d3) return;
   const dpr = window.devicePixelRatio || 1, Wd = Math.max(1, Math.round(c.clientWidth * dpr)), Hd = Math.max(1, Math.round(c.clientHeight * dpr)); if (c.width !== Wd || c.height !== Hd) { c.width = Wd; c.height = Hd; }
-  gl.viewport(0, 0, Wd, Hd); const bg = hex3(tok('--canvas')); gl.clearColor(bg[0], bg[1], bg[2], 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  gl.viewport(0, 0, Wd, Hd); const bg = hex3(tok('--canvas3d') || tok('--canvas')); gl.clearColor(bg[0], bg[1], bg[2], 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   const cp = Math.cos(RV.pitch), e = [RV.tgt[0] + RV.dist * cp * Math.cos(RV.yaw), RV.tgt[1] + RV.dist * cp * Math.sin(RV.yaw), RV.tgt[2] + RV.dist * Math.sin(RV.pitch)];
   const hh = RV.dist * Math.tan(0.35), hw = hh * Wd / Hd, fa = RV.dist * 20, ortho = [1 / hw, 0, 0, 0, 0, 1 / hh, 0, 0, 0, 0, -2 / (2 * fa), 0, 0, 0, 0, 1]; // projection orthogonale (pas d'effet de perspective)
   const mvp = m4mul(ortho, m4look(e, RV.tgt, camUp(RV))); RV.mvp = mvp;
@@ -9335,6 +9409,7 @@ function gcPostName() { const el = $('#gcPostName'); if (!el) return; const o = 
   $('#cfgDlibTh').value = LS.get('copo.dlibTh') || '132'; $('#cfgDlibTh').onchange = e => { LS.set('copo.dlibTh', e.target.value); dlibThSync(); };
   $('#cfgDlibDbl').checked = LS.get('copo.dlibDbl') !== '0'; $('#cfgDlibDbl').onchange = e => LS.set('copo.dlibDbl', e.target.checked ? '1' : '0'); dlibCfgSync();
   $('#cfgTpAuto').value = tpManual() ? 'manual' : 'auto'; $('#cfgTpAuto').onchange = e => { LS.set('copo.tpAuto', e.target.value); if (e.target.value === 'auto') recomputeAll(); tpStaleUi(); };
+  $('#cfgTheme').value = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'; $('#cfgTheme').onchange = e => themeSet(e.target.value);
   $('#cfgMat3d').value = MAT3D[LS.get('copo.mat3d')] ? LS.get('copo.mat3d') : 'orange'; $('#cfgMat3d').onchange = e => { LS.set('copo.mat3d', e.target.value); if (typeof rvReq === 'function') rvReq(); if (typeof V3 !== 'undefined' && V3.gl && !$('#v3d').hidden) v3Render(); };
   $('#cfgZoom3d').value = LS.get('copo.zoom3d') || 'cursor'; $('#cfgZoom3d').onchange = e => LS.set('copo.zoom3d', e.target.value);
   $('#cfgMouse3d').value = LS.get('copo.mouse3d') || 'cad'; $('#cfgMouse3d').onchange = e => { LS.set('copo.mouse3d', e.target.value); v3HelpSync(); };
