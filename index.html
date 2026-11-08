@@ -156,7 +156,11 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .libtree li.on{background:var(--accent);color:var(--accent-ink)}.libtree li.grp{font-weight:600}.libtree li.grp .tw{width:12px;display:inline-block;color:var(--muted)}.libtree li.off{opacity:.45}.libtree li .used{margin-left:auto;font-size:10.5px;color:var(--accent)}.libtree li.on .used{color:inherit}
 .libtree li svg{width:15px;height:15px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6}
 .libtools{display:flex;gap:4px;flex-wrap:wrap}.libmach{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px}
-.libright{overflow:auto;padding:12px 16px;min-height:0}.libform{display:grid;gap:10px;max-width:640px}.libform[hidden]{display:none}.libform textarea{resize:vertical}
+.libright{overflow:auto;padding:12px 16px;min-height:0}.libform{display:grid;gap:10px;max-width:720px}
+.libgeo{display:grid;grid-template-columns:180px minmax(0,1fr);gap:20px;align-items:center}
+.libgeof{display:grid;gap:10px;min-width:0}
+.libill{width:180px}
+@media (max-width:620px){.libgeo{grid-template-columns:1fr;gap:12px}.libill{width:130px;justify-self:center}}.libform[hidden]{display:none}.libform textarea{resize:vertical}
 .libuser{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}.libuser span{flex:1 1 220px}.libuser button{padding:3px 10px}
 .libest{margin:0;padding:6px 10px;border-radius:6px;background:color-mix(in srgb,#ff9f1c 18%,transparent);font-size:12.5px;color:var(--ink)}
 .dlibdlg .libbody{grid-template-columns:minmax(220px,280px) minmax(0,1fr)}.dlibleft{grid-template-rows:auto minmax(0,1fr) auto}.dlibleft .libtools{display:grid;gap:5px}.dlib-where{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:40%}.dlgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--th,132px),1fr));gap:10px}.dlcard{position:relative;display:grid;grid-template-rows:auto auto;gap:5px;padding:6px;border:1.5px solid var(--line);border-radius:8px;background:var(--raised);cursor:pointer;text-align:left;color:var(--ink);font:inherit;font-size:12px;min-width:0}.dlcard:hover{border-color:var(--muted)}.dlcard.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}.dlcard .th{aspect-ratio:4/3;border-radius:5px;background:#f4f1ea;display:grid;place-items:center;overflow:hidden}.dlcard .th img{max-width:92%;max-height:92%;object-fit:contain}.dlcard .th svg{width:46%;height:46%;fill:none;stroke:#6b6f78;stroke-width:1.5}.dlcard .th b{font:700 13px var(--f-mono, monospace);color:#6b6f78}.dlcard span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dlcard.dir .th{background:var(--panel)}.dlcard .th.site{background:#262a31}.dlibdlg .libio:disabled{opacity:.4;cursor:default;pointer-events:none}.libtree li.slib svg{stroke:var(--accent)}.dlcard.dir .th svg{stroke:var(--accent)}.dlcard .dx{position:absolute;top:4px;right:4px;display:none;width:22px;height:22px;border-radius:50%;border:0;background:var(--panel);color:var(--danger);place-items:center;cursor:pointer}.dlcard:hover .dx{display:grid}.dlcard .dx svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}.dlname{display:flex;gap:8px;align-items:end;margin-bottom:10px;flex-wrap:wrap}.dlname label{flex:1;min-width:200px}
@@ -1330,7 +1334,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.296</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.297</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1498,14 +1502,15 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         <p class="hint" id="libEmpty">Choisissez un outil dans la liste de gauche.</p>
         <section class="libform" id="toolForm">
           <p class="sw-h">Géométrie</p>
+          <div class="libgeo"><span class="ill libill" data-ill="tool"></span><div class="libgeof">
           <label>Nom<input type="text" data-t="name"></label>
-          <div class="figrow"><span class="ill" data-ill="tool"></span><div class="g2">
-            <label>Type<select data-t="type"><option value="flat">Fraise droite</option><option value="ball">Fraise hémisphérique</option><option value="v">Fraise en V</option><option value="engrave">Fraise de gravure (conique à pointe plate)</option><option value="taper">Fraise conique à bout sphérique</option><option value="drill">Foret</option><option value="thread">Fraise à fileter</option></select></label>
-            <label><span id="tDiaLbl">Diamètre (mm)</span><input data-u="len" type="number" data-t="dia" step="0.01" min="0.1"></label>
-          </div></div>
           <div class="g2">
-            <label data-tshow="v drill engrave engball thread"><span id="tAngLbl">Angle du V (°)</span><input type="number" data-t="angle" step="1" min="5" max="170"></label>
-            <label data-tshow="engrave">Diamètre de la pointe (mm)<input data-u="len" type="number" data-t="flat" step="0.01" min="0"></label>
+            <label>Type<select data-t="type"><option value="flat">Fraise droite</option><option value="ball">Fraise hémisphérique</option><option value="v">Fraise en V</option><option value="engrave">Fraise de gravure (conique à pointe plate)</option><option value="taper">Fraise conique à bout sphérique</option><option value="drill">Foret</option><option value="thread">Fraise à fileter</option></select></label>
+            <label><span id="tDiaLbl">Diamètre D (mm)</span><input data-u="len" type="number" data-t="dia" step="0.01" min="0.1"></label>
+          </div>
+          <div class="g2">
+            <label data-tshow="v drill engrave engball thread"><span id="tAngLbl">Angle du V α (°)</span><input type="number" data-t="angle" step="1" min="5" max="170"></label>
+            <label data-tshow="engrave">Diamètre de la pointe d (mm)<input data-u="len" type="number" data-t="flat" step="0.01" min="0"></label>
             <label data-tshow="taper engball">Rayon en bout R (mm)<input data-u="len" type="number" data-t="tipR" step="0.05" min="0.01"></label>
             <label data-tshow="taper thread">Longueur d’usinage L (mm)<input data-u="len" type="number" data-t="flen" step="0.5" min="0.5"></label>
           </div>
@@ -1513,6 +1518,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             <label>Nombre de dents<input type="number" data-t="flutes" step="1" min="1" max="12"></label>
             <label>Numéro d'outil (T)<input type="number" data-t="num" step="1" min="1"></label>
           </div>
+          </div></div>
           <p class="sw-h" id="libCutH">Réglages de coupe</p>
           <p class="libest" id="libEst" hidden></p>
           <p class="libest" id="libAvoid" hidden></p>
@@ -1883,6 +1889,7 @@ Object.assign(I18N_EN, {"Carbide Motion (Shapeoko, Nomad)": "Carbide Motion (Sha
 Object.assign(I18N_EN, {"DXF importé : {n} vecteur(s) dont {c} fermé(s), {w} × {h} mm": "DXF imported: {n} vector(s), {c} closed, {w} × {h} mm", "unité du fichier": "file unit", "sans unité : lu en mm": "no unit: read as mm", "{n} calques": "{n} layers", "Ignorés": "Skipped", "DXF binaire non pris en charge : réenregistrez-le en DXF ASCII (texte).": "Binary DXF is not supported: save it again as ASCII (text) DXF.", "Aucun vecteur 2D trouvé dans ce DXF.": "No 2D geometry found in this DXF.", "Éléments non pris en charge": "Unsupported entities"});
 Object.assign(I18N_EN, {"Vectoriser : contours de l'image": "Vectorize: image outlines", "Seuil": "Threshold", "Lissage": "Sweep", "Inverser (contours des zones claires)": "Invert (outline light areas)", "Aperçu des contours": "Outline preview", "Seuil automatique": "Auto threshold", "Créer les contours": "Create outlines", "Image en cours de chargement…": "Image loading…", "{n} contours · {m} points": "{n} outlines · {m} points", "Image pas encore chargée.": "Image not loaded yet.", "Aucun contour trouvé : ajustez le seuil ou cochez Inverser.": "No outline found: adjust the threshold or check Invert.", "{n} contours créés (groupés). Vous pouvez masquer l’image.": "{n} outlines created (grouped). You can hide the image."});
 Object.assign(I18N_EN, {"Signaler un bug…": "Report a bug…", "Suggestions et bugs connus": "Suggestions and known bugs", "Signaler un bug": "Report a bug", "Le rapport s'ouvre sur GitHub, prêt à être envoyé (compte GitHub gratuit nécessaire).": "The report opens on GitHub, ready to send (free GitHub account required).", "Titre": "Title", "Ex. : le congé échoue entre un arc et une droite": "E.g. the fillet fails between an arc and a line", "Que s'est-il passé ?": "What happened?", "Décrivez le problème.": "Describe the problem.", "Étapes pour le reproduire": "Steps to reproduce", "Résultat attendu": "Expected result", "Ce que COPO aurait dû faire.": "What COPO should have done.", "Joindre une capture de la vue 2D": "Attach a screenshot of the 2D view", "Aperçu de la capture de la vue 2D": "2D view screenshot preview", "Joindre le projet (fichier .json)": "Attach the project (.json file)", "Informations techniques ajoutées au rapport": "Technical information added to the report", "Annuler": "Cancel", "Ouvrir le rapport sur GitHub": "Open the report on GitHub", "Donnez au moins un titre ou une description.": "Give at least a title or a description.", "_(La capture est dans le presse-papiers : cliquez ici puis Ctrl+V pour la coller.)_": "_(The screenshot is on the clipboard: click here, then Ctrl+V to paste it.)_", "_(Glissez ici le fichier « capture-copo.png » qui vient d'être téléchargé.)_": "_(Drag the downloaded “capture-copo.png” file here.)_", "_(Glissez ici le fichier « projet-bug-copo.copo » qui vient d'être téléchargé.)_": "_(Drag the downloaded “projet-bug-copo.copo” file here.)_", "(non renseigné)": "(not specified)", "Capture": "Screenshot", "Projet": "Project", "Informations techniques": "Technical information", "Ouvrez ce lien dans votre navigateur.": "Open this link in your browser.", "Rapport ouvert sur GitHub : vérifiez-le puis cliquez sur « Create »/« Submit new issue ».": "Report opened on GitHub: check it, then click “Create” / “Submit new issue”."});
+Object.assign(I18N_EN, {"Diamètre D (mm)": "Diameter D (mm)", "Angle du V α (°)": "V angle α (°)", "Angle de pointe α (°)": "Point angle α (°)", "Angle du filet α (°)": "Thread angle α (°)", "Diamètre de la pointe d (mm)": "Tip diameter d (mm)"});
 Object.assign(I18N_EN, {"Dossier introuvable.": "Folder not found.", "La bibliothèque COPO est en lecture seule : copiez l’élément dans « Ma bibliothèque » pour le modifier.": "The COPO library is read-only: copy the item to “My library” to change it.", "La bibliothèque COPO est en lecture seule.": "The COPO library is read-only.", "Fichier indisponible : vérifiez la connexion.": "File unavailable: check your connection.", "Dessins et reliefs libres fournis avec COPO (lecture seule)": "Free drawings and reliefs supplied with COPO (read-only)", "Dessins et reliefs libres fournis avec COPO, rangés par catégorie. Ouvrez un dossier.": "Free drawings and reliefs supplied with COPO, sorted by category. Open a folder.", "« {n} » copié dans Ma bibliothèque.": "“{n}” copied to My library.", "Copier dans ma bibliothèque": "Copy to my library"});
 let LANG = (() => { try { const v = localStorage.getItem('copo.lang'); if (v === 'fr' || v === 'en') return v; } catch { } return /^fr/i.test(navigator.language || 'fr') ? 'fr' : 'en'; })();
 let trRe = null;
@@ -6071,6 +6078,71 @@ const FIG = {
     return f.svg();
   },
 };
+/* Illustrations des outils de la bibliothèque : outil gris à plat (ombre légère), cotes bleues = champs de la fiche outil */
+const TOOLFIG = (() => {
+  const C = { l: '#BAC1C9', m: '#AFB6BF', d: '#98A1AC', b: '#2E6AD1' };
+  const n = v => +v.toFixed(1);
+  const head = (x, y, dx, dy) => { const s = 8, w = 3.6, k = Math.hypot(dx, dy); dx /= k; dy /= k; const bx = x - dx * s, by = y - dy * s;
+    return '<path d="M' + n(x) + ' ' + n(y) + 'L' + n(bx - dy * w) + ' ' + n(by + dx * w) + 'L' + n(bx + dy * w) + ' ' + n(by - dx * w) + 'Z" fill="' + C.b + '"/>'; };
+  const ln = (x1, y1, x2, y2) => '<path d="M' + n(x1) + ' ' + n(y1) + 'L' + n(x2) + ' ' + n(y2) + '" stroke="' + C.b + '" stroke-width="1.6" fill="none"/>';
+  const ex = (x1, y1, x2, y2) => '<path d="M' + n(x1) + ' ' + n(y1) + 'L' + n(x2) + ' ' + n(y2) + '" stroke="' + C.b + '" stroke-width="1" opacity=".8" fill="none"/>';
+  const tx = (x, y, t, a = 'middle') => '<text x="' + n(x) + '" y="' + n(y) + '" fill="' + C.b + '" font-size="17" font-weight="600" font-style="' + (t === 'α' ? 'normal' : 'italic') + '" text-anchor="' + a + '" dominant-baseline="central" font-family="system-ui,Segoe UI,Arial,sans-serif">' + t + '</text>';
+  const dimH = (y, x1, x2, t, below = true) => ln(x1, y, x2, y) + head(x1, y, -1, 0) + head(x2, y, 1, 0) + tx((x1 + x2) / 2, below ? y + 14 : y - 13, t);
+  const dimV = (x, y1, y2, t, right = true) => ln(x, y1, x, y2) + head(x, y1, 0, -1) + head(x, y2, 0, 1) + tx(right ? x + 8 : x - 8, (y1 + y2) / 2, t, right ? 'start' : 'end');
+  /* petite cote horizontale, flèches à l'extérieur pointant vers les lignes d'attache */
+  const dimHo = (y, x1, x2, t) => ln(x1 - 18, y, x1, y) + head(x1, y, 1, 0) + ln(x2, y, x2 + 18, y) + head(x2, y, -1, 0) + tx(x2 + 24, y, t, 'start');
+  const P = (cx, cy, r, a) => [cx + r * Math.cos(a * Math.PI / 180), cy + r * Math.sin(a * Math.PI / 180)];
+  /* cote d'angle : arc de a1 à a2 (degrés, sens croissant), flèches tangentes à l'arc, lignes d'attache depuis r0 */
+  const dimA = (cx, cy, r, a1, a2, r0, lab) => {
+    const [x1, y1] = P(cx, cy, r, a1), [x2, y2] = P(cx, cy, r, a2), t = a => [-Math.sin(a * Math.PI / 180), Math.cos(a * Math.PI / 180)];
+    const [e1x, e1y] = P(cx, cy, r0, a1), [f1x, f1y] = P(cx, cy, r + 6, a1), [e2x, e2y] = P(cx, cy, r0, a2), [f2x, f2y] = P(cx, cy, r + 6, a2);
+    const t1 = t(a1), t2 = t(a2);
+    return ex(e1x, e1y, f1x, f1y) + ex(e2x, e2y, f2x, f2y) +
+      '<path d="M' + n(x1) + ' ' + n(y1) + 'A' + r + ' ' + r + ' 0 0 1 ' + n(x2) + ' ' + n(y2) + '" stroke="' + C.b + '" stroke-width="1.6" fill="none"/>' +
+      head(x1, y1, -t1[0], -t1[1]) + head(x2, y2, t2[0], t2[1]) + tx(lab[0], lab[1], 'α', lab[2] || 'middle');
+  };
+  const body = (d, f = C.l) => '<path d="' + d + '" fill="' + f + '"/>';
+  /* goujures : bandes obliques découpées dans la forme */
+  const flutes = (id, d, x1, x2, y1, y2, pitch, slope, w) => { const rise = (x2 - x1) * slope; let s = '';
+    for (let y = y1 - rise; y < y2 + pitch; y += pitch) s += '<path d="M' + x1 + ' ' + n(y) + 'L' + x2 + ' ' + n(y - rise) + 'V' + n(y - rise + w) + 'L' + x1 + ' ' + n(y + w) + 'Z" fill="' + C.d + '"/>';
+    return '<clipPath id="' + id + '"><path d="' + d + '"/></clipPath><g clip-path="url(#' + id + ')">' + s + '</g>'; };
+  const shade = (x, y, w, h) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + C.m + '"/>';
+  const svg = b => '<svg viewBox="0 -24 200 286" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' + b + '</svg>';
+
+  const F = {
+    flat(p) { const d = 'M76 20H124V215H76Z';
+      return svg(body(d) + shade(106, 20, 18, 195) + flutes(p, 'M76 112H124V215H76Z', 76, 124, 112, 215, 30, .9, 13) +
+        ex(76, 218, 76, 246) + ex(124, 218, 124, 246) + dimH(240, 76, 124, 'D')); },
+    ball(p) { const d = 'M76 20H124V191A24 24 0 0 1 76 191Z';
+      return svg(body(d) + shade(106, 20, 18, 172) + flutes(p, 'M76 112H124V191A24 24 0 0 1 76 191Z', 76, 124, 112, 220, 30, .9, 13) +
+        ex(76, 194, 76, 246) + ex(124, 194, 124, 246) + dimH(240, 76, 124, 'D')); },
+    drill(p) { const d = 'M80 20H120V195L100 207L80 195Z';
+      return svg(body(d) + flutes(p, d, 80, 120, 30, 210, 46, .8, 16) +
+        ex(80, 198, 80, 246) + ex(120, 198, 120, 246) + dimH(240, 80, 120, 'D') +
+        dimA(100, 207, 40, 211, 329, 4, [52, 176, 'end'])); },
+    v() { const d = 'M82 20H118V120H148V130L100 178L52 130V120H82Z';
+      return svg(body(d) + shade(106, 20, 12, 100) + body('M118 120H148V130L118 160Z', C.m) +
+        ex(52, 132, 52, 218) + ex(148, 132, 148, 218) + dimH(212, 52, 148, 'D') +
+        dimA(100, 178, 40, 225, 315, 4, [100, 152])); },
+    engrave() { const d = 'M80 20H120V135L104 163H96L80 135Z';
+      return svg(body(d) + shade(108, 20, 12, 115) + body('M108 135H120L104 163H101Z', C.m) +
+        ex(80, 18, 80, 4) + ex(120, 18, 120, 4) + dimH(10, 80, 120, 'D', false) +
+        '<path d="M96 163L100 170L104 163" stroke="' + C.b + '" stroke-width="1" stroke-dasharray="3 2" opacity=".8" fill="none"/>' +
+        dimA(100, 170, 30, 240, 300, 30, [76, 146, 'end']) +
+        ex(96, 166, 96, 212) + ex(104, 166, 104, 212) + dimHo(205, 96, 104, 'd')); },
+    taper(p) { const cone = 'M82 120H118L105 222A5 5 0 0 1 95 222Z';
+      return svg(body('M82 20H118V120H82Z') + shade(106, 20, 12, 100) + body(cone, C.l) + flutes(p, cone, 80, 120, 124, 235, 17, .8, 7) +
+        ex(82, 18, 82, 4) + ex(118, 18, 118, 4) + dimH(10, 82, 118, 'D', false) +
+        ex(120, 120, 160, 120) + ex(102, 227, 160, 227) + dimV(152, 120, 227, 'L') +
+        '<path d="M103.5 225.5L122 244" stroke="' + C.b + '" stroke-width="1.6" fill="none"/>' + head(103.5, 225.5, -1, -1) + tx(125, 249, 'R', 'start')); },
+    thread() { const L = 'M70 20H100V206.2H85L50 186V182L85 161.8V75L70 62Z', R = 'M100 20H130V62L115 75V161.8L150 182V186L115 206.2H100Z';
+      return svg(body(L) + body(R, C.l) + shade(115, 20, 15, 42) + body('M115 161.8L150 182V186L115 206.2Z', C.m) +
+        dimA(46.5, 184, 34, 150, 210, 4, [17, 152]) +
+        ex(117, 75, 184, 75) + ex(117, 206.2, 184, 206.2) + dimV(176, 75, 206.2, 'L') +
+        ex(50, 189, 50, 246) + ex(150, 189, 150, 246) + dimH(240, 50, 150, 'D')); },
+  };
+  return (type, id = 'tf') => (F[type] || F.flat)(id + type);
+})();
 const ILL = {
   cyl() { return FIG.cyl(); },
   rz0() { return FIG.rz0(); },
@@ -6102,12 +6174,8 @@ const ILL = {
   zzero() { return FIG.zzero(); },
   flip() { return FIG.flip(); },
   tool() {
-    const t0 = libTool(libSel); if (!t0 || $('#lib').hidden) return ''; const t = { ...t0, type: (t0.type === 'engrave' || t0.type === 'taper' || t0.type === 'engball') ? 'v' : t0.type };
-    const sh = '<path class="tl" d="M27 1h10v14H27z"/>';
-    if (t.type === 'ball') return SVG64(sh + '<path class="tl" d="M26 15h12v18a6 6 0 0 1-12 0z"/>' + FLUTE(26, 38, 15, 33) + DIM(26, 42, 38, 42));
-    if (t.type === 'v') return SVG64(sh + '<path class="tl" d="M24 15h16l-8 26z"/>' + '<path class="dl" d="M32 41v-14"/>' + '<path class="ln" d="M44 41a12 12 0 0 0-8-12"/>' + DIM(24, 12, 40, 12));
-    if (t.type === 'drill') return SVG64(sh + '<path class="tl" d="M27 15h10v20l-5 5-5-5z"/>' + FLUTE(27, 37, 15, 35) + DIM(27, 43, 37, 43));
-    return SVG64(sh + '<path class="tl" d="M26 15h12v24H26z"/>' + FLUTE(26, 38, 15, 39) + DIM(26, 42, 38, 42));
+    const t0 = libTool(libSel); if (!t0 || $('#lib').hidden) return '';
+    return TOOLFIG(t0.type === 'engball' ? 'taper' : t0.type);
   },
 };
 function sfigInit() { document.querySelectorAll('[data-sfig]').forEach(el => { if (!el.firstChild) el.innerHTML = el.dataset.sfig.startsWith('rl') ? FIG.relf(el.dataset.sfig) : FIG.strat(el.dataset.sfig); }); }
@@ -6879,7 +6947,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.296', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.297', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -7413,7 +7481,7 @@ function libRender() {
     const mat = projMat(), f = libFlat(t, mat);
     form.querySelectorAll('[data-t]').forEach(el => { if (document.activeElement !== el) el.value = f[el.dataset.t] ?? ''; });
     $$('#toolForm [data-tshow]').forEach(el => { el.style.display = el.dataset.tshow.split(' ').includes(t.type) ? '' : 'none'; });
-    $('#tAngLbl').textContent = tr(t.type === 'drill' ? 'Angle de pointe (°)' : t.type === 'thread' ? 'Angle du filet (°)' : 'Angle du V (°)'); $('#tDiaLbl').textContent = tr(t.type === 'taper' ? 'Diamètre de queue D (mm)' : 'Diamètre (mm)');
+    $('#tAngLbl').textContent = tr(t.type === 'drill' ? 'Angle de pointe α (°)' : t.type === 'thread' ? 'Angle du filet α (°)' : 'Angle du V α (°)'); $('#tDiaLbl').textContent = tr(t.type === 'taper' ? 'Diamètre de queue D (mm)' : 'Diamètre D (mm)');
     $('#libCutH').textContent = trf('Réglages de coupe — {m}', { m: libMatName(mat) });
     const est = $('#libEst'); est.hidden = f.src === 'lib' && !f.est; est.textContent = f.src === 'none' ? tr('Aucun réglage pour ce matériau : valeurs génériques, à adapter.') : f.src === 'other' ? tr('Pas de réglage pour ce matériau : valeurs reprises d’un autre matériau, à adapter.') : tr('Valeurs de départ estimées pour une CNC de loisir, d’après les tableaux CncFraises et Sorotec (réglages prudents ; PVC comme l’acrylique). Validez-les par un essai et corrigez-les : elles deviendront les vôtres.');
     const usr = libIsUser(t, mat), org = usr && libOrigCut(t, mat); $('#libUser').hidden = !usr; $('#libOrig').hidden = !org;
