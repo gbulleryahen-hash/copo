@@ -8195,7 +8195,7 @@ function drawImages(C) {
   }
 }
 // hauteur (0..1) du relief à un point local, NaN là où il n'a pas de matière (trou d'une extrusion, fond transparent…)
-function relAtLocal(it, lu, lv) { const f = relSrc(it), g = relGrid[it.id]; if (!f || !g) return NaN; const su = lu / it.w + 0.5, sv = 0.5 - lv / it.h; if (it.kind === 'image') { const i = Math.round(Math.max(0, Math.min(1, su)) * (g.nx - 1)), j = Math.round(Math.max(0, Math.min(1, sv)) * (g.ny - 1)); if (!g.d[j * g.nx + i]) return NaN; } const v = relSample(f, g.nx, g.ny, su, sv); return v !== v ? NaN : (it.invert ? 1 - v : v); }
+function relAtLocal(it, lu, lv) { const f = relSrc(it), g = relGrid[it.id]; if (!f || !g) return NaN; const su = lu / it.w + 0.5, sv = 0.5 - lv / it.h; if (it.kind === 'image') { const i = Math.round(Math.max(0, Math.min(1, su)) * (g.nx - 1)), j = Math.round(Math.max(0, Math.min(1, sv)) * (g.ny - 1)); if (!(relSample(relMaskF(it), g.nx, g.ny, su, sv) >= 0.5)) return NaN; } const v = relSample(f, g.nx, g.ny, su, sv); return v !== v ? NaN : (it.invert ? 1 - v : v); }
 // matière du relief au point local ou tout près (rayon r) : un STL ajouré ou une fine gravure reste facile à attraper
 function relNear(it, lu, lv, r) { if (relAtLocal(it, lu, lv) === relAtLocal(it, lu, lv)) return true; for (let k = 0; k < 12; k++) { const a = k * Math.PI / 6; for (const rr of [r * 0.5, r]) { const v = relAtLocal(it, lu + rr * Math.cos(a), lv + rr * Math.sin(a)); if (v === v) return true; } } return false; }
 function relPickAt(p, r) { let best = null, ba = Infinity; // parmi les reliefs qui ont de la matière sous le curseur (ou tout près), le plus petit : souvent celui posé sur l'autre
@@ -8302,6 +8302,12 @@ function relSrc(it) {
   if (r > 0) { const tmp = new Float32Array(f.length); for (let pass = 0; pass < 2; pass++) for (const [A, B, n, m, sa, sb] of [[f, tmp, nx, ny, 1, nx], [tmp, f, ny, nx, nx, 1]]) for (let j = 0; j < m; j++) { const o = j * sb; for (let i = 0; i < n; i++) { let s = 0, c = 0; for (let q = Math.max(0, i - r); q <= Math.min(n - 1, i + r); q++) { const v = A[o + q * sa]; if (v === v) { s += v; c++; } } B[o + i * sa] = A[o + i * sa] === A[o + i * sa] ? s / c : NaN; } } }
   relSm.set(it.id, { k, f }); return f;
 }
+/* masque d'une image (opaque = 1) adouci sur deux cellules : le contour suit une courbe lisse au lieu des marches des pixels */
+const relMaskSm = new Map();
+function relMaskF(it) { const g = relGrid[it.id]; if (!g) return null; const c = relMaskSm.get(it.id); if (c && c.g === g) return c.f;
+  const { nx, ny, d } = g, f = new Float32Array(nx * ny), tmp = new Float32Array(nx * ny); for (let i = 0; i < f.length; i++) f[i] = d[i] ? 1 : 0;
+  for (let pass = 0; pass < 2; pass++) for (const [A, B, n, m, sa, sb] of [[f, tmp, nx, ny, 1, nx], [tmp, f, ny, nx, nx, 1]]) for (let j = 0; j < m; j++) { const o = j * sb; for (let i = 0; i < n; i++) { let t = 0, k = 0; for (let q = Math.max(0, i - 2); q <= Math.min(n - 1, i + 2); q++) { t += A[o + q * sa]; k++; } B[o + i * sa] = t / k; } }
+  relMaskSm.set(it.id, { g, f }); return f; }
 function relSample(f, nx, ny, u, v) { // u, v dans [0,1] ; bilinéaire, NaN si vide au plus proche
   const X = u * (nx - 1), Y = v * (ny - 1); if (X < 0 || Y < 0 || X > nx - 1 || Y > ny - 1) return NaN;
   const i = Math.min(nx - 2, Math.floor(X)), j = Math.min(ny - 2, Math.floor(Y)), a = X - i, b = Y - j, q = j * nx + i;
@@ -8329,7 +8335,7 @@ function reliefCompose(cell, wantMask, maskIds, ext, tight) {
     const zH = +it.zH || 0, topZ = -(+it.top || 0), bot = topZ - zH, inv = !!it.invert, mode = it.mode || 'add', CL = relClipMask(it, i0, i1, j0, j1, cx, cy, X0, Y0), cw = i1 - i0 + 1, fe = Math.max(1e-6, 0.2 * Math.min(hw, hh));
     for (let j = j0; j <= j1; j++) { const dy = Y0 + j * cy - it.y; for (let i = i0; i <= i1; i++) { const dx = X0 + i * cx - it.x, lu = dx * cs + dy * sn, lv = -dx * sn + dy * cs; if (Math.abs(lu) > hw || Math.abs(lv) > hh) continue; if (CL && !CL[(j - j0) * cw + (i - i0)]) continue;
       const su = lu / it.w + 0.5, sv = 0.5 - lv / it.h, v = relSample(f, g.nx, g.ny, su, sv); if (v !== v) continue; const h = zH * (inv ? 1 - v : v), q = j * nx + i, cur = H[q];
-      if (Mk && (!maskIds || maskIds.includes(it.id)) && (it.kind !== 'image' || g.d[Math.round(Math.max(0, Math.min(1, sv)) * (g.ny - 1)) * g.nx + Math.round(Math.max(0, Math.min(1, su)) * (g.nx - 1))])) Mk[q] = 1;
+      if (Mk && (!maskIds || maskIds.includes(it.id)) && (it.kind !== 'image' || relSample(relMaskF(it), g.nx, g.ny, Math.max(0, Math.min(1, su)), Math.max(0, Math.min(1, sv))) >= 0.5)) Mk[q] = 1;
       let w = 0; if (mode === 'blend') { const t = Math.min(1, Math.min(hw - Math.abs(lu), hh - Math.abs(lv)) / fe); w = 0.5 * t * t * (3 - 2 * t); } // mélanger : moyenne des deux reliefs, fondue vers les bords
       H[q] = cur !== cur ? (mode === 'sub' ? topZ - h : bot + h) : mode === 'sub' ? cur - h : mode === 'max' ? Math.max(cur, bot + h) : mode === 'min' ? Math.min(cur, bot + h) : mode === 'blend' ? cur + (bot + h - cur) * w : cur + h; } }
   }
