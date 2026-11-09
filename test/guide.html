@@ -188,7 +188,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.310</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.311</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -489,7 +489,7 @@ X74.36 A14.181</pre>
     <p>Sélectionnez le motif (formes fermées), puis <span class="ui">Dessin › Incrustation en V (inlay)…</span>. Les réglages s’ouvrent dans le panneau de gauche, avec un schéma coté comme dans Aspire : <strong>a</strong> profondeur de poche, <strong>g</strong> jeu pour la colle au fond, <strong>b</strong> hauteur du mâle sous le support (il doit dépasser a − g : l’écart restant sera raboté), <strong>c</strong> débord du support, et un <strong>préfixe</strong> facultatif pour les noms des parcours, nommés <em>calque_fonction_fraise</em> : <code>femelle_degagement_6mm</code>, <code>femelle_vcarve_90deg</code>, <code>mâle_degagement_6mm</code>… Choisissez la fraise en V (bouton <span class="ui">Bibliothèque…</span> pour toute la bibliothèque) et, si vous voulez, des <strong>fraises de dégagement</strong> droites qui vident d’abord les fonds plats (plus rapide sur les grands motifs). Comme dans Aspire, vous pouvez en ajouter plusieurs (<span class="ui">+ Ajouter une fraise…</span>) : COPO les range de la plus grosse à la plus petite ; la plus grosse vide les fonds plats, chaque suivante est une reprise de matière liée à la précédente et ne reprend que ce qu’elle n’a pas pu enlever. Le débord <em>c</em> est automatique si la case reste vide ; la case <em>Créer les parcours d’outils</em> peut être décochée pour ne dessiner que la pièce mâle. COPO crée :</p>
     <ul>
       <li>un V-carving <em>femelle</em> du motif dans votre pièce ;</li>
-      <li>la pièce <em>mâle</em> : le motif en miroir entouré d'un cadre, sur le calque « Incrustation · mâle », avec un V-carving qui démarre à la profondeur de la poche moins le jeu et descend de l’écart de surface. Ses parcours sont créés <em>masqués</em> : pour l'usiner dans le bois d'incrustation, affichez-les et masquez ceux de la femelle avant d'enregistrer le G-code.</li>
+      <li>la pièce <em>mâle</em> : le motif en miroir entouré d'un cadre, sur le calque « mâle », avec un V-carving qui démarre à la profondeur de la poche moins le jeu et descend de l’écart de surface. Tous les calques (« mâle », « dégagement », « incrustation (calcul) ») et tous les parcours sont créés <em>visibles</em> : pour usiner une seule pièce, masquez les parcours de l'autre (icône œil de la liste) avant d'enregistrer le G-code.</li>
       <li>avec une fraise de dégagement, une poche « dégagement » avant chaque V-carving, là où le V atteindrait sa profondeur maximale. Avec une javelot ou une fraise à bout rond, femelle et mâle sont usinés sur une même forme de travail, dont les pointes et les coins rentrants sont arrondis au rayon du bout : les deux pièces s'emboîtent jusqu'au fond (votre dessin n'est pas modifié). La fraise en V ne repasse pas sur les fonds vidés par le dégagement : elle fait la paroi, puis seulement ce que la fraise de dégagement, à cause de son diamètre, n’a pas pu atteindre (pointes, passages étroits). Pour le mâle, le dégagement vide tout jusqu’au cadre (paroi droite), à la profondeur où travaille la fraise en V, et la fraise en V ne fait plus que la paroi en pente du motif, par paliers, plus les coins que la fraise de dégagement n’atteint pas : elle ne touche ni au cadre ni aux fonds plats. Le débord automatique s’élargit pour que le cône de la fraise reste dans le cadre.</li>
     </ul>
     <p>Retournez le mâle, collez-le dans la femelle, puis rabotez ou poncez le surplus. Le réglage <span class="ui">Profondeur de départ</span> du V-carving est aussi disponible à la main dans le formulaire des parcours.</p>
@@ -635,7 +635,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC), acorn (MIT, pour les calculs en tâche de fond).</p>
-    <footer><p>COPO 1.310 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.311 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -673,7 +673,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.310</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.311</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -974,7 +974,7 @@ X74.36 A14.181</pre>
     <p>Select the design (closed vectors), then <span class="ui">Drawing › V-carve inlay…</span>. The settings open in the left panel, with a dimensioned diagram as in Aspire: <strong>a</strong> pocket depth, <strong>g</strong> glue gap at the bottom, <strong>b</strong> male height below the backing (it must exceed a − g: the rest is planed off), <strong>c</strong> backing overhang, and an optional <strong>prefix</strong> for the toolpath names, built as <em>layer_function_tool</em>: <code>female_clearance_6mm</code>, <code>female_vcarve_90deg</code>, <code>male_clearance_6mm</code>… Choose the V-bit (<span class="ui">Library…</span> button for the whole library) and, if you like, flat <strong>clearance tools</strong> that first clear the flat areas (faster on large designs). As in Aspire, you can add several (<span class="ui">+ Add a tool…</span>): COPO sorts them from largest to smallest; the largest clears the flat areas, each next one is a rest machining toolpath linked to the previous one and only removes what it could not. The overhang <em>c</em> is automatic when left empty; the <em>Create the toolpaths</em> box can be unticked to draw only the male piece. COPO creates:</p>
     <ul>
       <li>a <em>female</em> V-carving of the design in your part;</li>
-      <li>the <em>male</em> plug: the mirrored design inside a frame, on the “Inlay · male” layer, with a V-carving that starts at the pocket depth minus the gap and goes down by the surface gap. Its toolpaths are created <em>hidden</em>: to cut it from the inlay wood, show them and hide the female ones before saving the G-code.</li>
+      <li>the <em>male</em> plug: the mirrored design inside a frame, on the “male” layer, with a V-carving that starts at the pocket depth minus the gap and goes down by the surface gap. All layers (“male”, “clearance”, “inlay (computed)”) and all toolpaths are created <em>visible</em>: to cut a single part, hide the other part's toolpaths (eye icon in the list) before saving the G-code.</li>
       <li>with a clearance tool, a “clearance” pocket before each V-carving, where the V would reach its full depth. With an engraving bit (flat tip) or a tapered ball nose, the female and the male are machined on the same working shape, whose points and inner corners are rounded to the tip radius: the two parts fit down to the bottom (your drawing is not changed). The V-bit does not go over the bottoms already cleared: it cuts the wall, then only what the clearance tool could not reach because of its diameter (points, narrow passages). For the male, the clearance empties everything up to the frame (straight wall), at the depth where the V-bit works, and the V-bit only cuts the sloped wall of the design, in levels, plus the corners the clearance tool cannot reach: it touches neither the frame nor the flat bottoms. The automatic overhang widens so that the bit's cone stays inside the frame.</li>
     </ul>
     <p>Flip the plug, glue it into the female pocket, then plane or sand off the excess. The V-carving <span class="ui">Start depth</span> setting is also available by hand in the toolpath form.</p>
@@ -1120,7 +1120,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC), acorn (MIT, for background calculations).</p>
-    <footer><p>COPO 1.310 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.311 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 

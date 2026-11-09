@@ -1340,7 +1340,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.310</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.311</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1789,6 +1789,7 @@ Object.assign(I18N_EN, {"Parcours renommé (rien n’est recalculé).": "Toolpat
 Object.assign(I18N_EN, {"paroi du motif": "design wall", "paliers": "levels", "palier": "level", "Fonds plats et cadre vidés à la fraise « {n} » (parcours de dégagement) ; la fraise en V ne fait que la paroi du motif.": "Flat bottoms and frame cleared with “{n}” (clearance toolpaths); the V-bit only cuts the design wall."});
 Object.assign(I18N_EN, {"Une fraise en V pointue ne peut pas vider un fond plat : ajoutez une fraise de dégagement ou choisissez une fraise javelot ou à bout rond.": "A pointed V-bit cannot clear a flat bottom: add a clearance tool or choose an engraving (flat tip) or tapered ball nose bit.", "Fond plat trop large pour le bout de cette fraise ({n} passes) : ajoutez une fraise de dégagement.": "Flat bottom too wide for the tip of this bit ({n} passes): add a clearance tool.", "{n} zone(s) plus étroite(s) que le bout de la fraise (Ø {w} mm) : non usinée(s), en rouge dans la vue 2D.": "{n} area(s) narrower than the bit tip (Ø {w} mm): not machined, shown in red in the 2D view.", "Ce parcours sort du brut : la fraise y usinerait dans le vide (la simulation ne le montre pas). Déplacez les vecteurs ou agrandissez le brut.": "This toolpath leaves the stock: the bit would cut air there (the simulation does not show it). Move the vectors or enlarge the stock.", "Incrustation : la femelle et le mâle doivent utiliser la même fraise conique (même angle, même bout) ; « {n} » utilise une autre fraise.": "Inlay: the female and the male must use the same tapered bit (same angle, same tip); “{n}” uses another bit.", "Fraise javelot": "Engraving bit (flat tip)", "Fraise conique à bout rond": "Tapered ball nose", "Diamètre du plat d (mm)": "Flat diameter d (mm)", "Javelot": "Engraving bit", "plat": "flat", "Le diamètre du plat doit être plus grand que 0 et plus petit que le diamètre de la fraise.": "The flat diameter must be greater than 0 and smaller than the bit diameter.", "Le rayon du bout doit être plus grand que 0 et plus petit que la moitié du diamètre.": "The tip radius must be greater than 0 and smaller than half the diameter.", "incrustation (calcul)": "inlay (computed)"});
 Object.assign(I18N_EN, {"Fraise V à bout rond": "Tapered ball nose", "Fraises V à bout rond": "Tapered ball nose bits", "Fraises javelot": "Engraving bits (flat tip)", "Fraise V": "V-bit"});
+Object.assign(I18N_EN, {"Incrustation créée : calques et parcours femelle et mâle, tous visibles.": "Inlay created: female and male layers and toolpaths, all visible."});
 Object.assign(I18N_EN, {"Visite rapide": "Quick tour", "Réafficher les astuces": "Show tips again", "Astuces réactivées : elles s’afficheront à l’ouverture de chaque onglet.": "Tips turned back on: they will show when you open each tab."});
 Object.assign(I18N_EN, {"Aligner sur": "Align to", "La sélection": "The selection", "Le premier vecteur sélectionné": "The first selected vector", "Le brut": "The stock", "Espacement (mm)": "Spacing (mm)", "Perçage": "Drilling", "Sélectionnez au moins deux vecteurs : le premier sert de référence.": "Select at least two vectors: the first one is the reference.", "Sélectionnez au moins deux vecteurs : le premier sert de point de départ.": "Select at least two vectors: the first one is the starting point.", "Les vecteurs sont plus grands que le brut.": "The vectors are larger than the stock.", "Profil sur la ligne 1": "On-line profile 1", "Profil sur la ligne 2": "On-line profile 2", "Poche 1": "Pocket 1", "F2 · Poche 2": "F2 · Pocket 2", "V-carving 2": "V-carving 2", "Foret 4 mm": "4 mm drill"});
 Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the nut / zero fret (mm)"});
@@ -6931,27 +6932,27 @@ function ilMake() {
   try { LS.set('copo.inlay', JSON.stringify({ tool: v.tool.id, D: v.D, gap: v.gap, Sg: v.Sg, name: v.name, clr: v.clr, clrTools: v.clrTools.map(t => t.id), margin: v.margin == null ? '' : v.margin, tp: v.tp })); } catch { }
   const ss = ilSel(), cg = coneGeom(v.tool), rW = h => cg.r(h), bb = bbox(ss), margin = v.margin != null ? v.margin : Math.max(3, 2 * rW(v.Sg) + 1.5, v.clr && v.clrTools.length ? rW(v.Sg) + rW(v.F) + 1.5 : 0); // avec dégagement : assez de marge pour que la fraise en V ne grave pas le cadre du mâle
   const nf0 = { ...newForm(), type: 'vcarve', dir: 'climb', vstep: 0.1 }, face = faceOf(ss[0]) === 2 ? 2 : 1, out = [];
-  const lay = (name, color, vis = true) => { let l = S.layers.find(x => x.name === name); if (!l) { l = { id: uid(), name, visible: vis, locked: false, color }; S.layers.push(l); } return l; };
+  const lay = (name, color, vis = true) => { let l = S.layers.find(x => x.name === name); if (l) l.visible = true; if (!l) { l = { id: uid(), name, visible: vis, locked: false, color }; S.layers.push(l); } return l; };
   const lm = lay(tr('mâle'), '#9b3ad1');
   const cx = bb.x0 + bb.w / 2, dx = bb.w + 2 * margin + 10, g = uid(), made = [];
   for (const sh of ss) { const n = mkShape(sh.nodes.map(cloneNode), true, { layer: lm.id, g }); if (!n) continue; transformShape(n, q => [2 * cx - q[0] + dx, q[1]]); made.push(n); }
   const mb = bbox(made), frame = mkShape(rectNodes(mb.x0 - margin, mb.y0 - margin, mb.x1 + margin, mb.y1 + margin), true, { layer: lm.id, g });
   // fraise à bout plat ou rond (rho > 0) : femelle et mâle usinés sur la même forme de travail R̃ = fermeture(ouverture(R)), pointes et coins arrondis au même rayon ; le dessin n'est pas modifié
   let femSh = ss, maleSh = made; const rho = cg.rho;
-  if (v.tp && rho > 1e-9) { const lk = lay(tr('incrustation (calcul)'), '#999999', false), rt = ipCommon(baseLoops(ss), rho), mk = L => L.map(l => mkShape(dedupe(l, true).map(q => NODE(q[0], q[1])), true, { layer: lk.id })).filter(Boolean);
+  if (v.tp && rho > 1e-9) { const lk = lay(tr('incrustation (calcul)'), '#999999'), rt = ipCommon(baseLoops(ss), rho), mk = L => L.map(l => mkShape(dedupe(l, true).map(q => NODE(q[0], q[1])), true, { layer: lk.id })).filter(Boolean);
     femSh = mk(rt); maleSh = mk(rt.map(l => l.map(q => [2 * cx - q[0] + dx, q[1]]))); if (!femSh.length || !maleSh.length) { femSh = ss; maleSh = made; } }
   if (v.tp) {
     const pre = v.name ? v.name.replace(/\s+/g, '-') + '_' : '', fL = pre + tpnLayer(ss.map(x => x.id)), mL = pre + lm.name.replace(/\s+/g, '-'), ck = v.clr && v.clrTools.length ? { clrTools: v.clrTools.map(t => t.id), clrTool: v.clrTools[0].id, clrExt: true } : {}; // la fraise en V ne refait pas les fonds vidés par le dégagement
     const fem = { ...(femSh !== ss ? { ownShapes: true } : {}), id: uid(), name: tpAutoName('vcarve', fL, v.tool, face), nameAuto: false, type: 'vcarve', toolId: v.tool.id, shapeIds: femSh.map(x => x.id), p: { ...nf0, depth: v.D, vstart: 0, zrel: 1, ilId: g, ilRole: 'fem', ...ck }, visible: true, face };
-    const male = { ownShapes: true, id: uid(), name: tpAutoName('vcarve', mL, v.tool, 1), nameAuto: false, type: 'vcarve', toolId: v.tool.id, shapeIds: [frame.id, ...maleSh.map(x => x.id)], p: { ...nf0, depth: v.Sg, vstart: v.S, zrel: 1, ilId: g, ilRole: 'male', ...ck }, visible: false, face: 1 };
+    const male = { ownShapes: true, id: uid(), name: tpAutoName('vcarve', mL, v.tool, 1), nameAuto: false, type: 'vcarve', toolId: v.tool.id, shapeIds: [frame.id, ...maleSh.map(x => x.id)], p: { ...nf0, depth: v.Sg, vstart: v.S, zrel: 1, ilId: g, ilRole: 'male', ...ck }, visible: true, face: 1 };
     if (v.clr && v.clrTools.length) { // fonds plats vidés d'abord : la plus grosse fraise, puis chaque suivante en reprise de la précédente
-      const lc = lay(tr('dégagement'), '#7a8a99', false), n = v.clrTools.length;
+      const lc = lay(tr('dégagement'), '#7a8a99'), n = v.clrTools.length;
       const chain = (L, base, depth, vis, fc) => { const sh = L.map(l => mkShape(dedupe(l, true).map(q => NODE(q[0], q[1])), true, { layer: lc.id })).filter(Boolean); if (!sh.length) return []; let prev = null;
         return v.clrTools.map((t, i) => { const tp = { ownShapes: true, id: uid(), name: tpAutoName('clr', base, t, fc), nameAuto: false, type: 'pocket', toolId: t.id, shapeIds: sh.map(x => x.id), p: { ...newForm(), type: 'pocket', depth, vstart: 0, zrel: 1, allow: 0, dir: 'climb', ...(prev ? { rest: true, restFrom: prev.id } : {}) }, visible: vis, face: fc }; prev = tp; return tp; }); };
       const cf = chain(offLoops(baseLoops(femSh), -rW(v.D)), fL, v.D, true, face);
       // mâle : le dégagement va jusqu'au cadre (paroi droite) ; la fraise en V ne travaille qu'autour du motif, dans une bande qui finit dans la zone déjà vidée
       // mâle : le dégagement vide tout jusqu'au cadre, à la profondeur F, sauf la paroi du motif (largeur Sg × tan) que fait la fraise en V
-      const cm = chain(loopsOf(cUnion([...baseLoops([frame]), ...offLoops(baseLoops(maleSh), rW(v.Sg))].map(toCP))), mL, v.F, false, 1);
+      const cm = chain(loopsOf(cUnion([...baseLoops([frame]), ...offLoops(baseLoops(maleSh), rW(v.Sg))].map(toCP))), mL, v.F, true, 1);
       if (cm.length) { male.shapeIds = maleSh.map(x => x.id); male.p = { ...male.p, vChamfer: true }; }
       out.push(...cf, fem, ...cm, male);
       if (!cf.length && !cm.length) toast(tr('Pas de fond plat assez large pour la fraise de dégagement : seule la fraise en V travaille.'));
@@ -6960,7 +6961,7 @@ function ilMake() {
   }
   S.sel.clear(); made.forEach(m => S.sel.add(m.id)); S.sel.add(frame.id);
   gadSec(null); commit(); gcDirty = true; renderLayers(); renderTpList(); renderSel(); draw();
-  const err = out.map(t => t.err).find(Boolean); toast(err ? err : tr(v.tp ? 'Incrustation créée : parcours femelle (visibles) et mâle (masqués).' : 'Incrustation créée : pièce mâle dessinée, sans parcours.') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
+  const err = out.map(t => t.err).find(Boolean); toast(err ? err : tr(v.tp ? 'Incrustation créée : calques et parcours femelle et mâle, tous visibles.' : 'Incrustation créée : pièce mâle dessinée, sans parcours.') + (mb.x1 + margin > S.stock.w ? ' ' + tr('La pièce mâle dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- inlay en poche (fraise droite) ----------
 // contour commun : ouverture puis fermeture par le rayon de la fraise -> tous les angles ont au moins ce rayon,
@@ -7055,7 +7056,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.310', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.311', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
