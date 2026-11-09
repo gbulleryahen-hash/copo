@@ -459,7 +459,7 @@ label.inl input{width:70px}
 .fp-styles button{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:3px 8px;cursor:pointer;color:var(--ink);font-size:12.5px}
 .fp-styles button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .optbar .fp-mini{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
-.coordin{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.tpt{min-width:0;display:flex;align-items:center;gap:6px}.tpt b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tpbad{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;font:700 10px/1 sans-serif;font-style:normal;color:#111}.newhat{flex-basis:100%;font-size:12.5px;color:var(--muted)}.newhat b{color:#ff9f1c;font-weight:600}
+.coordin{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.tpt{min-width:0;display:flex;align-items:center;gap:6px}.tpt b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tpren{flex:1;min-width:0;font:inherit;font-weight:600;padding:1px 4px}.tpbad{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;font:700 10px/1 sans-serif;font-style:normal;color:#111}.newhat{flex-basis:100%;font-size:12.5px;color:var(--muted)}.newhat b{color:#ff9f1c;font-weight:600}
 .tcmode{display:grid;gap:6px}.tcmode .tcl{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.tcmode input[type=text]{width:90px;font-family:var(--f-mono)}.tcmode .tcs{display:flex;align-items:center;gap:6px}.tcmode .tcfull{flex-basis:100%}.tcmode .tcind{margin-left:26px}
 .tpbad.stale{background:var(--accent);color:var(--accent-ink);font-size:11px}.tpprog{position:absolute;z-index:30;left:50%;top:44px;transform:translateX(-50%);width:min(420px,80%);padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);box-shadow:0 8px 24px rgb(0 0 0 / .35);display:grid;gap:6px;font-size:12.5px}.tpprog[hidden]{display:none}.tpprog i{display:block;position:relative;height:6px;border-radius:3px;background:var(--raised);overflow:hidden}.tpprog b{position:absolute;left:0;top:0;bottom:0;background:var(--accent);transition:width .2s}.tpprog b::after{content:'';position:absolute;left:100%;top:0;bottom:0;width:var(--w,10%);background:repeating-linear-gradient(45deg,var(--accent) 0 6px,transparent 6px 12px);opacity:.55;animation:tpst 1s linear infinite}@keyframes tpst{to{background-position:24px 0}}.tprecalc{width:100%;margin:6px 0}
 .tpbad.err{background:var(--danger)}.tpbad.wrn{background:#e8a33a}#relSum.bad{color:var(--danger);font-weight:500}.rlclip{display:grid;gap:6px;margin:8px 0}.ptb button:disabled{opacity:.45;cursor:default}.nebtn{display:inline-flex;align-items:center;gap:6px}.neico{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.neico .nf{fill:var(--accent);stroke:none}.neico .nh{stroke:var(--accent);stroke-width:1.3}.ptnext{display:grid;gap:8px}.ptnext>b{font-size:12.5px}.ptg{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px}.ptg label{display:grid;grid-template-columns:42px 1fr;align-items:center;gap:6px;font-size:12px;color:var(--muted)}.ptg input{width:100%;min-width:0}.ptb{display:flex;flex-wrap:wrap;gap:6px}
@@ -923,7 +923,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
             <label>Hauteur du mâle sous le support (b) (mm)<input data-u="len" type="number" id="ilB" step="0.5" min="0.5"></label>
             <label>Débord du support (c) (mm)<input data-u="len" type="number" id="ilMargin" step="1" min="0" placeholder="auto"></label>
           </div></div>
-          <label>Nom<input type="text" id="ilName"></label>
+          <label>Préfixe des noms<input type="text" id="ilName" placeholder="facultatif"></label>
           <label>Fraise en V<select id="ilTool" hidden></select><button type="button" class="toolpick" data-act="ilLib" title="Choisir dans la bibliothèque d’outils"><span data-pickof="ilTool"></span><small>Changer…</small></button></label>
           <label class="chk"><input type="checkbox" id="ilClr"> Utiliser des fraises de dégagement (vident les fonds plats)</label>
           <div id="ilClrRow" class="clrlist" hidden><ol id="ilClrList"></ol><button type="button" class="ghost" data-act="ilClrLib" title="Choisir dans la bibliothèque d’outils">+ Ajouter une fraise…</button><p class="hint">La plus grosse vide les fonds plats, chaque suivante reprend ce que la précédente n’a pas pu enlever.</p></div>
@@ -1341,7 +1341,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.304</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.305</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1786,6 +1786,7 @@ Object.assign(I18N_EN, {"Entrer en rampe ou en hélice": "Entering on a ramp or 
 Object.assign(I18N_EN, {"En ébauche de relief, l’hélice alèse un trou de 1,5 × Ø au début de la passe ; si elle sort de la limite d’usinage, l’outil entre en rampe.": "In relief roughing, the helix bores a 1.5 × Ø hole at the start of the pass; if it leaves the machining boundary, the tool ramps in instead."});
 Object.assign(I18N_EN, {"auto : {v} ({a}°)": "auto: {v} ({a}°)", "auto": "auto", "Par défaut, COPO fait une rampe aller-retour dont la longueur descend la passe sous 10° (bois tendre, MDF, plastiques), 5° (bois dur) ou 4° (aluminium, laiton), selon le matériau des outils du projet, et jamais moins de 1,5 × Ø : laissez la longueur vide pour la garder.": "By default, COPO makes a back-and-forth ramp whose length takes the pass down at 10° (softwood, MDF, plastics), 5° (hardwood) or 4° (aluminium, brass), depending on the project's tool material, and never less than 1.5 × Ø: leave the length empty to keep it."});
 Object.assign(I18N_EN, {"Rayon de l'arc (mm)": "Arc radius (mm)", "Diamètre de l'hélice (mm)": "Helix diameter (mm)", "auto (angle du matériau)": "auto (material angle)", "Hélice : l’outil descend en spirale ({p} mm par tour, Ø {d} mm, réduit si la place manque) ; sinon il passe en rampe.": "Helix: the tool spirals down ({p} mm per turn, Ø {d} mm, reduced if space is short); otherwise it ramps in.", "Cette fraise ne coupe pas au centre : COPO entre en rampe aller-retour au lieu de plonger.": "This bit does not cut at the center: COPO ramps in back and forth instead of plunging.", "Cette fraise ne coupe pas au centre : ne percez qu’en hélice, dans des trous plus grands qu’elle.": "This bit does not cut at the center: only drill helically, in holes larger than the bit.", "Ne coupe pas au centre (jamais de plongée droite)": "Not center-cutting (never plunge straight down)", "Diamètre modifié : vitesses, avances, passes et pas latéraux recalculés pour {n} matériau(x). Vérifiez-les.": "Diameter changed: speeds, feeds, pass depths and stepovers recalculated for {n} material(s). Check them.", "Copie → calque actif": "Copy → active layer", "{n} vecteur(s) copié(s) sur le calque « {l} ».": "{n} vector(s) copied to layer “{l}”.", "Copier sur le calque": "Copy to layer"});
+Object.assign(I18N_EN, {"Parcours renommé (rien n’est recalculé).": "Toolpath renamed (nothing is recomputed).", "Rien n’a changé.": "Nothing changed.", "Nom du parcours": "Toolpath name", "Double-clic sur le nom pour le renommer.": "Double-click the name to rename it.", "Préfixe des noms": "Name prefix", "facultatif": "optional"});
 Object.assign(I18N_EN, {"Visite rapide": "Quick tour", "Réafficher les astuces": "Show tips again", "Astuces réactivées : elles s’afficheront à l’ouverture de chaque onglet.": "Tips turned back on: they will show when you open each tab."});
 Object.assign(I18N_EN, {"Aligner sur": "Align to", "La sélection": "The selection", "Le premier vecteur sélectionné": "The first selected vector", "Le brut": "The stock", "Espacement (mm)": "Spacing (mm)", "Perçage": "Drilling", "Sélectionnez au moins deux vecteurs : le premier sert de référence.": "Select at least two vectors: the first one is the reference.", "Sélectionnez au moins deux vecteurs : le premier sert de point de départ.": "Select at least two vectors: the first one is the starting point.", "Les vecteurs sont plus grands que le brut.": "The vectors are larger than the stock.", "Profil sur la ligne 1": "On-line profile 1", "Profil sur la ligne 2": "On-line profile 2", "Poche 1": "Pocket 1", "F2 · Poche 2": "F2 · Pocket 2", "V-carving 2": "V-carving 2", "Foret 4 mm": "4 mm drill"});
 Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the nut / zero fret (mm)"});
@@ -2555,7 +2556,7 @@ function vclrSync(tp) {
   const T = tp.type === 'vcarve' ? (tp.p.clrExt ? [] : vcClrTools(tp.p)) : tp.type === 'pocket' && tp.p.roughTool ? [S.tools.find(t => t.id === tp.p.roughTool)].filter(Boolean) : [];
   for (const c of kids.slice(T.length)) S.tps = S.tps.filter(x => x !== c);
   const cs = T.map((t, k) => { let c = kids[k]; if (!c) { c = { id: uid(), type: 'pocket', shapeIds: [], vclrOf: tp.id, toolId: t.id, p: { ...newForm(), type: 'pocket', allow: 0, zrel: 1 }, visible: true, face: tp.face }; const i = S.tps.indexOf(tp); S.tps.splice(i < 0 ? S.tps.length : i, 0, c); }
-    c.clrIdx = k; c.toolId = t.id; c.name = tp.name + ' · ' + tr(tp.type === 'pocket' ? 'ébauche' : 'dégagement') + (T.length > 1 ? ' ' + (k + 1) + ' (' + t.name + ')' : ''); return c; });
+    c.clrIdx = k; c.toolId = t.id; if (c.nameAuto !== false) c.name = tpAutoName(tp.type === 'pocket' ? 'rough' : 'clr', tpnLayer(tp.shapeIds, tp.relIds), t, tp.face, c); return c; });
   cs.forEach(computeTP);
 }
 // garder les parcours liés comme parcours indépendants (suppression ou renommage du parcours principal) : vrais vecteurs, réglages figés
@@ -3420,6 +3421,13 @@ const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAl
 const uid = () => Math.random().toString(36).slice(2, 9);
 const fr = (v, d = 2) => (Math.round(v * 10 ** d) / 10 ** d).toFixed(d).replace('.', ',');
 const clone = o => JSON.parse(JSON.stringify(o));
+// nom automatique d'un parcours : calque_fonction_fraise (ex. femelle_degagement_6mm, femelle_vcarve_90deg)
+const TPN_FN = { fr: { 'profile:out': 'profil-ext', 'profile:in': 'profil-int', 'profile:on': 'profil-ligne', pocket: 'poche', vcarve: 'vcarve', drill: 'percage', thread: 'filetage', clr: 'degagement', rough: 'ebauche', rest: 'reprise', 'relief:rough': 'ebauche-relief', 'relief:finish': 'finition-relief' },
+  en: { 'profile:out': 'profile-out', 'profile:in': 'profile-in', 'profile:on': 'profile-on', pocket: 'pocket', vcarve: 'vcarve', drill: 'drill', thread: 'thread', clr: 'clearance', rough: 'roughing', rest: 'rest', 'relief:rough': 'relief-rough', 'relief:finish': 'relief-finish' } };
+function tpnTool(t) { if (!t) return '?'; const n = v => String(+(+v).toFixed(3)).replace('.', LANG === 'fr' ? ',' : '.'); return t.type === 'v' ? n(t.angle) + 'deg' : n(t.dia) + 'mm'; }
+function tpnLayer(ids, rids) { const sh = (ids || []).map(id => S.shapes.find(x => x.id === id)).find(Boolean); if (sh) { const l = S.layers.find(x => x.id === sh.layer); if (l) return l.name.trim().replace(/\s+/g, '-'); } const r = (rids || []).map(id => S.relief.items.find(x => x.id === id)).find(Boolean); return r ? String(r.name || 'relief').trim().replace(/\s+/g, '-') : (LANG === 'fr' ? 'calque' : 'layer'); }
+function tpAutoName(fn, layer, tool, face, except) { const F = TPN_FN[LANG === 'fr' ? 'fr' : 'en']; let b = (face === 2 ? 'F2_' : '') + layer + '_' + (F[fn] || fn) + '_' + tpnTool(tool), nm = b, k = 2; while (S.tps.some(x => x !== except && x.name === nm)) nm = b + '_' + k++; return nm; }
+function tpFn(type, p) { return type === 'profile' ? 'profile:' + (p.side || 'out') : type === 'relief' ? 'relief:' + (p.rlOp === 'finish' ? 'finish' : 'rough') : type === 'pocket' && p.rest ? 'rest' : type; }
 const TYPE_LBL = { profile: 'Profil', pocket: 'Poche', vcarve: 'V-carving', drill: 'Perçage', thread: 'Filetage', relief: 'Relief' };
 const SIDE_LBL = { out: 'extérieur', in: 'intérieur', on: 'sur la ligne' };
 const TOOL_LBL = { flat: 'Fraise droite', ball: 'Hémisphérique', v: 'Fraise en V', drill: 'Foret', thread: 'Fraise à fileter' };
@@ -6858,14 +6866,14 @@ function ilOpen() {
   const ss = ilSel(); if (!ss.length) return toast('Sélectionnez d’abord le motif à incruster (formes fermées).');
   let o = { D: 4, gap: 0.5, Sg: 1.5, name: tr('Incrustation V'), clr: false, margin: '', tp: true }; try { const q = JSON.parse(LS.get('copo.inlay') || '{}'); if (q.F != null && q.Sg == null) q.Sg = Math.max(0, q.F - (q.D || 4) + (q.gap || 0)); o = { ...o, ...q }; } catch { }
   ilFill('#ilTool', 'v', o.tool); ilClrIds = (o.clrTools || (o.clrTool ? [o.clrTool] : [])).filter(id => S.tools.some(t => t.id === id)); ilClrRender();
-  $('#ilD').value = o.D; $('#ilGap').value = o.gap; $('#ilB').value = +(o.D - o.gap + o.Sg).toFixed(3); $('#ilName').value = o.name || tr('Incrustation V'); $('#ilClr').checked = !!o.clr; $('#ilMargin').value = o.margin === '' || o.margin == null ? '' : o.margin; $('#ilTp').checked = o.tp !== false;
+  $('#ilD').value = o.D; $('#ilGap').value = o.gap; $('#ilB').value = +(o.D - o.gap + o.Sg).toFixed(3); $('#ilName').value = o.name && o.name !== tr('Incrustation V') ? o.name : ''; $('#ilClr').checked = !!o.clr; $('#ilMargin').value = o.margin === '' || o.margin == null ? '' : o.margin; $('#ilTp').checked = o.tp !== false;
   $('#ilSel').textContent = trf('{n} vecteur(s) sélectionné(s) comme motif.', { n: ss.length });
   gadSec('il'); ilInfo();
 }
 let ilClrIds = [];
 function ilClrTools() { const seen = new Set(); return ilClrIds.map(id => S.tools.find(t => t.id === id)).filter(Boolean).sort((a, b) => b.dia - a.dia).filter(t => { const k = t.dia.toFixed(3); if (seen.has(k)) return false; seen.add(k); return true; }); } // une fraise par diamètre
 function ilClrRender() { const L = $('#ilClrList'); if (!L) return; const T = ilClrTools(); ilClrIds = T.map(t => t.id); L.innerHTML = ''; T.forEach((t, i) => { const li = document.createElement('li'); li.innerHTML = '<b>' + (i + 1) + '</b><span></span><button type="button" title="Retirer" aria-label="Retirer">✕</button>'; li.querySelector('span').textContent = t.name; li.querySelector('button').onclick = () => { ilClrIds = ilClrIds.filter(x => x !== t.id); ilClrRender(); ilInfo(); }; L.appendChild(li); }); }
-function ilVals() { const tool = S.tools.find(t => t.id === $('#ilTool').value), D = +$('#ilD').value, gap = Math.max(0, +$('#ilGap').value || 0), Sg = (+$('#ilB').value || 0) - (D - gap), clr = $('#ilClr').checked, clrTools = ilClrTools(), clrTool = clrTools[0], mg = $('#ilMargin').value; return { tool, D, gap, Sg, S: D - gap, F: D - gap + Sg, clr, clrTool, clrTools, margin: mg === '' ? null : Math.max(0, +mg || 0), name: $('#ilName').value.trim() || tr('Incrustation V'), tp: $('#ilTp').checked }; }
+function ilVals() { const tool = S.tools.find(t => t.id === $('#ilTool').value), D = +$('#ilD').value, gap = Math.max(0, +$('#ilGap').value || 0), Sg = (+$('#ilB').value || 0) - (D - gap), clr = $('#ilClr').checked, clrTools = ilClrTools(), clrTool = clrTools[0], mg = $('#ilMargin').value; return { tool, D, gap, Sg, S: D - gap, F: D - gap + Sg, clr, clrTool, clrTools, margin: mg === '' ? null : Math.max(0, +mg || 0), name: $('#ilName').value.trim(), tp: $('#ilTp').checked }; }
 function ilCheck(v) {
   if (!v.tool) return tr('Choisissez une fraise en V.'); if (!(v.D > 0)) return tr('Indiquez la profondeur de la poche femelle.');
   if (!(v.S > 0)) return tr('Le jeu doit être plus petit que la profondeur de la poche.'); if (!(v.Sg > 0)) return tr('La hauteur du mâle (b) doit dépasser la profondeur de poche moins le jeu (a − g), pour qu’il reste un écart à raboter.');
@@ -6879,24 +6887,25 @@ function ilInfo() { pickSync(); const v = ilVals(), e = ilCheck(v), F = x => LAN
 function ilMake() {
   const v = ilVals(), e = ilCheck(v); if (e) return toast(e);
   try { LS.set('copo.inlay', JSON.stringify({ tool: v.tool.id, D: v.D, gap: v.gap, Sg: v.Sg, name: v.name, clr: v.clr, clrTools: v.clrTools.map(t => t.id), margin: v.margin == null ? '' : v.margin, tp: v.tp })); } catch { }
-  const ss = ilSel(), th = Math.tan(v.tool.angle * Math.PI / 360), bb = bbox(ss), margin = v.margin != null ? v.margin : Math.max(3, 2 * v.Sg * th + 1.5, v.clr && v.clrTools.length ? 2 * v.F * th + 1 : 0); // avec dégagement : assez de marge pour que la fraise en V ne grave pas le cadre du mâle
+  const ss = ilSel(), th = Math.tan(v.tool.angle * Math.PI / 360), bb = bbox(ss), margin = v.margin != null ? v.margin : Math.max(3, 2 * v.Sg * th + 1.5, v.clr && v.clrTools.length ? 2 * v.F * th + 1.5 : 0); // avec dégagement : assez de marge pour que la fraise en V ne grave pas le cadre du mâle
   const nf0 = { ...newForm(), type: 'vcarve', dir: 'climb', vstep: 0.1 }, face = faceOf(ss[0]) === 2 ? 2 : 1, out = [];
   const lay = (name, color, vis = true) => { let l = S.layers.find(x => x.name === name); if (!l) { l = { id: uid(), name, visible: vis, locked: false, color }; S.layers.push(l); } return l; };
-  const lm = lay(tr('Incrustation · mâle'), '#9b3ad1');
+  const lm = lay(tr('mâle'), '#9b3ad1');
   const cx = bb.x0 + bb.w / 2, dx = bb.w + 2 * margin + 10, g = uid(), made = [];
   for (const sh of ss) { const n = mkShape(sh.nodes.map(cloneNode), true, { layer: lm.id, g }); if (!n) continue; transformShape(n, q => [2 * cx - q[0] + dx, q[1]]); made.push(n); }
   const mb = bbox(made), frame = mkShape(rectNodes(mb.x0 - margin, mb.y0 - margin, mb.x1 + margin, mb.y1 + margin), true, { layer: lm.id, g });
   if (v.tp) {
-    const fem = { id: uid(), name: v.name + ' · ' + tr('femelle'), type: 'vcarve', toolId: v.tool.id, shapeIds: ss.map(x => x.id), p: { ...nf0, depth: v.D, vstart: 0, zrel: 1 }, visible: true, face };
-    const male = { ownShapes: true, id: uid(), name: v.name + ' · ' + tr('mâle'), type: 'vcarve', toolId: v.tool.id, shapeIds: [frame.id, ...made.map(x => x.id)], p: { ...nf0, depth: v.Sg, vstart: v.S, zrel: 1 }, visible: false, face: 1 };
+    const pre = v.name ? v.name.replace(/\s+/g, '-') + '_' : '', fL = pre + tpnLayer(ss.map(x => x.id)), mL = pre + lm.name.replace(/\s+/g, '-'), ck = v.clr && v.clrTools.length ? { clrTools: v.clrTools.map(t => t.id), clrTool: v.clrTools[0].id, clrExt: true } : {}; // la fraise en V ne refait pas les fonds vidés par le dégagement
+    const fem = { id: uid(), name: tpAutoName('vcarve', fL, v.tool, face), nameAuto: false, type: 'vcarve', toolId: v.tool.id, shapeIds: ss.map(x => x.id), p: { ...nf0, depth: v.D, vstart: 0, zrel: 1, ...ck }, visible: true, face };
+    const male = { ownShapes: true, id: uid(), name: tpAutoName('vcarve', mL, v.tool, 1), nameAuto: false, type: 'vcarve', toolId: v.tool.id, shapeIds: [frame.id, ...made.map(x => x.id)], p: { ...nf0, depth: v.Sg, vstart: v.S, zrel: 1, ...ck }, visible: false, face: 1 };
     if (v.clr && v.clrTools.length) { // fonds plats vidés d'abord : la plus grosse fraise, puis chaque suivante en reprise de la précédente
-      const lc = lay(tr('Incrustation · dégagement'), '#7a8a99', false), n = v.clrTools.length;
+      const lc = lay(tr('dégagement'), '#7a8a99', false), n = v.clrTools.length;
       const chain = (L, base, depth, vis, fc) => { const sh = L.map(l => mkShape(dedupe(l, true).map(q => NODE(q[0], q[1])), true, { layer: lc.id })).filter(Boolean); if (!sh.length) return []; let prev = null;
-        return v.clrTools.map((t, i) => { const tp = { ownShapes: true, id: uid(), name: base + (n > 1 ? ' ' + (i + 1) + ' (' + t.name + ')' : ''), type: 'pocket', toolId: t.id, shapeIds: sh.map(x => x.id), p: { ...newForm(), type: 'pocket', depth, vstart: 0, zrel: 1, allow: 0, dir: 'climb', ...(prev ? { rest: true, restFrom: prev.id } : {}) }, visible: vis, face: fc }; prev = tp; return tp; }); };
-      const cf = chain(offLoops(baseLoops(ss), -v.D * th), v.name + ' · ' + tr('femelle, dégagement'), v.D, true, face);
+        return v.clrTools.map((t, i) => { const tp = { ownShapes: true, id: uid(), name: tpAutoName('clr', base, t, fc), nameAuto: false, type: 'pocket', toolId: t.id, shapeIds: sh.map(x => x.id), p: { ...newForm(), type: 'pocket', depth, vstart: 0, zrel: 1, allow: 0, dir: 'climb', ...(prev ? { rest: true, restFrom: prev.id } : {}) }, visible: vis, face: fc }; prev = tp; return tp; }); };
+      const cf = chain(offLoops(baseLoops(ss), -v.D * th), fL, v.D, true, face);
       // mâle : le dégagement va jusqu'au cadre (paroi droite) ; la fraise en V ne travaille qu'autour du motif, dans une bande qui finit dans la zone déjà vidée
-      const fb = bbox([frame]), band = offLoops(baseLoops(made), 2 * v.F * th + 0.5), inF = band.length && band.every(l => l.every(q => q[0] > fb.x0 + 1e-6 && q[0] < fb.x1 - 1e-6 && q[1] > fb.y0 + 1e-6 && q[1] < fb.y1 - 1e-6));
-      const cm = chain(inF ? loopsOf(cUnion([...baseLoops([frame]), ...offLoops(baseLoops(made), v.F * th)].map(toCP))) : offLoops(baseLoops([frame, ...made]), -v.F * th), v.name + ' · ' + tr('mâle, dégagement'), v.Sg, false, 1);
+      const fb = bbox([frame]), band = offLoops(baseLoops(made), (v.F + v.Sg) * th + 0.5), reach = offLoops(band, v.S * th), inF = band.length && reach.every(l => l.every(q => q[0] > fb.x0 + 1e-6 && q[0] < fb.x1 - 1e-6 && q[1] > fb.y0 + 1e-6 && q[1] < fb.y1 - 1e-6));
+      const cm = chain(inF ? loopsOf(cUnion([...baseLoops([frame]), ...offLoops(baseLoops(made), v.F * th)].map(toCP))) : offLoops(baseLoops([frame, ...made]), -v.F * th), mL, v.F, false, 1);
       if (inF && cm.length) { const bs = band.map(l => mkShape(dedupe(l, true).map(q => NODE(q[0], q[1])), true, { layer: lc.id })).filter(Boolean); if (bs.length) male.shapeIds = [...bs.map(x => x.id), ...made.map(x => x.id)]; }
       out.push(...cf, fem, ...cm, male);
       if (!cf.length && !cm.length) toast(tr('Pas de fond plat assez large pour la fraise de dégagement : seule la fraise en V travaille.'));
@@ -7000,7 +7009,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.304', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.305', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -7108,6 +7117,10 @@ $('#fFont').onchange = e => { const f = [...e.target.files]; e.target.value = ''
 $('#fFontDir').onchange = e => { const f = [...e.target.files]; e.target.value = ''; addFontFiles(f); };
 
 // ---------- panneau Parcours ----------
+// renommer un parcours sur place (double-clic sur le nom, ou F2) : aucun recalcul, les parcours liés gardent leur nom
+function tpRenameInline(tp, b) { const inp = document.createElement('input'); inp.type = 'text'; inp.value = tp.name; inp.className = 'tpren'; inp.setAttribute('aria-label', tr('Nom du parcours')); b.replaceWith(inp); inp.focus(); inp.select(); let done = false;
+  const fin = ok => { if (done) return; done = true; const v = inp.value.trim(); if (ok && v && v !== tp.name) { tp.name = v; tp.nameAuto = false; if (S.editTp === tp.id && S.form) S.form.name = v; commit(false); gcDirty = true; } renderTpList(); if (S.editTp === tp.id) renderForm(); };
+  inp.onkeydown = e => { e.stopPropagation(); if (e.key === 'Enter') fin(true); if (e.key === 'Escape') fin(false); }; inp.onblur = () => fin(true); inp.onclick = e => e.stopPropagation(); }
 function renderTpList() { if (typeof libCardSync === 'function') libCardSync();
   const ul = $('#tpList'); if (!S.tps.length) { ul.innerHTML = '<li class="empty">Aucun parcours. Sélectionnez des vecteurs dans la vue 2D, réglez le formulaire ci-dessous puis cliquez sur Calculer.</li>'; $('#tpTotal').textContent = ''; $('#topstats').textContent = ''; return; }
   ul.innerHTML = ''; let tot = 0;
@@ -7122,7 +7135,7 @@ function renderTpList() { if (typeof libCardSync === 'function') libCardSync();
       + '<button class="iconbtn" data-a="down" title="Descendre" aria-label="Descendre"' + (idx < S.tps.length - 1 ? '' : ' disabled') + '><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button>'
       + '<button class="iconbtn" data-a="vis" title="' + (tp.visible ? 'Masquer et exclure du G-code' : 'Afficher et inclure') + '" aria-label="Visibilité"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>' + (tp.visible ? '' : '<path d="M4 4l16 16"/>') + '</svg></button>'
       + '<button class="iconbtn" data-a="del" title="Supprimer" aria-label="Supprimer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div>';
-    li.querySelector('b').textContent = tp.name; li.querySelector('.tpt').dataset.tip = [tp.name, sub, tp.err ? '⚠ ' + tp.err : '', ...wl.map(w => '⚠ ' + w)].filter(Boolean).join('\n'); // titre seul, détails au survol
+    li.querySelector('b').textContent = tp.name; li.querySelector('.tpt').dataset.tip = [tp.name, sub, tr('Double-clic sur le nom pour le renommer.'), tp.err ? '⚠ ' + tp.err : '', ...wl.map(w => '⚠ ' + w)].filter(Boolean).join('\n'); // titre seul, détails au survol
     li.onclick = e => {
       const a = e.target.closest('[data-a]'); if (a) { e.stopPropagation();
         if (a.dataset.a === 'del' && S.tps.some(x => x.vclrOf === tp.id) && !a.dataset.go) { const n = S.tps.filter(x => x.vclrOf === tp.id).length, kind = tr(tp.type === 'pocket' ? 'ébauche' : 'dégagement');
@@ -7136,7 +7149,8 @@ function renderTpList() { if (typeof libCardSync === 'function') libCardSync();
       S.editTp = t.id; S.activeTp = t.id; S.form = { ...newForm(), ...clone(t.p), type: t.type, toolId: t.toolId, name: t.name, face: String(t.face === 2 ? 2 : 1) };
       S.sel = new Set(t.shapeIds.filter(id => shapeById(id))); S.tpRels = new Set(t.relIds || []); renderSel(); renderForm(); renderTpList(); draw(); fwOpen('tpWin');
     };
-    li.onkeydown = e => { if (e.key === 'Enter') li.click(); };
+    li.querySelector('b').ondblclick = e => { e.stopPropagation(); tpRenameInline(tp, e.currentTarget); };
+    li.onkeydown = e => { if (e.target.tagName === 'INPUT') return; if (e.key === 'Enter') li.click(); if (e.key === 'F2') tpRenameInline(tp, li.querySelector('b')); };
     li.onmouseenter = () => { RV.hoverTp = tp.id; if (typeof rvReq === 'function') rvReq(); }; li.onmouseleave = () => { if (RV.hoverTp === tp.id) { RV.hoverTp = null; rvReq(); } };
     ul.appendChild(li);
   });
@@ -7267,12 +7281,17 @@ function applyForm() {
   const F = S.form, ids = [...S.sel], rids = F.type === 'profile' ? [...(S.tpRels || [])].filter(id => S.relief.items.some(x => x.id === id)) : [];
   const p = { side: F.side, depth: +F.depth || 0, pass: F.pass === '' ? '' : +F.pass, allow: +F.allow || 0, finish: F.finish, dir: F.dir, entry: F.entry, rlEntry: F.rlEntry || 'plunge', rampLen: F.rampLen === '' ? '' : +F.rampLen || 0, arcR: +F.arcR || 0, vstep: +F.vstep || 0.1, clrTools: F.type === 'vcarve' ? vcClrTools(F).map(t => t.id) : [], clrTool: F.type === 'vcarve' ? ((vcClrTools(F)[0] || {}).id || '') : '', clrExt: F.type === 'vcarve' && !!F.clrExt, vstart: +F.vstart || 0, zrel: 1, peck: +F.peck || 0, dwell: +F.dwell || 0, openSide: F.openSide || 'on', tabs: !!F.tabs, proj: !!F.proj, tabN: +F.tabN || 4, tabL: F.tabL === '' ? 8 : +F.tabL, tabH: +F.tabH || 2, tabShape: F.tabShape || 'rect', tabMode: F.tabMode === 'manual' ? 'manual' : 'auto', tabPts: F.tabMode === 'manual' && Array.isArray(F.tabPts) ? clone(F.tabPts) : null, strategy: F.strategy || 'rings', rasterAng: +F.rasterAng || 0, rest: F.type === 'pocket' && !!F.rest, roughTool: F.type === 'pocket' && F.rest ? (F.roughTool || '') : '', restFrom: F.type === 'pocket' && F.rest && F.restFrom !== '__new' ? (F.restFrom || '') : '', restTool: '', restDia: 0, helixPitch: F.helixPitch === '' || F.helixPitch == null ? '' : +F.helixPitch || 1, helixD: F.helixD === '' || F.helixD == null ? '' : +F.helixD, helixHoles: F.helixHoles !== false, thSide: F.thSide === 'out' ? 'out' : 'in', thPitch: Math.max(0.2, +F.thPitch || 1.25), thD: Math.max(0, +F.thD || 0), thHand: F.thHand === 'L' ? 'L' : 'R', thPasses: Math.max(1, Math.min(10, Math.round(+F.thPasses || 1))), rlOp: F.rlOp === 'finish' ? 'finish' : 'rough', rlStep: Math.max(2, Math.min(95, +F.rlStep || 40)), rlAng: +F.rlAng || 0, rlAllow: Math.max(0, +F.rlAllow || 0), rlCross: !!F.rlCross, rlBound: ['model', 'stock', 'sel'].includes(F.rlBound) ? F.rlBound : 'model', rlOff: +F.rlOff || 0, rlRStrat: F.rlRStrat === 'raster' ? 'raster' : 'z', rlFStrat: F.rlFStrat === 'offset' ? 'offset' : 'raster', rlDir: F.rlDir === 'conv' ? 'conv' : 'climb', rlEdge: F.rlEdge === 'center' ? 'center' : 'inside', rlItems: Array.isArray(F.rlItems) ? F.rlItems.slice() : null };
   const autoFace = sh => sh.length && sh.every(x => faceOf(x) === 2) ? 2 : 1, faceFor = idl => F.face === 'auto' || !F.face ? autoFace(idl.map(shapeById).filter(Boolean)) : +F.face;
-  if (S.editTp) { const tp = S.tps.find(t => t.id === S.editTp); if (!tp) return; tp.face = faceFor(ids.length ? ids : tp.shapeIds); tp.type = F.type; tp.toolId = F.toolId; tp.p = p; if (ids.length || rids.length) { tp.shapeIds = ids; tp.relIds = rids; } const oldN = tp.name, kidN = new Map(S.tps.filter(x => x.vclrOf === tp.id).map(x => [x.id, x.name])); tp.name = F.name || tp.name; computeTP(tp); vclrSync(tp); restLink(tp); commit(false); gcDirty = true; renderTpList(); draw();
-    if (tp.name !== oldN && kidN.size) { notice(trf('« {n} » renommé : ses parcours liés ont suivi.', { n: tp.name }), [{ t: tr('Renommer aussi'), primary: 1 }, { t: tr('Les rendre indépendants (garder leur nom)'), fn: () => { vclrDetach(tp); for (const [id, nm] of kidN) { const c = S.tps.find(x => x.id === id); if (c) c.name = nm; } commit(false); renderTpList(); renderForm(); toast(tr('Parcours liés rendus indépendants.')); } }]); return; }
+  if (S.editTp) { const tp = S.tps.find(t => t.id === S.editTp); if (!tp) return;
+    const nf = faceFor(ids.length ? ids : tp.shapeIds), emp = v => v == null || v === '' || v === 0 || v === false || (Array.isArray(v) && !v.length), peq = Object.keys(p).every(k => JSON.stringify(tp.p[k]) === JSON.stringify(p[k]) || (emp(tp.p[k]) && emp(p[k]))), same = peq && tp.type === F.type && tp.toolId === F.toolId && (tp.face || 1) === nf && ((!ids.length && !rids.length) || (JSON.stringify(tp.shapeIds) === JSON.stringify(ids) && JSON.stringify(tp.relIds || []) === JSON.stringify(rids)));
+    const typed = (F.name || '').trim(); if (typed && typed !== tp.name) tp.nameAuto = false;
+    if (same && !tp.stale) { if (typed && typed !== tp.name) { tp.name = typed; commit(false); gcDirty = true; renderTpList(); toast(tr('Parcours renommé (rien n’est recalculé).')); } else toast(tr('Rien n’a changé.')); return; }
+    tp.face = nf; tp.type = F.type; tp.toolId = F.toolId; tp.p = p; if (ids.length || rids.length) { tp.shapeIds = ids; tp.relIds = rids; }
+    if (typed && tp.nameAuto === false) tp.name = typed; else if (tp.nameAuto) { tp.name = tpAutoName(tpFn(tp.type, p), tpnLayer(tp.shapeIds, tp.relIds), S.tools.find(t => t.id === tp.toolId), tp.face, tp); S.form.name = tp.name; }
+    computeTP(tp); vclrSync(tp); restLink(tp); commit(false); gcDirty = true; renderTpList(); draw();
     toast(tp.err ? tp.err : 'Parcours mis à jour.'); return; }
   if (!ids.length && !rids.length && (F.type !== 'relief' || F.rlBound === 'sel')) { toast(F.type === 'relief' ? tr('Limite « Vecteurs sélectionnés » : sélectionnez d’abord les formes fermées dans la vue 2D.') : 'Sélectionnez d’abord les vecteurs à usiner dans la vue 2D.'); return; }
   const n = S.tps.filter(t => t.type === F.type).length + 1;
-  const fc = F.type === 'relief' || (!ids.length && rids.length) ? 1 : faceFor(ids), tp = { id: uid(), name: F.name || ((fc === 2 ? 'F2 · ' : '') + (F.type === 'relief' ? tr(F.rlOp === 'finish' ? 'Finition relief' : 'Ébauche relief') : tr(TYPE_LBL[F.type] + (F.type === 'profile' ? ' ' + SIDE_LBL[F.side] : ''))) + ' ' + n), type: F.type, toolId: F.toolId, shapeIds: ids, relIds: rids, p, visible: true, face: fc };
+  const fc = F.type === 'relief' || (!ids.length && rids.length) ? 1 : faceFor(ids), tp = { id: uid(), name: F.name || tpAutoName(tpFn(F.type, p), tpnLayer(ids, rids), S.tools.find(t => t.id === F.toolId), fc), nameAuto: !F.name, type: F.type, toolId: F.toolId, shapeIds: ids, relIds: rids, p, visible: true, face: fc };
   computeTP(tp); S.tps.push(tp); vclrSync(tp); restLink(tp); S.activeTp = tp.id; S.editTp = tp.id; S.form.name = tp.name; commit(false); gcDirty = true; renderTpList(); renderForm(); draw();
   toast(tp.err ? tp.err : 'Parcours calculé' + (tp.stats && tp.stats.min ? ' · ' + fmtTime(tp.stats.min) : '') + '.');
 }
@@ -7422,14 +7441,27 @@ function libStdNew(vg) {
 }
 // bibliothèque v5 : PEHD, javelots et carving (sans doublon d'une fraise de même géométrie), estimations recalculées
 function libUpgrade(o) {
-  if ((+o.v || 0) >= 5) return o;
+  if ((+o.v || 0) >= 5) return libUpgrade6(o);
   o.materials = o.materials.filter(m => m.id !== 'hdpe'); const ip = o.materials.findIndex(m => m.id === 'pvc'); o.materials.splice(ip < 0 ? o.materials.length : ip + 1, 0, { id: 'hdpe', name: 'PEHD' });
   const met = (o.groups.find(g => !g.parent && /m[ée]tri/i.test(g.name)) || {}).id || null, vg = (o.groups.find(g => g.parent === met && /en V/i.test(g.name)) || {}).id || 'grp-javelot';
   if (!o.groups.some(g => g.id === 'grp-javelot')) o.groups.push({ id: 'grp-javelot', name: 'Javelots (carbure)', parent: met, order: 5 });
   const same = (a, b) => a.type === b.type && Math.abs(a.dia - b.dia) < 0.01 && Math.abs((a.angle || 0) - (b.angle || 0)) < 0.5 && (a.type !== 'engrave' || (Math.abs((a.flat || 0) - (b.flat || 0)) < 0.01 && (a.flutes || 2) === (b.flutes || 2)));
   for (const t of libStdNew(vg)) { const x = o.tools.find(x => x.id === t.id || same(x, t)); if (!x) o.tools.push(t); else if (!x.fam && t.fam === 'carv') x.fam = 'carv'; }
   for (const t of o.tools) for (const m in (t.cut || {})) if (t.cut[m] && t.cut[m].est) { const es = libEstimate(t, m, t.cut); if (es) t.cut[m] = es; }
-  o.v = 5; return o;
+  o.v = 5; return libUpgrade6(o);
+}
+// bibliothèque v6 : les deux fraises de gravure d'Aspire (et leurs équivalents en pouces) laissent la place aux javelots et aux fraises en V de 30°
+const LIB_ENGR_OLD = ['c702876f-6690-4252-a694-c11d46f6ef67', '4c065674-20ee-4214-898c-58b93792b97f', '8c64bdc7-a4ac-4111-9911-d690a409e8c9', '44230771-834e-47a8-b2f2-d1c8de39d683'];
+function libUpgrade6(o) {
+  if ((+o.v || 0) >= 6) return o;
+  o.tools = o.tools.filter(t => !(LIB_ENGR_OLD.includes(t.id) && !Object.values(t.cut || {}).some(c => c && c.user)));
+  o.groups = o.groups.filter(g => !(/^gravure$/i.test(g.name) && !o.tools.some(t => t.group === g.id) && !o.groups.some(x => x.parent === g.id)));
+  const met = (o.groups.find(g => !g.parent && /m[ée]tri/i.test(g.name)) || {}).id || null, vg = (o.groups.find(g => g.parent === met && /en V/i.test(g.name)) || {}).id || met;
+  const V = (feed, pass) => ({ rpm: 18000, feed, plunge: Math.round(feed / 3 / 10) * 10, pass, step: 0.2 });
+  for (const d of [3.175, 6]) { const k = d > 4 ? 1.2 : 1, t = { id: 'std-v30-' + String(d).replace('.', '_'), group: vg, order: 1, type: 'v', units: 'mm', dia: d, angle: 30, flat: 0, flutes: 2, notes: '', num: null,
+    cut: { softwood: V(Math.round(900 * k), d > 4 ? 1.5 : 1), hardwood: V(Math.round(650 * k), d > 4 ? 1.2 : 0.8), mdf: V(Math.round(900 * k), d > 4 ? 1.5 : 1), acrylic: V(Math.round(600 * k), d > 4 ? 1 : 0.6), pvc: V(Math.round(600 * k), d > 4 ? 1 : 0.6), hdpe: V(Math.round(700 * k), d > 4 ? 1.2 : 0.8) } };
+    t.name = libToolName(t); if (!o.tools.some(x => x.id === t.id || (x.type === 'v' && Math.abs(x.dia - d) < 0.01 && Math.abs((x.angle || 0) - 30) < 0.5))) o.tools.push(t); }
+  o.v = 6; return o;
 }
 // conversion d'une base Aspire en bibliothèque COPO ; machineName : réglages de la machine à reprendre (sinon la première qui a des données)
 function vtdbToLib(db, machineName) {
@@ -7463,7 +7495,7 @@ const DEFAULT_LIB_JSON = "{\"v\":4,\"source\":\"Aspire \u00b7 workbee\",\"materi
 let LIB = (() => { try { const o = JSON.parse(LS.get('copo.toollib') || 'null'); if (o && o.tools && o.groups) { if ((+o.v || 0) < 4) { const D = DEFAULT_LIB(), ids = new Set(o.tools.map(t => t.id)), gids = new Set(o.groups.map(g => g.id)); for (const t of D.tools) if (/^std-/.test(t.id) && !ids.has(t.id) && gids.has(t.group)) o.tools.push(t); o.v = 4; try { LS.set('copo.toollib', JSON.stringify(o)); } catch { } } return o; } } catch { } return DEFAULT_LIB(); })(); // v4 : fraises et forets standard ajoutés aux bibliothèques existantes
 for (const [id, name] of LIB_MATS) if (!LIB.materials.some(m => m.id === id)) LIB.materials.push({ id, name });
 if ((LIB.v || 1) < 3) { for (const t of LIB.tools) for (const m of ['softwood', 'hardwood', 'mdf', 'acrylic', 'alu', 'brass', 'pvc']) if (!t.cut[m] || t.cut[m].est) { const es = libEstimate(t, m, t.cut); if (es) t.cut[m] = es; } LIB.v = 3; try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { } }
-if ((+LIB.v || 0) < 5) { libUpgrade(LIB); try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { } } // v5 : PEHD, javelots, carving en V
+if ((+LIB.v || 0) < 6) { libUpgrade(LIB); try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { } } // v5 : PEHD, javelots, carving en V
 let libSel = null, libPick = null, libOpenG = new Set((() => { try { return JSON.parse(LS.get('copo.libOpen') || '[]'); } catch { return []; } })()), libResetArm = 0, libPendingDb = null;
 if (!LIB.thr) {
   const par = (LIB.groups.find(g => !g.parent && /m[ée]tri/i.test(g.name)) || {}).id || null, gid = 'grp-thread';
