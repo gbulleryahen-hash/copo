@@ -188,7 +188,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.301</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.302</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -407,7 +407,7 @@ X74.36 A14.181</pre>
     <h3>Usiner le relief</h3>
     <p>Dans l’onglet <span class="ui">Parcours</span>, le type <strong>Relief</strong> propose deux opérations, chacune illustrée par une petite coupe : l’ébauche en escalier autour du relief, la finition qui suit la surface. Les stratégies ont aussi leur image : <em>Niveaux Z</em> (paliers à plat) et <em>Balayage 3D</em> pour l’ébauche, <em>Balayage</em> (allers-retours) et <em>Décalage</em> (passes qui suivent le contour) pour la finition. Sous la liste des reliefs à usiner, le volet <strong>Options avancées</strong> (ouvert par défaut) regroupe la limite d’usinage, avec une image qui montre en bleu la limite choisie (contour du modèle, contour du brut ou vecteurs sélectionnés), le décalage, la position de l’outil, la stratégie et les pas.</p>
     <ul>
-      <li><strong>Ébauche</strong> : balayage par niveaux de Z avec une fraise droite (la plus grosse est proposée), chaque niveau descendant de la profondeur de passe, en laissant une <em>surépaisseur</em> (0,5 mm par défaut) pour la finition. Pas latéral par défaut : 40 % du diamètre. <span class="ui">Entrée de l'outil</span> : <em>Rampe aller-retour</em> par défaut (l'outil descend en suivant le début de la passe sur 1,5 × Ø, puis revient à son départ à pleine profondeur) ou <em>Plongée droite</em>.</li>
+      <li><strong>Ébauche</strong> : balayage par niveaux de Z avec une fraise droite (la plus grosse est proposée), chaque niveau descendant de la profondeur de passe, en laissant une <em>surépaisseur</em> (0,5 mm par défaut) pour la finition. Pas latéral par défaut : 40 % du diamètre. <span class="ui">Entrée de l'outil</span> : <em>Rampe aller-retour</em> par défaut (l'outil descend en suivant le début de la passe sur 1,5 × Ø, puis revient à son départ à pleine profondeur), <em>Hélice</em> (l'outil alèse un trou de 1,5 × Ø en descendant de la <em>descente par tour</em> choisie, au premier endroit de la passe où le cercle tient entièrement dans la limite d'usinage et dans la matière à enlever, puis rejoint le début de la passe ; sinon il entre en rampe) ou <em>Plongée droite</em>.</li>
       <li><strong>Finition</strong> : balayage parallèle qui suit la surface en tenant compte de la forme réelle de l’outil, sans jamais entamer le relief. Utilisez une fraise hémisphérique, une fraise conique à bout sphérique (définie par D, R et L) ou, pour les détails fins, une fraise de gravure à pointe plate (angle et diamètre de la pointe). Une fraise de gravure à bout rond se décrit comme une fraise conique à bout sphérique, avec les cotes de la boîte : diamètre de queue D, rayon en bout R, longueur d’usinage L ; COPO en déduit l’angle (D 6, R 1, L 20 : 5,99°). Pas latéral par défaut : 10 % du diamètre ; angle du balayage réglable et <em>seconde passe croisée</em> à 90° possible.</li>
       <li><strong>Reliefs à usiner</strong> : cochez les éléments dont le contour limite l’usinage (tous par défaut). Les hauteurs restent celles du relief complet.</li>
       <li><strong>Limite d’usinage</strong> : <em>Contour du modèle</em> (les reliefs cochés, sans le fond transparent des images), <em>Contour du brut</em> (tout le brut) ou <em>Vecteurs sélectionnés</em> (formes fermées sélectionnées dans la vue 2D) . <em>Outil par rapport à la limite</em> : <em>bord de l’outil à l’intérieur</em> (par défaut, la fraise ne dépasse pas le tracé) ou <em>centre de l’outil sur la limite</em> (la fraise déborde d’un rayon, utile pour bien finir le bord d’un relief). <em>Décalage du contour</em> agrandit (valeur positive) ou réduit (négative) la limite.</li>
@@ -632,7 +632,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC), acorn (MIT, pour les calculs en tâche de fond).</p>
-    <footer><p>COPO 1.301 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.302 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -670,7 +670,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.301</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.302</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -889,7 +889,7 @@ X74.36 A14.181</pre>
     <h3>Machining the relief</h3>
     <p>In the <span class="ui">Toolpaths</span> tab, the <strong>Relief</strong> type offers two operations, each shown by a small cross-section: roughing as steps around the relief, finishing following the surface. The strategies have their picture too: <em>Z levels</em> (flat steps) and <em>3D raster</em> for roughing, <em>Raster</em> (back and forth) and <em>Offset</em> (passes following the outline) for finishing. Below the list of reliefs to machine, the <strong>Advanced options</strong> section (open by default) gathers the machining limit, with a picture showing the chosen limit in blue (model outline, stock outline or selected vectors), the offset, the tool position, the strategy and the steps.</p>
     <ul>
-      <li><strong>Roughing</strong>: raster by Z levels with a flat end mill (the largest is suggested), each level stepping down by the pass depth, leaving an <em>allowance</em> (0.5 mm by default) for finishing. Default stepover: 40% of the diameter. <span class="ui">Tool entry</span>: <em>Back-and-forth ramp</em> by default (the tool goes down following the start of the pass over 1.5 × Ø, then returns to its start at full depth) or <em>Straight plunge</em>.</li>
+      <li><strong>Roughing</strong>: raster by Z levels with a flat end mill (the largest is suggested), each level stepping down by the pass depth, leaving an <em>allowance</em> (0.5 mm by default) for finishing. Default stepover: 40% of the diameter. <span class="ui">Tool entry</span>: <em>Back-and-forth ramp</em> by default (the tool goes down following the start of the pass over 1.5 × Ø, then returns to its start at full depth), <em>Helix</em> (the tool bores a 1.5 × Ø hole, going down by the chosen <em>step-down per turn</em>, at the first place along the pass where the circle fits entirely within the machining boundary and the material to remove, then joins the start of the pass; otherwise it ramps in) or <em>Straight plunge</em>.</li>
       <li><strong>Finishing</strong>: parallel raster following the surface with the real tool shape, never gouging the relief. Use a ball nose, a tapered ball nose (defined by D, R and L) or, for fine details, a flat-tip engraving bit (angle and tip diameter). A round-tip engraving bit is described as a tapered ball nose, using the box dimensions: shank diameter D, tip radius R, cutting length L; COPO derives the angle (D 6, R 1, L 20: 5.99°). Default stepover: 10% of the diameter; adjustable raster angle and an optional <em>second cross pass</em> at 90°.</li>
       <li><strong>Reliefs to machine</strong>: check the items whose outline limits machining (all by default). Heights stay those of the full relief.</li>
       <li><strong>Machining boundary</strong>: <em>Model boundary</em> (the checked reliefs, without the transparent background of images), <em>Stock boundary</em> (the whole stock) or <em>Selected vectors</em> (closed vectors selected in the 2D view). <em>Tool relative to boundary</em>: <em>tool edge inside</em> (default, the tool does not cross the vector) or <em>tool center on boundary</em> (the tool overhangs by one radius, useful to finish a relief edge cleanly). <em>Boundary offset</em> enlarges (positive) or shrinks (negative) the boundary.</li>
@@ -1114,7 +1114,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC), acorn (MIT, for background calculations).</p>
-    <footer><p>COPO 1.301 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.302 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
