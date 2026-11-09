@@ -1340,7 +1340,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.308</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.309</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -7050,7 +7050,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.308', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.309', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -7405,8 +7405,8 @@ function inchFrac(inch) { for (const d of [1, 2, 4, 8, 16, 32, 64]) { const n = 
 function taperHalfAngle(D, R, L) { const a = D / 2, b = L - R; if (!(a > R) || !(b > 0)) return 0; const rho = Math.hypot(a, b); return (Math.acos(R / rho) - Math.atan2(b, a)) * 180 / Math.PI; }
 function libToolName(t) {
   const D = t.units === 'in' ? inchFrac(t.dia / 25.4) : String(+t.dia.toFixed(3)).replace('.', ',') + ' mm', f2 = v => String(+(+v || 0).toFixed(2)).replace('.', ',');
-  // noms des catalogues : Fraise V 90° Ø12 mm ; Javelot 30° × 0,2 mm – Ø3,175 mm (1 dent) ; Fraise V à bout rond 10° R0,25 mm – Ø6 mm
-  if (t.type === 'taper') return 'Fraise V à bout rond ' + f2(t.angle) + '° R' + f2(t.tipR) + ' mm – Ø' + D;
+  // noms des catalogues : Fraise V 90° Ø12 mm ; Javelot 30° × 0,2 mm – Ø3,175 mm (1 dent) ; Fraise V à bout rond R0,25 – L15 – Ø3,175 mm
+  if (t.type === 'taper') return 'Fraise V à bout rond R' + f2(t.tipR) + ' – L' + f2(t.flen) + ' – Ø' + D; // comme les catalogues : rayon, longueur de coupe, diamètre de queue (l'angle s'en déduit)
   if (t.type === 'v') return 'Fraise V ' + (+(+t.angle).toFixed(1)) + '° Ø' + D;
   if (t.type === 'engrave') return 'Javelot ' + (+(+t.angle || 0).toFixed(1)) + '° × ' + f2(t.flat) + ' mm – Ø' + D + ' (' + (t.flutes || 1) + ((t.flutes || 1) > 1 ? ' dents)' : ' dent)');
   return t.type === 'flat' ? 'Fraise droite (' + D + ')' : t.type === 'ball' ? 'Fraise hémisphérique (' + D + ')' : t.type === 'v' ? 'Fraise en V (' + (+t.angle.toFixed(1)) + '° - ' + D + ')'
@@ -7500,20 +7500,35 @@ const LIB_ENGR_OLD = ['c702876f-6690-4252-a694-c11d46f6ef67', '4c065674-20ee-421
 // bibliothèque v7 : rangement par famille (Fraises en V, Fraises javelot, Fraises V à bout rond) dans chaque dossier métrique / impérial,
 // dossiers « Gravure » et « Javelots (carbure) » supprimés une fois vides, noms des catalogues pour les fraises nommées automatiquement
 function libUpgrade7(o) {
-  if ((+o.v || 0) >= 7) return o;
+  if ((+o.v || 0) >= 7) return libUpgrade8(o);
   const roots = { mm: (o.groups.find(g => !g.parent && /m[ée]tri/i.test(g.name)) || {}).id, in: (o.groups.find(g => !g.parent && /imp[ée]ri|pouce/i.test(g.name)) || {}).id };
   const fam = { v: ['Fraises en V', 2, /^fraises en v$/i], engrave: ['Fraises javelot', 3, /^fraises javelot$/i], taper: ['Fraises V à bout rond', 4, /^fraises v à bout rond$/i] };
   const grp = (root, k) => { const [nm, ord, re] = fam[k]; let g = o.groups.find(x => x.parent === root && re.test(x.name)); if (!g) { g = { id: 'grp-' + k + '-' + root, name: nm, parent: root, order: ord }; o.groups.push(g); } return g.id; };
   const old = new Set(o.groups.filter(g => /^(gravure|javelots \(carbure\)|fraises en v|outils de forme)$/i.test(g.name) || g.id === 'grp-javelot').map(g => g.id));
   for (const t of o.tools) { if (!fam[t.type]) continue; const root = roots[t.units === 'in' ? 'in' : 'mm']; if (!root || !(old.has(t.group) || !t.group)) continue; t.group = grp(root, t.type); }
-  if (roots.mm) { for (const k of ['v', 'engrave', 'taper']) grp(roots.mm, k); // les trois dossiers existent toujours en métrique
-    const V = (feed, pass) => ({ rpm: 18000, feed, plunge: Math.round(feed / 3 / 10) * 10, pass, step: 0.1 });
-    for (const [d, R, ang] of [[3.175, 0.25, 10], [3.175, 0.5, 15], [6, 0.5, 10]]) { const a = ang / 2 * Math.PI / 180, t = { id: 'std-vbr-' + String(d).replace('.', '_') + '-' + String(R).replace('.', '_') + '-' + ang, group: grp(roots.mm, 'taper'), order: 0, type: 'taper', units: 'mm', dia: d, tipR: R, angle: ang, flat: 0, flutes: 2, notes: '', num: null,
-      flen: +(R * (1 - Math.sin(a)) + (d / 2 - R * Math.cos(a)) / Math.tan(a)).toFixed(2), cut: { softwood: V(900, 1), hardwood: V(650, 0.8), mdf: V(900, 1), acrylic: V(600, 0.6), pvc: V(600, 0.6), hdpe: V(700, 0.8) } };
-      t.angle = +(2 * taperHalfAngle(t.dia, R, t.flen)).toFixed(3); t.name = libToolName(t); if (!o.tools.some(x => x.id === t.id || (x.type === 'taper' && Math.abs(x.dia - d) < 0.01 && Math.abs((+x.tipR || 0) - R) < 0.01 && Math.abs((x.angle || 0) - ang) < 0.5))) o.tools.push(t); } }
+  if (roots.mm) for (const k of ['v', 'engrave', 'taper']) grp(roots.mm, k); // les trois dossiers existent toujours en métrique
   o.groups = o.groups.filter(g => !(/^(gravure|javelots \(carbure\))$/i.test(g.name) && !o.tools.some(t => t.group === g.id) && !o.groups.some(x => x.parent === g.id)));
   for (const t of o.tools) if (fam[t.type] && /^(Fraise en V \(|Fraise V \d|Gravure \(|Gravure bout rond|Javelot |Fraise conique à bout)/.test(t.name || '')) t.name = libToolName(t);
-  o.v = 7; return o;
+  o.v = 7; return libUpgrade8(o);
+}
+// bibliothèque v8 : fraises V à bout rond du catalogue (R, longueur de coupe L, Ø de queue) ; réglages d'après le tableau du fabricant
+// (diamètre de coupe = 2 R, bas de la plage, broche limitée à 18 000 tr/min), bois dur et plastiques 20 % plus bas, laiton comme l'alu moins 20 %
+const VBR_CAT = [[0.25, 15, 3.175], [0.5, 15, 3.175], [0.75, 15, 3.175], [1, 15, 3.175], [0.25, 15, 4], [0.5, 15, 4], [0.75, 15, 4], [1, 15, 4], [0.25, 20.5, 4], [0.5, 20.5, 4], [0.75, 20.5, 4], [1, 20.5, 4],
+  [0.25, 20, 6], [0.5, 20, 6], [0.75, 20, 6], [1, 20, 6], [1.5, 20, 6], [2, 20, 6], [0.25, 30.5, 6], [0.5, 30.5, 6], [0.75, 30.5, 6], [1, 30.5, 6], [1.5, 30.5, 6], [2, 30.5, 6], [0.5, 47, 8], [0.75, 47, 8], [1, 47, 8], [1.5, 47, 8], [2, 47, 8]];
+// tableau « Recommend Cutting Parameters » : [Ø de coupe, tr/min bois (bas), avance bois (bas), avance alu/cuivre (bas)]
+const VBR_CUT = [[0.5, 16000, 600, 500], [1, 14000, 800, 600], [1.5, 14000, 1000, 800], [2, 14000, 1100, 800], [2.5, 14000, 1200, 800], [3.1, 14000, 1400, 900], [4, 14000, 2000, 1200]];
+function vbrCut(R) { const d = 2 * R; let r = VBR_CUT[0]; for (const x of VBR_CUT) if (d >= x[0] - 1e-9) r = x; const rpm = Math.min(18000, r[1]), w = r[2], al = r[3], pw = +Math.min(2, 2 * R).toFixed(2), pa = +Math.min(1, R).toFixed(2), st = +(2 * R * 0.15).toFixed(3), C = (feed, pass) => ({ rpm, feed, plunge: Math.round(feed / 3 / 10) * 10, pass, step: st });
+  return { softwood: C(w, pw), mdf: C(w, pw), hardwood: C(Math.round(w * 0.8 / 10) * 10, +(pw * 0.8).toFixed(2)), acrylic: C(Math.round(w * 0.8 / 10) * 10, +(pw * 0.6).toFixed(2)), pvc: C(Math.round(w * 0.8 / 10) * 10, +(pw * 0.6).toFixed(2)), hdpe: C(Math.round(w * 0.9 / 10) * 10, +(pw * 0.8).toFixed(2)), alu: C(al, pa), brass: C(Math.round(al * 0.8 / 10) * 10, pa) }; }
+function libUpgrade8(o) {
+  if ((+o.v || 0) >= 8) return o;
+  const root = (o.groups.find(g => !g.parent && /m[ée]tri/i.test(g.name)) || {}).id || null;
+  let gid = (o.groups.find(g => g.parent === root && /^fraises v à bout rond$/i.test(g.name)) || {}).id; if (!gid) { gid = 'grp-taper-' + root; o.groups.push({ id: gid, name: 'Fraises V à bout rond', parent: root, order: 4 }); }
+  o.tools = o.tools.filter(t => !(/^std-vbr-/.test(t.id) && !Object.values(t.cut || {}).some(c => c && c.user))); // les trois fraises provisoires de la 1.308
+  VBR_CAT.forEach(([R, L, D], i) => { const t = { id: 'std-vbr-' + [R, L, D].map(v => String(v).replace('.', '_')).join('-'), group: gid, order: i, type: 'taper', units: 'mm', dia: D, tipR: R, flen: L, flat: 0, flutes: 2, notes: '', num: null, cut: vbrCut(R) };
+    t.angle = +(2 * taperHalfAngle(D, R, L)).toFixed(3); t.name = libToolName(t);
+    if (!o.tools.some(x => x.id === t.id || (x.type === 'taper' && Math.abs(x.dia - D) < 0.01 && Math.abs((+x.tipR || 0) - R) < 0.01 && Math.abs((+x.flen || 0) - L) < 0.05))) o.tools.push(t); });
+  for (const t of o.tools) if (t.type === 'taper' && /^Fraise (V à bout rond \d|conique à bout)/.test(t.name || '')) t.name = libToolName(t);
+  o.v = 8; return o;
 }
 function libUpgrade6(o) {
   if ((+o.v || 0) >= 6) return libUpgrade7(o);
@@ -7559,7 +7574,7 @@ const DEFAULT_LIB_JSON = "{\"v\":4,\"source\":\"Aspire \u00b7 workbee\",\"materi
 let LIB = (() => { try { const o = JSON.parse(LS.get('copo.toollib') || 'null'); if (o && o.tools && o.groups) { if ((+o.v || 0) < 4) { const D = DEFAULT_LIB(), ids = new Set(o.tools.map(t => t.id)), gids = new Set(o.groups.map(g => g.id)); for (const t of D.tools) if (/^std-/.test(t.id) && !ids.has(t.id) && gids.has(t.group)) o.tools.push(t); o.v = 4; try { LS.set('copo.toollib', JSON.stringify(o)); } catch { } } return o; } } catch { } return DEFAULT_LIB(); })(); // v4 : fraises et forets standard ajoutés aux bibliothèques existantes
 for (const [id, name] of LIB_MATS) if (!LIB.materials.some(m => m.id === id)) LIB.materials.push({ id, name });
 if ((LIB.v || 1) < 3) { for (const t of LIB.tools) for (const m of ['softwood', 'hardwood', 'mdf', 'acrylic', 'alu', 'brass', 'pvc']) if (!t.cut[m] || t.cut[m].est) { const es = libEstimate(t, m, t.cut); if (es) t.cut[m] = es; } LIB.v = 3; try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { } }
-if ((+LIB.v || 0) < 7) { libUpgrade(LIB); try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { } } // v5 : PEHD, javelots, carving en V
+if ((+LIB.v || 0) < 8) { libUpgrade(LIB); try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { } } // v5 : PEHD, javelots, carving en V
 let libSel = null, libPick = null, libOpenG = new Set((() => { try { return JSON.parse(LS.get('copo.libOpen') || '[]'); } catch { return []; } })()), libResetArm = 0, libPendingDb = null;
 if (!LIB.thr) {
   const par = (LIB.groups.find(g => !g.parent && /m[ée]tri/i.test(g.name)) || {}).id || null, gid = 'grp-thread';
