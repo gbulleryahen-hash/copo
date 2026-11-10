@@ -1304,7 +1304,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <p class="hint">Plus la résolution est haute, plus le relief est net, mais plus le calcul est long. <span class="tipw"><button type="button" class="tipi" aria-label="En savoir plus"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.4"/></svg></button><span class="tipb" role="tooltip">Le calcul est refait après chaque modification. Standard convient aux ordinateurs modestes. Les parcours ne sont pas concernés.</span></span></p>
           <label class="chk"><input type="checkbox" data-cfgui="showGrid"> Afficher la grille</label>
           <label class="chk"><input type="checkbox" data-cfgui="showTP"> Afficher les parcours</label>
-          <label class="chk"><input type="checkbox" data-cfgui="tpLabels"> Afficher le nom et le temps de chaque parcours</label>
+          <label class="chk"><input type="checkbox" data-cfgui="tpLabels"> Afficher le nom et le temps de chaque parcours dans la simulation</label>
           <label class="chk"><input type="checkbox" data-cfgui="showCut"> Afficher la matière enlevée</label>
           <label class="chk"><input type="checkbox" data-cfgui="showOver"> Afficher les traits superposés</label>
           <label class="chk"><input type="checkbox" data-cfgui="showEnds"> Marquer les extrémités des lignes ouvertes</label>
@@ -1355,7 +1355,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.324</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.325</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1820,7 +1820,7 @@ Object.assign(I18N_EN, {"Fraise V à bout rond": "Tapered ball nose", "Fraises V
 Object.assign(I18N_EN, {"Incrustation créée : calques et parcours femelle et mâle, tous visibles.": "Inlay created: female and male layers and toolpaths, all visible."});
 Object.assign(I18N_EN, {"Coller": "Paste", "Relief copié : Ctrl+V en colle une copie.": "Relief copied: Ctrl+V pastes a copy.", "Sélectionnez des vecteurs à copier.": "Select vectors to copy.", "{n} vecteur(s) coupé(s) : Ctrl+V pour les coller.": "{n} vector(s) cut: Ctrl+V to paste them.", "{n} vecteur(s) copié(s) : Ctrl+V pour les coller.": "{n} vector(s) copied: Ctrl+V to paste them.", "Rien à coller : copiez d’abord des vecteurs (Ctrl+C).": "Nothing to paste: copy vectors first (Ctrl+C).", "Le relief copié n’existe plus.": "The copied relief no longer exists.", "{n} vecteur(s) collé(s), décalé(s) de {d} mm.": "{n} vector(s) pasted, offset by {d} mm.", "{n} reliefs sélectionnés : alignez-les ou répartissez-les (onglet Relief ou Dessin › Aligner et répartir).": "{n} reliefs selected: align or distribute them (Relief tab or Drawing › Align and distribute).", "Sélectionnez un relief.": "Select a relief.", "Sélectionnez au moins deux reliefs (Maj + clic) : le premier sert de référence.": "Select at least two reliefs (Shift + click): the first one is the reference.", "Un seul relief : aligné sur le brut.": "A single relief: aligned on the stock.", "Sélectionnez au moins deux reliefs (Maj + clic) : le premier sert de point de départ.": "Select at least two reliefs (Shift + click): the first one is the starting point.", "Sélectionnez au moins trois reliefs (Maj + clic).": "Select at least three reliefs (Shift + click).", "Le premier relief sélectionné": "The first selected relief", "Maj + clic dans la vue 2D pour choisir plusieurs reliefs ; un seul relief s’aligne sur le brut.": "Shift + click in the 2D view to pick several reliefs; a single relief aligns on the stock.", "Les deux vecteurs ont été joints pour faire le coin.": "The two vectors were joined to make the corner."});
 Object.assign(I18N_EN, {"Le texte ne tient pas sur cette courbe.": "The text does not fit on this curve.", "Texte déplacé sur cette courbe (Maj + clic pour placer un autre texte).": "Text moved onto this curve (Shift + click to place another text).", "Texte déplacé ici (Maj + clic pour placer un autre texte).": "Text moved here (Shift + click to place another text)."});
-Object.assign(I18N_EN, {"Afficher le nom et le temps de chaque parcours": "Show the name and time of each toolpath"});
+Object.assign(I18N_EN, {"Afficher le nom et le temps de chaque parcours dans la simulation": "Show the name and time of each toolpath in the simulation"});
 Object.assign(I18N_EN, {"Visite rapide": "Quick tour", "Réafficher les astuces": "Show tips again", "Astuces réactivées : elles s’afficheront à l’ouverture de chaque onglet.": "Tips turned back on: they will show when you open each tab."});
 Object.assign(I18N_EN, {"Aligner sur": "Align to", "La sélection": "The selection", "Le premier vecteur sélectionné": "The first selected vector", "Le brut": "The stock", "Espacement (mm)": "Spacing (mm)", "Perçage": "Drilling", "Sélectionnez au moins deux vecteurs : le premier sert de référence.": "Select at least two vectors: the first one is the reference.", "Sélectionnez au moins deux vecteurs : le premier sert de point de départ.": "Select at least two vectors: the first one is the starting point.", "Les vecteurs sont plus grands que le brut.": "The vectors are larger than the stock.", "Profil sur la ligne 1": "On-line profile 1", "Profil sur la ligne 2": "On-line profile 2", "Poche 1": "Pocket 1", "F2 · Poche 2": "F2 · Pocket 2", "V-carving 2": "V-carving 2", "Foret 4 mm": "4 mm drill"});
 Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the nut / zero fret (mm)"});
@@ -3639,7 +3639,6 @@ function render() {
   const tpMode = !$('#tpWin').hidden;
   if (S.ui.showTP) for (const tp of S.tps) { if (!tp.visible || !tp.moves) continue; TPA = tpMode && tp.id !== S.editTp ? 0.15 : 1; ctx.globalAlpha = TPA; drawTP(tp, { profile: C.pf, pocket: C.pk, vcarve: C.vc, drill: C.dr, thread: C.th, relief: C.rl }[tp.type], tp.id === S.activeTp); tpEntries(tp, tp.id === S.activeTp); ctx.globalAlpha = 1; TPA = 1; }
   if (tpMode && S.tpRels && S.tpRels.size && (S.form || {}).type === 'profile') { ctx.save(); ctx.strokeStyle = C.acc || tok('--accent'); ctx.lineWidth = 2; ctx.setLineDash([6, 4]); for (const id of S.tpRels) { const it = S.relief.items.find(x => x.id === id); for (const lp of relOutLoops(it)) { ctx.beginPath(); lp.forEach((q, i) => i ? ctx.lineTo(sx(q[0]), sy(q[1])) : ctx.moveTo(sx(q[0]), sy(q[1]))); ctx.closePath(); ctx.stroke(); } } ctx.restore(); }
-  if (S.ui.showTP && S.ui.tpLabels) drawTPLabels(C);
   drawExt();
   drawOverlaps(); // halo sous les traits superposés
   // formes
@@ -3781,15 +3780,6 @@ function tpJobsRun() { if (tpjRaf) return; tpjRaf = requestAnimationFrame(() => 
         if (j.ov) TPOV.set(j.tp.id, c); else { TPCUT.set(id, c); if (c.full) TPOV.set(id, c); else tpOvWant(j); } draw(); break; } } if (TPJOB.has(id)) more = true; }
   if (more) tpJobsRun(); }); }
 function tpOvWant(j) { const o = TPOV.get(j.tp.id), id = 'ov:' + j.tp.id; if ((o && o.mv === j.mv && o.key === j.key) || TPJOB.has(id)) return; const oj = tpOvNew(j); if (oj) { TPJOB.set(id, oj); tpJobsRun(); } }
-// étiquette « nom · temps » au départ de chaque parcours visible (Préférences › Affichage)
-function drawTPLabels(C) { const used = []; ctx.save(); ctx.font = '600 11px ' + (tok('--f-ui') || 'system-ui, sans-serif'); ctx.textBaseline = 'middle'; ctx.lineWidth = 1; const ink = tok('--ink'), dur = m => m * 60 < 59.5 ? Math.round(m * 60) + ' s' : fmtTime(m);
-  for (const tp of S.tps) { if (!tp.visible || !tp.moves || !tp.moves.length) continue; const m = tp.moves.find(q => q.g === 1) || tp.moves[0];
-    const txt = (tp.name || TYPE_LBL[tp.type] || '') + (tp.stats && tp.stats.min ? ' · ' + dur(tp.stats.min) : ''), w = ctx.measureText(txt).width + 12, h = 17; let X = sx(m.x) + 8, Y = sy(m.y) - 12;
-    for (let k = 0; k < 30 && used.some(u => Math.abs(u[0] - X) < Math.max(u[2], w) && Math.abs(u[1] - Y) < h + 2); k++) Y -= h + 3; used.push([X, Y, w]);
-    const col = tok({ profile: '--pf', pocket: '--pk', vcarve: '--vc', drill: '--dr', thread: '--th', relief: '--rl' }[tp.type] || '--accent');
-    ctx.beginPath(); ctx.moveTo(sx(m.x), sy(m.y)); ctx.lineTo(X, Y + h / 2); ctx.strokeStyle = col; ctx.stroke();
-    ctx.fillStyle = C.panel; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(X, Y - h / 2, w, h, 5) : ctx.rect(X, Y - h / 2, w, h); ctx.fill(); ctx.strokeStyle = col; ctx.stroke(); ctx.fillStyle = ink; ctx.fillText(txt, X + 6, Y + 0.5); }
-  ctx.restore(); }
 function drawTP(tp, col, active) {
   const tool = S.tools.find(t => t.id === tp.toolId), mv = tp.dmoves || tp.moves;
   if (!tool || !mv || mv.length <= 2000 || tp.holes || !faceShown(tp.face === 2 ? 2 : 1)) return drawTPDirect(tp, col, active);
@@ -7169,7 +7159,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.324', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.325', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -8363,7 +8353,12 @@ function v3Frame(ts) {
   }
   v3Render(); if (V3.playing) v3Req();
 }
-function v3Ui() { const S3 = V3.S3; $('#v3Pos').value = S3.total ? Math.round(V3.T / S3.total * 1000) : 1000; $('#v3Time').textContent = fmtTime(V3.T) + ' / ' + fmtTime(S3.total); }
+function v3Ui() { const S3 = V3.S3; $('#v3Pos').value = S3.total ? Math.round(V3.T / S3.total * 1000) : 1000; $('#v3Time').textContent = fmtTime(V3.T) + ' / ' + fmtTime(S3.total) + v3TpList(S3); }
+// sous le temps de la simulation : nom et temps de chaque parcours, le parcours en cours marqué ▸ (Préférences › Affichage)
+function v3TpList(S3) { if (!S3 || !S.ui.tpLabels || !S3.segs || !S3.segs.length) return '';
+  if (!S3.tpr) { const R = []; let cur = null; for (let i = 0; i < S3.segs.length; i++) { const g = S3.segs[i], t1 = S3.cum[i], t0 = i ? S3.cum[i - 1] : 0; if (!cur || cur.id !== g.tp) { cur = { id: g.tp, t0, t1 }; R.push(cur); } else cur.t1 = t1; } S3.tpr = R; }
+  const dur = m => m * 60 < 59.5 ? Math.round(m * 60) + ' s' : fmtTime(m), T = V3.T;
+  return '\n' + S3.tpr.map(r => { const tp = S.tps.find(t => t.id === r.id), on = T > r.t0 + 1e-9 && T < r.t1 - 1e-9, done = T >= r.t1 - 1e-9; return (on ? '▸ ' : done ? '✓ ' : '  ') + (tp ? tp.name || TYPE_LBL[tp.type] : '?') + ' · ' + dur(r.t1 - r.t0); }).join('\n'); }
 function v3Play(on) { V3.playing = on; V3.last = 0; const b = $('#v3Play'); b.innerHTML = on ? '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>' : '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5v14l12-7z"/></svg>'; b.title = tr(on ? 'Pause (Espace)' : 'Lecture (Espace)'); if (on) v3Req(); }
 function v3Step(dir) { const S3 = V3.S3; if (!S3 || !S3.cum.length) return; v3Play(false); const c = S3.cum, T = V3.T, eps = 1e-7; let t;
   if (dir > 0) { let lo = 0, hi = c.length - 1; while (lo < hi) { const m = (lo + hi) >> 1; if (c[m] > T + eps) hi = m; else lo = m + 1; } t = c[lo] > T + eps ? c[lo] : S3.total; }
@@ -9916,7 +9911,7 @@ function gcPostName() { const el = $('#gcPostName'); if (!el) return; const o = 
   $('#cfgRelQ').onchange = e => { LS.set('copo.relQ', e.target.value); relDirty = true; if (typeof RV !== 'undefined') { RV.sig = ''; RV.lastBuild = 0; rvSync(); rvReq(); } if (typeof drawRelief !== 'undefined') drawRelief.last = 0; draw(); };
   $('#cfgSimQ').onchange = e => { $('#v3Q').value = e.target.value; LS.set('copo.simQ', e.target.value); };
   $('#cfgRelShow').onchange = e => { const c = $('#relShow'); if (c && c.checked !== e.target.checked) { c.checked = e.target.checked; c.dispatchEvent(new Event('change')); } };
-  $$('#cfg [data-cfgui]').forEach(c => c.onchange = () => { const k = c.dataset.cfgui; S.ui[k] = c.checked; if (SNAP_PREF.includes(k)) { snapVer++; snapSave(); } refreshToggles(); draw(); });
+  $$('#cfg [data-cfgui]').forEach(c => c.onchange = () => { const k = c.dataset.cfgui; S.ui[k] = c.checked; if (SNAP_PREF.includes(k)) { snapVer++; snapSave(); } refreshToggles(); draw(); if (k === 'tpLabels' && V3.S3) v3Ui(); });
   const mp = $('#mPost'); if (mp) { mp.addEventListener('change', () => setTimeout(gcPostName, 0)); new MutationObserver(gcPostName).observe(mp, { childList: true }); } gcPostName();
 })();
 
