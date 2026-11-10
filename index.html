@@ -1354,7 +1354,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.317</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.318</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -7147,7 +7147,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.317', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.318', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -7887,8 +7887,9 @@ function toolProf(tool) {
 }
 // hauteur de la pointe de l'outil posé sur le relief en (x, y) : maximum du relief moins le profil de la fraise sur son empreinte
 function relProjector(tool) {
-  const st = S.stock; let c = Math.max(0.08, Math.min(0.4, tool.dia / 12)); while ((st.w / c + 1) * (st.h / c + 1) > 5e6) c *= 1.25;
-  const R = reliefCompose(c, true), { nx, ny, cx, cy, M } = R, H = R.H.map((v, q) => M[q] ? v : 0), K = toolKernel(tool, cx, cy), memo = new Float32Array(nx * ny).fill(NaN); // hors du relief : dessus du brut (jamais plus profond par surprise)
+  const st = S.stock; let c = Math.max(0.05, Math.min(0.2, tool.dia / 30)); while ((st.w / c + 1) * (st.h / c + 1) > 6e6) c *= 1.2;
+  // le bord de la fraise ne compte qu'à une maille près (grille de calcul + grille du relief) : une fraise qui longe une paroi verticale (contour du relief) ne saute plus d'une maille à l'autre entre le haut et le bas de la paroi
+  const R = reliefCompose(c, true), { nx, ny, cx, cy, M } = R, H = R.H.map((v, q) => M[q] ? v : 0), gc = Math.max(0, ...S.relief.items.filter(i => i.visible && relGrid[i.id]).map(i => Math.max(i.w / relGrid[i.id].nx, i.h / relGrid[i.id].ny))), K = toolKernel(tool, cx, cy, Math.min(0.3, Math.max(cx, cy) * 0.75 + gc)), memo = new Float32Array(nx * ny).fill(NaN); // hors du relief : dessus du brut (jamais plus profond par surprise)
   const hc = (i, j) => { const q = j * nx + i; let v = memo[q]; if (v === v) return v; v = -Infinity; const { di, dj, dz, n } = K; for (let k = 0; k < n; k++) { const a = i + di[k], b = j + dj[k]; if (a < 0 || b < 0 || a >= nx || b >= ny) continue; const h = H[b * nx + a] - dz[k]; if (h > v) v = h; } if (v === -Infinity) v = R.base; memo[q] = v; return v; };
   const f = (x, y) => { const X = Math.max(0, Math.min(nx - 1.000001, x / cx)), Y = Math.max(0, Math.min(ny - 1.000001, y / cy)), i = Math.floor(X), j = Math.floor(Y), a = X - i, b = Y - j; return (hc(i, j) * (1 - a) + hc(i + 1, j) * a) * (1 - b) + (hc(i, j + 1) * (1 - a) + hc(i + 1, j + 1) * a) * b; };
   f.step = Math.max(0.1, Math.min(0.5, c * 1.5)); return f;
@@ -7904,8 +7905,8 @@ function projectMoves(moves, zAt) {
   }
   return out;
 }
-function toolKernel(tool, cx, cy) {
-  const r = tool.dia / 2, pf = toolProf(tool), ni = Math.ceil(r / cx) + 1, nj = Math.ceil(r / cy) + 1, di = [], dj = [], dz = [];
+function toolKernel(tool, cx, cy, tol) {
+  const r = tool.dia / 2 - (tol || 0), pf = toolProf(tool), ni = Math.ceil(r / cx) + 1, nj = Math.ceil(r / cy) + 1, di = [], dj = [], dz = [];
   for (let j = -nj; j <= nj; j++) for (let i = -ni; i <= ni; i++) {
     const d = Math.hypot(i * cx, j * cy); if (d > r + 1e-9) continue;
     di.push(i); dj.push(j); dz.push(pf(d));
