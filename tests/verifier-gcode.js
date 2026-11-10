@@ -95,8 +95,10 @@ async function gcodeDansLaPage(txt, posts, heureFixe) {
 }
 
 // ---------------------------------------------------------------- comparaison
+// fins de ligne CRLF (fichier extrait sous Windows) et LF : même G-code
+const lignes = t => t.replace(/\r\n/g, '\n').split('\n');
 function differences(attendu, obtenu, max = 8) {
-  const a = attendu.split('\n'), b = obtenu.split('\n'), out = [];
+  const a = lignes(attendu), b = lignes(obtenu), out = [];
   for (let i = 0; i < Math.max(a.length, b.length) && out.length < max; i++) {
     if (a[i] !== b[i]) out.push(`    ligne ${i + 1}\n      attendu : ${a[i] ?? '(fin du fichier)'}\n      obtenu  : ${b[i] ?? '(fin du fichier)'}`);
   }
@@ -184,9 +186,9 @@ async function main() {
           const d = differences(fs.readFileSync(fichier, 'utf8'), g);
           if (d.n) msgs.push(`G-code différent de ${path.relative(RACINE, fichier)} (${d.n} ligne(s)) :\n${d.texte}`);
         }
-        const lignes = g.split('\n').length;
+        const nbLignes = g.split('\n').length;
         if (msgs.length) { echecs++; console.log(`ÉCHEC  ${projet} · ${post}\n  ${msgs.join('\n  ')}`); }
-        else console.log(`${maj ? 'écrit ' : 'ok    '} ${projet} · ${post} (${lignes} lignes)`);
+        else console.log(`${maj ? 'écrit ' : 'ok    '} ${projet} · ${post} (${nbLignes} lignes)`);
       });
     }
   } finally {

@@ -1,0 +1,4 @@
+# Le G-code attendu et les projets de référence gardent des fins de ligne LF sur toutes les plateformes :
+# sans cela, Git les convertit en CRLF sous Windows (core.autocrlf) et la comparaison échoue.
+attendus/** text eol=lf
+projets/** text eol=lf
