@@ -1,0 +1,633 @@
+{
+ "meta": {
+  "name": "Poches",
+  "material": "Test"
+ },
+ "stock": {
+  "offX": 0,
+  "offY": 0,
+  "originXY": "bl",
+  "originZ": "top",
+  "mat": "softwood",
+  "w": 300,
+  "h": 200,
+  "t": 18
+ },
+ "shapes": [
+  {
+   "id": "p1",
+   "nodes": [
+    {
+     "x": 20,
+     "y": 20,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 100,
+     "y": 20,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 100,
+     "y": 80,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 20,
+     "y": 80,
+     "i": null,
+     "o": null,
+     "sm": false
+    }
+   ],
+   "closed": true,
+   "layer": "l1",
+   "g": null
+  },
+  {
+   "id": "p2",
+   "nodes": [
+    {
+     "x": 120,
+     "y": 20,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 200,
+     "y": 20,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 200,
+     "y": 80,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 120,
+     "y": 80,
+     "i": null,
+     "o": null,
+     "sm": false
+    }
+   ],
+   "closed": true,
+   "layer": "l1",
+   "g": null
+  },
+  {
+   "id": "p3",
+   "nodes": [
+    {
+     "x": 220,
+     "y": 20,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 280,
+     "y": 20,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 280,
+     "y": 80,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 220,
+     "y": 80,
+     "i": null,
+     "o": null,
+     "sm": false
+    }
+   ],
+   "closed": true,
+   "layer": "l1",
+   "g": null
+  },
+  {
+   "id": "p4",
+   "nodes": [
+    {
+     "x": 20,
+     "y": 110,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 140,
+     "y": 110,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 140,
+     "y": 180,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 20,
+     "y": 180,
+     "i": null,
+     "o": null,
+     "sm": false
+    }
+   ],
+   "closed": true,
+   "layer": "l1",
+   "g": null
+  },
+  {
+   "id": "ilot",
+   "closed": true,
+   "layer": "l1",
+   "g": null,
+   "nodes": [
+    {
+     "x": 95,
+     "y": 145,
+     "i": [
+      0,
+      -8.284271247461904
+     ],
+     "o": [
+      0,
+      8.284271247461904
+     ],
+     "sm": true
+    },
+    {
+     "x": 80,
+     "y": 160,
+     "i": [
+      8.284271247461904,
+      0
+     ],
+     "o": [
+      -8.284271247461904,
+      0
+     ],
+     "sm": true
+    },
+    {
+     "x": 65,
+     "y": 145,
+     "i": [
+      0,
+      8.284271247461904
+     ],
+     "o": [
+      0,
+      -8.284271247461904
+     ],
+     "sm": true
+    },
+    {
+     "x": 80,
+     "y": 130,
+     "i": [
+      -8.284271247461904,
+      0
+     ],
+     "o": [
+      8.284271247461904,
+      0
+     ],
+     "sm": true
+    }
+   ]
+  },
+  {
+   "id": "p5",
+   "nodes": [
+    {
+     "x": 170,
+     "y": 110,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 280,
+     "y": 110,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 280,
+     "y": 180,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 170,
+     "y": 180,
+     "i": null,
+     "o": null,
+     "sm": false
+    }
+   ],
+   "closed": true,
+   "layer": "l1",
+   "g": null
+  }
+ ],
+ "tools": [
+  {
+   "id": "t1",
+   "num": 1,
+   "name": "Fraise droite 3,175 mm",
+   "type": "flat",
+   "dia": 3.175,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 1200,
+   "plunge": 300,
+   "pass": 1.5,
+   "over": 40
+  },
+  {
+   "id": "t2",
+   "num": 2,
+   "name": "Fraise droite 6 mm",
+   "type": "flat",
+   "dia": 6,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 2000,
+   "plunge": 500,
+   "pass": 3,
+   "over": 40
+  },
+  {
+   "id": "t3",
+   "num": 3,
+   "name": "Fraise V 90° Ø12",
+   "type": "v",
+   "dia": 12,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 1500,
+   "plunge": 500,
+   "pass": 3,
+   "over": 20
+  },
+  {
+   "id": "t5",
+   "num": 5,
+   "name": "Fraise hémisphérique 3 mm",
+   "type": "ball",
+   "dia": 3,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 1000,
+   "plunge": 300,
+   "pass": 1,
+   "over": 50
+  },
+  {
+   "id": "t6",
+   "num": 6,
+   "name": "Foret 6 mm",
+   "type": "drill",
+   "dia": 6,
+   "flutes": 2,
+   "angle": 118,
+   "rpm": 8000,
+   "feed": 1000,
+   "plunge": 400,
+   "pass": 3,
+   "over": 0
+  }
+ ],
+ "tps": [
+  {
+   "id": "tp1",
+   "name": "Anneaux, rampe",
+   "nameAuto": false,
+   "type": "pocket",
+   "toolId": "t2",
+   "shapeIds": [
+    "p1"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "out",
+    "depth": 6,
+    "pass": "",
+    "allow": 0,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "rampzz",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "on",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "rings",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  },
+  {
+   "id": "tp2",
+   "name": "Balayage 30°",
+   "nameAuto": false,
+   "type": "pocket",
+   "toolId": "t2",
+   "shapeIds": [
+    "p2"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "out",
+    "depth": 4,
+    "pass": "",
+    "allow": 0,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "plunge",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "on",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "raster",
+    "rasterAng": 30,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  },
+  {
+   "id": "tp3",
+   "name": "Zigzag",
+   "nameAuto": false,
+   "type": "pocket",
+   "toolId": "t2",
+   "shapeIds": [
+    "p3"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "out",
+    "depth": 3,
+    "pass": "",
+    "allow": 0,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "plunge",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "on",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "zigzag",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  },
+  {
+   "id": "tp4",
+   "name": "Anneaux vers l’intérieur, îlot, hélice",
+   "nameAuto": false,
+   "type": "pocket",
+   "toolId": "t2",
+   "shapeIds": [
+    "p4",
+    "ilot"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "out",
+    "depth": 5,
+    "pass": "",
+    "allow": 0,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "helix",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "on",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "ringsIn",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  },
+  {
+   "id": "tp5",
+   "name": "Surépaisseur et finition, opposition",
+   "nameAuto": false,
+   "type": "pocket",
+   "toolId": "t1",
+   "shapeIds": [
+    "p5"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "out",
+    "depth": 4,
+    "pass": "",
+    "allow": 0.3,
+    "finish": "last",
+    "dir": "conv",
+    "entry": "plunge",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "on",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "rings",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  }
+ ],
+ "layers": [
+  {
+   "id": "l1",
+   "name": "Calque 1",
+   "visible": true,
+   "locked": false
+  }
+ ],
+ "layerActive": "l1",
+ "guides": {
+  "x": [],
+  "y": []
+ },
+ "dims": [],
+ "images": []
+}
