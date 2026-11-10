@@ -28,6 +28,23 @@
 - Gros projets : parcours et simulations longs calculés en tâche de fond (l'interface reste utilisable), affichage fluide des gros dessins et des gros parcours, historique d'annulation léger
 - Interface en français et en anglais (boutons FR / EN en haut à droite)
 
+## Scripts Python / Python scripts
+**Fichier › Ouvrir un script Python…** (ou glisser un `.py` sur la page) : le script décrit le brut, les formes et les usinages avec le module [`lib/copo.py`](lib/copo.py), COPO l'exécute dans le navigateur ([Pyodide](https://pyodide.org)) puis affiche la pièce en 2D et en 3D avec son G-code. Avec Chrome ou Edge, la pièce se met à jour à chaque enregistrement du fichier. Exemple : [`scripts-python/exemple-plaque.py`](scripts-python/exemple-plaque.py).
+
+```python
+from copo import *
+brut(300, 200, 18, materiau="bois tendre")
+plaque = rectangle(15, 15, 270, 170, rayon=12)
+percage([cercle(45 + i * 52.5, 160, 4) for i in range(5)], foret(8), 18, debourrage=4)
+profil(plaque, fraise(6), 18, cote="exterieur", ponts=4)
+```
+
+**Scripts paramétriques** : `parametre()`, `choix()` et `afficher()` font apparaître un formulaire dans COPO, et chaque modification relance le script ; `verifier()` refuse une combinaison de cotes impossible (message en rouge, pièce non modifiée), `avertissement()` et `info()` ajoutent des messages. Exemple complet : [`scripts-python/boite-parametrique/boite-parametrique.py`](scripts-python/boite-parametrique/boite-parametrique.py), une boîte à couvercle et compartiments (version COPO d'un générateur écrit pour Fusion 360).
+
+Python est téléchargé depuis le CDN jsDelivr à la première utilisation (environ 10 Mo). Pour travailler hors ligne, copiez la distribution Pyodide 0.26.4 (`pyodide.js`, `pyodide.asm.js`, `pyodide.asm.wasm`, `python_stdlib.zip`, `pyodide-lock.json`) dans `lib/pyodide/`. Les scripts fonctionnent aussi en ouvrant `index.html` directement depuis le disque : COPO lit alors la copie `lib/copo-py.js` du module (à régénérer avec `python lib/genere-copo-py-js.py` après toute modification de `lib/copo.py`).
+
+**File › Open a Python script…** (or drop a `.py` on the page) runs a script that describes the stock, shapes and toolpaths with [`lib/copo.py`](lib/copo.py) in the browser (Pyodide), then shows the part in 2D and 3D with its G-code. In Chrome or Edge the part updates each time the file is saved.
+
 ## Usage hors ligne / Offline use
 Téléchargez le dossier complet (« Code › Download ZIP »), décompressez-le et ouvrez `index.html` : tout est fourni, rien à installer.
 Download the whole folder (“Code › Download ZIP”), unzip it and open `index.html`: everything is included, nothing to install.
