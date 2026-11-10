@@ -1341,7 +1341,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.312</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.314</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1720,7 +1720,7 @@ if (!window.d3) document.write('<script src="https://cdn.jsdelivr.net/npm/d3-del
     Object.defineProperty(el, 'type', { get: () => 'number', set: () => { }, configurable: true });
     Object.defineProperty(el, 'value', { get() { const t = D.get.call(this).replace(/\s/g, '').replace(',', '.'); return ok.test(t) ? t : ''; }, set(x) { const t = x == null ? '' : String(x); if (document.activeElement === this) { const cur = this.value; if (cur === '' ? t === '' || isNaN(+t) || D.get.call(this).trim() !== '' : +cur === +t) return; } D.set.call(this, isFr() ? t.replace('.', ',') : t); }, configurable: true });
     Object.defineProperty(el, 'valueAsNumber', { get() { const t = this.value; return t === '' ? NaN : +t; }, set(x) { this.value = x; }, configurable: true });
-    el.addEventListener('beforeinput', e => { if (e.data && /[^0-9.,\-+eE]/.test(e.data)) e.preventDefault(); });
+    el.addEventListener('beforeinput', e => { if (e.data && /[^0-9.,\-+eE*\/xX×÷() ]/.test(e.data)) e.preventDefault(); });
     el.addEventListener('keydown', e => {
       if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return; e.preventDefault();
       const sa = el.getAttribute('step'), st = sa && sa !== 'any' ? +sa || 1 : 1, mn = el.getAttribute('min'), mx = el.getAttribute('max');
@@ -1730,6 +1730,19 @@ if (!window.d3) document.write('<script src="https://cdn.jsdelivr.net/npm/d3-del
     el.addEventListener('blur', () => { const t = el.value; if (t !== '' && D.get.call(el) !== (isFr() ? t.replace('.', ',') : t)) el.value = t; });
     el.value = v;
   };
+  // calcul dans les champs : 595-140, 73,694/2, (10+5)*3, 2x12 ; le résultat remplace le calcul à Entrée ou en quittant le champ
+  const expr = el => { const t = D.get.call(el).replace(/\s/g, '').replace(/,/g, '.').replace(/[xX×]/g, '*').replace(/÷/g, '/'); return /\d[-+*/]|[*/()]/.test(t) && !ok.test(t) ? t : null; };
+  const calc = t => { let i = 0; const num = () => { const m = t.slice(i).match(/^(\d+\.?\d*|\.\d+)(e[-+]?\d+)?/i); if (!m) throw 0; i += m[0].length; return +m[0]; };
+    const fac = () => { const c = t[i]; if (c === '-') { i++; return -fac(); } if (c === '+') { i++; return fac(); } if (c === '(') { i++; const v = sum(); if (t[i] !== ')') throw 0; i++; return v; } return num(); };
+    const prod = () => { let v = fac(); while (t[i] === '*' || t[i] === '/') { const o = t[i++], w = fac(); v = o === '*' ? v * w : v / w; } return v; };
+    const sum = () => { let v = prod(); while (t[i] === '+' || t[i] === '-') { const o = t[i++], w = prod(); v = o === '+' ? v + w : v - w; } return v; };
+    const v = sum(); if (i !== t.length || !isFinite(v)) throw 0; return v; };
+  const solve = el => { const t = expr(el); if (t === null) return false; let v; try { v = calc(t); } catch { return false; } const r = String(+v.toFixed(6)); D.set.call(el, isFr() ? r.replace('.', ',') : r); el.dispatchEvent(new Event('input', { bubbles: true })); return true; };
+  const numEl = e => e.target && e.target.dataset && e.target.dataset.num ? e.target : null;
+  document.addEventListener('input', e => { const el = numEl(e); if (el && expr(el) !== null) e.stopImmediatePropagation(); }, true); // calcul en cours : rien n'est appliqué
+  document.addEventListener('keydown', e => { const el = numEl(e); if (el && e.key === 'Enter' && expr(el) !== null && solve(el)) el.dispatchEvent(new Event('change', { bubbles: true })); }, true);
+  document.addEventListener('change', e => { const el = numEl(e); if (el && expr(el) !== null) solve(el); }, true);
+  document.addEventListener('focusout', e => { const el = numEl(e); if (el && expr(el) !== null && solve(el)) el.dispatchEvent(new Event('change', { bubbles: true })); }, true);
   const scan = r => { if (r.matches && r.matches('input[type=number]')) fix(r); if (r.querySelectorAll) r.querySelectorAll('input[type=number]').forEach(fix); };
   scan(document); new MutationObserver(ms => { for (const m of ms) for (const n of m.addedNodes) if (n.nodeType === 1) scan(n); }).observe(document.documentElement, { childList: true, subtree: true });
   window.numFixScan = scan;
@@ -7057,7 +7070,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.312', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.314', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });

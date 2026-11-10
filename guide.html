@@ -188,7 +188,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.312</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.314</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -235,6 +235,7 @@ footer p{max-width:none}
       <li><strong>Panneau de gauche</strong> en cinq onglets : <span class="ui">Projet</span>, <span class="ui">Dessin</span>, <span class="ui">Relief</span>, <span class="ui">Parcours</span> et <span class="ui">G-code</span>. Ils sont numérotés de 1 à 5 dans l’ordre habituel du travail. Dans les onglets Projet et Parcours et dans la bibliothèque d'outils, de petits schémas montrent ce que fait chaque réglage (profondeur, surépaisseur, sens de coupe, entrée de l'outil, ponts, forme de la fraise, zéro Z…) et se mettent à jour avec vos choix.</li>
       <li><strong>Barre de la vue 2D</strong>, flottante en bas à gauche de la vue 2D (les coordonnées du curseur par rapport à l'origine s’affichent en haut à gauche de la vue 2D, sur fond transparent, comme les informations de la vue 3D) : deux groupes d’icônes à allumer ou éteindre (leur nom s’affiche au survol). <em>Accroche</em> (aimant) : grille et son pas, vecteurs, repères, et le bouton de réglages qui ouvre les Règles d'accroche, juste au-dessus. <em>Afficher</em> (œil) : grille, parcours, matière enlevée, traits superposés. Un bouton allumé est entouré de bleu. En bas à droite, le bouton <strong>Tout voir</strong> montre le brut et tout le dessin ; la vue 3D a les mêmes barres, au même endroit.</li>
       <li><strong>Infobulles</strong> : arrêtez la souris un quart de seconde sur un bouton ou un réglage pour voir ce qu’il fait. L’infobulle disparaît dès que la souris quitte l’élément, et s’affiche aussitôt sur le bouton voisin quand vous explorez. Les flèches ▲ ▼ de la liste des parcours changent leur ordre d’usinage. Dans la liste des parcours, seul le nom s’affiche : l’opération, l’outil, la durée et les éventuels avertissements (pastille <em>!</em>) apparaissent au survol.</li>
+      <li><strong>Calculs dans les champs</strong> : dans tout champ numérique, tapez une opération avec <kbd>+</kbd> <kbd>-</kbd> <kbd>*</kbd> (ou <kbd>x</kbd>) <kbd>/</kbd> et des parenthèses, par exemple <code>595-140</code>, <code>73,694/2</code> ou <code>(10+5)*3</code> : le résultat remplace le calcul à <kbd>Entrée</kbd> ou en quittant le champ.</li>
       <li><strong>Noms des parcours</strong> : un nouveau parcours est nommé <em>calque_fonction_fraise</em>, par exemple <code>femelle_degagement_6mm</code>, <code>femelle_vcarve_90deg</code> ou <code>F2_fond_poche_6mm</code> sur la face 2. Tant que vous ne l’avez pas changé, le nom suit les réglages (autre fraise, autre fonction). Pour renommer un parcours, double-cliquez sur son nom dans la liste (ou <kbd>F2</kbd>) : rien n’est recalculé. Dans le formulaire, si seul le nom change, le parcours n’est pas recalculé non plus.</li>
       <li><strong>Trois niveaux d’aide</strong> (1.283) : sous chaque réglage, une ligne courte dit quoi faire. L’icône <strong>ⓘ</strong> ouvre une bulle avec le détail (pourquoi, quand, raccourcis) : survolez-la, ou touchez-la sur une tablette ; son lien « En savoir plus » ouvre la section correspondante de ce mode d’emploi. Les <strong>mots techniques</strong> (rampe, ponts, pas latéral, débourrage, surépaisseur…) affichent leur définition quand vous les survolez, sans icône ni soulignage ; sur tablette, touchez le mot. Les avertissements disent la conséquence et la solution, par exemple « Risque de casser la fraise : réduisez la profondeur de passe ».</li>
     </ul>
@@ -635,7 +636,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC), acorn (MIT, pour les calculs en tâche de fond).</p>
-    <footer><p>COPO 1.312 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.314 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -673,7 +674,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.312</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.314</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -720,6 +721,7 @@ M30</pre>
       <li><strong>Left panel</strong> with five tabs: <span class="ui">Project</span>, <span class="ui">Drawing</span>, <span class="ui">Relief</span>, <span class="ui">Toolpaths</span> and <span class="ui">G-code</span>. They are numbered 1 to 5 in the usual order of work. In the Project and Toolpaths tabs and in the tool library, small diagrams show what each setting does (depth, allowance, cut direction, tool entry, tabs, tool shape, Z zero…) and update with your choices.</li>
       <li><strong>Workspace bar</strong>, floating at the bottom left of the 2D view (cursor coordinates relative to the origin show at the top left of the 2D view, on a transparent background, like the 3D view information): two groups of on/off icons (their name shows on hover). <em>Snap</em> (magnet): grid and its spacing, vectors, guides, and the settings button that opens Snap settings just above it. <em>Show</em> (eye): grid, toolpaths, removed material, overlapping lines. An active button has a blue outline. At the bottom right, the <strong>Fit all</strong> button fits the view to the stock and drawing; the 3D view has the same bars in the same places.</li>
       <li><strong>Tooltips</strong>: rest the mouse a quarter of a second on a button or setting to see what it does. The tooltip disappears as soon as the mouse leaves, and shows straight away on the next button while you explore. The ▲ ▼ arrows in the toolpath list change the machining order. In the toolpath list only the name is shown: the operation, tool, time and any warnings (<em>!</em> badge) appear on hover.</li>
+      <li><strong>Math in fields</strong>: in any number field, type an operation with <kbd>+</kbd> <kbd>-</kbd> <kbd>*</kbd> (or <kbd>x</kbd>) <kbd>/</kbd> and parentheses, for example <code>595-140</code>, <code>73.694/2</code> or <code>(10+5)*3</code>: the result replaces it on <kbd>Enter</kbd> or when leaving the field.</li>
       <li><strong>Toolpath names</strong>: a new toolpath is named <em>layer_function_tool</em>, for example <code>female_clearance_6mm</code>, <code>female_vcarve_90deg</code> or <code>F2_bottom_pocket_6mm</code> on side 2. As long as you have not changed it, the name follows the settings (another tool, another function). To rename a toolpath, double-click its name in the list (or <kbd>F2</kbd>): nothing is recomputed. In the form, if only the name changes, the toolpath is not recomputed either.</li>
       <li><strong>Three levels of help</strong> (1.283): under each setting, a short line says what to do. The <strong>ⓘ</strong> icon opens a bubble with the details (why, when, shortcuts): hover over it, or tap it on a tablet; its “Learn more” link opens the matching section of this guide. <strong>Technical words</strong> (ramp, tabs, stepover, peck, allowance…) show their definition when you hover over them, with no icon or underline; on a tablet, tap the word. Warnings state the consequence and the fix, for example “Risk of breaking the tool: reduce the pass depth”.</li>
     </ul>
@@ -1120,7 +1122,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC), acorn (MIT, for background calculations).</p>
-    <footer><p>COPO 1.312 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.314 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
