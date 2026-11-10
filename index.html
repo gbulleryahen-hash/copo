@@ -1355,7 +1355,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.326</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.327</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -2603,20 +2603,28 @@ function buildVcarve(p, tool, shapes, M) {
     for (const lvl of lv) {
       // fond plat à ce palier : zones plus larges que ce que la fraise couvre à cette profondeur (avec fraise de dégagement : seulement le bord qu'elle n'atteint pas)
       const wl = g.r(lvl - S0), dmax = ct ? W + rc + fstep : Infinity, frg = wl > 1e-6 ? offAt(wl) : loops;
+      let ringed = null;
       if (frg.length) {
         const rings = [];
         const last = lvl >= maxD - 1e-9, st = last ? (g.rho > 0 && !ct ? fstepG : fstep) : Math.max(fstep, wl * 0.8); let r = frg; /* anneaux successifs : chacun décalé du précédent (même résultat, bien plus rapide) */ if (last && ct) rings.push(frg.map(fix), ...ringsIn(clrLeft(frg, rc, st), st, fix)); /* l'anneau du bord fait la paroi ; le reste seulement là où le dégagement n'est pas passé */ else for (let k = 0; k < 4000; k++) { const d = wl + k * st; if (d > (last ? dmax : ct ? W + st : Infinity)) break; if (k) r = offLoops(r, -st); if (!r.length) break; rings.push(r.map(fix)); }
-        if (rings.length) { mb.up(M.clearZ); emitRings(mb, rings, 0, -lvl, { ...o, entry: 'plunge' }, frg, tool.dia); deepest = Math.min(deepest, -lvl); }
+        if (rings.length) { const A = ct ? offLoops(offLoops(offAt(W), -rc), rc - 0.02) : null, Bd = ct && !last ? offAt(W + st) : null; /* zone déjà vidée : sans dégagement, toute la zone des anneaux ; avec dégagement, ce que sa fraise a vidé (et, aux paliers intermédiaires, la bande des anneaux) */
+          ringed = !ct ? (q => pipSet(q, frg)) : last ? (q => pipSet(q, A)) : (q => pipSet(q, A) || (pipSet(q, frg) && !pipSet(q, Bd))); mb.up(M.clearZ); emitRings(mb, rings, 0, -lvl, { ...o, entry: 'plunge' }, frg, tool.dia); deepest = Math.min(deepest, -lvl); }
       }
       // axe médian : la fraise remonte jusqu'à la pointe des coins
       let rem = []; for (const c of chains) rem.push(...vcSplit(c, prev, lvl));
+      /* parties plates de l'axe médian (au palier) dans une zone déjà vidée par les anneaux de ce palier ou par la fraise de dégagement (là où son centre passe) : inutiles, retirées */
+      if (ringed) { const fl = lvl - 1e-6, isIn = (a, q) => [0.25, 0.5, 0.75].every(t => ringed([a[0] + (q[0] - a[0]) * t, a[1] + (q[1] - a[1]) * t]));
+        const Lmin = 1; /* seulement les longs morceaux : couper une branche pour un court morceau coûte plus (remontée, plongée) qu'il ne fait gagner */
+        rem = rem.flatMap(c => { const n = c.length, dr = new Uint8Array(n); for (let i = 1; i < n; i++) if (-c[i - 1][2] >= fl && -c[i][2] >= fl && isIn(c[i - 1], c[i])) dr[i] = 1;
+          for (let i = 1; i < n;) { if (!dr[i]) { i++; continue; } let j = i, L = 0; while (j < n && dr[j]) { L += hyp(c[j - 1], c[j]); j++; } if (L < Lmin) for (let k = i; k < j; k++) dr[k] = 0; i = j; }
+          const out = []; let cur = [c[0]]; for (let i = 1; i < n; i++) { if (dr[i]) { if (cur.length > 1) out.push(cur); cur = [c[i]]; } else cur.push(c[i]); } if (cur.length > 1) out.push(cur); return out; }); }
       for (const c of vcOrder(rem, mb.x === null ? [0, 0] : [mb.x, mb.y])) {
         const bd = mb.x === null ? Infinity : hyp(c[0], [mb.x, mb.y]), s0 = c[0];
         let zl = null;
         if (mb.x !== null && mb.z <= 1e-9 && bd < 3 * h) { mb.g1(s0[0], s0[1], Math.max(mb.z, s0[2]), o.feed); mb.g1(s0[0], s0[1], s0[2], o.plunge); }
         else if (mb.x !== null && mb.z <= 1e-9 && (zl = linkZ([mb.x, mb.y], s0, mb.z, s0[2], lvl)) !== null) {
           if (zl.hop) { mb.g0(mb.x, mb.y, 0.5); mb.g0(s0[0], s0[1], 0.5); mb.g1(s0[0], s0[1], s0[2], o.plunge); }
-          else { if (zl.z > mb.z + 1e-9) mb.g1(mb.x, mb.y, zl.z, o.feed); mb.g1(s0[0], s0[1], zl.z, o.feed); if (s0[2] < zl.z - 1e-9) mb.g1(s0[0], s0[1], s0[2], o.plunge); } }
+          else { if (zl.z > mb.z + 1e-9) mb.g1(mb.x, mb.y, zl.z, o.feed); { const k = mb.m.length; mb.g1(s0[0], s0[1], zl.z, o.feed); if (mb.m.length > k) mb.m[k].lk = 1; } /* liaison : tracée comme un déplacement */ if (s0[2] < zl.z - 1e-9) mb.g1(s0[0], s0[1], s0[2], o.plunge); } }
         else { mb.approach(s0[0], s0[1], 0, o.plunge); mb.g1(s0[0], s0[1], s0[2], o.plunge); }
         for (let i = 1; i < c.length; i++) mb.g1(c[i][0], c[i][1], c[i][2], o.feed);
         for (const q of c) deepest = Math.min(deepest, q[2]);
@@ -3734,7 +3742,7 @@ function drawTPCut(c, mv, col, alpha, wOf) {
   let pen_ = false, cw_ = -1; c.beginPath();
   for (let i = 1; i < mv.length; i++) {
     const a = mv[i - 1], b = mv[i];
-    if (b.g === 1 && (b.z < -1e-6 || a.z < -1e-6)) { const wm = wOf(Math.min(a.z, b.z)); if (!pen_ || tpCutSplit(wm, cw_)) { c.stroke(); c.beginPath(); c.lineWidth = Math.max(1, wm * S.view.s); cw_ = wm; c.moveTo(sx(a.x), sy(a.y)); pen_ = true; } c.lineTo(sx(b.x), sy(b.y)); }
+    if (b.g === 1 && !b.lk && (b.z < -1e-6 || a.z < -1e-6)) { const wm = wOf(Math.min(a.z, b.z)); if (!pen_ || tpCutSplit(wm, cw_)) { c.stroke(); c.beginPath(); c.lineWidth = Math.max(1, wm * S.view.s); cw_ = wm; c.moveTo(sx(a.x), sy(a.y)); pen_ = true; } c.lineTo(sx(b.x), sy(b.y)); }
     else pen_ = false;
   }
   c.stroke(); c.restore();
@@ -3748,7 +3756,7 @@ function tpMovBox(mv) { let b = TPCUTBOX.get(mv); if (!b) { b = [Infinity, Infin
 /* traits du parcours dessinés directement pendant un zoom : lignes continues, points à moins d'un demi-pixel du précédent sautés (même aspect, beaucoup moins de segments) */
 function tpLinesLive(mv, col, active) {
   const poly = (g, dash) => { ctx.beginPath(); let lx = NaN, ly = NaN, open = false;
-    for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; const on = g === 1 ? b.g === 1 : (b.g === 0 && (Math.abs(a.x - b.x) + Math.abs(a.y - b.y)) > 1e-6); if (!on) { if (open && (lx !== ex || ly !== ey)) ctx.lineTo(ex, ey); open = false; continue; }
+    for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; const on = g === 1 ? b.g === 1 && !b.lk : ((b.g === 0 || b.lk) && (Math.abs(a.x - b.x) + Math.abs(a.y - b.y)) > 1e-6); if (!on) { if (open && (lx !== ex || ly !== ey)) ctx.lineTo(ex, ey); open = false; continue; }
       const ax = sx(a.x), ay = sy(a.y), bx = sx(b.x), by = sy(b.y);
       if (!open || Math.abs(ax - ex) > 1e-6 || Math.abs(ay - ey) > 1e-6) { if (open && (lx !== ex || ly !== ey)) ctx.lineTo(ex, ey); ctx.moveTo(ax, ay); lx = ax; ly = ay; open = true; }
       ex = bx; ey = by; if (Math.abs(bx - lx) + Math.abs(by - ly) >= 0.5) { ctx.lineTo(bx, by); lx = bx; ly = by; } }
@@ -3766,7 +3774,7 @@ function tpJobNew(tp, mv, tool, col, active, key) {
   const cg = tool.type === 'v' ? coneGeom(tool) : null, wOf = z => cg ? Math.min(tool.dia, 2 * cg.r(Math.max(0, -z))) : tool.dia;
   const [cut, gc] = S.ui.showCut ? mk() : [null, null], [ln, gl] = mk();
   /* passes de la largeur de coupe, découpées exactement comme le dessin direct (nouvelle passe à chaque levée ou changement de largeur) */
-  const rs = [], re = [], rw = []; if (S.ui.showCut) { let pen = false, cw = -1; for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; if (b.g === 1 && (b.z < -1e-6 || a.z < -1e-6)) { const wm = wOf(Math.min(a.z, b.z)); if (!pen || tpCutSplit(wm, cw)) { rs.push(i); re.push(i); rw.push(Math.max(1, wm * s)); cw = wm; pen = true; } else re[re.length - 1] = i; } else pen = false; } }
+  const rs = [], re = [], rw = []; if (S.ui.showCut) { let pen = false, cw = -1; for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; if (b.g === 1 && !b.lk && (b.z < -1e-6 || a.z < -1e-6)) { const wm = wOf(Math.min(a.z, b.z)); if (!pen || tpCutSplit(wm, cw)) { rs.push(i); re.push(i); rw.push(Math.max(1, wm * s)); cw = wm; pen = true; } else re[re.length - 1] = i; } else pen = false; } }
   if (gc) { gc.globalAlpha = TPA * (active ? 0.3 : 0.17); gc.strokeStyle = col; gc.lineCap = 'round'; gc.lineJoin = 'round'; }
   gl.strokeStyle = col; gl.lineWidth = active ? 1.4 : 1;
   /* vue (pour placer l'image) figée au début : les tranches suivantes dessinent avec les mêmes coordonnées */
@@ -3787,9 +3795,9 @@ function tpJobStep(j, all) {
         if (stop || late(g)) break; }
       j.r = r; if (r >= rs.length) { j.ph = j.ov ? 3 : 1; j.i = 1; j.sc = null; } /* vue d'ensemble : la largeur de coupe seulement */
     } else if (j.ph === 1) { const g = j.gl; let i = j.i;
-      while (i < mv.length) { const lim = all ? mv.length : Math.min(mv.length, i + 1500); g.beginPath(); for (; i < lim; i++) { const a = mv[i - 1], b = mv[i]; if (b.g === 1) { g.moveTo(sx(a.x), sy(a.y)); g.lineTo(sx(b.x), sy(b.y)); } } g.stroke(); if (late(g)) break; }
+      while (i < mv.length) { const lim = all ? mv.length : Math.min(mv.length, i + 1500); g.beginPath(); for (; i < lim; i++) { const a = mv[i - 1], b = mv[i]; if (b.g === 1 && !b.lk && !b.lk) { g.moveTo(sx(a.x), sy(a.y)); g.lineTo(sx(b.x), sy(b.y)); } } g.stroke(); if (late(g)) break; }
       j.i = i; if (i >= mv.length) j.ph = 2;
-    } else if (!j.gl) j.ph = 3; else { const g = j.gl; g.save(); g.globalAlpha = 0.5; g.setLineDash([3, 4]); g.lineWidth = 1; g.beginPath(); for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; if (b.g === 0 && (Math.abs(a.x - b.x) + Math.abs(a.y - b.y)) > 1e-6) { g.moveTo(sx(a.x), sy(a.y)); g.lineTo(sx(b.x), sy(b.y)); } } g.stroke(); g.restore(); j.ph = 3; }
+    } else if (!j.gl) j.ph = 3; else { const g = j.gl; g.save(); g.globalAlpha = 0.5; g.setLineDash([3, 4]); g.lineWidth = 1; g.beginPath(); for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; if ((b.g === 0 || b.lk) && (Math.abs(a.x - b.x) + Math.abs(a.y - b.y)) > 1e-6) { g.moveTo(sx(a.x), sy(a.y)); g.lineTo(sx(b.x), sy(b.y)); } } g.stroke(); g.restore(); j.ph = 3; }
   } finally { v.s = sv[0]; v.ox = sv[1]; v.oy = sv[2]; }
   return j.ph === 3;
 }
@@ -3833,9 +3841,9 @@ function drawTPDirect(tp, col, active) {
   if (S.ui.showCut) drawTPCut(ctx, mv, col, TPA * (active ? 0.3 : 0.17), wOf);
   if (tp.tabs) { const L = Math.max(1.5, (+tp.p.tabL || 0)) * S.view.s, Wd = Math.max(3, tool.dia * S.view.s); ctx.save(); for (const t of tp.tabs) { ctx.save(); ctx.translate(sx(t.x), sy(t.y)); ctx.rotate(-t.a); ctx.fillStyle = col; ctx.globalAlpha = TPA * (0.85); ctx.fillRect(-L / 2, -Wd / 2, L, Wd); ctx.globalAlpha = TPA * (1); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.2; ctx.strokeRect(-L / 2, -Wd / 2, L, Wd); ctx.restore(); } ctx.restore(); }
   ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = active ? 1.4 : 1; ctx.globalAlpha = TPA * (0.9); ctx.beginPath();
-  for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; if (b.g === 1) { ctx.moveTo(sx(a.x), sy(a.y)); ctx.lineTo(sx(b.x), sy(b.y)); } }
+  for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; if (b.g === 1 && !b.lk && !b.lk) { ctx.moveTo(sx(a.x), sy(a.y)); ctx.lineTo(sx(b.x), sy(b.y)); } }
   ctx.stroke(); ctx.globalAlpha = TPA * (0.45); ctx.setLineDash([3, 4]); ctx.beginPath();
-  for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; if (b.g === 0 && (Math.abs(a.x - b.x) + Math.abs(a.y - b.y)) > 1e-6) { ctx.moveTo(sx(a.x), sy(a.y)); ctx.lineTo(sx(b.x), sy(b.y)); } }
+  for (let i = 1; i < mv.length; i++) { const a = mv[i - 1], b = mv[i]; if ((b.g === 0 || b.lk) && (Math.abs(a.x - b.x) + Math.abs(a.y - b.y)) > 1e-6) { ctx.moveTo(sx(a.x), sy(a.y)); ctx.lineTo(sx(b.x), sy(b.y)); } }
   ctx.stroke(); ctx.restore();
 }
 // cotes
@@ -7183,7 +7191,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.326', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.327', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
