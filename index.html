@@ -678,7 +678,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
       </div></div>
       <div class="menu"><button class="mtop" aria-expanded="false">Édition</button><div class="mdrop" hidden>
         <button data-act="undo" data-en="Undo">Annuler<kbd>Ctrl+Z</kbd></button><button data-act="redo">Rétablir<kbd>Ctrl+Y</kbd></button>
-        <hr><button data-act="dup">Dupliquer<kbd>Ctrl+D</kbd></button><button data-act="selAll">Tout sélectionner<kbd>Ctrl+A</kbd></button><button data-act="del">Supprimer<kbd>Suppr</kbd></button>
+        <hr><button data-act="clipCut">Couper<kbd>Ctrl+X</kbd></button><button data-act="clipCopy">Copier<kbd>Ctrl+C</kbd></button><button data-act="clipPaste">Coller<kbd>Ctrl+V</kbd></button><button data-act="dup">Dupliquer<kbd>Ctrl+D</kbd></button><button data-act="selAll">Tout sélectionner<kbd>Ctrl+A</kbd></button><button data-act="del">Supprimer<kbd>Suppr</kbd></button>
         <hr><button data-act="cfgOpen">Paramètres…<kbd>Ctrl+,</kbd></button>
       </div></div>
       <div class="menu"><button class="mtop" aria-expanded="false">Dessin</button><div class="mdrop mcols" hidden>
@@ -1146,6 +1146,19 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
               <label id="rlCutSRow">Seuil <span id="rlCutv" class="mono"></span><input type="range" id="rlCutS" min="1" max="60" step="1"></label>
             </div>
             <div class="row"><button data-act="relOutline" class="primary" title="Crée un vecteur fermé sur le pourtour du relief sélectionné, pour le détourer">Créer le contour</button><button data-act="relFit">Ajuster au brut</button><button data-act="relCenter">Centrer</button></div>
+            <h3 class="dsec-h">Aligner et répartir</h3>
+            <div class="iconrow" id="rlAlignRow">
+            <button data-act="alignL" title="Aligner à gauche" aria-label="Aligner à gauche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 3v18"/><rect x="7" y="6" width="12" height="4"/><rect x="7" y="14" width="7" height="4"/></svg></button>
+            <button data-act="alignCH" title="Centrer horizontalement" aria-label="Centrer horizontalement"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18"/><rect x="5" y="6" width="14" height="4"/><rect x="8" y="14" width="8" height="4"/></svg></button>
+            <button data-act="alignR" title="Aligner à droite" aria-label="Aligner à droite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 3v18"/><rect x="5" y="6" width="12" height="4"/><rect x="10" y="14" width="7" height="4"/></svg></button>
+            <button data-act="alignT" title="Aligner en haut" aria-label="Aligner en haut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h18"/><rect x="6" y="7" width="4" height="12"/><rect x="14" y="7" width="4" height="7"/></svg></button>
+            <button data-act="alignCV" title="Centrer verticalement" aria-label="Centrer verticalement"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h18"/><rect x="6" y="5" width="4" height="14"/><rect x="14" y="8" width="4" height="8"/></svg></button>
+            <button data-act="alignB" title="Aligner en bas" aria-label="Aligner en bas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 20h18"/><rect x="6" y="5" width="4" height="12"/><rect x="14" y="10" width="4" height="7"/></svg></button>
+            <button data-act="distH" title="Répartir horizontalement" aria-label="Répartir horizontalement"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="7" width="4" height="10"/><rect x="10" y="7" width="4" height="10"/><rect x="17.5" y="7" width="4" height="10"/></svg></button>
+            <button data-act="distV" title="Répartir verticalement" aria-label="Répartir verticalement"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="2.5" width="10" height="4"/><rect x="7" y="10" width="10" height="4"/><rect x="7" y="17.5" width="10" height="4"/></svg></button>
+          </div>
+            <div class="g2"><label>Aligner sur<select data-k="alignRef"><option value="sel">La sélection</option><option value="first">Le premier relief sélectionné</option><option value="stock">Le brut</option></select></label><label>Espacement (mm)<input data-u="len" type="number" data-k="distGap" step="1" min="0"></label></div>
+            <p class="hint">Maj + clic dans la vue 2D pour choisir plusieurs reliefs ; un seul relief s’aligne sur le brut.</p>
             <p class="hint" id="rlInfo"></p>
           </div>
         </section>
@@ -1341,7 +1354,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.314</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.317</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1804,6 +1817,7 @@ Object.assign(I18N_EN, {"paroi du motif": "design wall", "paliers": "levels", "p
 Object.assign(I18N_EN, {"Une fraise en V pointue ne peut pas vider un fond plat : ajoutez une fraise de dégagement ou choisissez une fraise javelot ou à bout rond.": "A pointed V-bit cannot clear a flat bottom: add a clearance tool or choose an engraving (flat tip) or tapered ball nose bit.", "Fond plat trop large pour le bout de cette fraise ({n} passes) : ajoutez une fraise de dégagement.": "Flat bottom too wide for the tip of this bit ({n} passes): add a clearance tool.", "{n} zone(s) plus étroite(s) que le bout de la fraise (Ø {w} mm) : non usinée(s), en rouge dans la vue 2D.": "{n} area(s) narrower than the bit tip (Ø {w} mm): not machined, shown in red in the 2D view.", "Ce parcours sort du brut : la fraise y usinerait dans le vide (la simulation ne le montre pas). Déplacez les vecteurs ou agrandissez le brut.": "This toolpath leaves the stock: the bit would cut air there (the simulation does not show it). Move the vectors or enlarge the stock.", "Incrustation : la femelle et le mâle doivent utiliser la même fraise conique (même angle, même bout) ; « {n} » utilise une autre fraise.": "Inlay: the female and the male must use the same tapered bit (same angle, same tip); “{n}” uses another bit.", "Fraise javelot": "Engraving bit (flat tip)", "Fraise conique à bout rond": "Tapered ball nose", "Diamètre du plat d (mm)": "Flat diameter d (mm)", "Javelot": "Engraving bit", "plat": "flat", "Le diamètre du plat doit être plus grand que 0 et plus petit que le diamètre de la fraise.": "The flat diameter must be greater than 0 and smaller than the bit diameter.", "Le rayon du bout doit être plus grand que 0 et plus petit que la moitié du diamètre.": "The tip radius must be greater than 0 and smaller than half the diameter.", "incrustation (calcul)": "inlay (computed)"});
 Object.assign(I18N_EN, {"Fraise V à bout rond": "Tapered ball nose", "Fraises V à bout rond": "Tapered ball nose bits", "Fraises javelot": "Engraving bits (flat tip)", "Fraise V": "V-bit"});
 Object.assign(I18N_EN, {"Incrustation créée : calques et parcours femelle et mâle, tous visibles.": "Inlay created: female and male layers and toolpaths, all visible."});
+Object.assign(I18N_EN, {"Coller": "Paste", "Relief copié : Ctrl+V en colle une copie.": "Relief copied: Ctrl+V pastes a copy.", "Sélectionnez des vecteurs à copier.": "Select vectors to copy.", "{n} vecteur(s) coupé(s) : Ctrl+V pour les coller.": "{n} vector(s) cut: Ctrl+V to paste them.", "{n} vecteur(s) copié(s) : Ctrl+V pour les coller.": "{n} vector(s) copied: Ctrl+V to paste them.", "Rien à coller : copiez d’abord des vecteurs (Ctrl+C).": "Nothing to paste: copy vectors first (Ctrl+C).", "Le relief copié n’existe plus.": "The copied relief no longer exists.", "{n} vecteur(s) collé(s), décalé(s) de {d} mm.": "{n} vector(s) pasted, offset by {d} mm.", "{n} reliefs sélectionnés : alignez-les ou répartissez-les (onglet Relief ou Dessin › Aligner et répartir).": "{n} reliefs selected: align or distribute them (Relief tab or Drawing › Align and distribute).", "Sélectionnez un relief.": "Select a relief.", "Sélectionnez au moins deux reliefs (Maj + clic) : le premier sert de référence.": "Select at least two reliefs (Shift + click): the first one is the reference.", "Un seul relief : aligné sur le brut.": "A single relief: aligned on the stock.", "Sélectionnez au moins deux reliefs (Maj + clic) : le premier sert de point de départ.": "Select at least two reliefs (Shift + click): the first one is the starting point.", "Sélectionnez au moins trois reliefs (Maj + clic).": "Select at least three reliefs (Shift + click).", "Le premier relief sélectionné": "The first selected relief", "Maj + clic dans la vue 2D pour choisir plusieurs reliefs ; un seul relief s’aligne sur le brut.": "Shift + click in the 2D view to pick several reliefs; a single relief aligns on the stock.", "Les deux vecteurs ont été joints pour faire le coin.": "The two vectors were joined to make the corner."});
 Object.assign(I18N_EN, {"Visite rapide": "Quick tour", "Réafficher les astuces": "Show tips again", "Astuces réactivées : elles s’afficheront à l’ouverture de chaque onglet.": "Tips turned back on: they will show when you open each tab."});
 Object.assign(I18N_EN, {"Aligner sur": "Align to", "La sélection": "The selection", "Le premier vecteur sélectionné": "The first selected vector", "Le brut": "The stock", "Espacement (mm)": "Spacing (mm)", "Perçage": "Drilling", "Sélectionnez au moins deux vecteurs : le premier sert de référence.": "Select at least two vectors: the first one is the reference.", "Sélectionnez au moins deux vecteurs : le premier sert de point de départ.": "Select at least two vectors: the first one is the starting point.", "Les vecteurs sont plus grands que le brut.": "The vectors are larger than the stock.", "Profil sur la ligne 1": "On-line profile 1", "Profil sur la ligne 2": "On-line profile 2", "Poche 1": "Pocket 1", "F2 · Poche 2": "F2 · Pocket 2", "V-carving 2": "V-carving 2", "Foret 4 mm": "4 mm drill"});
 Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the nut / zero fret (mm)"});
@@ -4581,6 +4595,17 @@ function guideLk(axis) { const g = S.guides, k = axis === 'x' ? 'lx' : 'ly'; if 
 function guideDel(axis, i) { guideLk(axis).splice(i, 1); S.guides[axis].splice(i, 1); }
 function hitGuide(X, Y, all) { for (const axis of ['x', 'y']) { const L = guideLk(axis); for (let i = 0; i < S.guides[axis].length; i++) if (Math.abs((axis === 'x' ? sx(S.guides.x[i]) - X : sy(S.guides.y[i]) - Y)) < 4 && (all || !L[i])) return { axis, i }; } return null; }
 function guideOpen(gd) { if (curTab !== 'dessin') setTab('dessin'); if (S.ui.tool !== 'select') setTool('select'); S.ui.dsec = 'guides'; dRefresh(); renderGuides(); const li = $('#guideList').querySelector('[data-g="' + gd.axis + gd.i + '"]'); if (li) { li.classList.add('hl'); li.scrollIntoView({ block: 'nearest' }); const inp = li.querySelector('input'); if (inp) { inp.focus(); inp.select(); } setTimeout(() => li.classList.remove('hl'), 1500); } }
+// extrémités de deux vecteurs ouverts (ou d'un même vecteur) qui se touchent près du point : un coin à joindre avant le congé
+function findJunction(p) { const tol = Math.max(0.05, +S.ui.joinTol || 0.5), pr = 12 / S.view.s, E = [];
+  for (const s of S.shapes) { if (!editable(s) || s.closed || s.nodes.length < 2) continue; const N = s.nodes; for (const k of [0, N.length - 1]) if (Math.hypot(N[k].x - p[0], N[k].y - p[1]) < pr) E.push({ s, k, n: N[k] }); }
+  for (let a = 0; a < E.length; a++) for (let b = a + 1; b < E.length; b++) { const A = E[a], B = E[b]; if (A.s === B.s && (A.k === B.k || A.s.nodes.length < 3)) continue; if (Math.hypot(A.n.x - B.n.x, A.n.y - B.n.y) <= tol) return { A, B, p: [A.n.x, A.n.y], join: true }; }
+  return null; }
+function cornerByJoin(J, kind, val) { const keep = S.shapes.slice(), tps = S.tps.map(t => t.shapeIds.slice()), tol = Math.max(0.05, +S.ui.joinTol || 0.5); let s, i;
+  if (J.A.s === J.B.s) { s = J.A.s; const N = s.nodes, f = N[0], l = N[N.length - 1]; f.i = l.i; N.pop(); s.closed = true; refresh(s); i = 0; }
+  else { const r = joinNodes([J.A.s.nodes, J.B.s.nodes], tol, 'line'), ids = new Set([J.A.s.id, J.B.s.id]); S.shapes = S.shapes.filter(x => !ids.has(x.id)); s = mkShape(r.nodes, r.closed, { layer: J.A.s.layer, g: J.A.s.g });
+    if (!s) { S.shapes = keep; return false; } for (const tp of S.tps) if (tp.shapeIds.some(id => ids.has(id))) tp.shapeIds = [...tp.shapeIds.filter(id => !ids.has(id)), s.id]; let bd = Infinity; s.nodes.forEach((n, k) => { const d = Math.hypot(n.x - J.p[0], n.y - J.p[1]); if (d < bd) { bd = d; i = k; } }); }
+  if (canCorner(s, i) && applyCorner(s, i, kind, val, 0.999)) return true;
+  S.shapes = keep; S.tps.forEach((t, k) => t.shapeIds = tps[k]); if (J.A.s === J.B.s) { const N = J.A.s.nodes; J.A.s.closed = false; N.push(NODE(J.B.n.x, J.B.n.y, J.B.n.i)); N[0].i = null; refresh(J.A.s); } return false; }
 function findCorner(p) { let best = null, bd = 12 / S.view.s; for (const s of S.shapes) { if (!editable(s)) continue; s.nodes.forEach((n, i) => { const d = Math.hypot(n.x - p[0], n.y - p[1]); if (d < bd && canCorner(s, i)) { bd = d; best = { s, i, p: [n.x, n.y] }; } }); } return best; }
 function edgePortion(s, p) { // portion qui serait supprimée par Ajuster (pour l'aperçu)
   const others = S.shapes.filter(o => o !== s && shown(o)), xs = intersParams(s, others), { u } = paramAt(s, p), ns = nseg(s);
@@ -4879,6 +4904,7 @@ cv.addEventListener('pointerdown', e => {
       else if (gd) { drag = { mode: 'guide', axis: gd.axis, i: gd.i }; }
       else if (hi) { const was = S.imgSel === hi.id; if (!was) { IXF = false; selectImg(hi.id); } drag = { mode: 'imove', im: hi, off: [hi.x - p[0], hi.y - p[1]], toggleXf: was, X0: X, Y0: Y }; }
       else if (hr && !$('#tpWin').hidden) { tpRelPick(hr.id); }
+      else if (hr && e.shiftKey && S.relSel && S.relSel !== hr.id) { relMulti.add(S.relSel); if (relMulti.has(hr.id)) relMulti.delete(hr.id); else relMulti.add(hr.id); selectRel(hr.id, true); toast(trf('{n} reliefs sélectionnés : alignez-les ou répartissez-les (onglet Relief ou Dessin › Aligner et répartir).', { n: relSelIds().length })); }
       else if (hr) { const was = S.relSel === hr.id; if (!was) { RXF = false; selectRel(hr.id); if (curTab !== 'relief') setTab('relief'); } drag = { mode: 'imove', im: hr, off: [hr.x - p[0], hr.y - p[1]], rel: true, toggleXf: was, X0: X, Y0: Y }; relDragPrep(hr); }
       else { S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } if (S.relSel) { S.relSel = null; relPanel(); } if (!e.shiftKey) S.sel.clear(); renderSel(); drag = { mode: 'band', sx0: X, sy0: Y, sx1: X, sy1: Y }; }
     }
@@ -4919,9 +4945,11 @@ cv.addEventListener('pointerdown', e => {
     const n = c.s.nodes.length; if (!segIsLine(c.s, (c.i - 1 + n) % n) || !segIsLine(c.s, c.i)) { toast('Dogbone et T-bone : seulement entre deux segments droits.'); return; }
     if (!applyDog(c.s, c.i, S.ui.dogKind === 'tbone' ? 'tbone' : 'dogbone', D)) { toast('Côtés trop courts pour ce diamètre.'); return; } hoverCorner = null; commit();
   } else if (t === 'chamfer' || t === 'fillet') {
-    const c = findCorner(p); if (!c) { toast('Aucun coin vif à cet endroit.'); return; }
+    const c = findCorner(p), J = !c && findJunction(p); if (!c && !J) { toast('Aucun coin vif à cet endroit.'); return; }
     const v = t === 'chamfer' ? +S.ui.chamfer : +S.ui.fillet; if (!(v > 0)) { toast('Indiquez une valeur supérieure à 0.'); return; }
-    if (!applyCorner(c.s, c.i, t, v, 0.999)) { toast(t === 'fillet' ? 'Rayon trop grand pour ce coin : réduisez-le.' : 'Distance trop grande pour ce coin : réduisez-la.'); return; } hoverCorner = null; commit();
+    if (J) { if (!cornerByJoin(J, t, v)) { toast(t === 'fillet' ? 'Rayon trop grand pour ce coin : réduisez-le.' : 'Distance trop grande pour ce coin : réduisez-la.'); return; } hoverCorner = null; commit(); toast(tr('Les deux vecteurs ont été joints pour faire le coin.')); }
+    else {
+    if (!applyCorner(c.s, c.i, t, v, 0.999)) { toast(t === 'fillet' ? 'Rayon trop grand pour ce coin : réduisez-le.' : 'Distance trop grande pour ce coin : réduisez-la.'); return; } hoverCorner = null; commit(); }
   } else if (t === 'trim') {
     const s = hitEdge(p, 8); if (!s) { toast('Cliquez sur un vecteur.'); return; }
     const pieces = trimPieces(s, S.shapes.filter(o => o !== s && shown(o)), p);
@@ -5018,7 +5046,7 @@ cv.addEventListener('pointermove', e => {
     else setCoords(q);
     draw(); return;
   }
-  if (t === 'chamfer' || t === 'fillet' || t === 'dogbone') { hoverCorner = findCorner(p); draw(); }
+  if (t === 'chamfer' || t === 'fillet' || t === 'dogbone') { hoverCorner = findCorner(p) || (t !== 'dogbone' ? findJunction(p) : null); draw(); }
   if (t === 'trim') { const s = hitEdge(p, 8); hoverEdge = s ? edgePortion(s, p) : null; draw(); }
   if (t === 'extend') extHover(p);
   if (t === 'select' && !spaceDown) cv.style.cursor = xfCursor(X, Y) || imgCursor(X, Y) || 'default';
@@ -5428,6 +5456,9 @@ window.addEventListener('keydown', e => {
   if (mod && (k === 'z' || k === 'Z')) { e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
   if (mod && (k === 'y' || k === 'Y')) { e.preventDefault(); redo(); return; }
   if (mod && (k === 'd' || k === 'D')) { e.preventDefault(); act('dup'); return; }
+  if (mod && !e.shiftKey && (k === 'c' || k === 'C') && !(window.getSelection && String(window.getSelection()))) { e.preventDefault(); act('clipCopy'); return; }
+  if (mod && !e.shiftKey && (k === 'x' || k === 'X')) { e.preventDefault(); act('clipCut'); return; }
+  if (mod && !e.shiftKey && (k === 'v' || k === 'V')) { e.preventDefault(); act('clipPaste'); return; }
   if (mod && (k === 'g' || k === 'G')) { e.preventDefault(); act(e.shiftKey ? 'ungroup' : 'group'); return; }
   if (mod && (e.code === 'BracketRight' || k === ']' || k === '}')) { e.preventDefault(); arrange(e.shiftKey ? 'zFront' : 'zUp'); return; }
   if (mod && (e.code === 'BracketLeft' || k === '[' || k === '{')) { e.preventDefault(); arrange(e.shiftKey ? 'zBack' : 'zDown'); return; }
@@ -5587,8 +5618,31 @@ function doBool(kind) {
   const loops = loopsOf(res); if (!loops.length) return toast('Le résultat est vide.');
   replaceMany(ord, loops, first.layer); commit(); renderSel(); draw(); toast(loops.length + ' contour(s) obtenu(s).');
 }
+function relMoveBy(it, dx, dy) { it.x += dx; it.y += dy; if (relLinked(it)) { const im = imgById(it.src); if (im) { im.x = it.x; im.y = it.y; } } }
+function relOrgDone() { relBump(); relDirty = true; commit(false); relPanel(true); if (typeof renderImgPanel === 'function') renderImgPanel(true); draw(); }
+const relItems = () => relSelIds().map(id => S.relief.items.find(i => i.id === id)).filter(Boolean);
+const boxOf = bs => ({ x0: Math.min(...bs.map(b => b.x0)), y0: Math.min(...bs.map(b => b.y0)), x1: Math.max(...bs.map(b => b.x1)), y1: Math.max(...bs.map(b => b.y1)) });
+function relAlign(kind) {
+  let us = relItems(), ref; const mode = S.ui.alignRef || 'sel'; if (!us.length) return toast(tr('Sélectionnez un relief.'));
+  if (mode === 'first') { if (us.length < 2) return toast(tr('Sélectionnez au moins deux reliefs (Maj + clic) : le premier sert de référence.')); ref = relBox(us[0]); us = us.slice(1); }
+  else ref = mode === 'stock' || us.length === 1 ? { x0: 0, y0: 0, x1: S.stock.w, y1: S.stock.h } : boxOf(us.map(relBox));
+  for (const it of us) { const b = relBox(it); let dx = 0, dy = 0;
+    if (kind === 'L') dx = ref.x0 - b.x0; if (kind === 'CH') dx = (ref.x0 + ref.x1) / 2 - (b.x0 + b.x1) / 2; if (kind === 'R') dx = ref.x1 - b.x1;
+    if (kind === 'T') dy = ref.y1 - b.y1; if (kind === 'CV') dy = (ref.y0 + ref.y1) / 2 - (b.y0 + b.y1) / 2; if (kind === 'B') dy = ref.y0 - b.y0; relMoveBy(it, dx, dy); }
+  relOrgDone(); if (mode === 'sel' && us.length === 1) toast(tr('Un seul relief : aligné sur le brut.'));
+}
+function relDistribute(axis) {
+  const mode = S.ui.alignRef || 'sel', all = relItems(), X = axis === 'x', lo = b => X ? b.x0 : b.y0, size = b => X ? b.w : b.h, mv = (it, d) => relMoveBy(it, X ? d : 0, X ? 0 : d);
+  if (mode === 'first') { if (all.length < 2) return toast(tr('Sélectionnez au moins deux reliefs (Maj + clic) : le premier sert de point de départ.')); const gap = Math.max(0, +S.ui.distGap || 0); let pos = X ? relBox(all[0]).x1 : relBox(all[0]).y1;
+    for (const it of all.slice(1)) { const b = relBox(it); mv(it, pos + gap - lo(b)); pos += gap + size(b); } return relOrgDone(); }
+  const bs = all.map(it => ({ it, b: relBox(it) })).sort((a, c) => lo(a.b) - lo(c.b));
+  if (mode === 'stock') { if (!bs.length) return toast(tr('Sélectionnez un relief.')); const Lg = X ? S.stock.w : S.stock.h, gap = (Lg - bs.reduce((a, o) => a + size(o.b), 0)) / (bs.length + 1); let pos = gap; for (const o of bs) { mv(o.it, pos - lo(o.b)); pos += size(o.b) + gap; } return relOrgDone(); }
+  if (bs.length < 3) return toast(tr('Sélectionnez au moins trois reliefs (Maj + clic).'));
+  const span = (X ? bs[bs.length - 1].b.x1 : bs[bs.length - 1].b.y1) - lo(bs[0].b), gap = (span - bs.reduce((a, o) => a + size(o.b), 0)) / (bs.length - 1); let pos = lo(bs[0].b);
+  for (const o of bs) { mv(o.it, pos - lo(o.b)); pos += size(o.b) + gap; } relOrgDone();
+}
 function doAlign(kind) {
-  const ss = selShapes(); if (!ss.length) return toast('Sélectionnez des vecteurs.');
+  const ss = selShapes(); if (!ss.length && relSelIds().length) return relAlign(kind); if (!ss.length) return toast('Sélectionnez des vecteurs.');
   const mode = S.ui.alignRef || 'sel', stockB = { x0: 0, y0: 0, x1: S.stock.w, y1: S.stock.h };
   let us = units(ss), ref;
   if (mode === 'first') { if (us.length < 2) return toast('Sélectionnez au moins deux vecteurs : le premier sert de référence.');
@@ -5603,6 +5657,7 @@ function doAlign(kind) {
 function firstUnit(us) { const f = selOrdered()[0]; return us.find(u => u.includes(f)) || us[0]; }
 function selOrderUnits(us) { const ord = selOrdered(), rank = u => Math.min(...u.map(s => { const k = ord.indexOf(s); return k < 0 ? 1e9 : k; })); return us.slice().sort((a, b) => rank(a) - rank(b)); }
 function doDistribute(axis) {
+  if (!selShapes().length && relSelIds().length) return relDistribute(axis);
   const mode = S.ui.alignRef || 'sel', all = units(selShapes());
   if (mode === 'first') {
     if (all.length < 2) return toast('Sélectionnez au moins deux vecteurs : le premier sert de point de départ.');
@@ -5626,6 +5681,26 @@ function doDistribute(axis) {
 }
 // copie la sélection sur un calque (les copies sont sélectionnées, les originaux restent en place)
 function copyToLayer(ss, l) { const gm = new Map(), made = []; for (const s of ss) { const n = copyShapes([s], q => [q[0], q[1]], gm)[0]; if (!n) continue; n.layer = l.id; if (s.rot) n.rot = s.rot; made.push(n); } S.sel.clear(); made.forEach(n => S.sel.add(n.id)); commit(); renderLayers(); renderSel(); draw(); toast(trf('{n} vecteur(s) copié(s) sur le calque « {l} ».', { n: made.length, l: l.name })); }
+// presse-papiers de COPO : vecteurs (gardé aussi dans le navigateur, pour coller dans un autre projet ou un autre onglet) ou relief
+let CLIP = null, clipN = 0;
+function clipCopy(cut) {
+  const ss = selShapes();
+  if (!ss.length && S.relSel) { CLIP = { kind: 'relief', id: S.relSel }; clipN = 0; toast(tr('Relief copié : Ctrl+V en colle une copie.')); return; }
+  if (!ss.length) return toast(tr('Sélectionnez des vecteurs à copier.'));
+  CLIP = { kind: 'shapes', items: ss.map(x => ({ nodes: x.nodes.map(cloneNode), closed: x.closed, layer: x.layer, g: x.g || null, rot: x.rot || 0 })) }; clipN = 0;
+  try { LS.set('copo.clip', JSON.stringify(CLIP)); } catch { }
+  if (cut) { const ids = new Set(ss.map(x => x.id)); S.shapes = S.shapes.filter(x => !ids.has(x.id)); S.sel.clear(); S.ne = null; commit(); renderSel(); draw(); }
+  toast(trf(cut ? '{n} vecteur(s) coupé(s) : Ctrl+V pour les coller.' : '{n} vecteur(s) copié(s) : Ctrl+V pour les coller.', { n: ss.length }));
+}
+function clipPaste() {
+  let C = CLIP; if (!C || C.kind === 'shapes') { try { const o = JSON.parse(LS.get('copo.clip') || 'null'); if (o && o.kind === 'shapes' && o.items) C = o; } catch { } }
+  if (!C) return toast(tr('Rien à coller : copiez d’abord des vecteurs (Ctrl+C).'));
+  if (C.kind === 'relief') { if (!S.relief.items.some(i => i.id === C.id)) return toast(tr('Le relief copié n’existe plus.')); selectRel(C.id); relDup(); return; }
+  const d = 10 * ++clipN, gm = new Map(); S.sel.clear(); S.selDim = null; if (S.relSel) { S.relSel = null; relPanel(); }
+  for (const it of C.items) { let g = null; if (it.g) { if (!gm.has(it.g)) gm.set(it.g, uid()); g = gm.get(it.g); }
+    const n = mkShape(it.nodes.map(cloneNode), it.closed, { layer: S.layers.some(l => l.id === it.layer) ? it.layer : S.layerActive, g }); if (!n) continue; transformShape(n, q => [q[0] + d, q[1] - d]); if (it.rot) n.rot = it.rot; S.sel.add(n.id); }
+  if (curTab !== 'dessin' && curTab !== 'parcours') setTab('dessin'); commit(); renderLayers(); renderSel(); draw(); toast(trf('{n} vecteur(s) collé(s), décalé(s) de {d} mm.', { n: S.sel.size, d }));
+}
 function copyShapes(ss, f, gmap) { return ss.map(s => { let g = null; if (s.g) { if (!gmap.has(s.g)) gmap.set(s.g, uid()); g = gmap.get(s.g); } const n = mkShape(s.nodes.map(cloneNode), s.closed, { layer: s.layer, g }); if (n) transformShape(n, f); return n; }).filter(Boolean); }
 function doArray() {
   const ss = selShapes(); if (!ss.length) return toast('Sélectionnez les vecteurs à copier.'); const b = bbox(ss), made = [], U = S.ui;
@@ -5791,9 +5866,11 @@ function act(a, btn) {
     case 'undo': undo(); return;
     case 'redo': redo(); return;
     case 'fit': fit(); return;
+    case 'clipCopy': case 'clipCut': clipCopy(a === 'clipCut'); return;
+    case 'clipPaste': clipPaste(); return;
     case 'del': if (!ss.length) return; { const ids = new Set(ss.map(s => s.id)); S.shapes = S.shapes.filter(s => !ids.has(s.id)); S.sel.clear(); S.ne = null; commit(); renderSel(); draw(); } return;
     case 'dup': { if (!ss.length) return; S.sel.clear(); copyShapes(ss, q => [q[0], q[1]], new Map()).forEach(n => S.sel.add(n.id)); commit(); renderSel(); draw(); toast(tr('Copie créée sur place et sélectionnée : faites-la glisser ou utilisez les flèches pour la déplacer.')); return; } // sur place, comme dans la plupart des logiciels de dessin
-    case 'center': { if (!ss.length) return; const b = bbox(ss), dx = S.stock.w / 2 - (b.x0 + b.w / 2), dy = S.stock.h / 2 - (b.y0 + b.h / 2); ss.forEach(s => transformShape(s, q => [q[0] + dx, q[1] + dy])); commit(); renderSel(); draw(); return; }
+    case 'center': { if (!ss.length && relSelIds().length) { imgAct('relCenter'); return; } if (!ss.length) return; const b = bbox(ss), dx = S.stock.w / 2 - (b.x0 + b.w / 2), dy = S.stock.h / 2 - (b.y0 + b.h / 2); ss.forEach(s => transformShape(s, q => [q[0] + dx, q[1] + dy])); commit(); renderSel(); draw(); return; }
     case 'rotate': case 'rot90': { if (!ss.length) return toast(tr('Sélectionnez un vecteur.')); rotateSel(+(btn && btn.dataset.q) || 90); commit(); renderSel(); draw(); return; }
     case 'rotApply': rotApply(); return;
     case 'fitApply': fitApply(); return;
@@ -7070,7 +7147,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.314', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.317', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -8602,8 +8679,11 @@ function relHandleAt(X, Y) {
   return best.cx && best.cy ? { kind: 'iscale', im: it, sgn: [best.cx, best.cy], anchor: opp, rel: true } : { kind: 'iedge', im: it, sgn: [best.cx, best.cy], anchor: opp, rel: true };
 }
 var relLastSel = null, relClipPick = null;
-function selectRel(id) { if (S.relSel !== id) RXF = false; S.relSel = id; if (id) relLastSel = id; if (id) { S.sel.clear(); S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } renderSel(); } relPanel(); dRefresh(); draw(); }
+let relMulti = new Set(); // reliefs choisis en plus (Maj + clic), pour aligner et répartir
+function relSelIds() { const ids = [...relMulti]; if (S.relSel && !ids.includes(S.relSel)) ids.push(S.relSel); return ids.filter(id => S.relief.items.some(i => i.id === id)); }
+function selectRel(id, keep) { if (!keep) relMulti.clear(); if (S.relSel !== id) RXF = false; S.relSel = id; if (id) relLastSel = id; if (id) { S.sel.clear(); S.selDim = null; if (S.imgSel) { S.imgSel = null; renderImgPanel(); } renderSel(); } relPanel(); dRefresh(); draw(); }
 function drawRelHandles(C) {
+  if (relMulti.size && S.relief.show !== false) { ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1; ctx.setLineDash([4, 3]); for (const it of relItems()) { if (it.id === S.relSel || !it.visible) continue; const cs = imgFrame(it).corners.map(q => [sx(q[0]), sy(q[1])]); ctx.beginPath(); cs.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.stroke(); } ctx.restore(); }
   const it = typeof relCur === 'function' && relCur(); if (!it || !it.visible || S.relief.show === false || S.ui.tool !== 'select' || relLinked(it)) return;
   const f = imgFrame(it), cs = f.corners.map(q => [sx(q[0]), sy(q[1])]);
   ctx.save(); ctx.strokeStyle = C.acc; ctx.lineWidth = 1; ctx.setLineDash([4, 3]); ctx.beginPath(); cs.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.stroke(); ctx.setLineDash([]);
@@ -9492,7 +9572,7 @@ function imgAct(a) {
   if (a === 'relClipNo') { relClipPick = null; S.sel.clear(); renderSel(); relPanel(true); draw(); return true; }
   if (a === 'relUnclip') { relSet(i => { delete i.clip; }); return true; }
   if (a === 'relOutline') { const it = relCur(); if (!it) { toast(tr('Sélectionnez d’abord un relief.')); return true; } relOutline(it); return true; }
-  if (a === 'relCenter') { relSet(i => { i.x = S.stock.w / 2; i.y = S.stock.h / 2; }); return true; }
+  if (a === 'relCenter') { const its = relItems(); if (its.length > 1) { const b = boxOf(its.map(relBox)), dx = S.stock.w / 2 - (b.x0 + b.x1) / 2, dy = S.stock.h / 2 - (b.y0 + b.y1) / 2; its.forEach(it => relMoveBy(it, dx, dy)); relOrgDone(); return true; } relSet(i => { i.x = S.stock.w / 2; i.y = S.stock.h / 2; }); return true; }
   if (a === 'relRot0') { relSet(i => { const t = (+i.rx || 0) || (+i.ry || 0); i.rot = 0; i.rx = 0; i.ry = 0; if (t && i.kind === 'stl') rvReraster(i, true); }); return true; }
   if (a === 'relDel') { const it = relCur(); if (!it) return true; relBump(); S.relief.items = S.relief.items.filter(x => x !== it); S.relSel = null; relDirty = true; commit(false); relPanel(); draw(); return true; }
   if (a === 'relView') { VIEWS.d3 = true; VIEWS.userHid3 = false; viewsApply(); return true; }
