@@ -1,0 +1,620 @@
+{
+ "meta": {
+  "name": "Profils",
+  "material": "Test"
+ },
+ "stock": {
+  "offX": 0,
+  "offY": 0,
+  "originXY": "bl",
+  "originZ": "top",
+  "mat": "softwood",
+  "w": 300,
+  "h": 200,
+  "t": 12
+ },
+ "shapes": [
+  {
+   "id": "r1",
+   "nodes": [
+    {
+     "x": 20,
+     "y": 20,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 120,
+     "y": 20,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 120,
+     "y": 90,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 20,
+     "y": 90,
+     "i": null,
+     "o": null,
+     "sm": false
+    }
+   ],
+   "closed": true,
+   "layer": "l1",
+   "g": null
+  },
+  {
+   "id": "c1",
+   "closed": true,
+   "layer": "l1",
+   "g": null,
+   "nodes": [
+    {
+     "x": 235,
+     "y": 55,
+     "i": [
+      0,
+      -19.329966244077774
+     ],
+     "o": [
+      0,
+      19.329966244077774
+     ],
+     "sm": true
+    },
+    {
+     "x": 200,
+     "y": 90,
+     "i": [
+      19.329966244077774,
+      0
+     ],
+     "o": [
+      -19.329966244077774,
+      0
+     ],
+     "sm": true
+    },
+    {
+     "x": 165,
+     "y": 55,
+     "i": [
+      0,
+      19.329966244077774
+     ],
+     "o": [
+      0,
+      -19.329966244077774
+     ],
+     "sm": true
+    },
+    {
+     "x": 200,
+     "y": 20,
+     "i": [
+      -19.329966244077774,
+      0
+     ],
+     "o": [
+      19.329966244077774,
+      0
+     ],
+     "sm": true
+    }
+   ]
+  },
+  {
+   "id": "r2",
+   "nodes": [
+    {
+     "x": 20,
+     "y": 120,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 120,
+     "y": 120,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 120,
+     "y": 180,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 20,
+     "y": 180,
+     "i": null,
+     "o": null,
+     "sm": false
+    }
+   ],
+   "closed": true,
+   "layer": "l1",
+   "g": null
+  },
+  {
+   "id": "c2",
+   "closed": true,
+   "layer": "l1",
+   "g": null,
+   "nodes": [
+    {
+     "x": 230,
+     "y": 150,
+     "i": [
+      0,
+      -16.568542494923808
+     ],
+     "o": [
+      0,
+      16.568542494923808
+     ],
+     "sm": true
+    },
+    {
+     "x": 200,
+     "y": 180,
+     "i": [
+      16.568542494923808,
+      0
+     ],
+     "o": [
+      -16.568542494923808,
+      0
+     ],
+     "sm": true
+    },
+    {
+     "x": 170,
+     "y": 150,
+     "i": [
+      0,
+      16.568542494923808
+     ],
+     "o": [
+      0,
+      -16.568542494923808
+     ],
+     "sm": true
+    },
+    {
+     "x": 200,
+     "y": 120,
+     "i": [
+      -16.568542494923808,
+      0
+     ],
+     "o": [
+      16.568542494923808,
+      0
+     ],
+     "sm": true
+    }
+   ]
+  },
+  {
+   "id": "l1",
+   "nodes": [
+    {
+     "x": 250,
+     "y": 20,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 280,
+     "y": 60,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 250,
+     "y": 100,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 280,
+     "y": 140,
+     "i": null,
+     "o": null,
+     "sm": false
+    }
+   ],
+   "closed": false,
+   "layer": "l1",
+   "g": null
+  }
+ ],
+ "tools": [
+  {
+   "id": "t1",
+   "num": 1,
+   "name": "Fraise droite 3,175 mm",
+   "type": "flat",
+   "dia": 3.175,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 1200,
+   "plunge": 300,
+   "pass": 1.5,
+   "over": 40
+  },
+  {
+   "id": "t2",
+   "num": 2,
+   "name": "Fraise droite 6 mm",
+   "type": "flat",
+   "dia": 6,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 2000,
+   "plunge": 500,
+   "pass": 3,
+   "over": 40
+  },
+  {
+   "id": "t3",
+   "num": 3,
+   "name": "Fraise V 90° Ø12",
+   "type": "v",
+   "dia": 12,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 1500,
+   "plunge": 500,
+   "pass": 3,
+   "over": 20
+  },
+  {
+   "id": "t5",
+   "num": 5,
+   "name": "Fraise hémisphérique 3 mm",
+   "type": "ball",
+   "dia": 3,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 1000,
+   "plunge": 300,
+   "pass": 1,
+   "over": 50
+  },
+  {
+   "id": "t6",
+   "num": 6,
+   "name": "Foret 6 mm",
+   "type": "drill",
+   "dia": 6,
+   "flutes": 2,
+   "angle": 118,
+   "rpm": 8000,
+   "feed": 1000,
+   "plunge": 400,
+   "pass": 3,
+   "over": 0
+  }
+ ],
+ "tps": [
+  {
+   "id": "tp6",
+   "name": "Extérieur, ponts",
+   "nameAuto": false,
+   "type": "profile",
+   "toolId": "t2",
+   "shapeIds": [
+    "r1"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "out",
+    "depth": 12,
+    "pass": "",
+    "allow": 0,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "plunge",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "on",
+    "tabs": true,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "rings",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  },
+  {
+   "id": "tp7",
+   "name": "Intérieur, entrée en arc",
+   "nameAuto": false,
+   "type": "profile",
+   "toolId": "t2",
+   "shapeIds": [
+    "c1"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "in",
+    "depth": 6,
+    "pass": "",
+    "allow": 0,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "arc",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "on",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "rings",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  },
+  {
+   "id": "tp8",
+   "name": "Sur la ligne, rampe continue",
+   "nameAuto": false,
+   "type": "profile",
+   "toolId": "t1",
+   "shapeIds": [
+    "r2"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "on",
+    "depth": 3,
+    "pass": "",
+    "allow": 0,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "ramp",
+    "rlEntry": "plunge",
+    "rampLen": 20,
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "on",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "rings",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  },
+  {
+   "id": "tp9",
+   "name": "Extérieur, surépaisseur et finition",
+   "nameAuto": false,
+   "type": "profile",
+   "toolId": "t2",
+   "shapeIds": [
+    "c2"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "out",
+    "depth": 8,
+    "pass": "",
+    "allow": 0.5,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "plunge",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "on",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "rings",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  },
+  {
+   "id": "tp10",
+   "name": "Ligne ouverte, à gauche",
+   "nameAuto": false,
+   "type": "profile",
+   "toolId": "t1",
+   "shapeIds": [
+    "l1"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "on",
+    "depth": 2,
+    "pass": "",
+    "allow": 0,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "plunge",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "left",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "rings",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  }
+ ],
+ "layers": [
+  {
+   "id": "l1",
+   "name": "Calque 1",
+   "visible": true,
+   "locked": false
+  }
+ ],
+ "layerActive": "l1",
+ "guides": {
+  "x": [],
+  "y": []
+ },
+ "dims": [],
+ "images": []
+}
