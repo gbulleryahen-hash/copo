@@ -1355,7 +1355,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.325</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.326</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -2542,6 +2542,18 @@ function clrLeft(Z, rc, ov, keep) { const U = cDiffEO(Z, offLoops(offLoops(Z, -r
 function ringsIn(Z, st, fix) { const out = []; let r = Z; for (let k = 0; k < 4000 && r.length; k++) { if (k) r = offLoops(r, -st); if (r.length) out.push(r.map(fix)); } return out; }
 function cDiffEO(a, b) { const c = new ClipperLib.Clipper(); c.AddPaths(a.map(toCP), ClipperLib.PolyType.ptSubject, true); c.AddPaths(b.map(toCP), ClipperLib.PolyType.ptClip, true); const r = []; c.Execute(ClipperLib.ClipType.ctDifference, r, ClipperLib.PolyFillType.pftEvenOdd, ClipperLib.PolyFillType.pftEvenOdd); return loopsOf(r); }
 function vcMaxD(p, tool) { const g = coneGeom(tool), th = g.th, flute = g.h(g.R0); return { g, th, flute, maxD: +p.depth > 0 ? Math.min(+p.depth, flute) : flute }; }
+// ordre des branches de l'axe médian : plus proche voisin (chaque branche dans le sens le plus court), puis 2-opt (inverser une suite de branches quand cela raccourcit les déplacements)
+function vcOrder(rem, cur) {
+  const A = [], R = rem.slice(); let c0 = cur;
+  while (R.length) { let bi = 0, bd = Infinity, rv = false; R.forEach((c, i) => { const a = hyp(c[0], c0), b = hyp(c[c.length - 1], c0); if (a < bd) { bd = a; bi = i; rv = false; } if (b < bd) { bd = b; bi = i; rv = true; } });
+    let c = R.splice(bi, 1)[0]; if (rv) c = c.slice().reverse(); A.push(c); c0 = c[c.length - 1]; }
+  const n = A.length, E = c => c[c.length - 1], t0 = Date.now(); if (n < 3) return A;
+  for (let pass = 0, imp = true; imp && pass < 60 && Date.now() - t0 < 400; pass++) { imp = false;
+    for (let i = 0; i < n - 1; i++) { const a = i ? E(A[i - 1]) : cur, b = A[i][0];
+      for (let j = i + 1; j < n; j++) { const c = E(A[j]), d = j + 1 < n ? A[j + 1][0] : null, dl = hyp(a, c) - hyp(a, b) + (d ? hyp(b, d) - hyp(c, d) : 0);
+        if (dl < -1e-6) { const seg = A.slice(i, j + 1).reverse().map(q => q.slice().reverse()); A.splice(i, j - i + 1, ...seg); imp = true; break; } } } }
+  return A;
+}
 function buildVcarve(p, tool, shapes, M) {
   const Del = (typeof d3 !== 'undefined' && d3.Delaunay) ? d3.Delaunay : (typeof globalThis !== 'undefined' && globalThis.TestDelaunay);
   if (tool.type !== 'v') throw new Error('Le V-carving demande une fraise en V.');
@@ -2576,6 +2588,17 @@ function buildVcarve(p, tool, shapes, M) {
     const W = g.r(maxD - S0); if (offAt(W).length) { flat = true;
       if (!ct && !(g.rho > 0) && Math.max(0.1, 0.2 * th) / (2 * th) > 0.12) throw new Error(tr('Une fraise en V pointue ne peut pas vider un fond plat : ajoutez une fraise de dégagement ou choisissez une fraise javelot ou à bout rond.'));
       if (!ct && maxR / fstepG > 1500) throw new Error(trf('Fond plat trop large pour le bout de cette fraise ({n} passes) : ajoutez une fraise de dégagement.', { n: Math.round(maxR / fstepG) })); }
+    /* liaison sans remonter : d'une fin de branche à la suivante, la fraise peut aller tout droit à une profondeur où son cône reste dans la gravure (distance au bord le long du trajet) ; sinon remontée au Z de dégagement */
+    const SG = []; for (const L of loops) for (let i = 0; i < L.length; i++) { const a = L[i], b = L[(i + 1) % L.length]; SG.push(a[0], a[1], b[0], b[1]); }
+    const dB = (x, y) => { let m = Infinity; for (let i = 0; i < SG.length; i += 4) { const ax = SG[i], ay = SG[i + 1], dx = SG[i + 2] - ax, dy = SG[i + 3] - ay, l2 = dx * dx + dy * dy; let t = l2 ? ((x - ax) * dx + (y - ay) * dy) / l2 : 0; t = t < 0 ? 0 : t > 1 ? 1 : t; const ex = ax + t * dx - x, ey = ay + t * dy - y, d = ex * ex + ey * ey; if (d < m) m = d; } return Math.sqrt(m); };
+    const rapid = +M.rapid || 3000, cz = +M.clearZ || 2;
+    const inR = (x, y) => { let c = false; for (let i = 0; i < SG.length; i += 4) { const ay = SG[i + 1], by = SG[i + 3]; if ((ay > y) !== (by > y) && x < SG[i] + (y - ay) * (SG[i + 2] - SG[i]) / (by - ay)) c = !c; } return c; };
+    /* { z } : liaison en avance de travail à cette profondeur ; { hop } : petit saut à 0,5 mm au-dessus de la surface (trajet entièrement dans la gravure) ; null : remontée au Z de dégagement */
+    const linkZ = (A, B, zA, zB, lvl) => { const L = hyp(A, B); if (L > 20 * tool.dia) return null; const n = Math.max(2, Math.ceil(L / Math.min(0.25, Math.max(0.05, h)))); let need = -Infinity, ins = true;
+      for (let k = 1; k < n; k++) { const t = k / n, x = A[0] + (B[0] - A[0]) * t, y = A[1] + (B[1] - A[1]) * t; if (!inR(x, y)) { ins = false; break; } need = Math.max(need, -Math.min(maxD, lvl, S0 + g.h(Math.max(0, dB(x, y) - g.rho - 0.02)))); }
+      if (!ins) return null; const zl = Math.max(zA, zB, need), tH = (0.5 - zA) / rapid + L / rapid + (0.5 - zB) / o.plunge, tR = (cz - zA) / rapid + L / rapid + (cz - 0.5) / rapid + (0.5 - zB) / o.plunge;
+      if (zl < -0.01) { const tL = (zl - zA) / o.feed + L / o.feed + (zl - zB) / o.plunge; if (tL <= tH) return { z: zl }; }
+      return tH < tR ? { hop: true } : null; };
     let prev = 0;
     for (const lvl of lv) {
       // fond plat à ce palier : zones plus larges que ce que la fraise couvre à cette profondeur (avec fraise de dégagement : seulement le bord qu'elle n'atteint pas)
@@ -2587,12 +2610,13 @@ function buildVcarve(p, tool, shapes, M) {
       }
       // axe médian : la fraise remonte jusqu'à la pointe des coins
       let rem = []; for (const c of chains) rem.push(...vcSplit(c, prev, lvl));
-      while (rem.length) {
-        const cur = mb.x === null ? [0, 0] : [mb.x, mb.y]; let bi = 0, bd = Infinity, rev = false;
-        rem.forEach((c, i) => { const a = hyp(c[0], cur), b = hyp(c[c.length - 1], cur); if (a < bd) { bd = a; bi = i; rev = false; } if (b < bd) { bd = b; bi = i; rev = true; } });
-        let c = rem.splice(bi, 1)[0]; if (rev) c = c.slice().reverse();
-        const s0 = c[0];
+      for (const c of vcOrder(rem, mb.x === null ? [0, 0] : [mb.x, mb.y])) {
+        const bd = mb.x === null ? Infinity : hyp(c[0], [mb.x, mb.y]), s0 = c[0];
+        let zl = null;
         if (mb.x !== null && mb.z <= 1e-9 && bd < 3 * h) { mb.g1(s0[0], s0[1], Math.max(mb.z, s0[2]), o.feed); mb.g1(s0[0], s0[1], s0[2], o.plunge); }
+        else if (mb.x !== null && mb.z <= 1e-9 && (zl = linkZ([mb.x, mb.y], s0, mb.z, s0[2], lvl)) !== null) {
+          if (zl.hop) { mb.g0(mb.x, mb.y, 0.5); mb.g0(s0[0], s0[1], 0.5); mb.g1(s0[0], s0[1], s0[2], o.plunge); }
+          else { if (zl.z > mb.z + 1e-9) mb.g1(mb.x, mb.y, zl.z, o.feed); mb.g1(s0[0], s0[1], zl.z, o.feed); if (s0[2] < zl.z - 1e-9) mb.g1(s0[0], s0[1], s0[2], o.plunge); } }
         else { mb.approach(s0[0], s0[1], 0, o.plunge); mb.g1(s0[0], s0[1], s0[2], o.plunge); }
         for (let i = 1; i < c.length; i++) mb.g1(c[i][0], c[i][1], c[i][2], o.feed);
         for (const q of c) deepest = Math.min(deepest, q[2]);
@@ -7159,7 +7183,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.325', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.326', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
