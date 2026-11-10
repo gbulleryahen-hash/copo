@@ -1,0 +1,12 @@
+{
+  "name": "copo-tests",
+  "private": true,
+  "description": "Tests de non-régression du G-code de COPO",
+  "scripts": {
+    "test": "node verifier-gcode.js",
+    "maj": "node verifier-gcode.js --maj"
+  },
+  "devDependencies": {
+    "puppeteer-core": "23.11.1"
+  }
+}
