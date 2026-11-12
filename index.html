@@ -473,7 +473,7 @@ label.inl input{width:70px}
 .app{gap:0;padding-block:0}
 .top{min-height:38px;gap:8px;border-bottom:1px solid var(--line);flex-wrap:nowrap}
 .brand svg{width:22px;height:22px}
-.brand b{font:700 16px/1 var(--f-ui)}
+.brand b{font:700 16px/1 var(--f-ui)}.brand .curfile{font:500 12.5px/1.2 var(--f-ui);text-transform:none;letter-spacing:0;color:var(--muted);max-width:min(28vw,260px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:3px 8px;border:1px solid var(--line);border-radius:5px}.brand .curfile.dirty::after{content:" •";color:var(--accent)}
 .menubar{display:flex;gap:1px;flex-wrap:wrap}
 .menu{position:relative}
 .mtop{background:transparent;border:0;padding:6px 9px;border-radius:4px;color:var(--ink);cursor:pointer;font-size:13.5px}
@@ -663,6 +663,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
     <div class="brand">
       <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg>
       <b>COPO</b>
+      <span class="curfile" id="curFile" title="Fichier en cours"></span>
     </div>
     <nav class="menubar" id="menubar" aria-label="Menus">
       <div class="menu"><button class="mtop" aria-expanded="false">Fichier</button><div class="mdrop" hidden>
@@ -1354,7 +1355,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.333</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.334</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1821,6 +1822,7 @@ Object.assign(I18N_EN, {"Coller": "Paste", "Relief copié : Ctrl+V en colle une 
 Object.assign(I18N_EN, {"Le texte ne tient pas sur cette courbe.": "The text does not fit on this curve.", "Texte déplacé sur cette courbe (Maj + clic pour placer un autre texte).": "Text moved onto this curve (Shift + click to place another text).", "Texte déplacé ici (Maj + clic pour placer un autre texte).": "Text moved here (Shift + click to place another text)."});
 Object.assign(I18N_EN, {"Afficher le nom et le temps de chaque parcours dans la simulation": "Show the name and time of each toolpath in the simulation"});
 Object.assign(I18N_EN, {"Angle de rotation (autour du pivot)": "Rotation angle (around the pivot)", "Angle de rotation": "Rotation angle", "Proportions libres": "Free proportions"});
+Object.assign(I18N_EN, {"Sans titre": "Untitled", "Fichier en cours": "Current file", "Exemple": "Example", "Exemple rotatif": "Rotary example"});
 Object.assign(I18N_EN, {"Visite rapide": "Quick tour", "Réafficher les astuces": "Show tips again", "Astuces réactivées : elles s’afficheront à l’ouverture de chaque onglet.": "Tips turned back on: they will show when you open each tab."});
 Object.assign(I18N_EN, {"Aligner sur": "Align to", "La sélection": "The selection", "Le premier vecteur sélectionné": "The first selected vector", "Le brut": "The stock", "Espacement (mm)": "Spacing (mm)", "Perçage": "Drilling", "Sélectionnez au moins deux vecteurs : le premier sert de référence.": "Select at least two vectors: the first one is the reference.", "Sélectionnez au moins deux vecteurs : le premier sert de point de départ.": "Select at least two vectors: the first one is the starting point.", "Les vecteurs sont plus grands que le brut.": "The vectors are larger than the stock.", "Profil sur la ligne 1": "On-line profile 1", "Profil sur la ligne 2": "On-line profile 2", "Poche 1": "Pocket 1", "F2 · Poche 2": "F2 · Pocket 2", "V-carving 2": "V-carving 2", "Foret 4 mm": "4 mm drill"});
 Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the nut / zero fret (mm)"});
@@ -1993,7 +1995,7 @@ function setLang(l) {
   document.documentElement.lang = LANG; langMarks(); gcDirty = true; renderGcode(); setTool(S.ui.tool); draw();
   toast(LANG === 'fr' ? 'Interface en français.' : 'Interface in English.');
 }
-function langMarks() { document.querySelectorAll('[data-lfr]').forEach(e => e.textContent = LANG === 'en' ? e.dataset.len : e.dataset.lfr); document.querySelectorAll('[data-lang]').forEach(b => b.classList.toggle('on', b.dataset.lang === LANG)); const g = document.getElementById('guideLink'); if (g) g.href = 'guide.html#' + LANG; }
+function langMarks() { if (typeof showCurFile === 'function') setTimeout(showCurFile, 0); document.querySelectorAll('[data-lfr]').forEach(e => e.textContent = LANG === 'en' ? e.dataset.len : e.dataset.lfr); document.querySelectorAll('[data-lang]').forEach(b => b.classList.toggle('on', b.dataset.lang === LANG)); const g = document.getElementById('guideLink'); if (g) g.href = 'guide.html#' + LANG; }
 // ---------- unités d'affichage (le modèle reste toujours en mm et en mm/min) ----------
 const UNIT = (() => { const d = { len: 'mm', feed: 'mm/min', frac: false }; try { return { ...d, ...JSON.parse(localStorage.getItem('copo.units') || '{}') }; } catch { return d; } })();
 const uK = u => u === 'feed' ? ({ 'mm/s': 60, 'in/min': 25.4 }[UNIT.feed] || 1) : u === 'len' ? (UNIT.len === 'in' ? 25.4 : 1) : 1;
@@ -5861,7 +5863,7 @@ function act(a, btn) {
   switch (a) {
     case 'new': {
       const b = $('#btnNew'); if (Date.now() - newArm > 3000) { newArm = Date.now(); b.textContent = 'Tout effacer ?'; b.classList.add('armed'); setTimeout(() => { b.textContent = 'Nouveau'; b.classList.remove('armed'); }, 3000); return; }
-      newArm = 0; b.textContent = 'Nouveau'; b.classList.remove('armed'); closeMenus(); projKeep(null); S.shapes = []; S.tps = []; S.dims = []; S.images = []; S.imgSel = null; S.relief = { items: [], show: true, res: 0.3 }; S.relSel = null; relGrid = {}; relMesh = {}; relSm.clear(); relDirty = true; relCache = null; if (typeof RXF !== 'undefined') RXF = false; S.guides = { x: [], y: [] }; S.layers = DEFAULT_LAYERS(); S.layerActive = 'l1'; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; S.form = newForm(); S.meta = {}; commit(); renderSel(); renderForm(); renderLayers(); renderGuides(); fit(); if (typeof RV !== 'undefined') { RV.fitted = false; RV.touched = false; } setTab('projet'); toast('Projet vide.'); return;
+      newArm = 0; b.textContent = 'Nouveau'; b.classList.remove('armed'); closeMenus(); projKeep(null); setCurFile(''); S.shapes = []; S.tps = []; S.dims = []; S.images = []; S.imgSel = null; S.relief = { items: [], show: true, res: 0.3 }; S.relSel = null; relGrid = {}; relMesh = {}; relSm.clear(); relDirty = true; relCache = null; if (typeof RXF !== 'undefined') RXF = false; S.guides = { x: [], y: [] }; S.layers = DEFAULT_LAYERS(); S.layerActive = 'l1'; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; S.form = newForm(); S.meta = {}; commit(); renderSel(); renderForm(); renderLayers(); renderGuides(); fit(); if (typeof RV !== 'undefined') { RV.fitted = false; RV.touched = false; } setTab('projet'); toast('Projet vide.'); return;
     }
     case 'v3d': tpEnsure(v3Open, tr('la simulation')); return;
     case 'fpOpen': fpOpen(); return;
@@ -5910,8 +5912,8 @@ function act(a, btn) {
     case 'libReset': { if (Date.now() - libResetArm > 3000) { libResetArm = Date.now(); toast(tr('Cliquez encore une fois pour revenir à la bibliothèque par défaut (vos modifications seront perdues).')); return; } libResetArm = 0; LIB = DEFAULT_LIB(); libSel = null; libSave(); libLinkProject(); libSyncProject(); libRender(); toast(tr('Bibliothèque par défaut rétablie.')); return; }
     case 'libMatAdd': { const nm = (window.prompt && window.prompt(tr('Nom du nouveau matériau'), '')) || ''; if (!nm.trim()) return; const id = 'm_' + uid(); LIB.materials.push({ id, name: nm.trim() }); libSave(); libSetMat(id); return; }
     case 'tabGcode': setTab('gcode'); return;
-    case 'sample': loadSample(); toast('Projet d’exemple chargé.'); return;
-    case 'sampleRot': loadSample(true); setTab('projet'); toast('Exemple rotatif chargé : cylindre Ø 90 mm, texte en V-carving et filet enroulés autour.'); return;
+    case 'sample': loadSample(); projKeep(null); setCurFile(tr('Exemple')); toast('Projet d’exemple chargé.'); return;
+    case 'sampleRot': loadSample(true); projKeep(null); setCurFile(tr('Exemple rotatif')); setTab('projet'); toast('Exemple rotatif chargé : cylindre Ø 90 mm, texte en V-carving et filet enroulés autour.'); return;
     case 'open': projOpen(); return;
     case 'import': $('#fSvg').click(); return;
     case 'font': $('#fFont').click(); return;
@@ -7208,7 +7210,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.333', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.334', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -7261,7 +7263,7 @@ async function bugSend() {
 }
 // enregistrement du projet : après le premier « Enregistrer », le même fichier est réécrit sans redemander le dossier (Chrome, Edge, Brave, Vivaldi)
 var projHandle = null;
-function projKeep(h) { projHandle = h; try { idbPutImg('proj_handle', h || null).catch(() => { }); } catch { } } // mémorisé : Ctrl+S réécrit le même fichier même après avoir rechargé COPO
+function projKeep(h) { projHandle = h; if (h && h.name) setCurFile(h.name); try { idbPutImg('proj_handle', h || null).catch(() => { }); } catch { } } // mémorisé : Ctrl+S réécrit le même fichier même après avoir rechargé COPO
 (async () => { try { const db = await idb(); const r = await new Promise((res, rej) => { const q = db.transaction('images').objectStore('images').get('proj_handle'); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); }); if (r && r.src && r.src.kind === 'file' && !projHandle) projHandle = r.src; } catch { } })();
 const COPO_TYPES = [{ description: 'Projet COPO', accept: { 'application/x-copo': ['.copo'] } }];
 function projJSON() { const o = JSON.parse(snapState()); const d = {}; for (const im of S.images) if (imgData[im.id]) d[im.id] = imgData[im.id]; if (Object.keys(d).length) o.imgData = d; { const rd = {}; for (const it of S.relief.items) if (relGrid[it.id]) rd[it.id] = relPack(relGrid[it.id]); if (Object.keys(rd).length) o.relData = rd; const rm = {}; for (const it of S.relief.items) if (it.kind === 'stl' && relMesh[it.id]) rm[it.id] = f32ToB64(relMesh[it.id]); if (Object.keys(rm).length) o.relMesh = rm; } return JSON.stringify(o); } // le maillage STL voyage avec le projet
@@ -7273,10 +7275,10 @@ async function projSave(as) {
       const w = await projHandle.createWritable(); await w.write(txt); await w.close(); projDirty(false); toast(trf('Projet enregistré dans « {f} ».', { f: projHandle.name })); return; }
     catch (e) { if (e && e.name === 'AbortError') return; projKeep(null); setTimeout(() => toast(trf('Écriture directe dans le fichier impossible ({e}) : le projet est téléchargé.', { e: (e && (e.name + (e.message ? ' — ' + e.message : ''))) || '?' })), 1500); }
   }
-  saveFile(projFileName(), txt, 'Projet COPO'); projDirty(false); if (!window.showSaveFilePicker && !window.claude && !projSave.told) { projSave.told = true; setTimeout(() => toast(tr('Ce navigateur ne permet pas de réécrire le fichier : le projet est téléchargé à chaque enregistrement. Avec Chrome, Edge ou Vivaldi (ou Brave avec l’option « File System Access API » activée), Ctrl+S réécrit directement le même fichier.')), 1800); }
+  saveFile(projFileName(), txt, 'Projet COPO'); setCurFile(projFileName()); projDirty(false); if (!window.showSaveFilePicker && !window.claude && !projSave.told) { projSave.told = true; setTimeout(() => toast(tr('Ce navigateur ne permet pas de réécrire le fichier : le projet est téléchargé à chaque enregistrement. Avec Chrome, Edge ou Vivaldi (ou Brave avec l’option « File System Access API » activée), Ctrl+S réécrit directement le même fichier.')), 1800); }
 }
 async function projOpen() {
-  if (window.showOpenFilePicker && !window.claude) { try { const [h] = await window.showOpenFilePicker({ types: COPO_TYPES.concat([{ description: 'JSON', accept: { 'application/json': ['.json'] } }]), multiple: false }); openProjectText(await (await h.getFile()).text()); projKeep(/\.copo$/i.test(h.name) ? h : null); } catch (e) { if (!(e && e.name === 'AbortError')) toast(e.message || tr('Fichier illisible.')); } return; }
+  if (window.showOpenFilePicker && !window.claude) { try { const [h] = await window.showOpenFilePicker({ types: COPO_TYPES.concat([{ description: 'JSON', accept: { 'application/json': ['.json'] } }]), multiple: false }); openProjectText(await (await h.getFile()).text()); projKeep(/\.copo$/i.test(h.name) ? h : null); setCurFile(h.name); } catch (e) { if (!(e && e.name === 'AbortError')) toast(e.message || tr('Fichier illisible.')); } return; }
   projKeep(null); $('#fOpen').click();
 }
 function projFileName() { const n = String((S.meta && S.meta.name) || '').replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim(); return (n || 'projet-copo') + '.copo'; }
@@ -7294,7 +7296,7 @@ function readFile(input, cb, binary) { input.onchange = () => { const f = input.
 function f32ToB64(a) { const u = new Uint8Array(a.buffer, a.byteOffset, a.byteLength); let s = ''; for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(s); }
 function b64ToF32(b) { const s = atob(b), u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return new Float32Array(u.buffer); }
 function openProjectText(txt) { if (typeof RV !== 'undefined') { RV.fitted = false; RV.touched = false; } const o = JSON.parse(txt); if (!o.shapes || !o.stock) throw new Error('Ce fichier n’est pas un projet COPO.'); if (o.imgData) { for (const [k, v] of Object.entries(o.imgData)) { imgData[k] = v; IMG.delete(k); idbPutImg(k, v).catch(() => { }); } delete o.imgData; txt = JSON.stringify(o); } if (o.relData) { for (const [k, v] of Object.entries(o.relData)) { relGrid[k] = relUnpack(v); relSm.delete(k); idbPutImg('rel_' + k, v).catch(() => { }); } delete o.relData; txt = JSON.stringify(o); } if (o.relMesh) { for (const [k, v] of Object.entries(o.relMesh)) { try { const T = b64ToF32(v); relMesh[k] = T; idbPutImg('relm_' + k, T).catch(() => { }); } catch { } } delete o.relMesh; txt = JSON.stringify(o); } S.imgSel = null; hist = []; hi = -1; S.sel.clear(); S.editTp = null; S.activeTp = null; S.ne = null; restore(txt); if (relRegenOld()) { S.tps.filter(t => t.type === 'relief' || (t.p && t.p.proj)).forEach(computeTP); renderTpList(); } commit(false); S.form = newForm(); renderForm(); fit(); toast('Projet ouvert.'); }
-readFile($('#fOpen'), txt => { projKeep(null); openProjectText(txt); });
+readFile($('#fOpen'), (txt, f) => { projKeep(null); openProjectText(txt); setCurFile(f && f.name); });
 // application installée : un double-clic sur un fichier .copo l'ouvre ici
 if ('launchQueue' in window) launchQueue.setConsumer(async lp => { const h = lp.files && lp.files[0]; if (!h) return; try { openProjectText(await (await h.getFile()).text()); projKeep(h); } catch (e) { toast(e.message || 'Fichier illisible.'); } });
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => { });
@@ -9619,7 +9621,7 @@ function bindImgPanel() {
   cw.addEventListener('drop', e => {
     const f = [...(e.dataTransfer.files || [])]; if (!f.length) return; e.preventDefault();
     const r = cv.getBoundingClientRect(), at = [wx(e.clientX - r.left), wy(e.clientY - r.top)];
-    const pj = f.find(x => /\.(copo|json)$/i.test(x.name)); if (pj) { pj.text().then(t => { try { openProjectText(t); } catch (er) { toast(er.message || 'Fichier illisible.'); } }); return; }
+    const pj = f.find(x => /\.(copo|json)$/i.test(x.name)); if (pj) { pj.text().then(t => { try { openProjectText(t); setCurFile(pj.name); } catch (er) { toast(er.message || 'Fichier illisible.'); } }); return; }
     const im = f.find(x => /^image\//.test(x.type) && !/svg/.test(x.type)), sv = f.find(x => /svg/.test(x.type) || /\.svg$/i.test(x.name)), pd = f.find(x => /\.(pdf|ai)$/i.test(x.name) || x.type === 'application/pdf');
     if (pd) { importPdfFile(pd); return; }
     if (im) insertImageFile(im, at); else if (sv) sv.text().then(t => { try { const n = importSVG(t); commit(); renderSel(); fit(); toast(n + ' vecteur(s) importé(s).'); } catch (er) { toast(er.message); } });
@@ -9966,7 +9968,12 @@ function gcPostName() { const el = $('#gcPostName'); if (!el) return; const o = 
 
 
 // bouton Enregistrer : point bleu tant que des modifications ne sont pas enregistrées
-let projDirtyV = false; function projDirty(v) { if (projDirtyV === v) return; projDirtyV = v; const b = document.getElementById('tbSave'); if (b) { b.classList.toggle('dirty', v); b.dataset.tip = v ? tr('Enregistrer le projet (Ctrl+S) : modifications non enregistrées') : tr('Enregistrer le projet (Ctrl+S)'); } }
+/* nom du fichier en cours, affiché à côté de COPO et dans l'onglet du navigateur ; un point si des modifications ne sont pas enregistrées */
+let curFile = ''; try { curFile = LS.get('copo.curFile') || ''; } catch { }
+function setCurFile(n) { curFile = String(n || ''); try { LS.set('copo.curFile', curFile); } catch { } showCurFile(); }
+function showCurFile() { const e = document.getElementById('curFile'), n = (curFile || tr('Sans titre')).replace(/\.copo$/i, ''); if (e) { e.textContent = n; e.title = tr('Fichier en cours') + ' : ' + n; e.classList.toggle('dirty', !!projDirtyV); } document.title = (projDirtyV ? '• ' : '') + n + ' — COPO'; }
+setTimeout(showCurFile, 0);
+let projDirtyV = false; function projDirty(v) { if (projDirtyV === v) return; projDirtyV = v; showCurFile(); const b = document.getElementById('tbSave'); if (b) { b.classList.toggle('dirty', v); b.dataset.tip = v ? tr('Enregistrer le projet (Ctrl+S) : modifications non enregistrées') : tr('Enregistrer le projet (Ctrl+S)'); } }
 
 // ---------- bibliothèque de machines : plusieurs profils (nom, post-processeur, vitesses, Z, course, broche, notes) ----------
 var MACH_DEF = { tcZ: -10, post: 'grbl', safeZ: 10, clearZ: 2, rapid: 3000, maxFeed: 2000, comments: true, arcs: true };
