@@ -1,0 +1,418 @@
+{
+ "meta": {
+  "name": "Double face",
+  "material": "Test"
+ },
+ "stock": {
+  "offX": 0,
+  "offY": 0,
+  "originXY": "bl",
+  "originZ": "top",
+  "mat": "softwood",
+  "w": 200,
+  "h": 120,
+  "t": 18,
+  "flip": "x"
+ },
+ "shapes": [
+  {
+   "id": "a1",
+   "nodes": [
+    {
+     "x": 20,
+     "y": 20,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 80,
+     "y": 20,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 80,
+     "y": 60,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 20,
+     "y": 60,
+     "i": null,
+     "o": null,
+     "sm": false
+    }
+   ],
+   "closed": true,
+   "layer": "l1",
+   "g": null
+  },
+  {
+   "id": "a2",
+   "closed": true,
+   "layer": "f2",
+   "g": null,
+   "nodes": [
+    {
+     "x": 160,
+     "y": 60,
+     "i": [
+      0,
+      -11.045694996615872
+     ],
+     "o": [
+      0,
+      11.045694996615872
+     ],
+     "sm": true
+    },
+    {
+     "x": 140,
+     "y": 80,
+     "i": [
+      11.045694996615872,
+      0
+     ],
+     "o": [
+      -11.045694996615872,
+      0
+     ],
+     "sm": true
+    },
+    {
+     "x": 120,
+     "y": 60,
+     "i": [
+      0,
+      11.045694996615872
+     ],
+     "o": [
+      0,
+      -11.045694996615872
+     ],
+     "sm": true
+    },
+    {
+     "x": 140,
+     "y": 40,
+     "i": [
+      -11.045694996615872,
+      0
+     ],
+     "o": [
+      11.045694996615872,
+      0
+     ],
+     "sm": true
+    }
+   ]
+  },
+  {
+   "id": "a3",
+   "nodes": [
+    {
+     "x": 100,
+     "y": 20,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 180,
+     "y": 20,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 180,
+     "y": 100,
+     "i": null,
+     "o": null,
+     "sm": false
+    },
+    {
+     "x": 100,
+     "y": 100,
+     "i": null,
+     "o": null,
+     "sm": false
+    }
+   ],
+   "closed": true,
+   "layer": "l1",
+   "g": null
+  }
+ ],
+ "tools": [
+  {
+   "id": "t1",
+   "num": 1,
+   "name": "Fraise droite 3,175 mm",
+   "type": "flat",
+   "dia": 3.175,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 1200,
+   "plunge": 300,
+   "pass": 1.5,
+   "over": 40
+  },
+  {
+   "id": "t2",
+   "num": 2,
+   "name": "Fraise droite 6 mm",
+   "type": "flat",
+   "dia": 6,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 2000,
+   "plunge": 500,
+   "pass": 3,
+   "over": 40
+  },
+  {
+   "id": "t3",
+   "num": 3,
+   "name": "Fraise V 90° Ø12",
+   "type": "v",
+   "dia": 12,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 1500,
+   "plunge": 500,
+   "pass": 3,
+   "over": 20
+  },
+  {
+   "id": "t5",
+   "num": 5,
+   "name": "Fraise hémisphérique 3 mm",
+   "type": "ball",
+   "dia": 3,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 1000,
+   "plunge": 300,
+   "pass": 1,
+   "over": 50
+  },
+  {
+   "id": "t6",
+   "num": 6,
+   "name": "Foret 6 mm",
+   "type": "drill",
+   "dia": 6,
+   "flutes": 2,
+   "angle": 118,
+   "rpm": 8000,
+   "feed": 1000,
+   "plunge": 400,
+   "pass": 3,
+   "over": 0
+  }
+ ],
+ "tps": [
+  {
+   "id": "tp14",
+   "name": "Face 1, poche",
+   "nameAuto": false,
+   "type": "pocket",
+   "toolId": "t2",
+   "shapeIds": [
+    "a1"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "out",
+    "depth": 5,
+    "pass": "",
+    "allow": 0,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "plunge",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "on",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "rings",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  },
+  {
+   "id": "tp15",
+   "name": "Face 2, poche",
+   "nameAuto": false,
+   "type": "pocket",
+   "toolId": "t2",
+   "shapeIds": [
+    "a2"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "out",
+    "depth": 4,
+    "pass": "",
+    "allow": 0,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "plunge",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "on",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "rings",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 2
+  },
+  {
+   "id": "tp16",
+   "name": "Face 1, V-carving",
+   "nameAuto": false,
+   "type": "vcarve",
+   "toolId": "t3",
+   "shapeIds": [
+    "a3"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "out",
+    "depth": 3,
+    "pass": "",
+    "allow": 0,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "plunge",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "on",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "rings",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  }
+ ],
+ "layers": [
+  {
+   "id": "l1",
+   "name": "Calque 1",
+   "visible": true,
+   "locked": false
+  },
+  {
+   "id": "f2",
+   "name": "Face 2",
+   "visible": true,
+   "locked": false,
+   "face": 2
+  }
+ ],
+ "layerActive": "l1",
+ "guides": {
+  "x": [],
+  "y": []
+ },
+ "dims": [],
+ "images": []
+}
