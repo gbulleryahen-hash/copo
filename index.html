@@ -670,6 +670,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         <button data-act="sample">Ouvrir l'exemple</button>
         <button data-act="sampleRot">Ouvrir l'exemple rotatif (4ᵉ axe)</button>
         <button data-act="open">Ouvrir un projet…<kbd>Ctrl+O</kbd></button>
+        <button data-act="pyOpen" data-en="Open a Python script…">Ouvrir un script Python…</button><button data-act="pyRerun" data-en="Re-run the Python script">Relancer le script Python</button>
         <button data-act="save">Enregistrer le projet<kbd>Ctrl+S</kbd></button><button data-act="saveAs">Enregistrer sous…<kbd>Ctrl+Maj+S</kbd></button>
         <hr><button data-act="imgInsert">Insérer une image…</button><button data-act="import">Importer un SVG, DXF, PDF ou AI…</button><button data-act="relStl">Importer un STL (relief)…</button>
         <hr><button data-act="dlibOpen">Bibliothèque de dessins et d’images…</button><button data-act="dlibSaveCurMenu">Ajouter le dessin en cours à la bibliothèque…</button>
@@ -5915,6 +5916,8 @@ function act(a, btn) {
     case 'sample': loadSample(); projKeep(null); setCurFile(tr('Exemple')); toast('Projet d’exemple chargé.'); return;
     case 'sampleRot': loadSample(true); projKeep(null); setCurFile(tr('Exemple rotatif')); setTab('projet'); toast('Exemple rotatif chargé : cylindre Ø 90 mm, texte en V-carving et filet enroulés autour.'); return;
     case 'open': projOpen(); return;
+    case 'pyOpen': if (typeof pyOpen === 'function') pyOpen(); return;
+    case 'pyRerun': if (typeof pyRerun === 'function') pyRerun(); return;
     case 'import': $('#fSvg').click(); return;
     case 'font': $('#fFont').click(); return;
     case 'fontDir': $('#fFontDir').click(); return;
@@ -10073,6 +10076,7 @@ function machImportText(txt) {
 }
 $('#fMach').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) f.text().then(machImportText); });
 </script>
+<script src="lib/copo-python.js"></script>
 
 </body>
 </html>
