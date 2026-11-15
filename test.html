@@ -174,6 +174,36 @@ table.cnc-set input{width:110px;text-align:right}
 .cnc-bar{display:inline-block;position:relative;width:70px;height:6px;border-radius:3px;background:var(--raised);vertical-align:middle;overflow:hidden}
 .cnc-bar i{position:absolute;top:0;bottom:0;left:50%;width:0;background:var(--accent)}
 .cnc-mh .cnc-btn.sm{white-space:nowrap}
+/* panneau Usiner : connexion et coordonnées */
+.cnc-top{display:flex;gap:7px;align-items:stretch;margin-bottom:9px}
+.cnc-gear{font-size:18px;padding:4px 11px!important}
+.cnc-btn.cnc-conn{text-align:left;font-weight:600}
+.cnc-cdot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#2e9b5c;margin-right:8px;box-shadow:0 0 0 3px rgb(46 155 92/.25)}
+.cnc-cdot.al{background:var(--danger);box-shadow:0 0 0 3px color-mix(in srgb,var(--danger) 25%,transparent)}
+.cnc-gozero{width:100%;margin-bottom:8px}
+.cnc-coord{border:1px solid var(--line);border-radius:8px;padding:6px 8px 8px;background:var(--panel)}
+.cnc-crow{display:grid;grid-template-columns:18px 34px 1fr 78px 34px;gap:6px;align-items:center;margin:3px 0}
+.cnc-chd{font-size:11px;color:var(--muted);font-weight:600}
+.cnc-chd span:nth-child(3),.cnc-chd span:nth-child(4){text-align:right}
+.cnc-axl{font-size:15px}.cnc-axl.x{color:#e5484d}.cnc-axl.y{color:#2e9b5c}.cnc-axl.z{color:#3e7be0}
+.cnc-pane .cnc-wsin{width:100%;min-width:0;text-align:right;font:600 16px var(--f-mono);padding:5px 7px;border-left-width:3px}
+.cnc-pane .cnc-wsin.x{border-left-color:#e5484d}.cnc-pane .cnc-wsin.y{border-left-color:#2e9b5c}.cnc-pane .cnc-wsin.z{border-left-color:#3e7be0}
+.cnc-pane .cnc-wsin:not(.set){color:var(--muted)}
+.cnc-mv{font:12.5px var(--f-mono);color:var(--muted);text-align:right}
+.cnc-crow .cnc-btn.sm{padding:4px 0}
+/* panneau flottant à droite du panneau Usiner */
+.cnc-float{position:absolute;left:10px;top:10px;bottom:10px;width:350px;overflow:auto;pointer-events:auto;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(5px);border:1px solid var(--line);border-radius:11px;box-shadow:0 8px 26px var(--shadow);padding:8px 9px;color:var(--ink);font-size:13px}
+.cnc-float.min{bottom:auto;width:230px}
+.cnc-fh{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 2px 8px}
+.cnc-float.min .cnc-fh{padding-bottom:2px}
+.cnc-card2{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:8px 10px;margin-bottom:8px;font-size:12px}
+.cnc-card2 table.cnc-bb{width:100%}
+
+/* la vue 3D commence à droite du panneau flottant */
+#rv3.cnc-on:not(.cnc-fmin) #rvc,#rv3.cnc-on:not(.cnc-fmin) #rvov{left:370px;width:calc(100% - 370px)}
+#rv3.cnc-on:not(.cnc-fmin) #cncPill{left:calc(50% + 185px)}
+#rv3.cnc-fmin #cncPill{left:50%}
+#rv3.cnc-on:not(.cnc-fmin) .rvtools{left:380px}
 </style>
 </head>
 <body>
@@ -10491,7 +10521,7 @@ function status(l) {
   K.pn = (f.find(x => x.startsWith('Pn:')) || '').slice(3); if (wp) K.mpos = wp.map((v, i) => v + K.wco[i]);
   const prev = K.st; K.st = st; K.lastSt = performance.now();
   if (st !== 'Alarm' && K.alarm && prev === 'Alarm') K.alarm = null;
-  if (K.prog && (st === 'Run' || st === 'Hold')) { const w = wpos(); const p = toInt(w), t = K.trail, la = t[t.length - 1]; if (!la || Math.hypot(p[0] - la[0], p[1] - la[1], p[2] - la[2]) > 0.3) { t.push(p); if (t.length > 40000) t.splice(0, 5000); } }
+  if (K.prog && (st === 'Run' || st === 'Hold' || st === 'Idle')) trackPath();
   if (K.prog && K.prog.all && !K.prog.tc && !K.prog.err && !K.fly.length && !K.out.length && st === 'Idle' && Date.now() - K.prog.t0 > 1500) progDone();
   if (prev !== st) { ui(); if (K.prog && st === 'Idle') progFeed(); if (K.prog && st === 'Run' && K.prog.m0) K.prog.m0 = ''; } else live();
   if (curTab === 'usiner' && typeof rvReq === 'function') rvReq();
@@ -10503,6 +10533,13 @@ const conn = () => !!K.T && K.st !== 'Conn';
 const moving = () => ['Run', 'Jog', 'Home'].includes(K.st) || !!K.busy;
 function stockO() { const st = S.stock, RT = st.rotary || {}; const [ox, oy] = originOf(st); const oz = RT.on ? (RT.z0 === 'axis' ? st.t / 2 : 0) : st.originZ === 'bottom' ? +st.t : 0; return { ox, oy, oz, rot: !!RT.on }; }
 function toInt(w) { const o = stockO(); return [w[0] + o.ox, w[1] + o.oy, w[2] - o.oz]; }
+
+function trackPath() { // retrouve où en est l'outil sur le trajet du programme (pas de raccourcis entre deux relevés)
+  const pts = K.pts, P = K.prog; if (!pts || !pts.length || !P) return; const w = wpos(); if (P.air) w[2] -= 0; let k0 = Math.max(0, K.doneK), best = -1, bd = 1e9;
+  const lim = Math.min(pts.length - 1, k0 + 3000), maxLi = P.i;
+  for (let k = k0; k <= lim; k++) { const b = pts[k]; if (b.li > maxLi) break; const a = k ? pts[k - 1].p : b.p, q = b.p, d = [q[0] - a[0], q[1] - a[1], q[2] - a[2]], L2 = d[0] * d[0] + d[1] * d[1] + d[2] * d[2]; let u = L2 ? ((w[0] - a[0]) * d[0] + (w[1] - a[1]) * d[1] + (w[2] - a[2]) * d[2]) / L2 : 0; u = Math.max(0, Math.min(1, u)); const e = Math.hypot(a[0] + d[0] * u - w[0], a[1] + d[1] * u - w[1], a[2] + d[2] * u - w[2]); if (e < bd - 1e-6) { bd = e; best = k - 1; } if (bd < 0.02 && k > best + 40) break; }
+  if (best >= K.doneK && bd < 2) K.doneK = best;
+}
 
 /* ---------------- connexion ---------------- */
 let pollT = 0;
@@ -10593,15 +10630,17 @@ function progInfo() {
   const sig = S.tps.map(t => [t.id, t.visible ? 1 : 0, t.err ? 1 : 0, typeof objId === 'function' ? objId(t.moves) : (t.moves || []).length, t.toolId].join(':')).join(',') + '|' + JSON.stringify(S.stock) + '|' + JSON.stringify(S.machine) + '|' + (S.tools || []).map(t => t.id + ':' + t.num + ':' + t.dia + ':' + t.rpm).join(',') + '|' + U.face;
   if (PI_ && sig === PI_sig) return PI_; PI_sig = sig;
   let g = '', tps = []; try { ({ g, tps } = progGcode()); } catch (e) { g = ''; }
-  const L = [], tools = [], mn = [1e9, 1e9, 1e9], mx = [-1e9, -1e9, -1e9], cum = []; let p = [0, 0, 0], abs = true, mode = 0, F = 1000, t = 0; const RAP = Math.min(+K.set[110] || 3000, +K.set[111] || 3000);
+  const L = [], tools = [], mn = [1e9, 1e9, 1e9], mx = [-1e9, -1e9, -1e9], cum = [], pts = []; let p = [0, 0, 0], abs = true, mode = 0, F = 1000, t = 0; const RAP = Math.min(+K.set[110] || 3000, +K.set[111] || 3000);
   for (const raw of g.split('\n')) { const tx = raw.replace(/\(.*?\)|;.*$/g, '').trim(); const tc = /^T(\d+)\s*M0?6$/i.exec(tx); const it = { raw, t: tc ? '' : tx, tc: tc ? +tc[1] : null, cm: (/\((.*)\)/.exec(raw) || [])[1] || '' };
     if (tc) tools.push(+tc[1]);
     if (it.t) { const u = it.t.toUpperCase(), W = {}; let m; const re = /([A-Z])(-?\d*\.?\d+)/g; const G = []; while ((m = re.exec(u))) { if (m[1] === 'G') G.push(+m[2]); else W[m[1]] = +m[2]; }
       for (const gg of G) { if ([0, 1, 2, 3].includes(gg)) mode = gg; if (gg === 90) abs = true; if (gg === 91) abs = false; if (gg === 4) t += (W.P || 0); }
       if (W.F) F = W.F; const q2 = p.slice(); let mv = false; ['X', 'Y', 'Z'].forEach((k, i) => { if (W[k] !== undefined) { q2[i] = abs ? W[k] : p[i] + W[k]; mv = true; } });
-      if (mv && !G.includes(4)) { let len = Math.hypot(q2[0] - p[0], q2[1] - p[1], q2[2] - p[2]); if (mode === 2 || mode === 3) { const r = Math.hypot(W.I || 0, W.J || 0); len = Math.max(len, r * 0.5 * Math.PI); } t += len / (mode === 0 ? RAP : F) * 60; p = q2; for (let i = 0; i < 3; i++) { mn[i] = Math.min(mn[i], p[i]); mx[i] = Math.max(mx[i], p[i]); } } }
+      if (mv && !G.includes(4)) { let len = Math.hypot(q2[0] - p[0], q2[1] - p[1], q2[2] - p[2]); if (mode === 2 || mode === 3) { const r = Math.hypot(W.I || 0, W.J || 0); len = Math.max(len, r * 0.5 * Math.PI); } t += len / (mode === 0 ? RAP : F) * 60; const li = L.length;
+        if (mode === 2 || mode === 3) { const cx = p[0] + (W.I || 0), cy = p[1] + (W.J || 0), r = Math.hypot(p[0] - cx, p[1] - cy); let a0 = Math.atan2(p[1] - cy, p[0] - cx), a1 = Math.atan2(q2[1] - cy, q2[0] - cx); if (mode === 2) { if (a1 >= a0 - 1e-9) a1 -= 2 * Math.PI; } else if (a1 <= a0 + 1e-9) a1 += 2 * Math.PI; const n = Math.max(2, Math.min(90, Math.ceil(Math.abs(a1 - a0) * r / 1))); for (let k = 1; k < n; k++) { const a = a0 + (a1 - a0) * k / n; pts.push({ li, p: [cx + r * Math.cos(a), cy + r * Math.sin(a), p[2] + (q2[2] - p[2]) * k / n] }); } }
+        pts.push({ li, p: q2.slice(), r: mode === 0 }); p = q2; for (let i = 0; i < 3; i++) { mn[i] = Math.min(mn[i], p[i]); mx[i] = Math.max(mx[i], p[i]); } } }
     cum.push(t); L.push(it); }
-  PI_ = { L, tools, mn, mx, t, cum, tps, g, sig }; return PI_;
+  PI_ = { L, tools, mn, mx, t, cum, tps, g, sig, pts }; return PI_;
 }
 function checks() {
   const P = progInfo(), c = [], o = stockO(), st = S.stock;
@@ -10624,7 +10663,7 @@ const canStart = () => K.st === 'Idle' && !K.prog && !K.busy && checks().every(c
 async function progStart() {
   if (K.prog && K.st === 'Hold') { rt('~'); return; }
   if (!canStart()) { say('Terminez les vérifications de l’étape 4 avant de démarrer.'); U.vol = 4; ui(); return; }
-  const P = progInfo(); K.finished = false; K.trail = []; K.tool = P.tools[0] || null;
+  const P = progInfo(); K.finished = false; K.trail = []; K.doneK = -1; K.pts = P.pts; K.tool = P.tools[0] || null;
   K.prog = { L: P.L, i: 0, acked: 0, moved: false, all: false, tc: null, err: null, t0: Date.now(), cum: P.cum, tot: P.t, air: !!K.airWant };
   log('— Envoi du programme : ' + P.L.length + ' lignes —', 'm'); U.vol = 4;
   if (K.prog.air) { try { await cmd('G92.1'); const z = wpos()[2]; await cmd('G92 Z' + n3(z - 10)); K.air = true; } catch { progAbort('air'); ui(); return; } }
@@ -10645,7 +10684,7 @@ function progFeed() {
 }
 function progError(idx, e) { const P = K.prog; if (!P) return; rt('!'); P.err = { idx, e, line: P.L[idx].t }; log('Arrêt sur erreur, ligne ' + (idx + 1) + ' : ' + P.L[idx].t, 'e'); U.vol = 4; ui(); }
 function progResumeErr() { const P = K.prog; if (!P || !P.err) return; P.err = null; rt('~'); progFeed(); ui(); }
-async function progDone() { const P = K.prog; K.prog = null; K.finished = true; if (P && P.air) { try { await cmd('G92.1'); } catch { } K.air = false; } log('— Programme terminé (' + fmtT((Date.now() - P.t0) / 1000) + ') —', 'm'); ui(); say('Usinage terminé. Attendez l’arrêt de la broche avant de toucher la pièce.'); }
+async function progDone() { const P = K.prog; K.prog = null; if (K.pts) K.doneK = K.pts.length - 1; K.finished = true; if (P && P.air) { try { await cmd('G92.1'); } catch { } K.air = false; } log('— Programme terminé (' + fmtT((Date.now() - P.t0) / 1000) + ') —', 'm'); ui(); say('Usinage terminé. Attendez l’arrêt de la broche avant de toucher la pièce.'); }
 function progAbort(why) { const P = K.prog; if (!P) return; K.prog = null; flush('abort', false); tcClose(); log('— Programme arrêté (' + why + ') —', 'e'); if (P.air && K.T) { setTimeout(() => cmd('G92.1').catch(() => { }), 600); } ui(); }
 function pause() { if (K.st === 'Run' || K.st === 'Jog' || K.st === 'Home') rt('!'); }
 function stopAll() {
@@ -10690,17 +10729,17 @@ function build() {
   q('.panel').appendChild(pane); scroll = q('#cncScroll'); ctl = q('#cncCtl');
   ov = document.createElement('div'); ov.id = 'cncOv'; ov.hidden = true; ov.setAttribute('data-notr', ''); q('#rv3').appendChild(ov);
   pane.addEventListener('click', onClick); document.body.addEventListener('click', e => { if (e.target.closest('#cncTc,.cnc-modal,#cncOv')) onClick(e); });
-  pane.addEventListener('change', onChange); document.body.addEventListener('change', e => { if (e.target.closest('#cncTc,.cnc-modal')) onChange(e); });
-  document.addEventListener('click', e => { if (U.conOpen && !e.target.closest('.cnc-cwrap')) { U.conOpen = false; panel(); } });
+  pane.addEventListener('change', onChange); document.body.addEventListener('change', e => { if (e.target.closest('#cncTc,.cnc-modal,#cncOv')) onChange(e); });
+  document.addEventListener('click', e => { if (U.conOpen && !e.target.closest('.cnc-cwrap')) { U.conOpen = false; topRender(); } });
   tabVis(); ctlRender();
 }
 function tabVis() { if (tabBtn) tabBtn.hidden = !CF.on; if (!CF.on && curTab === 'usiner') setTab('parcours'); }
 window.cncOnTab = t => {
   if (!tabBtn) return; const on = t === 'usiner', rv = q('#rv3');
-  if (on) { if (!U.prevViews) U.prevViews = { d2: VIEWS.d2, d3: VIEWS.d3 }; VIEWS.d2 = false; VIEWS.d3 = true; viewsApply(); RV.showTp = true; rv.classList.add('cnc-on'); ov.hidden = false; PI_ = null; ui(); }
+  if (on) { if (!U.prevViews) U.prevViews = { d2: VIEWS.d2, d3: VIEWS.d3 }; VIEWS.d2 = false; VIEWS.d3 = true; viewsApply(); RV.showTp = true; rv.classList.add('cnc-on'); rv.classList.toggle('cnc-fmin', !!U.floatMin); setTimeout(() => { if (typeof rvFit === 'function') rvFit(true); rvReq(); }, 60); ov.hidden = false; PI_ = null; ui(); }
   else if (U.prevViews) { VIEWS.d2 = U.prevViews.d2; VIEWS.d3 = U.prevViews.d3; U.prevViews = null; viewsApply(); rv.classList.remove('cnc-on'); ov.hidden = true; }
 };
-function ui() { if (!pane) return; tabBtn.classList.toggle('cnc-conn', !!K.T && K.st !== 'Alarm'); tabBtn.classList.toggle('cnc-alarm', K.st === 'Alarm'); if (curTab === 'usiner') { panel(); ovRender(); } live(); tcRender(); }
+function ui() { if (!pane) return; tabBtn.classList.toggle('cnc-conn', !!K.T && K.st !== 'Alarm'); tabBtn.classList.toggle('cnc-alarm', K.st === 'Alarm'); if (curTab === 'usiner') { topRender(); ovRender(); } live(); tcRender(); }
 
 function stat() { return {
   s1: conn() ? 'done' : '',
@@ -10711,26 +10750,15 @@ function vol(n, title, st, sum, body) { const open = U.vol === n; if (open && !s
 const chk = (g, k, label) => '<label class="cnc-chk"><input type="checkbox" data-u="' + g + '.' + k + '" ' + (U[g][k] ? 'checked' : '') + '><span>' + label + '</span></label>';
 
 function panel() {
-  if (!scroll || curTab !== 'usiner') return; const sc = scroll.scrollTop, st = stat();
-  let h = '<div class="cnc-test"><b>Version test.</b> Pilotage d’une vraie machine : restez près de l’arrêt d’urgence et faites d’abord un essai dans l’air.</div>';
+  const box = q('#cncVols'); if (!box || curTab !== 'usiner') return; const fl = q('#cncFloat'), sc = fl ? fl.scrollTop : 0, st = stat();
+  let h = '';
   if (K.st === 'Alarm' && K.alarm) h += '<div class="cnc-box err"><b class="t">⚠ Alarme ' + K.alarm.n + '</b>' + esc(K.alarm.t) + '<div class="cnc-row" style="margin-top:7px">' + (limOn() ? '<button class="cnc-btn sm pri" data-c="home">⌂ Prise d’origine ($H)</button>' : '') + '<button class="cnc-btn sm" data-c="unlock">Déverrouiller ($X)</button></div></div>';
   else if (K.st === 'Alarm' && conn()) h += '<div class="cnc-box err"><b class="t">⚠ Machine en alarme</b>' + (limOn() ? 'Prise d’origine nécessaire au démarrage (normal).' : '') + '<div class="cnc-row" style="margin-top:7px">' + (limOn() ? '<button class="cnc-btn sm pri" data-c="home">⌂ Prise d’origine ($H)</button>' : '') + '<button class="cnc-btn sm" data-c="unlock">Déverrouiller ($X)</button></div></div>';
   if (K.st === 'Door') h += '<div class="cnc-box warn"><b class="t">Porte ouverte</b>Fermez la porte (ou le capteur) puis reprenez.</div>';
   // 1 connexion
   let b1;
-  if (!K.T) {
-    const ser = 'serial' in navigator;
-    b1 = '<div class="cnc-cwrap' + (U.conOpen ? ' open' : '') + '"><button class="cnc-btn pri big" data-c="conMenu">🔌 Connecter ▾</button><div class="cnc-cmenu"><div class="cnc-ct">USB</div>' +
-      (U.ports || []).map((p, i) => '<button class="cnc-ci" data-c="conPort" data-i="' + i + '"><span class="ic">🔌</span><span><b>' + esc(portName(p)) + '</b><small>Déjà autorisé · ' + CF.baud + ' bauds</small></span></button>').join('') +
-      '<button class="cnc-ci" data-c="conSerial" ' + (ser ? '' : 'disabled') + '><span class="ic">＋</span><span><b>Choisir un port USB…</b><small>' + (ser ? 'Le navigateur affiche la liste des appareils' : 'Demande Chrome ou Edge (Web Serial)') + '</small></span></button>' +
-      '<div class="cnc-ct">Essai sans machine</div><button class="cnc-ci" data-c="conSim" data-k="sim"><span class="ic">🧪</span><span><b>Machine simulée – GRBL 1.1</b><small>Avec fins de course</small></span></button><button class="cnc-ci" data-c="conSim" data-k="simf"><span class="ic">🧪</span><span><b>Machine simulée – FluidNC</b><small>Prise d’origine axe par axe</small></span></button><button class="cnc-ci" data-c="conSim" data-k="simn"><span class="ic">🧪</span><span><b>Machine simulée sans fins de course</b><small>GRBL 1.1</small></span></button>' +
-      '<div class="cnc-ct">Wi-Fi</div><button class="cnc-ci" disabled><span class="ic">📶</span><span><b>FluidNC Wi-Fi</b><small>Pas encore dans la version test</small></span></button></div></div>' +
-      (K.st === 'Conn' ? '<p class="cnc-m">Connexion…</p>' : '') +
-      '<div class="cnc-box info"><b class="t">Avant de connecter</b><ul><li>La machine est sous tension, le câble USB branché.</li><li>Aucun autre logiciel n’utilise la machine (UGS, gSender, Candle…).</li><li>Chrome ou Edge : le navigateur demande d’autoriser le port la première fois.</li></ul></div>';
-  } else {
-    b1 = '<div class="cnc-kv"><span>Contrôleur</span><span><b>' + esc(K.ctrl || '…') + '</b></span><span>Liaison</span><span>' + esc(K.name) + '</span><span>Fins de course</span><span>' + (limOn() ? 'oui' : 'non') + '</span>' + (K.set[130] ? '<span>Course</span><span>' + K.set[130] + ' × ' + K.set[131] + ' × ' + K.set[132] + ' mm</span>' : '') + '</div>' +
-      '<div class="cnc-row" style="margin-top:11px"><button class="cnc-btn" data-c="mset">⚙ Paramètres machine</button><button class="cnc-btn" data-c="disc">Déconnecter</button></div>';
-  }
+  if (!K.T) b1 = '<p class="cnc-s" style="margin-top:0">Cliquez sur <b>🔌 Connecter</b> en haut du panneau Usiner : USB ou machine simulée pour essayer.</p><div class="cnc-box info"><b class="t">Avant de connecter</b><ul><li>La machine est sous tension, le câble USB branché.</li><li>Aucun autre logiciel n’utilise la machine (UGS, gSender, Candle…).</li><li>Chrome ou Edge : le navigateur demande d’autoriser le port la première fois.</li></ul></div>';
+  else b1 = '<div class="cnc-kv"><span>Contrôleur</span><span><b>' + esc(K.ctrl || '…') + '</b></span><span>Liaison</span><span>' + esc(K.name) + '</span><span>Fins de course</span><span>' + (limOn() ? 'oui' : 'non') + '</span>' + (K.set[130] ? '<span>Course</span><span>' + K.set[130] + ' × ' + K.set[131] + ' × ' + K.set[132] + ' mm</span>' : '') + '</div>';
   h += vol(1, 'Connexion', st.s1, K.T ? (K.st === 'Conn' ? 'Connexion…' : '<span style="color:#2e9b5c">●</span> ' + esc(K.ctrl || 'Connectée')) : '○ Non connectée', b1);
   // 2 origine machine
   let b2 = '';
@@ -10754,7 +10782,7 @@ function panel() {
   h += vol(3, 'Origine pièce', st.s3, allSet() ? '✓ X Y Z définis' : AX.filter(a => K.ws[a]).map(a => a.toUpperCase()).join(' ') || 'À faire', originBody());
   h += vol(4, 'Usinage', st.s4, K.prog ? (K.prog.tc ? 'Changement d’outil' : K.st === 'Hold' ? 'En pause' : 'En cours…') : K.finished ? '✓ Terminé' : '', launchBody());
   h += '<div class="cnc-dr"><header data-c="drawer"><span>' + (U.drawer ? '▾' : '▸') + '</span><b>Console et macros</b><span class="cnc-s">(utilisateurs avancés)</span></header>' + (U.drawer ? '<div class="cnc-mac">' + CF.macros.map((m, i) => '<button data-c="macro" data-i="' + i + '" ' + (conn() && !K.prog ? '' : 'disabled') + '>' + esc(m.n) + '</button>').join('') + '</div>' + conHtml('c1') : '') + '</div>';
-  scroll.innerHTML = h; scroll.scrollTop = sc; conRender(); live();
+  box.innerHTML = h; if (fl) fl.scrollTop = sc; conRender(); live();
 }
 function illu(a) {
   const blk = '<path d="M40 70 L130 52 L190 70 L100 90 Z" fill="var(--stock)" stroke="var(--stock-edge)"/><path d="M40 70 L40 110 L100 130 L100 90 Z" fill="var(--stock)" stroke="var(--stock-edge)" opacity=".85"/><path d="M100 90 L190 70 L190 110 L100 130 Z" fill="var(--stock)" stroke="var(--stock-edge)" opacity=".7"/>';
@@ -10784,10 +10812,8 @@ function originBody() {
       '<p class="cnc-s" style="margin:8px 0 0"><span class="cnc-led ' + (/P/.test(K.pn) ? 'on' : '') + '" data-live="led"></span>Contact du palpeur : <b data-live="ledt">' + (/P/.test(K.pn) ? 'fermé' : 'ouvert') + '</b> — touchez la plaque avec la fraise pour vérifier.' + (K.kind === 'sim' ? ' <button class="cnc-btn lnk" data-c="simTouch">simuler</button>' : '') + '</p>' +
       '<button class="cnc-btn pri big" style="margin-top:9px" data-c="probe" ' + (dis || K.st === 'Alarm' || K.busy ? 'disabled' : '') + '>' + (K.busy === 'probe' ? 'Palpage…' : 'Palper ' + U.paxis) + '</button>';
   } else {
-    h += '<p class="cnc-s">Approchez la fraise avec le pavé (pas de 0,1 mm à la fin) jusqu’à pincer légèrement une feuille ou une cale, puis cliquez sur Zéro. Pour X et Y, tenez compte du rayon de la fraise (cliquez sur la valeur pour saisir une cote).</p>';
-    for (const a of AX) h += '<div class="cnc-ax"><b>' + a.toUpperCase() + '</b>' + (U.edit === a ? '<input id="cncAxIn" type="number" step="0.01" value="' + w[AX.indexOf(a)].toFixed(2) + '" data-ax="' + a + '" style="text-align:right;font:600 15px var(--f-mono)">' : '<span class="cnc-axv" data-c="edit" data-a="' + a + '" data-live="w' + a + '" title="Cliquer pour saisir une cote">' + f2(w[AX.indexOf(a)]) + '</span>') + '<button class="cnc-btn sm" data-c="zero" data-a="' + a + '" ' + (dis ? 'disabled' : '') + '>Zéro ' + a.toUpperCase() + '</button></div>';
+    h += '<p class="cnc-s" style="margin-top:0">Approchez la fraise du point d’origine avec le pavé (pas de 0,1 mm à la fin), jusqu’à pincer légèrement une feuille ou une cale, puis utilisez les boutons <b>↺ Zéro</b> du panneau (colonne « Pièce » : on peut aussi y taper une cote). Pour X et Y, tenez compte du rayon de la fraise.</p>';
     h += '<div class="cnc-box cnc-row wrap" style="gap:8px"><span class="cnc-s">Z sur une cale de</span><input type="number" step="0.01" min="0" value="' + CF.shim + '" data-cf="shim" style="width:70px"><span class="cnc-s">mm</span><button class="cnc-btn sm pri" data-c="zShim" ' + (dis ? 'disabled' : '') + '>Zéro Z sur la cale</button><span class="cnc-s cnc-m" style="flex-basis:100%">La fraise touche la cale posée sur ' + (S.stock.originZ === 'bottom' ? 'le dessus du brut (Z0 sur la table : COPO ajoute l’épaisseur du brut)' : 'la pièce') + '.</span></div>';
-    h += '<button class="cnc-btn" style="margin-top:5px;width:100%" data-c="zeroAll" ' + (dis ? 'disabled' : '') + '>Tout à zéro (X Y Z)</button>';
   }
   h += '<div class="cnc-chips">' + AX.map(a => '<span class="cnc-chip ' + (K.ws[a] ? 'ok' : '') + '">' + (K.ws[a] ? '✓' : '○') + ' ' + a.toUpperCase() + '</span>').join('') + '</div>';
   if (allSet() && !(K.prog && K.prog.tc)) h += '<div class="cnc-box ok cnc-s"><b class="t">Vérifiez avant de continuer</b>Envoyez la fraise au-dessus de X0 Y0 et regardez si elle est bien à l’origine de la pièce.</div><div class="cnc-row"><button class="cnc-btn" data-c="goto" ' + (canJog() ? '' : 'disabled') + '>Aller au-dessus de X0 Y0</button><button class="cnc-btn pri" style="flex:1" data-c="go4">Continuer →</button></div>';
@@ -10821,6 +10847,7 @@ function ctlRender() {
     '<div><div class="cnc-s cnc-m" style="margin-bottom:3px">Pas (mm)</div><div class="cnc-seg">' + CF.steps.map(s => '<button class="' + (+CF.step === +s ? 'on' : '') + '" data-c="step" data-v="' + s + '">' + f2(s, s < 1 ? 1 : 0) + '</button>').join('') + '</div>' +
     '<div class="cnc-s cnc-m" style="margin:7px 0 1px">Vitesse <b data-live="jf">' + CF.jogF + '</b> mm/min</div><input type="range" min="100" max="6000" step="100" value="' + CF.jogF + '" data-cf="jogF" style="width:100%;accent-color:var(--accent)">' +
     '<div class="cnc-s cnc-m" style="margin-top:3px"><span class="cnc-kbd">←→↑↓</span> <span class="cnc-kbd">PgUp</span> <span class="cnc-kbd">PgDn</span> souris sur la vue · maintenir = continu</div></div></div>' +
+    '<div class="cnc-row" style="margin-top:9px;gap:6px"><button class="cnc-btn' + ((K.fs[1] > 0 || U.spin) ? ' pri' : '') + '" style="flex:1" data-c="spin" data-live="bspin">' + ((K.fs[1] > 0 || U.spin) ? '■ Broche (M5)' : '↻ Broche (M3)') + '</button><button class="cnc-btn' + (U.cool ? ' pri' : '') + '" style="flex:1" data-c="cool">' + (U.cool ? '■ Arrosage (M9)' : '💧 Arrosage (M8)') + '</button></div>' +
     '<div class="cnc-run"><button class="cnc-rb go" data-c="start" data-live="bstart">▶ Démarrer</button><button class="cnc-rb pa" data-c="pause" data-live="bpause">⏸ Pause</button><button class="cnc-rb st" data-c="stop" data-live="bstop" title="Échap">■ Arrêt</button></div>' +
     '<div class="cnc-ovr"><span>Avance</span><input type="range" min="10" max="200" step="10" value="100" data-ovr="f"><b data-live="ovf">100 %</b></div>' +
     '<div class="cnc-ovr"><span>Broche</span><input type="range" min="10" max="200" step="10" value="100" data-ovr="s"><b data-live="ovs">100 %</b></div>';
@@ -10837,19 +10864,40 @@ function ovrSet(k, v) { if (!K.T) return; const cur = k === 'f' ? K.ov[0] : K.ov
 
 /* ---------------- cartouches de la vue 3D ---------------- */
 function ovRender() {
-  if (!ov || curTab !== 'usiner') return; const P = progInfo();
-  ov.innerHTML = '<div id="cncPill"></div>' +
-    '<div class="cnc-card" id="cncPos"><div class="cnc-ch"><span>Position pièce <span class="cnc-badge">G54</span></span><button data-c="posT">' + (U.posOpen ? '–' : '+') + '</button></div>' + (U.posOpen ? '<div class="cnc-b3"><span>X</span><span data-live="ox"></span><span>Y</span><span data-live="oy"></span><span>Z</span><span data-live="oz"></span></div>' + (U.posMp ? '<div class="cnc-mp" data-live="mp"></div>' : '') + '<button class="cnc-btn lnk" data-c="mpT">' + (U.posMp ? 'Masquer' : 'Afficher') + ' les coordonnées machine</button>' +
-      '<div class="cnc-ch" style="margin:7px 0 0">Encombrement du programme (mm)</div><table class="cnc-bb"><tr><th></th><th>min</th><th>max</th><th>taille</th></tr>' + AX.map((a, i) => '<tr><th>' + a.toUpperCase() + '</th><td data-live="bn' + a + '">' + (P.tps.length ? f2(P.mn[i]) : '–') + '</td><td data-live="bx' + a + '">' + (P.tps.length ? f2(P.mx[i]) : '–') + '</td><td>' + (P.tps.length ? f2(P.mx[i] - P.mn[i], 1) : '–') + '</td></tr>').join('') + '</table>' : '') + '</div>' +
-    '<div class="cnc-card" id="cncRunC"><div class="cnc-ch"><span>Usinage</span><button data-c="runT">' + (U.runOpen ? '–' : '+') + '</button></div>' + (U.runOpen ? '<div class="cnc-kv"><span>Écoulé</span><span data-live="tel">0:00</span><span>Restant</span><span data-live="trest"></span></div><div class="cnc-prog"><i data-live="pbar"></i></div><div class="cnc-kv"><span>Avance réelle</span><span data-live="fcur"></span><span>Broche</span><span data-live="scur"></span><span>Outil</span><span data-live="tcur"></span><span>Suivant</span><span data-live="tnext"></span></div><div class="cnc-gl" data-live="gl"></div>' : '') + '</div>';
-  live();
+  if (!ov || curTab !== 'usiner') return; const P = progInfo(), old = q('#cncFloat'), sc = old ? old.scrollTop : 0;
+  ov.innerHTML = '<div id="cncPill"></div><div id="cncFloat" class="cnc-float' + (U.floatMin ? ' min' : '') + '"><div class="cnc-fh"><b>Étapes et vérifications</b><button class="cnc-btn sm" data-c="floatT" title="' + (U.floatMin ? 'Déplier' : 'Replier') + '">' + (U.floatMin ? '▸' : '▾') + '</button></div>' + (U.floatMin ? '' :
+    '<div class="cnc-test"><b>Version test.</b> Pilotage d’une vraie machine : restez près de l’arrêt d’urgence et faites d’abord un essai dans l’air.</div>' +
+    '<div class="cnc-card2"><div class="cnc-ch"><span>Encombrement du programme (mm)</span><button data-c="posT">' + (U.posOpen ? '–' : '+') + '</button></div>' + (U.posOpen ? '<table class="cnc-bb"><tr><th></th><th>min</th><th>max</th><th>taille</th></tr>' + AX.map((a, i) => '<tr><th>' + a.toUpperCase() + '</th><td data-live="bn' + a + '">' + (P.tps.length ? f2(P.mn[i]) : '–') + '</td><td data-live="bx' + a + '">' + (P.tps.length ? f2(P.mx[i]) : '–') + '</td><td>' + (P.tps.length ? f2(P.mx[i] - P.mn[i], 1) : '–') + '</td></tr>').join('') + '</table>' : '') + '</div>' +
+    '<div class="cnc-card2"><div class="cnc-ch"><span>Usinage</span><button data-c="runT">' + (U.runOpen ? '–' : '+') + '</button></div>' + (U.runOpen ? '<div class="cnc-kv"><span>Écoulé</span><span data-live="tel">0:00</span><span>Restant</span><span data-live="trest"></span></div><div class="cnc-prog"><i data-live="pbar"></i></div><div class="cnc-kv"><span>Avance réelle</span><span data-live="fcur"></span><span>Broche</span><span data-live="scur"></span><span>Outil</span><span data-live="tcur"></span><span>Suivant</span><span data-live="tnext"></span></div><div class="cnc-gl" data-live="gl"></div>' : '') + '</div>' +
+    '<div id="cncVols"></div>') + '</div>';
+  panel(); const f = q('#cncFloat'); if (f) f.scrollTop = sc; live();
+}
+
+/* ---------------- panneau Usiner : connexion, coordonnées ---------------- */
+function topRender() {
+  if (!scroll || curTab !== 'usiner') return; const ser = 'serial' in navigator, c = conn(), dis = !c || moving() || !!K.prog;
+  let h = '<div class="cnc-top"><div class="cnc-cwrap' + (U.conOpen ? ' open' : '') + '" style="flex:1">';
+  if (!K.T) h += '<button class="cnc-btn pri big" data-c="conMenu">🔌 Connecter ▾</button><div class="cnc-cmenu"><div class="cnc-ct">USB</div>' +
+    (U.ports || []).map((p, i) => '<button class="cnc-ci" data-c="conPort" data-i="' + i + '"><span class="ic">🔌</span><span><b>' + esc(portName(p)) + '</b><small>Déjà autorisé · ' + CF.baud + ' bauds</small></span></button>').join('') +
+    '<button class="cnc-ci" data-c="conSerial" ' + (ser ? '' : 'disabled') + '><span class="ic">＋</span><span><b>Choisir un port USB…</b><small>' + (ser ? 'Le navigateur affiche la liste des appareils' : 'Demande Chrome ou Edge (Web Serial)') + '</small></span></button>' +
+    '<div class="cnc-ct">Essai sans machine</div><button class="cnc-ci" data-c="conSim" data-k="sim"><span class="ic">🧪</span><span><b>Machine simulée – GRBL 1.1</b><small>Avec fins de course</small></span></button><button class="cnc-ci" data-c="conSim" data-k="simf"><span class="ic">🧪</span><span><b>Machine simulée – FluidNC</b><small>Prise d’origine axe par axe</small></span></button><button class="cnc-ci" data-c="conSim" data-k="simn"><span class="ic">🧪</span><span><b>Machine simulée sans fins de course</b><small>GRBL 1.1</small></span></button>' +
+    '<div class="cnc-ct">Wi-Fi</div><button class="cnc-ci" disabled><span class="ic">📶</span><span><b>FluidNC Wi-Fi</b><small>Pas encore dans la version test</small></span></button></div>';
+  else h += '<button class="cnc-btn big cnc-conn" data-c="conMenu">' + (K.st === 'Conn' ? 'Connexion…' : '<span class="cnc-cdot ' + (K.st === 'Alarm' ? 'al' : '') + '"></span>' + esc(K.ctrl || 'Connectée') + ' · ' + esc(K.kind === 'sim' ? 'simulée' : 'USB')) + ' ▾</button><div class="cnc-cmenu"><div class="cnc-ct">' + esc(K.name) + '</div><button class="cnc-ci" data-c="disc"><span class="ic">⏏</span><span><b>Déconnecter</b></span></button></div>';
+  h += '</div><button class="cnc-btn cnc-gear" data-c="mset" title="Paramètres machine : réglages $$, déplacements, palpeur, manette, macros, console">⚙</button></div>';
+  if (K.st === 'Alarm' && conn()) h += '<div class="cnc-box err"><b class="t">⚠ Alarme' + (K.alarm ? ' ' + K.alarm.n : '') + '</b>' + (K.alarm ? esc(K.alarm.t) : limOn() ? 'Prise d’origine nécessaire au démarrage (normal).' : '') + '<div class="cnc-row" style="margin-top:7px">' + (limOn() ? '<button class="cnc-btn sm pri" data-c="home">⌂ Prise d’origine</button>' : '') + '<button class="cnc-btn sm" data-c="unlock">Déverrouiller ($X)</button></div></div>';
+  if (K.st === 'Door') h += '<div class="cnc-box warn"><b class="t">Porte ouverte</b>Fermez la porte (ou le capteur) puis reprenez.</div>';
+  h += '<button class="cnc-btn cnc-gozero" data-c="goto" ' + (c && allSet() && canJog() ? '' : 'disabled') + ' title="Remonte si besoin, puis va au-dessus de X0 Y0">⌖ Aller au zéro pièce (X0 Y0)</button>';
+  h += '<div class="cnc-coord"><div class="cnc-crow cnc-chd"><span></span><span>Zéro</span><span>Pièce <span class="cnc-badge">G54</span></span><span>Machine</span><span>Aller</span></div>' +
+    AX.map((a, i) => '<div class="cnc-crow"><b class="cnc-axl ' + a + '">' + a.toUpperCase() + '</b><button class="cnc-btn sm" data-c="zero" data-a="' + a + '" ' + (dis ? 'disabled' : '') + ' title="Zéro ' + a.toUpperCase() + ' ici (G10 L20 P1 ' + a.toUpperCase() + '0)">↺</button><input class="cnc-wsin ' + a + (K.ws[a] ? ' set' : '') + '" type="number" step="0.01" data-wsin="' + a + '" title="Tapez une cote puis Entrée : la position actuelle prend cette valeur" ' + (dis ? 'disabled' : '') + '><span class="cnc-mv" data-live="m' + a + '">–</span><button class="cnc-btn sm" data-c="goAx" data-a="' + a + '" ' + (c && K.ws[a] && canJog() ? '' : 'disabled') + ' title="Aller à ' + a.toUpperCase() + '0">⌂</button></div>').join('') +
+    '<div class="cnc-row" style="margin-top:6px"><button class="cnc-btn" style="flex:1" data-c="zeroAll" ' + (dis ? 'disabled' : '') + '>↺ Zéro X Y Z</button><button class="cnc-btn" data-c="zShim" ' + (dis ? 'disabled' : '') + ' title="La fraise touche la cale posée sur la pièce">Zéro Z sur cale ' + f2(CF.shim) + '</button></div></div>';
+  scroll.innerHTML = h; live();
 }
 const L$ = k => qa('[data-live="' + k + '"]');
 const setL = (k, t) => { for (const e of L$(k)) if (e.textContent !== t) e.textContent = t; };
 function live() {
   if (!pane) return; const w = wpos(), P = K.prog, I = PI_;
   if (curTab === 'usiner') {
-    const o = allSet() || K.T; setL('ox', o ? f2(w[0]) : '–'); setL('oy', o ? f2(w[1]) : '–'); setL('oz', o ? f2(w[2]) : '–'); if (!U.edit) AX.forEach((a, i) => setL('w' + a, f2(w[i])));
+    const o = allSet() || K.T; setL('ox', o ? f2(w[0]) : '–'); setL('oy', o ? f2(w[1]) : '–'); setL('oz', o ? f2(w[2]) : '–'); if (!U.edit) AX.forEach((a, i) => setL('w' + a, f2(w[i]))); qa('[data-wsin]').forEach(e => { if (document.activeElement !== e) { const v = K.T ? (Math.round(w[AX.indexOf(e.dataset.wsin)] * 1000) / 1000).toFixed(3) : ''; if (e.value !== v) e.value = v; } }); AX.forEach((a, i) => setL('m' + a, K.T ? f2(K.mpos[i]) : '–'));
     setL('mp', 'MPos  X ' + f2(K.mpos[0]) + '  Y ' + f2(K.mpos[1]) + '  Z ' + f2(K.mpos[2]));
     const pill = q('#cncPill'); if (pill) { const s = P && P.tc ? 'Tool' : K.busy === 'probe' ? 'Probe' : K.st; pill.className = s; pill.textContent = '● ' + (ST_FR[s] || s) + (K.T && K.ctrl ? ' · ' + K.ctrl : '') + (K.air ? ' · essai dans l’air' : ''); }
     const lon = /P/.test(K.pn); for (const e of L$('led')) e.classList.toggle('on', lon); setL('ledt', lon ? 'fermé' : 'ouvert');
@@ -10864,7 +10912,7 @@ function live() {
   const bs = L$('bstart')[0]; if (bs) { const hold = P && K.st === 'Hold' && !P.tc && !P.err; bs.disabled = !(canStart() || hold); bs.textContent = hold ? '▶ Reprendre' : '▶ Démarrer'; }
   const bp = L$('bpause')[0]; if (bp) bp.disabled = !(K.st === 'Run' || K.st === 'Jog' || K.st === 'Home');
   const bt = L$('bstop')[0]; if (bt) bt.disabled = !K.T;
-  const jd = !canJog() && !jogging; if (ctl) qa('.cnc-pb', ctl).forEach(b => b.disabled = jd);
+  const jd = !canJog() && !jogging; if (ctl) { qa('.cnc-pb', ctl).forEach(b => b.disabled = jd); qa('[data-c=spin],[data-c=cool]', ctl).forEach(b => b.disabled = !conn() || !!K.prog); }
   setL('jf', String(CF.jogF));
 }
 setInterval(() => { if (curTab === 'usiner') live(); }, 250);
@@ -10872,7 +10920,7 @@ setInterval(() => { if (curTab === 'usiner') live(); }, 250);
 /* outil dans la vue 3D (appelé par rvOverlay) */
 window.cncOverlay = g => {
   if (curTab !== 'usiner' || !K.T || typeof rvProj !== 'function' || !RV.mvp) return;
-  const tr2 = K.trail; if (tr2.length > 1) { g.strokeStyle = 'rgba(120,120,120,.85)'; g.lineWidth = 2; g.beginPath(); tr2.forEach((p, i) => { const s = rvProj(p); i ? g.lineTo(s[0], s[1]) : g.moveTo(s[0], s[1]); }); g.stroke(); }
+  const pts = K.pts; if (pts && K.doneK >= 0 && allSet()) { g.strokeStyle = 'rgba(150,150,150,.95)'; g.lineWidth = 2.2; g.lineJoin = 'round'; g.beginPath(); for (let k = 0; k <= K.doneK && k < pts.length; k++) { const s = rvProj(toInt(pts[k].p)); k ? g.lineTo(s[0], s[1]) : g.moveTo(s[0], s[1]); } if (K.prog) { const s = rvProj(toInt(wpos())); g.lineTo(s[0], s[1]); } g.stroke(); }
   if (!allSet()) return;
   const p = toInt(wpos()), d = curToolDia(), a = rvProj(p), b = rvProj([p[0], p[1], p[2] + 25]), c = rvProj([p[0], p[1], p[2] + 40]), e = rvProj([p[0], p[1], p[2] + 110]), u = rvProj([p[0] + 10, p[1], p[2]]), v = rvProj([p[0], p[1] + 10, p[2]]);
   const k = Math.max(Math.hypot(u[0] - a[0], u[1] - a[1]), Math.hypot(v[0] - a[0], v[1] - a[1])) / 10;
@@ -10930,7 +10978,11 @@ async function onClick(e) {
   const b = e.target.closest('[data-c]'); if (!b || b.disabled) return; const c = b.dataset.c;
   switch (c) {
     case 'vol': U.vol = U.vol === +b.dataset.n ? 0 : +b.dataset.n; panel(); break;
-    case 'conMenu': U.conOpen = !U.conOpen; if (U.conOpen && 'serial' in navigator) { try { U.ports = await navigator.serial.getPorts(); } catch { U.ports = []; } } panel(); break;
+    case 'conMenu': U.conOpen = !U.conOpen; if (U.conOpen && !K.T && 'serial' in navigator) { try { U.ports = await navigator.serial.getPorts(); } catch { U.ports = []; } } topRender(); break;
+    case 'floatT': U.floatMin = !U.floatMin; q('#rv3').classList.toggle('cnc-fmin', !!U.floatMin); ovRender(); rvReq(); break;
+    case 'goAx': { const a = b.dataset.a, z = Math.max(wpos()[2], 5); if (!canJog()) break; K.busy = 'goto'; ui(); try { await seq(a === 'z' ? ['G90', 'G0 Z0'] : ['G90', 'G0 Z' + n3(z), 'G0 ' + a.toUpperCase() + '0']); await waitIdle(); } catch { } K.busy = ''; ui(); break; }
+    case 'spin': if (!conn() || K.prog) break; if (K.fs[1] > 0 || U.spin) { cmd('M5').catch(() => { }); U.spin = false; } else { const t = toolByNum(K.tool) || toolByNum(progInfo().tools[0]) || (S.tools || [])[0]; cmd('M3 S' + Math.round(+(t && t.rpm) || 12000)).catch(() => { }); U.spin = true; } ctlRender(); break;
+    case 'cool': if (!conn()) break; U.cool = !U.cool; cmd(U.cool ? 'M8' : 'M9').catch(() => { }); ctlRender(); break;
     case 'conPort': connect('serial', (U.ports || [])[+b.dataset.i]); break;
     case 'conSerial': connect('serial'); break;
     case 'conSim': connect(b.dataset.k); break;
@@ -10993,6 +11045,7 @@ async function onChange(e) {
   if (d.cf) { CF[d.cf] = +t.value; cfSave(); if (d.cf === 'jogF') setL('jf', String(CF.jogF)); if (d.cf === 'shim') { CF.shim = Math.max(0, +t.value || 0); cfSave(); qa('[data-cf="shim"]').forEach(x => { if (x !== t) x.value = CF.shim; }); tcRender(); } return; }
   if (d.cfb) { CF[d.cfb] = t.checked; cfSave(); if (d.cfb === 'probe') { U.pmode = CF.probe ? 'probe' : 'hand'; const c2 = q('#cfgCncProbe'); if (c2) c2.checked = CF.probe; if (q('#cncMset')) msetOpen(); ui(); } return; }
   if (d.step !== undefined) { CF.steps[+d.step] = +t.value || CF.steps[+d.step]; cfSave(); ctlRender(); return; }
+  if (d.wsin) { const a = d.wsin, v = t.value.trim(); t.blur(); if (v !== '' && isFinite(+v)) await setZero(a, +v); return; }
   if (d.ax) { const a = d.ax; U.edit = null; await setZero(a, +t.value); return; }
   if (d.set) { const k = d.set; try { await cmd('$' + k + '=' + t.value); K.set[k] = +t.value; say('$' + k + ' = ' + t.value + ' envoyé.'); } catch (er) { say('Refusé par la machine : ' + er); t.value = K.set[k]; } return; }
   if (d.gpa !== undefined) { if (t.value) CF.gp.a[d.gpa] = t.value; else delete CF.gp.a[d.gpa]; cfSave(); return; }
