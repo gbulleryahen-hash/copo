@@ -1529,6 +1529,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         <section class="cfg-sec" data-cfg="cnc" data-ico="machine"><h2>Pilotage de la machine</h2>
           <label class="chk"><input type="checkbox" id="cfgCnc"> Afficher l’onglet 6 « Usiner » (pilotage de la CNC) — expérimental</label>
           <label class="chk"><input type="checkbox" id="cfgCncProbe"> J’ai un palpeur (plaque Z ou bloc XYZ) — sinon, l’origine pièce se fait à la main</label>
+          <label class="chk"><input type="checkbox" id="cfgCncGuide"> Étapes guidées et vérifications (conseillé) — décoché : aucune vérification avant le démarrage, le panneau « Données » ne montre que l’encombrement, les temps, vitesses et outils, la prise d’origine et le palpeur</label>
           <p class="hint">Connecte une machine GRBL, grblHAL ou FluidNC par USB (Chrome ou Edge), guide la prise d’origine, l’origine pièce et le palpage, puis envoie le G-code des parcours visibles. Une machine simulée permet d’essayer sans machine.</p>
         </section>
         <section class="cfg-sec" data-cfg="sim" data-ico="sim"><h2>Simulation</h2>
@@ -10954,7 +10955,6 @@ function msetOpen(t) {
   if (t) U.mtab = t; let el = q('#cncMset'); if (!el) { el = document.createElement('div'); el.id = 'cncMset'; el.className = 'cnc-modal'; el.setAttribute('data-notr', ''); el.addEventListener('mousedown', e => { if (e.target === el) el.remove(); }); document.body.appendChild(el); }
   const T = [['machine', 'Machine'], ['moves', 'Déplacements'], ['probe', 'Palpeur'], ['pad', 'Manette'], ['macros', 'Macros'], ['console', 'Console']]; let b = '';
   if (U.mtab === 'machine') {
-    b += '<label class="cnc-chk" style="margin-bottom:10px"><input type="checkbox" data-cfb="guide" ' + (CF.guide ? 'checked' : '') + '><span><b>Étapes guidées et vérifications</b> (conseillé). Décoché : aucune vérification avant le démarrage ; le panneau « Données » ne montre que l’encombrement, les temps, vitesses et outils, la prise d’origine et le palpeur.</span></label>';
     b += '<div class="cnc-row wrap" style="margin-bottom:10px"><label class="cnc-s">Vitesse de la liaison USB <select data-cf="baud">' + [115200, 250000, 230400, 57600, 38400].map(v => '<option ' + (+CF.baud === v ? 'selected' : '') + '>' + v + '</option>').join('') + '</select></label><span class="cnc-s cnc-m">(prise en compte à la prochaine connexion)</span></div>';
     if (K.fluid) b += '<div class="cnc-box info"><b class="t">FluidNC : la configuration est dans config.yaml</b>Les réglages de la carte sont dans le fichier <code>config.yaml</code> (les $ ci-dessous sont partiels).<div class="cnc-row wrap" style="margin-top:7px"><button class="cnc-btn sm" data-c="fDump" ' + (conn() ? '' : 'disabled') + '>Télécharger config.yaml</button><button class="cnc-btn sm" data-c="fSd" ' + (conn() ? '' : 'disabled') + '>Fichiers de la carte ($SD/List)</button><button class="cnc-btn sm" disabled title="Pas encore dans la version test">Envoyer un config.yaml…</button></div></div>';
     if (U.impSet) { const L = U.impSet, diff = Object.entries(L).filter(([k, v]) => +K.set[k] !== +v); b += '<div class="cnc-box warn"><b class="t">Réglages $ importés : ' + Object.keys(L).length + '</b>' + (conn() ? diff.length + ' différent(s) de la machine : ' + esc(diff.slice(0, 12).map(([k, v]) => '$' + k + '=' + v).join(' · ')) + (diff.length > 12 ? '…' : '') : 'Connectez la machine pour les lui envoyer.') + '<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn sm pri" data-c="impSend" ' + (conn() && !K.prog && diff.length ? '' : 'disabled') + '>Envoyer à la machine</button><button class="cnc-btn sm" data-c="impDrop">Ignorer</button></div></div>'; }
@@ -11173,6 +11173,7 @@ async function impSend() {
 
 /* ---------------- réglage dans Paramètres ---------------- */
 function cfgHook() {
+  const g2 = q('#cfgCncGuide'); if (g2) { g2.checked = CF.guide !== false; g2.addEventListener('change', () => { if (K.prog) { g2.checked = CF.guide; say('Pas pendant un usinage.'); return; } CF.guide = g2.checked; cfSave(); ui(); }); }
   const p2 = q('#cfgCncProbe'); if (p2) { p2.checked = !!CF.probe; p2.addEventListener('change', () => { CF.probe = p2.checked; cfSave(); U.pmode = CF.probe ? 'probe' : 'hand'; ui(); }); }
   const c = q('#cfgCnc'); if (!c) return; c.checked = !!CF.on;
   c.addEventListener('change', () => { if (!c.checked && K.prog) { c.checked = true; say('Arrêtez l’usinage avant de cacher l’onglet Usiner.'); return; } CF.on = c.checked; cfSave(); if (!CF.on && K.T) disconnect(); tabVis(); say(CF.on ? 'Onglet 6 « Usiner » ajouté.' : 'Onglet Usiner caché.'); });
