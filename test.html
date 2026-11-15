@@ -24,7 +24,7 @@
 .tabs [data-tab="usiner"].cnc-alarm .cnc-tdot{background:var(--danger);opacity:1}
 .pane.cnc-pane:not([hidden]){display:flex;flex-direction:column;padding:0;overflow:hidden}
 #cncScroll{flex:1;overflow:auto;padding:10px 12px 14px;min-height:0}
-#cncCtl{border-top:1px solid var(--line);padding:10px 12px 12px;background:var(--bg);flex:none}
+#cncCtl{border-top:1px solid var(--line);padding:10px 12px 12px;background:transparent;flex:none}
 .cnc-test{font-size:12px;background:color-mix(in srgb,#d9480f 14%,var(--panel));border:1px solid color-mix(in srgb,#d9480f 40%,var(--line));border-radius:8px;padding:6px 9px;margin-bottom:9px;color:var(--ink)}
 .cnc-vol{border:1px solid var(--line);border-radius:8px;background:var(--panel);margin-bottom:8px;overflow:visible}
 .cnc-vol>header{display:flex;align-items:center;gap:8px;padding:10px 11px;cursor:pointer;user-select:none;border-radius:8px}
@@ -10886,7 +10886,7 @@ function topRender() {
   h += '</div><button class="cnc-btn cnc-gear" data-c="mset" title="Paramètres machine : réglages $$, déplacements, palpeur, manette, macros, console">⚙</button></div>';
   if (K.st === 'Alarm' && conn()) h += '<div class="cnc-box err"><b class="t">⚠ Alarme' + (K.alarm ? ' ' + K.alarm.n : '') + '</b>' + (K.alarm ? esc(K.alarm.t) : limOn() ? 'Prise d’origine nécessaire au démarrage (normal).' : '') + '<div class="cnc-row" style="margin-top:7px">' + (limOn() ? '<button class="cnc-btn sm pri" data-c="home">⌂ Prise d’origine</button>' : '') + '<button class="cnc-btn sm" data-c="unlock">Déverrouiller ($X)</button></div></div>';
   if (K.st === 'Door') h += '<div class="cnc-box warn"><b class="t">Porte ouverte</b>Fermez la porte (ou le capteur) puis reprenez.</div>';
-  h += '<button class="cnc-btn cnc-gozero" data-c="goto" ' + (c && allSet() && canJog() ? '' : 'disabled') + ' title="Remonte si besoin, puis va au-dessus de X0 Y0">⌖ Aller au zéro pièce (X0 Y0)</button>';
+  h += '<button class="cnc-btn cnc-gozero" data-c="goHome" ' + (c && K.homed && canJog() ? '' : 'disabled') + ' title="' + (K.homed ? 'Remonte Z, puis va à l’origine machine (G53)' : 'Faites d’abord la prise d’origine') + '">⌂ Aller à l’origine machine</button>';
   h += '<div class="cnc-coord"><div class="cnc-crow cnc-chd"><span></span><span>Zéro</span><span>Pièce <span class="cnc-badge">G54</span></span><span>Machine</span><span>Aller</span></div>' +
     AX.map((a, i) => '<div class="cnc-crow"><b class="cnc-axl ' + a + '">' + a.toUpperCase() + '</b><button class="cnc-btn sm" data-c="zero" data-a="' + a + '" ' + (dis ? 'disabled' : '') + ' title="Zéro ' + a.toUpperCase() + ' ici (G10 L20 P1 ' + a.toUpperCase() + '0)">↺</button><input class="cnc-wsin ' + a + (K.ws[a] ? ' set' : '') + '" type="number" step="0.01" data-wsin="' + a + '" title="Tapez une cote puis Entrée : la position actuelle prend cette valeur" ' + (dis ? 'disabled' : '') + '><span class="cnc-mv" data-live="m' + a + '">–</span><button class="cnc-btn sm" data-c="goAx" data-a="' + a + '" ' + (c && K.ws[a] && canJog() ? '' : 'disabled') + ' title="Aller à ' + a.toUpperCase() + '0">⌂</button></div>').join('') +
     '<div class="cnc-row" style="margin-top:6px"><button class="cnc-btn" style="flex:1" data-c="zeroAll" ' + (dis ? 'disabled' : '') + '>↺ Zéro X Y Z</button><button class="cnc-btn" data-c="zShim" ' + (dis ? 'disabled' : '') + ' title="La fraise touche la cale posée sur la pièce">Zéro Z sur cale ' + f2(CF.shim) + '</button></div></div>';
@@ -10979,6 +10979,7 @@ async function onClick(e) {
   switch (c) {
     case 'vol': U.vol = U.vol === +b.dataset.n ? 0 : +b.dataset.n; panel(); break;
     case 'conMenu': U.conOpen = !U.conOpen; if (U.conOpen && !K.T && 'serial' in navigator) { try { U.ports = await navigator.serial.getPorts(); } catch { U.ports = []; } } topRender(); break;
+    case 'goHome': { if (!K.homed || !canJog()) break; const po = +K.set[27] || 1, v = i => K.mpos[i] > 0.5 ? po : -po; K.busy = 'goto'; ui(); try { await seq(['G53 G0 Z' + n3(v(2)), 'G53 G0 X' + n3(v(0)) + ' Y' + n3(v(1))]); await waitIdle(); } catch { } K.busy = ''; ui(); break; }
     case 'floatT': U.floatMin = !U.floatMin; q('#rv3').classList.toggle('cnc-fmin', !!U.floatMin); ovRender(); rvReq(); break;
     case 'goAx': { const a = b.dataset.a, z = Math.max(wpos()[2], 5); if (!canJog()) break; K.busy = 'goto'; ui(); try { await seq(a === 'z' ? ['G90', 'G0 Z0'] : ['G90', 'G0 Z' + n3(z), 'G0 ' + a.toUpperCase() + '0']); await waitIdle(); } catch { } K.busy = ''; ui(); break; }
     case 'spin': if (!conn() || K.prog) break; if (K.fs[1] > 0 || U.spin) { cmd('M5').catch(() => { }); U.spin = false; } else { const t = toolByNum(K.tool) || toolByNum(progInfo().tools[0]) || (S.tools || [])[0]; cmd('M3 S' + Math.round(+(t && t.rpm) || 12000)).catch(() => { }); U.spin = true; } ctlRender(); break;
