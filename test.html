@@ -167,6 +167,13 @@ table.cnc-set input{width:110px;text-align:right}
 .cnc-mac{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:7px 0}
 .cnc-mac button{border:1px solid var(--line);background:var(--input);color:var(--ink);border-radius:6px;padding:5px 3px;font:inherit;font-size:12px;cursor:pointer}
 .cnc-mac button:disabled{opacity:.45}
+#cncGpT tr.last td{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+#cncGpT tr.on td{background:color-mix(in srgb,var(--accent) 38%,transparent);transition:none}
+#cncGpT tr td{transition:background .4s}
+#cncGpT select{min-width:190px}
+.cnc-bar{display:inline-block;position:relative;width:70px;height:6px;border-radius:3px;background:var(--raised);vertical-align:middle;overflow:hidden}
+.cnc-bar i{position:absolute;top:0;bottom:0;left:50%;width:0;background:var(--accent)}
+.cnc-mh .cnc-btn.sm{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -1490,6 +1497,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         </section>
         <section class="cfg-sec" data-cfg="cnc" data-ico="machine"><h2>Pilotage de la machine</h2>
           <label class="chk"><input type="checkbox" id="cfgCnc"> Afficher l’onglet 6 « Usiner » (pilotage de la CNC) — expérimental</label>
+          <label class="chk"><input type="checkbox" id="cfgCncProbe"> J’ai un palpeur (plaque Z ou bloc XYZ) — sinon, l’origine pièce se fait à la main</label>
           <p class="hint">Connecte une machine GRBL, grblHAL ou FluidNC par USB (Chrome ou Edge), guide la prise d’origine, l’origine pièce et le palpage, puis envoie le G-code des parcours visibles. Une machine simulée permet d’essayer sans machine.</p>
         </section>
         <section class="cfg-sec" data-cfg="sim" data-ico="sim"><h2>Simulation</h2>
@@ -10308,8 +10316,10 @@ const say = (m) => { try { toast(m); } catch { } };
 /* ---------------- réglages (gardés dans le navigateur) ---------------- */
 const DEF = { on: false, steps: [0.1, 1, 10, 50], step: 1, jogF: 1500, plate: 15, blockOff: 10, probeF: 100, probeDist: 30, retract: 5, sim: 10, baud: 115200, m3: true,
   macros: [{ n: 'Parking', g: 'G53 G0 Z-5\nG53 G0 X-5 Y-5' }, { n: 'Aspiration ON', g: 'M8' }, { n: 'Aspiration OFF', g: 'M9' }, { n: 'Au-dessus de X0 Y0', g: 'G90 G0 Z5\nG0 X0 Y0' }, { n: 'Lever Z', g: 'G53 G0 Z-5' }, { n: 'Infos ($I)', g: '$I' }],
-  gp: { lock: 4, btn: { 0: 'step0', 1: 'step1', 2: 'step2', 3: 'home', 4: 'lock', 5: 'zeroZ' }, invX: false, invY: false, invZ: false, thr: 25 } };
-let CF = (() => { try { const o = JSON.parse(LS.get('copo.cnc') || '{}'); return { ...DEF, ...o, gp: { ...DEF.gp, ...(o.gp || {}) } }; } catch { return { ...DEF }; } })();
+  probe: false,
+  gp: { on: true, lock: 4, fn: -1, a: { 0: 'stepP', 1: 'stepN', 2: 'stepR', 3: 'home', 5: 'zeroZ', 9: 'start', 8: 'hold' }, a2: {}, invX: false, invY: false, invZ: false, thr: 25 } };
+const cfMerge = o => { o = o || {}; const g = o.gp && !o.gp.btn ? o.gp : {}; return { ...DEF, ...o, steps: Array.isArray(o.steps) && o.steps.length === 4 ? o.steps.map(Number) : DEF.steps.slice(), macros: Array.isArray(o.macros) ? o.macros : DEF.macros.map(m => ({ ...m })), gp: { ...DEF.gp, ...g, a: { ...(g.a || DEF.gp.a) }, a2: { ...(g.a2 || {}) } } }; };
+let CF = (() => { try { return cfMerge(JSON.parse(LS.get('copo.cnc') || '{}')); } catch { return cfMerge({}); } })();
 const cfSave = () => { try { LS.set('copo.cnc', JSON.stringify(CF)); } catch { } };
 
 /* ---------------- état de la machine ---------------- */
@@ -10318,7 +10328,7 @@ const K = { T: null, kind: '', name: '', st: 'Off', sub: '', ctrl: '', fluid: fa
   out: [], fly: [], flyLen: 0, prog: null, tool: null, trail: [], prb: null, idleW: [], finished: false, air: false, busy: '', lastSt: 0, cap: null, sim: null };
 const RX = 127;
 const LOG = [];
-const U = { face: 1, vol: 1, pmode: 'probe', paxis: 'Z', pre: {}, fix: {}, launch: {}, drawer: false, mtab: 'machine', hideOk: true, edit: null, posMp: false, posOpen: true, runOpen: true, homeConfirm: false, prevViews: null, hist: [], hi: -1 };
+const U = { face: 1, vol: 1, pmode: CF.probe ? 'probe' : 'hand', paxis: 'Z', pre: {}, fix: {}, launch: {}, drawer: false, mtab: 'machine', hideOk: true, edit: null, posMp: false, posOpen: true, runOpen: true, homeConfirm: false, prevViews: null, hist: [], hi: -1 };
 const ALARMS = { 1: 'Fin de course touchée : la position est perdue. Refaites la prise d’origine.', 2: 'Le mouvement demandé sort de la zone de travail (limites logicielles).', 3: 'Remise à zéro pendant un mouvement : la position n’est plus garantie. Refaites la prise d’origine.', 4: 'Le palpeur était déjà en contact avant le palpage.', 5: 'Pas de contact pendant le palpage : rapprochez la fraise de la plaque.', 6: 'Prise d’origine interrompue.', 7: 'Porte ouverte pendant la prise d’origine.', 8: 'Prise d’origine : le capteur ne se libère pas.', 9: 'Prise d’origine : capteur de fin de course non trouvé.', 10: 'Fin de course déclenchée (contrôle).', 11: 'Prise d’origine nécessaire.' };
 const ERRS = { 1: 'lettre attendue', 2: 'valeur incorrecte', 3: 'commande $ inconnue', 5: 'prise d’origine désactivée ($22)', 8: 'machine occupée', 9: 'verrouillée (alarme)', 15: 'déplacement hors de la zone de travail', 16: 'commande de déplacement incorrecte', 20: 'commande non reconnue', 22: 'avance non définie', 33: 'arc incorrect' };
 const SETS = { 0: 'Durée des impulsions (µs)', 1: 'Délai de mise en veille des moteurs (ms)', 2: 'Inversion des impulsions', 3: 'Inversion des sens', 4: 'Inversion « enable »', 5: 'Inversion des fins de course', 6: 'Inversion du palpeur', 10: 'Contenu du rapport d’état', 11: 'Écart en jonction (mm)', 12: 'Tolérance des arcs (mm)', 13: 'Rapport en pouces', 20: 'Limites logicielles', 21: 'Fins de course matérielles', 22: 'Prise d’origine activée', 23: 'Sens de prise d’origine', 24: 'Vitesse lente de prise d’origine (mm/min)', 25: 'Vitesse de recherche (mm/min)', 26: 'Anti-rebond (ms)', 27: 'Dégagement après prise d’origine (mm)', 30: 'Vitesse de broche maxi (tr/min)', 31: 'Vitesse de broche mini (tr/min)', 32: 'Mode laser', 100: 'Pas par mm X', 101: 'Pas par mm Y', 102: 'Pas par mm Z', 110: 'Vitesse maxi X (mm/min)', 111: 'Vitesse maxi Y (mm/min)', 112: 'Vitesse maxi Z (mm/min)', 120: 'Accélération X (mm/s²)', 121: 'Accélération Y (mm/s²)', 122: 'Accélération Z (mm/s²)', 130: 'Course X (mm)', 131: 'Course Y (mm)', 132: 'Course Z (mm)' };
@@ -10662,8 +10672,9 @@ function tcRender() {
   el.innerHTML = '<div class="cnc-mb" style="width:min(470px,92vw)"><div class="cnc-mh"><h2>🔧 Changement d’outil</h2></div><div class="cnc-mbody">' +
     (rd ? '<p>Le programme demande : <b>' + nm + '</b> (T' + P.tc.tool + '). La broche est arrêtée et le Z relevé.</p>' : '<p class="cnc-m">Fin des mouvements en cours, arrêt de la broche et remontée du Z…</p>') +
     '<label class="cnc-chk"><input type="checkbox" data-tc="mounted" ' + (P.tc.mounted ? 'checked' : '') + (rd ? '' : ' disabled') + '><span><b>1.</b> Attendez l’arrêt complet de la broche, puis montez la <b>' + nm + '</b>. Serrez bien la pince.</span></label>' +
-    '<div style="padding:6px 0 6px 24px"><b>2.</b> Refaites le zéro Z : posez la plaque sous la fraise (descendez avec le pavé du panneau), branchez la pince, puis :<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn pri" data-c="tcProbe" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>Palper Z (plaque ' + f2(CF.plate, 1) + ' mm)</button>' + (P.tc.probed ? '<span style="color:#2e9b5c;font-weight:600">✓ Z refait</span>' : '') + '<span class="cnc-s"><span class="cnc-led ' + (/P/.test(K.pn) ? 'on' : '') + '" data-live="led"></span>contact</span></div><p class="cnc-s cnc-m" style="margin:6px 0 0">Ne touchez pas à X et Y : ils restent valables.</p></div>' +
-    '<div style="padding-left:24px"><b>3.</b> Rangez la plaque et la pince' + (CF.m3 ? '.' : ', rallumez la défonceuse.') + '</div>' +
+    (CF.probe ? '<div style="padding:6px 0 6px 24px"><b>2.</b> Refaites le zéro Z : posez la plaque sous la fraise (descendez avec le pavé du panneau), branchez la pince, puis :<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn pri" data-c="tcProbe" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>Palper Z (plaque ' + f2(CF.plate, 1) + ' mm)</button>' + (P.tc.probed ? '<span style="color:#2e9b5c;font-weight:600">✓ Z refait</span>' : '') + '<span class="cnc-s"><span class="cnc-led ' + (/P/.test(K.pn) ? 'on' : '') + '" data-live="led"></span>contact</span></div>' :
+      '<div style="padding:6px 0 6px 24px"><b>2.</b> Refaites le zéro Z à la main : posez une feuille de papier sur la pièce, descendez la fraise avec le pavé (pas de 0,1 mm à la fin) jusqu’à pincer la feuille, puis :<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn pri" data-c="tcPaper" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>Zéro Z ici (feuille 0,1 mm)</button>' + (P.tc.probed ? '<span style="color:#2e9b5c;font-weight:600">✓ Z refait</span>' : '') + '</div>') + '<p class="cnc-s cnc-m" style="margin:6px 0 0">Ne touchez pas à X et Y : ils restent valables.</p></div>' +
+    '<div style="padding-left:24px"><b>3.</b> ' + (CF.probe ? 'Rangez la plaque et la pince' : 'Retirez la feuille') + (CF.m3 ? '.' : ', rallumez la défonceuse.') + '</div>' +
     '<div class="cnc-row" style="margin-top:14px;justify-content:space-between"><button class="cnc-btn" data-c="stop">Arrêter l’usinage</button><button class="cnc-btn pri" data-c="tcResume" ' + (P.tc.probed ? '' : 'disabled') + '>▶ Reprendre l’usinage</button></div>' +
     '<p class="cnc-s cnc-m" style="margin-top:9px">Le pavé de déplacement (en bas du panneau) reste utilisable.</p></div></div>';
 }
@@ -10733,7 +10744,9 @@ function panel() {
         (K.busy === 'home' || K.st === 'Home' ? '<p class="cnc-m">Prise d’origine en cours… <b>Échap</b> ou ■ Arrêt pour stopper.</p>' : '') +
         '<p class="cnc-s" style="margin:8px 0 0"><button class="cnc-btn lnk" data-c="unlock">Déverrouiller sans prise d’origine ($X)</button> <span class="cnc-m">– déconseillé</span><br><button class="cnc-btn lnk" data-c="noLim">Ma machine n’a pas de fins de course</button></p>'; }
     } else if (!K.homeSkip) b2 += '<div class="cnc-box info"><b class="t">Pas de fins de course</b>Pas de prise d’origine automatique : le point de départ de la machine est sa position à la mise sous tension.</div><button class="cnc-btn pri big" data-c="skipHome">Continuer</button>';
-    if ((K.homed || K.homeSkip) && !K.lostPos) b2 += '<div class="cnc-box ok"><b class="t">✓ ' + (K.homed ? 'Origine machine faite' : 'Étape passée') + '</b>' + (K.homed ? 'La machine connaît sa position.' : 'Sans prise d’origine, la zone de travail ne peut pas être vérifiée.') + '</div><div class="cnc-lbl">Maintenant, fixez votre pièce</div>' +
+    if (limOn() && K.homeSkip && !K.homed && !K.lostPos) b2 += '<button class="cnc-btn pri" data-c="home" ' + (moving() || K.prog ? 'disabled' : '') + '>⌂ Prise d’origine</button>';
+    if (limOn() && K.homed) b2 += '<div class="cnc-row wrap" style="margin-bottom:4px"><button class="cnc-btn pri" data-c="home" ' + (moving() || K.prog ? 'disabled' : '') + '>⌂ Prise d’origine</button>' + ((K.fluid || K.hal) ? AX.map(a => '<button class="cnc-btn sm" data-c="homeAx" data-a="' + a + '" ' + (moving() || K.prog ? 'disabled' : '') + '>' + a.toUpperCase() + '</button>').join('') : '') + '</div>';
+    if ((K.homed || K.homeSkip) && !K.lostPos) b2 += '<div class="cnc-box ok"><b class="t">✓ ' + (K.homed ? 'Origine machine faite' : 'Étape passée') + '</b>' + (K.homed ? 'La machine connaît sa position. Le bouton ci-dessus la refait si besoin.' : 'Sans prise d’origine, la zone de travail ne peut pas être vérifiée.') + '</div><div class="cnc-lbl">Maintenant, fixez votre pièce</div>' +
       chk('fix', 'a', 'La pièce est bridée (brides, vis ou adhésif double face) et ne bouge pas') + chk('fix', 'b', 'Les brides sont hors de la zone usinée et du passage de la broche') + chk('fix', 'c', 'La pièce est à plat, sans copeaux dessous') +
       '<button class="cnc-btn pri big" style="margin-top:7px" data-c="fixed" ' + (['a', 'b', 'c'].every(k => U.fix[k]) ? '' : 'disabled') + '>Ma pièce est fixée →</button>';
   }
@@ -10760,7 +10773,9 @@ function originBody() {
   if (K.prog && K.prog.tc) h += '<div class="cnc-box warn"><b class="t">Changement d’outil en cours</b>Refaites seulement le <b>Z</b> (fenêtre de droite).</div>';
   if (K.originLost) h += '<div class="cnc-box warn"><b class="t">Origine pièce à refaire</b>Sans fins de course, un arrêt pendant un mouvement fait perdre la position.</div>';
   if (K.g54 && K.g54.some(v => Math.abs(v) > 0.001) && !allSet() && !K.originLost) h += '<div class="cnc-box"><b class="t">Origine enregistrée dans la machine</b>G54 : X ' + f2(K.g54[0]) + ' · Y ' + f2(K.g54[1]) + ' · Z ' + f2(K.g54[2]) + '<div style="margin-top:6px"><button class="cnc-btn sm" data-c="keepG54">La reprendre (même pièce, même fraise)</button></div></div>';
-  h += '<div class="cnc-seg" style="margin:4px 0"><button class="' + (U.pmode === 'probe' ? 'on' : '') + '" data-c="pmode" data-v="probe">Avec palpeur</button><button class="' + (U.pmode === 'hand' ? 'on' : '') + '" data-c="pmode" data-v="hand">À la main</button></div>';
+  if (!CF.probe) U.pmode = 'hand';
+  if (CF.probe) h += '<div class="cnc-seg" style="margin:4px 0"><button class="' + (U.pmode === 'probe' ? 'on' : '') + '" data-c="pmode" data-v="probe">Avec palpeur</button><button class="' + (U.pmode === 'hand' ? 'on' : '') + '" data-c="pmode" data-v="hand">À la main</button></div>';
+  else h += '<p class="cnc-s cnc-m" style="margin:2px 0 6px">Réglage à la main. Vous avez une plaque ou un bloc de palpage ? <button class="cnc-btn lnk" data-c="msetProbe">Activer le palpeur</button></p>';
   if (U.pmode === 'probe') {
     const tc = K.prog && K.prog.tc;
     h += '<div class="cnc-lbl">Que voulez-vous palper ?</div><div class="cnc-seg">' + ['Z', 'XYZ', 'XY', 'X', 'Y'].map(a => '<button class="' + (U.paxis === a ? 'on' : '') + '" data-c="paxis" data-v="' + a + '" ' + (tc && a !== 'Z' ? 'disabled' : '') + '>' + a + '</button>').join('') + '</div>' + illu(U.paxis) + '<p class="cnc-s" style="margin:0 0 6px">' + PTXT[U.paxis] + '</p>';
@@ -10873,23 +10888,30 @@ function msetOpen(t) {
   if (U.mtab === 'machine') {
     b += '<div class="cnc-row wrap" style="margin-bottom:10px"><label class="cnc-s">Vitesse de la liaison USB <select data-cf="baud">' + [115200, 250000, 230400, 57600, 38400].map(v => '<option ' + (+CF.baud === v ? 'selected' : '') + '>' + v + '</option>').join('') + '</select></label><span class="cnc-s cnc-m">(prise en compte à la prochaine connexion)</span></div>';
     if (K.fluid) b += '<div class="cnc-box info"><b class="t">FluidNC : la configuration est dans config.yaml</b>Les réglages de la carte sont dans le fichier <code>config.yaml</code> (les $ ci-dessous sont partiels).<div class="cnc-row wrap" style="margin-top:7px"><button class="cnc-btn sm" data-c="fDump" ' + (conn() ? '' : 'disabled') + '>Télécharger config.yaml</button><button class="cnc-btn sm" data-c="fSd" ' + (conn() ? '' : 'disabled') + '>Fichiers de la carte ($SD/List)</button><button class="cnc-btn sm" disabled title="Pas encore dans la version test">Envoyer un config.yaml…</button></div></div>';
+    if (U.impSet) { const L = U.impSet, diff = Object.entries(L).filter(([k, v]) => +K.set[k] !== +v); b += '<div class="cnc-box warn"><b class="t">Réglages $ importés : ' + Object.keys(L).length + '</b>' + (conn() ? diff.length + ' différent(s) de la machine : ' + esc(diff.slice(0, 12).map(([k, v]) => '$' + k + '=' + v).join(' · ')) + (diff.length > 12 ? '…' : '') : 'Connectez la machine pour les lui envoyer.') + '<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn sm pri" data-c="impSend" ' + (conn() && !K.prog && diff.length ? '' : 'disabled') + '>Envoyer à la machine</button><button class="cnc-btn sm" data-c="impDrop">Ignorer</button></div></div>'; }
     const keys = Object.keys(K.set).map(Number).sort((a, b) => a - b);
     b += keys.length ? '<table class="cnc-set"><tr><th>Code</th><th>Réglage</th><th>Valeur</th></tr>' + keys.map(k => '<tr><td class="c">$' + k + '</td><td>' + esc(SETS[k] || '') + '</td><td><input type="number" step="any" value="' + K.set[k] + '" data-set="' + k + '" ' + (conn() && !K.prog ? '' : 'disabled') + '></td></tr>').join('') + '</table><div class="cnc-row" style="margin-top:10px"><button class="cnc-btn sm" data-c="setSave">Enregistrer les $$ dans un fichier</button><button class="cnc-btn sm" data-c="setRead" ' + (conn() ? '' : 'disabled') + '>Relire ($$)</button><span class="cnc-s cnc-m">Une valeur modifiée est envoyée tout de suite à la machine.</span></div>' : '<p class="cnc-m">Connectez la machine pour lire ses réglages ($$).</p>';
   } else if (U.mtab === 'moves') {
     b = '<div class="cnc-lbl" style="margin-top:0">Les 4 pas du pavé (mm)</div><div class="cnc-row">' + CF.steps.map((s, i) => '<input type="number" step="0.01" value="' + s + '" data-step="' + i + '" style="width:80px">').join('') + '</div><div class="cnc-lbl">Vitesse de déplacement manuel (mm/min)</div><input type="number" value="' + CF.jogF + '" data-cf="jogF"><div class="cnc-lbl">Broche</div><label class="cnc-chk"><input type="checkbox" data-cfb="m3" ' + (CF.m3 ? 'checked' : '') + '><span>La broche est commandée par la machine (M3 / M5). Décochez pour une défonceuse allumée à la main.</span></label>' +
       (K.kind === 'sim' || !K.T ? '<div class="cnc-lbl">Machine simulée : vitesse de la simulation</div><div class="cnc-seg">' + [1, 10, 50].map(v => '<button class="' + (+CF.sim === v ? 'on' : '') + '" data-c="simSp" data-v="' + v + '">× ' + v + '</button>').join('') + '</div>' : '');
   } else if (U.mtab === 'probe') {
-    b = '<div class="cnc-kv" style="max-width:470px;gap:8px 16px;align-items:center"><span>Épaisseur de la plaque Z (mm)</span><span><input type="number" step="0.1" value="' + CF.plate + '" data-cf="plate"></span><span>Bloc XYZ : distance entre la face palpée et le bord de la pièce (mm)</span><span><input type="number" step="0.1" value="' + CF.blockOff + '" data-cf="blockOff"></span><span>Vitesse de palpage (mm/min)</span><span><input type="number" value="' + CF.probeF + '" data-cf="probeF"></span><span>Distance maxi de recherche en Z (mm)</span><span><input type="number" value="' + CF.probeDist + '" data-cf="probeDist"></span><span>Dégagement après palpage (mm)</span><span><input type="number" value="' + CF.retract + '" data-cf="retract"></span></div><p class="cnc-s cnc-m">Le Z se palpe en deux passes : une rapide, puis une lente plus précise. Les côtés X et Y se palpent 8 mm sous le dessus du bloc.</p>';
+    b = '<label class="cnc-chk" style="margin-bottom:10px"><input type="checkbox" data-cfb="probe" ' + (CF.probe ? 'checked' : '') + '><span><b>J’ai un palpeur</b> (plaque Z ou bloc XYZ branché sur la machine). Sinon, l’origine pièce et le changement d’outil se font à la main.</span></label>' + (CF.probe ? '' : '<div style="opacity:.5;pointer-events:none">') + '<div class="cnc-kv" style="max-width:470px;gap:8px 16px;align-items:center"><span>Épaisseur de la plaque Z (mm)</span><span><input type="number" step="0.1" value="' + CF.plate + '" data-cf="plate"></span><span>Bloc XYZ : distance entre la face palpée et le bord de la pièce (mm)</span><span><input type="number" step="0.1" value="' + CF.blockOff + '" data-cf="blockOff"></span><span>Vitesse de palpage (mm/min)</span><span><input type="number" value="' + CF.probeF + '" data-cf="probeF"></span><span>Distance maxi de recherche en Z (mm)</span><span><input type="number" value="' + CF.probeDist + '" data-cf="probeDist"></span><span>Dégagement après palpage (mm)</span><span><input type="number" value="' + CF.retract + '" data-cf="retract"></span></div><p class="cnc-s cnc-m">Le Z se palpe en deux passes : une rapide, puis une lente plus précise. Les côtés X et Y se palpent 8 mm sous le dessus du bloc.</p>' + (CF.probe ? '' : '</div>');
   } else if (U.mtab === 'pad') {
     let gp = null; try { gp = [...(navigator.getGamepads ? navigator.getGamepads() : [])].find(Boolean); } catch { }
-    const A = [['', '—'], ['step0', 'Pas fin'], ['step1', 'Pas normal'], ['step2', 'Pas rapide'], ['lock', 'Sécurité (maintenir)'], ['home', 'Prise d’origine'], ['zeroZ', 'Zéro Z'], ['start', 'Démarrer / Reprendre'], ['pause', 'Pause'], ['stop', 'Arrêt']];
-    b = '<div class="cnc-row" style="margin-bottom:9px"><b>Manette</b><span class="cnc-chip ' + (gp ? 'ok' : '') + '">' + (gp ? 'Détectée : ' + esc(gp.id.slice(0, 50)) : 'Non détectée : appuyez sur un bouton de la manette') + '</span></div><div class="cnc-box warn cnc-s"><b class="t">Bouton de sécurité</b>La machine ne bouge à la manette que si vous <b>maintenez</b> le bouton de sécurité.</div>' +
-      '<div class="cnc-row" style="align-items:flex-start;gap:20px;flex-wrap:wrap"><table class="cnc-set" style="width:auto"><tr><th>Bouton</th><th>Action</th></tr>' + [0, 1, 2, 3, 4, 5, 6, 7].map(i => '<tr><td>' + i + '</td><td><select data-gpb="' + i + '">' + A.map(x => '<option value="' + x[0] + '" ' + ((CF.gp.btn[i] || '') === x[0] ? 'selected' : '') + '>' + x[1] + '</option>').join('') + '</select></td></tr>').join('') + '</table>' +
-      '<table class="cnc-set" style="width:auto"><tr><th>Stick</th><th>Axe</th><th>Inverser</th></tr><tr><td>Stick 1 gauche / droite</td><td>X</td><td><input type="checkbox" data-gpi="invX" ' + (CF.gp.invX ? 'checked' : '') + '></td></tr><tr><td>Stick 1 haut / bas</td><td>Y</td><td><input type="checkbox" data-gpi="invY" ' + (CF.gp.invY ? 'checked' : '') + '></td></tr><tr><td>Stick 2 haut / bas</td><td>Z</td><td><input type="checkbox" data-gpi="invZ" ' + (CF.gp.invZ ? 'checked' : '') + '></td></tr><tr><td>Zone morte</td><td colspan="2"><input type="number" value="' + CF.gp.thr + '" data-gpt="thr" style="width:64px"> %</td></tr></table></div>';
+    const N = Math.max(12, gp ? gp.buttons.length : 16), G = CF.gp, opt = sel => '<option value="">—</option>' + GPA.map(c => '<optgroup label="' + c.c + '">' + c.i.map(x => '<option value="' + x[0] + '" ' + (sel === x[0] ? 'selected' : '') + '>' + x[1] + '</option>').join('') + '</optgroup>').join('');
+    const bsel = (k, v) => '<select data-gpk="' + k + '"><option value="-1">Aucun</option>' + Array.from({ length: N }, (_, i) => '<option value="' + i + '" ' + (+v === i ? 'selected' : '') + '>Bouton ' + i + '</option>').join('') + '</select>';
+    b = '<div class="cnc-row wrap" style="margin-bottom:9px;gap:10px"><b>Manette</b><span class="cnc-chip ' + (gp ? 'ok' : '') + '" id="cncGpId">' + (gp ? 'Détectée : ' + esc(gp.id.slice(0, 60)) : 'Non détectée : appuyez sur un bouton de la manette') + '</span><label class="cnc-chk"><input type="checkbox" data-gpo="on" ' + (G.on ? 'checked' : '') + '><span>Manette active</span></label></div>' +
+      '<div class="cnc-box info cnc-s">Appuyez sur un bouton de la manette : sa ligne s’allume dans le tableau. Choisissez ensuite son action. Pendant que cet onglet est ouvert, la manette ne commande pas la machine.</div>' +
+      '<div class="cnc-row wrap" style="gap:18px;margin:8px 0"><label class="cnc-s">Bouton de sécurité (à maintenir pour bouger) ' + bsel('lock', G.lock) + '</label><label class="cnc-s">Bouton « 2ᵉ action » (comme une touche Fn) ' + bsel('fn', G.fn) + '</label></div>' +
+      '<div class="cnc-row" style="align-items:flex-start;gap:18px;flex-wrap:wrap"><table class="cnc-set" style="width:auto" id="cncGpT"><tr><th>Bouton</th><th>Action</th><th>2ᵉ action (avec le bouton 2ᵉ action)</th></tr>' +
+      Array.from({ length: N }, (_, i) => '<tr data-gprow="' + i + '"><td><b>' + i + '</b>' + (+G.lock === i ? ' <span class="cnc-chip">sécurité</span>' : +G.fn === i ? ' <span class="cnc-chip">2ᵉ action</span>' : '') + '</td><td><select data-gpa="' + i + '">' + opt(G.a[i] || '') + '</select></td><td><select data-gpa2="' + i + '">' + opt(G.a2[i] || '') + '</select></td></tr>').join('') + '</table>' +
+      '<div><table class="cnc-set" style="width:auto"><tr><th>Stick</th><th>Axe</th><th>Inverser</th><th></th></tr>' + [['Stick 1 gauche / droite', 'X', 'invX', 0], ['Stick 1 haut / bas', 'Y', 'invY', 1], ['Stick 2 haut / bas', 'Z', 'invZ', 3]].map(r => '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td><input type="checkbox" data-gpi="' + r[2] + '" ' + (G[r[2]] ? 'checked' : '') + '></td><td><span class="cnc-bar"><i data-gpax="' + r[3] + '"></i></span></td></tr>').join('') +
+      '<tr><td>Zone morte</td><td colspan="3"><input type="number" value="' + G.thr + '" data-gpt="thr" style="width:64px"> %</td></tr></table><p class="cnc-s cnc-m" style="max-width:300px">Les sticks déplacent la machine seulement en maintenant le bouton de sécurité. Les déplacements suivent la vitesse réglée sous le pavé.</p>' +
+      '<div class="cnc-row"><button class="cnc-btn sm" data-c="gpReset">Valeurs par défaut</button></div></div></div>';
   } else if (U.mtab === 'macros') {
     b = '<p class="cnc-s cnc-m">Boutons de G-code personnalisés, sous « Console et macros » dans l’onglet Usiner.</p>' + CF.macros.map((m, i) => '<div class="cnc-row" style="align-items:flex-start;margin-bottom:7px"><input value="' + esc(m.n) + '" data-mn="' + i + '" style="width:160px"><textarea rows="2" data-mg="' + i + '" style="flex:1;font:12px var(--f-mono);background:var(--input);color:var(--ink);border:1px solid var(--line);border-radius:var(--r);padding:5px">' + esc(m.g) + '</textarea><button class="cnc-btn sm" data-c="macro" data-i="' + i + '" ' + (conn() && !K.prog ? '' : 'disabled') + '>▶</button></div>').join('');
   } else b = conHtml('c2') + '<p class="cnc-s cnc-m">Exemples : <code>?</code> <code>$$</code> <code>$I</code> <code>$G</code> <code>$#</code> <code>$X</code> <code>$H</code> <code>G0 Z5</code>. Les commandes sont refusées pendant l’usinage.</p>';
-  el.innerHTML = '<div class="cnc-mb"><div class="cnc-mh"><h2>Paramètres machine' + (K.ctrl ? ' – ' + esc(K.ctrl) : '') + '</h2><button class="cnc-btn sm" data-c="msetX">✕</button></div><div class="cnc-mt">' + T.map(t => '<button class="' + (U.mtab === t[0] ? 'on' : '') + '" data-c="mtab" data-v="' + t[0] + '">' + t[1] + '</button>').join('') + '</div><div class="cnc-mbody">' + b + '</div></div>';
+  el.innerHTML = '<div class="cnc-mb"><div class="cnc-mh"><h2>Paramètres machine' + (K.ctrl ? ' – ' + esc(K.ctrl) : '') + '</h2><button class="cnc-btn sm" data-c="cfExp" title="Enregistre dans un fichier les réglages de l’onglet Usiner (pas, palpeur, manette, macros) et les $ de la machine connectée">⤓ Exporter les réglages</button><button class="cnc-btn sm" data-c="cfImp" title="Relit un fichier de réglages COPO (.json) ou une liste de $n=valeur">⤒ Importer…</button><input type="file" id="cncImp" accept=".json,.txt,.nc,.gcode,text/plain,application/json" hidden><button class="cnc-btn sm" data-c="msetX">✕</button></div><div class="cnc-mt">' + T.map(t => '<button class="' + (U.mtab === t[0] ? 'on' : '') + '" data-c="mtab" data-v="' + t[0] + '">' + t[1] + '</button>').join('') + '</div><div class="cnc-mbody">' + b + '</div></div>';
   conRender();
 }
 function download(name, text) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
@@ -10925,6 +10947,13 @@ async function onClick(e) {
     case 'paxis': U.paxis = b.dataset.v; panel(); break;
     case 'probe': probe(); break;
     case 'tcProbe': U.paxis = 'Z'; probe(); break;
+    case 'tcPaper': { const o = stockO(); await setZero('z', 0.1 + o.oz); if (K.prog && K.prog.tc && K.ws.z) K.prog.tc.probed = true; tcRender(); break; }
+    case 'msetProbe': msetOpen('probe'); break;
+    case 'cfExp': cfExport(); break;
+    case 'cfImp': { const i = q('#cncImp'); if (i) i.click(); break; }
+    case 'impSend': impSend(); break;
+    case 'impDrop': U.impSet = null; msetOpen('machine'); break;
+    case 'gpReset': CF.gp = cfMerge({}).gp; cfSave(); msetOpen('pad'); break;
     case 'simTouch': if (K.sim) { K.sim.touch = performance.now() + 1500; } break;
     case 'edit': U.edit = b.dataset.a; panel(); setTimeout(() => { const i = q('#cncAxIn'); if (i) { i.focus(); i.select(); } }, 0); break;
     case 'zero': setZero(b.dataset.a, 0); break;
@@ -10960,11 +10989,15 @@ async function onChange(e) {
   if (d.tc) { if (K.prog && K.prog.tc) K.prog.tc[d.tc] = t.checked; tcRender(); return; }
   if (d.k === 'airWant') { K.airWant = t.checked; panel(); return; }
   if (d.cf) { CF[d.cf] = +t.value; cfSave(); if (d.cf === 'jogF') setL('jf', String(CF.jogF)); return; }
-  if (d.cfb) { CF[d.cfb] = t.checked; cfSave(); return; }
+  if (d.cfb) { CF[d.cfb] = t.checked; cfSave(); if (d.cfb === 'probe') { U.pmode = CF.probe ? 'probe' : 'hand'; const c2 = q('#cfgCncProbe'); if (c2) c2.checked = CF.probe; if (q('#cncMset')) msetOpen(); ui(); } return; }
   if (d.step !== undefined) { CF.steps[+d.step] = +t.value || CF.steps[+d.step]; cfSave(); ctlRender(); return; }
   if (d.ax) { const a = d.ax; U.edit = null; await setZero(a, +t.value); return; }
   if (d.set) { const k = d.set; try { await cmd('$' + k + '=' + t.value); K.set[k] = +t.value; say('$' + k + ' = ' + t.value + ' envoyé.'); } catch (er) { say('Refusé par la machine : ' + er); t.value = K.set[k]; } return; }
-  if (d.gpb !== undefined) { CF.gp.btn[d.gpb] = t.value; if (t.value === 'lock') CF.gp.lock = +d.gpb; cfSave(); return; }
+  if (d.gpa !== undefined) { if (t.value) CF.gp.a[d.gpa] = t.value; else delete CF.gp.a[d.gpa]; cfSave(); return; }
+  if (d.gpa2 !== undefined) { if (t.value) CF.gp.a2[d.gpa2] = t.value; else delete CF.gp.a2[d.gpa2]; cfSave(); return; }
+  if (d.gpk) { CF.gp[d.gpk] = +t.value; cfSave(); msetOpen('pad'); return; }
+  if (d.gpo) { CF.gp[d.gpo] = t.checked; cfSave(); return; }
+  if (t.id === 'cncImp') { const f = t.files && t.files[0]; t.value = ''; if (f) f.text().then(cfImportText); return; }
   if (d.gpi) { CF.gp[d.gpi] = t.checked; cfSave(); return; }
   if (d.gpt) { CF.gp.thr = +t.value; cfSave(); return; }
   if (d.mn !== undefined) { CF.macros[+d.mn].n = t.value; cfSave(); return; }
@@ -10987,17 +11020,84 @@ window.addEventListener('blur', () => { for (const k in held) clearTimeout(held[
 window.addEventListener('beforeunload', e => { if (K.prog) { e.preventDefault(); e.returnValue = ''; } });
 
 /* ---------------- manette ---------------- */
-let gpPrev = {};
+const GPA = [
+  { c: 'Déplacements', i: [['stepR', 'Pas rapide'], ['stepN', 'Pas normal'], ['stepP', 'Pas précis'], ['stepC', 'Changer de pas (cycle)'], ['jX+', 'Jog X+ (droite)'], ['jX-', 'Jog X− (gauche)'], ['jY+', 'Jog Y+ (arrière)'], ['jY-', 'Jog Y− (avant)'], ['jZ+', 'Jog Z+ (haut)'], ['jZ-', 'Jog Z− (bas)'], ['jX+Y+', 'Jog X+ Y+'], ['jX+Y-', 'Jog X+ Y−'], ['jX-Y+', 'Jog X− Y+'], ['jX-Y-', 'Jog X− Y−']] },
+  { c: 'Positions', i: [['park', 'Parking (1ʳᵉ macro)'], ['zeroX', 'Zéro X'], ['zeroY', 'Zéro Y'], ['zeroZ', 'Zéro Z'], ['zeroAll', 'Zéro X Y Z'], ['goXY', 'Aller à X0 Y0'], ['goX', 'Aller à X0'], ['goY', 'Aller à Y0'], ['goZ', 'Aller à Z0'], ['cBL', 'Coin arrière gauche'], ['cBR', 'Coin arrière droit'], ['cFL', 'Coin avant gauche'], ['cFR', 'Coin avant droit'], ['home', 'Prise d’origine']] },
+  { c: 'Palpage', i: [['probe', 'Lancer le palpage'], ['pNext', 'Palpage suivant (Z, XYZ…)'], ['pPrev', 'Palpage précédent'], ['diaUp', 'Diamètre d’outil +'], ['diaDn', 'Diamètre d’outil −']] },
+  { c: 'Broche', i: [['spOn', 'Broche marche (M3)'], ['spOff', 'Broche arrêt (M5)']] },
+  { c: 'Arrosage', i: [['m7', 'Brouillard (M7)'], ['m8', 'Arrosage / aspiration (M8)'], ['m9', 'Arrêt arrosage (M9)']] },
+  { c: 'Usinage', i: [['start', 'Démarrer / Reprendre'], ['pause', 'Pause'], ['stop', 'Arrêt (remise à zéro)']] },
+  { c: 'Réglages d’avance', i: [['f+', 'Avance +1 %'], ['f++', 'Avance +10 %'], ['f-', 'Avance −1 %'], ['f--', 'Avance −10 %'], ['f0', 'Avance 100 %'], ['s+', 'Broche +1 %'], ['s++', 'Broche +10 %'], ['s-', 'Broche −1 %'], ['s--', 'Broche −10 %'], ['s0', 'Broche 100 %']] },
+  { c: 'Général', i: [['gpTog', 'Manette active / inactive'], ['unlock', 'Déverrouiller ($X)'], ['reset', 'Remise à zéro (0x18)'], ['report', 'Rapport d’état (?)'], ['tcOk', 'Valider le changement d’outil'], ['hold', 'Pause immédiate (!)']] },
+  { c: 'Vue 3D', i: [['v3d', 'Vue 3D'], ['vTop', 'Vue de dessus'], ['vFront', 'Vue de face'], ['vRight', 'Vue de droite'], ['vLeft', 'Vue de gauche'], ['vFit', 'Tout voir'], ['zIn', 'Zoom +'], ['zOut', 'Zoom −']] }];
+const MOVE_A = /^(j|park|zero|go|c[BF]|home|probe|spOn|m[78]|start|unlock|tcOk)/;
+function gpJog(id) { const m = /^j((?:[XYZ][+-])+)$/.exec(id); if (!m) return null; const v = [0, 0, 0]; for (const x of m[1].match(/[XYZ][+-]/g)) v['XYZ'.indexOf(x[0])] = x[1] === '+' ? 1 : -1; return v; }
+async function gpDo(id, lk) {
+  if (!id) return; if (MOVE_A.test(id) && !lk) { say('Maintenez le bouton de sécurité de la manette.'); return; }
+  const st = n => { CF.step = CF.steps[n]; cfSave(); ctlRender(); }, o = stockO(), trv = [K.set[130], K.set[131], K.set[132]];
+  const corner = (bx, by) => { if (!K.homed || !trv[0] || K.mpos[0] > 0.5) { say('Coins : prise d’origine et courses ($130, $131) nécessaires.'); return; } seq(['G53 G0 Z-5', 'G53 G0 X' + n3(bx ? -5 : -trv[0] + 5) + ' Y' + n3(by ? -5 : -trv[1] + 5)]).catch(() => { }); };
+  const view = (y, p) => { RV.yaw = y; RV.pitch = p; rvReq(); };
+  switch (id) {
+    case 'stepR': st(3); break; case 'stepN': st(1); break; case 'stepP': st(0); break; case 'stepC': { const k = CF.steps.indexOf(+CF.step); st((k + 1) % 4); break; }
+    case 'park': runMacro(0); break; case 'zeroX': setZero('x', 0); break; case 'zeroY': setZero('y', 0); break; case 'zeroZ': setZero('z', 0); break; case 'zeroAll': zeroAll(); break;
+    case 'goXY': gotoOrigin(); break; case 'goX': if (allSet()) seq(['G90', 'G0 X0']).catch(() => { }); break; case 'goY': if (allSet()) seq(['G90', 'G0 Y0']).catch(() => { }); break; case 'goZ': if (allSet()) seq(['G90', 'G0 Z' + n3(o.oz + 1)]).catch(() => { }); break;
+    case 'cBL': corner(0, 1); break; case 'cBR': corner(1, 1); break; case 'cFL': corner(0, 0); break; case 'cFR': corner(1, 0); break; case 'home': home(); break;
+    case 'probe': if (CF.probe) probe(); else say('Palpeur non activé (Paramètres machine › Palpeur).'); break;
+    case 'pNext': case 'pPrev': { const L = ['Z', 'XYZ', 'XY', 'X', 'Y'], k = L.indexOf(U.paxis); U.paxis = L[(k + (id === 'pNext' ? 1 : 4)) % 5]; panel(); say('Palpage : ' + U.paxis); break; }
+    case 'diaUp': case 'diaDn': U.dia = Math.max(0.5, Math.round(((+U.dia || curToolDia()) + (id === 'diaUp' ? 0.5 : -0.5)) * 100) / 100); panel(); say('Diamètre d’outil : ' + f2(U.dia) + ' mm'); break;
+    case 'spOn': { const t = toolByNum(K.tool) || (S.tools || [])[0]; cmd('M3 S' + Math.round(+(t && t.rpm) || 12000)).catch(() => { }); break; }
+    case 'spOff': cmd('M5').catch(() => { }); break; case 'm7': cmd('M7').catch(() => { }); break; case 'm8': cmd('M8').catch(() => { }); break; case 'm9': cmd('M9').catch(() => { }); break;
+    case 'start': progStart(); break; case 'pause': pause(); break; case 'stop': stopAll(); break;
+    case 'f+': rt('\x93'); break; case 'f++': rt('\x91'); break; case 'f-': rt('\x94'); break; case 'f--': rt('\x92'); break; case 'f0': rt('\x90'); break;
+    case 's+': rt('\x9c'); break; case 's++': rt('\x9a'); break; case 's-': rt('\x9d'); break; case 's--': rt('\x9b'); break; case 's0': rt('\x99'); break;
+    case 'gpTog': CF.gp.on = !CF.gp.on; cfSave(); say('Manette ' + (CF.gp.on ? 'active' : 'inactive')); break;
+    case 'unlock': unlock(); break; case 'reset': rt('\x18'); break; case 'report': rt('?'); break; case 'hold': rt('!'); break;
+    case 'tcOk': if (K.prog && K.prog.tc && K.prog.tc.probed) tcResume(); else say('Changement d’outil : refaites d’abord le zéro Z.'); break;
+    case 'v3d': view(-Math.PI / 2 + 0.35, 0.75); break; case 'vTop': view(-Math.PI / 2, 1.5707); break; case 'vFront': view(-Math.PI / 2, 0); break; case 'vRight': view(0, 0); break; case 'vLeft': view(Math.PI, 0); break;
+    case 'vFit': if (typeof rvFit === 'function') rvFit(true); rvReq(); break; case 'zIn': RV.dist *= 0.8; rvReq(); break; case 'zOut': RV.dist *= 1.25; rvReq(); break;
+  }
+}
+let gpPrev = {}, gpJ = null;
 function gpLoop() {
-  requestAnimationFrame(gpLoop); if (curTab !== 'usiner' || !K.T) return; let g = null; try { g = [...(navigator.getGamepads ? navigator.getGamepads() : [])].find(Boolean); } catch { return; } if (!g) return;
-  const lk = g.buttons[+CF.gp.lock] && g.buttons[+CF.gp.lock].pressed, th = CF.gp.thr / 100, ax = i => { const v = g.axes[i] || 0; return Math.abs(v) < th ? 0 : Math.sign(v); };
-  const v = [ax(0) * (CF.gp.invX ? -1 : 1), -ax(1) * (CF.gp.invY ? -1 : 1), -ax(3) * (CF.gp.invZ ? -1 : 1)], key = v.join(',');
-  if (lk && v.some(Boolean)) { if (gpPrev.v !== key) { if (jogging) { jogStop(); setTimeout(() => jogStart(v), 60); } else jogStart(v); gpPrev.v = key; } } else if (gpPrev.v) { jogStop(); gpPrev.v = ''; }
-  g.buttons.forEach((b, i) => { if (b.pressed && !gpPrev['b' + i]) { const a = CF.gp.btn[i]; if (a === 'step0' || a === 'step1' || a === 'step2') { CF.step = CF.steps[+a.slice(4)]; ctlRender(); } else if (a === 'pause') pause(); else if (a === 'stop') stopAll(); else if (lk && a === 'home') home(); else if (lk && a === 'zeroZ') setZero('z', 0); else if (lk && a === 'start') progStart(); } gpPrev['b' + i] = b.pressed; });
+  requestAnimationFrame(gpLoop); let g = null; try { g = [...(navigator.getGamepads ? navigator.getGamepads() : [])].find(Boolean); } catch { return; }
+  const cfgOpen = !!q('#cncGpT');
+  if (cfgOpen) { // configuration : on allume la ligne du bouton appuyé
+    const id = q('#cncGpId'); if (id && g && !id.dataset.ok) { id.textContent = 'Détectée : ' + g.id.slice(0, 60); id.classList.add('ok'); id.dataset.ok = 1; }
+    if (g) { g.buttons.forEach((b, i) => { const r = q('[data-gprow="' + i + '"]'); if (!r) return; if (b.pressed) { r.classList.add('on'); r.classList.add('last'); if (!gpPrev['c' + i]) { qa('#cncGpT tr.last').forEach(x => { if (x !== r) x.classList.remove('last'); }); r.scrollIntoView({ block: 'nearest' }); } } else r.classList.remove('on'); gpPrev['c' + i] = b.pressed; });
+      qa('[data-gpax]').forEach(e => { const v = g.axes[+e.dataset.gpax] || 0; e.style.left = (50 + Math.min(0, v) * 50) + '%'; e.style.width = Math.abs(v) * 50 + '%'; }); }
+    if (gpJ) { jogStop(); gpJ = null; } return; }
+  if (!g || curTab !== 'usiner' || !K.T || !CF.gp.on && !(g.buttons.some((b, i) => b.pressed && (CF.gp.a[i] === 'gpTog')))) { if (gpJ) { jogStop(); gpJ = null; } return; }
+  const G = CF.gp, lk = +G.lock < 0 ? true : !!(g.buttons[+G.lock] && g.buttons[+G.lock].pressed), fn = +G.fn >= 0 && g.buttons[+G.fn] && g.buttons[+G.fn].pressed, th = G.thr / 100, ax = i => { const v = g.axes[i] || 0; return Math.abs(v) < th ? 0 : Math.sign(v); };
+  // boutons de déplacement maintenus, puis sticks
+  let jv = null;
+  g.buttons.forEach((b, i) => { if (i === +G.lock || i === +G.fn) return; const id = (fn ? G.a2[i] : G.a[i]) || ''; const v = gpJog(id); if (v && b.pressed && lk) jv = v; });
+  if (!jv && lk) { const v = [ax(0) * (G.invX ? -1 : 1), -ax(1) * (G.invY ? -1 : 1), -ax(3) * (G.invZ ? -1 : 1)]; if (v.some(Boolean)) jv = v; }
+  const key = jv ? jv.join(',') : '';
+  if (key !== (gpJ || '')) { if (gpJ) jogStop(); gpJ = key || null; if (jv) setTimeout(() => { if (gpJ === key) jogStart(jv); }, gpJ ? 60 : 0); }
+  g.buttons.forEach((b, i) => { if (b.pressed && !gpPrev['b' + i] && i !== +G.lock && i !== +G.fn) { const id = (fn ? G.a2[i] : G.a[i]) || ''; if (!gpJog(id)) gpDo(id, lk); } gpPrev['b' + i] = b.pressed; });
+}
+
+/* ---------------- exporter / importer les réglages ---------------- */
+function cfExport() {
+  const o = { copo: 'usiner', version: 1, date: new Date().toISOString(), reglages: CF, grbl: Object.keys(K.set).length ? K.set : undefined, controleur: K.ctrl || undefined };
+  download('copo-usiner-reglages.json', JSON.stringify(o, null, 2)); say('Réglages exportés.');
+}
+function cfImportText(txt) {
+  let o = null; try { o = JSON.parse(txt); } catch { }
+  if (o && o.reglages) { const keep = CF.on; CF = cfMerge(o.reglages); CF.on = keep; cfSave(); U.impSet = o.grbl && Object.keys(o.grbl).length ? o.grbl : null; U.pmode = CF.probe ? 'probe' : 'hand'; ctlRender(); ui(); msetOpen('machine'); say('Réglages importés' + (U.impSet ? ' (avec ' + Object.keys(U.impSet).length + ' réglages $ de la machine)' : '') + '.'); return; }
+  const L = {}; for (const l of String(txt).split(/\r?\n/)) { const m = /^\s*\$(\d+)\s*=\s*(-?[\d.]+)/.exec(l); if (m) L[m[1]] = +m[2]; }
+  if (Object.keys(L).length) { U.impSet = L; msetOpen('machine'); say(Object.keys(L).length + ' réglages $ lus dans le fichier.'); return; }
+  say('Fichier non reconnu : réglages COPO (.json) ou liste de $n=valeur attendus.');
+}
+async function impSend() {
+  const L = U.impSet; if (!L || !conn() || K.prog) return; let n = 0, err = 0;
+  for (const [k, v] of Object.entries(L)) { if (+K.set[k] === +v) continue; try { await cmd('$' + k + '=' + v); K.set[k] = +v; n++; } catch { err++; } }
+  U.impSet = null; msetOpen('machine'); say(n + ' réglage(s) envoyé(s) à la machine' + (err ? ', ' + err + ' refusé(s)' : '') + '.');
 }
 
 /* ---------------- réglage dans Paramètres ---------------- */
 function cfgHook() {
+  const p2 = q('#cfgCncProbe'); if (p2) { p2.checked = !!CF.probe; p2.addEventListener('change', () => { CF.probe = p2.checked; cfSave(); U.pmode = CF.probe ? 'probe' : 'hand'; ui(); }); }
   const c = q('#cfgCnc'); if (!c) return; c.checked = !!CF.on;
   c.addEventListener('change', () => { if (!c.checked && K.prog) { c.checked = true; say('Arrêtez l’usinage avant de cacher l’onglet Usiner.'); return; } CF.on = c.checked; cfSave(); if (!CF.on && K.T) disconnect(); tabVis(); say(CF.on ? 'Onglet 6 « Usiner » ajouté.' : 'Onglet Usiner caché.'); });
 }
