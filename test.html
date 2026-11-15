@@ -17,6 +17,157 @@
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <meta name="theme-color" content="#262626">
 <link rel="manifest" href="manifest.webmanifest">
+<style>
+/* ===== COPO — onglet Usiner (version test) ===== */
+.tabs [data-tab="usiner"] .cnc-tdot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:5px;vertical-align:1px;background:var(--muted);opacity:.6}
+.tabs [data-tab="usiner"].cnc-conn .cnc-tdot{background:#2e9b5c;opacity:1}
+.tabs [data-tab="usiner"].cnc-alarm .cnc-tdot{background:var(--danger);opacity:1}
+.pane.cnc-pane:not([hidden]){display:flex;flex-direction:column;padding:0;overflow:hidden}
+#cncScroll{flex:1;overflow:auto;padding:10px 12px 14px;min-height:0}
+#cncCtl{border-top:1px solid var(--line);padding:10px 12px 12px;background:var(--bg);flex:none}
+.cnc-test{font-size:12px;background:color-mix(in srgb,#d9480f 14%,var(--panel));border:1px solid color-mix(in srgb,#d9480f 40%,var(--line));border-radius:8px;padding:6px 9px;margin-bottom:9px;color:var(--ink)}
+.cnc-vol{border:1px solid var(--line);border-radius:8px;background:var(--panel);margin-bottom:8px;overflow:visible}
+.cnc-vol>header{display:flex;align-items:center;gap:8px;padding:10px 11px;cursor:pointer;user-select:none;border-radius:8px}
+.cnc-vol>header:hover{background:var(--raised)}
+.cnc-vol.open>header{border-bottom:1px solid var(--line);border-radius:8px 8px 0 0;background:var(--raised)}
+.cnc-vn{font-weight:700;color:var(--muted);width:12px}
+.cnc-vt{font-weight:600}
+.cnc-vs{flex:1;text-align:right;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cnc-chev{color:var(--muted);transition:transform .15s;font-size:11px}
+.cnc-vol.open .cnc-chev{transform:rotate(180deg)}
+.cnc-vb{padding:10px 11px 13px;font-size:13px}
+.cnc-dot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--muted);opacity:.55}
+.cnc-dot.done{background:#2e9b5c;opacity:1;box-shadow:0 0 0 3px rgb(46 155 92/.22)}
+.cnc-dot.cur{background:var(--accent);opacity:1;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.cnc-dot.redo{background:var(--warn);opacity:1;box-shadow:0 0 0 3px color-mix(in srgb,var(--warn) 25%,transparent)}
+.cnc-pane .cnc-btn,.cnc-modal .cnc-btn{font:inherit;font-size:13px;color:var(--ink);background:var(--input);border:1px solid var(--line);border-radius:var(--r);padding:6px 11px;cursor:pointer}
+.cnc-btn:hover:not(:disabled){background:var(--raised)}
+.cnc-btn:disabled{opacity:.45;cursor:not-allowed}
+.cnc-btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink,#fff);font-weight:600}
+:root[data-theme="light"] .cnc-btn.pri{background:var(--accent-soft);color:var(--accent-text);border-color:#BCC8D3}
+.cnc-btn.big{width:100%;padding:9px 12px;font-size:14px}
+.cnc-btn.sm{padding:3px 8px;font-size:12px}
+.cnc-btn.lnk{border:0;background:none;color:var(--accent);padding:1px 0;text-decoration:underline;font-size:12.5px}
+:root[data-theme="light"] .cnc-btn.lnk{color:var(--accent-text)}
+.cnc-row{display:flex;gap:7px;align-items:center}
+.cnc-row.wrap{flex-wrap:wrap}
+.cnc-m{color:var(--muted)}
+.cnc-s{font-size:12px}
+.cnc-lbl{font-size:11.5px;color:var(--muted);font-weight:600;margin:11px 0 5px}
+.cnc-box{border-radius:8px;padding:8px 10px;margin:8px 0;border:1px solid var(--line);background:var(--raised);font-size:12.5px;line-height:1.45}
+.cnc-box b.t{display:block;margin-bottom:3px}
+.cnc-box ul{margin:3px 0 0;padding-left:17px}
+.cnc-box.ok{border-color:color-mix(in srgb,#2e9b5c 45%,var(--line));background:color-mix(in srgb,#2e9b5c 13%,var(--panel))}
+.cnc-box.warn{border-color:color-mix(in srgb,var(--warn) 50%,var(--line));background:color-mix(in srgb,var(--warn) 14%,var(--panel))}
+.cnc-box.err{border-color:color-mix(in srgb,var(--danger) 50%,var(--line));background:color-mix(in srgb,var(--danger) 14%,var(--panel))}
+.cnc-box.info{border-color:color-mix(in srgb,var(--accent) 35%,var(--line));background:color-mix(in srgb,var(--accent) 10%,var(--panel))}
+.cnc-chk{display:flex;gap:8px;align-items:flex-start;padding:3px 0;cursor:pointer;font-size:13px}
+.cnc-chk input{margin-top:3px;flex:none;accent-color:var(--accent)}
+.cnc-seg{display:inline-flex;border:1px solid var(--line);background:var(--raised);border-radius:var(--r);padding:2px;gap:2px}
+.cnc-seg button{border:0;background:transparent;border-radius:calc(var(--r) - 1px);padding:4px 9px;min-width:30px;font:inherit;font-size:12.5px;color:var(--ink);cursor:pointer}
+.cnc-seg button.on{background:var(--accent);color:var(--accent-ink,#fff);font-weight:600}
+:root[data-theme="light"] .cnc-seg button.on{background:var(--accent-soft);color:var(--accent-text)}
+.cnc-seg button:disabled{opacity:.4;cursor:not-allowed}
+.cnc-pane input[type=number],.cnc-pane select,.cnc-modal input,.cnc-modal select{background:var(--input);color:var(--ink);border:1px solid var(--line);border-radius:var(--r);padding:4px 7px;font:inherit;font-size:13px}
+.cnc-cwrap{position:relative}
+.cnc-cmenu{display:none;position:absolute;left:0;right:0;top:100%;margin-top:4px;background:var(--panel);border:1px solid var(--line);border-radius:9px;box-shadow:0 10px 26px var(--shadow);z-index:30;padding:4px}
+.cnc-cwrap:hover .cnc-cmenu,.cnc-cwrap.open .cnc-cmenu{display:block}
+.cnc-cwrap:hover::after{content:"";position:absolute;left:0;right:0;top:100%;height:6px}
+.cnc-ci{display:flex;gap:9px;align-items:center;width:100%;text-align:left;border:0;background:none;border-radius:7px;padding:7px 9px;color:var(--ink);font:inherit;font-size:13px;cursor:pointer}
+.cnc-ci:hover:not(:disabled){background:var(--raised)}
+.cnc-ci:disabled{opacity:.45;cursor:default}
+.cnc-ci small{display:block;color:var(--muted);font-size:11.5px}
+.cnc-ci .ic{width:20px;text-align:center;font-size:16px}
+.cnc-ct{font-size:11px;color:var(--muted);padding:6px 9px 2px}
+.cnc-kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:12.5px}
+.cnc-kv>span:nth-child(odd){color:var(--muted)}
+.cnc-kv>span:nth-child(even){text-align:right;font-variant-numeric:tabular-nums}
+.cnc-ax{display:grid;grid-template-columns:18px 1fr auto;gap:8px;align-items:center;padding:3px 0}
+.cnc-ax b{font-weight:700}
+.cnc-axv{font:600 17px/1.1 var(--f-mono);border:1px dashed transparent;border-radius:6px;padding:3px 6px;cursor:text;text-align:right}
+.cnc-axv:hover{border-color:var(--line);background:var(--input)}
+.cnc-chips{display:flex;gap:6px;margin:8px 0}
+.cnc-chip{border-radius:6px;padding:1px 8px;font-size:12px;background:var(--raised);color:var(--muted)}
+.cnc-chip.ok{background:color-mix(in srgb,#2e9b5c 22%,var(--panel));color:var(--ink)}
+.cnc-led{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--muted);opacity:.5;margin-right:6px;vertical-align:0}
+.cnc-led.on{background:#2fbf5f;opacity:1;box-shadow:0 0 7px #2fbf5f}
+.cnc-illu{background:var(--raised);border-radius:8px;display:flex;justify-content:center;padding:4px;margin:8px 0}
+.cnc-illu svg{max-width:100%}
+.cnc-op{display:flex;align-items:center;gap:7px;padding:2px 0;font-size:12.5px}
+.cnc-sw{width:9px;height:9px;border-radius:3px;flex:none}
+.cnc-ck{font-size:12.5px;padding:2px 0}
+.cnc-ck i{font-style:normal;font-weight:700;margin-right:4px}
+.cnc-ck.ok i{color:#2e9b5c}.cnc-ck.no i{color:var(--danger)}.cnc-ck.wa i{color:var(--warn)}
+/* commandes du bas */
+.cnc-cg{display:grid;grid-template-columns:auto auto 1fr;gap:10px;align-items:start}
+.cnc-pad{display:grid;grid-template-columns:repeat(3,38px);grid-template-rows:repeat(3,38px);gap:4px}
+.cnc-zpad{display:grid;grid-template-columns:38px;grid-template-rows:repeat(3,38px);gap:4px}
+.cnc-pb{border:1px solid var(--line);background:var(--input);border-radius:7px;font:600 12.5px var(--f-ui);color:var(--ink);padding:0;touch-action:none;cursor:pointer}
+.cnc-pb:hover:not(:disabled){border-color:var(--accent)}
+.cnc-pb:active:not(:disabled){background:color-mix(in srgb,var(--accent) 25%,var(--input))}
+.cnc-pb.dg{color:var(--muted);font-weight:500}
+.cnc-pb:disabled{opacity:.4;cursor:not-allowed}
+.cnc-run{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:6px;margin-top:10px}
+.cnc-rb{border-radius:8px;border:1px solid;padding:9px 4px;font:700 13.5px var(--f-ui);cursor:pointer}
+.cnc-rb:disabled{opacity:.4;cursor:not-allowed}
+.cnc-rb.go{background:color-mix(in srgb,#2e9b5c 22%,var(--panel));border-color:color-mix(in srgb,#2e9b5c 60%,var(--line));color:var(--ink)}
+.cnc-rb.pa{background:color-mix(in srgb,var(--warn) 20%,var(--panel));border-color:color-mix(in srgb,var(--warn) 60%,var(--line));color:var(--ink)}
+.cnc-rb.st{background:#c9402f;border-color:#a8321f;color:#fff}
+.cnc-rb.st:hover:not(:disabled){background:#b5361f}
+.cnc-ovr{display:grid;grid-template-columns:54px 1fr 44px;gap:6px;align-items:center;margin-top:6px;font-size:12px}
+.cnc-ovr input{width:100%;accent-color:var(--accent)}
+.cnc-ovr b{text-align:right;font-variant-numeric:tabular-nums}
+.cnc-kbd{font:10.5px var(--f-mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 3px}
+/* vue 3D */
+#rv3.cnc-on .rvinfo,#rv3.cnc-on .rvxf{display:none!important}
+#cncOv{position:absolute;inset:0;pointer-events:none}
+#cncOv[hidden]{display:none}
+.cnc-card{position:absolute;pointer-events:auto;background:color-mix(in srgb,var(--panel) 90%,transparent);backdrop-filter:blur(4px);border:1px solid var(--line);border-radius:9px;box-shadow:0 4px 14px var(--shadow);padding:9px 11px;font-size:12px;color:var(--ink)}
+#cncPos{left:10px;top:10px;min-width:220px}
+#cncRunC{right:10px;top:138px;min-width:240px}
+.cnc-ch{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:11.5px;color:var(--muted);font-weight:600;margin-bottom:5px}
+.cnc-ch button{border:0;background:none;color:var(--muted);cursor:pointer;font:inherit;padding:0 3px}
+.cnc-b3{display:grid;grid-template-columns:16px 1fr;gap:1px 8px;font:600 20px/1.2 var(--f-mono)}
+.cnc-b3 span:nth-child(odd){font:700 13px/1.9 var(--f-ui);color:var(--muted)}
+.cnc-mp{font:11.5px var(--f-mono);color:var(--muted);margin-top:3px}
+.cnc-badge{display:inline-block;background:color-mix(in srgb,var(--accent) 25%,transparent);color:var(--ink);font-weight:700;border-radius:5px;padding:0 6px;font-size:11px}
+table.cnc-bb{border-collapse:collapse;margin-top:4px;font:11.5px var(--f-mono)}
+table.cnc-bb td,table.cnc-bb th{padding:1px 6px;text-align:right}
+table.cnc-bb th{font:600 10.5px var(--f-ui);color:var(--muted)}
+.cnc-bad{color:var(--warn);font-weight:700}
+.cnc-prog{height:5px;border-radius:3px;background:var(--raised);overflow:hidden;margin:6px 0 7px}
+.cnc-prog i{display:block;height:100%;background:var(--accent);width:0}
+.cnc-gl{font:10.5px var(--f-mono);color:var(--muted);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px}
+#cncPill{position:absolute;left:50%;top:10px;transform:translateX(-50%);border-radius:20px;padding:5px 15px;font:700 13px var(--f-ui);border:1px solid var(--line);background:var(--panel);color:var(--ink);box-shadow:0 4px 14px var(--shadow);pointer-events:none;white-space:nowrap}
+#cncPill.Idle{background:color-mix(in srgb,#2e9b5c 25%,var(--panel));border-color:#2e9b5c}
+#cncPill.Alarm{background:color-mix(in srgb,var(--danger) 25%,var(--panel));border-color:var(--danger)}
+#cncPill.Run,#cncPill.Jog,#cncPill.Home{background:color-mix(in srgb,var(--accent) 25%,var(--panel));border-color:var(--accent)}
+#cncPill.Hold,#cncPill.Door,#cncPill.Tool{background:color-mix(in srgb,var(--warn) 25%,var(--panel));border-color:var(--warn)}
+/* fenêtres */
+.cnc-modal{position:fixed;inset:0;background:rgb(0 0 0/.35);display:flex;align-items:center;justify-content:center;z-index:200;font-family:var(--f-ui)}
+.cnc-modal.side{background:transparent;pointer-events:none;justify-content:flex-end;padding-right:22px}
+.cnc-mb{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:11px;box-shadow:0 20px 60px rgb(0 0 0/.35);width:min(880px,94vw);max-height:88vh;display:flex;flex-direction:column;pointer-events:auto}
+.cnc-mh{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);gap:10px}
+.cnc-mh h2{margin:0;font-size:15.5px;flex:1}
+.cnc-mt{display:flex;gap:2px;border-bottom:1px solid var(--line);padding:0 10px;flex-wrap:wrap}
+.cnc-mt button{border:0;background:none;padding:9px 11px;color:var(--muted);border-bottom:2px solid transparent;font:inherit;cursor:pointer}
+.cnc-mt button.on{color:var(--ink);font-weight:600;border-bottom-color:var(--accent)}
+.cnc-mbody{padding:14px 16px;overflow:auto;font-size:13px}
+table.cnc-set{width:100%;border-collapse:collapse;font-size:12.5px}
+table.cnc-set td,table.cnc-set th{border-bottom:1px solid var(--line);padding:5px 7px;text-align:left;vertical-align:middle}
+table.cnc-set th{font-weight:600;color:var(--muted);font-size:11.5px}
+table.cnc-set td.c{font:11.5px var(--f-mono);color:var(--muted);width:52px}
+table.cnc-set input{width:110px;text-align:right}
+.cnc-con{background:#1d1c1a;color:#e9e4da;font:11.5px/1.45 var(--f-mono);border-radius:7px;padding:7px 9px;height:210px;overflow:auto;white-space:pre-wrap;user-select:text}
+.cnc-con .s{color:#9ec3ff}.cnc-con .e{color:#ff9d8a}.cnc-con .a{color:#ffc46b}.cnc-con .m{color:#9a9488}
+.cnc-cin{display:flex;gap:6px;margin-top:6px}
+.cnc-cin input{flex:1;font-family:var(--f-mono)}
+.cnc-dr{margin-top:12px;border-top:1px solid var(--line);padding-top:7px}
+.cnc-dr>header{display:flex;align-items:center;gap:7px;cursor:pointer;color:var(--muted);font-size:12.5px;user-select:none}
+.cnc-mac{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:7px 0}
+.cnc-mac button{border:1px solid var(--line);background:var(--input);color:var(--ink);border-radius:6px;padding:5px 3px;font:inherit;font-size:12px;cursor:pointer}
+.cnc-mac button:disabled{opacity:.45}
+</style>
 </head>
 <body>
 <script>try{if(localStorage.getItem('copo.theme')==='light')document.documentElement.dataset.theme='light'}catch(e){}</script>
@@ -662,7 +813,8 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
   <header class="top">
     <div class="brand">
       <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg>
-      <b>COPO</b><span class="testbadge" title="Version test : post-processeurs industriels et catalogue de machines. Ses réglages sont gardés à part de la version normale.">TEST</span>
+      <b>COPO</b>
+<span class="testbadge" title="Version test : onglet Usiner (pilotage de la machine). Ses réglages sont gardés à part de la version normale.">TEST</span>
     </div>
     <nav class="menubar" id="menubar" aria-label="Menus">
       <div class="menu"><button class="mtop" aria-expanded="false">Fichier</button><div class="mdrop" hidden>
@@ -1336,6 +1488,10 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <label>Taille des aperçus<select id="cfgDlibTh"><option value="104">Petits</option><option value="132">Moyens</option><option value="180">Grands</option></select></label>
           <label class="chk"><input type="checkbox" id="cfgDlibDbl"> Double-clic sur un aperçu : l’ajouter au dessin et fermer la bibliothèque</label>
         </section>
+        <section class="cfg-sec" data-cfg="cnc" data-ico="machine"><h2>Pilotage de la machine</h2>
+          <label class="chk"><input type="checkbox" id="cfgCnc"> Afficher l’onglet 6 « Usiner » (pilotage de la CNC) — expérimental</label>
+          <p class="hint">Connecte une machine GRBL, grblHAL ou FluidNC par USB (Chrome ou Edge), guide la prise d’origine, l’origine pièce et le palpage, puis envoie le G-code des parcours visibles. Une machine simulée permet d’essayer sans machine.</p>
+        </section>
         <section class="cfg-sec" data-cfg="sim" data-ico="sim"><h2>Simulation</h2>
           <label>Résolution par défaut<select id="cfgSimQ"><option value="1">Standard (le plus rapide)</option><option value="2">Haute (environ 3 × plus lent)</option><option value="3">Très haute (environ 7 × plus lent)</option></select></label>
           <p class="hint">La simulation ne calcule que la zone usinée : plus la pièce est petite, plus le rendu est fin. <span class="tipw"><button type="button" class="tipi" aria-label="En savoir plus"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.4"/></svg></button><span class="tipb" role="tooltip">Standard : 500 000 points ; Haute : 1,5 million ; Très haute : 3,5 millions.</span></span></p>
@@ -1365,7 +1521,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.335</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.336</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -4429,7 +4585,7 @@ function pjSummary() {
   const f1 = v => LANG === 'fr' ? fr(v, 1) : v.toFixed(1), RT = st.rotary || {}; el.textContent = (RT.on ? tr('Cylindre') + ' L ' + f1(RT.axis === 'y' ? st.h : st.w) + ' × Ø ' + f1(st.t) + ' mm' : f1(st.w) + ' × ' + f1(st.h) + ' × ' + f1(st.t) + ' mm') + (S.meta && S.meta.material ? ' · ' + S.meta.material : '') + '\n' + tr('Origine') + ' : ' + tr(originLabel(st)) + ' · Z0 : ' + (RT.on ? tr(RT.z0 === 'axis' ? 'axe du cylindre' : 'surface du cylindre') + ' · ' + tr('rotatif') + ', ' + (S.machine.rotL === 'B' ? 'B' : 'A') : tr(st.originZ === 'bottom' ? 'table' : 'dessus du brut') + (has2 && stMode() === 'double' ? ' · ' + tr('double face') : '')) + '\n' + post + ' · ' + UNIT.len + ' · ' + UNIT.feed;
   illRefresh(); el.style.whiteSpace = 'pre-line'; if (typeof libMatSync === 'function') libMatSync(); const m = document.getElementById('pjMat'); if (m && document.activeElement !== m) m.value = (S.meta && S.meta.material) || '';
 }
-function setTab(t) { if (t === 'gcode' && !tpManual() && tpLaterT) tpRecalcThen(() => { });  if (t !== 'parcours' && S.ui.tool !== 'tabedit') fwClose('tpWin'); if (t !== 'outils') fwClose('toolWin'); curTab = t; if (t === 'projet') pjSummary(); $$('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t)); $$('.pane').forEach(p => p.hidden = p.dataset.pane !== t); if (t === 'gcode') renderGcode(); if (t === 'parcours') { renderForm(); if (typeof VIEWS !== 'undefined' && !VIEWS.d3 && !VIEWS.userHid3) { VIEWS.d3 = true; viewsApply(); } } if (t === 'relief') { relPanel(); if (!VIEWS.d3 && !VIEWS.userHid3) { VIEWS.d3 = true; viewsApply(); } } draw(); coTabSoon(t); }
+function setTab(t) { if (t === 'gcode' && !tpManual() && tpLaterT) tpRecalcThen(() => { });  if (t !== 'parcours' && S.ui.tool !== 'tabedit') fwClose('tpWin'); if (t !== 'outils') fwClose('toolWin'); curTab = t; if (t === 'projet') pjSummary(); $$('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t)); $$('.pane').forEach(p => p.hidden = p.dataset.pane !== t); if (t === 'gcode') renderGcode(); if (t === 'parcours') { renderForm(); if (typeof VIEWS !== 'undefined' && !VIEWS.d3 && !VIEWS.userHid3) { VIEWS.d3 = true; viewsApply(); } } if (t === 'relief') { relPanel(); if (!VIEWS.d3 && !VIEWS.userHid3) { VIEWS.d3 = true; viewsApply(); } } draw(); coTabSoon(t); if (typeof cncOnTab === 'function') cncOnTab(t); }
 $$('.tabs button').forEach(b => b.onclick = () => setTab(b.dataset.tab));
 document.querySelector('[data-pane="projet"]').addEventListener('change', () => setTimeout(pjSummary, 0)); document.getElementById('cfg').addEventListener('change', () => setTimeout(pjSummary, 0));
 document.getElementById('pjMat').addEventListener('change', e => { S.meta = { ...(S.meta || {}), material: e.target.value.trim() }; commit(false); pjSummary(); });
@@ -7252,7 +7408,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.335', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.336', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -9486,6 +9642,7 @@ function rvOverlay() {
   // infos (coin haut gauche)
   const el = $('#rvInfo'); if (it) { const Z = rvZ(it), o = outXY(it.x, it.y), f = v => fr(v, 2); el.textContent = it.name + '\n' + 'X ' + f(o[0]) + '  Y ' + f(o[1]) + '  ' + tr('(centre)') + '\n' + tr('Taille') + ' ' + f(it.w) + ' × ' + f(it.h) + ' × ' + f(+it.zH || 0) + ' mm\n' + tr('Haut brut → haut relief') + ' ' + f(+it.top || 0) + ' mm\n' + tr('Bas brut → bas relief') + ' ' + f(S.stock.t - (+it.top || 0) - (+it.zH || 0)) + ' mm\n' + tr('Rotation') + ' Z ' + fr(+it.rot || 0, 1) + '°' + (it.kind === 'stl' ? '  X ' + fr(+it.rx || 0, 1) + '°  Y ' + fr(+it.ry || 0, 1) + '°' : ''); }
   const dis = !it; document.querySelectorAll('.rvxf button').forEach(b => b.disabled = dis);
+  if (typeof cncOverlay === 'function') cncOverlay(g);
 }
 function rvRender() {
   RV.raf = 0; const gl = RV.gl, c = $('#rvc'); if (!gl || !VIEWS.d3) return;
@@ -10130,6 +10287,725 @@ function machImportText(txt) {
   if (!n) return toast(tr('Aucune machine dans ce fichier.')); machStore(); machUi(); toast(trf('{n} machine(s) importée(s) : cliquez sur une machine pour la choisir.', { n }));
 }
 $('#fMach').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) f.text().then(machImportText); });
+</script>
+<script>
+/* ======================================================================
+   COPO — onglet « Usiner » (VERSION TEST)
+   Pilotage d'une CNC GRBL / grblHAL / FluidNC par USB (Web Serial),
+   ou d'une machine simulée pour essayer sans machine.
+   ====================================================================== */
+(() => {
+'use strict';
+const q = (s, r = document) => r.querySelector(s), qa = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const f2 = (v, d = 2) => { v = +v || 0; if (Math.abs(v) < 0.5 * 10 ** -d) v = 0; return typeof fr === 'function' ? fr(v, d) : v.toFixed(d); };
+const n3 = v => { const s = (Math.round((+v || 0) * 1000) / 1000).toFixed(3).replace(/\.?0+$/, ''); return s === '-0' ? '0' : s; };
+const fmtT = s => { s = Math.max(0, Math.round(s)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };
+const AX = ['x', 'y', 'z'];
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const say = (m) => { try { toast(m); } catch { } };
+
+/* ---------------- réglages (gardés dans le navigateur) ---------------- */
+const DEF = { on: false, steps: [0.1, 1, 10, 50], step: 1, jogF: 1500, plate: 15, blockOff: 10, probeF: 100, probeDist: 30, retract: 5, sim: 10, baud: 115200, m3: true,
+  macros: [{ n: 'Parking', g: 'G53 G0 Z-5\nG53 G0 X-5 Y-5' }, { n: 'Aspiration ON', g: 'M8' }, { n: 'Aspiration OFF', g: 'M9' }, { n: 'Au-dessus de X0 Y0', g: 'G90 G0 Z5\nG0 X0 Y0' }, { n: 'Lever Z', g: 'G53 G0 Z-5' }, { n: 'Infos ($I)', g: '$I' }],
+  gp: { lock: 4, btn: { 0: 'step0', 1: 'step1', 2: 'step2', 3: 'home', 4: 'lock', 5: 'zeroZ' }, invX: false, invY: false, invZ: false, thr: 25 } };
+let CF = (() => { try { const o = JSON.parse(LS.get('copo.cnc') || '{}'); return { ...DEF, ...o, gp: { ...DEF.gp, ...(o.gp || {}) } }; } catch { return { ...DEF }; } })();
+const cfSave = () => { try { LS.set('copo.cnc', JSON.stringify(CF)); } catch { } };
+
+/* ---------------- état de la machine ---------------- */
+const K = { T: null, kind: '', name: '', st: 'Off', sub: '', ctrl: '', fluid: false, hal: false, mpos: [0, 0, 0], wco: [0, 0, 0], fs: [0, 0], ov: [100, 100, 100], pn: '',
+  set: {}, g54: null, homed: false, homeSkip: false, noLim: null, lostPos: false, originLost: false, ws: { x: false, y: false, z: false }, alarm: null, alarmN: 0,
+  out: [], fly: [], flyLen: 0, prog: null, tool: null, trail: [], prb: null, idleW: [], finished: false, air: false, busy: '', lastSt: 0, cap: null, sim: null };
+const RX = 127;
+const LOG = [];
+const U = { face: 1, vol: 1, pmode: 'probe', paxis: 'Z', pre: {}, fix: {}, launch: {}, drawer: false, mtab: 'machine', hideOk: true, edit: null, posMp: false, posOpen: true, runOpen: true, homeConfirm: false, prevViews: null, hist: [], hi: -1 };
+const ALARMS = { 1: 'Fin de course touchée : la position est perdue. Refaites la prise d’origine.', 2: 'Le mouvement demandé sort de la zone de travail (limites logicielles).', 3: 'Remise à zéro pendant un mouvement : la position n’est plus garantie. Refaites la prise d’origine.', 4: 'Le palpeur était déjà en contact avant le palpage.', 5: 'Pas de contact pendant le palpage : rapprochez la fraise de la plaque.', 6: 'Prise d’origine interrompue.', 7: 'Porte ouverte pendant la prise d’origine.', 8: 'Prise d’origine : le capteur ne se libère pas.', 9: 'Prise d’origine : capteur de fin de course non trouvé.', 10: 'Fin de course déclenchée (contrôle).', 11: 'Prise d’origine nécessaire.' };
+const ERRS = { 1: 'lettre attendue', 2: 'valeur incorrecte', 3: 'commande $ inconnue', 5: 'prise d’origine désactivée ($22)', 8: 'machine occupée', 9: 'verrouillée (alarme)', 15: 'déplacement hors de la zone de travail', 16: 'commande de déplacement incorrecte', 20: 'commande non reconnue', 22: 'avance non définie', 33: 'arc incorrect' };
+const SETS = { 0: 'Durée des impulsions (µs)', 1: 'Délai de mise en veille des moteurs (ms)', 2: 'Inversion des impulsions', 3: 'Inversion des sens', 4: 'Inversion « enable »', 5: 'Inversion des fins de course', 6: 'Inversion du palpeur', 10: 'Contenu du rapport d’état', 11: 'Écart en jonction (mm)', 12: 'Tolérance des arcs (mm)', 13: 'Rapport en pouces', 20: 'Limites logicielles', 21: 'Fins de course matérielles', 22: 'Prise d’origine activée', 23: 'Sens de prise d’origine', 24: 'Vitesse lente de prise d’origine (mm/min)', 25: 'Vitesse de recherche (mm/min)', 26: 'Anti-rebond (ms)', 27: 'Dégagement après prise d’origine (mm)', 30: 'Vitesse de broche maxi (tr/min)', 31: 'Vitesse de broche mini (tr/min)', 32: 'Mode laser', 100: 'Pas par mm X', 101: 'Pas par mm Y', 102: 'Pas par mm Z', 110: 'Vitesse maxi X (mm/min)', 111: 'Vitesse maxi Y (mm/min)', 112: 'Vitesse maxi Z (mm/min)', 120: 'Accélération X (mm/s²)', 121: 'Accélération Y (mm/s²)', 122: 'Accélération Z (mm/s²)', 130: 'Course X (mm)', 131: 'Course Y (mm)', 132: 'Course Z (mm)' };
+const ST_FR = { Off: 'Non connectée', Conn: 'Connexion…', Idle: 'Prête', Run: 'Usinage en cours', Hold: 'En pause', Jog: 'Déplacement', Home: 'Prise d’origine…', Alarm: 'Alarme', Door: 'Porte ouverte', Check: 'Contrôle', Sleep: 'Veille', Tool: 'Changement d’outil', Probe: 'Palpage…' };
+
+function log(t, c) { LOG.push({ t, c }); if (LOG.length > 600) LOG.splice(0, 100); conRender(); }
+
+/* ---------------- liaisons ---------------- */
+const VID = { 0x2341: 'Arduino', 0x2a03: 'Arduino', 0x1a86: 'CH340', 0x0403: 'FTDI', 0x10c4: 'CP210x (ESP32…)', 0x303a: 'ESP32', 0x0483: 'STM32 (grblHAL)', 0x16c0: 'Teensy', 0x1d50: 'grblHAL' };
+const portName = p => { const i = p.getInfo ? p.getInfo() : {}; return (VID[i.usbVendorId] || 'Port USB') + (i.usbVendorId ? ' · ' + i.usbVendorId.toString(16).padStart(4, '0') + ':' + (i.usbProductId || 0).toString(16).padStart(4, '0') : ''); };
+async function serialOpen(port) {
+  await port.open({ baudRate: +CF.baud || 115200, bufferSize: 4096 });
+  const enc = new TextEncoder(), dec = new TextDecoder(), w = port.writable.getWriter(); let reading = true, reader = port.readable.getReader();
+  const T = { kind: 'serial', write: s => w.write(enc.encode(s)).catch(() => { }), close: async () => { reading = false; try { await reader.cancel(); } catch { } try { w.releaseLock(); } catch { } try { await port.close(); } catch { } } };
+  (async () => { let buf = ''; try { while (reading) { const { value, done } = await reader.read(); if (done) break; buf += dec.decode(value, { stream: true }); const parts = buf.split(/\r\n|\n|\r/); buf = parts.pop(); for (const l of parts) if (l.trim()) T.onLine && T.onLine(l.trim()); } } catch (e) { } finally { try { reader.releaseLock(); } catch { } if (reading && T.onClose) T.onClose(); } })();
+  return T;
+}
+
+/* ---------------- machine simulée (GRBL 1.1) ---------------- */
+class SimGrbl {
+  constructor(o) {
+    this.fluid = !!o.fluid; this.lim = o.limits !== false; const st = S.stock || { w: 200, h: 150, t: 18 };
+    this.trav = [400, 300, 80]; this.table = -78; this.sx = -330; this.sy = -250; this.sw = +st.w || 200; this.sh = +st.h || 150; this.top = this.table + (+st.t || 18);
+    this.PL = 15; this.OFF = 10; const t0 = (S.tools || []).find(t => t.dia) || { dia: 6 }; this.r = (+t0.dia || 6) / 2;
+    this.mpos = [-170, -120, -22]; this.pe = this.mpos.slice(); this.wco = [0, 0, 0]; this.g92 = [0, 0, 0]; this.prb = [0, 0, 0];
+    this.state = this.lim ? 'Alarm' : 'Idle'; this.q = []; this.pend = 0; this.abs = true; this.mode = 0; this.f = 0; this.ov = [100, 100, 100]; this.spin = 0; this.S = 0; this.hold = false; this.lb = ''; this.touch = 0;
+    this.set = { 0: 10, 1: 25, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 10: 1, 11: 0.01, 12: 0.002, 13: 0, 20: this.lim ? 1 : 0, 21: 0, 22: this.lim ? 1 : 0, 23: 0, 24: 25, 25: 500, 26: 250, 27: 1, 30: 24000, 31: 0, 32: 0, 100: 800, 101: 800, 102: 800, 110: 5000, 111: 5000, 112: 1500, 120: 500, 121: 500, 122: 200, 130: 400, 131: 300, 132: 80 };
+    this.T = { kind: 'sim', write: s => this.rx(s), close: () => { clearInterval(this.tm); } };
+    let last = performance.now(); this.tm = setInterval(() => { const n = performance.now(); this.tick(Math.min(0.1, (n - last) / 1000)); last = n; }, 20);
+    setTimeout(() => this.boot(), 350);
+  }
+  emit(l) { Promise.resolve().then(() => this.T.onLine && this.T.onLine(l)); }
+  boot() { this.emit(this.fluid ? "Grbl 3.9 [FluidNC v3.9.1 (machine simulée) '$' for help]" : "Grbl 1.1h ['$' for help]"); if (this.state === 'Alarm') this.emit("[MSG:'$H'|'$X' to unlock]"); }
+  sc() { return Math.max(1, +CF.sim || 1); }
+  rx(s) {
+    for (const ch of s) {
+      const c = ch.charCodeAt(0);
+      if (ch === '?') this.report();
+      else if (ch === '!') { if (['Run', 'Jog', 'Home'].includes(this.state) || this.q.length) { this.hold = true; this.state = 'Hold'; } }
+      else if (ch === '~') { if (this.hold) { this.hold = false; this.state = this.q.length ? 'Run' : 'Idle'; } }
+      else if (c === 0x18) this.reset();
+      else if (c === 0x85) { if (this.q.length && this.q[0].jog) { this.q = this.q.filter(m => !m.jog); this.pe = this.mpos.slice(); } if (this.state === 'Jog') this.state = 'Idle'; }
+      else if (c >= 0x90 && c <= 0x9d) this.ovr(c);
+      else if (ch === '\n') { const l = this.lb; this.lb = ''; this.line(l); }
+      else if (ch !== '\r') this.lb += ch;
+    }
+  }
+  ovr(c) { const o = this.ov, cl = (v, a, b) => Math.max(a, Math.min(b, v)); if (c === 0x90) o[0] = 100; if (c === 0x91) o[0] = cl(o[0] + 10, 10, 200); if (c === 0x92) o[0] = cl(o[0] - 10, 10, 200); if (c === 0x93) o[0] = cl(o[0] + 1, 10, 200); if (c === 0x94) o[0] = cl(o[0] - 1, 10, 200); if (c === 0x95) o[1] = 100; if (c === 0x96) o[1] = 50; if (c === 0x97) o[1] = 25; if (c === 0x99) o[2] = 100; if (c === 0x9a) o[2] = cl(o[2] + 10, 10, 200); if (c === 0x9b) o[2] = cl(o[2] - 10, 10, 200); }
+  report() { const p = this.mpos, w = [0, 1, 2].map(i => this.wco[i] + this.g92[i]); const pn = (this.touch > performance.now() || this.inContact()) ? '|Pn:P' : '';
+    const fd = this.cur ? Math.round(this.cur) : 0; this.emit('<' + (this.state === 'Hold' ? 'Hold:0' : this.state) + '|MPos:' + p.map(v => v.toFixed(3)).join(',') + '|FS:' + fd + ',' + (this.spin ? Math.round(this.S * this.ov[2] / 100) : 0) + '|WCO:' + w.map(v => v.toFixed(3)).join(',') + '|Ov:' + this.ov.join(',') + pn + '>'); }
+  inContact() { return false; }
+  reset() { const moving = this.q.length > 0 && !this.hold || ['Run', 'Jog', 'Home'].includes(this.state) && this.q.length; this.q = []; this.pend = 0; this.hold = false; this.spin = 0; this.g92 = [0, 0, 0]; this.abs = true; this.pe = this.mpos.slice(); this.homeOk = 0;
+    if (moving) { this.state = 'Alarm'; this.emit('ALARM:3'); } else if (this.state !== 'Alarm') this.state = 'Idle';
+    this.emit(''); this.boot(); }
+  ok() { if (this.q.length >= 15) this.pend++; else this.emit('ok'); }
+  err(n) { this.emit('error:' + n); }
+  alarm(n) { this.state = 'Alarm'; this.q = []; this.pend = 0; this.hold = false; this.spin = 0; this.pe = this.mpos.slice(); this.emit('ALARM:' + n); }
+  wpos(i) { return this.mpos[i] - this.wco[i] - this.g92[i]; }
+  line(l) {
+    const u = l.replace(/\(.*?\)|;.*$/g, '').replace(/\s+/g, '').toUpperCase();
+    if (!u) { this.emit('ok'); return; }
+    if (u[0] === '$') return this.dollar(u);
+    if (this.state === 'Alarm') return this.err(9);
+    const W = {}, G = [], Ms = []; const re = /([A-Z])(-?\d*\.?\d+)/g; let m;
+    while ((m = re.exec(u))) { const k = m[1], v = +m[2]; if (k === 'G') G.push(v); else if (k === 'M') Ms.push(v); else W[k] = v; }
+    if (Ms.includes(6)) return this.err(20);
+    if (W.F !== undefined) this.f = W.F; if (W.S !== undefined) this.S = W.S;
+    let g53 = false, g38 = false, g10 = false, g92 = false, g4 = false;
+    for (const g of G) { if ([0, 1, 2, 3].includes(g)) this.mode = g; else if (g === 90) this.abs = true; else if (g === 91) this.abs = false; else if (g === 53) g53 = true; else if (g === 38.2) g38 = true; else if (g === 10) g10 = true; else if (g === 92) g92 = true; else if (g === 92.1) this.g92 = [0, 0, 0]; else if (g === 4) g4 = true; }
+    for (const mm of Ms) { if (mm === 3 || mm === 4) this.spin = 1; if (mm === 5) this.spin = 0; if (mm === 0) this.q.push({ m0: 1 }); }
+    if (g10) { if (W.L === 20) AX.forEach((a, i) => { const k = a.toUpperCase(); if (W[k] !== undefined) this.wco[i] = this.pe[i] - this.g92[i] - W[k]; }); else if (W.L === 2) AX.forEach((a, i) => { const k = a.toUpperCase(); if (W[k] !== undefined) this.wco[i] = W[k]; }); return this.ok(); }
+    if (g92) { AX.forEach((a, i) => { const k = a.toUpperCase(); if (W[k] !== undefined) this.g92[i] = this.pe[i] - this.wco[i] - W[k]; }); return this.ok(); }
+    if (g4) { this.q.push({ dw: (W.P || 0) }); if (!this.hold) this.state = 'Run'; return this.ok(); }
+    const has = 'XYZ'.split('').some(k => W[k] !== undefined);
+    const tgt = this.pe.slice(); AX.forEach((a, i) => { const k = a.toUpperCase(); if (W[k] === undefined) return; tgt[i] = g53 ? W[k] : this.abs ? W[k] + this.wco[i] + this.g92[i] : this.pe[i] + W[k]; });
+    if (g38) { if (!this.f && W.F === undefined) return this.err(22); this.q.push({ to: tgt, f: this.f, probe: 1, from: this.pe.slice() }); this.pe = tgt.slice(); this.state = this.hold ? 'Hold' : 'Run'; this.probeLine = 1; return; }
+    if (!has) return this.ok();
+    if (this.mode === 2 || this.mode === 3) { const s = this.pe, cx = s[0] + (W.I || 0), cy = s[1] + (W.J || 0), r = Math.hypot(s[0] - cx, s[1] - cy); let a0 = Math.atan2(s[1] - cy, s[0] - cx), a1 = Math.atan2(tgt[1] - cy, tgt[0] - cx);
+      if (this.mode === 2) { if (a1 >= a0 - 1e-9) a1 -= 2 * Math.PI; } else { if (a1 <= a0 + 1e-9) a1 += 2 * Math.PI; } const n = Math.max(2, Math.ceil(Math.abs(a1 - a0) * r / 1.5));
+      for (let k = 1; k <= n; k++) { const a = a0 + (a1 - a0) * k / n; this.q.push({ to: [cx + r * Math.cos(a), cy + r * Math.sin(a), s[2] + (tgt[2] - s[2]) * k / n], f: this.f }); } }
+    else { if (this.mode === 1 && !this.f) return this.err(22); this.q.push({ to: tgt, f: this.f, rapid: this.mode === 0 }); }
+    this.pe = tgt.slice(); if (!this.hold) this.state = 'Run'; this.ok();
+  }
+  dollar(u) {
+    if (u === '$$') { for (const [k, v] of Object.entries(this.set)) this.emit('$' + k + '=' + v); return this.emit('ok'); }
+    if (u === '$I') { this.emit(this.fluid ? '[VER:3.9 FluidNC v3.9.1:]' : '[VER:1.1h.20190825:]'); this.emit('[OPT:V,15,128]'); return this.emit('ok'); }
+    if (u === '$#') { const w = this.wco; this.emit('[G54:' + w.map(v => v.toFixed(3)).join(',') + ']'); this.emit('[G55:0.000,0.000,0.000]'); this.emit('[G92:' + this.g92.map(v => v.toFixed(3)).join(',') + ']'); this.emit('[TLO:0.000]'); this.emit('[PRB:' + this.prb.map(v => v.toFixed(3)).join(',') + ':0]'); return this.emit('ok'); }
+    if (u === '$G') { this.emit('[GC:G' + this.mode + ' G54 G17 G21 ' + (this.abs ? 'G90' : 'G91') + ' G94 M' + (this.spin ? 3 : 5) + ' M9 T0 F' + this.f + ' S' + this.S + ']'); return this.emit('ok'); }
+    if (u === '$X') { if (this.state === 'Alarm') { this.state = 'Idle'; this.emit('[MSG:Caution: Unlocked]'); } return this.emit('ok'); }
+    if (/^\$H[XYZ]?$/.test(u)) { if (!this.lim) return this.err(5); if (u.length > 2 && !this.fluid) return this.err(3); if (!['Idle', 'Alarm'].includes(this.state)) return this.err(8);
+      const ax = u.length > 2 ? u.slice(2).toLowerCase() : 'xyz'; this.state = 'Home'; this.q = []; if (ax.includes('z')) this.q.push({ to: [this.mpos[0], this.mpos[1], -1], f: 1500, home: 1 }); const t = [ax.includes('x') ? -1 : this.mpos[0], ax.includes('y') ? -1 : this.mpos[1], ax.includes('z') ? -1 : this.mpos[2]]; this.q.push({ to: t, f: 2500, home: 1, last: 1 }); this.pe = t.slice(); return; }
+    if (/^\$J=/.test(u)) { if (!['Idle', 'Jog'].includes(this.state)) return this.err(8); const s = u.slice(3); const W = {}; let m; const re = /([A-Z])(-?\d*\.?\d+)/g; while ((m = re.exec(s))) W[m[1]] = +m[2]; const rel = /G91/.test(s), g53 = /G53/.test(s);
+      const base = this.q.length ? this.pe : this.mpos; const t = base.slice(); AX.forEach((a, i) => { const k = a.toUpperCase(); if (W[k] === undefined) return; t[i] = rel ? base[i] + W[k] : g53 ? W[k] : W[k] + this.wco[i] + this.g92[i]; });
+      if (+this.set[20] && this.state !== 'Alarm' && t.some((v, i) => v > 0.001 || v < -this.trav[i] - 0.001)) return this.err(15);
+      if (!W.F) return this.err(22); this.q.push({ to: t, f: W.F, jog: 1 }); this.pe = t.slice(); this.state = 'Jog'; return this.ok(); }
+    { const m = /^\$(\d+)=(-?[\d.]+)$/.exec(u); if (m) { this.set[m[1]] = +m[2]; if (m[1] === '22') this.lim = !!+m[2]; return this.emit('ok'); } }
+    if (u === '$CONFIG/DUMP' && this.fluid) { ['name: Machine simulée', 'board: ESP32', 'stepping:', '  engine: RMT', 'axes:', '  x:', '    steps_per_mm: 800', '    max_rate_mm_per_min: 5000', '    max_travel_mm: 400', '  y:', '    max_travel_mm: 300', '  z:', '    max_travel_mm: 80', 'probe:', '  pin: gpio.32:low'].forEach(l => this.emit(l)); return this.emit('ok'); }
+    if (u === '$SD/LIST' && this.fluid) { this.emit('[FILE: /sd/test.nc|SIZE:2481]'); return this.emit('ok'); }
+    this.err(3);
+  }
+  contact(m) { // point de contact sur le trajet m (null si aucun)
+    const s = m.from, t = m.to, d = [t[0] - s[0], t[1] - s[1], t[2] - s[2]], r = this.r, sx = this.sx, sy = this.sy, top = this.top, bT = top + this.PL, bx0 = sx - this.OFF, by0 = sy - this.OFF, bx1 = sx + 40, by1 = sy + 40, bB = top - 12;
+    const inBlk = (x, y) => x > bx0 && x < bx1 && y > by0 && y < by1;
+    if (d[2] < 0 && Math.abs(d[0]) < 1e-6 && Math.abs(d[1]) < 1e-6) { const surf = inBlk(s[0], s[1]) ? bT : ((s[0] > sx && s[0] < sx + this.sw && s[1] > sy && s[1] < sy + this.sh) ? top : this.table) + this.PL; if (s[2] <= surf + 1e-6) return 'already'; return surf >= t[2] ? [s[0], s[1], surf] : null; }
+    if (d[0] > 0 && Math.abs(d[1]) < 1e-6 && Math.abs(d[2]) < 1e-6) { const c = bx0 - r; if (s[1] > by0 && s[1] < by1 && s[2] < bT && s[2] > bB && s[0] < c && t[0] >= c) return [c, s[1], s[2]]; return null; }
+    if (d[1] > 0 && Math.abs(d[0]) < 1e-6 && Math.abs(d[2]) < 1e-6) { const c = by0 - r; if (s[0] > bx0 && s[0] < bx1 && s[2] < bT && s[2] > bB && s[1] < c && t[1] >= c) return [s[0], c, s[2]]; return null; }
+    return null;
+  }
+  tick(dt) {
+    this.cur = 0;
+    while (this.pend && this.q.length < 15) { this.pend--; this.emit('ok'); }
+    if (this.hold || !this.q.length) { if (!this.q.length && ['Run', 'Jog'].includes(this.state) && !this.hold) this.state = 'Idle'; return; }
+    const m = this.q[0];
+    if (m.m0) { this.q.shift(); this.hold = true; this.state = 'Hold'; return; }
+    if (m.dw !== undefined) { m.dw -= dt * this.sc(); if (m.dw <= 0) this.q.shift(); return; }
+    if (m.probe && !m.c) { const c = this.contact(m); if (c === 'already') { this.q.shift(); this.alarm(4); this.emit('ok'); return; } m.c = c || 'none'; if (c) m.to = c; }
+    const v = m.rapid ? 2500 * this.ov[1] / 100 : m.jog || m.home ? m.f : m.f * this.ov[0] / 100, sc = m.jog ? 1 : m.home ? 4 : this.sc();
+    const p = this.mpos, d = [m.to[0] - p[0], m.to[1] - p[1], m.to[2] - p[2]], L = Math.hypot(...d), st = v / 60 * dt * sc; this.cur = v;
+    if (L <= st || L < 1e-9) { this.mpos = m.to.slice(); this.q.shift();
+      if (m.probe) { if (m.c !== 'none') { this.prb = this.mpos.slice(); this.emit('[PRB:' + this.prb.map(x => x.toFixed(3)).join(',') + ':1]'); this.emit('ok'); this.touch = performance.now() + 400; } else { this.alarm(5); this.emit('ok'); } this.pe = this.mpos.slice(); }
+      if (m.home && m.last) { this.state = 'Idle'; this.emit('ok'); }
+      if (!this.q.length && !this.hold && ['Run', 'Jog'].includes(this.state)) this.state = 'Idle';
+    } else { const k = st / L; p[0] += d[0] * k; p[1] += d[1] * k; p[2] += d[2] * k; }
+  }
+}
+
+/* ---------------- protocole GRBL ---------------- */
+function rt(ch) { if (K.T) K.T.write(ch); }
+function pump() {
+  while (K.out.length && K.T) { const it = K.out[0], n = it.line.length + 1; if (K.fly.length && K.flyLen + n > RX) break; K.out.shift(); K.fly.push(it); K.flyLen += n; K.T.write(it.line + '\n'); if (!it.quiet) log('> ' + it.line, 's'); }
+}
+function enqueue(line, cb, quiet) { K.out.push({ line, cb, quiet }); pump(); }
+function cmd(line, quiet) { return new Promise((res, rej) => { if (!K.T) return rej('off'); enqueue(line, e => e ? rej(e) : res(), quiet); }); }
+function ack(err) { const it = K.fly.shift(); if (!it) return; K.flyLen -= it.line.length + 1; try { it.cb && it.cb(err); } catch { } pump(); progFeed(); }
+function flush(reason, fly) { const L = fly ? [...K.fly, ...K.out] : K.out.slice(); if (fly) { K.fly = []; K.flyLen = 0; } K.out = []; for (const it of L) try { it.cb && it.cb(reason); } catch { } }
+async function seq(lines) { const a = K.alarmN; for (const l of lines) { if (typeof l === 'function') await l(); else await cmd(l); if (K.alarmN !== a) throw 'alarm'; } }
+function waitIdle(ms = 600000) { return new Promise((res, rej) => { const t0 = Date.now(); const ck = () => { if (!K.T) return rej('off'); if (K.st === 'Alarm') return rej('alarm'); if (K.st === 'Idle' && !K.fly.length && !K.out.length && K.lastSt > K.idleFrom) return res(); if (Date.now() - t0 > ms) return rej('timeout'); setTimeout(ck, 60); }; K.idleFrom = performance.now(); setTimeout(ck, 120); }); }
+
+function onLine(l) {
+  if (K.cap && !/^</.test(l)) { if (l === 'ok') { const c = K.cap; K.cap = null; ack(null); c.res(c.lines); return; } if (/^error:/.test(l)) { const c = K.cap; K.cap = null; ack(l); c.rej(l); return; } K.cap.lines.push(l); return; }
+  if (l[0] === '<') return status(l);
+  if (l === 'ok') { if (!U.hideOk) log('ok', 'm'); ack(null); return; }
+  if (/^error:/.test(l)) { const n = +l.slice(6); log(l + (ERRS[n] ? ' (' + ERRS[n] + ')' : ''), 'e'); ack(l); return; }
+  if (/^ALARM:/.test(l)) { const n = +l.slice(6); K.alarm = { n, t: ALARMS[n] || '' }; K.alarmN++; K.st = 'Alarm'; log(l + ' — ' + (ALARMS[n] || ''), 'a');
+    flush('alarm', false); if (K.prog) progAbort('alarm');
+    if ([1, 3, 6, 7, 8, 9].includes(n)) { if (K.homed || limOn()) { K.homed = false; K.lostPos = true; U.vol = 2; } else { K.originLost = true; K.ws = { x: false, y: false, z: false }; U.vol = 3; } }
+    const N = K.alarmN; setTimeout(() => { if (K.alarmN === N && K.fly.length) flush('alarm', true); }, 1500);
+    ui(); return; }
+  if (/^\[PRB:/.test(l)) { const m = /PRB:([-\d.]+),([-\d.]+),([-\d.]+)(?:,[-\d.]+)*:(\d)/.exec(l); if (m) K.prb = { p: [+m[1], +m[2], +m[3]], ok: m[4] === '1' }; log(l); return; }
+  if (/^\[G54:/.test(l)) { const m = /G54:([-\d.]+),([-\d.]+),([-\d.]+)/.exec(l); if (m) K.g54 = [+m[1], +m[2], +m[3]]; log(l, 'm'); return; }
+  if (/^\[VER:/.test(l)) { K.ver = l.slice(5, -1); if (/fluidnc/i.test(l)) K.fluid = true; log(l); return; }
+  { const m = /^\$(\d+)=(-?[\d.]+)/.exec(l); if (m) { K.set[+m[1]] = +m[2]; log(l, 'm'); return; } }
+  if (/^Grbl|^GrblHAL/i.test(l)) { K.fluid = /fluidnc/i.test(l) || K.fluid; K.hal = /grblhal/i.test(l); K.ctrl = K.fluid ? 'FluidNC' : K.hal ? 'grblHAL' : 'GRBL'; K.welcome = true; log(l, 'a'); flush('reset', true); if (K.prog) progAbort('reset'); K.air = false; ui(); return; }
+  log(l, /^\[MSG/.test(l) ? 'a' : '');
+}
+function status(l) {
+  const f = l.slice(1, -1).split('|'); K.sub = f[0]; const st = f[0].split(':')[0]; let wp = null;
+  for (const x of f.slice(1)) { const i = x.indexOf(':'), k = x.slice(0, i), v = x.slice(i + 1).split(',').map(Number);
+    if (k === 'MPos') K.mpos = v; else if (k === 'WPos') wp = v; else if (k === 'WCO') K.wco = v; else if (k === 'FS') K.fs = v; else if (k === 'F') K.fs = [v[0], 0]; else if (k === 'Ov') K.ov = v; }
+  K.pn = (f.find(x => x.startsWith('Pn:')) || '').slice(3); if (wp) K.mpos = wp.map((v, i) => v + K.wco[i]);
+  const prev = K.st; K.st = st; K.lastSt = performance.now();
+  if (st !== 'Alarm' && K.alarm && prev === 'Alarm') K.alarm = null;
+  if (K.prog && (st === 'Run' || st === 'Hold')) { const w = wpos(); const p = toInt(w), t = K.trail, la = t[t.length - 1]; if (!la || Math.hypot(p[0] - la[0], p[1] - la[1], p[2] - la[2]) > 0.3) { t.push(p); if (t.length > 40000) t.splice(0, 5000); } }
+  if (K.prog && K.prog.all && !K.prog.tc && !K.prog.err && !K.fly.length && !K.out.length && st === 'Idle' && Date.now() - K.prog.t0 > 1500) progDone();
+  if (prev !== st) { ui(); if (K.prog && st === 'Idle') progFeed(); if (K.prog && st === 'Run' && K.prog.m0) K.prog.m0 = ''; } else live();
+  if (curTab === 'usiner' && typeof rvReq === 'function') rvReq();
+}
+const wpos = () => K.mpos.map((v, i) => v - K.wco[i]);
+const allSet = () => K.ws.x && K.ws.y && K.ws.z;
+const limOn = () => K.noLim === null ? (K.set[22] !== undefined ? !!K.set[22] : K.fluid ? true : !!K.homed) : !K.noLim;
+const conn = () => !!K.T && K.st !== 'Conn';
+const moving = () => ['Run', 'Jog', 'Home'].includes(K.st) || !!K.busy;
+function stockO() { const st = S.stock, RT = st.rotary || {}; const [ox, oy] = originOf(st); const oz = RT.on ? (RT.z0 === 'axis' ? st.t / 2 : 0) : st.originZ === 'bottom' ? +st.t : 0; return { ox, oy, oz, rot: !!RT.on }; }
+function toInt(w) { const o = stockO(); return [w[0] + o.ox, w[1] + o.oy, w[2] - o.oz]; }
+
+/* ---------------- connexion ---------------- */
+let pollT = 0;
+async function connect(kind, port) {
+  if (K.T) return;
+  U.conOpen = false; K.st = 'Conn'; K.name = ''; ui();
+  try {
+    if (kind === 'serial') { if (!('serial' in navigator)) { say('Le pilotage USB demande Chrome ou Edge (Web Serial).'); K.st = 'Off'; ui(); return; }
+      const p = port || await navigator.serial.requestPort(); K.T = await serialOpen(p); K.kind = 'serial'; K.name = portName(p) + ' · ' + CF.baud + ' bauds'; }
+    else { const sim = new SimGrbl({ fluid: kind === 'simf', limits: kind !== 'simn' }); K.sim = sim; K.T = sim.T; K.kind = 'sim'; K.name = kind === 'simf' ? 'Machine simulée (FluidNC)' : kind === 'simn' ? 'Machine simulée sans fins de course' : 'Machine simulée (GRBL 1.1)'; }
+  } catch (e) { K.T = null; K.st = 'Off'; ui(); if (e && e.name !== 'NotFoundError') say('Connexion impossible : ' + (e.message || e)); return; }
+  Object.assign(K, { st: 'Conn', set: {}, g54: null, homed: false, homeSkip: false, noLim: null, lostPos: false, originLost: false, ws: { x: false, y: false, z: false }, alarm: null, out: [], fly: [], flyLen: 0, prog: null, trail: [], finished: false, air: false, welcome: false, fluid: false, hal: false, ctrl: '', ver: '' });
+  K.T.onLine = onLine; K.T.onClose = () => { log('— Liaison coupée —', 'e'); hardOff(); say('La liaison avec la machine est coupée.'); };
+  log('— Connexion : ' + K.name + ' —', 'm');
+  for (let i = 0; i < 32 && !K.welcome; i++) await sleep(100);
+  if (!K.welcome) { K.T.write('\n'); await sleep(300); }
+  clearInterval(pollT); pollT = setInterval(() => { if (K.T) K.T.write('?'); }, 200); K.T.write('?');
+  try { await cmd('$I'); } catch { }
+  try { await cmd('$$'); } catch { }
+  try { await cmd('$#'); } catch { }
+  if (!K.ctrl) K.ctrl = K.fluid ? 'FluidNC' : 'GRBL';
+  await sleep(250); if (K.st === 'Conn') K.st = 'Idle';
+  U.vol = 2; ui(); say('Machine connectée : ' + K.ctrl);
+}
+function hardOff() { clearInterval(pollT); flush('off', true); if (K.prog) progAbort('off'); K.T = null; K.sim = null; K.st = 'Off'; K.alarm = null; U.vol = 1; ui(); }
+async function disconnect() { if (K.prog) { say('Arrêtez l’usinage avant de déconnecter.'); return; } const T = K.T; K.T = null; clearInterval(pollT); try { T && T.onLine && (T.onLine = null); await (T && T.close()); } catch { } log('— Déconnectée —', 'm'); hardOff(); }
+
+/* ---------------- origine machine ---------------- */
+async function home(ax) {
+  if (!conn() || moving() || K.prog) return; K.busy = 'home'; ui();
+  try { await cmd(ax ? '$H' + ax.toUpperCase() : '$H'); K.homedAx = ax ? (K.homedAx || '') + ax : 'xyz'; if (AX.every(a => K.homedAx.includes(a))) { K.homed = true; K.lostPos = false; K.alarm = null; say('Origine machine faite.'); if (K.pieceFixed) U.vol = allSet() ? 4 : 3; } }
+  catch (e) { say('Prise d’origine interrompue (' + e + ').'); }
+  K.busy = ''; ui();
+}
+async function unlock() { if (!conn()) return; try { await cmd('$X'); await cmd('G90'); } catch { } if (limOn() && !K.homed) K.homeSkip = true; K.alarm = null; ui(); }
+
+/* ---------------- origine pièce ---------------- */
+async function setZero(a, v) { if (!conn() || moving()) return; v = +v || 0; try { await cmd('G10 L20 P1 ' + a.toUpperCase() + n3(v)); K.ws[a] = true; K.originLost = false; } catch (e) { say('Refusé par la machine : ' + e); } ui(); }
+async function zeroAll() { if (!conn() || moving()) return; try { await cmd('G10 L20 P1 X0 Y0 Z0'); K.ws = { x: true, y: true, z: true }; K.originLost = false; } catch (e) { say('Refusé : ' + e); } ui(); }
+function keepG54() { K.ws = { x: true, y: true, z: true }; K.originLost = false; ui(); say('Origine pièce enregistrée dans la machine reprise. Vérifiez-la.'); }
+async function gotoOrigin() { if (!conn() || moving() || !allSet()) return; const z = Math.max(wpos()[2], 5); K.busy = 'goto'; ui(); try { await seq(['G90', 'G0 Z' + n3(z), 'G0 X0 Y0']); await waitIdle(); } catch { } K.busy = ''; ui(); }
+const toolR = () => { const d = +U.dia || curToolDia(); return d / 2; };
+function curToolDia() { const t = toolByNum(K.tool) || (progInfo().tools[0] && toolByNum(progInfo().tools[0])) || (S.tools || [])[0]; return t ? (+t.dia || 6) : 6; }
+const toolByNum = n => (S.tools || []).find(t => (t.num || 1) === n);
+async function probe() {
+  if (!conn()) return; if (!(K.st === 'Idle' || K.st === 'Hold' && K.prog && K.prog.tc)) { say('La machine doit être à l’arrêt pour palper.'); return; }
+  const a = U.paxis, o = stockO(), r = toolR(), PL = +CF.plate, OFF = +CF.blockOff, F = +CF.probeF, D = +CF.probeDist, RET = +CF.retract, c = 10, sd = Math.max(2, Math.min(8, PL - 3));
+  const Zp = () => ['G91', 'G38.2 Z-' + n3(D) + ' F' + n3(F * 2), ckP, 'G0 Z2', 'G38.2 Z-5 F' + n3(F / 2), ckP, 'G90', 'G10 L20 P1 Z' + n3(PL + o.oz), () => { K.ws.z = true; }, 'G91', 'G0 Z' + n3(RET), 'G90'];
+  const Xp = () => ['G91', 'G38.2 X' + n3(c + r + 12) + ' F' + n3(F), ckP, 'G90', 'G10 L20 P1 X' + n3(-(r + OFF + o.ox)), () => { K.ws.x = true; }, 'G91', 'G0 X-2', 'G90'];
+  const Yp = () => ['G91', 'G38.2 Y' + n3(c + r + 12) + ' F' + n3(F), ckP, 'G90', 'G10 L20 P1 Y' + n3(-(r + OFF + o.oy)), () => { K.ws.y = true; }, 'G91', 'G0 Y-2', 'G90'];
+  const toSideX = ['G91', 'G0 X-' + n3(c + r + 3), 'G0 Z-' + n3(RET + sd), 'G90'], backX = ['G91', 'G0 Z' + n3(RET + sd), 'G0 X' + n3(c + r + 5), 'G90'];
+  const toSideY = ['G91', 'G0 Y-' + n3(c + r + 3), 'G0 Z-' + n3(RET + sd), 'G90'], backY = ['G91', 'G0 Z' + n3(RET + sd), 'G0 Y' + n3(c + r + 5), 'G90'];
+  let L;
+  if (a === 'Z') L = Zp();
+  else if (a === 'XYZ') L = [...Zp(), ...toSideX, ...Xp(), ...backX, ...toSideY, ...Yp(), ...backY];
+  else if (a === 'XY') { if (!K.ws.z) { say('Faites d’abord le Z (palpage Z ou XYZ).'); return; } L = ['G90', 'G0 Z' + n3(PL + o.oz + RET), ...toSideX, ...Xp(), ...backX, ...toSideY, ...Yp(), ...backY]; }
+  else if (a === 'X') L = Xp(); else L = Yp();
+  K.busy = 'probe'; K.prb = null; ui();
+  try { await seq(L); await waitIdle(); if (a !== 'Z' && a !== 'X' && a !== 'Y' && K.st === 'Idle') { await seq(['G90', 'G0 X0 Y0']); await waitIdle(); } if (K.prog && K.prog.tc) K.prog.tc.probed = true; say('Palpage ' + a + ' terminé.'); }
+  catch (e) { try { await cmd('G90', true); } catch { } say(e === 'alarm' ? 'Palpage arrêté : ' + ((K.alarm && K.alarm.t) || 'alarme') + ' Déverrouillez puis recommencez.' : 'Palpage interrompu (' + e + ').'); }
+  K.busy = ''; ui(); tcRender();
+}
+async function ckP() { await sleep(30); if (!K.prb || !K.prb.ok) throw 'alarm'; K.prb = null; }
+
+/* ---------------- déplacements ---------------- */
+const canJog = () => conn() && (K.st === 'Idle' || K.st === 'Jog' || (K.prog && K.prog.tc && K.st !== 'Run')) && !K.busy;
+async function jogStep(v) {
+  if (!canJog()) { if (K.st === 'Alarm') say('Machine en alarme : déverrouillez ou faites la prise d’origine.'); return; }
+  const s = +CF.step, w = AX.map((a, i) => v[i] ? a.toUpperCase() + n3(v[i] * s) : '').filter(Boolean).join(' ');
+  try { await cmd('$J=G91 G21 ' + w + ' F' + Math.round(CF.jogF)); } catch (e) { if (/error:15/.test(e)) say('Déplacement refusé : il sortirait de la zone de travail.'); }
+}
+let jogging = null;
+function jogStart(v) {
+  if (!canJog() || jogging) return; const tr0 = [K.set[130], K.set[131], K.set[132]], d = [];
+  AX.forEach((a, i) => { if (!v[i]) return; let L = 100; if (K.homed && tr0[i]) { const neg = K.mpos[i] <= 0.5; const p = K.mpos[i], hi = neg ? 0 : tr0[i], lo = neg ? -tr0[i] : 0; L = Math.max(0, (v[i] > 0 ? hi - p : p - lo) - 0.5); } d.push(a.toUpperCase() + n3(v[i] * L)); });
+  if (!d.length) return; jogging = v; cmd('$J=G91 G21 ' + d.join(' ') + ' F' + Math.round(CF.jogF)).catch(() => { });
+}
+function jogStop() { if (!jogging) return; jogging = null; rt('\x85'); }
+
+/* ---------------- programme ---------------- */
+function progGcode() {
+  const tps = S.tps.filter(t => t.visible && !t.err && t.moves && t.moves.length), f1 = tps.filter(t => t.face !== 2 && U.face !== 2), f2 = tps.filter(t => t.face === 2 && U.face === 2);
+  const M0 = machineEff(); const Mg = { ...M0, post: M0.post === 'grblhal' ? 'grblhal' : 'grbl', tcMode: 'cmd', tcA: 'T', tcN: true, tcB: ' M6', comments: true, cycles: false };
+  return { g: makeGcode(f1.concat(f2), S.tools, S.stock, Mg), tps: f1.concat(f2) };
+}
+let PI_ = null, PI_sig = '';
+function progInfo() {
+  const sig = S.tps.map(t => [t.id, t.visible ? 1 : 0, t.err ? 1 : 0, typeof objId === 'function' ? objId(t.moves) : (t.moves || []).length, t.toolId].join(':')).join(',') + '|' + JSON.stringify(S.stock) + '|' + JSON.stringify(S.machine) + '|' + (S.tools || []).map(t => t.id + ':' + t.num + ':' + t.dia + ':' + t.rpm).join(',') + '|' + U.face;
+  if (PI_ && sig === PI_sig) return PI_; PI_sig = sig;
+  let g = '', tps = []; try { ({ g, tps } = progGcode()); } catch (e) { g = ''; }
+  const L = [], tools = [], mn = [1e9, 1e9, 1e9], mx = [-1e9, -1e9, -1e9], cum = []; let p = [0, 0, 0], abs = true, mode = 0, F = 1000, t = 0; const RAP = Math.min(+K.set[110] || 3000, +K.set[111] || 3000);
+  for (const raw of g.split('\n')) { const tx = raw.replace(/\(.*?\)|;.*$/g, '').trim(); const tc = /^T(\d+)\s*M0?6$/i.exec(tx); const it = { raw, t: tc ? '' : tx, tc: tc ? +tc[1] : null, cm: (/\((.*)\)/.exec(raw) || [])[1] || '' };
+    if (tc) tools.push(+tc[1]);
+    if (it.t) { const u = it.t.toUpperCase(), W = {}; let m; const re = /([A-Z])(-?\d*\.?\d+)/g; const G = []; while ((m = re.exec(u))) { if (m[1] === 'G') G.push(+m[2]); else W[m[1]] = +m[2]; }
+      for (const gg of G) { if ([0, 1, 2, 3].includes(gg)) mode = gg; if (gg === 90) abs = true; if (gg === 91) abs = false; if (gg === 4) t += (W.P || 0); }
+      if (W.F) F = W.F; const q2 = p.slice(); let mv = false; ['X', 'Y', 'Z'].forEach((k, i) => { if (W[k] !== undefined) { q2[i] = abs ? W[k] : p[i] + W[k]; mv = true; } });
+      if (mv && !G.includes(4)) { let len = Math.hypot(q2[0] - p[0], q2[1] - p[1], q2[2] - p[2]); if (mode === 2 || mode === 3) { const r = Math.hypot(W.I || 0, W.J || 0); len = Math.max(len, r * 0.5 * Math.PI); } t += len / (mode === 0 ? RAP : F) * 60; p = q2; for (let i = 0; i < 3; i++) { mn[i] = Math.min(mn[i], p[i]); mx[i] = Math.max(mx[i], p[i]); } } }
+    cum.push(t); L.push(it); }
+  PI_ = { L, tools, mn, mx, t, cum, tps, g, sig }; return PI_;
+}
+function checks() {
+  const P = progInfo(), c = [], o = stockO(), st = S.stock;
+  c.push({ ok: conn(), t: 'Machine connectée' });
+  c.push({ ok: !limOn() || K.homed, t: limOn() ? 'Prise d’origine faite' : 'Prise d’origine (pas de fins de course)' });
+  c.push({ ok: allSet(), t: 'Origine pièce définie (X, Y et Z)' });
+  c.push({ ok: P.tps.length > 0, t: P.tps.length ? P.tps.length + ' parcours visible(s) à usiner' : 'Aucun parcours visible et calculé (onglet Parcours)' });
+  const stale = S.tps.some(t => t.visible && t.stale); c.push({ ok: !stale, t: stale ? 'Des parcours ne sont pas à jour : recalculez-les' : 'Parcours à jour' });
+  if (o.rot) c.push({ ok: false, t: 'Projet rotatif (4ᵉ axe) : pas encore pris en charge par l’onglet Usiner' });
+  if (P.tps.length) { const bot = o.oz - (+st.t || 0), deep = P.mn[2] < bot - 1; c.push({ ok: true, wa: deep, t: deep ? 'La fraise descend ' + f2(bot - P.mn[2], 1) + ' mm sous le dessous du brut : martyr nécessaire' : 'Profondeur dans l’épaisseur du brut' }); }
+  if (P.tps.length && allSet() && K.homed && K.set[130]) { const tr0 = [K.set[130], K.set[131], K.set[132]], air = K.airWant ? 10 : 0, out = [];
+    AX.forEach((a, i) => { const lo = K.wco[i] + P.mn[i] + (i === 2 ? air : 0), hi = K.wco[i] + P.mx[i] + (i === 2 ? air : 0), neg = K.mpos[i] <= 0.5, L0 = neg ? -tr0[i] : 0, L1 = neg ? 0 : tr0[i]; if (lo < L0 - 0.01 || hi > L1 + 0.01) out.push(a.toUpperCase()); });
+    c.push({ ok: !out.length, t: out.length ? 'Le programme sort de la zone de travail en ' + out.join(', ') : 'Le programme tient dans la zone de travail' }); }
+  else if (P.tps.length) c.push({ ok: true, wa: true, t: 'Zone de travail non vérifiable (prise d’origine ou $130–$132 manquants)' });
+  return c;
+}
+const LAUNCH = [['tool', () => { const P = progInfo(), t = toolByNum(P.tools[0]); return 'La bonne fraise est montée : <b>' + esc(t ? t.name : 'outil ' + (P.tools[0] || 1)) + '</b>'; }], ['clamp', () => 'La pièce est bridée, brides hors du trajet de l’outil'], ['probe', () => 'Le palpeur et sa pince sont rangés'], ['spindle', () => CF.m3 ? 'La broche est commandée par la machine (M3)' : 'La défonceuse est allumée'], ['dust', () => 'L’aspiration est en marche'], ['ppe', () => 'Lunettes et protection auditive portées'], ['estop', () => 'Je sais où est l’arrêt d’urgence de la machine']];
+const canStart = () => K.st === 'Idle' && !K.prog && !K.busy && checks().every(c => c.ok) && LAUNCH.every(l => U.launch[l[0]]);
+
+async function progStart() {
+  if (K.prog && K.st === 'Hold') { rt('~'); return; }
+  if (!canStart()) { say('Terminez les vérifications de l’étape 4 avant de démarrer.'); U.vol = 4; ui(); return; }
+  const P = progInfo(); K.finished = false; K.trail = []; K.tool = P.tools[0] || null;
+  K.prog = { L: P.L, i: 0, acked: 0, moved: false, all: false, tc: null, err: null, t0: Date.now(), cum: P.cum, tot: P.t, air: !!K.airWant };
+  log('— Envoi du programme : ' + P.L.length + ' lignes —', 'm'); U.vol = 4;
+  if (K.prog.air) { try { await cmd('G92.1'); const z = wpos()[2]; await cmd('G92 Z' + n3(z - 10)); K.air = true; } catch { progAbort('air'); ui(); return; } }
+  ui(); progFeed();
+}
+function progFeed() {
+  const P = K.prog; if (!P || P.tc || P.err || P.all) return;
+  while (P.i < P.L.length && K.out.length < 4) {
+    const it = P.L[P.i], idx = P.i;
+    if (it.tc !== null) { if (!P.tcSeen) { P.tcSeen = true; K.tool = it.tc; P.i++; P.acked = Math.max(P.acked, idx + 1); continue; }
+      if (K.fly.length || K.out.length || K.st !== 'Idle') return; P.i++; P.m0 = ''; P.tc = { tool: it.tc, probed: false, mounted: false }; tcStart(); return; }
+    P.i++; if (!it.t) { if (!K.fly.length && !K.out.length) P.acked = Math.max(P.acked, idx + 1); continue; }
+    if (/^G[0-3]\b|^[XYZ]/i.test(it.t)) P.moved = true;
+    if (/^M0?0$/i.test(it.t)) { let m = ''; for (let j = idx - 1; j >= Math.max(0, idx - 4) && !m; j--) m = P.L[j].cm; P.m0 = m || 'Pause du programme (M0)'; }
+    enqueue(it.t, e => { if (!K.prog || K.prog !== P) return; if (e) { if (/^error/.test(e)) progError(idx, e); return; } P.acked = Math.max(P.acked, idx + 1); }, true);
+  }
+  if (P.i >= P.L.length) P.all = true;
+}
+function progError(idx, e) { const P = K.prog; if (!P) return; rt('!'); P.err = { idx, e, line: P.L[idx].t }; log('Arrêt sur erreur, ligne ' + (idx + 1) + ' : ' + P.L[idx].t, 'e'); U.vol = 4; ui(); }
+function progResumeErr() { const P = K.prog; if (!P || !P.err) return; P.err = null; rt('~'); progFeed(); ui(); }
+async function progDone() { const P = K.prog; K.prog = null; K.finished = true; if (P && P.air) { try { await cmd('G92.1'); } catch { } K.air = false; } log('— Programme terminé (' + fmtT((Date.now() - P.t0) / 1000) + ') —', 'm'); ui(); say('Usinage terminé. Attendez l’arrêt de la broche avant de toucher la pièce.'); }
+function progAbort(why) { const P = K.prog; if (!P) return; K.prog = null; flush('abort', false); tcClose(); log('— Programme arrêté (' + why + ') —', 'e'); if (P.air && K.T) { setTimeout(() => cmd('G92.1').catch(() => { }), 600); } ui(); }
+function pause() { if (K.st === 'Run' || K.st === 'Jog' || K.st === 'Home') rt('!'); }
+function stopAll() {
+  if (!K.T) return; log('> ! puis remise à zéro (0x18)', 'e'); const wasProg = !!K.prog; jogging = null;
+  rt('!'); if (K.prog) progAbort('arrêt'); flush('stop', false); tcClose();
+  setTimeout(() => { rt('\x18'); setTimeout(() => { if (K.T && wasProg) cmd('G92.1', true).catch(() => { }); }, 900); }, 250);
+  K.busy = ''; ui();
+}
+
+/* ---------------- changement d'outil ---------------- */
+async function tcStart() {
+  const P = K.prog; if (!P || !P.tc) return; U.vol = 4; ui();
+  try { await waitIdle(); await cmd('M5'); if (K.homed && K.mpos[2] <= 0.5) await cmd('G53 G0 Z-5'); else await seq(['G91', 'G0 Z10', 'G90']); await waitIdle(); } catch (e) { return; }
+  if (K.prog !== P) return; P.tc.ready = true; tcRender();
+}
+async function tcResume() {
+  const P = K.prog; if (!P || !P.tc) return; K.tool = P.tc.tool; P.tc = null; tcClose(); const o = stockO(), sz = (+S.machine.safeZ || 5) + o.oz;
+  try { await seq(['G90', 'G0 Z' + n3(sz)]); } catch { } ui(); progFeed();
+}
+function tcRender() {
+  let el = q('#cncTc'); const P = K.prog; if (!P || !P.tc) { if (el) el.remove(); return; }
+  if (!el) { el = document.createElement('div'); el.id = 'cncTc'; el.className = 'cnc-modal side'; el.setAttribute('data-notr', ''); document.body.appendChild(el); }
+  const t = toolByNum(P.tc.tool), nm = esc(t ? t.name : 'outil ' + P.tc.tool), rd = P.tc.ready;
+  el.innerHTML = '<div class="cnc-mb" style="width:min(470px,92vw)"><div class="cnc-mh"><h2>🔧 Changement d’outil</h2></div><div class="cnc-mbody">' +
+    (rd ? '<p>Le programme demande : <b>' + nm + '</b> (T' + P.tc.tool + '). La broche est arrêtée et le Z relevé.</p>' : '<p class="cnc-m">Fin des mouvements en cours, arrêt de la broche et remontée du Z…</p>') +
+    '<label class="cnc-chk"><input type="checkbox" data-tc="mounted" ' + (P.tc.mounted ? 'checked' : '') + (rd ? '' : ' disabled') + '><span><b>1.</b> Attendez l’arrêt complet de la broche, puis montez la <b>' + nm + '</b>. Serrez bien la pince.</span></label>' +
+    '<div style="padding:6px 0 6px 24px"><b>2.</b> Refaites le zéro Z : posez la plaque sous la fraise (descendez avec le pavé du panneau), branchez la pince, puis :<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn pri" data-c="tcProbe" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>Palper Z (plaque ' + f2(CF.plate, 1) + ' mm)</button>' + (P.tc.probed ? '<span style="color:#2e9b5c;font-weight:600">✓ Z refait</span>' : '') + '<span class="cnc-s"><span class="cnc-led ' + (/P/.test(K.pn) ? 'on' : '') + '" data-live="led"></span>contact</span></div><p class="cnc-s cnc-m" style="margin:6px 0 0">Ne touchez pas à X et Y : ils restent valables.</p></div>' +
+    '<div style="padding-left:24px"><b>3.</b> Rangez la plaque et la pince' + (CF.m3 ? '.' : ', rallumez la défonceuse.') + '</div>' +
+    '<div class="cnc-row" style="margin-top:14px;justify-content:space-between"><button class="cnc-btn" data-c="stop">Arrêter l’usinage</button><button class="cnc-btn pri" data-c="tcResume" ' + (P.tc.probed ? '' : 'disabled') + '>▶ Reprendre l’usinage</button></div>' +
+    '<p class="cnc-s cnc-m" style="margin-top:9px">Le pavé de déplacement (en bas du panneau) reste utilisable.</p></div></div>';
+}
+function tcClose() { const el = q('#cncTc'); if (el) el.remove(); }
+
+/* ---------------- interface : onglet et panneau ---------------- */
+let pane, scroll, ctl, tabBtn, ov;
+function build() {
+  const tabs = q('.panel .tabs'); if (!tabs || q('[data-tab="usiner"]', tabs)) return;
+  tabBtn = document.createElement('button'); tabBtn.setAttribute('role', 'tab'); tabBtn.dataset.tab = 'usiner'; tabBtn.setAttribute('aria-selected', 'false');
+  tabBtn.innerHTML = '<i aria-hidden="true">6</i><span>Usiner</span><span class="cnc-tdot"></span>'; tabBtn.onclick = () => setTab('usiner'); tabs.appendChild(tabBtn);
+  pane = document.createElement('div'); pane.className = 'pane cnc-pane'; pane.dataset.pane = 'usiner'; pane.hidden = true; pane.setAttribute('data-notr', ''); pane.innerHTML = '<div id="cncScroll"></div><div id="cncCtl"></div>';
+  q('.panel').appendChild(pane); scroll = q('#cncScroll'); ctl = q('#cncCtl');
+  ov = document.createElement('div'); ov.id = 'cncOv'; ov.hidden = true; ov.setAttribute('data-notr', ''); q('#rv3').appendChild(ov);
+  pane.addEventListener('click', onClick); document.body.addEventListener('click', e => { if (e.target.closest('#cncTc,.cnc-modal,#cncOv')) onClick(e); });
+  pane.addEventListener('change', onChange); document.body.addEventListener('change', e => { if (e.target.closest('#cncTc,.cnc-modal')) onChange(e); });
+  document.addEventListener('click', e => { if (U.conOpen && !e.target.closest('.cnc-cwrap')) { U.conOpen = false; panel(); } });
+  tabVis(); ctlRender();
+}
+function tabVis() { if (tabBtn) tabBtn.hidden = !CF.on; if (!CF.on && curTab === 'usiner') setTab('parcours'); }
+window.cncOnTab = t => {
+  if (!tabBtn) return; const on = t === 'usiner', rv = q('#rv3');
+  if (on) { if (!U.prevViews) U.prevViews = { d2: VIEWS.d2, d3: VIEWS.d3 }; VIEWS.d2 = false; VIEWS.d3 = true; viewsApply(); RV.showTp = true; rv.classList.add('cnc-on'); ov.hidden = false; PI_ = null; ui(); }
+  else if (U.prevViews) { VIEWS.d2 = U.prevViews.d2; VIEWS.d3 = U.prevViews.d3; U.prevViews = null; viewsApply(); rv.classList.remove('cnc-on'); ov.hidden = true; }
+};
+function ui() { if (!pane) return; tabBtn.classList.toggle('cnc-conn', !!K.T && K.st !== 'Alarm'); tabBtn.classList.toggle('cnc-alarm', K.st === 'Alarm'); if (curTab === 'usiner') { panel(); ovRender(); } live(); tcRender(); }
+
+function stat() { return {
+  s1: conn() ? 'done' : '',
+  s2: !conn() ? '' : K.lostPos ? 'redo' : (K.homed || K.homeSkip) ? (K.homed || !limOn() ? 'done' : 'redo') : '',
+  s3: K.prog && K.prog.tc ? 'redo' : K.originLost ? 'redo' : allSet() ? 'done' : '',
+  s4: K.prog ? 'cur' : K.finished ? 'done' : '' }; }
+function vol(n, title, st, sum, body) { const open = U.vol === n; if (open && !st) st = 'cur'; return '<section class="cnc-vol' + (open ? ' open' : '') + '"><header data-c="vol" data-n="' + n + '"><span class="cnc-dot ' + st + '"></span><span class="cnc-vn">' + n + '</span><span class="cnc-vt">' + title + '</span><span class="cnc-vs">' + sum + '</span><span class="cnc-chev">▼</span></header>' + (open ? '<div class="cnc-vb">' + body + '</div>' : '') + '</section>'; }
+const chk = (g, k, label) => '<label class="cnc-chk"><input type="checkbox" data-u="' + g + '.' + k + '" ' + (U[g][k] ? 'checked' : '') + '><span>' + label + '</span></label>';
+
+function panel() {
+  if (!scroll || curTab !== 'usiner') return; const sc = scroll.scrollTop, st = stat();
+  let h = '<div class="cnc-test"><b>Version test.</b> Pilotage d’une vraie machine : restez près de l’arrêt d’urgence et faites d’abord un essai dans l’air.</div>';
+  if (K.st === 'Alarm' && K.alarm) h += '<div class="cnc-box err"><b class="t">⚠ Alarme ' + K.alarm.n + '</b>' + esc(K.alarm.t) + '<div class="cnc-row" style="margin-top:7px">' + (limOn() ? '<button class="cnc-btn sm pri" data-c="home">⌂ Prise d’origine ($H)</button>' : '') + '<button class="cnc-btn sm" data-c="unlock">Déverrouiller ($X)</button></div></div>';
+  else if (K.st === 'Alarm' && conn()) h += '<div class="cnc-box err"><b class="t">⚠ Machine en alarme</b>' + (limOn() ? 'Prise d’origine nécessaire au démarrage (normal).' : '') + '<div class="cnc-row" style="margin-top:7px">' + (limOn() ? '<button class="cnc-btn sm pri" data-c="home">⌂ Prise d’origine ($H)</button>' : '') + '<button class="cnc-btn sm" data-c="unlock">Déverrouiller ($X)</button></div></div>';
+  if (K.st === 'Door') h += '<div class="cnc-box warn"><b class="t">Porte ouverte</b>Fermez la porte (ou le capteur) puis reprenez.</div>';
+  // 1 connexion
+  let b1;
+  if (!K.T) {
+    const ser = 'serial' in navigator;
+    b1 = '<div class="cnc-cwrap' + (U.conOpen ? ' open' : '') + '"><button class="cnc-btn pri big" data-c="conMenu">🔌 Connecter ▾</button><div class="cnc-cmenu"><div class="cnc-ct">USB</div>' +
+      (U.ports || []).map((p, i) => '<button class="cnc-ci" data-c="conPort" data-i="' + i + '"><span class="ic">🔌</span><span><b>' + esc(portName(p)) + '</b><small>Déjà autorisé · ' + CF.baud + ' bauds</small></span></button>').join('') +
+      '<button class="cnc-ci" data-c="conSerial" ' + (ser ? '' : 'disabled') + '><span class="ic">＋</span><span><b>Choisir un port USB…</b><small>' + (ser ? 'Le navigateur affiche la liste des appareils' : 'Demande Chrome ou Edge (Web Serial)') + '</small></span></button>' +
+      '<div class="cnc-ct">Essai sans machine</div><button class="cnc-ci" data-c="conSim" data-k="sim"><span class="ic">🧪</span><span><b>Machine simulée – GRBL 1.1</b><small>Avec fins de course</small></span></button><button class="cnc-ci" data-c="conSim" data-k="simf"><span class="ic">🧪</span><span><b>Machine simulée – FluidNC</b><small>Prise d’origine axe par axe</small></span></button><button class="cnc-ci" data-c="conSim" data-k="simn"><span class="ic">🧪</span><span><b>Machine simulée sans fins de course</b><small>GRBL 1.1</small></span></button>' +
+      '<div class="cnc-ct">Wi-Fi</div><button class="cnc-ci" disabled><span class="ic">📶</span><span><b>FluidNC Wi-Fi</b><small>Pas encore dans la version test</small></span></button></div></div>' +
+      (K.st === 'Conn' ? '<p class="cnc-m">Connexion…</p>' : '') +
+      '<div class="cnc-box info"><b class="t">Avant de connecter</b><ul><li>La machine est sous tension, le câble USB branché.</li><li>Aucun autre logiciel n’utilise la machine (UGS, gSender, Candle…).</li><li>Chrome ou Edge : le navigateur demande d’autoriser le port la première fois.</li></ul></div>';
+  } else {
+    b1 = '<div class="cnc-kv"><span>Contrôleur</span><span><b>' + esc(K.ctrl || '…') + '</b></span><span>Liaison</span><span>' + esc(K.name) + '</span><span>Fins de course</span><span>' + (limOn() ? 'oui' : 'non') + '</span>' + (K.set[130] ? '<span>Course</span><span>' + K.set[130] + ' × ' + K.set[131] + ' × ' + K.set[132] + ' mm</span>' : '') + '</div>' +
+      '<div class="cnc-row" style="margin-top:11px"><button class="cnc-btn" data-c="mset">⚙ Paramètres machine</button><button class="cnc-btn" data-c="disc">Déconnecter</button></div>';
+  }
+  h += vol(1, 'Connexion', st.s1, K.T ? (K.st === 'Conn' ? 'Connexion…' : '<span style="color:#2e9b5c">●</span> ' + esc(K.ctrl || 'Connectée')) : '○ Non connectée', b1);
+  // 2 origine machine
+  let b2 = '';
+  if (!conn()) b2 = '<p class="cnc-m">Connectez d’abord la machine.</p>';
+  else {
+    if (limOn()) {
+      if (K.lostPos) b2 += '<div class="cnc-box warn"><b class="t">Refaites la prise d’origine</b>La position de la machine n’est plus sûre. Votre <b>origine pièce est conservée</b> : la prise d’origine la retrouve exactement.</div>';
+      if (!K.homed) { b2 += '<p class="cnc-s">La prise d’origine envoie chaque axe sur son capteur de fin de course : la machine sait ensuite exactement où elle est.</p><div class="cnc-lbl">À vérifier avant</div>' + chk('pre', 'a', 'Rien ne gêne sur la table ni le long des axes') + chk('pre', 'b', 'La fraise est au-dessus de la pièce, pas dedans') + chk('pre', 'c', 'Ma main est près de l’arrêt d’urgence') +
+        '<button class="cnc-btn pri big" style="margin-top:7px" data-c="home" ' + (['a', 'b', 'c'].every(k => U.pre[k]) && !moving() ? '' : 'disabled') + '>⌂ Prise d’origine (tous les axes)</button>' +
+        '<div class="cnc-row cnc-s" style="margin-top:7px"><span class="cnc-m">Un seul axe :</span>' + AX.map(a => '<button class="cnc-btn sm" data-c="homeAx" data-a="' + a + '" ' + ((K.fluid || K.hal) && !moving() ? '' : 'disabled') + '>' + a.toUpperCase() + '</button>').join('') + (K.fluid || K.hal ? '' : '<span class="cnc-m">(pas avec GRBL 1.1)</span>') + '</div>' +
+        (K.busy === 'home' || K.st === 'Home' ? '<p class="cnc-m">Prise d’origine en cours… <b>Échap</b> ou ■ Arrêt pour stopper.</p>' : '') +
+        '<p class="cnc-s" style="margin:8px 0 0"><button class="cnc-btn lnk" data-c="unlock">Déverrouiller sans prise d’origine ($X)</button> <span class="cnc-m">– déconseillé</span><br><button class="cnc-btn lnk" data-c="noLim">Ma machine n’a pas de fins de course</button></p>'; }
+    } else if (!K.homeSkip) b2 += '<div class="cnc-box info"><b class="t">Pas de fins de course</b>Pas de prise d’origine automatique : le point de départ de la machine est sa position à la mise sous tension.</div><button class="cnc-btn pri big" data-c="skipHome">Continuer</button>';
+    if ((K.homed || K.homeSkip) && !K.lostPos) b2 += '<div class="cnc-box ok"><b class="t">✓ ' + (K.homed ? 'Origine machine faite' : 'Étape passée') + '</b>' + (K.homed ? 'La machine connaît sa position.' : 'Sans prise d’origine, la zone de travail ne peut pas être vérifiée.') + '</div><div class="cnc-lbl">Maintenant, fixez votre pièce</div>' +
+      chk('fix', 'a', 'La pièce est bridée (brides, vis ou adhésif double face) et ne bouge pas') + chk('fix', 'b', 'Les brides sont hors de la zone usinée et du passage de la broche') + chk('fix', 'c', 'La pièce est à plat, sans copeaux dessous') +
+      '<button class="cnc-btn pri big" style="margin-top:7px" data-c="fixed" ' + (['a', 'b', 'c'].every(k => U.fix[k]) ? '' : 'disabled') + '>Ma pièce est fixée →</button>';
+  }
+  h += vol(2, 'Origine machine', st.s2, !conn() ? '' : K.lostPos ? 'À refaire' : K.homed ? '✓ Faite' : !limOn() && K.homeSkip ? 'Pas de fins de course' : K.homeSkip ? 'Déverrouillée sans origine' : 'À faire', b2);
+  h += vol(3, 'Origine pièce', st.s3, allSet() ? '✓ X Y Z définis' : AX.filter(a => K.ws[a]).map(a => a.toUpperCase()).join(' ') || 'À faire', originBody());
+  h += vol(4, 'Usinage', st.s4, K.prog ? (K.prog.tc ? 'Changement d’outil' : K.st === 'Hold' ? 'En pause' : 'En cours…') : K.finished ? '✓ Terminé' : '', launchBody());
+  h += '<div class="cnc-dr"><header data-c="drawer"><span>' + (U.drawer ? '▾' : '▸') + '</span><b>Console et macros</b><span class="cnc-s">(utilisateurs avancés)</span></header>' + (U.drawer ? '<div class="cnc-mac">' + CF.macros.map((m, i) => '<button data-c="macro" data-i="' + i + '" ' + (conn() && !K.prog ? '' : 'disabled') + '>' + esc(m.n) + '</button>').join('') + '</div>' + conHtml('c1') : '') + '</div>';
+  scroll.innerHTML = h; scroll.scrollTop = sc; conRender(); live();
+}
+function illu(a) {
+  const blk = '<path d="M40 70 L130 52 L190 70 L100 90 Z" fill="var(--stock)" stroke="var(--stock-edge)"/><path d="M40 70 L40 110 L100 130 L100 90 Z" fill="var(--stock)" stroke="var(--stock-edge)" opacity=".85"/><path d="M100 90 L190 70 L190 110 L100 130 Z" fill="var(--stock)" stroke="var(--stock-edge)" opacity=".7"/>';
+  const tool = (x, y) => '<rect x="' + (x - 5) + '" y="' + (y - 48) + '" width="10" height="48" fill="#aab0b8" stroke="#4b5058"/><path d="M' + (x - 5) + ' ' + (y - 30) + ' l10 -6 M' + (x - 5) + ' ' + (y - 18) + ' l10 -6 M' + (x - 5) + ' ' + (y - 6) + ' l10 -6" stroke="#4b5058"/><rect x="' + (x - 9) + '" y="' + (y - 62) + '" width="18" height="14" fill="#6b727c"/>';
+  const plate = '<path d="M95 74 L125 68 L140 73 L110 79 Z" fill="#c9ccd1" stroke="#555"/><path d="M95 74 v4 L110 83 V79 Z M110 79 v4 L140 77 V73 Z" fill="#a9adb4" stroke="#555"/>';
+  const bloc = '<path d="M36 68 L66 62 L90 68 L60 74 Z" fill="#c9ccd1" stroke="#555"/><path d="M36 68 v18 L60 92 V74 Z M60 74 v18 L90 86 V68 Z" fill="#a9adb4" stroke="#555"/>';
+  const ar = (x, y, dx, dy) => '<path d="M' + x + ' ' + y + ' l' + dx + ' ' + dy + '" stroke="var(--danger)" stroke-width="2.5" marker-end="url(#cncAr)"/>';
+  const ex = { Z: plate + tool(117, 62) + ar(117, 20, 0, 10), XYZ: bloc + tool(62, 58) + ar(62, 16, 0, 10), XY: bloc + tool(62, 40), X: bloc + tool(22, 98) + ar(28, 82, 8, -2), Y: bloc + tool(62, 120) + ar(66, 110, 6, -4) }[a];
+  return '<div class="cnc-illu"><svg width="230" height="140" viewBox="0 0 230 140"><defs><marker id="cncAr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--danger)"/></marker></defs>' + blk + ex + '</svg></div>';
+}
+const PTXT = { Z: 'Posez la plaque sur la pièce, sous la fraise. Approchez la fraise à 1 ou 2 cm au-dessus de la plaque.', XYZ: 'Posez le bloc sur le coin avant gauche de la pièce. Placez la fraise au-dessus du bloc, à 1 ou 2 cm, à moins de 10 mm de ses bords gauche et avant.', XY: 'Le Z doit être fait. Placez la fraise au-dessus du bloc (coin avant gauche), à moins de 10 mm de ses bords gauche et avant.', X: 'Placez la fraise à gauche du bloc, à moins de 10 mm, sous le dessus du bloc.', Y: 'Placez la fraise devant le bloc, à moins de 10 mm, sous le dessus du bloc.' };
+function originBody() {
+  if (!conn()) return '<p class="cnc-m">Connectez d’abord la machine.</p>';
+  const w = wpos(), dis = moving() && !(K.prog && K.prog.tc), st = S.stock, bl = typeof originKey === 'function' ? originKey(st) === 'bl' : true, o = stockO();
+  let h = '<div class="cnc-box info cnc-row" style="gap:10px"><svg width="70" height="50" viewBox="0 0 70 50" style="flex:none"><rect x="6" y="6" width="58" height="38" fill="var(--stock)" stroke="var(--stock-edge)"/><circle cx="' + (6 + 58 * Math.min(1, Math.max(0, o.ox / (+st.w || 1)))) + '" cy="' + (44 - 38 * Math.min(1, Math.max(0, o.oy / (+st.h || 1)))) + '" r="4.5" fill="var(--danger)"/></svg><span>Origine du projet : <b>' + esc(tr(originLabel(st))) + '</b>, Z0 sur ' + (st.originZ === 'bottom' ? '<b>la table</b>' : '<b>le dessus du brut</b>') + '.</span></div>';
+  if (K.prog && K.prog.tc) h += '<div class="cnc-box warn"><b class="t">Changement d’outil en cours</b>Refaites seulement le <b>Z</b> (fenêtre de droite).</div>';
+  if (K.originLost) h += '<div class="cnc-box warn"><b class="t">Origine pièce à refaire</b>Sans fins de course, un arrêt pendant un mouvement fait perdre la position.</div>';
+  if (K.g54 && K.g54.some(v => Math.abs(v) > 0.001) && !allSet() && !K.originLost) h += '<div class="cnc-box"><b class="t">Origine enregistrée dans la machine</b>G54 : X ' + f2(K.g54[0]) + ' · Y ' + f2(K.g54[1]) + ' · Z ' + f2(K.g54[2]) + '<div style="margin-top:6px"><button class="cnc-btn sm" data-c="keepG54">La reprendre (même pièce, même fraise)</button></div></div>';
+  h += '<div class="cnc-seg" style="margin:4px 0"><button class="' + (U.pmode === 'probe' ? 'on' : '') + '" data-c="pmode" data-v="probe">Avec palpeur</button><button class="' + (U.pmode === 'hand' ? 'on' : '') + '" data-c="pmode" data-v="hand">À la main</button></div>';
+  if (U.pmode === 'probe') {
+    const tc = K.prog && K.prog.tc;
+    h += '<div class="cnc-lbl">Que voulez-vous palper ?</div><div class="cnc-seg">' + ['Z', 'XYZ', 'XY', 'X', 'Y'].map(a => '<button class="' + (U.paxis === a ? 'on' : '') + '" data-c="paxis" data-v="' + a + '" ' + (tc && a !== 'Z' ? 'disabled' : '') + '>' + a + '</button>').join('') + '</div>' + illu(U.paxis) + '<p class="cnc-s" style="margin:0 0 6px">' + PTXT[U.paxis] + '</p>';
+    if (U.paxis !== 'Z' && !bl) h += '<div class="cnc-box warn cnc-s">Le bloc se pose au coin avant gauche ; COPO décale X0 et Y0 jusqu’à l’origine du projet en se fiant aux dimensions du brut (' + f2(st.w, 1) + ' × ' + f2(st.h, 1) + ' mm).</div>';
+    h += '<div class="cnc-row wrap" style="gap:12px"><label class="cnc-s">Épaisseur de la plaque<br><input type="number" step="0.1" value="' + CF.plate + '" data-cf="plate" style="width:80px"> mm</label>' + (U.paxis !== 'Z' ? '<label class="cnc-s">Diamètre de l’outil<br><input type="number" step="0.01" value="' + (U.dia || curToolDia()) + '" data-u2="dia" style="width:80px"> mm</label>' : '') + '</div>' +
+      '<p class="cnc-s" style="margin:8px 0 0"><span class="cnc-led ' + (/P/.test(K.pn) ? 'on' : '') + '" data-live="led"></span>Contact du palpeur : <b data-live="ledt">' + (/P/.test(K.pn) ? 'fermé' : 'ouvert') + '</b> — touchez la plaque avec la fraise pour vérifier.' + (K.kind === 'sim' ? ' <button class="cnc-btn lnk" data-c="simTouch">simuler</button>' : '') + '</p>' +
+      '<button class="cnc-btn pri big" style="margin-top:9px" data-c="probe" ' + (dis || K.st === 'Alarm' || K.busy ? 'disabled' : '') + '>' + (K.busy === 'probe' ? 'Palpage…' : 'Palper ' + U.paxis) + '</button>';
+  } else {
+    h += '<p class="cnc-s">Approchez la fraise avec le pavé (pas de 0,1 mm à la fin) jusqu’à pincer une feuille de papier, puis cliquez sur Zéro. Pour le Z avec une feuille : cliquez sur la valeur et tapez 0,1.</p>';
+    for (const a of AX) h += '<div class="cnc-ax"><b>' + a.toUpperCase() + '</b>' + (U.edit === a ? '<input id="cncAxIn" type="number" step="0.01" value="' + w[AX.indexOf(a)].toFixed(2) + '" data-ax="' + a + '" style="text-align:right;font:600 15px var(--f-mono)">' : '<span class="cnc-axv" data-c="edit" data-a="' + a + '" data-live="w' + a + '" title="Cliquer pour saisir une cote">' + f2(w[AX.indexOf(a)]) + '</span>') + '<button class="cnc-btn sm" data-c="zero" data-a="' + a + '" ' + (dis ? 'disabled' : '') + '>Zéro ' + a.toUpperCase() + '</button></div>';
+    h += '<button class="cnc-btn" style="margin-top:5px;width:100%" data-c="zeroAll" ' + (dis ? 'disabled' : '') + '>Tout à zéro (X Y Z)</button>';
+  }
+  h += '<div class="cnc-chips">' + AX.map(a => '<span class="cnc-chip ' + (K.ws[a] ? 'ok' : '') + '">' + (K.ws[a] ? '✓' : '○') + ' ' + a.toUpperCase() + '</span>').join('') + '</div>';
+  if (allSet() && !(K.prog && K.prog.tc)) h += '<div class="cnc-box ok cnc-s"><b class="t">Vérifiez avant de continuer</b>Envoyez la fraise au-dessus de X0 Y0 et regardez si elle est bien à l’origine de la pièce.</div><div class="cnc-row"><button class="cnc-btn" data-c="goto" ' + (canJog() ? '' : 'disabled') + '>Aller au-dessus de X0 Y0</button><button class="cnc-btn pri" style="flex:1" data-c="go4">Continuer →</button></div>';
+  return h;
+}
+function launchBody() {
+  if (!conn()) return '<p class="cnc-m">Connectez d’abord la machine.</p>';
+  const P = progInfo(), C = checks();
+  let h = '';
+  if (K.prog && K.prog.err) h += '<div class="cnc-box err"><b class="t">Erreur de la machine, ligne ' + (K.prog.err.idx + 1) + '</b><code>' + esc(K.prog.err.line) + '</code> → ' + esc(K.prog.err.e) + '<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn sm" data-c="errGo">Ignorer et reprendre</button><button class="cnc-btn sm" data-c="stop">Arrêter</button></div></div>';
+  if (K.prog && K.st === 'Hold' && !K.prog.tc && !K.prog.err) h += K.prog.m0 ? '<div class="cnc-box warn"><b class="t">Pause demandée par le programme</b>' + esc(K.prog.m0) + '<br>Une fois prêt : ▶ Reprendre en bas du panneau.</div>' : '<div class="cnc-box warn"><b class="t">En pause</b>▶ Reprendre en bas du panneau.</div>';
+  const has2 = S.tps.some(t => t.visible && t.face === 2), has1 = S.tps.some(t => t.visible && t.face !== 2); if (has2 && !has1) U.face = 2; if (has1 && !has2) U.face = 1;
+  if (has1 && has2) h += '<div class="cnc-lbl" style="margin-top:0">Projet double face : une face à la fois</div><div class="cnc-seg"><button class="' + (U.face !== 2 ? 'on' : '') + '" data-c="face" data-v="1" ' + (K.prog ? 'disabled' : '') + '>Face 1 (dessus)</button><button class="' + (U.face === 2 ? 'on' : '') + '" data-c="face" data-v="2" ' + (K.prog ? 'disabled' : '') + '>Face 2 (dessous)</button></div><p class="cnc-s cnc-m" style="margin:5px 0 0">Après la face 1 : retournez la pièce, refaites l’origine pièce (étape 3), puis usinez la face 2.</p>';
+  h += '<div class="cnc-lbl"' + (has1 && has2 ? '' : ' style="margin-top:0"') + '>Programme (parcours visibles)</div>' + (P.tps.length ? P.tps.map((t, i) => { const tl = (S.tools || []).find(x => x.id === t.toolId); return '<div class="cnc-op"><span class="cnc-sw" style="background:var(--' + ({ profile: 'pf', pocket: 'pk', vcarve: 'vc', drill: 'dr', thread: 'th', relief: 'rl' }[t.type] || 'accent') + ')"></span><b>' + (i + 1) + '. ' + esc(t.name) + '</b><span class="cnc-m">' + esc(tl ? tl.name : '') + (t.face === 2 ? ' · face 2' : '') + '</span></div>'; }).join('') : '<p class="cnc-m cnc-s">Aucun parcours visible et calculé.</p>');
+  h += '<div class="cnc-s cnc-m" style="margin:4px 0">Temps estimé : <b>' + fmtT(P.t) + '</b> · ' + P.L.length + ' lignes · ' + (new Set(P.tools)).size + ' outil(s)' + ((new Set(P.tools)).size > 1 ? ' (changement guidé)' : '') + '</div>';
+  if (S.tps.some(t => t.visible && t.stale)) h += '<button class="cnc-btn sm" data-act="tpRecalc">⟳ Recalculer les parcours</button>';
+  h += '<div class="cnc-lbl">Contrôles automatiques</div>' + C.map(c => '<div class="cnc-ck ' + (c.ok ? c.wa ? 'wa' : 'ok' : 'no') + '"><i>' + (c.ok ? c.wa ? '!' : '✓' : '✗') + '</i>' + c.t + '</div>').join('');
+  h += '<div class="cnc-lbl">À vérifier par vous</div>' + LAUNCH.map(l => chk('launch', l[0], l[1]())).join('');
+  h += '<label class="cnc-chk" style="margin-top:5px"><input type="checkbox" data-k="airWant" ' + (K.airWant ? 'checked' : '') + (K.prog ? ' disabled' : '') + '><span><b>Essai dans l’air</b> : tout le programme 10 mm plus haut (décalage G92), pour vérifier le trajet sans toucher la pièce.</span></label>';
+  if (!K.prog) h += canStart() ? '<div class="cnc-box ok cnc-s">Tout est prêt : <b>▶ Démarrer</b> en bas du panneau. Restez près de la machine.</div>' : '<div class="cnc-box cnc-s cnc-m">▶ Démarrer s’active quand tout est vert et coché.</div>';
+  if (K.finished) h += '<div class="cnc-box ok cnc-s"><b class="t">✓ Usinage terminé</b>Attendez l’arrêt de la broche, aspirez les copeaux, puis débridez la pièce.</div>';
+  return h;
+}
+
+/* ---------------- commandes du bas ---------------- */
+function ctlRender() {
+  if (!ctl) return;
+  ctl.innerHTML = '<div class="cnc-cg"><div class="cnc-pad">' +
+    [[-1, 1, '↖', 1], [0, 1, 'Y+'], [1, 1, '↗', 1], [-1, 0, 'X−'], null, [1, 0, 'X+'], [-1, -1, '↙', 1], [0, -1, 'Y−'], [1, -1, '↘', 1]].map(b => b ? '<button class="cnc-pb' + (b[3] ? ' dg' : '') + '" data-j="' + b[0] + ',' + b[1] + ',0">' + b[2] + '</button>' : '<button class="cnc-pb" data-c="padHome" title="Aller au-dessus de l’origine pièce (X0 Y0)">' + (U.homeConfirm ? 'OK ?' : '⌖') + '</button>').join('') +
+    '</div><div class="cnc-zpad"><button class="cnc-pb" data-j="0,0,1">Z+</button><span style="text-align:center;font-size:11px;color:var(--muted);align-self:center">Z</span><button class="cnc-pb" data-j="0,0,-1">Z−</button></div>' +
+    '<div><div class="cnc-s cnc-m" style="margin-bottom:3px">Pas (mm)</div><div class="cnc-seg">' + CF.steps.map(s => '<button class="' + (+CF.step === +s ? 'on' : '') + '" data-c="step" data-v="' + s + '">' + f2(s, s < 1 ? 1 : 0) + '</button>').join('') + '</div>' +
+    '<div class="cnc-s cnc-m" style="margin:7px 0 1px">Vitesse <b data-live="jf">' + CF.jogF + '</b> mm/min</div><input type="range" min="100" max="6000" step="100" value="' + CF.jogF + '" data-cf="jogF" style="width:100%;accent-color:var(--accent)">' +
+    '<div class="cnc-s cnc-m" style="margin-top:3px"><span class="cnc-kbd">←→↑↓</span> <span class="cnc-kbd">PgUp</span> <span class="cnc-kbd">PgDn</span> souris sur la vue · maintenir = continu</div></div></div>' +
+    '<div class="cnc-run"><button class="cnc-rb go" data-c="start" data-live="bstart">▶ Démarrer</button><button class="cnc-rb pa" data-c="pause" data-live="bpause">⏸ Pause</button><button class="cnc-rb st" data-c="stop" data-live="bstop" title="Échap">■ Arrêt</button></div>' +
+    '<div class="cnc-ovr"><span>Avance</span><input type="range" min="10" max="200" step="10" value="100" data-ovr="f"><b data-live="ovf">100 %</b></div>' +
+    '<div class="cnc-ovr"><span>Broche</span><input type="range" min="10" max="200" step="10" value="100" data-ovr="s"><b data-live="ovs">100 %</b></div>';
+  qa('[data-j]', ctl).forEach(b => {
+    const v = b.dataset.j.split(',').map(Number); let tm = 0, cont = false;
+    b.onpointerdown = e => { e.preventDefault(); try { b.setPointerCapture(e.pointerId); } catch { } cont = false; tm = setTimeout(() => { cont = true; jogStart(v); }, 350); };
+    b.onpointerup = () => { clearTimeout(tm); if (cont) jogStop(); else jogStep(v); };
+    b.onpointercancel = () => { clearTimeout(tm); jogStop(); };
+  });
+  qa('[data-ovr]', ctl).forEach(r => { r.onchange = () => ovrSet(r.dataset.ovr, +r.value); r.ondblclick = () => { r.value = 100; ovrSet(r.dataset.ovr, 100); }; });
+  live();
+}
+function ovrSet(k, v) { if (!K.T) return; const cur = k === 'f' ? K.ov[0] : K.ov[2]; if (v === 100) { rt(k === 'f' ? '\x90' : '\x99'); return; } let d = Math.round((v - cur) / 10); const up = k === 'f' ? '\x91' : '\x9a', dn = k === 'f' ? '\x92' : '\x9b'; for (; d > 0; d--) rt(up); for (; d < 0; d++) rt(dn); log('> ' + (k === 'f' ? 'avance' : 'broche') + ' ' + v + ' %', 's'); }
+
+/* ---------------- cartouches de la vue 3D ---------------- */
+function ovRender() {
+  if (!ov || curTab !== 'usiner') return; const P = progInfo();
+  ov.innerHTML = '<div id="cncPill"></div>' +
+    '<div class="cnc-card" id="cncPos"><div class="cnc-ch"><span>Position pièce <span class="cnc-badge">G54</span></span><button data-c="posT">' + (U.posOpen ? '–' : '+') + '</button></div>' + (U.posOpen ? '<div class="cnc-b3"><span>X</span><span data-live="ox"></span><span>Y</span><span data-live="oy"></span><span>Z</span><span data-live="oz"></span></div>' + (U.posMp ? '<div class="cnc-mp" data-live="mp"></div>' : '') + '<button class="cnc-btn lnk" data-c="mpT">' + (U.posMp ? 'Masquer' : 'Afficher') + ' les coordonnées machine</button>' +
+      '<div class="cnc-ch" style="margin:7px 0 0">Encombrement du programme (mm)</div><table class="cnc-bb"><tr><th></th><th>min</th><th>max</th><th>taille</th></tr>' + AX.map((a, i) => '<tr><th>' + a.toUpperCase() + '</th><td data-live="bn' + a + '">' + (P.tps.length ? f2(P.mn[i]) : '–') + '</td><td data-live="bx' + a + '">' + (P.tps.length ? f2(P.mx[i]) : '–') + '</td><td>' + (P.tps.length ? f2(P.mx[i] - P.mn[i], 1) : '–') + '</td></tr>').join('') + '</table>' : '') + '</div>' +
+    '<div class="cnc-card" id="cncRunC"><div class="cnc-ch"><span>Usinage</span><button data-c="runT">' + (U.runOpen ? '–' : '+') + '</button></div>' + (U.runOpen ? '<div class="cnc-kv"><span>Écoulé</span><span data-live="tel">0:00</span><span>Restant</span><span data-live="trest"></span></div><div class="cnc-prog"><i data-live="pbar"></i></div><div class="cnc-kv"><span>Avance réelle</span><span data-live="fcur"></span><span>Broche</span><span data-live="scur"></span><span>Outil</span><span data-live="tcur"></span><span>Suivant</span><span data-live="tnext"></span></div><div class="cnc-gl" data-live="gl"></div>' : '') + '</div>';
+  live();
+}
+const L$ = k => qa('[data-live="' + k + '"]');
+const setL = (k, t) => { for (const e of L$(k)) if (e.textContent !== t) e.textContent = t; };
+function live() {
+  if (!pane) return; const w = wpos(), P = K.prog, I = PI_;
+  if (curTab === 'usiner') {
+    const o = allSet() || K.T; setL('ox', o ? f2(w[0]) : '–'); setL('oy', o ? f2(w[1]) : '–'); setL('oz', o ? f2(w[2]) : '–'); if (!U.edit) AX.forEach((a, i) => setL('w' + a, f2(w[i])));
+    setL('mp', 'MPos  X ' + f2(K.mpos[0]) + '  Y ' + f2(K.mpos[1]) + '  Z ' + f2(K.mpos[2]));
+    const pill = q('#cncPill'); if (pill) { const s = P && P.tc ? 'Tool' : K.busy === 'probe' ? 'Probe' : K.st; pill.className = s; pill.textContent = '● ' + (ST_FR[s] || s) + (K.T && K.ctrl ? ' · ' + K.ctrl : '') + (K.air ? ' · essai dans l’air' : ''); }
+    const lon = /P/.test(K.pn); for (const e of L$('led')) e.classList.toggle('on', lon); setL('ledt', lon ? 'fermé' : 'ouvert');
+    if (I && allSet() && K.homed && K.set[130]) AX.forEach((a, i) => { const tr0 = K.set[130 + i], neg = K.mpos[i] <= 0.5, lo = K.wco[i] + I.mn[i], hi = K.wco[i] + I.mx[i]; for (const e of L$('bn' + a)) e.classList.toggle('cnc-bad', lo < (neg ? -tr0 : 0) - 0.01); for (const e of L$('bx' + a)) e.classList.toggle('cnc-bad', hi > (neg ? 0 : tr0) + 0.01); });
+    if (I) { const tot = I.t, done = P ? (I.cum[Math.max(0, P.acked - 1)] || 0) : K.finished ? tot : 0, el = P ? (Date.now() - P.t0) / 1000 : 0; setL('tel', fmtT(el)); setL('trest', fmtT(Math.max(0, tot - done) / ((K.ov[0] || 100) / 100))); for (const e of L$('pbar')) e.style.width = (tot ? Math.min(100, done / tot * 100) : 0) + '%';
+      let nx = '—'; if (P) { for (let i = P.i; i < P.L.length; i++) if (P.L[i].tc !== null) { const t = toolByNum(P.L[i].tc); nx = t ? t.name : 'T' + P.L[i].tc; break; } } else if ((new Set(I.tools)).size > 1) { const t = toolByNum(I.tools[1]); nx = t ? t.name : '—'; }
+      setL('tnext', nx); setL('gl', P && P.L[P.acked] ? 'N' + (P.acked + 1) + '  ' + (P.L[P.acked].t || P.L[P.acked].raw) : ''); }
+    setL('fcur', Math.round(K.fs[0] || 0) + ' mm/min'); setL('scur', K.fs[1] ? Math.round(K.fs[1]) + ' tr/min' : 'arrêtée'); { const t = toolByNum(K.tool); setL('tcur', t ? t.name : '—'); }
+    setL('ovf', (K.ov[0] || 100) + ' %'); setL('ovs', (K.ov[2] || 100) + ' %');
+    for (const r of qa('[data-ovr]', ctl)) if (document.activeElement !== r) r.value = r.dataset.ovr === 'f' ? K.ov[0] || 100 : K.ov[2] || 100;
+  }
+  const bs = L$('bstart')[0]; if (bs) { const hold = P && K.st === 'Hold' && !P.tc && !P.err; bs.disabled = !(canStart() || hold); bs.textContent = hold ? '▶ Reprendre' : '▶ Démarrer'; }
+  const bp = L$('bpause')[0]; if (bp) bp.disabled = !(K.st === 'Run' || K.st === 'Jog' || K.st === 'Home');
+  const bt = L$('bstop')[0]; if (bt) bt.disabled = !K.T;
+  const jd = !canJog() && !jogging; if (ctl) qa('.cnc-pb', ctl).forEach(b => b.disabled = jd);
+  setL('jf', String(CF.jogF));
+}
+setInterval(() => { if (curTab === 'usiner') live(); }, 250);
+
+/* outil dans la vue 3D (appelé par rvOverlay) */
+window.cncOverlay = g => {
+  if (curTab !== 'usiner' || !K.T || typeof rvProj !== 'function' || !RV.mvp) return;
+  const tr2 = K.trail; if (tr2.length > 1) { g.strokeStyle = 'rgba(120,120,120,.85)'; g.lineWidth = 2; g.beginPath(); tr2.forEach((p, i) => { const s = rvProj(p); i ? g.lineTo(s[0], s[1]) : g.moveTo(s[0], s[1]); }); g.stroke(); }
+  if (!allSet()) return;
+  const p = toInt(wpos()), d = curToolDia(), a = rvProj(p), b = rvProj([p[0], p[1], p[2] + 25]), c = rvProj([p[0], p[1], p[2] + 40]), e = rvProj([p[0], p[1], p[2] + 110]), u = rvProj([p[0] + 10, p[1], p[2]]), v = rvProj([p[0], p[1] + 10, p[2]]);
+  const k = Math.max(Math.hypot(u[0] - a[0], u[1] - a[1]), Math.hypot(v[0] - a[0], v[1] - a[1])) / 10;
+  g.lineCap = 'butt'; g.globalAlpha = .4; g.strokeStyle = '#4a4f57'; g.lineWidth = Math.max(8, 46 * k); g.beginPath(); g.moveTo(c[0], c[1]); g.lineTo(e[0], e[1]); g.stroke(); g.globalAlpha = 1;
+  g.strokeStyle = '#7b828c'; g.lineWidth = Math.max(4, 16 * k); g.beginPath(); g.moveTo(b[0], b[1]); g.lineTo(c[0], c[1]); g.stroke();
+  g.strokeStyle = '#b4bac2'; g.lineWidth = Math.max(2, d * k); g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke();
+  g.fillStyle = K.fs[1] ? '#e2560f' : '#1e1c19'; g.beginPath(); g.arc(a[0], a[1], 3.5, 0, 7); g.fill();
+};
+
+/* ---------------- fenêtre « Paramètres machine » ---------------- */
+function msetOpen(t) {
+  if (t) U.mtab = t; let el = q('#cncMset'); if (!el) { el = document.createElement('div'); el.id = 'cncMset'; el.className = 'cnc-modal'; el.setAttribute('data-notr', ''); el.addEventListener('mousedown', e => { if (e.target === el) el.remove(); }); document.body.appendChild(el); }
+  const T = [['machine', 'Machine'], ['moves', 'Déplacements'], ['probe', 'Palpeur'], ['pad', 'Manette'], ['macros', 'Macros'], ['console', 'Console']]; let b = '';
+  if (U.mtab === 'machine') {
+    b += '<div class="cnc-row wrap" style="margin-bottom:10px"><label class="cnc-s">Vitesse de la liaison USB <select data-cf="baud">' + [115200, 250000, 230400, 57600, 38400].map(v => '<option ' + (+CF.baud === v ? 'selected' : '') + '>' + v + '</option>').join('') + '</select></label><span class="cnc-s cnc-m">(prise en compte à la prochaine connexion)</span></div>';
+    if (K.fluid) b += '<div class="cnc-box info"><b class="t">FluidNC : la configuration est dans config.yaml</b>Les réglages de la carte sont dans le fichier <code>config.yaml</code> (les $ ci-dessous sont partiels).<div class="cnc-row wrap" style="margin-top:7px"><button class="cnc-btn sm" data-c="fDump" ' + (conn() ? '' : 'disabled') + '>Télécharger config.yaml</button><button class="cnc-btn sm" data-c="fSd" ' + (conn() ? '' : 'disabled') + '>Fichiers de la carte ($SD/List)</button><button class="cnc-btn sm" disabled title="Pas encore dans la version test">Envoyer un config.yaml…</button></div></div>';
+    const keys = Object.keys(K.set).map(Number).sort((a, b) => a - b);
+    b += keys.length ? '<table class="cnc-set"><tr><th>Code</th><th>Réglage</th><th>Valeur</th></tr>' + keys.map(k => '<tr><td class="c">$' + k + '</td><td>' + esc(SETS[k] || '') + '</td><td><input type="number" step="any" value="' + K.set[k] + '" data-set="' + k + '" ' + (conn() && !K.prog ? '' : 'disabled') + '></td></tr>').join('') + '</table><div class="cnc-row" style="margin-top:10px"><button class="cnc-btn sm" data-c="setSave">Enregistrer les $$ dans un fichier</button><button class="cnc-btn sm" data-c="setRead" ' + (conn() ? '' : 'disabled') + '>Relire ($$)</button><span class="cnc-s cnc-m">Une valeur modifiée est envoyée tout de suite à la machine.</span></div>' : '<p class="cnc-m">Connectez la machine pour lire ses réglages ($$).</p>';
+  } else if (U.mtab === 'moves') {
+    b = '<div class="cnc-lbl" style="margin-top:0">Les 4 pas du pavé (mm)</div><div class="cnc-row">' + CF.steps.map((s, i) => '<input type="number" step="0.01" value="' + s + '" data-step="' + i + '" style="width:80px">').join('') + '</div><div class="cnc-lbl">Vitesse de déplacement manuel (mm/min)</div><input type="number" value="' + CF.jogF + '" data-cf="jogF"><div class="cnc-lbl">Broche</div><label class="cnc-chk"><input type="checkbox" data-cfb="m3" ' + (CF.m3 ? 'checked' : '') + '><span>La broche est commandée par la machine (M3 / M5). Décochez pour une défonceuse allumée à la main.</span></label>' +
+      (K.kind === 'sim' || !K.T ? '<div class="cnc-lbl">Machine simulée : vitesse de la simulation</div><div class="cnc-seg">' + [1, 10, 50].map(v => '<button class="' + (+CF.sim === v ? 'on' : '') + '" data-c="simSp" data-v="' + v + '">× ' + v + '</button>').join('') + '</div>' : '');
+  } else if (U.mtab === 'probe') {
+    b = '<div class="cnc-kv" style="max-width:470px;gap:8px 16px;align-items:center"><span>Épaisseur de la plaque Z (mm)</span><span><input type="number" step="0.1" value="' + CF.plate + '" data-cf="plate"></span><span>Bloc XYZ : distance entre la face palpée et le bord de la pièce (mm)</span><span><input type="number" step="0.1" value="' + CF.blockOff + '" data-cf="blockOff"></span><span>Vitesse de palpage (mm/min)</span><span><input type="number" value="' + CF.probeF + '" data-cf="probeF"></span><span>Distance maxi de recherche en Z (mm)</span><span><input type="number" value="' + CF.probeDist + '" data-cf="probeDist"></span><span>Dégagement après palpage (mm)</span><span><input type="number" value="' + CF.retract + '" data-cf="retract"></span></div><p class="cnc-s cnc-m">Le Z se palpe en deux passes : une rapide, puis une lente plus précise. Les côtés X et Y se palpent 8 mm sous le dessus du bloc.</p>';
+  } else if (U.mtab === 'pad') {
+    let gp = null; try { gp = [...(navigator.getGamepads ? navigator.getGamepads() : [])].find(Boolean); } catch { }
+    const A = [['', '—'], ['step0', 'Pas fin'], ['step1', 'Pas normal'], ['step2', 'Pas rapide'], ['lock', 'Sécurité (maintenir)'], ['home', 'Prise d’origine'], ['zeroZ', 'Zéro Z'], ['start', 'Démarrer / Reprendre'], ['pause', 'Pause'], ['stop', 'Arrêt']];
+    b = '<div class="cnc-row" style="margin-bottom:9px"><b>Manette</b><span class="cnc-chip ' + (gp ? 'ok' : '') + '">' + (gp ? 'Détectée : ' + esc(gp.id.slice(0, 50)) : 'Non détectée : appuyez sur un bouton de la manette') + '</span></div><div class="cnc-box warn cnc-s"><b class="t">Bouton de sécurité</b>La machine ne bouge à la manette que si vous <b>maintenez</b> le bouton de sécurité.</div>' +
+      '<div class="cnc-row" style="align-items:flex-start;gap:20px;flex-wrap:wrap"><table class="cnc-set" style="width:auto"><tr><th>Bouton</th><th>Action</th></tr>' + [0, 1, 2, 3, 4, 5, 6, 7].map(i => '<tr><td>' + i + '</td><td><select data-gpb="' + i + '">' + A.map(x => '<option value="' + x[0] + '" ' + ((CF.gp.btn[i] || '') === x[0] ? 'selected' : '') + '>' + x[1] + '</option>').join('') + '</select></td></tr>').join('') + '</table>' +
+      '<table class="cnc-set" style="width:auto"><tr><th>Stick</th><th>Axe</th><th>Inverser</th></tr><tr><td>Stick 1 gauche / droite</td><td>X</td><td><input type="checkbox" data-gpi="invX" ' + (CF.gp.invX ? 'checked' : '') + '></td></tr><tr><td>Stick 1 haut / bas</td><td>Y</td><td><input type="checkbox" data-gpi="invY" ' + (CF.gp.invY ? 'checked' : '') + '></td></tr><tr><td>Stick 2 haut / bas</td><td>Z</td><td><input type="checkbox" data-gpi="invZ" ' + (CF.gp.invZ ? 'checked' : '') + '></td></tr><tr><td>Zone morte</td><td colspan="2"><input type="number" value="' + CF.gp.thr + '" data-gpt="thr" style="width:64px"> %</td></tr></table></div>';
+  } else if (U.mtab === 'macros') {
+    b = '<p class="cnc-s cnc-m">Boutons de G-code personnalisés, sous « Console et macros » dans l’onglet Usiner.</p>' + CF.macros.map((m, i) => '<div class="cnc-row" style="align-items:flex-start;margin-bottom:7px"><input value="' + esc(m.n) + '" data-mn="' + i + '" style="width:160px"><textarea rows="2" data-mg="' + i + '" style="flex:1;font:12px var(--f-mono);background:var(--input);color:var(--ink);border:1px solid var(--line);border-radius:var(--r);padding:5px">' + esc(m.g) + '</textarea><button class="cnc-btn sm" data-c="macro" data-i="' + i + '" ' + (conn() && !K.prog ? '' : 'disabled') + '>▶</button></div>').join('');
+  } else b = conHtml('c2') + '<p class="cnc-s cnc-m">Exemples : <code>?</code> <code>$$</code> <code>$I</code> <code>$G</code> <code>$#</code> <code>$X</code> <code>$H</code> <code>G0 Z5</code>. Les commandes sont refusées pendant l’usinage.</p>';
+  el.innerHTML = '<div class="cnc-mb"><div class="cnc-mh"><h2>Paramètres machine' + (K.ctrl ? ' – ' + esc(K.ctrl) : '') + '</h2><button class="cnc-btn sm" data-c="msetX">✕</button></div><div class="cnc-mt">' + T.map(t => '<button class="' + (U.mtab === t[0] ? 'on' : '') + '" data-c="mtab" data-v="' + t[0] + '">' + t[1] + '</button>').join('') + '</div><div class="cnc-mbody">' + b + '</div></div>';
+  conRender();
+}
+function download(name, text) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+async function capture(line) { for (let i = 0; i < 50 && (K.fly.length || K.out.length); i++) await sleep(50); return new Promise((res, rej) => { if (!K.T) return rej('off'); const it = { line, cb: null, quiet: false }; K.cap = { lines: [], res, rej }; K.out.push(it); pump(); }); }
+
+/* ---------------- console ---------------- */
+function conHtml(id) { return '<div class="cnc-con" id="' + id + '"></div><div class="cnc-cin"><input id="' + id + 'in" placeholder="Commande (ex. $$, ?, G0 Z5)…" data-con="1"><button class="cnc-btn sm" data-c="conSend" data-i="' + id + '">Envoyer</button></div><label class="cnc-chk cnc-s"><input type="checkbox" data-u="hideOk" ' + (U.hideOk ? 'checked' : '') + '><span>Masquer les « ok »</span></label>'; }
+function conRender() { for (const id of ['c1', 'c2']) { const e = document.getElementById(id); if (!e) continue; e.innerHTML = LOG.slice(-250).map(l => '<div class="' + (l.c || '') + '">' + esc(l.t) + '</div>').join(''); e.scrollTop = e.scrollHeight; } }
+async function conSend(id) { const i = document.getElementById(id + 'in'); if (!i) return; const v = i.value.trim(); if (!v) return; i.value = ''; U.hist.push(v); U.hi = U.hist.length; if (!conn()) { log('Non connectée', 'e'); return; } if (K.prog) { log('Refusé pendant l’usinage', 'e'); return; }
+  if (v === '?') { rt('?'); log('> ?', 's'); return; } try { await cmd(v); } catch { } if (/^\$X$/i.test(v)) { K.alarm = null; } if (/^G10/i.test(v)) { const W = v.toUpperCase(); AX.forEach(a => { if (W.includes(a.toUpperCase())) K.ws[a] = true; }); } ui(); }
+async function runMacro(i) { const m = CF.macros[i]; if (!m || !conn() || K.prog) return; for (const l of m.g.split('\n').map(x => x.trim()).filter(Boolean)) { try { await cmd(l); } catch { break; } } }
+
+/* ---------------- événements ---------------- */
+async function onClick(e) {
+  const b = e.target.closest('[data-c]'); if (!b || b.disabled) return; const c = b.dataset.c;
+  switch (c) {
+    case 'vol': U.vol = U.vol === +b.dataset.n ? 0 : +b.dataset.n; panel(); break;
+    case 'conMenu': U.conOpen = !U.conOpen; if (U.conOpen && 'serial' in navigator) { try { U.ports = await navigator.serial.getPorts(); } catch { U.ports = []; } } panel(); break;
+    case 'conPort': connect('serial', (U.ports || [])[+b.dataset.i]); break;
+    case 'conSerial': connect('serial'); break;
+    case 'conSim': connect(b.dataset.k); break;
+    case 'disc': disconnect(); break;
+    case 'mset': msetOpen(); break;
+    case 'msetX': { const el = q('#cncMset'); if (el) el.remove(); break; }
+    case 'mtab': msetOpen(b.dataset.v); break;
+    case 'home': home(); break;
+    case 'homeAx': home(b.dataset.a); break;
+    case 'unlock': unlock(); break;
+    case 'noLim': K.noLim = true; K.homeSkip = false; ui(); break;
+    case 'skipHome': K.homeSkip = true; ui(); break;
+    case 'fixed': K.pieceFixed = true; U.vol = allSet() ? 4 : 3; ui(); break;
+    case 'pmode': U.pmode = b.dataset.v; panel(); break;
+    case 'paxis': U.paxis = b.dataset.v; panel(); break;
+    case 'probe': probe(); break;
+    case 'tcProbe': U.paxis = 'Z'; probe(); break;
+    case 'simTouch': if (K.sim) { K.sim.touch = performance.now() + 1500; } break;
+    case 'edit': U.edit = b.dataset.a; panel(); setTimeout(() => { const i = q('#cncAxIn'); if (i) { i.focus(); i.select(); } }, 0); break;
+    case 'zero': setZero(b.dataset.a, 0); break;
+    case 'zeroAll': zeroAll(); break;
+    case 'keepG54': keepG54(); break;
+    case 'goto': gotoOrigin(); break;
+    case 'go4': U.vol = 4; panel(); break;
+    case 'face': U.face = +b.dataset.v; PI_ = null; ui(); break;
+    case 'start': progStart(); break;
+    case 'pause': pause(); break;
+    case 'stop': stopAll(); break;
+    case 'errGo': progResumeErr(); break;
+    case 'tcResume': tcResume(); break;
+    case 'step': CF.step = +b.dataset.v; cfSave(); ctlRender(); break;
+    case 'padHome': if (!allSet()) { say('Définissez d’abord l’origine pièce.'); break; } if (!U.homeConfirm) { U.homeConfirm = true; ctlRender(); setTimeout(() => { U.homeConfirm = false; ctlRender(); }, 2500); break; } U.homeConfirm = false; ctlRender(); gotoOrigin(); break;
+    case 'drawer': U.drawer = !U.drawer; panel(); break;
+    case 'macro': runMacro(+b.dataset.i); break;
+    case 'conSend': conSend(b.dataset.i); break;
+    case 'posT': U.posOpen = !U.posOpen; ovRender(); break;
+    case 'runT': U.runOpen = !U.runOpen; ovRender(); break;
+    case 'mpT': U.posMp = !U.posMp; ovRender(); break;
+    case 'simSp': CF.sim = +b.dataset.v; cfSave(); msetOpen(); break;
+    case 'setSave': download('reglages-' + (K.ctrl || 'grbl').toLowerCase() + '.txt', Object.entries(K.set).map(([k, v]) => '$' + k + '=' + v).join('\n') + '\n'); break;
+    case 'setRead': K.set = {}; try { await cmd('$$'); } catch { } msetOpen(); break;
+    case 'fDump': try { const L = await capture('$Config/Dump'); download('config.yaml', L.join('\n') + '\n'); } catch (er) { say('Lecture de config.yaml impossible (' + er + ').'); } break;
+    case 'fSd': try { const L = await capture('$SD/List'); L.forEach(l => log(l)); U.mtab = 'console'; msetOpen(); } catch (er) { say('Lecture de la carte impossible (' + er + ').'); } break;
+  }
+}
+async function onChange(e) {
+  const t = e.target, d = t.dataset;
+  if (d.u) { const [g, k] = d.u.split('.'); if (k) U[g][k] = t.checked; else U[g] = t.checked; if (d.u === 'hideOk') conRender(); else { panel(); live(); } return; }
+  if (d.u2) { U[d.u2] = +t.value; return; }
+  if (d.tc) { if (K.prog && K.prog.tc) K.prog.tc[d.tc] = t.checked; tcRender(); return; }
+  if (d.k === 'airWant') { K.airWant = t.checked; panel(); return; }
+  if (d.cf) { CF[d.cf] = +t.value; cfSave(); if (d.cf === 'jogF') setL('jf', String(CF.jogF)); return; }
+  if (d.cfb) { CF[d.cfb] = t.checked; cfSave(); return; }
+  if (d.step !== undefined) { CF.steps[+d.step] = +t.value || CF.steps[+d.step]; cfSave(); ctlRender(); return; }
+  if (d.ax) { const a = d.ax; U.edit = null; await setZero(a, +t.value); return; }
+  if (d.set) { const k = d.set; try { await cmd('$' + k + '=' + t.value); K.set[k] = +t.value; say('$' + k + ' = ' + t.value + ' envoyé.'); } catch (er) { say('Refusé par la machine : ' + er); t.value = K.set[k]; } return; }
+  if (d.gpb !== undefined) { CF.gp.btn[d.gpb] = t.value; if (t.value === 'lock') CF.gp.lock = +d.gpb; cfSave(); return; }
+  if (d.gpi) { CF.gp[d.gpi] = t.checked; cfSave(); return; }
+  if (d.gpt) { CF.gp.thr = +t.value; cfSave(); return; }
+  if (d.mn !== undefined) { CF.macros[+d.mn].n = t.value; cfSave(); return; }
+  if (d.mg !== undefined) { CF.macros[+d.mg].g = t.value; cfSave(); return; }
+}
+document.addEventListener('keydown', e => { const t = e.target; if (t && t.dataset && t.dataset.con && e.key === 'Enter') { conSend(t.id.slice(0, -2)); e.preventDefault(); } if (t && t.id === 'cncAxIn' && e.key === 'Escape') { U.edit = null; panel(); } if (t && t.id === 'cncAxIn' && e.key === 'Enter') t.blur(); });
+document.addEventListener('focusout', e => { if (e.target && e.target.id === 'cncAxIn') { setTimeout(() => { if (U.edit) { U.edit = null; panel(); } }, 0); } });
+
+/* clavier : flèches / PgUp / PgDn quand la souris est sur la vue 3D ou sur le pavé ; Échap = arrêt */
+let over = false; const held = {};
+const KEYS = { ArrowLeft: [-1, 0, 0], ArrowRight: [1, 0, 0], ArrowUp: [0, 1, 0], ArrowDown: [0, -1, 0], PageUp: [0, 0, 1], PageDown: [0, 0, -1] };
+window.addEventListener('keydown', e => {
+  if (curTab !== 'usiner' || !K.T) return; const tg = document.activeElement, typing = tg && /^(INPUT|TEXTAREA|SELECT)$/.test(tg.tagName);
+  if (e.key === 'Escape' && !typing && (moving() || K.prog || K.st === 'Hold')) { e.preventDefault(); e.stopImmediatePropagation(); stopAll(); return; }
+  const v = KEYS[e.key]; if (!v || typing || !over) return; e.preventDefault(); e.stopImmediatePropagation(); if (e.repeat || held[e.key]) return;
+  held[e.key] = { t: setTimeout(() => { held[e.key].c = true; jogStart(v); }, 350) };
+}, true);
+window.addEventListener('keyup', e => { const h = held[e.key]; if (!h) return; e.stopImmediatePropagation(); clearTimeout(h.t); if (h.c) jogStop(); else jogStep(KEYS[e.key]); delete held[e.key]; }, true);
+window.addEventListener('blur', () => { for (const k in held) clearTimeout(held[k].t); for (const k in held) delete held[k]; jogStop(); });
+window.addEventListener('beforeunload', e => { if (K.prog) { e.preventDefault(); e.returnValue = ''; } });
+
+/* ---------------- manette ---------------- */
+let gpPrev = {};
+function gpLoop() {
+  requestAnimationFrame(gpLoop); if (curTab !== 'usiner' || !K.T) return; let g = null; try { g = [...(navigator.getGamepads ? navigator.getGamepads() : [])].find(Boolean); } catch { return; } if (!g) return;
+  const lk = g.buttons[+CF.gp.lock] && g.buttons[+CF.gp.lock].pressed, th = CF.gp.thr / 100, ax = i => { const v = g.axes[i] || 0; return Math.abs(v) < th ? 0 : Math.sign(v); };
+  const v = [ax(0) * (CF.gp.invX ? -1 : 1), -ax(1) * (CF.gp.invY ? -1 : 1), -ax(3) * (CF.gp.invZ ? -1 : 1)], key = v.join(',');
+  if (lk && v.some(Boolean)) { if (gpPrev.v !== key) { if (jogging) { jogStop(); setTimeout(() => jogStart(v), 60); } else jogStart(v); gpPrev.v = key; } } else if (gpPrev.v) { jogStop(); gpPrev.v = ''; }
+  g.buttons.forEach((b, i) => { if (b.pressed && !gpPrev['b' + i]) { const a = CF.gp.btn[i]; if (a === 'step0' || a === 'step1' || a === 'step2') { CF.step = CF.steps[+a.slice(4)]; ctlRender(); } else if (a === 'pause') pause(); else if (a === 'stop') stopAll(); else if (lk && a === 'home') home(); else if (lk && a === 'zeroZ') setZero('z', 0); else if (lk && a === 'start') progStart(); } gpPrev['b' + i] = b.pressed; });
+}
+
+/* ---------------- réglage dans Paramètres ---------------- */
+function cfgHook() {
+  const c = q('#cfgCnc'); if (!c) return; c.checked = !!CF.on;
+  c.addEventListener('change', () => { if (!c.checked && K.prog) { c.checked = true; say('Arrêtez l’usinage avant de cacher l’onglet Usiner.'); return; } CF.on = c.checked; cfSave(); if (!CF.on && K.T) disconnect(); tabVis(); say(CF.on ? 'Onglet 6 « Usiner » ajouté.' : 'Onglet Usiner caché.'); });
+}
+
+function init() { build(); cfgHook(); const rv = q('#rv3'); if (rv) { rv.addEventListener('pointerenter', () => over = true); rv.addEventListener('pointerleave', () => over = false); } if (ctl) { ctl.addEventListener('pointerenter', () => over = true); ctl.addEventListener('pointerleave', () => over = false); } requestAnimationFrame(gpLoop); }
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+window.COPO_CNC = { K, CF, U, connect, progInfo, checks, LOG }; // pour les tests
+})();
 </script>
 
 </body>
