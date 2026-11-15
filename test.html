@@ -204,6 +204,7 @@ table.cnc-set input{width:110px;text-align:right}
 #rv3.cnc-on:not(.cnc-fmin) #cncPill{left:calc(50% + 185px)}
 #rv3.cnc-fmin #cncPill{left:50%}
 #rv3.cnc-on:not(.cnc-fmin) .rvtools{left:380px}
+.cnc-float label.cnc-il{display:inline-flex;flex-direction:row;align-items:center;gap:6px;margin:0}
 </style>
 </head>
 <body>
@@ -10346,7 +10347,7 @@ const say = (m) => { try { toast(m); } catch { } };
 /* ---------------- réglages (gardés dans le navigateur) ---------------- */
 const DEF = { on: false, steps: [0.1, 1, 10, 50], step: 1, jogF: 1500, plate: 15, blockOff: 10, probeF: 100, probeDist: 30, retract: 5, sim: 10, baud: 115200, m3: true,
   macros: [{ n: 'Parking', g: 'G53 G0 Z-5\nG53 G0 X-5 Y-5' }, { n: 'Aspiration ON', g: 'M8' }, { n: 'Aspiration OFF', g: 'M9' }, { n: 'Au-dessus de X0 Y0', g: 'G90 G0 Z5\nG0 X0 Y0' }, { n: 'Lever Z', g: 'G53 G0 Z-5' }, { n: 'Infos ($I)', g: '$I' }],
-  probe: false, shim: 0.1,
+  probe: false, shim: 0.1, guide: true,
   gp: { on: true, lock: 4, fn: -1, a: { 0: 'stepP', 1: 'stepN', 2: 'stepR', 3: 'home', 5: 'zeroZ', 9: 'start', 8: 'hold' }, a2: {}, invX: false, invY: false, invZ: false, thr: 25 } };
 const cfMerge = o => { o = o || {}; const g = o.gp && !o.gp.btn ? o.gp : {}; return { ...DEF, ...o, steps: Array.isArray(o.steps) && o.steps.length === 4 ? o.steps.map(Number) : DEF.steps.slice(), macros: Array.isArray(o.macros) ? o.macros : DEF.macros.map(m => ({ ...m })), gp: { ...DEF.gp, ...g, a: { ...(g.a || DEF.gp.a) }, a2: { ...(g.a2 || {}) } } }; };
 let CF = (() => { try { return cfMerge(JSON.parse(LS.get('copo.cnc') || '{}')); } catch { return cfMerge({}); } })();
@@ -10560,6 +10561,9 @@ async function connect(kind, port) {
   try { await cmd('$I'); } catch { }
   try { await cmd('$$'); } catch { }
   try { await cmd('$#'); } catch { }
+  if (K.fluid) { try { const L = await capture('$Config/Dump'); let inP = false, pin = ''; for (const l of L) { if (/^probe:\s*$/.test(l)) { inP = true; continue; } if (inP && /^\S/.test(l)) inP = false; const m = inP && /^\s+pin:\s*(\S+)/.exec(l); if (m) pin = m[1]; }
+    K.fProbe = !!pin && !/no_pin/i.test(pin); log('config.yaml : palpeur ' + (K.fProbe ? 'déclaré (' + pin + ')' : 'non déclaré'), 'm');
+    if (K.fProbe && !CF.probe) { CF.probe = true; cfSave(); U.pmode = 'probe'; const c2 = q('#cfgCncProbe'); if (c2) c2.checked = true; setTimeout(() => say('FluidNC : palpeur déclaré dans config.yaml (' + pin + '), palpeur activé.'), 800); } } catch { } }
   if (!K.ctrl) K.ctrl = K.fluid ? 'FluidNC' : 'GRBL';
   await sleep(250); if (K.st === 'Conn') K.st = 'Idle';
   U.vol = 2; ui(); say('Machine connectée : ' + K.ctrl);
@@ -10658,7 +10662,7 @@ function checks() {
   return c;
 }
 const LAUNCH = [['tool', () => { const P = progInfo(), t = toolByNum(P.tools[0]); return 'La bonne fraise est montée : <b>' + esc(t ? t.name : 'outil ' + (P.tools[0] || 1)) + '</b>'; }], ['clamp', () => 'La pièce est bridée, brides hors du trajet de l’outil'], ['probe', () => 'Le palpeur et sa pince sont rangés'], ['spindle', () => CF.m3 ? 'La broche est commandée par la machine (M3)' : 'La défonceuse est allumée'], ['dust', () => 'L’aspiration est en marche'], ['ppe', () => 'Lunettes et protection auditive portées'], ['estop', () => 'Je sais où est l’arrêt d’urgence de la machine']];
-const canStart = () => K.st === 'Idle' && !K.prog && !K.busy && checks().every(c => c.ok) && LAUNCH.every(l => U.launch[l[0]]);
+const canStart = () => K.st === 'Idle' && !K.prog && !K.busy && (CF.guide ? checks().every(c => c.ok) && LAUNCH.every(l => U.launch[l[0]]) : conn() && progInfo().tps.length > 0 && !stockO().rot);
 
 async function progStart() {
   if (K.prog && K.st === 'Hold') { rt('~'); return; }
@@ -10751,6 +10755,7 @@ const chk = (g, k, label) => '<label class="cnc-chk"><input type="checkbox" data
 
 function panel() {
   const box = q('#cncVols'); if (!box || curTab !== 'usiner') return; const fl = q('#cncFloat'), sc = fl ? fl.scrollTop : 0, st = stat();
+  if (!CF.guide) { box.innerHTML = liteBody(); if (fl) fl.scrollTop = sc; live(); return; }
   let h = '';
   if (K.st === 'Alarm' && K.alarm) h += '<div class="cnc-box err"><b class="t">⚠ Alarme ' + K.alarm.n + '</b>' + esc(K.alarm.t) + '<div class="cnc-row" style="margin-top:7px">' + (limOn() ? '<button class="cnc-btn sm pri" data-c="home">⌂ Prise d’origine ($H)</button>' : '') + '<button class="cnc-btn sm" data-c="unlock">Déverrouiller ($X)</button></div></div>';
   else if (K.st === 'Alarm' && conn()) h += '<div class="cnc-box err"><b class="t">⚠ Machine en alarme</b>' + (limOn() ? 'Prise d’origine nécessaire au démarrage (normal).' : '') + '<div class="cnc-row" style="margin-top:7px">' + (limOn() ? '<button class="cnc-btn sm pri" data-c="home">⌂ Prise d’origine ($H)</button>' : '') + '<button class="cnc-btn sm" data-c="unlock">Déverrouiller ($X)</button></div></div>';
@@ -10783,6 +10788,19 @@ function panel() {
   h += vol(4, 'Usinage', st.s4, K.prog ? (K.prog.tc ? 'Changement d’outil' : K.st === 'Hold' ? 'En pause' : 'En cours…') : K.finished ? '✓ Terminé' : '', launchBody());
   h += '<div class="cnc-dr"><header data-c="drawer"><span>' + (U.drawer ? '▾' : '▸') + '</span><b>Console et macros</b><span class="cnc-s">(utilisateurs avancés)</span></header>' + (U.drawer ? '<div class="cnc-mac">' + CF.macros.map((m, i) => '<button data-c="macro" data-i="' + i + '" ' + (conn() && !K.prog ? '' : 'disabled') + '>' + esc(m.n) + '</button>').join('') + '</div>' + conHtml('c1') : '') + '</div>';
   box.innerHTML = h; if (fl) fl.scrollTop = sc; conRender(); live();
+}
+function liteBody() { // sans étapes guidées : seulement les outils prise d'origine et palpage
+  const c = conn(), dis = !c || moving() || !!K.prog; let h = '';
+  if (K.prog && K.prog.err) h += '<div class="cnc-box err"><b class="t">Erreur de la machine, ligne ' + (K.prog.err.idx + 1) + '</b><code>' + esc(K.prog.err.line) + '</code> → ' + esc(K.prog.err.e) + '<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn sm" data-c="errGo">Ignorer et reprendre</button><button class="cnc-btn sm" data-c="stop">Arrêter</button></div></div>';
+  if (K.prog && K.st === 'Hold' && !K.prog.tc && !K.prog.err && K.prog.m0) h += '<div class="cnc-box warn"><b class="t">Pause demandée par le programme</b>' + esc(K.prog.m0) + '</div>';
+  h += '<div class="cnc-card2"><div class="cnc-ch"><span>Prise d’origine machine</span></div><div class="cnc-row wrap"><button class="cnc-btn pri" data-c="home" ' + (c && limOn() && !dis ? '' : 'disabled') + '>⌂ Tous les axes' + (K.homed ? ' ✓' : '') + '</button>' + (K.fluid || K.hal ? AX.map(a => '<button class="cnc-btn sm" data-c="homeAx" data-a="' + a + '" ' + (c && !dis ? '' : 'disabled') + '>' + a.toUpperCase() + '</button>').join('') : '') + '</div>' + (c && !limOn() ? '<p class="cnc-s cnc-m" style="margin:5px 0 0">Pas de fins de course sur cette machine.</p>' : '') + '</div>';
+  if (CF.probe) h += '<div class="cnc-card2"><div class="cnc-ch"><span>Palpeur</span><span class="cnc-s" style="font-weight:400"><span class="cnc-led ' + (/P/.test(K.pn) ? 'on' : '') + '" data-live="led"></span><span data-live="ledt">' + (/P/.test(K.pn) ? 'fermé' : 'ouvert') + '</span></span></div><div class="cnc-seg">' + ['Z', 'XYZ', 'XY', 'X', 'Y'].map(a => '<button class="' + (U.paxis === a ? 'on' : '') + '" data-c="paxis" data-v="' + a + '">' + a + '</button>').join('') + '</div>' +
+    '<div class="cnc-row wrap" style="gap:10px;margin-top:7px"><label class="cnc-s cnc-il">Plaque <input type="number" step="0.1" value="' + CF.plate + '" data-cf="plate" style="width:66px"> mm</label>' + (U.paxis !== 'Z' ? '<label class="cnc-s cnc-il">Outil Ø <input type="number" step="0.01" value="' + (U.dia || curToolDia()) + '" data-u2="dia" style="width:66px"> mm</label>' : '') + '</div>' +
+    '<button class="cnc-btn pri big" style="margin-top:8px" data-c="probe" ' + (c && K.st !== 'Alarm' && !K.busy && !(moving() && !(K.prog && K.prog.tc)) ? '' : 'disabled') + '>' + (K.busy === 'probe' ? 'Palpage…' : 'Palper ' + U.paxis) + '</button></div>';
+  const has2 = S.tps.some(t => t.visible && t.face === 2), has1 = S.tps.some(t => t.visible && t.face !== 2);
+  if (has1 && has2) h += '<div class="cnc-card2"><div class="cnc-ch"><span>Double face</span></div><div class="cnc-seg"><button class="' + (U.face !== 2 ? 'on' : '') + '" data-c="face" data-v="1" ' + (K.prog ? 'disabled' : '') + '>Face 1</button><button class="' + (U.face === 2 ? 'on' : '') + '" data-c="face" data-v="2" ' + (K.prog ? 'disabled' : '') + '>Face 2</button></div></div>';
+  h += '<label class="cnc-chk cnc-s" style="margin-top:2px"><input type="checkbox" data-k="airWant" ' + (K.airWant ? 'checked' : '') + (K.prog ? ' disabled' : '') + '><span><b>Essai dans l’air</b> (+10 mm)</span></label>';
+  return h;
 }
 function illu(a) {
   const blk = '<path d="M40 70 L130 52 L190 70 L100 90 Z" fill="var(--stock)" stroke="var(--stock-edge)"/><path d="M40 70 L40 110 L100 130 L100 90 Z" fill="var(--stock)" stroke="var(--stock-edge)" opacity=".85"/><path d="M100 90 L190 70 L190 110 L100 130 Z" fill="var(--stock)" stroke="var(--stock-edge)" opacity=".7"/>';
@@ -10865,7 +10883,7 @@ function ovrSet(k, v) { if (!K.T) return; const cur = k === 'f' ? K.ov[0] : K.ov
 /* ---------------- cartouches de la vue 3D ---------------- */
 function ovRender() {
   if (!ov || curTab !== 'usiner') return; const P = progInfo(), old = q('#cncFloat'), sc = old ? old.scrollTop : 0;
-  ov.innerHTML = '<div id="cncPill"></div><div id="cncFloat" class="cnc-float' + (U.floatMin ? ' min' : '') + '"><div class="cnc-fh"><b>Étapes et vérifications</b><button class="cnc-btn sm" data-c="floatT" title="' + (U.floatMin ? 'Déplier' : 'Replier') + '">' + (U.floatMin ? '▸' : '▾') + '</button></div>' + (U.floatMin ? '' :
+  ov.innerHTML = '<div id="cncPill"></div><div id="cncFloat" class="cnc-float' + (U.floatMin ? ' min' : '') + '"><div class="cnc-fh"><b>' + (CF.guide ? 'Données et vérifications' : 'Données') + '</b><button class="cnc-btn sm" data-c="floatT" title="' + (U.floatMin ? 'Déplier' : 'Replier') + '">' + (U.floatMin ? '▸' : '▾') + '</button></div>' + (U.floatMin ? '' :
     '<div class="cnc-test"><b>Version test.</b> Pilotage d’une vraie machine : restez près de l’arrêt d’urgence et faites d’abord un essai dans l’air.</div>' +
     '<div class="cnc-card2"><div class="cnc-ch"><span>Encombrement du programme (mm)</span><button data-c="posT">' + (U.posOpen ? '–' : '+') + '</button></div>' + (U.posOpen ? '<table class="cnc-bb"><tr><th></th><th>min</th><th>max</th><th>taille</th></tr>' + AX.map((a, i) => '<tr><th>' + a.toUpperCase() + '</th><td data-live="bn' + a + '">' + (P.tps.length ? f2(P.mn[i]) : '–') + '</td><td data-live="bx' + a + '">' + (P.tps.length ? f2(P.mx[i]) : '–') + '</td><td>' + (P.tps.length ? f2(P.mx[i] - P.mn[i], 1) : '–') + '</td></tr>').join('') + '</table>' : '') + '</div>' +
     '<div class="cnc-card2"><div class="cnc-ch"><span>Usinage</span><button data-c="runT">' + (U.runOpen ? '–' : '+') + '</button></div>' + (U.runOpen ? '<div class="cnc-kv"><span>Écoulé</span><span data-live="tel">0:00</span><span>Restant</span><span data-live="trest"></span></div><div class="cnc-prog"><i data-live="pbar"></i></div><div class="cnc-kv"><span>Avance réelle</span><span data-live="fcur"></span><span>Broche</span><span data-live="scur"></span><span>Outil</span><span data-live="tcur"></span><span>Suivant</span><span data-live="tnext"></span></div><div class="cnc-gl" data-live="gl"></div>' : '') + '</div>' +
@@ -10936,6 +10954,7 @@ function msetOpen(t) {
   if (t) U.mtab = t; let el = q('#cncMset'); if (!el) { el = document.createElement('div'); el.id = 'cncMset'; el.className = 'cnc-modal'; el.setAttribute('data-notr', ''); el.addEventListener('mousedown', e => { if (e.target === el) el.remove(); }); document.body.appendChild(el); }
   const T = [['machine', 'Machine'], ['moves', 'Déplacements'], ['probe', 'Palpeur'], ['pad', 'Manette'], ['macros', 'Macros'], ['console', 'Console']]; let b = '';
   if (U.mtab === 'machine') {
+    b += '<label class="cnc-chk" style="margin-bottom:10px"><input type="checkbox" data-cfb="guide" ' + (CF.guide ? 'checked' : '') + '><span><b>Étapes guidées et vérifications</b> (conseillé). Décoché : aucune vérification avant le démarrage ; le panneau « Données » ne montre que l’encombrement, les temps, vitesses et outils, la prise d’origine et le palpeur.</span></label>';
     b += '<div class="cnc-row wrap" style="margin-bottom:10px"><label class="cnc-s">Vitesse de la liaison USB <select data-cf="baud">' + [115200, 250000, 230400, 57600, 38400].map(v => '<option ' + (+CF.baud === v ? 'selected' : '') + '>' + v + '</option>').join('') + '</select></label><span class="cnc-s cnc-m">(prise en compte à la prochaine connexion)</span></div>';
     if (K.fluid) b += '<div class="cnc-box info"><b class="t">FluidNC : la configuration est dans config.yaml</b>Les réglages de la carte sont dans le fichier <code>config.yaml</code> (les $ ci-dessous sont partiels).<div class="cnc-row wrap" style="margin-top:7px"><button class="cnc-btn sm" data-c="fDump" ' + (conn() ? '' : 'disabled') + '>Télécharger config.yaml</button><button class="cnc-btn sm" data-c="fSd" ' + (conn() ? '' : 'disabled') + '>Fichiers de la carte ($SD/List)</button><button class="cnc-btn sm" disabled title="Pas encore dans la version test">Envoyer un config.yaml…</button></div></div>';
     if (U.impSet) { const L = U.impSet, diff = Object.entries(L).filter(([k, v]) => +K.set[k] !== +v); b += '<div class="cnc-box warn"><b class="t">Réglages $ importés : ' + Object.keys(L).length + '</b>' + (conn() ? diff.length + ' différent(s) de la machine : ' + esc(diff.slice(0, 12).map(([k, v]) => '$' + k + '=' + v).join(' · ')) + (diff.length > 12 ? '…' : '') : 'Connectez la machine pour les lui envoyer.') + '<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn sm pri" data-c="impSend" ' + (conn() && !K.prog && diff.length ? '' : 'disabled') + '>Envoyer à la machine</button><button class="cnc-btn sm" data-c="impDrop">Ignorer</button></div></div>'; }
@@ -11045,7 +11064,7 @@ async function onChange(e) {
   if (d.tc) { if (K.prog && K.prog.tc) K.prog.tc[d.tc] = t.checked; tcRender(); return; }
   if (d.k === 'airWant') { K.airWant = t.checked; panel(); return; }
   if (d.cf) { CF[d.cf] = +t.value; cfSave(); if (d.cf === 'jogF') setL('jf', String(CF.jogF)); if (d.cf === 'shim') { CF.shim = Math.max(0, +t.value || 0); cfSave(); qa('[data-cf="shim"]').forEach(x => { if (x !== t) x.value = CF.shim; }); tcRender(); } return; }
-  if (d.cfb) { CF[d.cfb] = t.checked; cfSave(); if (d.cfb === 'probe') { U.pmode = CF.probe ? 'probe' : 'hand'; const c2 = q('#cfgCncProbe'); if (c2) c2.checked = CF.probe; if (q('#cncMset')) msetOpen(); ui(); } return; }
+  if (d.cfb) { CF[d.cfb] = t.checked; cfSave(); if (d.cfb === 'guide') { ui(); return; } if (d.cfb === 'probe') { U.pmode = CF.probe ? 'probe' : 'hand'; const c2 = q('#cfgCncProbe'); if (c2) c2.checked = CF.probe; if (q('#cncMset')) msetOpen(); ui(); } return; }
   if (d.step !== undefined) { CF.steps[+d.step] = +t.value || CF.steps[+d.step]; cfSave(); ctlRender(); return; }
   if (d.wsin) { const a = d.wsin, v = t.value.trim(); t.blur(); if (v !== '' && isFinite(+v)) await setZero(a, +v); return; }
   if (d.ax) { const a = d.ax; U.edit = null; await setZero(a, +t.value); return; }
