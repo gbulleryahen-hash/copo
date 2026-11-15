@@ -205,6 +205,8 @@ table.cnc-set input{width:110px;text-align:right}
 #rv3.cnc-fmin #cncPill{left:50%}
 #rv3.cnc-on:not(.cnc-fmin) .rvtools{left:380px}
 .cnc-float label.cnc-il{display:inline-flex;flex-direction:row;align-items:center;gap:6px;margin:0}
+#cncAlarm{position:absolute;top:50px;left:calc(50% + 185px);transform:translateX(-50%);max-width:min(620px,calc(100% - 420px));margin:0;pointer-events:auto;box-shadow:0 6px 20px var(--shadow);z-index:2;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+#rv3.cnc-fmin #cncAlarm{left:50%;max-width:min(620px,calc(100% - 40px))}
 </style>
 </head>
 <body>
@@ -10759,9 +10761,6 @@ function panel() {
   const box = q('#cncVols'); if (!box || curTab !== 'usiner') return; const fl = q('#cncFloat'), sc = fl ? fl.scrollTop : 0, st = stat();
   if (!CF.guide) { box.innerHTML = liteBody(); if (fl) fl.scrollTop = sc; live(); return; }
   let h = '';
-  if (K.st === 'Alarm' && K.alarm) h += '<div class="cnc-box err"><b class="t">⚠ Alarme ' + K.alarm.n + '</b>' + esc(K.alarm.t) + '<div class="cnc-row" style="margin-top:7px">' + (limOn() ? '<button class="cnc-btn sm pri" data-c="home">⌂ Prise d’origine ($H)</button>' : '') + '<button class="cnc-btn sm" data-c="unlock">Déverrouiller ($X)</button></div></div>';
-  else if (K.st === 'Alarm' && conn()) h += '<div class="cnc-box err"><b class="t">⚠ Machine en alarme</b>' + (limOn() ? 'Prise d’origine nécessaire au démarrage (normal).' : '') + '<div class="cnc-row" style="margin-top:7px">' + (limOn() ? '<button class="cnc-btn sm pri" data-c="home">⌂ Prise d’origine ($H)</button>' : '') + '<button class="cnc-btn sm" data-c="unlock">Déverrouiller ($X)</button></div></div>';
-  if (K.st === 'Door') h += '<div class="cnc-box warn"><b class="t">Porte ouverte</b>Fermez la porte (ou le capteur) puis reprenez.</div>';
   // 1 connexion
   let b1;
   if (!K.T) b1 = '<p class="cnc-s" style="margin-top:0">Cliquez sur <b>🔌 Connecter</b> en haut du panneau Usiner : USB ou machine simulée pour essayer.</p><div class="cnc-box info"><b class="t">Avant de connecter</b><ul><li>La machine est sous tension, le câble USB branché.</li><li>Aucun autre logiciel n’utilise la machine (UGS, gSender, Candle…).</li><li>Chrome ou Edge : le navigateur demande d’autoriser le port la première fois.</li></ul></div>';
@@ -10790,6 +10789,13 @@ function panel() {
   h += vol(4, 'Usinage', st.s4, K.prog ? (K.prog.tc ? 'Changement d’outil' : K.st === 'Hold' ? 'En pause' : 'En cours…') : K.finished ? '✓ Terminé' : '', launchBody());
   h += '<div class="cnc-dr"><header data-c="drawer"><span>' + (U.drawer ? '▾' : '▸') + '</span><b>Console et macros</b><span class="cnc-s">(utilisateurs avancés)</span></header>' + (U.drawer ? '<div class="cnc-mac">' + CF.macros.map((m, i) => '<button data-c="macro" data-i="' + i + '" ' + (conn() && !K.prog ? '' : 'disabled') + '>' + esc(m.n) + '</button>').join('') + '</div>' + conHtml('c1') : '') + '</div>';
   box.innerHTML = h; if (fl) fl.scrollTop = sc; conRender(); live();
+}
+function alarmBanner() { // alarmes en haut de la vue 3D
+  if (!conn()) return ''; let t = '', k = 'err';
+  if (K.st === 'Alarm') { const n = K.alarm ? K.alarm.n : 0, needHome = [1, 3, 6, 7, 8, 9, 11].includes(n) || (!n && limOn() && !K.homed);
+    t = '<b>⚠ Alarme' + (n ? ' ' + n : '') + '</b> — ' + esc(K.alarm ? K.alarm.t : limOn() ? 'Prise d’origine nécessaire au démarrage (normal).' : 'Machine verrouillée.') + (needHome && limOn() ? ' <span class="cnc-m">Utilisez « Prise d’origine machine » dans le panneau, ou déverrouillez.</span>' : '') + ' <button class="cnc-btn sm" data-c="unlock">Déverrouiller ($X)</button>'; }
+  else if (K.st === 'Door') { k = 'warn'; t = '<b>Porte ouverte</b> — fermez la porte (ou le capteur) puis reprenez.'; }
+  return t ? '<div id="cncAlarm" class="cnc-box ' + k + '">' + t + '</div>' : '';
 }
 function liteBody() { // sans étapes guidées : seulement les outils prise d'origine et palpage
   const c = conn(), dis = !c || moving() || !!K.prog; let h = '';
@@ -10885,7 +10891,7 @@ function ovrSet(k, v) { if (!K.T) return; const cur = k === 'f' ? K.ov[0] : K.ov
 /* ---------------- cartouches de la vue 3D ---------------- */
 function ovRender() {
   if (!ov || curTab !== 'usiner') return; const P = progInfo(), old = q('#cncFloat'), sc = old ? old.scrollTop : 0;
-  ov.innerHTML = '<div id="cncPill"></div><div id="cncFloat" class="cnc-float' + (U.floatMin ? ' min' : '') + '"><div class="cnc-fh"><b>' + (CF.guide ? 'Données et vérifications' : 'Données') + '</b><button class="cnc-btn sm" data-c="floatT" title="' + (U.floatMin ? 'Déplier' : 'Replier') + '">' + (U.floatMin ? '▸' : '▾') + '</button></div>' + (U.floatMin ? '' :
+  ov.innerHTML = '<div id="cncPill"></div>' + alarmBanner() + '<div id="cncFloat" class="cnc-float' + (U.floatMin ? ' min' : '') + '"><div class="cnc-fh"><b>' + (CF.guide ? 'Données et vérifications' : 'Données') + '</b><button class="cnc-btn sm" data-c="floatT" title="' + (U.floatMin ? 'Déplier' : 'Replier') + '">' + (U.floatMin ? '▸' : '▾') + '</button></div>' + (U.floatMin ? '' :
     '<div class="cnc-test"><b>Version test.</b> Pilotage d’une vraie machine : restez près de l’arrêt d’urgence et faites d’abord un essai dans l’air.</div>' +
     '<div class="cnc-card2"><div class="cnc-ch"><span>Encombrement du programme (mm)</span><button data-c="posT">' + (U.posOpen ? '–' : '+') + '</button></div>' + (U.posOpen ? '<table class="cnc-bb"><tr><th></th><th>min</th><th>max</th><th>taille</th></tr>' + AX.map((a, i) => '<tr><th>' + a.toUpperCase() + '</th><td data-live="bn' + a + '">' + (P.tps.length ? f2(P.mn[i]) : '–') + '</td><td data-live="bx' + a + '">' + (P.tps.length ? f2(P.mx[i]) : '–') + '</td><td>' + (P.tps.length ? f2(P.mx[i] - P.mn[i], 1) : '–') + '</td></tr>').join('') + '</table>' : '') + '</div>' +
     '<div class="cnc-card2"><div class="cnc-ch"><span>Usinage</span><button data-c="runT">' + (U.runOpen ? '–' : '+') + '</button></div>' + (U.runOpen ? '<div class="cnc-kv"><span>Écoulé</span><span data-live="tel">0:00</span><span>Restant</span><span data-live="trest"></span></div><div class="cnc-prog"><i data-live="pbar"></i></div><div class="cnc-kv"><span>Avance réelle</span><span data-live="fcur"></span><span>Broche</span><span data-live="scur"></span><span>Outil</span><span data-live="tcur"></span><span>Suivant</span><span data-live="tnext"></span></div><div class="cnc-gl" data-live="gl"></div>' : '') + '</div>' +
@@ -10904,8 +10910,6 @@ function topRender() {
     '<div class="cnc-ct">Wi-Fi</div><button class="cnc-ci" disabled><span class="ic">📶</span><span><b>FluidNC Wi-Fi</b><small>Pas encore dans la version test</small></span></button></div>';
   else h += '<button class="cnc-btn big cnc-conn" data-c="conMenu">' + (K.st === 'Conn' ? 'Connexion…' : '<span class="cnc-cdot ' + (K.st === 'Alarm' ? 'al' : '') + '"></span>' + esc(K.ctrl || 'Connectée') + ' · ' + esc(K.kind === 'sim' ? 'simulée' : 'USB')) + ' ▾</button><div class="cnc-cmenu"><div class="cnc-ct">' + esc(K.name) + '</div><button class="cnc-ci" data-c="disc"><span class="ic">⏏</span><span><b>Déconnecter</b></span></button></div>';
   h += '</div><button class="cnc-btn cnc-gear" data-c="mset" title="Paramètres machine : réglages $$, déplacements, palpeur, manette, macros, console">⚙</button></div>';
-  if (K.st === 'Alarm' && conn()) h += '<div class="cnc-box err"><b class="t">⚠ Alarme' + (K.alarm ? ' ' + K.alarm.n : '') + '</b>' + (K.alarm ? esc(K.alarm.t) : limOn() ? 'Prise d’origine nécessaire au démarrage (normal).' : '') + '<div class="cnc-row" style="margin-top:7px">' + (limOn() ? '<button class="cnc-btn sm pri" data-c="home">⌂ Prise d’origine</button>' : '') + '<button class="cnc-btn sm" data-c="unlock">Déverrouiller ($X)</button></div></div>';
-  if (K.st === 'Door') h += '<div class="cnc-box warn"><b class="t">Porte ouverte</b>Fermez la porte (ou le capteur) puis reprenez.</div>';
   h += '<button class="cnc-btn cnc-gozero' + (c && limOn() && !K.homed ? ' pri' : '') + '" data-c="home" ' + (c && limOn() && !moving() && !K.prog && ['Idle', 'Alarm'].includes(K.st) ? '' : 'disabled') + ' title="' + (c && !limOn() ? 'Pas de fins de course sur cette machine' : 'Envoie chaque axe sur son fin de course ($H)') + '">⌂ Prise d’origine machine' + (K.homed ? ' ✓' : '') + '</button>';
   h += '<button class="cnc-btn cnc-gozero" data-c="goHome" ' + (c && K.homed && canJog() ? '' : 'disabled') + ' title="' + (K.homed ? 'Remonte Z, puis va à l’origine machine (G53)' : 'Faites d’abord la prise d’origine') + '">⤒ Aller à l’origine machine</button>';
   h += '<div class="cnc-coord"><div class="cnc-crow cnc-chd"><span></span><span>Zéro</span><span>Pièce <span class="cnc-badge">G54</span></span><span>Machine</span><span>Aller</span></div>' +
