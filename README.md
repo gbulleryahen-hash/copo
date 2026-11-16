@@ -7,7 +7,7 @@
 - **Mode d'emploi / User guide :** `guide.html` · PDF : `COPO-mode-emploi-FR.pdf`, `COPO-user-guide-EN.pdf`
 - **Bibliothèque libre / Free library :** `bibliotheque/` — 195 dessins 2D (SVG : formes, panneaux, lutherie…) et 88 reliefs en niveaux de gris (PNG 16 bits), rangés par catégorie, avec un fichier `bibliotheque-copo.copolib` à importer dans COPO. Sources et licences : `bibliotheque/CREDITS.md` / 195 2D drawings (shapes, panels, lutherie…) and 88 grayscale reliefs, sorted by category, plus a `.copolib` file to import into COPO.
 
-**Version 1.357**
+**Version 1.359**
 
 ## Fonctions / Features
 - Dessin : rectangle, ellipse, polygone/étoile, arc, plume (Bézier), texte (aussi sur une courbe), nœuds, chanfreins, congés, dégagements dogbone et T-bone, ajuster, couper, joindre, booléens, réseau, calques, repères, cotes, images de référence, vectorisation d'image (contours), import/export SVG, import DXF (calques, blocs, splines)
@@ -22,7 +22,7 @@
 - Lutherie : générateur de touche de guitare (diapason, largeurs, frettes non traversantes, repères) et incrustation en V (inlay : poche femelle et pièce mâle) ; boîte à entures (tenons droits, dogbones, couvercle plat ou à tenons)
 - Neuf familles de polices décoratives fournies (URW Chancery, Alegreya, Cinzel Decorative, Pirata One, Chicle, Comic Neue, Protest Riot, Great Vibes, Smokum)
 - Une soixantaine de polices à trait unique fournies (Hershey, EMS, Cutlings, Relief SingleLine, Routed Gothic), import de polices SVG ; catalogue avec aperçu : `fonts/apercu-polices.html`
-- G-code : GRBL, GRBL changement manuel (G53 + pause), Carbide Motion, Onefinity, LinuxCNC, Mach3/4, UCCNC, MASSO, post-processeur personnalisé ; arcs G2/G3
+- G-code : GRBL, grblHAL, FluidNC, GRBL changement manuel (G53 + pause), Carbide Motion, Onefinity, LinuxCNC, Mach3/4, UCCNC, MASSO, post-processeur personnalisé ; arcs G2/G3
 - Positions de départ et de fin de chaque outil et du programme (sur place, X0 Y0, coordonnées pièce ou machine G53, G28, G30)
 - Onglet 6 Usiner (expérimental, à activer dans Édition › Paramètres) : pilotage d'une CNC GRBL, grblHAL ou FluidNC en USB depuis le navigateur (Chrome, Edge, Firefox 151+), prise d'origine, palpage manuel ou automatique, changement d'outil guidé, vérifications avant le lancement, manette de jeu, machine simulée pour essayer
 - Fiche de gamme imprimable : vues 2D des faces, vues dimétriques de la simulation, origine, outils, parcours, vitesses, points de vigilance, liste de contrôle
