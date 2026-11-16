@@ -188,7 +188,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.335</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.337</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -207,7 +207,7 @@ footer p{max-width:none}
       <div><b>Polices à trait unique</b><span>Une soixantaine fournies (Hershey, EMS, Relief…) pour graver vite en une seule passe.</span></div>
       <div><b>Double face</b><span>Calques par face, retournement en X ou en Y, pause pour retourner la pièce.</span></div>
       <div><b>Aperçu 3D</b><span>Simulation de l'enlèvement de matière, face 1 et face 2, avec lecture animée.</span></div>
-      <div><b>G-code</b><span>GRBL, grblHAL, GRBL manuel (G53), Carbide Motion, Onefinity, LinuxCNC, Mach3/4, UCCNC, MASSO, post-processeur personnalisé, une soixantaine de machines au format .pp (Haas, Tormach PathPilot, Axyz, Isel, Kuka, laser, HPGL…) et import de vos fichiers .pp. Arcs G2/G3.</span></div>
+      <div><b>G-code</b><span>GRBL, grblHAL, GRBL manuel (G53), Carbide Motion, Onefinity, LinuxCNC, Mach3/4, UCCNC, MASSO, Estlcam, TinyG, WinCNC, WinPC-NC, Stepcraft, commandes industrielles ISO (Haas, Fanuc, Hurco, Syntec, Makino, Centroid…), post-processeur personnalisé, une soixantaine de machines au format .pp (Haas, Tormach PathPilot, Axyz, Isel, Kuka, laser, HPGL…) et import de vos fichiers .pp. Arcs G2/G3.</span></div>
       <div><b>Fiche de gamme</b><span>Fiche d'atelier imprimable : vues 2D et 3D, origine, outils, parcours, vitesses, contrôles.</span></div>
       <div><b>Millimètres ou pouces</b><span>Dessin, outils et avances en mm ou en pouces (fractions possibles), G-code en G21 ou G20.</span></div>
       <div><b>Français et anglais</b><span>Interface et mode d'emploi dans les deux langues, au choix avec les boutons FR / EN en haut à droite.</span></div>
@@ -340,7 +340,9 @@ X74.042 A14.162
 X74.36 A14.181</pre>
     <h3 id="fr-machines">Bibliothèque de machines</h3>
     <figure><img src="img/fr-23-machines.webp" alt="Bibliothèque de machines : liste à gauche, réglages à droite." width="1800" height="1125" loading="lazy"><figcaption>À gauche, les machines (celle qui est cochée sert au G-code) ; à droite, les réglages de la machine choisie, enregistrés automatiquement.</figcaption></figure>
-    <p>Dans l’onglet Projet, <span class="ui">Machine › Changer…</span> ouvre la bibliothèque. Chaque machine garde son post-processeur, ses vitesses, ses hauteurs de sécurité, sa course X/Y/Z, sa plage de broche et son axe rotatif (lettre A ou B). La machine par défaut utilise le post-processeur <em>GRBL (pause M0 au changement d’outil)</em>, et la remontée à un Z machine (G53) au changement d’outil est désactivée par défaut. Le <strong>changement d’outil</strong> se règle aussi dans la machine : <em>Selon le post-processeur</em> (par défaut), <em>Aucune commande</em> (l’outil n’apparaît qu’en commentaire), <em>Commande de pause</em> (M0 ou une autre commande, à chaque changement) ou <em>Commande de changement</em> (commande de début, n° d’outil, commande de fin : « T6 M6 », « M6 T6 »…), avec un exemple sous les champs. Le numéro d’outil (T…) est celui de la fraise dans la bibliothèque d’outils ; si deux outils du programme ont le même numéro, un avertissement s’affiche sous le G-code. Ce réglage ne s’applique pas aux post-processeurs .pp, qui définissent eux-mêmes le changement d’outil. <span class="ui">Exporter…</span> enregistre toutes les machines dans un fichier <code>machines-copo.json</code> (autre ordinateur, sauvegarde) ; <span class="ui">Importer…</span> ajoute les machines d’un tel fichier sans rien remplacer.</p>
+    <p>Dans l’onglet Projet, <span class="ui">Machine › Changer…</span> ouvre la bibliothèque. Chaque machine garde son post-processeur, ses vitesses, ses hauteurs de sécurité, sa course X/Y/Z, sa plage de broche et son axe rotatif (lettre A ou B). La machine par défaut utilise le post-processeur <em>GRBL (pause M0 au changement d’outil)</em>, et la remontée à un Z machine (G53) au changement d’outil est désactivée par défaut. Le <strong>changement d’outil</strong> se règle aussi dans la machine : <em>Selon le post-processeur</em> (par défaut), <em>Aucune commande</em> (l’outil n’apparaît qu’en commentaire), <em>Commande de pause</em> (M0 ou une autre commande, à chaque changement) ou <em>Commande de changement</em> (commande de début, n° d’outil, commande de fin : « T6 M6 », « M6 T6 »…), avec un exemple sous les champs. Le numéro d’outil (T…) est celui de la fraise dans la bibliothèque d’outils ; si deux outils du programme ont le même numéro, un avertissement s’affiche sous le G-code. Ce réglage ne s’applique pas aux post-processeurs .pp ni aux commandes industrielles ISO, qui définissent eux-mêmes le changement d’outil. <span class="ui">Exporter…</span> enregistre toutes les machines dans un fichier <code>machines-copo.json</code> (autre ordinateur, sauvegarde) ; <span class="ui">Importer…</span> ajoute les machines d’un tel fichier sans rien remplacer.</p>
+    <p><strong>Catalogue de machines.</strong> <span class="ui">Catalogue de machines…</span> propose 23 machines 3 axes déjà réglées, reprises de la bibliothèque Fusion 360 : 17 Haas (VF, VM, DM, TM, CM, GM…), 3 Hurco, la SYIL X7 et deux i2R. Tapez un nom pour filtrer (« Haas », « VF-2 »), puis cliquez sur une machine : elle est copiée dans vos machines avec sa course, sa broche et son post-processeur, et choisie. Fusion ne donne pas les vitesses des Haas : réglez la vitesse des rapides et l’avance maximale de votre machine. L’arrosage est désactivé par défaut.</p>
+    <p><strong>Importer une machine de Fusion 360 ou de FreeCAD.</strong> <span class="ui">Importer…</span> accepte aussi les fichiers de machine de Fusion 360 (<code>.mch</code>) et de FreeCAD 1.2 et suivants (<code>.fcm</code>), un ou plusieurs à la fois. COPO en reprend le nom, la course, la broche, les rapides, l’avance maximale et un 4ᵉ axe A ou B, et choisit le post-processeur le plus proche de celui d’origine (un <code>.cps</code> Haas devient « Haas NGC », un post-processeur FreeCAD <code>linuxcnc</code> devient « LinuxCNC »…). Ce qui a été repris est noté dans les notes de la machine ; ce qui reste à vérifier s’affiche dans le message. Les machines 5 axes, les machines qui ne sont pas des fraiseuses et les machines à fil (électroérosion) sont refusées.</p>
 
     <h2 id="fr-param">Paramètres</h2>
     <p><span class="ui">Édition › Paramètres…</span> (<kbd>Ctrl</kbd>+<kbd>,</kbd>) ouvre une fenêtre à rubriques : les titres à gauche, le contenu qui défile à droite (cliquez un titre pour y aller ; le titre de la partie affichée s’allume). Tout est enregistré dans le navigateur.</p>
@@ -571,8 +573,32 @@ X74.36 A14.181</pre>
         <tr><td>Carbide Motion, Onefinity</td><td><code>M6 T…</code> : le logiciel de pilotage demande de changer l'outil.</td></tr>
         <tr><td>LinuxCNC, Mach3/4, UCCNC, MASSO</td><td><code>T… M6</code> avec le numéro d'outil, en-tête <code>G40 G49 G80</code>, arcs en <code>G91.1</code>. Fichier <code>.ngc</code> (LinuxCNC), <code>.tap</code> (Mach, UCCNC) ou <code>.nc</code>.</td></tr>
         <tr><td>Personnalisé</td><td>Vous écrivez l'en-tête, le changement d'outil et la fin du programme, avec des variables : <code>{UNITS}</code>, <code>{SAFEZ}</code>, <code>{TCZ}</code>, <code>{T}</code>, <code>{S}</code>, <code>{D}</code>, <code>{TOOL}</code>. Extension du fichier et <code>G91.1</code> au choix.</td></tr>
+        <tr><td>Estlcam, TinyG, WinCNC, WinPC-NC, Stepcraft</td><td><code>M6 (Outil n)</code> (Estlcam), <code>T…</code> seul (WinCNC) ou <code>T… M6</code>. Fichier <code>.nc</code>, <code>.gcode</code> (TinyG) ou <code>.tap</code> (WinCNC).</td></tr>
+        <tr><td>Industrie (ISO type Fanuc) : Haas NGC, Haas classique, Fanuc, Robodrill, Makino, Yasnac, Mitsubishi Meldas, Syntec, Hurco, Centroid, Fadal</td><td><code>T… M6</code>, puis au premier mouvement <code>G0 G90 G54 X… Y…</code>, <code>S… M3</code>, <code>G43 H…</code> (correcteur de longueur du même numéro) et l’arrosage. Programme entre <code>%</code> avec un numéro <code>O…</code>, dégagement <code>G28 G91 Z0.</code>, point décimal toujours écrit (<code>X10.</code>).</td></tr>
       </tbody>
     </table></div>
+    <p><strong>Commandes industrielles ISO.</strong> Pour ces post-processeurs, la machine a un bloc <em>Programme ISO</em> : numéro de programme, arrosage (aucun, M8, M7 ou M88 centre broche), dégagement en Z par <code>G28 G91 Z0</code> ou <code>G53 G0 Z0</code>, arrêt optionnel <code>M1</code> avant chaque changement d’outil, préparation de l’outil suivant (<code>T…</code> juste après <code>M6</code>) et numéros de ligne <code>N10</code>, <code>N15</code>… Le point décimal est indispensable : sur une Fanuc, <code>X10</code> sans point vaut 0,010 mm. L’origine pièce est toujours <code>G54</code> ; le taraudage (<code>G84</code>) et le lissage (<code>G187</code>, <code>G05.1</code>) ne sont pas encore écrits.</p>
+<pre>%
+O01000
+G90 G94 G17 G40 G49 G80
+G21
+G28 G91 Z0.
+G90
+<span class="c">(Outil : Fraise 2 dents D6.)</span>
+T3 M6
+G0 G90 G54 X10. Y10.
+S18000 M3
+G43 H03 Z10.
+M8
+…
+M9
+M5
+G28 G91 Z0.
+G90
+G28 G91 Y0.
+G90
+M30
+%</pre>
     <p><strong>Autres machines (format .pp).</strong> La liste propose aussi, dans un groupe à part, des machines industrielles et spéciales : Advanced Laser, Axyz, Bridgeport EZTRACK, Busellato GEN J6000, DeskCNC, Haas (avec ou sans arcs), ISEL NCP, Kuka (robot), Lasercomb, Mach2/3 ATC, Biesse Rover, Pacer, Precix, ShopBot (fraisage, tête 2, perceuses pneumatiques GC et PRS), Torchmate 2, Turbo CNC, Tormach PathPilot (mm et pouces : G30 avant chaque changement d’outil, G43 H…, arcs G91.1), Vision Series 3, WaterJet PRO, des machines à axe rotatif (Mach2/3 Wrap, CAMaster, CNC Shark, WinCNC, WinPC-NC, ShopBot Indexer), un traceur / découpe vinyle HPGL et un listing texte lisible du parcours (pour vérifier). Elles reprennent la logique des post-processeurs .pp d’Aspire et VCarve : chacune fixe ses unités (mm ou pouces), le format des nombres, la numérotation des lignes, l’en-tête, le changement d’outil et la fin du programme, et l’extension du fichier. Si votre machine n’y est pas et que vous avez son fichier .pp (dossier PostP d’Aspire, VCarve ou Cut2D), le bouton <span class="ui">Importer un post-processeur (.pp)…</span> le charge : il rejoint le groupe « Importés », est gardé dans votre navigateur et enregistré avec le projet. Les blocs courants sont gérés (en-tête, fin, changement d’outil, nouveau parcours, rapides, avances, plongées, remontées, arcs IJ ou R, arcs en hélice, temporisation, allumage et extinction d’un laser, plasma ou jet d’eau, changement d’avance), ainsi que les variables courantes : <code data-notr>[TOOL_DIA]</code> diamètre de la fraise, <code data-notr>[TOOLNAME]</code>, <code data-notr>[DATE]</code>, <code data-notr>[TIME]</code>, dimensions du brut (<code data-notr>[XLENGTH]</code>, <code data-notr>[XMIN]</code>…), liste des parcours et des outils (<code data-notr>[TOOLPATHS_OUTPUT]</code>, <code data-notr>[TOOLS_USED]</code>). COPO signale les blocs qu’il ignore. Les post-processeurs qui allument l’outil à la plongée (laser, jet d’eau) demandent des parcours en « Plongée droite » : COPO le rappelle dans le bloc Machine et l’onglet G-code. Faites toujours un passage à vide avec un post-processeur que vous n’avez pas encore utilisé.</p>
 <pre><span class="c">(Mettre l'outil : Fraise droite 6 mm D6 - refaire le zero Z puis reprendre)</span>
 G21 G90 G17 G94
@@ -677,7 +703,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.335</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.337</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -696,7 +722,7 @@ M30</pre>
       <div><b>Single-line fonts</b><span>About sixty included (Hershey, EMS, Relief…) for fast one-pass engraving.</span></div>
       <div><b>Double-sided</b><span>Layers per side, flip around X or Y, pause to turn the part over.</span></div>
       <div><b>3D preview</b><span>Material removal simulation, side 1 and side 2, with animated playback.</span></div>
-      <div><b>G-code</b><span>GRBL, grblHAL, manual GRBL (G53), Carbide Motion, Onefinity, LinuxCNC, Mach3/4, UCCNC, MASSO, a custom post-processor, about sixty .pp-format machines (Haas, Tormach PathPilot, Axyz, Isel, Kuka, laser, HPGL…) and import of your own .pp files. G2/G3 arcs.</span></div>
+      <div><b>G-code</b><span>GRBL, grblHAL, manual GRBL (G53), Carbide Motion, Onefinity, LinuxCNC, Mach3/4, UCCNC, MASSO, Estlcam, TinyG, WinCNC, WinPC-NC, Stepcraft, industrial ISO controls (Haas, Fanuc, Hurco, Syntec, Makino, Centroid…), a custom post-processor, about sixty .pp-format machines (Haas, Tormach PathPilot, Axyz, Isel, Kuka, laser, HPGL…) and import of your own .pp files. G2/G3 arcs.</span></div>
       <div><b>Setup sheet</b><span>Printable workshop sheet: 2D and 3D views, origin, tools, toolpaths, speeds, checks.</span></div>
       <div><b>Millimeters or inches</b><span>Drawing, tools and feeds in mm or inches (fractions available), G-code in G21 or G20.</span></div>
       <div><b>French and English</b><span>Interface and user guide in both languages, chosen with the FR / EN buttons at the top right.</span></div>
@@ -829,7 +855,9 @@ X74.042 A14.162
 X74.36 A14.181</pre>
     <h3 id="en-machines">Machine library</h3>
     <figure><img src="img/en-23-machines.webp" alt="Machine library: list on the left, settings on the right." width="1800" height="1125" loading="lazy"><figcaption>Left, the machines (the checked one is used for the G-code); right, the settings of the selected machine, saved automatically.</figcaption></figure>
-    <p>In the Project tab, <span class="ui">Machine › Change…</span> opens the library. Each machine keeps its post-processor, speeds, safe heights, X/Y/Z travel, spindle range and rotary axis (letter A or B). The default machine uses the <em>GRBL (M0 pause at tool change)</em> post-processor, and rising to a machine Z (G53) at tool changes is off by default. The <strong>tool change</strong> can also be set in the machine: <em>As set by the post-processor</em> (default), <em>No command</em> (the tool only appears in a comment), <em>Pause command</em> (M0 or another command, at each change) or <em>Tool change command</em> (start command, tool number, end command: “T6 M6”, “M6 T6”…), with an example under the fields. The tool number (T…) is the tool’s number in the tool library; if two tools of the program share a number, a warning shows under the G-code. It does not apply to .pp post-processors, which define the tool change themselves. <span class="ui">Export…</span> saves all machines to a <code>machines-copo.json</code> file (another computer, backup); <span class="ui">Import…</span> adds the machines from such a file without replacing anything.</p>
+    <p>In the Project tab, <span class="ui">Machine › Change…</span> opens the library. Each machine keeps its post-processor, speeds, safe heights, X/Y/Z travel, spindle range and rotary axis (letter A or B). The default machine uses the <em>GRBL (M0 pause at tool change)</em> post-processor, and rising to a machine Z (G53) at tool changes is off by default. The <strong>tool change</strong> can also be set in the machine: <em>As set by the post-processor</em> (default), <em>No command</em> (the tool only appears in a comment), <em>Pause command</em> (M0 or another command, at each change) or <em>Tool change command</em> (start command, tool number, end command: “T6 M6”, “M6 T6”…), with an example under the fields. The tool number (T…) is the tool’s number in the tool library; if two tools of the program share a number, a warning shows under the G-code. It does not apply to .pp post-processors or industrial ISO controls, which define the tool change themselves. <span class="ui">Export…</span> saves all machines to a <code>machines-copo.json</code> file (another computer, backup); <span class="ui">Import…</span> adds the machines from such a file without replacing anything.</p>
+    <p><strong>Machine catalog.</strong> <span class="ui">Machine catalog…</span> offers 23 ready-made 3-axis machines from the Fusion 360 library: 17 Haas (VF, VM, DM, TM, CM, GM…), 3 Hurco, the SYIL X7 and two i2R. Type a name to filter (“Haas”, “VF-2”), then click a machine: it is copied into your machines with its travel, spindle and post-processor, and selected. Fusion gives no speeds for the Haas machines: set your machine’s rapid speed and maximum feed. Coolant is off by default.</p>
+    <p><strong>Importing a machine from Fusion 360 or FreeCAD.</strong> <span class="ui">Import…</span> also accepts machine files from Fusion 360 (<code>.mch</code>) and FreeCAD 1.2 and later (<code>.fcm</code>), one or several at a time. COPO keeps the name, travel, spindle, rapids, maximum feed and an A or B 4th axis, and picks the post-processor closest to the original one (a Haas <code>.cps</code> becomes “Haas NGC”, a FreeCAD <code>linuxcnc</code> post becomes “LinuxCNC”…). What was kept is written in the machine’s notes; what still needs checking shows in the message. 5-axis machines, machines that are not mills and wire EDM machines are refused.</p>
 
     <h2 id="en-settings">Settings</h2>
     <p><span class="ui">Edit › Settings…</span> (<kbd>Ctrl</kbd>+<kbd>,</kbd>) opens a window with sections: titles on the left, content scrolling on the right (click a title to jump to it; the title of the part shown lights up). Everything is saved in the browser.</p>
@@ -1060,8 +1088,32 @@ X74.36 A14.181</pre>
         <tr><td>Carbide Motion, Onefinity</td><td><code>M6 T…</code>: the control software asks you to change the tool.</td></tr>
         <tr><td>LinuxCNC, Mach3/4, UCCNC, MASSO</td><td><code>T… M6</code> with the tool number, <code>G40 G49 G80</code> header, arcs with <code>G91.1</code>. <code>.ngc</code> file (LinuxCNC), <code>.tap</code> (Mach, UCCNC) or <code>.nc</code>.</td></tr>
         <tr><td>Custom</td><td>You write the header, tool change and program end, with variables: <code>{UNITS}</code>, <code>{SAFEZ}</code>, <code>{TCZ}</code>, <code>{T}</code>, <code>{S}</code>, <code>{D}</code>, <code>{TOOL}</code>. File extension and <code>G91.1</code> are up to you.</td></tr>
+        <tr><td>Estlcam, TinyG, WinCNC, WinPC-NC, Stepcraft</td><td><code>M6 (Tool n)</code> (Estlcam), <code>T…</code> alone (WinCNC) or <code>T… M6</code>. <code>.nc</code>, <code>.gcode</code> (TinyG) or <code>.tap</code> (WinCNC) file.</td></tr>
+        <tr><td>Industrial (Fanuc-style ISO): Haas NGC, classic Haas, Fanuc, Robodrill, Makino, Yasnac, Mitsubishi Meldas, Syntec, Hurco, Centroid, Fadal</td><td><code>T… M6</code>, then at the first move <code>G0 G90 G54 X… Y…</code>, <code>S… M3</code>, <code>G43 H…</code> (length offset with the same number) and coolant. Program between <code>%</code> with an <code>O…</code> number, <code>G28 G91 Z0.</code> retract, decimal point always written (<code>X10.</code>).</td></tr>
       </tbody>
     </table></div>
+    <p><strong>Industrial ISO controls.</strong> For these post-processors, the machine has an <em>ISO program</em> block: program number, coolant (none, M8, M7 or M88 through-spindle), Z retract with <code>G28 G91 Z0</code> or <code>G53 G0 Z0</code>, optional stop <code>M1</code> before each tool change, pre-staging the next tool (<code>T…</code> right after <code>M6</code>) and line numbers <code>N10</code>, <code>N15</code>… The decimal point is essential: on a Fanuc, <code>X10</code> without a point means 0.010 mm. The work offset is always <code>G54</code>; tapping (<code>G84</code>) and smoothing (<code>G187</code>, <code>G05.1</code>) are not written yet.</p>
+<pre>%
+O01000
+G90 G94 G17 G40 G49 G80
+G21
+G28 G91 Z0.
+G90
+<span class="c">(Tool: 2-flute end mill D6.)</span>
+T3 M6
+G0 G90 G54 X10. Y10.
+S18000 M3
+G43 H03 Z10.
+M8
+…
+M9
+M5
+G28 G91 Z0.
+G90
+G28 G91 Y0.
+G90
+M30
+%</pre>
     <p><strong>Other machines (.pp format).</strong> The list also offers, in a separate group, industrial and special machines: Advanced Laser, Axyz, Bridgeport EZTRACK, Busellato GEN J6000, DeskCNC, Haas (with or without arcs), ISEL NCP, Kuka (robot), Lasercomb, Mach2/3 ATC, Biesse Rover, Pacer, Precix, ShopBot (routing, head 2, GC and PRS air drills), Torchmate 2, Turbo CNC, Tormach PathPilot (mm and inch: G30 before each tool change, G43 H…, G91.1 arcs), Vision Series 3, WaterJet PRO, rotary-axis machines (Mach2/3 Wrap, CAMaster, CNC Shark, WinCNC, WinPC-NC, ShopBot Indexer), an HPGL plotter / vinyl cutter and a readable text listing of the toolpath (for checking). They follow the logic of Aspire and VCarve .pp post-processors: each sets its units (mm or inches), number format, line numbering, header, tool change, program end and file extension. If your machine is not there and you have its .pp file (PostP folder of Aspire, VCarve or Cut2D), the <span class="ui">Import a post-processor (.pp)…</span> button loads it: it joins the “Imported” group, is kept in your browser and saved with the project. The usual blocks are handled (header, end, tool change, new toolpath, rapids, feeds, plunges, retracts, IJ or R arcs, helical arcs, dwell, laser / plasma / water jet on and off, feed change), as well as the usual variables: <code data-notr>[TOOL_DIA]</code> tool diameter, <code data-notr>[TOOLNAME]</code>, <code data-notr>[DATE]</code>, <code data-notr>[TIME]</code>, stock size (<code data-notr>[XLENGTH]</code>, <code data-notr>[XMIN]</code>…), liste des parcours et des outils (<code data-notr>[TOOLPATHS_OUTPUT]</code>, <code data-notr>[TOOLS_USED]</code>). COPO lists the blocks it ignores. Post-processors that turn the tool on at the plunge (laser, water jet) need toolpaths with a “Straight plunge” entry: COPO reminds you in the Machine block and the G-code tab. Always do a dry run with a post-processor you have not used yet.</p>
 <pre><span class="c">(Load tool: End mill 6 mm D6 - set Z zero again then resume)</span>
 G21 G90 G17 G94
