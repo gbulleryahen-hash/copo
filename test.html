@@ -10768,7 +10768,7 @@ async function connect(kind, port) {
   if (K.T) return;
   U.conOpen = false; K.st = 'Conn'; K.name = ''; ui();
   try {
-    if (kind === 'serial') { if (!('serial' in navigator)) { say('Le pilotage USB demande Chrome ou Edge (Web Serial).'); K.st = 'Off'; ui(); return; }
+    if (kind === 'serial') { if (!('serial' in navigator)) { say('Ce navigateur ne sait pas parler au port USB. Utilisez Chrome, Edge, Opera, Vivaldi ou Firefox 151+ sur ordinateur (pas Safari).'); K.st = 'Off'; ui(); return; }
       const p = port || await navigator.serial.requestPort(); K.T = await serialOpen(p); K.kind = 'serial'; K.name = portName(p) + ' · ' + CF.baud + ' bauds'; }
     else { const sim = new SimGrbl({ fluid: kind === 'simf', limits: kind !== 'simn' }); K.sim = sim; K.T = sim.T; K.kind = 'sim'; K.name = kind === 'simf' ? 'Machine simulée (FluidNC)' : kind === 'simn' ? 'Machine simulée sans fins de course' : 'Machine simulée (GRBL 1.1)'; }
   } catch (e) { K.T = null; K.st = 'Off'; ui(); if (e && e.name === 'NotFoundError') { say('Aucun port choisi. Si la machine n’apparaissait pas dans la liste, installez le pilote USB de sa carte.'); } else { say('Connexion impossible : ' + (e.message || e)); driversOpen(); } return; }
@@ -10970,7 +10970,7 @@ function panel() {
   let h = '';
   // 1 connexion
   let b1;
-  if (!K.T) b1 = '<p class="cnc-s" style="margin-top:0">Cliquez sur <b>🔌 Connecter</b> en haut du panneau Usiner : USB ou machine simulée pour essayer.</p><div class="cnc-box info"><b class="t">Avant de connecter</b><ul><li>La machine est sous tension, le câble USB branché.</li><li>Aucun autre logiciel n’utilise la machine (UGS, gSender, Candle…).</li><li>Chrome ou Edge : le navigateur demande d’autoriser le port la première fois.</li></ul></div>';
+  if (!K.T) b1 = '<p class="cnc-s" style="margin-top:0">Cliquez sur <b>🔌 Connecter</b> en haut du panneau Usiner : USB ou machine simulée pour essayer.</p><div class="cnc-box info"><b class="t">Avant de connecter</b><ul><li>La machine est sous tension, le câble USB branché.</li><li>Aucun autre logiciel n’utilise la machine (UGS, gSender, Candle…).</li><li>Navigateur : Chrome, Edge, Opera, Vivaldi ou Firefox 151+ sur ordinateur (pas Safari). Il demande d’autoriser le port la première fois.</li></ul></div>';
   else b1 = '<div class="cnc-kv"><span>Contrôleur</span><span><b>' + esc(K.ctrl || '…') + '</b></span><span>Liaison</span><span>' + esc(K.name) + '</span><span>Fins de course</span><span>' + (limOn() ? 'oui' : 'non') + '</span>' + (K.set[130] ? '<span>Course</span><span>' + K.set[130] + ' × ' + K.set[131] + ' × ' + K.set[132] + ' mm</span>' : '') + '</div>';
   h += vol(1, 'Connexion', st.s1, K.T ? (K.st === 'Conn' ? 'Connexion…' : '<span style="color:#2e9b5c">●</span> ' + esc(K.ctrl || 'Connectée')) : '○ Non connectée', b1);
   // 2 origine machine
@@ -11034,6 +11034,14 @@ function guideRender() {
   if (ns.sel) { const t = q(ns.sel); if (t && !t.disabled) t.classList.add('cnc-next'); }
 }
 const LA = () => LAUNCH.filter(l => l[0] !== 'probe' || CF.probe);
+function brwBox() {
+  const ok = 'serial' in navigator, Y = '<td style="color:var(--ok,#2a2)">✔</td>', N = '<td style="color:var(--err,#c33)">✘</td>';
+  const B = [['Google Chrome', 'Windows, macOS, Linux, ChromeOS', 1], ['Microsoft Edge', 'Windows, macOS, Linux', 1], ['Opera, Vivaldi', 'ordinateur', 1], ['Firefox 151 et plus', 'ordinateur ; autorisation demandée au premier branchement', 1], ['Chrome pour Android', 'tablette + câble USB OTG (non testé avec COPO)', 1], ['Safari', 'Mac, iPhone, iPad', 0], ['Firefox avant 151, Firefox Android, Samsung Internet', '', 0]];
+  return '<div class="cnc-box ' + (ok ? 'info' : 'warn') + '" style="margin-top:0"><b class="t">1. Le bon navigateur ?</b>' +
+    (ok ? 'Ce navigateur sait parler au port USB ✔. Si la fenêtre de choix du port s’ouvre mais reste vide, voir les pilotes plus bas.' : '<b>Ce navigateur ne sait pas parler au port USB</b> : la machine ne peut pas apparaître. Ouvrez COPO dans un navigateur de la liste ci-dessous.') +
+    '<table class="cnc-set" style="margin-top:6px"><tr><th></th><th>Navigateur</th><th>Remarque</th></tr>' + B.map(b => '<tr>' + (b[2] ? Y : N) + '<td><b>' + b[0] + '</b></td><td>' + b[1] + '</td></tr>').join('') + '</table>' +
+    '<small>Sur un ordinateur d’entreprise, l’accès USB peut être bloqué par l’administrateur (Firefox le coupe par défaut dans ce cas).</small></div><b class="t" style="display:block;margin:10px 0 4px">2. Le pilote USB ?</b>';
+}
 function driversOpen() { // pilotes USB des cartes courantes
   let el = q('#cncDrv'); if (!el) { el = document.createElement('div'); el.id = 'cncDrv'; el.className = 'cnc-modal'; el.setAttribute('data-notr', ''); el.addEventListener('mousedown', e => { if (e.target === el) el.remove(); }); document.body.appendChild(el); }
   const L = (u, t) => '<a href="' + u + '" target="_blank" rel="noopener">' + t + '</a>';
@@ -11045,10 +11053,10 @@ function driversOpen() { // pilotes USB des cartes courantes
     ['Arduino officiel (ATmega16U2)', 'Arduino Uno / Mega d’origine', 'Inclus dans Windows 10 et 11 et macOS. Windows 7 : pilote fourni avec l’' + L('https://www.arduino.cc/en/software', 'IDE Arduino')],
     ['USB natif (STM32, ESP32-S3…)', 'Cartes grblHAL, FluidNC sur ESP32-S3', 'Rien à installer (Windows 10/11, macOS, Linux)']];
   el.innerHTML = '<div class="cnc-mb" style="width:min(820px,95vw)"><div class="cnc-mh"><h2>🔌 La machine n’apparaît pas dans la liste ?</h2><button class="cnc-btn sm" data-c="drvX">✕</button></div><div class="cnc-mbody">' +
-    '<p style="margin-top:0">La carte de la machine communique par une petite <b>puce USB-série</b>. Si l’ordinateur n’a pas son <b>pilote</b>, le navigateur ne voit pas la machine. Windows 10/11 l’installe souvent tout seul, mais pas toujours.</p>' +
+    brwBox() + '<p>La carte de la machine communique par une petite <b>puce USB-série</b>. Si l’ordinateur n’a pas son <b>pilote</b>, le navigateur ne voit pas la machine. Windows 10/11 l’installe souvent tout seul, mais pas toujours.</p>' +
     '<div class="cnc-box info"><b class="t">Quelle puce ?</b><ul><li>Elle est écrite sur la carte, à côté de la prise USB (CH340G, CP2102, CH9102F, FT232RL…).</li><li>Windows : clic droit sur Démarrer › <b>Gestionnaire de périphériques</b>, machine branchée. Dans « Ports (COM et LPT) » : bien installé. Dans « Autres périphériques » avec un point d’exclamation : pilote manquant (le nom indique la puce).</li></ul></div>' +
     '<table class="cnc-set"><tr><th>Puce</th><th>Cartes courantes</th><th>Pilote officiel</th></tr>' + R.map(r => '<tr><td><b>' + r[0] + '</b></td><td>' + r[1] + '</td><td>' + r[2] + '</td></tr>').join('') + '</table>' +
-    '<div class="cnc-box warn"><b class="t">Si ça ne marche toujours pas</b><ul><li><b>Câble USB</b> : certains câbles ne servent qu’à charger. Essayez-en un autre, de préférence court, sans rallonge ni hub.</li><li>Fermez les autres logiciels qui utilisent la machine (UGS, gSender, LightBurn, Candle, IDE Arduino…).</li><li>Après l’installation du pilote : débranchez et rebranchez la machine, puis rechargez COPO.</li><li>Navigateur : Chrome ou Edge (Firefox et Safari ne savent pas encore parler au port USB).</li><li>FluidNC peut aussi se piloter en Wi-Fi par son interface web (pas encore depuis COPO).</li></ul></div>' +
+    '<div class="cnc-box warn"><b class="t">Si ça ne marche toujours pas</b><ul><li><b>Câble USB</b> : certains câbles ne servent qu’à charger. Essayez-en un autre, de préférence court, sans rallonge ni hub.</li><li>Fermez les autres logiciels qui utilisent la machine (UGS, gSender, LightBurn, Candle, IDE Arduino…).</li><li>Après l’installation du pilote : débranchez et rebranchez la machine, puis rechargez COPO.</li><li>FluidNC peut aussi se piloter en Wi-Fi par son interface web (pas encore depuis COPO).</li></ul></div>' +
     '<div class="cnc-box' + (/Linux/.test(navigator.userAgent) && !/Android/.test(navigator.userAgent) ? ' info' : '') + '"><b class="t">🐧 Linux</b>Les pilotes (CH340, CP2102, FTDI, Arduino) sont déjà dans le noyau : rien à installer. Mais trois réglages bloquent souvent l’accès :<ul>' +
       '<li><b>Droits sur le port</b> : ajoutez votre compte au groupe des ports série, puis fermez la session et reconnectez-vous :<br><code class="cnc-cmd">sudo usermod -aG dialout $USER</code> (Ubuntu, Debian, Mint, Fedora)<br><code class="cnc-cmd">sudo usermod -aG uucp $USER</code> (Arch, Manjaro)</li>' +
       '<li><b>brltty</b> (afficheur braille, installé d’office sur Ubuntu et Mint) s’empare des cartes CH340 : la machine apparaît dans <code>lsusb</code> mais pas comme port. Si vous n’utilisez pas d’afficheur braille :<br><code class="cnc-cmd">sudo apt remove brltty</code> puis débranchez et rebranchez la machine.</li>' +
@@ -11200,7 +11208,7 @@ function topRender() {
   let h = '<div class="cnc-top"><div class="cnc-cwrap' + (U.conOpen ? ' open' : '') + '" style="flex:1">';
   if (!K.T) h += '<button class="cnc-btn pri big" data-c="conMenu">🔌 Connecter ▾</button><div class="cnc-cmenu"><div class="cnc-ct">USB</div>' +
     (U.ports || []).map((p, i) => '<button class="cnc-ci" data-c="conPort" data-i="' + i + '"><span class="ic">🔌</span><span><b>' + esc(portName(p)) + '</b><small>Déjà autorisé · ' + CF.baud + ' bauds</small></span></button>').join('') +
-    '<button class="cnc-ci" data-c="conSerial" ' + (ser ? '' : 'disabled') + '><span class="ic">＋</span><span><b>Choisir un port USB…</b><small>' + (ser ? 'Le navigateur affiche la liste des appareils' : 'Demande Chrome ou Edge (Web Serial)') + '</small></span></button>' +
+    '<button class="cnc-ci" data-c="conSerial" ' + (ser ? '' : 'disabled') + '><span class="ic">＋</span><span><b>Choisir un port USB…</b><small>' + (ser ? 'Le navigateur affiche la liste des appareils' : 'Navigateur non compatible : Chrome, Edge ou Firefox 151+') + '</small></span></button>' +
     '<div class="cnc-ct">Essai sans machine</div><button class="cnc-ci" data-c="conSim" data-k="sim"><span class="ic">🧪</span><span><b>Machine simulée – GRBL 1.1</b><small>Avec fins de course</small></span></button><button class="cnc-ci" data-c="conSim" data-k="simf"><span class="ic">🧪</span><span><b>Machine simulée – FluidNC</b><small>Prise d’origine axe par axe</small></span></button><button class="cnc-ci" data-c="conSim" data-k="simn"><span class="ic">🧪</span><span><b>Machine simulée sans fins de course</b><small>GRBL 1.1</small></span></button>' +
     '<div class="cnc-ct">Wi-Fi</div><button class="cnc-ci" disabled><span class="ic">📶</span><span><b>FluidNC Wi-Fi</b><small>Pas encore dans la version test</small></span></button>' +
     '<div class="cnc-ct">Aide</div><button class="cnc-ci" data-c="drivers"><span class="ic">🛈</span><span><b>La machine n’apparaît pas ?</b><small>Pilotes USB (Arduino, ESP32, FluidNC…)</small></span></button></div>';
@@ -11519,7 +11527,7 @@ function cfgHook() {
 
 function init() { build(); cfgHook(); const rv = q('#rv3'); if (rv) { rv.addEventListener('pointerenter', () => over = true); rv.addEventListener('pointerleave', () => over = false); } if (ctl) { ctl.addEventListener('pointerenter', () => over = true); ctl.addEventListener('pointerleave', () => over = false); } requestAnimationFrame(gpLoop); }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
-window.COPO_CNC = { K, CF, U, connect, progInfo, checks, LOG }; // pour les tests
+window.COPO_CNC = { K, CF, U, connect, progInfo, checks, LOG, driversOpen }; // pour les tests
 })();
 </script>
 
