@@ -10559,7 +10559,7 @@ if (CF.shim === 0.1 && !CF.shim2) { CF.shim = 0; CF.shim2 = 1; }
 const cfSave = () => { try { LS.set('copo.cnc', JSON.stringify(CF)); } catch { } };
 
 /* ---------------- état de la machine ---------------- */
-const K = { wcs: 1, acc: '', T: null, kind: '', name: '', st: 'Off', sub: '', ctrl: '', fluid: false, hal: false, mpos: [0, 0, 0], wco: [0, 0, 0], fs: [0, 0], ov: [100, 100, 100], pn: '',
+const K = { sp: [-1, -1, -1], wcs: 1, acc: '', T: null, kind: '', name: '', st: 'Off', sub: '', ctrl: '', fluid: false, hal: false, mpos: [0, 0, 0], wco: [0, 0, 0], fs: [0, 0], ov: [100, 100, 100], pn: '',
   set: {}, g54: null, homed: false, homeSkip: false, noLim: null, lostPos: false, originLost: false, ws: { x: false, y: false, z: false }, alarm: null, alarmN: 0,
   out: [], fly: [], flyLen: 0, prog: null, tool: null, trail: [], prb: null, idleW: [], finished: false, air: false, busy: '', lastSt: 0, cap: null, sim: null };
 const RX = 127;
@@ -10727,6 +10727,7 @@ function status(l) {
   for (const x of f.slice(1)) { const i = x.indexOf(':'), k = x.slice(0, i), v = x.slice(i + 1).split(',').map(Number);
     if (k === 'MPos') K.mpos = v; else if (k === 'WPos') wp = v; else if (k === 'WCO') K.wco = v; else if (k === 'FS') K.fs = v; else if (k === 'F') K.fs = [v[0], 0]; else if (k === 'Ov') K.ov = v; }
   K.pn = (f.find(x => x.startsWith('Pn:')) || '').slice(3); K.acc = (f.find(x => x.startsWith('A:')) || '').slice(2); if (wp) K.mpos = wp.map((v, i) => v + K.wco[i]);
+  for (let i = 0; i < 3; i++) if (Math.abs(K.mpos[i]) > 0.5) K.sp[i] = Math.sign(K.mpos[i]);
   const prev = K.st; K.st = st; K.lastSt = performance.now();
   if (st !== 'Alarm' && K.alarm && prev === 'Alarm') K.alarm = null;
   if (K.prog && (st === 'Run' || st === 'Hold' || st === 'Idle')) trackPath();
@@ -10768,7 +10769,7 @@ async function connect(kind, port) {
       const p = port || await navigator.serial.requestPort(); K.T = await serialOpen(p); K.kind = 'serial'; K.name = portName(p) + ' · ' + CF.baud + ' bauds'; }
     else { const sim = new SimGrbl({ fluid: kind === 'simf', limits: kind !== 'simn' }); K.sim = sim; K.T = sim.T; K.kind = 'sim'; K.name = kind === 'simf' ? 'Machine simulée (FluidNC)' : kind === 'simn' ? 'Machine simulée sans fins de course' : 'Machine simulée (GRBL 1.1)'; }
   } catch (e) { K.T = null; K.st = 'Off'; ui(); if (e && e.name !== 'NotFoundError') say('Connexion impossible : ' + (e.message || e)); return; }
-  Object.assign(K, { pieceFixed: false, st: 'Conn', set: {}, g54: null, homed: false, homeSkip: false, noLim: null, lostPos: false, originLost: false, ws: { x: false, y: false, z: false }, alarm: null, out: [], fly: [], flyLen: 0, prog: null, trail: [], finished: false, air: false, welcome: false, fluid: false, hal: false, ctrl: '', ver: '' });
+  Object.assign(K, { sp: [-1, -1, -1], pieceFixed: false, st: 'Conn', set: {}, g54: null, homed: false, homeSkip: false, noLim: null, lostPos: false, originLost: false, ws: { x: false, y: false, z: false }, alarm: null, out: [], fly: [], flyLen: 0, prog: null, trail: [], finished: false, air: false, welcome: false, fluid: false, hal: false, ctrl: '', ver: '' });
   K.T.onLine = onLine; K.T.onClose = () => { log('— Liaison coupée —', 'e'); hardOff(); say('La liaison avec la machine est coupée.'); };
   log('— Connexion : ' + K.name + ' —', 'm');
   for (let i = 0; i < 32 && !K.welcome; i++) await sleep(100);
@@ -10836,7 +10837,7 @@ async function jogStep(v) {
 let jogging = null;
 function jogStart(v) {
   if (!canJog() || jogging) return; const tr0 = [K.set[130], K.set[131], K.set[132]], d = [];
-  AX.forEach((a, i) => { if (!v[i]) return; let L = 100; if (K.homed && tr0[i]) { const neg = K.mpos[i] <= 0.5; const p = K.mpos[i], hi = neg ? 0 : tr0[i], lo = neg ? -tr0[i] : 0; L = Math.max(0, (v[i] > 0 ? hi - p : p - lo) - 0.5); } d.push(a.toUpperCase() + n3(v[i] * L)); });
+  AX.forEach((a, i) => { if (!v[i]) return; let L = 100; if (K.homed && tr0[i]) { const neg = K.sp[i] < 0; const p = K.mpos[i], hi = neg ? 0 : tr0[i], lo = neg ? -tr0[i] : 0; L = Math.max(0, (v[i] > 0 ? hi - p : p - lo) - 0.5); } d.push(a.toUpperCase() + n3(v[i] * L)); });
   if (!d.length) return; jogging = v; cmd('$J=G91 G21 ' + d.join(' ') + ' F' + Math.round(CF.jogF)).catch(() => { });
 }
 function jogStop() { if (!jogging) return; jogging = null; rt('\x85'); }
@@ -10874,7 +10875,7 @@ function checks() {
   if (o.rot) c.push({ ok: false, t: 'Projet rotatif (4ᵉ axe) : pas encore pris en charge par l’onglet Usiner' });
   if (P.tps.length) { const bot = o.oz - (+st.t || 0), deep = P.mn[2] < bot - 1; c.push({ ok: true, wa: deep, t: deep ? 'La fraise descend ' + f2(bot - P.mn[2], 1) + ' mm sous le dessous du brut : martyr nécessaire' : 'Profondeur dans l’épaisseur du brut' }); }
   if (P.tps.length && allSet() && K.homed && K.set[130]) { const tr0 = [K.set[130], K.set[131], K.set[132]], air = K.airWant ? 10 : 0, out = [];
-    AX.forEach((a, i) => { const lo = K.wco[i] + P.mn[i] + (i === 2 ? air : 0), hi = K.wco[i] + P.mx[i] + (i === 2 ? air : 0), neg = K.mpos[i] <= 0.5, L0 = neg ? -tr0[i] : 0, L1 = neg ? 0 : tr0[i]; if (lo < L0 - 0.01 || hi > L1 + 0.01) out.push(a.toUpperCase()); });
+    AX.forEach((a, i) => { const lo = K.wco[i] + P.mn[i] + (i === 2 ? air : 0), hi = K.wco[i] + P.mx[i] + (i === 2 ? air : 0), neg = K.sp[i] < 0, L0 = neg ? -tr0[i] : 0, L1 = neg ? 0 : tr0[i]; if (lo < L0 - 0.01 || hi > L1 + 0.01) out.push(a.toUpperCase()); });
     c.push({ ok: !out.length, t: out.length ? 'Le programme sort de la zone de travail en ' + out.join(', ') : 'Le programme tient dans la zone de travail' }); }
   else if (P.tps.length) c.push({ ok: true, wa: true, t: 'Zone de travail non vérifiable (prise d’origine ou $130–$132 manquants)' });
   return c;
@@ -10920,7 +10921,7 @@ function stopAll() {
 /* ---------------- changement d'outil ---------------- */
 async function tcStart() {
   const P = K.prog; if (!P || !P.tc) return; U.vol = 4; ui();
-  try { await waitIdle(); await cmd('M5'); if (K.homed && K.mpos[2] <= 0.5) await cmd('G53 G0 Z-5'); else await seq(['G91', 'G0 Z10', 'G90']); await waitIdle(); } catch (e) { return; }
+  try { await waitIdle(); await cmd('M5'); if (K.homed && K.sp[2] < 0) await cmd('G53 G0 Z-5'); else await seq(['G91', 'G0 Z10', 'G90']); await waitIdle(); } catch (e) { return; }
   if (K.prog !== P) return; P.tc.ready = true; tcRender();
 }
 async function tcResume() {
@@ -11206,7 +11207,7 @@ function live() {
     setL('mp', 'MPos  X ' + f2(K.mpos[0]) + '  Y ' + f2(K.mpos[1]) + '  Z ' + f2(K.mpos[2]));
     const pill = q('#cncPill'); if (pill) { const s = P && P.tc ? 'Tool' : K.busy === 'probe' ? 'Probe' : K.st; pill.className = s; pill.textContent = '● ' + (ST_FR[s] || s) + (K.T && K.ctrl ? ' · ' + K.ctrl : '') + (K.air ? ' · essai dans l’air' : ''); }
     const lon = /P/.test(K.pn); for (const e of L$('led')) e.classList.toggle('on', lon); setL('ledt', lon ? 'fermé' : 'ouvert');
-    if (I && allSet() && K.homed && K.set[130]) AX.forEach((a, i) => { const tr0 = K.set[130 + i], neg = K.mpos[i] <= 0.5, lo = K.wco[i] + I.mn[i], hi = K.wco[i] + I.mx[i]; for (const e of L$('bn' + a)) e.classList.toggle('cnc-bad', lo < (neg ? -tr0 : 0) - 0.01); for (const e of L$('bx' + a)) e.classList.toggle('cnc-bad', hi > (neg ? 0 : tr0) + 0.01); });
+    if (I && allSet() && K.homed && K.set[130]) AX.forEach((a, i) => { const tr0 = K.set[130 + i], neg = K.sp[i] < 0, lo = K.wco[i] + I.mn[i], hi = K.wco[i] + I.mx[i]; for (const e of L$('bn' + a)) e.classList.toggle('cnc-bad', lo < (neg ? -tr0 : 0) - 0.01); for (const e of L$('bx' + a)) e.classList.toggle('cnc-bad', hi > (neg ? 0 : tr0) + 0.01); });
     if (I) { const tot = I.t, done = P ? (I.cum[Math.max(0, P.acked - 1)] || 0) : K.finished ? tot : 0, el = P ? (Date.now() - P.t0) / 1000 : 0; setL('tel', fmtT(el)); setL('trest', fmtT(Math.max(0, tot - done) / ((K.ov[0] || 100) / 100))); for (const e of L$('pbar')) e.style.width = (tot ? Math.min(100, done / tot * 100) : 0) + '%';
       let nx = '—'; if (P) { for (let i = P.i; i < P.L.length; i++) if (P.L[i].tc !== null) { const t = toolByNum(P.L[i].tc); nx = t ? t.name : 'T' + P.L[i].tc; break; } } else if ((new Set(I.tools)).size > 1) { const t = toolByNum(I.tools[1]); nx = t ? t.name : '—'; }
       setL('tnext', nx); setL('gl', P && P.L[P.acked] ? 'N' + (P.acked + 1) + '  ' + (P.L[P.acked].t || P.L[P.acked].raw) : ''); }
@@ -11226,7 +11227,7 @@ setInterval(() => { if (curTab === 'usiner') { live(); guideRender(); } }, 250);
 window.cncOverlay = g => {
   if (curTab !== 'usiner' || !K.T || typeof rvProj !== 'function' || !RV.mvp) return;
   if (K.homed && K.set[130] && K.set[131] && K.set[132]) { // course de la machine, en pointillés
-    const tv = [K.set[130], K.set[131], K.set[132]], R = AX.map((a, i) => K.mpos[i] > 0.5 ? [0, tv[i]] : [-tv[i], 0]), m2i = (x, y, z) => rvProj(toInt([x - K.wco[0], y - K.wco[1], z - K.wco[2]]));
+    const tv = [K.set[130], K.set[131], K.set[132]], R = AX.map((a, i) => K.sp[i] > 0 ? [0, tv[i]] : [-tv[i], 0]), m2i = (x, y, z) => rvProj(toInt([x - K.wco[0], y - K.wco[1], z - K.wco[2]]));
     const C = [0, 1, 2, 3, 4, 5, 6, 7].map(k => m2i(R[0][k & 1], R[1][(k >> 1) & 1], R[2][(k >> 2) & 1])), E = [[0, 1], [2, 3], [4, 5], [6, 7], [0, 2], [1, 3], [4, 6], [5, 7], [0, 4], [1, 5], [2, 6], [3, 7]];
     g.save(); g.setLineDash([6, 5]); g.strokeStyle = 'rgba(217,72,15,.75)'; g.lineWidth = 1.3; g.beginPath(); for (const [a, b] of E) { g.moveTo(C[a][0], C[a][1]); g.lineTo(C[b][0], C[b][1]); } g.stroke(); g.setLineDash([]);
     g.fillStyle = 'rgba(217,72,15,.9)'; g.font = '600 11px system-ui'; g.fillText('Course machine ' + tv[0] + ' × ' + tv[1] + ' × ' + tv[2] + ' mm', C[6][0] + 6, C[6][1] - 6); g.restore(); }
@@ -11288,7 +11289,7 @@ async function onClick(e) {
   switch (c) {
     case 'vol': U.vol = U.vol === +b.dataset.n ? 0 : +b.dataset.n; panel(); break;
     case 'conMenu': U.conOpen = !U.conOpen; if (U.conOpen && !K.T && 'serial' in navigator) { try { U.ports = await navigator.serial.getPorts(); } catch { U.ports = []; } } topRender(); break;
-    case 'goHome': { if (!K.homed || !canJog()) break; const po = +K.set[27] || 1, v = i => K.mpos[i] > 0.5 ? po : -po; K.busy = 'goto'; ui(); try { await seq(['G53 G0 Z' + n3(v(2)), 'G53 G0 X' + n3(v(0)) + ' Y' + n3(v(1))]); await waitIdle(); } catch { } K.busy = ''; ui(); break; }
+    case 'goHome': { if (!K.homed || !canJog()) break; const po = +K.set[27] || 1, v = i => K.sp[i] > 0 ? po : -po; K.busy = 'goto'; ui(); try { await seq(['G53 G0 Z' + n3(v(2)), 'G53 G0 X' + n3(v(0)) + ' Y' + n3(v(1))]); await waitIdle(); } catch { } K.busy = ''; ui(); break; }
     case 'menu': U.menu = U.menu === b.dataset.v ? null : b.dataset.v; topRender(); break;
     case 'probeT': U.probeOpen = !U.probeOpen; if (U.probeOpen && U.floatMin) { U.floatMin = false; q('#rv3').classList.remove('cnc-fmin'); } ovRender(); topRender(); break;
     case 'goM': U.go.m = b.dataset.v === '1'; topRender(); break;
@@ -11418,7 +11419,7 @@ function gpJog(id) { const m = /^j((?:[XYZ][+-])+)$/.exec(id); if (!m) return nu
 async function gpDo(id, lk) {
   if (!id) return; if (MOVE_A.test(id) && !lk) { say('Maintenez le bouton de sécurité de la manette.'); return; }
   const st = n => { CF.step = CF.steps[n]; cfSave(); ctlRender(); }, o = stockO(), trv = [K.set[130], K.set[131], K.set[132]];
-  const corner = (bx, by) => { if (!K.homed || !trv[0]) { say('Coins : prise d’origine et courses ($130, $131) nécessaires.'); return; } const ps = i => K.mpos[i] > 0.5, cx = ps(0) ? (bx ? trv[0] - 5 : 5) : (bx ? -5 : -trv[0] + 5), cy = ps(1) ? (by ? trv[1] - 5 : 5) : (by ? -5 : -trv[1] + 5); seq(['G53 G0 Z' + n3(K.mpos[2] > 0.5 ? trv[2] - 5 : -5), 'G53 G0 X' + n3(cx) + ' Y' + n3(cy)]).catch(() => { }); };
+  const corner = (bx, by) => { if (!K.homed || !trv[0]) { say('Coins : prise d’origine et courses ($130, $131) nécessaires.'); return; } const ps = i => K.sp[i] > 0, cx = ps(0) ? (bx ? trv[0] - 5 : 5) : (bx ? -5 : -trv[0] + 5), cy = ps(1) ? (by ? trv[1] - 5 : 5) : (by ? -5 : -trv[1] + 5); seq(['G53 G0 Z' + n3(K.sp[2] > 0 ? trv[2] - 5 : -5), 'G53 G0 X' + n3(cx) + ' Y' + n3(cy)]).catch(() => { }); };
   const view = (y, p) => { RV.yaw = y; RV.pitch = p; rvReq(); };
   switch (id) {
     case 'stepR': st(3); break; case 'stepM': st(2); break; case 'stepN': st(1); break; case 'stepP': st(0); break; case 'stepC': { const k = CF.steps.indexOf(+CF.step); st((k + 1) % 4); break; }
