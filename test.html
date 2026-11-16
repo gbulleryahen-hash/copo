@@ -10808,6 +10808,8 @@ const conn = () => !!K.T && K.st !== 'Conn';
 const moving = () => ['Run', 'Jog', 'Home'].includes(K.st) || !!K.busy;
 function stockO() { const st = S.stock, RT = st.rotary || {}; const [ox, oy] = originOf(st); const oz = RT.on ? (RT.z0 === 'axis' ? st.t / 2 : 0) : st.originZ === 'bottom' ? +st.t : 0; return { ox, oy, oz, rot: !!RT.on }; }
 function toInt(w) { const o = stockO(); return [w[0] + o.ox, w[1] + o.oy, w[2] - o.oz]; }
+function toV(w) { // point du G-code → vue 3D ; face 2 : COPO dessine ses parcours sous le brut, retournés (flipPt, z = −épaisseur − z)
+  const p = toInt(w); if (U.face !== 2 || typeof flipPt !== 'function') return p; const q = flipPt([p[0], p[1]]); return [q[0], q[1], -(+S.stock.t || 0) - p[2]]; }
 
 function trackPath() { // retrouve où en est l'outil sur le trajet du programme (pas de raccourcis entre deux relevés)
   const pts = K.pts, P = K.prog; if (!pts || !pts.length || !P) return; const w = wpos(); let k0 = Math.max(0, K.doneK), best = -1, bd = 1e9;
@@ -11348,12 +11350,12 @@ setInterval(() => { if (curTab === 'usiner') { live(); guideRender(); } }, 250);
 window.cncOverlay = g => {
   if (curTab !== 'usiner' || !K.T || typeof rvProj !== 'function' || !RV.mvp) return;
   if (K.homed && K.set[130] && K.set[131] && K.set[132]) { // course de la machine, en pointillés
-    const tv = [K.set[130], K.set[131], K.set[132]], R = AX.map((a, i) => K.sp[i] > 0 ? [0, tv[i]] : [-tv[i], 0]), m2i = (x, y, z) => rvProj(toInt([x - K.wco[0], y - K.wco[1], z - K.wco[2]]));
+    const tv = [K.set[130], K.set[131], K.set[132]], R = AX.map((a, i) => K.sp[i] > 0 ? [0, tv[i]] : [-tv[i], 0]), m2i = (x, y, z) => rvProj(toV([x - K.wco[0], y - K.wco[1], z - K.wco[2]]));
     const C = [0, 1, 2, 3, 4, 5, 6, 7].map(k => m2i(R[0][k & 1], R[1][(k >> 1) & 1], R[2][(k >> 2) & 1])), E = [[0, 1], [2, 3], [4, 5], [6, 7], [0, 2], [1, 3], [4, 6], [5, 7], [0, 4], [1, 5], [2, 6], [3, 7]];
     g.save(); g.setLineDash([6, 5]); g.strokeStyle = 'rgba(217,72,15,.75)'; g.lineWidth = 1.3; g.beginPath(); for (const [a, b] of E) { g.moveTo(C[a][0], C[a][1]); g.lineTo(C[b][0], C[b][1]); } g.stroke(); g.setLineDash([]);
     g.fillStyle = 'rgba(217,72,15,.9)'; g.font = '600 11px system-ui'; g.fillText('Course machine ' + tv[0] + ' × ' + tv[1] + ' × ' + tv[2] + ' mm', C[6][0] + 6, C[6][1] - 6); g.restore(); }
-  const pts = K.pts; if (pts && K.doneK >= 0 && allSet()) { g.strokeStyle = 'rgba(150,150,150,.95)'; g.lineWidth = 2.2; g.lineJoin = 'round'; g.beginPath(); for (let k = 0; k <= K.doneK && k < pts.length; k++) { const s = rvProj(toInt(pts[k].p)); k ? g.lineTo(s[0], s[1]) : g.moveTo(s[0], s[1]); } if (K.prog) { const s = rvProj(toInt(wpos())); g.lineTo(s[0], s[1]); } g.stroke(); }
-  const p = toInt(wpos()), d = curToolDia(), a = rvProj(p), b = rvProj([p[0], p[1], p[2] + 25]), c = rvProj([p[0], p[1], p[2] + 40]), e = rvProj([p[0], p[1], p[2] + 110]), u = rvProj([p[0] + 10, p[1], p[2]]), v = rvProj([p[0], p[1] + 10, p[2]]);
+  const pts = K.pts; if (pts && K.doneK >= 0 && allSet()) { g.strokeStyle = 'rgba(150,150,150,.95)'; g.lineWidth = 2.2; g.lineJoin = 'round'; g.beginPath(); for (let k = 0; k <= K.doneK && k < pts.length; k++) { const s = rvProj(toV(pts[k].p)); k ? g.lineTo(s[0], s[1]) : g.moveTo(s[0], s[1]); } if (K.prog) { const s = rvProj(toV(wpos())); g.lineTo(s[0], s[1]); } g.stroke(); }
+  const p = wpos(), d = curToolDia(), a = rvProj(toV(p)), b = rvProj(toV([p[0], p[1], p[2] + 25])), c = rvProj(toV([p[0], p[1], p[2] + 40])), e = rvProj(toV([p[0], p[1], p[2] + 110])), u = rvProj(toV([p[0] + 10, p[1], p[2]])), v = rvProj(toV([p[0], p[1] + 10, p[2]]));
   const k = Math.max(Math.hypot(u[0] - a[0], u[1] - a[1]), Math.hypot(v[0] - a[0], v[1] - a[1])) / 10;
   g.lineCap = 'butt'; g.globalAlpha = .4; g.strokeStyle = '#4a4f57'; g.lineWidth = Math.max(8, 46 * k); g.beginPath(); g.moveTo(c[0], c[1]); g.lineTo(e[0], e[1]); g.stroke(); g.globalAlpha = 1;
   g.strokeStyle = '#7b828c'; g.lineWidth = Math.max(4, 16 * k); g.beginPath(); g.moveTo(b[0], b[1]); g.lineTo(c[0], c[1]); g.stroke();
