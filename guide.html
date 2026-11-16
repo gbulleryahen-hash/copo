@@ -188,7 +188,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.337</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.351</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -573,8 +573,8 @@ X74.36 A14.181</pre>
         <tr><td>Carbide Motion, Onefinity</td><td><code>M6 T…</code> : le logiciel de pilotage demande de changer l'outil.</td></tr>
         <tr><td>LinuxCNC, Mach3/4, UCCNC, MASSO</td><td><code>T… M6</code> avec le numéro d'outil, en-tête <code>G40 G49 G80</code>, arcs en <code>G91.1</code>. Fichier <code>.ngc</code> (LinuxCNC), <code>.tap</code> (Mach, UCCNC) ou <code>.nc</code>.</td></tr>
         <tr><td>Personnalisé</td><td>Vous écrivez l'en-tête, le changement d'outil et la fin du programme, avec des variables : <code>{UNITS}</code>, <code>{SAFEZ}</code>, <code>{TCZ}</code>, <code>{T}</code>, <code>{S}</code>, <code>{D}</code>, <code>{TOOL}</code>. Extension du fichier et <code>G91.1</code> au choix.</td></tr>
-        <tr><td>Estlcam, TinyG, WinCNC, WinPC-NC, Stepcraft</td><td><code>M6 (Outil n)</code> (Estlcam), <code>T…</code> seul (WinCNC) ou <code>T… M6</code>. Fichier <code>.nc</code>, <code>.gcode</code> (TinyG) ou <code>.tap</code> (WinCNC).</td></tr>
-        <tr><td>Industrie (ISO type Fanuc) : Haas NGC, Haas classique, Fanuc, Robodrill, Makino, Yasnac, Mitsubishi Meldas, Syntec, Hurco, Centroid, Fadal</td><td><code>T… M6</code>, puis au premier mouvement <code>G0 G90 G54 X… Y…</code>, <code>S… M3</code>, <code>G43 H…</code> (correcteur de longueur du même numéro) et l’arrosage. Programme entre <code>%</code> avec un numéro <code>O…</code>, dégagement <code>G28 G91 Z0.</code>, point décimal toujours écrit (<code>X10.</code>).</td></tr>
+        <tr><td>Autres contrôleurs CNC</td><td>Estlcam, TinyG, WinCNC, WinPC-NC, Stepcraft : <code>M6 (Outil n)</code> (Estlcam), <code>T…</code> seul (WinCNC) ou <code>T… M6</code>. Fichier <code>.nc</code>, <code>.gcode</code> (TinyG) ou <code>.tap</code> (WinCNC).</td></tr>
+        <tr><td>Industrie (ISO type Fanuc)</td><td>Haas NGC, Haas classique, Fanuc, Robodrill, Makino, Yasnac, Mitsubishi Meldas, Syntec, Hurco, Centroid, Fadal : <code>T… M6</code>, puis au premier mouvement <code>G0 G90 G54 X… Y…</code>, <code>S… M3</code>, <code>G43 H…</code> (correcteur de longueur du même numéro) et l’arrosage. Programme entre <code>%</code> avec un numéro <code>O…</code>, dégagement <code>G28 G91 Z0.</code>, point décimal toujours écrit (<code>X10.</code>).</td></tr>
       </tbody>
     </table></div>
     <p><strong>Commandes industrielles ISO.</strong> Pour ces post-processeurs, la machine a un bloc <em>Programme ISO</em> : numéro de programme, arrosage (aucun, M8, M7 ou M88 centre broche), dégagement en Z par <code>G28 G91 Z0</code> ou <code>G53 G0 Z0</code>, arrêt optionnel <code>M1</code> avant chaque changement d’outil, préparation de l’outil suivant (<code>T…</code> juste après <code>M6</code>) et numéros de ligne <code>N10</code>, <code>N15</code>… Le point décimal est indispensable : sur une Fanuc, <code>X10</code> sans point vaut 0,010 mm. L’origine pièce est toujours <code>G54</code> ; le taraudage (<code>G84</code>) et le lissage (<code>G187</code>, <code>G05.1</code>) ne sont pas encore écrits.</p>
@@ -665,7 +665,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC), acorn (MIT, pour les calculs en tâche de fond).</p>
-    <footer><p>COPO 1.335 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.351 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -703,7 +703,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.337</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.351</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -1088,8 +1088,8 @@ X74.36 A14.181</pre>
         <tr><td>Carbide Motion, Onefinity</td><td><code>M6 T…</code>: the control software asks you to change the tool.</td></tr>
         <tr><td>LinuxCNC, Mach3/4, UCCNC, MASSO</td><td><code>T… M6</code> with the tool number, <code>G40 G49 G80</code> header, arcs with <code>G91.1</code>. <code>.ngc</code> file (LinuxCNC), <code>.tap</code> (Mach, UCCNC) or <code>.nc</code>.</td></tr>
         <tr><td>Custom</td><td>You write the header, tool change and program end, with variables: <code>{UNITS}</code>, <code>{SAFEZ}</code>, <code>{TCZ}</code>, <code>{T}</code>, <code>{S}</code>, <code>{D}</code>, <code>{TOOL}</code>. File extension and <code>G91.1</code> are up to you.</td></tr>
-        <tr><td>Estlcam, TinyG, WinCNC, WinPC-NC, Stepcraft</td><td><code>M6 (Tool n)</code> (Estlcam), <code>T…</code> alone (WinCNC) or <code>T… M6</code>. <code>.nc</code>, <code>.gcode</code> (TinyG) or <code>.tap</code> (WinCNC) file.</td></tr>
-        <tr><td>Industrial (Fanuc-style ISO): Haas NGC, classic Haas, Fanuc, Robodrill, Makino, Yasnac, Mitsubishi Meldas, Syntec, Hurco, Centroid, Fadal</td><td><code>T… M6</code>, then at the first move <code>G0 G90 G54 X… Y…</code>, <code>S… M3</code>, <code>G43 H…</code> (length offset with the same number) and coolant. Program between <code>%</code> with an <code>O…</code> number, <code>G28 G91 Z0.</code> retract, decimal point always written (<code>X10.</code>).</td></tr>
+        <tr><td>Other CNC controllers</td><td>Estlcam, TinyG, WinCNC, WinPC-NC, Stepcraft: <code>M6 (Tool n)</code> (Estlcam), <code>T…</code> alone (WinCNC) or <code>T… M6</code>. <code>.nc</code>, <code>.gcode</code> (TinyG) or <code>.tap</code> (WinCNC) file.</td></tr>
+        <tr><td>Industrial (Fanuc-style ISO)</td><td>Haas NGC, classic Haas, Fanuc, Robodrill, Makino, Yasnac, Mitsubishi Meldas, Syntec, Hurco, Centroid, Fadal: <code>T… M6</code>, then at the first move <code>G0 G90 G54 X… Y…</code>, <code>S… M3</code>, <code>G43 H…</code> (length offset with the same number) and coolant. Program between <code>%</code> with an <code>O…</code> number, <code>G28 G91 Z0.</code> retract, decimal point always written (<code>X10.</code>).</td></tr>
       </tbody>
     </table></div>
     <p><strong>Industrial ISO controls.</strong> For these post-processors, the machine has an <em>ISO program</em> block: program number, coolant (none, M8, M7 or M88 through-spindle), Z retract with <code>G28 G91 Z0</code> or <code>G53 G0 Z0</code>, optional stop <code>M1</code> before each tool change, pre-staging the next tool (<code>T…</code> right after <code>M6</code>) and line numbers <code>N10</code>, <code>N15</code>… The decimal point is essential: on a Fanuc, <code>X10</code> without a point means 0.010 mm. The work offset is always <code>G54</code>; tapping (<code>G84</code>) and smoothing (<code>G187</code>, <code>G05.1</code>) are not written yet.</p>
@@ -1180,7 +1180,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC), acorn (MIT, for background calculations).</p>
-    <footer><p>COPO 1.335 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.351 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
