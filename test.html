@@ -9694,7 +9694,7 @@ function rvSync() {
   if (sig !== RV.sig) { const now = performance.now(), wait = Math.max(60, RV.cost || 0) - (now - (RV.lastEnd || 0)); if (RV.sig && wait > 0) { clearTimeout(RV.thT); RV.thT = setTimeout(() => { rvSync(); rvReq(); }, wait + 5); } else { RV.sig = sig; rvBuildMesh(); RV.lastEnd = performance.now(); RV.cost = RV.lastEnd - now; rvReq(); } } /* pendant une manipulation : maillage refait au plus une fois par intervalle */
   if (dr && !RV.dm) { const b = dr.q ? [80000, 150000, 250000][relLevel()] : 30000; RV.dm = { a: relOnly(i => i.id !== dr.id, () => rvMakeMesh(b)), b: relOnly(i => i.id === dr.id, () => rvMakeMesh(b)) }; rvReq(); } /* déplacement : deux maillages, l'élément déplacé est décalé à l'affichage */
   if (!RV.fitted && $('#rvc').clientWidth > 10) { rvFit(true); RV.fitted = true; }
-  const lsig = JSON.stringify(wrapInfo()) + '|' + ((st.rotary || {}).z0 || '') + '|' + (typeof snapVer !== 'undefined' ? snapVer : 0) + '|' + st.w + '|' + st.h + '|' + st.t + '|' + st.originXY + '|' + S.shapes.length + '|' + [...S.sel].join(',') + '|' + S.tps.map(t => t.id + (t.visible ? 1 : 0) + (t.moves ? t.moves.length : 0) + (t.face || 1) + ':' + objId(t.moves) + ':' + objId(t.dmoves)).join(','); /* parcours recalculé avec le même nombre de mouvements : vu aussi */
+  const lsig = JSON.stringify(wrapInfo()) + '|' + ((st.rotary || {}).z0 || '') + '|' + (typeof snapVer !== 'undefined' ? snapVer : 0) + '|' + st.w + '|' + st.h + '|' + st.t + '|' + st.originXY + '|' + S.shapes.length + '|' + [...S.sel].join(',') + '|' + S.tps.map(t => t.id + (t.visible ? 1 : 0) + (t.moves ? t.moves.length : 0) + (t.face || 1) + ':' + objId(t.moves) + ':' + objId(t.dmoves)).join(',') + '|' + (typeof cncFace === 'function' ? cncFace() : 0); /* parcours recalculé avec le même nombre de mouvements : vu aussi */
   /* traits de la vue 3D : si leur construction est longue (gros dessin), on attend 0,25 s après la dernière modification */
   if (lsig !== RV.lsig) { if (RV.lsig && (RV.lnCost || 0) > 40 && !RV.lnGo) { clearTimeout(RV.lnT); RV.lnT = setTimeout(() => { RV.lnT = 0; RV.lnGo = true; try { rvSync(); } finally { RV.lnGo = false; } }, 250); } else { RV.lsig = lsig; const t0 = performance.now(); rvBuildLines(); RV.lnCost = performance.now() - t0; rvReq(); } }
 }
@@ -9740,7 +9740,7 @@ function rvMakeMesh(budget) {
 function rvBuildLines() {
   const gl = RV.gl, st = S.stock;
   /* traits des parcours : refaits seulement si un parcours, sa visibilité, le brut, l'enroulement ou les couleurs changent (pas à chaque retouche du dessin) */
-  const tsig = S.tps.map(tp => [tp.id, tp.visible ? 1 : 0, tp.err ? 1 : 0, tp.face || 1, tp.type, objId(tp.moves), objId(tp.dmoves)].join(':')).join(',') + '|' + st.t + '|' + JSON.stringify(wrapInfo()) + '|' + ['--muted', '--pf', '--pk', '--vc', '--dr', '--th', '--rl'].map(tok).join(',') + '|' + objId(gl), keepTp = RV.lTp !== undefined && RV.tsig === tsig;
+  const tsig = S.tps.map(tp => [tp.id, tp.visible ? 1 : 0, tp.err ? 1 : 0, tp.face || 1, tp.type, objId(tp.moves), objId(tp.dmoves)].join(':')).join(',') + '|' + (typeof cncFace === 'function' ? cncFace() : 0) + '|' + st.t + '|' + JSON.stringify(wrapInfo()) + '|' + ['--muted', '--pf', '--pk', '--vc', '--dr', '--th', '--rl'].map(tok).join(',') + '|' + objId(gl), keepTp = RV.lTp !== undefined && RV.tsig === tsig;
   for (const k of ['lStock', 'lAxes', 'lDraw', 'lTp']) if (RV[k] && !(k === 'lTp' && keepTp)) gl.deleteVertexArray(RV[k].vao);
   const mk = (segs0) => { const segs = wrapSegs(segs0, 6); const d = new Float32Array(segs.length * 6); segs.forEach((v, k) => d.set(v, k * 6)); return segs.length ? { vao: rvBuf([[RV.lprog, 3, 'aP'], [RV.lprog, 3, 'aC']], d), n: segs.length } : null; };
   const g = hex3(tok('--muted')), P = [[0, 0], [st.w, 0], [st.w, st.h], [0, st.h]], S2 = [];
@@ -9755,7 +9755,7 @@ function rvBuildLines() {
   // parcours d'outils visibles : passes en couleur du type, déplacements rapides en gris
   if (keepTp) return; RV.tsig = tsig;
   const col = { profile: hex3(tok('--pf')), pocket: hex3(tok('--pk')), vcarve: hex3(tok('--vc')), drill: hex3(tok('--dr')), thread: hex3(tok('--th')), relief: hex3(tok('--rl')) }, rg = g.map(v => v * 0.8), ce = hex3(tok('--warn')), T2 = [];
-  for (const tp of S.tps) { if (!tp.visible || tp.err) continue; const f2 = tp.face === 2, mv = f2 && tp.dmoves ? tp.dmoves : tp.moves; if (!mv) continue; const c = col[tp.type] || [0.3, 0.5, 1]; let pr = null;
+  for (const tp of S.tps) { if (!tp.visible || tp.err) continue; const cf = (typeof cncFace === 'function' ? cncFace() : 0); if (cf && (tp.face === 2 ? 2 : 1) !== cf) continue; const f2 = tp.face === 2 && !cf, mv = f2 && tp.dmoves ? tp.dmoves : tp.moves; if (!mv) continue; const c = col[tp.type] || [0.3, 0.5, 1]; let pr = null;
     for (const m of mv) { if (typeof m.x !== 'number' || (m.g !== 0 && m.g !== 1)) continue; const q = [m.x, m.y, f2 ? -st.t - m.z : m.z]; if (pr) { const cc = m.g === 0 ? rg : m.e ? ce : c; T2.push([...pr, ...cc], [...q, ...cc]); } pr = q; } }
   RV.lTp = mk(T2);
 }
@@ -9765,7 +9765,7 @@ function rvFocusTp() { const w = $('#tpWin'), id = RV.hoverTp || (w && !w.hidden
 function rvFocusSync() {
   const tp = rvFocusTp(), sig = tp ? tp.id + '|' + (tp.moves ? tp.moves.length : 0) + '|' + (tp.face || 1) + '|' + S.stock.t + '|' + JSON.stringify(wrapInfo()) : '';
   if (sig === RV.fsig) return; RV.fsig = sig; const gl = RV.gl; if (RV.lTpX) { gl.deleteVertexArray(RV.lTpX.vao); RV.lTpX = null; } if (!tp) return;
-  const st = S.stock, f2 = tp.face === 2, mv = f2 && tp.dmoves ? tp.dmoves : tp.moves; if (!mv) return;
+  const st = S.stock, f2 = tp.face === 2 && !(typeof cncFace === 'function' ? cncFace() : 0), mv = f2 && tp.dmoves ? tp.dmoves : tp.moves; if (!mv) return;
   const c = hex3(tok({ profile: '--pf', pocket: '--pk', vcarve: '--vc', drill: '--dr', thread: '--th', relief: '--rl' }[tp.type] || '--accent')), rg = hex3(tok('--muted')).map(v => v * 0.8), ce = hex3(tok('--warn')), T = []; let pr = null;
   for (const m of mv) { if (typeof m.x !== 'number' || (m.g !== 0 && m.g !== 1)) continue; const q = [m.x, m.y, f2 ? -st.t - m.z : m.z]; if (pr) { const cc = m.g === 0 ? rg : m.e ? ce : c; T.push([...pr, ...cc], [...q, ...cc]); } pr = q; }
   if (!T.length) return; const T2 = wrapSegs(T, 6), d = new Float32Array(T2.length * 6); T2.forEach((v, k) => d.set(v, k * 6)); RV.lTpX = { vao: rvBuf([[RV.lprog, 3, 'aP'], [RV.lprog, 3, 'aC']], d), n: T.length };
@@ -10808,8 +10808,8 @@ const conn = () => !!K.T && K.st !== 'Conn';
 const moving = () => ['Run', 'Jog', 'Home'].includes(K.st) || !!K.busy;
 function stockO() { const st = S.stock, RT = st.rotary || {}; const [ox, oy] = originOf(st); const oz = RT.on ? (RT.z0 === 'axis' ? st.t / 2 : 0) : st.originZ === 'bottom' ? +st.t : 0; return { ox, oy, oz, rot: !!RT.on }; }
 function toInt(w) { const o = stockO(); return [w[0] + o.ox, w[1] + o.oy, w[2] - o.oz]; }
-function toV(w) { // point du G-code → vue 3D ; face 2 : COPO dessine ses parcours sous le brut, retournés (flipPt, z = −épaisseur − z)
-  const p = toInt(w); if (U.face !== 2 || typeof flipPt !== 'function') return p; const q = flipPt([p[0], p[1]]); return [q[0], q[1], -(+S.stock.t || 0) - p[2]]; }
+const toV = toInt; // point du G-code → vue 3D (dans l'onglet Usiner, la vue montre la face usinée telle qu'elle est sur la machine : voir cncFace)
+window.cncFace = () => curTab === 'usiner' && pane ? (U.face === 2 ? 2 : 1) : 0; // lu par la vue 3D de COPO : face 2 dessinée retournée, sur le dessus, seule
 
 function trackPath() { // retrouve où en est l'outil sur le trajet du programme (pas de raccourcis entre deux relevés)
   const pts = K.pts, P = K.prog; if (!pts || !pts.length || !P) return; const w = wpos(); let k0 = Math.max(0, K.doneK), best = -1, bd = 1e9;
@@ -11022,8 +11022,10 @@ function build() {
 function tabVis() { if (tabBtn) tabBtn.hidden = !CF.on; if (!CF.on && curTab === 'usiner') setTab('parcours'); }
 window.cncOnTab = t => {
   if (!tabBtn) return; const on = t === 'usiner', rv = q('#rv3');
-  if (on) { if (!U.prevViews) U.prevViews = { d2: VIEWS.d2, d3: VIEWS.d3 }; VIEWS.d2 = false; VIEWS.d3 = true; viewsApply(); RV.showTp = true; rv.classList.add('cnc-on'); rv.classList.toggle('cnc-fmin', !!U.floatMin); setTimeout(() => { if (typeof rvFit === 'function') rvFit(true); rvReq(); }, 60); ov.hidden = false; PI_ = null; ui(); }
-  else if (U.prevViews) { VIEWS.d2 = U.prevViews.d2; VIEWS.d3 = U.prevViews.d3; U.prevViews = null; viewsApply(); rv.classList.remove('cnc-on'); ov.hidden = true; }
+  const drawBtn = v => { const b = document.querySelector('[data-act="rvDraw"]'); if (b) b.setAttribute('aria-pressed', v); };
+  if (on) { if (U.prevDraw === undefined) { U.prevDraw = RV.showDraw; RV.showDraw = false; drawBtn(false); } /* dessin caché par défaut dans l'onglet Usiner */ if (!U.prevViews) U.prevViews = { d2: VIEWS.d2, d3: VIEWS.d3 }; VIEWS.d2 = false; VIEWS.d3 = true; viewsApply(); RV.showTp = true; rv.classList.add('cnc-on'); rv.classList.toggle('cnc-fmin', !!U.floatMin); setTimeout(() => { if (typeof rvFit === 'function') rvFit(true); rvReq(); }, 60); ov.hidden = false; PI_ = null; ui(); }
+  else if (U.prevDraw !== undefined) { RV.showDraw = U.prevDraw; U.prevDraw = undefined; drawBtn(RV.showDraw); rvReq(); }
+  if (!on && U.prevViews) { VIEWS.d2 = U.prevViews.d2; VIEWS.d3 = U.prevViews.d3; U.prevViews = null; viewsApply(); rv.classList.remove('cnc-on'); ov.hidden = true; }
 };
 function ui() { if (!pane) return; tabBtn.classList.toggle('cnc-conn', !!K.T && K.st !== 'Alarm'); tabBtn.classList.toggle('cnc-alarm', K.st === 'Alarm'); if (curTab === 'usiner') { topRender(); drRender(); } tcRender(); live(); }
 
@@ -11468,7 +11470,7 @@ async function onClick(e) {
     case 'keepG54': keepG54(); break;
     case 'goto': gotoOrigin(); break;
     case 'go4': U.vol = 4; panel(); break;
-    case 'face': U.face = +b.dataset.v; PI_ = null; ui(); break;
+    case 'face': U.face = +b.dataset.v; PI_ = null; ui(); rvReq(); break;
     case 'start': progStart(); break;
     case 'pause': pause(); break;
     case 'stop': stopAll(); break;
