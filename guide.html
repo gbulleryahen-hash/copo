@@ -177,6 +177,7 @@ footer p{max-width:none}
       <li><a href="#fr-vues">Vues 2D et 3D</a></li>
       <li><a href="#fr-3d">Aperçu 3D</a></li>
       <li><a href="#fr-gcode">G-code</a></li>
+      <li><a href="#fr-usiner">Usiner (piloter la machine)</a></li>
       <li><a href="#fr-installer">Installer et hors ligne</a></li>
       <li><a href="#fr-raccourcis">Raccourcis</a></li>
       <li><a href="#fr-bug">Signaler un bug</a></li>
@@ -188,7 +189,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.354</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.355</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -354,6 +355,7 @@ X74.36 A14.181</pre>
       <li><strong>Vues 3D</strong> (suite) : zoom à la molette vers le pointeur (par défaut) ou vers le centre de la vue. <strong>Couleur du relief</strong> : bronze (par défaut), aluminium, bois clair, bois foncé ou plastique, la même dans la vue 3D et dans la simulation.</li>
       <li><strong>Bibliothèque</strong> : emplacement de la bibliothèque de dessins et d’images (dans le navigateur ou dans un dossier de l’ordinateur), taille des aperçus, effet du double-clic.</li>
       <li><strong>Simulation</strong> : résolution par défaut de l’aperçu 3D (Standard, Haute ou Très haute).</li>
+      <li><strong>Pilotage de la machine</strong> : affiche l’onglet 6 Usiner (expérimental), indique si vous avez un palpeur, et active les étapes guidées et vérifications (voir Usiner).</li>
     </ul>
     <p>Les unités et la machine restent dans l’onglet Projet, à portée de main. L’onglet G-code rappelle le post-processeur choisi ; <span class="ui">Changer…</span> ouvre la bibliothèque de machines.</p>
 
@@ -624,7 +626,8 @@ M5
 G53 G0 Z-10
 G0 X0 Y0
 M30</pre>
-    <p>Le post-processeur, la vitesse des rapides (pour l'estimation du temps), le Z de sécurité, le Z de dégagement, les commentaires et les arcs G2/G3 se règlent dans l'onglet Projet, bloc Machine. La case <em>En fin de programme, revenir en X0 Y0</em> (cochée par défaut) peut être décochée : la broche reste alors au-dessus de la pièce, au Z de sécurité (pratique pour reprendre ou contrôler la pièce sans déplacer la table). Le fichier prend l'extension attendue par le post-processeur (<code>.nc</code>, <code>.tap</code>, <code>.ngc</code>).</p>
+    <p>Le post-processeur, la vitesse des rapides (pour l'estimation du temps), le Z de sécurité, le Z de dégagement, les commentaires et les arcs G2/G3 se règlent dans l'onglet Projet, bloc Machine. Le fichier prend l'extension attendue par le post-processeur (<code>.nc</code>, <code>.tap</code>, <code>.ngc</code>).</p>
+    <p><strong>Positions de départ et de fin.</strong> Dans la bibliothèque de machines, trois réglages disent où va la fraise : au <em>départ de chaque outil</em> (après le changement d’outil, avant le premier parcours), à la <em>fin de chaque outil</em> (avant le changement, par exemple devant la machine pour changer la fraise facilement) et en <em>fin du programme</em>. Choix possibles : rester sur place (au Z de sécurité), origine pièce X0 Y0, coordonnées pièce (X, Y, Z comme les parcours), coordonnées machine <code>G53</code> (X, Y, Z), ou point de référence <code>G28</code> ou <code>G30</code> enregistré dans la commande (<code>G28.1</code>, <code>G30.1</code>). Une case vide laisse l’axe où il est (seulement Y en coordonnées machine : le plateau vient à l’avant). La fraise remonte toujours d’abord au Z de sécurité ; en coordonnées machine, Z bouge en premier. La machine par défaut part et finit chaque outil à Z10, et finit le programme en X0 Y0 Z10. Avec un post-processeur ISO ou importé (.pp), seule la fin du programme compte : rester sur place, ou revenir à l’origine prévue par le post-processeur.</p>
     <p><strong>Courbes et arcs G2/G3.</strong> COPO n'envoie pas les courbes de Bézier telles quelles à la machine : les parcours sont calculés en petits segments, puis, si « Arcs G2/G3 » est coché, les portions circulaires sont reconnues et écrites en vrais arcs G2/G3 (fichier plus court, mouvement plus fluide). Un cercle dessiné avec l'outil Cercle ou un tracé lissé en mode <em>Arcs</em> donne des arcs exacts ; une courbe libre est approchée par une suite d'arcs et de droites, dans la tolérance.</p>
     <div class="note"><p>Vérifiez toujours le G-code par un passage à vide, outil au-dessus du brut, avant d'usiner.</p></div>
     <h3>Unités : millimètres ou pouces</h3>
@@ -641,6 +644,59 @@ M30</pre>
       <li>une liste de contrôle avant de lancer, une zone de remarques et des cases de visa.</li>
     </ul>
     <p><span class="ui">Enregistrer en PDF</span> (dans la fenêtre de la fiche, ou directement <span class="ui">Fichier › Enregistrer la fiche de gamme en PDF</span> sans l'ouvrir) crée un fichier PDF au format A4, découpé en pages sans couper les tableaux ni les images, prêt à imprimer ou à envoyer. Le PDF est une image de la fiche (texte non sélectionnable) ; pour un PDF avec du texte, utilisez <span class="ui">Imprimer</span> puis « Enregistrer au format PDF » du navigateur. Vous pouvez aussi garder le fichier HTML avec le G-code. Les réglages de la fiche sont enregistrés avec le projet.</p>
+
+    <h2 id="fr-usiner" class="pb">Usiner : piloter la machine (expérimental)</h2>
+    <figure><img src="img/fr-30-usiner.webp" alt="Onglet Usiner : à gauche la connexion, la prise d’origine, les positions X Y Z et le pavé de déplacement ; au centre le panneau Données ; à droite la vue 3D avec la course de la machine." width="1800" height="1125" loading="lazy"><figcaption>L’onglet 6 Usiner avec la machine simulée : commandes à gauche, panneau Données au centre, course de la machine et fraise dans la vue 3D.</figcaption></figure>
+    <p>L’onglet <strong>6 Usiner</strong> envoie le G-code des parcours visibles directement à une machine <strong>GRBL</strong>, <strong>grblHAL</strong> ou <strong>FluidNC</strong> branchée en USB, sans passer par un autre logiciel de pilotage. Il est caché par défaut : cochez <span class="ui">Édition › Paramètres › Pilotage de la machine › Afficher l’onglet 6 « Usiner »</span>. Dans la même rubrique : <em>J’ai un palpeur</em> (plaque Z ou bloc XYZ branché sur la machine) et <em>Étapes guidées et vérifications</em> (cochée, conseillée).</p>
+    <div class="note"><p>Fonction expérimentale. Restez près de la machine et de son arrêt d’urgence. Le premier essai peut se faire sans machine : <span class="ui">🔌 Connecter › Machine simulée</span>.</p></div>
+
+    <h3>Navigateur et connexion</h3>
+    <p>La liaison USB passe par Web Serial : <strong>Chrome, Edge, Opera, Vivaldi</strong> ou <strong>Firefox 151 et plus</strong>, sur ordinateur (Windows, macOS, Linux). Safari (Mac, iPhone, iPad), Firefox avant 151, Firefox Android et Samsung Internet ne savent pas parler au port USB. Sur un ordinateur d’entreprise, l’administrateur peut avoir bloqué l’accès USB.</p>
+    <p><span class="ui">🔌 Connecter › Choisir un port USB…</span> : le navigateur affiche la liste des appareils ; il demande l’autorisation la première fois, puis le port est proposé directement. Fermez d’abord les autres logiciels qui utilisent la machine (UGS, gSender, Candle, LightBurn…). La vitesse de la liaison (115 200 par défaut) se règle dans les paramètres machine.</p>
+    <p><strong>La machine n’apparaît pas ?</strong> Le menu Connecter ouvre une aide en deux points : le bon navigateur (COPO indique si celui-ci est compatible), puis le <strong>pilote USB</strong> de la puce de la carte, avec les liens vers les pilotes officiels : CH340/CH341 et CH9102/CH343 (WCH, cartes GRBL bon marché et beaucoup d’ESP32), CP2102/CP2104 (Silicon Labs, ESP32 DevKit), FT232 (FTDI), Arduino d’origine. Sous Linux, rien à installer, mais trois réglages bloquent souvent l’accès : droits sur le port (<code>sudo usermod -aG dialout $USER</code>, puis fermer la session), <code>brltty</code> qui s’empare des cartes CH340, et Chromium installé en snap (<code>sudo snap connect chromium:raw-usb</code>).</p>
+    <p>À la connexion, COPO lit les réglages <code>$$</code> de la machine (courses <code>$130</code>–<code>$132</code>, fins de course, prise d’origine) et reconnaît FluidNC et grblHAL.</p>
+
+    <h3>Le panneau de gauche</h3>
+    <ul>
+      <li><span class="ui">⌂ Prise d’origine machine</span> (<code>$H</code>) envoie chaque axe sur son fin de course : la machine sait ensuite exactement où elle est, et COPO peut vérifier que le programme tient dans sa course. Sans fins de course, le point de départ est la position à la mise sous tension.</li>
+      <li>La ligne en dessous : le <strong>repère de travail</strong> (G54 à G59), <span class="ui">🏠</span> aller à l’origine machine (Z d’abord), <span class="ui">✈ Aller à…</span> (coordonnées pièce ou machine, coins et centre de la pièce à la hauteur de sécurité), <span class="ui">📚</span> positions enregistrées (changement d’outil, aspiration, chargement…) et <span class="ui">⌖ Palper</span>.</li>
+      <li>Le tableau X Y Z : position <strong>Pièce</strong> (repère de travail) et <strong>Machine</strong>. <span class="ui">↺</span> met l’axe à zéro à la position actuelle (<code>G10 L20</code>) ; taper une cote dans la colonne Pièce puis Entrée donne cette valeur à la position actuelle, sans bouger la machine.</li>
+      <li>Le <strong>pavé</strong> déplace la machine (X, Y, diagonales, Z, et <span class="ui">XY0</span> au centre : deux clics pour revenir au-dessus de X0 Y0). Les quatre <strong>pas</strong> (0,1 · 1 · 10 · 50 mm par défaut) et la <strong>vitesse</strong> de déplacement sont sur la même ligne. Souris sur la vue 3D : les flèches et <kbd>PgUp</kbd> / <kbd>PgDn</kbd> déplacent la machine ; maintenir la touche déplace en continu.</li>
+      <li><span class="ui">Broche (M3)</span> et <span class="ui">Arrosage (M8)</span>, puis <span class="ui">▶ Démarrer</span>, <span class="ui">⏸ Pause</span> et <span class="ui">■ Arrêt</span> (arrêt immédiat et remise à zéro de la commande). Les curseurs <strong>Avance</strong> et <strong>Broche</strong> modifient la vitesse pendant l’usinage (10 à 200 %).</li>
+      <li>En bas, <span class="ui">Console et macros</span> (utilisateurs avancés) : boutons de G-code personnalisés et console pour envoyer des commandes (<code>$$</code>, <code>?</code>, <code>G0 Z5</code>…).</li>
+    </ul>
+    <p>Une <strong>alarme</strong> s’affiche en bandeau en haut de la vue 3D, avec son explication et le bouton <span class="ui">Déverrouiller ($X)</span>. La vue 3D montre aussi la course de la machine (cadre en pointillés), la fraise et la trace de l’usinage.</p>
+
+    <h3>Origine pièce et palpage</h3>
+    <p><span class="ui">⌖ Palper</span> ouvre la carte de palpage dans le panneau Données, avec deux modes :</p>
+    <ul>
+      <li><strong>✋ Manuel (Z)</strong> : descendez la fraise avec le pavé (pas de 0,1 mm à la fin) jusqu’à toucher la pièce, ou une cale posée dessus ; indiquez l’épaisseur de la cale (0 sans cale) puis <span class="ui">Zéro Z ici</span>.</li>
+      <li><strong>⚡ Automatique (palpeur)</strong>, si <em>J’ai un palpeur</em> est coché : la machine descend seule jusqu’à toucher la plaque, en deux passes (rapide puis lente), et règle le zéro. Avec un bloc XYZ posé sur le coin avant gauche, elle palpe aussi X et Y, puis décale X0 Y0 jusqu’à l’origine du projet. Épaisseur de la plaque, décalage du bloc, vitesse, distance de recherche et dégagement se règlent dans les paramètres machine.</li>
+    </ul>
+    <p>X et Y se règlent à la main avec <span class="ui">↺</span> une fois la fraise placée à l’origine du projet (indiquée dans la carte : coin ou centre du brut, Z0 sur le dessus du brut ou la table).</p>
+
+    <h3>Étapes guidées et vérifications</h3>
+    <p>Avec <em>Étapes guidées et vérifications</em> (interrupteur <span class="ui">Vérifications</span> en haut du panneau Données), un bandeau en bas de la vue 3D indique l’étape suivante, de 1/5 à 5/5 : connecter la machine, faire la prise d’origine, fixer la pièce, faire l’origine pièce, démarrer. Le bouton concerné clignote. Avant le lancement, la fenêtre <strong>Avant de lancer</strong> montre les contrôles automatiques (machine connectée, prise d’origine, origine pièce X Y Z, parcours à jour, profondeur dans le brut, programme dans la zone de travail) et une liste à cocher (bonne fraise montée, pièce bridée, palpeur rangé, broche, aspiration, lunettes et protection auditive, arrêt d’urgence). <span class="ui">▶ Lancer l’usinage</span> s’active quand tout est vert et coché.</p>
+    <p>Sans les vérifications, le panneau Données ne montre que l’encombrement du programme, les temps (écoulé, restant), les vitesses et les outils, la prise d’origine et le palpeur, et ▶ Démarrer lance directement.</p>
+
+    <h3>Pendant l’usinage</h3>
+    <ul>
+      <li>Le panneau Données suit l’usinage : temps écoulé et restant, avance réelle, broche, outil en cours et suivant. Pour un projet double face, choisissez <span class="ui">Face 1</span> ou <span class="ui">Face 2</span> en haut du panneau ; après la face 1, retournez la pièce et refaites l’origine pièce.</li>
+      <li><strong>Changement d’outil</strong> : au <code>T… M6</code> du programme, COPO arrête la broche, remonte le Z et affiche la carte <em>Changement d’outil</em> avec le nom de la fraise. Montez-la, refaites seulement le zéro Z (manuel ou palpeur, sans toucher à X et Y), puis <span class="ui">▶ Reprendre l’usinage</span>.</li>
+      <li>Une pause <code>M0</code> du programme s’affiche avec son commentaire ; ▶ Reprendre continue.</li>
+      <li>En fin d’usinage, attendez l’arrêt de la broche avant de toucher la pièce.</li>
+    </ul>
+
+    <h3>Paramètres machine (⚙)</h3>
+    <p>Le bouton <span class="ui">⚙</span> à côté de Connecter ouvre six onglets : <strong>Machine</strong> (vitesse de la liaison, réglages <code>$$</code> de la carte avec leur explication, modifiables, enregistrés dans un fichier ou relus ; pour FluidNC, téléchargement de <code>config.yaml</code> et liste des fichiers de la carte), <strong>Déplacements</strong> (les quatre pas, la vitesse, broche commandée par la machine ou défonceuse allumée à la main), <strong>Palpeur</strong>, <strong>Manette</strong>, <strong>Macros</strong> et <strong>Console</strong>. <span class="ui">⤓ Exporter les réglages</span> enregistre ces réglages et les <code>$</code> de la machine dans un fichier ; <span class="ui">⤒ Importer…</span> les relit.</p>
+    <p><strong>Manette de jeu</strong> : branchez-la et appuyez sur un bouton ; sa ligne s’allume dans le tableau, choisissez son action (pas, déplacements, zéros, aller à, prise d’origine, palpage, broche, avance, démarrer, pause, arrêt, vues…). Un bouton de sécurité est à maintenir pour bouger, un bouton « 2ᵉ action » donne une deuxième fonction à chaque bouton, et les deux sticks peuvent déplacer X, Y, Z ou régler l’avance et la broche.</p>
+
+    <h3>Limites actuelles</h3>
+    <ul>
+      <li>Les projets rotatifs (4ᵉ axe) ne sont pas encore pris en charge : ▶ Démarrer reste grisé.</li>
+      <li>FluidNC se pilote en USB ; le Wi-Fi n’est pas encore possible depuis COPO.</li>
+      <li>Le G-code envoyé est celui des parcours visibles, au format GRBL, avec la machine choisie (Z de sécurité, positions de départ et de fin).</li>
+    </ul>
 
     <h2 id="fr-installer">Installer et utiliser hors ligne</h2>
     <ul>
@@ -676,7 +732,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC), acorn (MIT, pour les calculs en tâche de fond).</p>
-    <footer><p>COPO 1.354 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.355 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -703,6 +759,7 @@ M30</pre>
       <li><a href="#en-views">2D and 3D views</a></li>
       <li><a href="#en-3d">3D preview</a></li>
       <li><a href="#en-gcode">G-code</a></li>
+      <li><a href="#en-machine">Machine (CNC control)</a></li>
       <li><a href="#en-install">Install and offline</a></li>
       <li><a href="#en-shortcuts">Shortcuts</a></li>
       <li><a href="#en-bug">Report a bug</a></li>
@@ -714,7 +771,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.354</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.355</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -880,6 +937,7 @@ X74.36 A14.181</pre>
       <li><strong>3D views</strong> (continued): wheel zoom towards the cursor (default) or towards the view center. <strong>Relief color</strong>: bronze (default), aluminium, light wood, dark wood or plastic, the same in the 3D view and in the simulation.</li>
       <li><strong>Library</strong>: location of the drawing and image library (in the browser or in a folder on the computer), preview size, double-click action.</li>
       <li><strong>Simulation</strong>: default resolution of the 3D preview (Standard, High or Very high).</li>
+      <li><strong>Machine control</strong>: shows tab 6 Machine (experimental), tells COPO whether you have a probe, and turns on the guided steps and checks (see Machine).</li>
     </ul>
     <p>Units and machine stay in the Project tab, close at hand. The G-code tab shows the selected post-processor; <span class="ui">Change…</span> opens the machine library.</p>
 
@@ -1150,7 +1208,8 @@ M5
 G53 G0 Z-10
 G0 X0 Y0
 M30</pre>
-    <p>The post-processor, rapid speed (for the time estimate), safe Z, clearance Z, comments and G2/G3 arcs are set in the Project tab, Machine block. The <em>At the end of the program, return to X0 Y0</em> box (checked by default) can be unchecked: the spindle then stays above the part, at the safe Z (handy to rework or check the part without moving the table). The file gets the extension the post-processor expects (<code>.nc</code>, <code>.tap</code>, <code>.ngc</code>).</p>
+    <p>The post-processor, rapid speed (for the time estimate), safe Z, clearance Z, comments and G2/G3 arcs are set in the Project tab, Machine block. The file gets the extension the post-processor expects (<code>.nc</code>, <code>.tap</code>, <code>.ngc</code>).</p>
+    <p><strong>Start and end positions.</strong> In the machine library, three settings say where the bit goes: at the <em>start of each tool</em> (after the tool change, before the first toolpath), at the <em>end of each tool</em> (before the change, for example to the front of the machine to change the bit easily) and at the <em>end of program</em>. Choices: stay in place (at safe Z), work origin X0 Y0, work coordinates (X, Y, Z like the toolpaths), machine coordinates <code>G53</code> (X, Y, Z), or a <code>G28</code> or <code>G30</code> reference point stored in the controller (<code>G28.1</code>, <code>G30.1</code>). An empty box leaves the axis where it is (only Y in machine coordinates: the table comes to the front). The bit always rises to safe Z first; in machine coordinates, Z moves first. The default machine starts and ends each tool at Z10, and ends the program at X0 Y0 Z10. With an ISO or imported (.pp) post-processor, only the end of program applies: stay in place, or return to the origin set by the post-processor.</p>
     <p><strong>Curves and G2/G3 arcs.</strong> COPO does not send Bézier curves to the machine as they are: toolpaths are computed as short segments, then, when “G2/G3 arcs” is checked, circular portions are recognised and written as true G2/G3 arcs (shorter file, smoother motion). A circle drawn with the Circle tool or a vector smoothed in <em>Arcs</em> mode gives exact arcs; a free-form curve is approximated by a series of arcs and lines, within tolerance.</p>
     <div class="note"><p>Always check the G-code with a dry run, tool above the stock, before cutting.</p></div>
     <h3>Units: millimeters or inches</h3>
@@ -1167,6 +1226,59 @@ M30</pre>
       <li>a checklist before starting, a notes area and sign-off boxes.</li>
     </ul>
     <p><span class="ui">Save as PDF</span> (in the sheet window, or straight from <span class="ui">File › Save the setup sheet as PDF</span> without opening it) creates an A4 PDF file, split into pages without cutting tables or pictures, ready to print or send. The PDF is a picture of the sheet (text not selectable); for a PDF with text, use <span class="ui">Print</span> then the browser's “Save as PDF”. You can also keep the HTML file with the G-code. The sheet settings are saved with the project.</p>
+
+    <h2 id="en-machine" class="pb">Machine: controlling the CNC (experimental)</h2>
+    <figure><img src="img/en-30-usiner.webp" alt="Machine tab: on the left the connection, homing, X Y Z positions and jog pad; in the middle the Data panel; on the right the 3D view with the machine travel." width="1800" height="1125" loading="lazy"><figcaption>Tab 6 Machine with the simulated machine: controls on the left, Data panel in the middle, machine travel and bit in the 3D view.</figcaption></figure>
+    <p>The <strong>6 Machine</strong> tab sends the G-code of the visible toolpaths straight to a <strong>GRBL</strong>, <strong>grblHAL</strong> or <strong>FluidNC</strong> machine connected over USB, with no other control software. It is hidden by default: tick <span class="ui">Edit › Settings › Machine control › Show tab 6 “Machine”</span>. In the same section: <em>I have a probe</em> (Z plate or XYZ block wired to the machine) and <em>Guided steps and checks</em> (ticked, recommended).</p>
+    <div class="note"><p>Experimental feature. Stay near the machine and its emergency stop. You can try it first without a machine: <span class="ui">🔌 Connect › Simulated machine</span>.</p></div>
+
+    <h3>Browser and connection</h3>
+    <p>The USB link uses Web Serial: <strong>Chrome, Edge, Opera, Vivaldi</strong> or <strong>Firefox 151 and later</strong>, on a computer (Windows, macOS, Linux). Safari (Mac, iPhone, iPad), Firefox before 151, Firefox Android and Samsung Internet cannot talk to the USB port. On a company computer, the administrator may have blocked USB access.</p>
+    <p><span class="ui">🔌 Connect › Choose a USB port…</span>: the browser shows the list of devices; it asks for permission the first time, then offers the port directly. First close any other software using the machine (UGS, gSender, Candle, LightBurn…). The link speed (115,200 by default) is set in the machine settings.</p>
+    <p><strong>The machine does not appear?</strong> The Connect menu opens a two-part help: the right browser (COPO tells you whether this one is compatible), then the <strong>USB driver</strong> for the board’s chip, with links to the official drivers: CH340/CH341 and CH9102/CH343 (WCH, low-cost GRBL boards and many ESP32), CP2102/CP2104 (Silicon Labs, ESP32 DevKit), FT232 (FTDI), genuine Arduino. On Linux there is nothing to install, but three settings often block access: port permissions (<code>sudo usermod -aG dialout $USER</code>, then log out), <code>brltty</code> grabbing CH340 boards, and Chromium installed as a snap (<code>sudo snap connect chromium:raw-usb</code>).</p>
+    <p>On connection, COPO reads the machine’s <code>$$</code> settings (travel <code>$130</code>–<code>$132</code>, limit switches, homing) and recognizes FluidNC and grblHAL.</p>
+
+    <h3>The left panel</h3>
+    <ul>
+      <li><span class="ui">⌂ Machine homing</span> (<code>$H</code>) sends each axis to its limit switch: the machine then knows exactly where it is, and COPO can check that the program fits in its travel. Without limit switches, the starting point is the position at power-on.</li>
+      <li>The row below: the <strong>work coordinate system</strong> (G54 to G59), <span class="ui">🏠</span> go to machine origin (Z first), <span class="ui">✈ Go to…</span> (work or machine coordinates, part corners and center at safe height), <span class="ui">📚</span> saved positions (tool change, dust extraction, loading…) and <span class="ui">⌖ Probe</span>.</li>
+      <li>The X Y Z table: <strong>Work</strong> position (work coordinate system) and <strong>Machine</strong> position. <span class="ui">↺</span> zeroes the axis at the current position (<code>G10 L20</code>); typing a value in the Work column then Enter gives that value to the current position, without moving the machine.</li>
+      <li>The <strong>jog pad</strong> moves the machine (X, Y, diagonals, Z, and <span class="ui">XY0</span> in the middle: two clicks to go back above X0 Y0). The four <strong>steps</strong> (0.1 · 1 · 10 · 50 mm by default) and the jog <strong>speed</strong> are on the same row. Mouse over the 3D view: the arrow keys and <kbd>PgUp</kbd> / <kbd>PgDn</kbd> move the machine; holding the key moves continuously.</li>
+      <li><span class="ui">Spindle (M3)</span> and <span class="ui">Coolant (M8)</span>, then <span class="ui">▶ Start</span>, <span class="ui">⏸ Pause</span> and <span class="ui">■ Stop</span> (immediate stop and controller reset). The <strong>Feed</strong> and <strong>Spindle</strong> sliders change the speed while machining (10 to 200 %).</li>
+      <li>At the bottom, <span class="ui">Console and macros</span> (advanced users): custom G-code buttons and a console to send commands (<code>$$</code>, <code>?</code>, <code>G0 Z5</code>…).</li>
+    </ul>
+    <p>An <strong>alarm</strong> shows as a banner at the top of the 3D view, with its explanation and the <span class="ui">Unlock ($X)</span> button. The 3D view also shows the machine travel (dashed box), the bit and the machining trail.</p>
+
+    <h3>Work origin and probing</h3>
+    <p><span class="ui">⌖ Probe</span> opens the probing card in the Data panel, with two modes:</p>
+    <ul>
+      <li><strong>✋ Manual (Z)</strong>: lower the bit with the jog pad (0.1 mm steps at the end) until it touches the part, or a shim laid on it; enter the shim thickness (0 without a shim), then <span class="ui">Zero Z here</span>.</li>
+      <li><strong>⚡ Automatic (probe)</strong>, when <em>I have a probe</em> is ticked: the machine lowers itself until it touches the plate, in two passes (fast then slow), and sets the zero. With an XYZ block on the front left corner, it also probes X and Y, then shifts X0 Y0 to the project origin. Plate thickness, block offset, feed, search distance and retract are set in the machine settings.</li>
+    </ul>
+    <p>Set X and Y by hand with <span class="ui">↺</span> once the bit is at the project origin (shown in the card: corner or center of the stock, Z0 on the top of the stock or on the table).</p>
+
+    <h3>Guided steps and checks</h3>
+    <p>With <em>Guided steps and checks</em> (the <span class="ui">Checks</span> switch at the top of the Data panel), a banner at the bottom of the 3D view shows the next step, from 1/5 to 5/5: connect the machine, home it, secure the part, set the work origin, start. The relevant button flashes. Before starting, the <strong>Before starting</strong> window shows the automatic checks (machine connected, homing, X Y Z work origin, toolpaths up to date, depth within the stock, program within the work area) and a checklist (right bit loaded, part clamped, probe put away, spindle, dust extraction, glasses and hearing protection, emergency stop). <span class="ui">▶ Start machining</span> becomes active when everything is green and ticked.</p>
+    <p>Without the checks, the Data panel only shows the program extent, the times (elapsed, remaining), speeds and tools, homing and the probe, and ▶ Start starts right away.</p>
+
+    <h3>While machining</h3>
+    <ul>
+      <li>The Data panel follows the job: elapsed and remaining time, actual feed, spindle, current and next tool. For a double-sided project, choose <span class="ui">Side 1</span> or <span class="ui">Side 2</span> at the top of the panel; after side 1, flip the part and set the work origin again.</li>
+      <li><strong>Tool change</strong>: at the program’s <code>T… M6</code>, COPO stops the spindle, raises Z and shows the <em>Tool change</em> card with the bit’s name. Load it, set only Z zero again (manual or probe, without touching X and Y), then <span class="ui">▶ Resume machining</span>.</li>
+      <li>A program pause <code>M0</code> shows with its comment; ▶ Resume continues.</li>
+      <li>At the end, wait for the spindle to stop before touching the part.</li>
+    </ul>
+
+    <h3>Machine settings (⚙)</h3>
+    <p>The <span class="ui">⚙</span> button next to Connect opens six tabs: <strong>Machine</strong> (link speed, the board’s <code>$$</code> settings with their explanation, editable, saved to a file or read again; for FluidNC, download of <code>config.yaml</code> and the list of board files), <strong>Jogging</strong> (the four steps, the speed, spindle controlled by the machine or router switched on by hand), <strong>Probe</strong>, <strong>Gamepad</strong>, <strong>Macros</strong> and <strong>Console</strong>. <span class="ui">⤓ Export settings</span> saves these settings and the machine’s <code>$</code> settings to a file; <span class="ui">⤒ Import…</span> reads them back.</p>
+    <p><strong>Gamepad</strong>: plug it in and press a button; its row lights up in the table, then choose its action (steps, jogging, zeros, go to, homing, probing, spindle, feed, start, pause, stop, views…). A safety button must be held to move, a “2nd action” button gives each button a second function, and the two sticks can jog X, Y, Z or adjust feed and spindle.</p>
+
+    <h3>Current limits</h3>
+    <ul>
+      <li>Rotary projects (4th axis) are not supported yet: ▶ Start stays greyed out.</li>
+      <li>FluidNC is controlled over USB; Wi-Fi is not possible from COPO yet.</li>
+      <li>The G-code sent is that of the visible toolpaths, in GRBL format, with the selected machine (safe Z, start and end positions).</li>
+    </ul>
 
     <h2 id="en-install">Install and use offline</h2>
     <ul>
@@ -1202,7 +1314,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC), acorn (MIT, for background calculations).</p>
-    <footer><p>COPO 1.354 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.355 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
