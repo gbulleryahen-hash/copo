@@ -189,7 +189,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.355</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.356</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -682,7 +682,7 @@ M30</pre>
     <h3>Pendant l’usinage</h3>
     <ul>
       <li>Le panneau Données suit l’usinage : temps écoulé et restant, avance réelle, broche, outil en cours et suivant. Pour un projet double face, choisissez <span class="ui">Face 1</span> ou <span class="ui">Face 2</span> en haut du panneau ; après la face 1, retournez la pièce et refaites l’origine pièce.</li>
-      <li><strong>Changement d’outil</strong> : au <code>T… M6</code> du programme, COPO arrête la broche, remonte le Z et affiche la carte <em>Changement d’outil</em> avec le nom de la fraise. Montez-la, refaites seulement le zéro Z (manuel ou palpeur, sans toucher à X et Y), puis <span class="ui">▶ Reprendre l’usinage</span>.</li>
+      <li><strong>Changement d’outil</strong> : au <code>T… M6</code> du programme, COPO arrête la broche et affiche la carte <em>Changement d’outil</em> avec le nom de la fraise. L’onglet n’ajoute aucun mouvement : la fraise reste où le programme l’a laissée (réglage <em>Fin de chaque outil</em> de la machine, Z10 par défaut) ; remontez-la avec le pavé si vous manquez de place. Montez la fraise, refaites seulement le zéro Z (manuel ou palpeur, sans toucher à X et Y), puis <span class="ui">▶ Reprendre l’usinage</span> : la fraise remonte d’abord au Z de sécurité, puis le programme continue.</li>
       <li>Une pause <code>M0</code> du programme s’affiche avec son commentaire ; ▶ Reprendre continue.</li>
       <li>En fin d’usinage, attendez l’arrêt de la broche avant de toucher la pièce.</li>
     </ul>
@@ -732,7 +732,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC), acorn (MIT, pour les calculs en tâche de fond).</p>
-    <footer><p>COPO 1.355 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.356 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -771,7 +771,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.355</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.356</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -1264,7 +1264,7 @@ M30</pre>
     <h3>While machining</h3>
     <ul>
       <li>The Data panel follows the job: elapsed and remaining time, actual feed, spindle, current and next tool. For a double-sided project, choose <span class="ui">Side 1</span> or <span class="ui">Side 2</span> at the top of the panel; after side 1, flip the part and set the work origin again.</li>
-      <li><strong>Tool change</strong>: at the program’s <code>T… M6</code>, COPO stops the spindle, raises Z and shows the <em>Tool change</em> card with the bit’s name. Load it, set only Z zero again (manual or probe, without touching X and Y), then <span class="ui">▶ Resume machining</span>.</li>
+      <li><strong>Tool change</strong>: at the program’s <code>T… M6</code>, COPO stops the spindle and shows the <em>Tool change</em> card with the bit’s name. The tab adds no move: the bit stays where the program left it (the machine’s <em>End of each tool</em> setting, Z10 by default); raise it with the jog pad if you need more room. Load the bit, set only Z zero again (manual or probe, without touching X and Y), then <span class="ui">▶ Resume machining</span>: the bit first rises to safe Z, then the program continues.</li>
       <li>A program pause <code>M0</code> shows with its comment; ▶ Resume continues.</li>
       <li>At the end, wait for the spindle to stop before touching the part.</li>
     </ul>
@@ -1314,7 +1314,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC), acorn (MIT, for background calculations).</p>
-    <footer><p>COPO 1.355 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.356 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
