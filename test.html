@@ -262,9 +262,12 @@ table.cnc-set input{width:110px;text-align:right}
 .cnc-padw .cnc-zpad>*:nth-child(1){grid-column:4;grid-row:1}
 .cnc-padw .cnc-zpad>*:nth-child(2){grid-column:4;grid-row:2}
 .cnc-padw .cnc-zpad>*:nth-child(3){grid-column:4;grid-row:3}
-.cnc-stepl{display:flex;gap:12px;align-items:flex-end}
-.cnc-stepl .cnc-seg{display:inline-grid;grid-template-columns:repeat(4,auto)}
-.cnc-stepl .cnc-seg button{padding:4px 8px;min-width:0}
+.cnc-stepl{display:flex;gap:10px;align-items:flex-end}
+.cnc-stepl>div:first-child{flex:1 1 auto;min-width:0}
+.cnc-stepl .cnc-seg{display:grid;grid-template-columns:repeat(4,1fr)}
+.cnc-stepl .cnc-seg button{padding:8px 4px;min-width:0;font-size:14px;font-weight:600}
+.cnc-stepl .cnc-jf{flex:0 0 96px;min-width:0}
+.cnc-stepl .cnc-jf input{width:100%}
 .cnc-jf{flex:1;min-width:0}
 .cnc-jf input{width:100%;accent-color:var(--accent)}
 .cnc-face .cnc-seg{display:grid;grid-template-columns:1fr 1fr;width:100%}
