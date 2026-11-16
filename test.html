@@ -11176,18 +11176,18 @@ function liteBody() { // sans étapes guidées : seulement les outils prise d'or
   if (K.prog && K.st === 'Hold' && !K.prog.tc && !K.prog.err && K.prog.m0) h += '<div class="cnc-box warn"><b class="t">Pause demandée par le programme</b>' + esc(K.prog.m0) + '</div>';
   return h;
 }
-function illu(a) { // dessins du palpage, d'après les croquis de l'auteur : pièce jaune, bloc gris troué, fraise, flèche rouge
-  const P = (x, y, z) => [+(38 + x + 0.6 * y).toFixed(1), +(122 - z - 0.4 * y).toFixed(1)], pt = q => q.join(' ');
+function illu(a) { // dessins du palpage en vue isométrique, d'après les croquis de l'auteur : pièce jaune, bloc gris troué posé au coin avant gauche, fraise, flèche rouge
+  const P = (x, y, z) => [+(78 + (x - y) * 0.866).toFixed(1), +(178 - (x + y) * 0.5 - z).toFixed(1)], pt = q => q.join(' ');
   const box = (x0, x1, y0, y1, z0, z1, ft, ff, fs, st, sw) => { const f = (pts, c) => '<path d="M' + pts.map(q => pt(P(...q))).join(' L') + ' Z" fill="' + c + '" stroke="' + st + '" stroke-width="' + sw + '" stroke-linejoin="round"/>';
-    return f([[x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1]], ft) + f([[x0, y0, z0], [x1, y0, z0], [x1, y0, z1], [x0, y0, z1]], ff) + f([[x1, y0, z0], [x1, y1, z0], [x1, y1, z1], [x1, y0, z1]], fs); };
-  const stock = box(0, 130, 0, 60, 0, 32, '#f6b20f', '#e8a20a', '#cf8c06', '#6b5418', .8);
-  const c = P(37, 26, 58), bloc = box(16, 58, 10, 42, 32, 58, '#d4d4d4', '#bdbdbd', '#a3a3a3', '#222', 1.6) + '<ellipse cx="' + c[0] + '" cy="' + c[1] + '" rx="7" ry="3.2" fill="#111"/>';
-  const plate = box(60, 100, 18, 44, 32, 35, '#e3e3e3', '#c4c4c4', '#ababab', '#222', 1.2);
-  const tool = (x, y, z) => { const [sx, sy] = P(x, y, z); return '<rect x="' + (sx - 9) + '" y="' + (sy - 66) + '" width="18" height="14" rx="1" fill="#5f656e"/><rect x="' + (sx - 5) + '" y="' + (sy - 52) + '" width="10" height="52" fill="#a9afb7" stroke="#4b5058"/>' + [44, 36, 28, 20, 12].map(d => '<path d="M' + (sx - 5) + ' ' + (sy - d + 3) + ' l10 -6" stroke="#4b5058"/>').join(''); };
+    return f([[x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1]], ft) + f([[x0, y0, z0], [x1, y0, z0], [x1, y0, z1], [x0, y0, z1]], ff) + f([[x0, y0, z0], [x0, y1, z0], [x0, y1, z1], [x0, y0, z1]], fs); }; // dessus, face avant (y0) et face gauche (x0) : vue du coin avant gauche
+  const stock = box(0, 130, 0, 70, 0, 35, '#f6b20f', '#e8a20a', '#d39207', '#6b5418', .8);
+  const c = P(20, 20, 59), bloc = box(0, 40, 0, 40, 35, 59, '#d4d4d4', '#bdbdbd', '#a3a3a3', '#222', 1.6) + '<ellipse cx="' + c[0] + '" cy="' + c[1] + '" rx="9" ry="5.2" fill="#111"/>';
+  const plate = box(50, 90, 22, 50, 35, 38, '#e3e3e3', '#c4c4c4', '#ababab', '#222', 1.2);
+  const tool = (x, y, z) => { const [sx, sy] = P(x, y, z); return '<rect x="' + (sx - 9) + '" y="' + (sy - 62) + '" width="18" height="13" rx="1" fill="#5f656e"/><rect x="' + (sx - 5) + '" y="' + (sy - 49) + '" width="10" height="49" fill="#a9afb7" stroke="#4b5058"/>' + [42, 34, 26, 18, 10].map(d => '<path d="M' + (sx - 5) + ' ' + (sy - d + 3) + ' l10 -6" stroke="#4b5058"/>').join(''); };
   const ar = (p1, p2) => '<path d="M' + pt(p1) + ' L' + pt(p2) + '" stroke="#e5262c" stroke-width="3.2" marker-end="url(#cncAr)"/>';
-  const zt = P(80, 31, 35);
-  const ex = { Z: plate + tool(80, 31, 52) + ar([zt[0], zt[1] - 44], [zt[0], zt[1] - 22]), XYZ: bloc + tool(37, 26, 76), XY: bloc + tool(37, 26, 76), X: bloc + tool(3, 26, 42) + ar(P(1, 26, 47), P(15, 26, 47)), Y: bloc + tool(37, -6, 42) + ar(P(46, -8, 47), P(46, 9, 47)) }[a];
-  return '<div class="cnc-illu"><svg width="100%" style="max-width:300px" viewBox="0 -28 230 156"><defs><marker id="cncAr" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0 0 L5 2.5 L0 5 Z" fill="#e5262c"/></marker></defs>' + stock + ex + '</svg></div>';
+  const zt = P(70, 36, 38);
+  const ex = { Z: plate + tool(70, 36, 54) + ar([zt[0], zt[1] - 46], [zt[0], zt[1] - 22]), XYZ: bloc + tool(20, 20, 77), XY: bloc + tool(20, 20, 77), X: bloc + tool(-28, 20, 46) + ar(P(-24, 20, 50), P(-3, 20, 50)), Y: bloc + tool(20, -28, 46) + ar(P(20, -24, 50), P(20, -3, 50)) }[a];
+  return '<div class="cnc-illu"><svg width="100%" style="max-width:280px" viewBox="0 12 230 190"><defs><marker id="cncAr" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0 0 L5 2.5 L0 5 Z" fill="#e5262c"/></marker></defs>' + stock + ex + '</svg></div>';
 }
 const PTXT = { Z: 'Posez la plaque sur la pièce, sous la fraise. Approchez la fraise à 1 ou 2 cm au-dessus de la plaque.', XYZ: 'Posez le bloc sur le coin avant gauche de la pièce. Placez la fraise au-dessus du bloc, à 1 ou 2 cm, à moins de 10 mm de ses bords gauche et avant.', XY: 'Le Z doit être fait. Placez la fraise au-dessus du bloc (coin avant gauche), à moins de 10 mm de ses bords gauche et avant.', X: 'Placez la fraise à gauche du bloc, à moins de 10 mm, sous le dessus du bloc.', Y: 'Placez la fraise devant le bloc, à moins de 10 mm, sous le dessus du bloc.' };
 function originBody() {
