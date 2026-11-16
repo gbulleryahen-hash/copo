@@ -189,7 +189,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.356</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.357</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -355,7 +355,7 @@ X74.36 A14.181</pre>
       <li><strong>Vues 3D</strong> (suite) : zoom à la molette vers le pointeur (par défaut) ou vers le centre de la vue. <strong>Couleur du relief</strong> : bronze (par défaut), aluminium, bois clair, bois foncé ou plastique, la même dans la vue 3D et dans la simulation.</li>
       <li><strong>Bibliothèque</strong> : emplacement de la bibliothèque de dessins et d’images (dans le navigateur ou dans un dossier de l’ordinateur), taille des aperçus, effet du double-clic.</li>
       <li><strong>Simulation</strong> : résolution par défaut de l’aperçu 3D (Standard, Haute ou Très haute).</li>
-      <li><strong>Pilotage de la machine</strong> : affiche l’onglet 6 Usiner (expérimental), indique si vous avez un palpeur, et active les étapes guidées et vérifications (voir Usiner).</li>
+      <li><strong>Pilotage de la machine</strong> : affiche l’onglet 6 Usiner (expérimental), indique si vous avez un capteur, et active les étapes guidées et vérifications (voir Usiner).</li>
     </ul>
     <p>Les unités et la machine restent dans l’onglet Projet, à portée de main. L’onglet G-code rappelle le post-processeur choisi ; <span class="ui">Changer…</span> ouvre la bibliothèque de machines.</p>
 
@@ -647,7 +647,7 @@ M30</pre>
 
     <h2 id="fr-usiner" class="pb">Usiner : piloter la machine (expérimental)</h2>
     <figure><img src="img/fr-30-usiner.webp" alt="Onglet Usiner : à gauche la connexion, la prise d’origine, les positions X Y Z et le pavé de déplacement ; au centre le panneau Données ; à droite la vue 3D avec la course de la machine." width="1800" height="1125" loading="lazy"><figcaption>L’onglet 6 Usiner avec la machine simulée : commandes à gauche, panneau Données au centre, course de la machine et fraise dans la vue 3D.</figcaption></figure>
-    <p>L’onglet <strong>6 Usiner</strong> envoie le G-code des parcours visibles directement à une machine <strong>GRBL</strong>, <strong>grblHAL</strong> ou <strong>FluidNC</strong> branchée en USB, sans passer par un autre logiciel de pilotage. Il est caché par défaut : cochez <span class="ui">Édition › Paramètres › Pilotage de la machine › Afficher l’onglet 6 « Usiner »</span>. Dans la même rubrique : <em>J’ai un palpeur</em> (plaque Z ou bloc XYZ branché sur la machine) et <em>Étapes guidées et vérifications</em> (cochée, conseillée).</p>
+    <p>L’onglet <strong>6 Usiner</strong> envoie le G-code des parcours visibles directement à une machine <strong>GRBL</strong>, <strong>grblHAL</strong> ou <strong>FluidNC</strong> branchée en USB, sans passer par un autre logiciel de pilotage. Il est caché par défaut : cochez <span class="ui">Édition › Paramètres › Pilotage de la machine › Afficher l’onglet 6 « Usiner »</span>. Dans la même rubrique : <em>J’ai un capteur</em> (plaque Z ou bloc XYZ branché sur la machine) et <em>Étapes guidées et vérifications</em> (cochée, conseillée).</p>
     <div class="note"><p>Fonction expérimentale. Restez près de la machine et de son arrêt d’urgence. Le premier essai peut se faire sans machine : <span class="ui">🔌 Connecter › Machine simulée</span>.</p></div>
 
     <h3>Navigateur et connexion</h3>
@@ -671,24 +671,24 @@ M30</pre>
     <p><span class="ui">⌖ Palper</span> ouvre la carte de palpage dans le panneau Données, avec deux modes :</p>
     <ul>
       <li><strong>✋ Manuel (Z)</strong> : descendez la fraise avec le pavé (pas de 0,1 mm à la fin) jusqu’à toucher la pièce, ou une cale posée dessus ; indiquez l’épaisseur de la cale (0 sans cale) puis <span class="ui">Zéro Z ici</span>.</li>
-      <li><strong>⚡ Automatique (palpeur)</strong>, si <em>J’ai un palpeur</em> est coché : la machine descend seule jusqu’à toucher la plaque, en deux passes (rapide puis lente), et règle le zéro. Avec un bloc XYZ posé sur le coin avant gauche, elle palpe aussi X et Y, puis décale X0 Y0 jusqu’à l’origine du projet. Épaisseur de la plaque, décalage du bloc, vitesse, distance de recherche et dégagement se règlent dans les paramètres machine.</li>
+      <li><strong>⚡ Automatique (capteur)</strong>, si <em>J’ai un capteur</em> est coché : la machine descend seule jusqu’à toucher la plaque, en deux passes (rapide puis lente), et règle le zéro. Avec un bloc XYZ posé sur le coin avant gauche, elle palpe aussi X et Y, puis décale X0 Y0 jusqu’à l’origine du projet. Épaisseur de la plaque, décalage du bloc, vitesse, distance de recherche et dégagement se règlent dans les paramètres machine.</li>
     </ul>
     <p>X et Y se règlent à la main avec <span class="ui">↺</span> une fois la fraise placée à l’origine du projet (indiquée dans la carte : coin ou centre du brut, Z0 sur le dessus du brut ou la table).</p>
 
     <h3>Étapes guidées et vérifications</h3>
-    <p>Avec <em>Étapes guidées et vérifications</em> (interrupteur <span class="ui">Vérifications</span> en haut du panneau Données), un bandeau en bas de la vue 3D indique l’étape suivante, de 1/5 à 5/5 : connecter la machine, faire la prise d’origine, fixer la pièce, faire l’origine pièce, démarrer. Le bouton concerné clignote. Avant le lancement, la fenêtre <strong>Avant de lancer</strong> montre les contrôles automatiques (machine connectée, prise d’origine, origine pièce X Y Z, parcours à jour, profondeur dans le brut, programme dans la zone de travail) et une liste à cocher (bonne fraise montée, pièce bridée, palpeur rangé, broche, aspiration, lunettes et protection auditive, arrêt d’urgence). <span class="ui">▶ Lancer l’usinage</span> s’active quand tout est vert et coché.</p>
-    <p>Sans les vérifications, le panneau Données ne montre que l’encombrement du programme, les temps (écoulé, restant), les vitesses et les outils, la prise d’origine et le palpeur, et ▶ Démarrer lance directement.</p>
+    <p>Avec <em>Étapes guidées et vérifications</em> (interrupteur <span class="ui">Vérifications</span> en haut du panneau Données), un bandeau en bas de la vue 3D indique l’étape suivante, de 1/5 à 5/5 : connecter la machine, faire la prise d’origine, fixer la pièce, faire l’origine pièce, démarrer. Le bouton concerné clignote. Avant le lancement, la fenêtre <strong>Avant de lancer</strong> montre les contrôles automatiques (machine connectée, prise d’origine, origine pièce X Y Z, parcours à jour, profondeur dans le brut, programme dans la zone de travail) et une liste à cocher (bonne fraise montée, pièce bridée, capteur rangé, broche, aspiration, lunettes et protection auditive, arrêt d’urgence). <span class="ui">▶ Lancer l’usinage</span> s’active quand tout est vert et coché.</p>
+    <p>Sans les vérifications, le panneau Données ne montre que l’encombrement du programme, les temps (écoulé, restant), les vitesses et les outils, la prise d’origine et le capteur, et ▶ Démarrer lance directement.</p>
 
     <h3>Pendant l’usinage</h3>
     <ul>
       <li>Le panneau Données suit l’usinage : temps écoulé et restant, avance réelle, broche, outil en cours et suivant. Pour un projet double face, choisissez <span class="ui">Face 1</span> ou <span class="ui">Face 2</span> en haut du panneau ; après la face 1, retournez la pièce et refaites l’origine pièce.</li>
-      <li><strong>Changement d’outil</strong> : au <code>T… M6</code> du programme, COPO arrête la broche et affiche la carte <em>Changement d’outil</em> avec le nom de la fraise. L’onglet n’ajoute aucun mouvement : la fraise reste où le programme l’a laissée (réglage <em>Fin de chaque outil</em> de la machine, Z10 par défaut) ; remontez-la avec le pavé si vous manquez de place. Montez la fraise, refaites seulement le zéro Z (manuel ou palpeur, sans toucher à X et Y), puis <span class="ui">▶ Reprendre l’usinage</span> : la fraise remonte d’abord au Z de sécurité, puis le programme continue.</li>
+      <li><strong>Changement d’outil</strong> : au <code>T… M6</code> du programme, COPO arrête la broche et affiche la carte <em>Changement d’outil</em> avec le nom de la fraise. L’onglet n’ajoute aucun mouvement : la fraise reste où le programme l’a laissée (réglage <em>Fin de chaque outil</em> de la machine, Z10 par défaut) ; remontez-la avec le pavé si vous manquez de place. Montez la fraise, refaites seulement le zéro Z (manuel ou capteur, sans toucher à X et Y), puis <span class="ui">▶ Reprendre l’usinage</span> : la fraise remonte d’abord au Z de sécurité, puis le programme continue.</li>
       <li>Une pause <code>M0</code> du programme s’affiche avec son commentaire ; ▶ Reprendre continue.</li>
       <li>En fin d’usinage, attendez l’arrêt de la broche avant de toucher la pièce.</li>
     </ul>
 
     <h3>Paramètres machine (⚙)</h3>
-    <p>Le bouton <span class="ui">⚙</span> à côté de Connecter ouvre six onglets : <strong>Machine</strong> (vitesse de la liaison, réglages <code>$$</code> de la carte avec leur explication, modifiables, enregistrés dans un fichier ou relus ; pour FluidNC, téléchargement de <code>config.yaml</code> et liste des fichiers de la carte), <strong>Déplacements</strong> (les quatre pas, la vitesse, broche commandée par la machine ou défonceuse allumée à la main), <strong>Palpeur</strong>, <strong>Manette</strong>, <strong>Macros</strong> et <strong>Console</strong>. <span class="ui">⤓ Exporter les réglages</span> enregistre ces réglages et les <code>$</code> de la machine dans un fichier ; <span class="ui">⤒ Importer…</span> les relit.</p>
+    <p>Le bouton <span class="ui">⚙</span> à côté de Connecter ouvre six onglets : <strong>Machine</strong> (vitesse de la liaison, réglages <code>$$</code> de la carte avec leur explication, modifiables, enregistrés dans un fichier ou relus ; pour FluidNC, téléchargement de <code>config.yaml</code> et liste des fichiers de la carte), <strong>Déplacements</strong> (les quatre pas, la vitesse, broche commandée par la machine ou défonceuse allumée à la main), <strong>Capteur</strong>, <strong>Manette</strong>, <strong>Macros</strong> et <strong>Console</strong>. <span class="ui">⤓ Exporter les réglages</span> enregistre ces réglages et les <code>$</code> de la machine dans un fichier ; <span class="ui">⤒ Importer…</span> les relit.</p>
     <p><strong>Manette de jeu</strong> : branchez-la et appuyez sur un bouton ; sa ligne s’allume dans le tableau, choisissez son action (pas, déplacements, zéros, aller à, prise d’origine, palpage, broche, avance, démarrer, pause, arrêt, vues…). Un bouton de sécurité est à maintenir pour bouger, un bouton « 2ᵉ action » donne une deuxième fonction à chaque bouton, et les deux sticks peuvent déplacer X, Y, Z ou régler l’avance et la broche.</p>
 
     <h3>Limites actuelles</h3>
@@ -732,7 +732,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC), acorn (MIT, pour les calculs en tâche de fond).</p>
-    <footer><p>COPO 1.356 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.357 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -771,7 +771,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.356</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.357</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -1314,7 +1314,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC), acorn (MIT, for background calculations).</p>
-    <footer><p>COPO 1.356 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.357 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
