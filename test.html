@@ -251,6 +251,22 @@ table.cnc-set input{width:110px;text-align:right}
 .cnc-cg{grid-template-columns:auto auto minmax(0,1fr)}
 .cnc-cg .cnc-seg{display:grid;grid-template-columns:repeat(4,1fr);width:100%;box-sizing:border-box}
 .cnc-cg .cnc-seg button{min-width:0;padding:4px 2px}
+/* panneau : tout en haut, d'un seul tenant ; console en bas */
+.pane.cnc-pane:not([hidden]){overflow:auto}
+#cncScroll{flex:none;overflow:visible;padding-bottom:4px}
+#cncCtl{border-top:0;padding-top:4px}
+#cncDr{flex:none;padding:0 8px 10px;margin-top:auto}
+.cnc-padw{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,52px);gap:8px 0;justify-items:center;margin:4px 0 10px}
+.cnc-padw .cnc-pad,.cnc-padw .cnc-zpad{display:contents}
+.cnc-padw .cnc-pb{width:52px;height:52px}
+.cnc-padw .cnc-zpad>*:nth-child(1){grid-column:4;grid-row:1}
+.cnc-padw .cnc-zpad>*:nth-child(2){grid-column:4;grid-row:2}
+.cnc-padw .cnc-zpad>*:nth-child(3){grid-column:4;grid-row:3}
+.cnc-stepl{display:flex;gap:12px;align-items:flex-end}
+.cnc-stepl .cnc-seg{display:inline-grid;grid-template-columns:repeat(4,auto)}
+.cnc-stepl .cnc-seg button{padding:4px 8px;min-width:0}
+.cnc-jf{flex:1;min-width:0}
+.cnc-jf input{width:100%;accent-color:var(--accent)}
 </style>
 </head>
 <body>
@@ -10902,7 +10918,7 @@ function build() {
   const tabs = q('.panel .tabs'); if (!tabs || q('[data-tab="usiner"]', tabs)) return;
   tabBtn = document.createElement('button'); tabBtn.setAttribute('role', 'tab'); tabBtn.dataset.tab = 'usiner'; tabBtn.setAttribute('aria-selected', 'false');
   tabBtn.innerHTML = '<i aria-hidden="true">6</i><span>Usiner</span><span class="cnc-tdot"></span>'; tabBtn.onclick = () => setTab('usiner'); tabs.appendChild(tabBtn);
-  pane = document.createElement('div'); pane.className = 'pane cnc-pane'; pane.dataset.pane = 'usiner'; pane.hidden = true; pane.setAttribute('data-notr', ''); pane.innerHTML = '<div id="cncScroll"></div><div id="cncCtl"></div>';
+  pane = document.createElement('div'); pane.className = 'pane cnc-pane'; pane.dataset.pane = 'usiner'; pane.hidden = true; pane.setAttribute('data-notr', ''); pane.innerHTML = '<div id="cncScroll"></div><div id="cncCtl"></div><div id="cncDr"></div>';
   q('.panel').appendChild(pane); scroll = q('#cncScroll'); ctl = q('#cncCtl');
   ov = document.createElement('div'); ov.id = 'cncOv'; ov.hidden = true; ov.setAttribute('data-notr', ''); q('#rv3').appendChild(ov);
   pane.addEventListener('click', onClick); document.body.addEventListener('click', e => { if (e.target.closest('#cncTc,.cnc-modal,#cncOv')) onClick(e); });
@@ -10916,7 +10932,7 @@ window.cncOnTab = t => {
   if (on) { if (!U.prevViews) U.prevViews = { d2: VIEWS.d2, d3: VIEWS.d3 }; VIEWS.d2 = false; VIEWS.d3 = true; viewsApply(); RV.showTp = true; rv.classList.add('cnc-on'); rv.classList.toggle('cnc-fmin', !!U.floatMin); setTimeout(() => { if (typeof rvFit === 'function') rvFit(true); rvReq(); }, 60); ov.hidden = false; PI_ = null; ui(); }
   else if (U.prevViews) { VIEWS.d2 = U.prevViews.d2; VIEWS.d3 = U.prevViews.d3; U.prevViews = null; viewsApply(); rv.classList.remove('cnc-on'); ov.hidden = true; }
 };
-function ui() { if (!pane) return; tabBtn.classList.toggle('cnc-conn', !!K.T && K.st !== 'Alarm'); tabBtn.classList.toggle('cnc-alarm', K.st === 'Alarm'); if (curTab === 'usiner') { topRender(); } tcRender(); live(); }
+function ui() { if (!pane) return; tabBtn.classList.toggle('cnc-conn', !!K.T && K.st !== 'Alarm'); tabBtn.classList.toggle('cnc-alarm', K.st === 'Alarm'); if (curTab === 'usiner') { topRender(); drRender(); } tcRender(); live(); }
 
 function stat() { return {
   s1: conn() ? 'done' : '',
@@ -10956,7 +10972,6 @@ function panel() {
   h += vol(2, 'Origine machine', st.s2, !conn() ? '' : K.lostPos ? 'À refaire' : K.homed ? '✓ Faite' : !limOn() && K.homeSkip ? 'Pas de fins de course' : K.homeSkip ? 'Déverrouillée sans origine' : 'À faire', b2);
   h += vol(3, 'Origine pièce', st.s3, allSet() ? '✓ X Y Z définis' : AX.filter(a => K.ws[a]).map(a => a.toUpperCase()).join(' ') || 'À faire', originBody());
   h += vol(4, 'Usinage', st.s4, K.prog ? (K.prog.tc ? 'Changement d’outil' : K.st === 'Hold' ? 'En pause' : 'En cours…') : K.finished ? '✓ Terminé' : '', launchBody());
-  h += '<div class="cnc-dr"><header data-c="drawer"><span>' + (U.drawer ? '▾' : '▸') + '</span><b>Console et macros</b><span class="cnc-s">(utilisateurs avancés)</span></header>' + (U.drawer ? '<div class="cnc-mac">' + CF.macros.map((m, i) => '<button data-c="macro" data-i="' + i + '" ' + (conn() && !K.prog ? '' : 'disabled') + '>' + esc(m.n) + '</button>').join('') + '</div>' + conHtml('c1') : '') + '</div>';
   box.innerHTML = h; if (fl) fl.scrollTop = sc; conRender(); live();
 }
 function alarmBanner() { // alarmes en haut de la vue 3D
@@ -11045,12 +11060,12 @@ function launchBody() {
 /* ---------------- commandes du bas ---------------- */
 function ctlRender() {
   if (!ctl) return;
-  ctl.innerHTML = '<div class="cnc-cg"><div class="cnc-pad">' +
+  ctl.innerHTML = '<div class="cnc-padw"><div class="cnc-pad">' +
     [[-1, 1, '↖', 1], [0, 1, '<b class="cy">Y</b>+'], [1, 1, '↗', 1], [-1, 0, '<b class="cx">X</b>−'], null, [1, 0, '<b class="cx">X</b>+'], [-1, -1, '↙', 1], [0, -1, '<b class="cy">Y</b>−'], [1, -1, '↘', 1]].map(b => b ? '<button class="cnc-pb' + (b[3] ? ' dg' : '') + '" data-j="' + b[0] + ',' + b[1] + ',0">' + b[2] + '</button>' : '<button class="cnc-pb xy0" data-c="padHome" title="Remonte si besoin, puis va au-dessus de X0 Y0 (cliquer deux fois)">' + (U.homeConfirm ? 'OK ?' : '<b class="cx">X</b><b class="cy">Y</b>0') + '</button>').join('') +
     '</div><div class="cnc-zpad"><button class="cnc-pb" data-j="0,0,1"><b class="cz">Z</b>+</button><span></span><button class="cnc-pb" data-j="0,0,-1"><b class="cz">Z</b>−</button></div>' +
-    '<div><div class="cnc-s cnc-m" style="margin-bottom:3px">Pas (mm)</div><div class="cnc-seg">' + CF.steps.map(s => '<button class="' + (+CF.step === +s ? 'on' : '') + '" data-c="step" data-v="' + s + '">' + f2(s, s < 1 ? 1 : 0) + '</button>').join('') + '</div>' +
-    '<div class="cnc-s cnc-m" style="margin:7px 0 1px">Vitesse <b data-live="jf">' + CF.jogF + '</b> mm/min</div><input type="range" min="100" max="6000" step="100" value="' + CF.jogF + '" data-cf="jogF" style="width:100%;accent-color:var(--accent)">' +
-    '<div class="cnc-s cnc-m" style="margin-top:3px"><span class="cnc-kbd">←→↑↓</span> <span class="cnc-kbd">PgUp</span> <span class="cnc-kbd">PgDn</span> souris sur la vue · maintenir = continu</div></div></div>' +
+    '</div><div class="cnc-stepl"><div><div class="cnc-s cnc-m">Pas (mm)</div><div class="cnc-seg">' + CF.steps.map(s => '<button class="' + (+CF.step === +s ? 'on' : '') + '" data-c="step" data-v="' + s + '">' + f2(s, s < 1 ? 1 : 0) + '</button>').join('') + '</div></div>' +
+    '<div class="cnc-jf"><div class="cnc-s cnc-m">Vitesse <b data-live="jf">' + CF.jogF + '</b> mm/min</div><input type="range" min="100" max="6000" step="100" value="' + CF.jogF + '" data-cf="jogF"></div></div>' +
+    '<div class="cnc-s cnc-m" style="margin-top:5px"><span class="cnc-kbd">←→↑↓</span> <span class="cnc-kbd">PgUp</span> <span class="cnc-kbd">PgDn</span> souris sur la vue · maintenir = continu</div>' +
     '<div class="cnc-row" style="margin-top:9px;gap:6px"><button class="cnc-btn" style="flex:1" data-c="spin" data-live="bspin">↻ Broche (M3)</button><button class="cnc-btn" style="flex:1" data-c="cool" data-live="bcool">💧 Arrosage (M8)</button></div>' +
     '<div class="cnc-run"><button class="cnc-rb go" data-c="start" data-live="bstart">▶ Démarrer</button><button class="cnc-rb pa" data-c="pause" data-live="bpause">⏸ Pause</button><button class="cnc-rb st" data-c="stop" data-live="bstop" title="Échap">■ Arrêt</button></div>' +
     '<div class="cnc-ovr"><span>Avance</span><input type="range" min="10" max="200" step="10" value="100" data-ovr="f"><b data-live="ovf">100 %</b></div>' +
@@ -11078,6 +11093,11 @@ function ovRender() {
 }
 
 /* ---------------- panneau Usiner : connexion, coordonnées ---------------- */
+function drRender() { // console et macros, en bas du panneau
+  const el = q('#cncDr'); if (!el) return;
+  el.innerHTML = '<div class="cnc-dr"><header data-c="drawer"><span>' + (U.drawer ? '▾' : '▸') + '</span><b>Console et macros</b><span class="cnc-s">(utilisateurs avancés)</span></header>' + (U.drawer ? '<div class="cnc-mac">' + CF.macros.map((m, i) => '<button data-c="macro" data-i="' + i + '" ' + (conn() && !K.prog ? '' : 'disabled') + '>' + esc(m.n) + '</button>').join('') + '</div>' + conHtml('c1') : '') + '</div>';
+  conRender();
+}
 function topRender() {
   if (!scroll || curTab !== 'usiner') return; const ser = 'serial' in navigator, c = conn(), dis = !c || moving() || !!K.prog;
   let h = '<div class="cnc-top"><div class="cnc-cwrap' + (U.conOpen ? ' open' : '') + '" style="flex:1">';
@@ -11103,8 +11123,7 @@ function topRender() {
     '<div class="cnc-row" style="margin-top:6px"><input id="cncPosN" placeholder="Nom de la position actuelle" style="flex:1"><button class="cnc-btn sm" data-c="posAdd">Enregistrer ici</button></div></div>'; }
   h += '<div class="cnc-coord"><div class="cnc-crow cnc-chd"><span></span><span>Zéro</span><span>Pièce <span class="cnc-badge">G5' + (3 + K.wcs) + '</span></span><span>Machine</span><span>Aller</span></div>' +
     AX.map((a, i) => '<div class="cnc-crow"><b class="cnc-axl ' + a + '">' + a.toUpperCase() + '</b><button class="cnc-btn sm" data-c="zero" data-a="' + a + '" ' + (dis ? 'disabled' : '') + ' title="Zéro ' + a.toUpperCase() + ' ici (G10 L20 P1 ' + a.toUpperCase() + '0)">↺</button><input class="cnc-wsin ' + a + (K.ws[a] ? ' set' : '') + '" type="number" step="0.01" data-wsin="' + a + '" title="Tapez une cote puis Entrée : la position actuelle prend cette valeur" ' + (dis ? 'disabled' : '') + '><span class="cnc-mv" data-live="m' + a + '">–</span><button class="cnc-btn sm" data-c="goAx" data-a="' + a + '" ' + (c && K.ws[a] && canJog() ? '' : 'disabled') + ' title="Aller à ' + a.toUpperCase() + '0">⌂</button></div>').join('') +
-    '<button class="cnc-btn" style="width:100%;margin-top:6px" data-c="zeroAll" ' + (dis ? 'disabled' : '') + ' title="X et Y seulement : le Z se règle à part">↺ Zéro X Y</button>' +
-    '<div class="cnc-zz"><span class="cnc-s cnc-m">Zéro Z à la main :</span><button class="cnc-btn sm" data-c="zShim" ' + (dis ? 'disabled' : '') + ' title="La fraise pince la feuille ou la cale posée sur la pièce">cale ' + String(+CF.shim).replace('.', ',') + ' mm</button><button class="cnc-btn sm" data-c="zPlate" ' + (dis ? 'disabled' : '') + ' title="Descendez la fraise jusqu’à toucher la plaque posée sur la pièce">plaque ' + String(+CF.plate).replace('.', ',') + ' mm</button></div></div>';
+    '</div>';
   scroll.innerHTML = h; live();
 }
 const L$ = k => qa('[data-live="' + k + '"]');
@@ -11254,7 +11273,7 @@ async function onClick(e) {
     case 'tcResume': tcResume(); break;
     case 'step': CF.step = +b.dataset.v; cfSave(); ctlRender(); break;
     case 'padHome': if (!allSet()) { say('Définissez d’abord l’origine pièce.'); break; } if (!U.homeConfirm) { U.homeConfirm = true; ctlRender(); setTimeout(() => { U.homeConfirm = false; ctlRender(); }, 2500); break; } U.homeConfirm = false; ctlRender(); gotoOrigin(); break;
-    case 'drawer': U.drawer = !U.drawer; panel(); break;
+    case 'drawer': U.drawer = !U.drawer; drRender(); break;
     case 'macro': runMacro(+b.dataset.i); break;
     case 'conSend': conSend(b.dataset.i); break;
     case 'posT': U.posOpen = !U.posOpen; ovRender(); break;
