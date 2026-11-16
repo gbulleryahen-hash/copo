@@ -19,12 +19,12 @@
 <link rel="manifest" href="manifest.webmanifest">
 <style>
 /* ===== COPO — onglet Usiner (version test) ===== */
-.tabs [data-tab="usiner"] .cnc-tdot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:5px;vertical-align:1px;background:var(--muted);opacity:.6}
+.tabs [data-tab="usiner"] .cnc-tdot{position:absolute;top:4px;right:3px;width:6px;height:6px;border-radius:50%;background:var(--muted);opacity:.6}
 .tabs [data-tab="usiner"].cnc-conn .cnc-tdot{background:#2e9b5c;opacity:1}
 .tabs [data-tab="usiner"].cnc-alarm .cnc-tdot{background:var(--danger);opacity:1}
 .pane.cnc-pane:not([hidden]){display:flex;flex-direction:column;padding:0;overflow:hidden}
-#cncScroll{flex:1;overflow:auto;padding:10px 12px 14px;min-height:0}
-#cncCtl{border-top:1px solid var(--line);padding:10px 12px 12px;background:transparent;flex:none}
+#cncScroll{flex:1;overflow:auto;padding:8px 8px 12px;min-height:0}
+#cncCtl{border-top:1px solid var(--line);padding:8px 8px 10px;background:transparent;flex:none}
 .cnc-test{font-size:12px;background:color-mix(in srgb,#d9480f 14%,var(--panel));border:1px solid color-mix(in srgb,#d9480f 40%,var(--line));border-radius:8px;padding:6px 9px;margin-bottom:9px;color:var(--ink)}
 .cnc-vol{border:1px solid var(--line);border-radius:8px;background:var(--panel);margin-bottom:8px;overflow:visible}
 .cnc-vol>header{display:flex;align-items:center;gap:8px;padding:10px 11px;cursor:pointer;user-select:none;border-radius:8px}
@@ -207,6 +207,15 @@ table.cnc-set input{width:110px;text-align:right}
 .cnc-float label.cnc-il{display:inline-flex;flex-direction:row;align-items:center;gap:6px;margin:0}
 #cncAlarm{position:absolute;top:50px;left:calc(50% + 185px);transform:translateX(-50%);max-width:min(620px,calc(100% - 420px));margin:0;pointer-events:auto;box-shadow:0 6px 20px var(--shadow);z-index:2;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 #rv3.cnc-fmin #cncAlarm{left:50%;max-width:min(620px,calc(100% - 40px))}
+.cnc-zz{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:6px}
+.cnc-zz .cnc-btn.sm{flex:1;padding:4px 6px}
+/* six onglets : plus serrés, le premier collé au bord */
+.panel .tabs{display:flex;gap:0;padding:5px 0 0;grid-auto-columns:auto}
+.panel .tabs{overflow:hidden}
+.panel .tabs button{flex:1 1 auto;min-width:0;padding:8px 3px;gap:2px;font-size:12px;border-radius:6px 6px 0 0}
+.panel .tabs button span{overflow:hidden;text-overflow:ellipsis}
+.panel .tabs button i{font-size:10.5px}
+.panel .tabs button[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -1563,7 +1572,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.336</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.352</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -7456,7 +7465,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.336', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.352', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -10441,9 +10450,9 @@ async function serialOpen(port) {
 class SimGrbl {
   constructor(o) {
     this.fluid = !!o.fluid; this.lim = o.limits !== false; const st = S.stock || { w: 200, h: 150, t: 18 };
-    this.trav = [400, 300, 80]; this.table = -78; this.sx = -330; this.sy = -250; this.sw = +st.w || 200; this.sh = +st.h || 150; this.top = this.table + (+st.t || 18);
+    this.trav = [400, 300, 80]; this.table = -78; this.sx = 60; this.sy = 40; this.sw = +st.w || 200; this.sh = +st.h || 150; this.top = this.table + (+st.t || 18);
     this.PL = 15; this.OFF = 10; const t0 = (S.tools || []).find(t => t.dia) || { dia: 6 }; this.r = (+t0.dia || 6) / 2;
-    this.mpos = [-170, -120, -22]; this.pe = this.mpos.slice(); this.wco = [0, 0, 0]; this.g92 = [0, 0, 0]; this.prb = [0, 0, 0];
+    this.mpos = [190, 150, -22]; this.pe = this.mpos.slice(); const oo = (() => { try { const o = stockO(); return o; } catch { return { ox: 0, oy: 0, oz: 0 }; } })(); this.wco = [this.sx + oo.ox, this.sy + oo.oy, this.top - oo.oz]; this.g92 = [0, 0, 0]; this.prb = [0, 0, 0];
     this.state = this.lim ? 'Alarm' : 'Idle'; this.q = []; this.pend = 0; this.abs = true; this.mode = 0; this.f = 0; this.ov = [100, 100, 100]; this.spin = 0; this.S = 0; this.hold = false; this.lb = ''; this.touch = 0;
     this.set = { 0: 10, 1: 25, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 10: 1, 11: 0.01, 12: 0.002, 13: 0, 20: this.lim ? 1 : 0, 21: 0, 22: this.lim ? 1 : 0, 23: 0, 24: 25, 25: 500, 26: 250, 27: 1, 30: 24000, 31: 0, 32: 0, 100: 800, 101: 800, 102: 800, 110: 5000, 111: 5000, 112: 1500, 120: 500, 121: 500, 122: 200, 130: 400, 131: 300, 132: 80 };
     this.T = { kind: 'sim', write: s => this.rx(s), close: () => { clearInterval(this.tm); } };
@@ -10509,10 +10518,10 @@ class SimGrbl {
     if (u === '$G') { this.emit('[GC:G' + this.mode + ' G54 G17 G21 ' + (this.abs ? 'G90' : 'G91') + ' G94 M' + (this.spin ? 3 : 5) + ' M9 T0 F' + this.f + ' S' + this.S + ']'); return this.emit('ok'); }
     if (u === '$X') { if (this.state === 'Alarm') { this.state = 'Idle'; this.emit('[MSG:Caution: Unlocked]'); } return this.emit('ok'); }
     if (/^\$H[XYZ]?$/.test(u)) { if (!this.lim) return this.err(5); if (u.length > 2 && !this.fluid) return this.err(3); if (!['Idle', 'Alarm'].includes(this.state)) return this.err(8);
-      const ax = u.length > 2 ? u.slice(2).toLowerCase() : 'xyz'; this.state = 'Home'; this.q = []; if (ax.includes('z')) this.q.push({ to: [this.mpos[0], this.mpos[1], -1], f: 1500, home: 1 }); const t = [ax.includes('x') ? -1 : this.mpos[0], ax.includes('y') ? -1 : this.mpos[1], ax.includes('z') ? -1 : this.mpos[2]]; this.q.push({ to: t, f: 2500, home: 1, last: 1 }); this.pe = t.slice(); return; }
+      const ax = u.length > 2 ? u.slice(2).toLowerCase() : 'xyz'; this.state = 'Home'; this.q = []; if (ax.includes('z')) this.q.push({ to: [this.mpos[0], this.mpos[1], -1], f: 1500, home: 1 }); const t = [ax.includes('x') ? 1 : this.mpos[0], ax.includes('y') ? 1 : this.mpos[1], ax.includes('z') ? -1 : this.mpos[2]]; this.q.push({ to: t, f: 2500, home: 1, last: 1 }); this.pe = t.slice(); return; }
     if (/^\$J=/.test(u)) { if (!['Idle', 'Jog'].includes(this.state)) return this.err(8); const s = u.slice(3); const W = {}; let m; const re = /([A-Z])(-?\d*\.?\d+)/g; while ((m = re.exec(s))) W[m[1]] = +m[2]; const rel = /G91/.test(s), g53 = /G53/.test(s);
       const base = this.q.length ? this.pe : this.mpos; const t = base.slice(); AX.forEach((a, i) => { const k = a.toUpperCase(); if (W[k] === undefined) return; t[i] = rel ? base[i] + W[k] : g53 ? W[k] : W[k] + this.wco[i] + this.g92[i]; });
-      if (+this.set[20] && this.state !== 'Alarm' && t.some((v, i) => v > 0.001 || v < -this.trav[i] - 0.001)) return this.err(15);
+      if (+this.set[20] && this.state !== 'Alarm' && t.some((v, i) => i === 2 ? (v > 0.001 || v < -this.trav[2] - 0.001) : (v < -0.001 || v > this.trav[i] + 0.001))) return this.err(15);
       if (!W.F) return this.err(22); this.q.push({ to: t, f: W.F, jog: 1 }); this.pe = t.slice(); this.state = 'Jog'; return this.ok(); }
     { const m = /^\$(\d+)=(-?[\d.]+)$/.exec(u); if (m) { this.set[m[1]] = +m[2]; if (m[1] === '22') this.lim = !!+m[2]; return this.emit('ok'); } }
     if (u === '$CONFIG/DUMP' && this.fluid) { ['name: Machine simulée', 'board: ESP32', 'stepping:', '  engine: RMT', 'axes:', '  x:', '    steps_per_mm: 800', '    max_rate_mm_per_min: 5000', '    max_travel_mm: 400', '  y:', '    max_travel_mm: 300', '  z:', '    max_travel_mm: 80', 'probe:', '  pin: gpio.32:low'].forEach(l => this.emit(l)); return this.emit('ok'); }
@@ -10625,6 +10634,7 @@ async function connect(kind, port) {
     if (K.fProbe && !CF.probe) { CF.probe = true; cfSave(); U.pmode = 'probe'; const c2 = q('#cfgCncProbe'); if (c2) c2.checked = true; setTimeout(() => say('FluidNC : palpeur déclaré dans config.yaml (' + pin + '), palpeur activé.'), 800); } } catch { } }
   if (!K.ctrl) K.ctrl = K.fluid ? 'FluidNC' : 'GRBL';
   await sleep(250); if (K.st === 'Conn') K.st = 'Idle';
+  if (!CF.guide) { K.ws = { x: true, y: true, z: true }; if (K.st === 'Alarm' && !K.alarm) { try { await cmd('$X'); await cmd('G90'); } catch { } K.homeSkip = true; log('Déverrouillée sans prise d’origine (vérifications désactivées) : la position actuelle est conservée.', 'm'); } }
   U.vol = 2; ui(); say('Machine connectée : ' + K.ctrl);
 }
 function hardOff() { clearInterval(pollT); flush('off', true); if (K.prog) progAbort('off'); K.T = null; K.sim = null; K.st = 'Off'; K.alarm = null; U.vol = 1; ui(); }
@@ -10641,7 +10651,7 @@ async function unlock() { if (!conn()) return; try { await cmd('$X'); await cmd(
 
 /* ---------------- origine pièce ---------------- */
 async function setZero(a, v) { if (!conn() || moving()) return; v = +v || 0; try { await cmd('G10 L20 P1 ' + a.toUpperCase() + n3(v)); K.ws[a] = true; K.originLost = false; } catch (e) { say('Refusé par la machine : ' + e); } ui(); }
-async function zeroAll() { if (!conn() || moving()) return; try { await cmd('G10 L20 P1 X0 Y0 Z0'); K.ws = { x: true, y: true, z: true }; K.originLost = false; } catch (e) { say('Refusé : ' + e); } ui(); }
+async function zeroAll() { if (!conn() || moving()) return; try { await cmd('G10 L20 P1 X0 Y0'); K.ws.x = true; K.ws.y = true; K.originLost = false; } catch (e) { say('Refusé : ' + e); } ui(); }
 function keepG54() { K.ws = { x: true, y: true, z: true }; K.originLost = false; ui(); say('Origine pièce enregistrée dans la machine reprise. Vérifiez-la.'); }
 async function gotoOrigin() { if (!conn() || moving() || !allSet()) return; const z = Math.max(wpos()[2], 5); K.busy = 'goto'; ui(); try { await seq(['G90', 'G0 Z' + n3(z), 'G0 X0 Y0']); await waitIdle(); } catch { } K.busy = ''; ui(); }
 const toolR = () => { const d = +U.dia || curToolDia(); return d / 2; };
@@ -10775,8 +10785,8 @@ function tcRender() {
     (rd ? '<p>Le programme demande : <b>' + nm + '</b> (T' + P.tc.tool + '). La broche est arrêtée et le Z relevé.</p>' : '<p class="cnc-m">Fin des mouvements en cours, arrêt de la broche et remontée du Z…</p>') +
     '<label class="cnc-chk"><input type="checkbox" data-tc="mounted" ' + (P.tc.mounted ? 'checked' : '') + (rd ? '' : ' disabled') + '><span><b>1.</b> Attendez l’arrêt complet de la broche, puis montez la <b>' + nm + '</b>. Serrez bien la pince.</span></label>' +
     (CF.probe ? '<div style="padding:6px 0 6px 24px"><b>2.</b> Refaites le zéro Z : posez la plaque sous la fraise (descendez avec le pavé du panneau), branchez la pince, puis :<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn pri" data-c="tcProbe" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>Palper Z (plaque ' + f2(CF.plate, 1) + ' mm)</button>' + (P.tc.probed ? '<span style="color:#2e9b5c;font-weight:600">✓ Z refait</span>' : '') + '<span class="cnc-s"><span class="cnc-led ' + (/P/.test(K.pn) ? 'on' : '') + '" data-live="led"></span>contact</span></div>' +
-      '<div class="cnc-s" style="margin-top:9px;padding-top:7px;border-top:1px dashed var(--line)"><b>Ou à la main</b> : feuille ou cale de <input type="number" step="0.01" min="0" value="' + CF.shim + '" data-cf="shim" style="width:62px"> mm sur la pièce, descendez avec le pavé jusqu’à la pincer, puis <button class="cnc-btn sm" data-c="tcPaper" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>Zéro Z ici</button></div>' :
-      '<div style="padding:6px 0 6px 24px"><b>2.</b> Refaites le zéro Z à la main : posez la feuille ou la cale (' + f2(CF.shim) + ' mm) sur la pièce, descendez la fraise avec le pavé (pas de 0,1 mm à la fin) jusqu’à la pincer légèrement, puis :<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn pri" data-c="tcPaper" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>Zéro Z ici (cale ' + f2(CF.shim) + ' mm)</button>' + (P.tc.probed ? '<span style="color:#2e9b5c;font-weight:600">✓ Z refait</span>' : '') + '</div>') + '<p class="cnc-s cnc-m" style="margin:6px 0 0">Ne touchez pas à X et Y : ils restent valables.</p></div>' +
+      '<div class="cnc-s" style="margin-top:9px;padding-top:7px;border-top:1px dashed var(--line)"><b>Ou à la main</b> : feuille ou cale de <input type="number" step="0.01" min="0" value="' + CF.shim + '" data-cf="shim" style="width:62px"> mm sur la pièce, descendez avec le pavé jusqu’à la pincer, puis <button class="cnc-btn sm" data-c="tcPaper" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>Zéro Z ici</button> ou, fraise posée sur la plaque, <button class="cnc-btn sm" data-c="tcPlate" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>Zéro Z sur plaque ' + f2(CF.plate, 1) + ' mm</button></div>' :
+      '<div style="padding:6px 0 6px 24px"><b>2.</b> Refaites le zéro Z à la main : posez la feuille ou la cale (' + f2(CF.shim) + ' mm) sur la pièce, descendez la fraise avec le pavé (pas de 0,1 mm à la fin) jusqu’à la pincer légèrement, puis :<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn pri" data-c="tcPaper" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>Zéro Z ici (cale ' + f2(CF.shim) + ' mm)</button><button class="cnc-btn" data-c="tcPlate" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>sur plaque ' + f2(CF.plate, 1) + ' mm</button>' + (P.tc.probed ? '<span style="color:#2e9b5c;font-weight:600">✓ Z refait</span>' : '') + '</div>') + '<p class="cnc-s cnc-m" style="margin:6px 0 0">Ne touchez pas à X et Y : ils restent valables.</p></div>' +
     '<div style="padding-left:24px"><b>3.</b> ' + (CF.probe ? 'Rangez la plaque et la pince (ou la cale)' : 'Retirez la feuille ou la cale') + (CF.m3 ? '.' : ', rallumez la défonceuse.') + '</div>' +
     '<div class="cnc-row" style="margin-top:14px;justify-content:space-between"><button class="cnc-btn" data-c="stop">Arrêter l’usinage</button><button class="cnc-btn pri" data-c="tcResume" ' + (P.tc.probed ? '' : 'disabled') + '>▶ Reprendre l’usinage</button></div>' +
     '<p class="cnc-s cnc-m" style="margin-top:9px">Le pavé de déplacement (en bas du panneau) reste utilisable.</p></div></div>';
@@ -10966,11 +10976,12 @@ function topRender() {
     '<div class="cnc-ct">Wi-Fi</div><button class="cnc-ci" disabled><span class="ic">📶</span><span><b>FluidNC Wi-Fi</b><small>Pas encore dans la version test</small></span></button></div>';
   else h += '<button class="cnc-btn big cnc-conn" data-c="conMenu">' + (K.st === 'Conn' ? 'Connexion…' : '<span class="cnc-cdot ' + (K.st === 'Alarm' ? 'al' : '') + '"></span>' + esc(K.ctrl || 'Connectée') + ' · ' + esc(K.kind === 'sim' ? 'simulée' : 'USB')) + ' ▾</button><div class="cnc-cmenu"><div class="cnc-ct">' + esc(K.name) + '</div><button class="cnc-ci" data-c="disc"><span class="ic">⏏</span><span><b>Déconnecter</b></span></button></div>';
   h += '</div><button class="cnc-btn cnc-gear" data-c="mset" title="Paramètres machine : réglages $$, déplacements, palpeur, manette, macros, console">⚙</button></div>';
-  h += '<button class="cnc-btn cnc-gozero' + (c && limOn() && !K.homed ? ' pri' : '') + '" data-c="home" ' + (c && limOn() && !moving() && !K.prog && ['Idle', 'Alarm'].includes(K.st) ? '' : 'disabled') + ' title="' + (c && !limOn() ? 'Pas de fins de course sur cette machine' : 'Envoie chaque axe sur son fin de course ($H)') + '">⌂ Prise d’origine machine' + (K.homed ? ' ✓' : '') + '</button>';
+  h += '<button class="cnc-btn cnc-gozero' + (c && limOn() && !K.homed && CF.guide ? ' pri' : '') + '" data-c="home" ' + (c && limOn() && !moving() && !K.prog && ['Idle', 'Alarm'].includes(K.st) ? '' : 'disabled') + ' title="' + (c && !limOn() ? 'Pas de fins de course sur cette machine' : 'Envoie chaque axe sur son fin de course ($H)') + '">⌂ Prise d’origine machine' + (K.homed ? ' ✓' : '') + '</button>';
   h += '<button class="cnc-btn cnc-gozero" data-c="goHome" ' + (c && K.homed && canJog() ? '' : 'disabled') + ' title="' + (K.homed ? 'Remonte Z, puis va à l’origine machine (G53)' : 'Faites d’abord la prise d’origine') + '">⤒ Aller à l’origine machine</button>';
   h += '<div class="cnc-coord"><div class="cnc-crow cnc-chd"><span></span><span>Zéro</span><span>Pièce <span class="cnc-badge">G54</span></span><span>Machine</span><span>Aller</span></div>' +
     AX.map((a, i) => '<div class="cnc-crow"><b class="cnc-axl ' + a + '">' + a.toUpperCase() + '</b><button class="cnc-btn sm" data-c="zero" data-a="' + a + '" ' + (dis ? 'disabled' : '') + ' title="Zéro ' + a.toUpperCase() + ' ici (G10 L20 P1 ' + a.toUpperCase() + '0)">↺</button><input class="cnc-wsin ' + a + (K.ws[a] ? ' set' : '') + '" type="number" step="0.01" data-wsin="' + a + '" title="Tapez une cote puis Entrée : la position actuelle prend cette valeur" ' + (dis ? 'disabled' : '') + '><span class="cnc-mv" data-live="m' + a + '">–</span><button class="cnc-btn sm" data-c="goAx" data-a="' + a + '" ' + (c && K.ws[a] && canJog() ? '' : 'disabled') + ' title="Aller à ' + a.toUpperCase() + '0">⌂</button></div>').join('') +
-    '<div class="cnc-row" style="margin-top:6px"><button class="cnc-btn" style="flex:1" data-c="zeroAll" ' + (dis ? 'disabled' : '') + '>↺ Zéro X Y Z</button><button class="cnc-btn" data-c="zShim" ' + (dis ? 'disabled' : '') + ' title="La fraise touche la cale posée sur la pièce">Zéro Z sur cale ' + f2(CF.shim) + '</button></div></div>';
+    '<button class="cnc-btn" style="width:100%;margin-top:6px" data-c="zeroAll" ' + (dis ? 'disabled' : '') + ' title="X et Y seulement : le Z se règle à part">↺ Zéro X Y</button>' +
+    '<div class="cnc-zz"><span class="cnc-s cnc-m">Zéro Z à la main :</span><button class="cnc-btn sm" data-c="zShim" ' + (dis ? 'disabled' : '') + ' title="La fraise pince la feuille ou la cale posée sur la pièce">cale ' + String(+CF.shim).replace('.', ',') + ' mm</button><button class="cnc-btn sm" data-c="zPlate" ' + (dis ? 'disabled' : '') + ' title="Descendez la fraise jusqu’à toucher la plaque posée sur la pièce">plaque ' + String(+CF.plate).replace('.', ',') + ' mm</button></div></div>';
   scroll.innerHTML = h; live();
 }
 const L$ = k => qa('[data-live="' + k + '"]');
@@ -11002,7 +11013,6 @@ setInterval(() => { if (curTab === 'usiner') live(); }, 250);
 window.cncOverlay = g => {
   if (curTab !== 'usiner' || !K.T || typeof rvProj !== 'function' || !RV.mvp) return;
   const pts = K.pts; if (pts && K.doneK >= 0 && allSet()) { g.strokeStyle = 'rgba(150,150,150,.95)'; g.lineWidth = 2.2; g.lineJoin = 'round'; g.beginPath(); for (let k = 0; k <= K.doneK && k < pts.length; k++) { const s = rvProj(toInt(pts[k].p)); k ? g.lineTo(s[0], s[1]) : g.moveTo(s[0], s[1]); } if (K.prog) { const s = rvProj(toInt(wpos())); g.lineTo(s[0], s[1]); } g.stroke(); }
-  if (!allSet()) return;
   const p = toInt(wpos()), d = curToolDia(), a = rvProj(p), b = rvProj([p[0], p[1], p[2] + 25]), c = rvProj([p[0], p[1], p[2] + 40]), e = rvProj([p[0], p[1], p[2] + 110]), u = rvProj([p[0] + 10, p[1], p[2]]), v = rvProj([p[0], p[1] + 10, p[2]]);
   const k = Math.max(Math.hypot(u[0] - a[0], u[1] - a[1]), Math.hypot(v[0] - a[0], v[1] - a[1])) / 10;
   g.lineCap = 'butt'; g.globalAlpha = .4; g.strokeStyle = '#4a4f57'; g.lineWidth = Math.max(8, 46 * k); g.beginPath(); g.moveTo(c[0], c[1]); g.lineTo(e[0], e[1]); g.stroke(); g.globalAlpha = 1;
@@ -11025,7 +11035,7 @@ function msetOpen(t) {
     b = '<div class="cnc-lbl" style="margin-top:0">Les 4 pas du pavé (mm)</div><div class="cnc-row">' + CF.steps.map((s, i) => '<input type="number" step="0.01" value="' + s + '" data-step="' + i + '" style="width:80px">').join('') + '</div><div class="cnc-lbl">Vitesse de déplacement manuel (mm/min)</div><input type="number" value="' + CF.jogF + '" data-cf="jogF"><div class="cnc-lbl">Broche</div><label class="cnc-chk"><input type="checkbox" data-cfb="m3" ' + (CF.m3 ? 'checked' : '') + '><span>La broche est commandée par la machine (M3 / M5). Décochez pour une défonceuse allumée à la main.</span></label>' +
       (K.kind === 'sim' || !K.T ? '<div class="cnc-lbl">Machine simulée : vitesse de la simulation</div><div class="cnc-seg">' + [1, 10, 50].map(v => '<button class="' + (+CF.sim === v ? 'on' : '') + '" data-c="simSp" data-v="' + v + '">× ' + v + '</button>').join('') + '</div>' : '');
   } else if (U.mtab === 'probe') {
-    b = '<label class="cnc-chk" style="margin-bottom:10px"><input type="checkbox" data-cfb="probe" ' + (CF.probe ? 'checked' : '') + '><span><b>J’ai un palpeur</b> (plaque Z ou bloc XYZ branché sur la machine). Sinon, l’origine pièce et le changement d’outil se font à la main.</span></label>' + '<div class="cnc-kv" style="max-width:470px;gap:8px 16px;align-items:center;margin-bottom:12px"><span><b>Épaisseur de la feuille ou de la cale</b> pour le zéro Z à la main (mm)</span><span><input type="number" step="0.01" min="0" value="' + CF.shim + '" data-cf="shim"></span></div><p class="cnc-s cnc-m" style="margin:-6px 0 12px">Feuille de papier ≈ 0,1 mm · cale de réglage ou foret posé à plat : sa mesure au pied à coulisse.</p>' + (CF.probe ? '' : '<div style="opacity:.5;pointer-events:none">') + '<div class="cnc-kv" style="max-width:470px;gap:8px 16px;align-items:center"><span>Épaisseur de la plaque Z (mm)</span><span><input type="number" step="0.1" value="' + CF.plate + '" data-cf="plate"></span><span>Bloc XYZ : distance entre la face palpée et le bord de la pièce (mm)</span><span><input type="number" step="0.1" value="' + CF.blockOff + '" data-cf="blockOff"></span><span>Vitesse de palpage (mm/min)</span><span><input type="number" value="' + CF.probeF + '" data-cf="probeF"></span><span>Distance maxi de recherche en Z (mm)</span><span><input type="number" value="' + CF.probeDist + '" data-cf="probeDist"></span><span>Dégagement après palpage (mm)</span><span><input type="number" value="' + CF.retract + '" data-cf="retract"></span></div><p class="cnc-s cnc-m">Le Z se palpe en deux passes : une rapide, puis une lente plus précise. Les côtés X et Y se palpent 8 mm sous le dessus du bloc.</p>' + (CF.probe ? '' : '</div>');
+    b = '<label class="cnc-chk" style="margin-bottom:10px"><input type="checkbox" data-cfb="probe" ' + (CF.probe ? 'checked' : '') + '><span><b>J’ai un palpeur</b> (plaque Z ou bloc XYZ branché sur la machine). Sinon, l’origine pièce et le changement d’outil se font à la main.</span></label>' + '<div class="cnc-kv" style="max-width:470px;gap:8px 16px;align-items:center;margin-bottom:12px"><span><b>Épaisseur de la feuille ou de la cale</b> pour le zéro Z à la main (mm)</span><span><input type="number" step="0.01" min="0" value="' + CF.shim + '" data-cf="shim"></span><span><b>Épaisseur de la plaque Z</b> (palpeur ou zéro à la main, mm)</span><span><input type="number" step="0.1" value="' + CF.plate + '" data-cf="plate"></span></div><p class="cnc-s cnc-m" style="margin:-6px 0 12px">Feuille de papier ≈ 0,1 mm. Cale ou plaque : mesurez-la au pied à coulisse. Sans palpeur, « Zéro Z sur plaque » se fait en descendant la fraise jusqu’à toucher la plaque.</p>' + (CF.probe ? '' : '<div style="opacity:.5;pointer-events:none">') + '<div class="cnc-kv" style="max-width:470px;gap:8px 16px;align-items:center"><span>Bloc XYZ : distance entre la face palpée et le bord de la pièce (mm)</span><span><input type="number" step="0.1" value="' + CF.blockOff + '" data-cf="blockOff"></span><span>Vitesse de palpage (mm/min)</span><span><input type="number" value="' + CF.probeF + '" data-cf="probeF"></span><span>Distance maxi de recherche en Z (mm)</span><span><input type="number" value="' + CF.probeDist + '" data-cf="probeDist"></span><span>Dégagement après palpage (mm)</span><span><input type="number" value="' + CF.retract + '" data-cf="retract"></span></div><p class="cnc-s cnc-m">Le Z se palpe en deux passes : une rapide, puis une lente plus précise. Les côtés X et Y se palpent 8 mm sous le dessus du bloc.</p>' + (CF.probe ? '' : '</div>');
   } else if (U.mtab === 'pad') {
     let gp = null; try { gp = [...(navigator.getGamepads ? navigator.getGamepads() : [])].find(Boolean); } catch { }
     const N = Math.max(12, gp ? gp.buttons.length : 16), G = CF.gp, opt = sel => '<option value="">—</option>' + GPA.map(c => '<optgroup label="' + c.c + '">' + c.i.map(x => '<option value="' + x[0] + '" ' + (sel === x[0] ? 'selected' : '') + '>' + x[1] + '</option>').join('') + '</optgroup>').join('');
@@ -11082,7 +11092,9 @@ async function onClick(e) {
     case 'paxis': U.paxis = b.dataset.v; panel(); break;
     case 'probe': probe(); break;
     case 'tcProbe': U.paxis = 'Z'; probe(); break;
+    case 'zPlate': setZero('z', (+CF.plate || 0) + stockO().oz); break;
     case 'zShim': setZero('z', (+CF.shim || 0) + stockO().oz); break;
+    case 'tcPlate': { const o = stockO(); await setZero('z', (+CF.plate || 0) + o.oz); if (K.prog && K.prog.tc && K.ws.z) K.prog.tc.probed = true; tcRender(); break; }
     case 'tcPaper': { const o = stockO(); await setZero('z', (+CF.shim || 0) + o.oz); if (K.prog && K.prog.tc && K.ws.z) K.prog.tc.probed = true; tcRender(); break; }
     case 'msetProbe': msetOpen('probe'); break;
     case 'cfExp': cfExport(); break;
@@ -11124,7 +11136,7 @@ async function onChange(e) {
   if (d.u2) { U[d.u2] = +t.value; return; }
   if (d.tc) { if (K.prog && K.prog.tc) K.prog.tc[d.tc] = t.checked; tcRender(); return; }
   if (d.k === 'airWant') { K.airWant = t.checked; panel(); return; }
-  if (d.cf) { CF[d.cf] = +t.value; cfSave(); if (d.cf === 'jogF') setL('jf', String(CF.jogF)); if (d.cf === 'shim') { CF.shim = Math.max(0, +t.value || 0); cfSave(); qa('[data-cf="shim"]').forEach(x => { if (x !== t) x.value = CF.shim; }); tcRender(); } return; }
+  if (d.cf) { CF[d.cf] = +t.value; cfSave(); if (d.cf === 'jogF') setL('jf', String(CF.jogF)); if (d.cf === 'plate') { topRender(); tcRender(); } if (d.cf === 'shim') { CF.shim = Math.max(0, +t.value || 0); cfSave(); qa('[data-cf="shim"]').forEach(x => { if (x !== t) x.value = CF.shim; }); tcRender(); topRender(); } return; }
   if (d.cfb) { CF[d.cfb] = t.checked; cfSave(); if (d.cfb === 'guide') { ui(); return; } if (d.cfb === 'probe') { U.pmode = CF.probe ? 'probe' : 'hand'; const c2 = q('#cfgCncProbe'); if (c2) c2.checked = CF.probe; if (q('#cncMset')) msetOpen(); ui(); } return; }
   if (d.step !== undefined) { CF.steps[+d.step] = +t.value || CF.steps[+d.step]; cfSave(); ctlRender(); return; }
   if (d.wsin) { const a = d.wsin, v = t.value.trim(); t.blur(); if (v !== '' && isFinite(+v)) await setZero(a, +v); return; }
@@ -11159,7 +11171,7 @@ window.addEventListener('beforeunload', e => { if (K.prog) { e.preventDefault();
 /* ---------------- manette ---------------- */
 const GPA = [
   { c: 'Déplacements', i: [['stepR', 'Pas rapide'], ['stepN', 'Pas normal'], ['stepP', 'Pas précis'], ['stepC', 'Changer de pas (cycle)'], ['jX+', 'Jog X+ (droite)'], ['jX-', 'Jog X− (gauche)'], ['jY+', 'Jog Y+ (arrière)'], ['jY-', 'Jog Y− (avant)'], ['jZ+', 'Jog Z+ (haut)'], ['jZ-', 'Jog Z− (bas)'], ['jX+Y+', 'Jog X+ Y+'], ['jX+Y-', 'Jog X+ Y−'], ['jX-Y+', 'Jog X− Y+'], ['jX-Y-', 'Jog X− Y−']] },
-  { c: 'Positions', i: [['park', 'Parking (1ʳᵉ macro)'], ['zeroX', 'Zéro X'], ['zeroY', 'Zéro Y'], ['zeroZ', 'Zéro Z'], ['zeroAll', 'Zéro X Y Z'], ['goXY', 'Aller à X0 Y0'], ['goX', 'Aller à X0'], ['goY', 'Aller à Y0'], ['goZ', 'Aller à Z0'], ['cBL', 'Coin arrière gauche'], ['cBR', 'Coin arrière droit'], ['cFL', 'Coin avant gauche'], ['cFR', 'Coin avant droit'], ['home', 'Prise d’origine']] },
+  { c: 'Positions', i: [['park', 'Parking (1ʳᵉ macro)'], ['zeroX', 'Zéro X'], ['zeroY', 'Zéro Y'], ['zeroZ', 'Zéro Z'], ['zeroAll', 'Zéro X Y'], ['goXY', 'Aller à X0 Y0'], ['goX', 'Aller à X0'], ['goY', 'Aller à Y0'], ['goZ', 'Aller à Z0'], ['cBL', 'Coin arrière gauche'], ['cBR', 'Coin arrière droit'], ['cFL', 'Coin avant gauche'], ['cFR', 'Coin avant droit'], ['home', 'Prise d’origine']] },
   { c: 'Palpage', i: [['probe', 'Lancer le palpage'], ['pNext', 'Palpage suivant (Z, XYZ…)'], ['pPrev', 'Palpage précédent'], ['diaUp', 'Diamètre d’outil +'], ['diaDn', 'Diamètre d’outil −']] },
   { c: 'Broche', i: [['spOn', 'Broche marche (M3)'], ['spOff', 'Broche arrêt (M5)']] },
   { c: 'Arrosage', i: [['m7', 'Brouillard (M7)'], ['m8', 'Arrosage / aspiration (M8)'], ['m9', 'Arrêt arrosage (M9)']] },
@@ -11172,7 +11184,7 @@ function gpJog(id) { const m = /^j((?:[XYZ][+-])+)$/.exec(id); if (!m) return nu
 async function gpDo(id, lk) {
   if (!id) return; if (MOVE_A.test(id) && !lk) { say('Maintenez le bouton de sécurité de la manette.'); return; }
   const st = n => { CF.step = CF.steps[n]; cfSave(); ctlRender(); }, o = stockO(), trv = [K.set[130], K.set[131], K.set[132]];
-  const corner = (bx, by) => { if (!K.homed || !trv[0] || K.mpos[0] > 0.5) { say('Coins : prise d’origine et courses ($130, $131) nécessaires.'); return; } seq(['G53 G0 Z-5', 'G53 G0 X' + n3(bx ? -5 : -trv[0] + 5) + ' Y' + n3(by ? -5 : -trv[1] + 5)]).catch(() => { }); };
+  const corner = (bx, by) => { if (!K.homed || !trv[0]) { say('Coins : prise d’origine et courses ($130, $131) nécessaires.'); return; } const ps = i => K.mpos[i] > 0.5, cx = ps(0) ? (bx ? trv[0] - 5 : 5) : (bx ? -5 : -trv[0] + 5), cy = ps(1) ? (by ? trv[1] - 5 : 5) : (by ? -5 : -trv[1] + 5); seq(['G53 G0 Z' + n3(K.mpos[2] > 0.5 ? trv[2] - 5 : -5), 'G53 G0 X' + n3(cx) + ' Y' + n3(cy)]).catch(() => { }); };
   const view = (y, p) => { RV.yaw = y; RV.pitch = p; rvReq(); };
   switch (id) {
     case 'stepR': st(3); break; case 'stepN': st(1); break; case 'stepP': st(0); break; case 'stepC': { const k = CF.steps.indexOf(+CF.step); st((k + 1) % 4); break; }
