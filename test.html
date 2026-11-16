@@ -216,6 +216,41 @@ table.cnc-set input{width:110px;text-align:right}
 .panel .tabs button span{overflow:hidden;text-overflow:ellipsis}
 .panel .tabs button i{font-size:10.5px}
 .panel .tabs button[hidden]{display:none}
+/* pavé plus gros, lettres des axes en couleur */
+.cnc-pad{grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,48px);gap:5px}
+.cnc-zpad{grid-template-columns:48px;grid-template-rows:repeat(3,48px);gap:5px}
+.cnc-pb{font-size:15px}
+.cnc-pb .cx{color:#e5484d}.cnc-pb .cy{color:#2e9b5c}.cnc-pb .cz{color:#3e7be0}
+.cnc-pb b{font-weight:800}
+.cnc-pb.xy0{font-size:13px;letter-spacing:-.02em}
+.cnc-pb.dg{font-size:16px}
+/* rangée d'icônes, menus Aller à et positions */
+.cnc-icons{display:flex;gap:5px;margin-bottom:8px}
+.cnc-icons .cnc-wcs{width:66px;flex:none;font-weight:700}
+.cnc-btn.cnc-ib{flex:1;padding:6px 0;font-size:15px}
+.cnc-btn.cnc-ib.cnc-pr{flex:2;font-size:13px;font-weight:600}
+.cnc-menu{border:1px solid var(--accent);border-radius:8px;padding:8px 9px;margin:-2px 0 9px;background:var(--raised);font-size:13px}
+.cnc-gor{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:5px;align-items:center;margin-top:7px}
+.cnc-gor label{display:flex;align-items:center;gap:4px;margin:0}
+.cnc-gor input{width:100%;min-width:0;text-align:right;font-family:var(--f-mono)}
+.cnc-gq{display:flex;flex-wrap:wrap;gap:4px}
+.cnc-gq .cnc-btn.sm{flex:1 1 30%}
+.cnc-pos{display:grid;grid-template-columns:1fr auto auto;gap:5px;align-items:center;padding:5px 0;border-bottom:1px solid var(--line)}
+.cnc-pos small{display:block;color:var(--muted);font:11px var(--f-mono)}
+.cnc-zm{display:grid;grid-template-columns:62px auto 1fr;gap:5px;align-items:center}
+.cnc-zm input{width:100%;text-align:right}
+.cnc-tc{border-color:var(--warn)!important;background:color-mix(in srgb,var(--warn) 12%,var(--panel))!important}
+.cnc-pc{border-color:var(--accent)!important}
+.cnc-sw2{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin:0 6px 0 auto;cursor:pointer}
+.cnc-sw2 input{display:none}
+.cnc-sw2 span{position:relative;width:30px;height:17px;border-radius:9px;background:var(--line);transition:.15s}
+.cnc-sw2 span::before{content:"";position:absolute;width:13px;height:13px;left:2px;top:2px;border-radius:50%;background:#fff;transition:.15s}
+.cnc-sw2 input:checked+span{background:var(--accent)}
+.cnc-sw2 input:checked+span::before{transform:translateX(13px)}
+.cnc-float .cnc-illu svg{height:105px}
+.cnc-cg{grid-template-columns:auto auto minmax(0,1fr)}
+.cnc-cg .cnc-seg{display:grid;grid-template-columns:repeat(4,1fr);width:100%;box-sizing:border-box}
+.cnc-cg .cnc-seg button{min-width:0;padding:4px 2px}
 </style>
 </head>
 <body>
@@ -351,7 +386,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .libhead,.libfoot{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}.libfoot{border-bottom:0;border-top:1px solid var(--line)}.libhead .grow,.libfoot .grow,.libtools .grow{flex:1}
 .libhead select{min-width:150px}.libbody{display:grid;grid-template-columns:minmax(260px,330px) minmax(0,1fr);min-height:0}
 .libleft{display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;gap:8px;padding:10px;border-right:1px solid var(--line);min-height:0}
-.libtree{list-style:none;margin:0;padding:4px;overflow:auto;border:1px solid var(--line);border-radius:6px;background:var(--raised);font-size:13px}
+#libTree li.drop{outline:2px dashed var(--accent);outline-offset:-2px}.libtree{list-style:none;margin:0;padding:4px;overflow:auto;border:1px solid var(--line);border-radius:6px;background:var(--raised);font-size:13px}
 .libtree li{display:flex;align-items:center;gap:6px;padding:3px 6px;border-radius:4px;cursor:pointer;white-space:nowrap;user-select:none}.libtree li:hover{background:color-mix(in srgb,var(--accent) 14%,transparent)}
 .libtree li.on{background:var(--accent);color:var(--accent-ink)}.libtree li.grp{font-weight:600}.libtree li.grp .tw{width:12px;display:inline-block;color:var(--muted)}.libtree li.off{opacity:.45}.libtree li .used{margin-left:auto;font-size:10.5px;color:var(--accent)}.libtree li.on .used{color:inherit}
 .libtree li svg{width:15px;height:15px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6}
@@ -1460,6 +1495,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           </div>
           <label class="chk" id="uG20Row" hidden><input type="checkbox" id="mG20"> G-code en pouces (G20)</label>
           <label class="chk"><input type="checkbox" id="mComments" checked> Commentaires dans le programme</label>
+          <label class="chk"><input type="checkbox" id="mEndHome" checked> En fin de programme, revenir en X0 Y0 (sinon la broche reste au-dessus de la pièce, au Z de sécurité)</label>
           <label class="chk"><input type="checkbox" id="mArcs" checked> Arcs G2/G3 (fichier plus court, mouvement plus fluide)</label>
           <label class="chk" id="mCycRow"><input type="checkbox" id="mCyc" checked> Cycles de perçage G81/G82/G83 (le contrôleur gère les remontées)</label>
         </section>
@@ -1572,7 +1608,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.352</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.354</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1733,7 +1769,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
   <div class="libdlg" role="dialog" aria-labelledby="libT">
     <div class="libhead"><span class="fwin-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h4v5l-2 2-2-2z"/><path d="M9 10v11"/><path d="M15 3h3v9l-1.5 3-1.5-3z"/><path d="M16.5 15v6"/></svg></span><b id="libT">Bibliothèque d’outils</b>
       <label class="inl">Matériau<select id="libMat"></select></label><button class="iconbtn" data-act="libMatAdd" title="Nouveau matériau" aria-label="Nouveau matériau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button>
-      <span class="grow"></span><button data-act="libImport" class="libio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11M7.5 9.5 12 14l4.5-4.5"/><path d="M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg>Importer…</button><button data-act="libExport" class="libio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14V3M7.5 7.5 12 3l4.5 4.5"/><path d="M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg>Exporter…</button><button class="iconbtn" data-act="libClose" title="Fermer" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <span class="grow"></span><button data-act="libImport" class="libio" title="Bibliothèque COPO (.json) : fusionnée dans les dossiers de même nom, sans doublons · bibliothèque Aspire / VCarve (.vtdb)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11M7.5 9.5 12 14l4.5-4.5"/><path d="M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg>Importer…</button><button data-act="libExport" class="libio" title="Exporte le dossier sélectionné (avec ses sous-dossiers), ou toute la bibliothèque si aucun dossier n’est sélectionné"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14V3M7.5 7.5 12 3l4.5 4.5"/><path d="M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg>Exporter…</button><button class="iconbtn" data-act="libClose" title="Fermer" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="libbody">
       <div class="libleft">
         <input type="search" id="libSearch" placeholder="Rechercher un outil" aria-label="Rechercher un outil">
@@ -2040,6 +2076,11 @@ Object.assign(I18N_EN, {"Le texte ne tient pas sur cette courbe.": "The text doe
 Object.assign(I18N_EN, {"Afficher le nom et le temps de chaque parcours dans la simulation": "Show the name and time of each toolpath in the simulation"});
 Object.assign(I18N_EN, {"Angle de rotation (autour du pivot)": "Rotation angle (around the pivot)", "Angle de rotation": "Rotation angle", "Proportions libres": "Free proportions"});
 Object.assign(I18N_EN, {"Sans titre": "Untitled", "Fichier en cours": "Current file", "Exemple": "Example", "Exemple rotatif": "Rotary example"});
+Object.assign(I18N_EN, {"En fin de programme, revenir en X0 Y0 (sinon la broche reste au-dessus de la pièce, au Z de sécurité)": "At the end of the program, return to X0 Y0 (otherwise the spindle stays above the part, at the safe Z)"});
+Object.assign(I18N_EN, {"Dupliquer (par exemple une ébauche, puis une finition)": "Duplicate (for example a roughing pass, then a finishing pass)", "Parcours dupliqué : « {n} ». Changez l’outil ou les réglages, puis appliquez.": "Toolpath duplicated: “{n}”. Change the tool or settings, then apply."});
+Object.assign(I18N_EN, {"Dossier « {g} » exporté : {n} outil(s).": "Folder “{g}” exported: {n} tool(s).", "{n} outil(s) ajouté(s), {u} mis à jour, {d} déjà présent(s).": "{n} tool(s) added, {u} updated, {d} already present.", "Un outil de ce dossier sert à un parcours du projet : changez d’outil dans ces parcours d’abord.": "A tool in this folder is used by a toolpath in the project: change the tool in those toolpaths first.", "Le dossier « {g} » contient {n} outil(s) : cliquez encore une fois sur Supprimer pour tout effacer.": "Folder “{g}” contains {n} tool(s): click Delete once more to erase everything."});
+Object.assign(I18N_EN, {"Exporte le dossier sélectionné (avec ses sous-dossiers), ou toute la bibliothèque si aucun dossier n’est sélectionné": "Exports the selected folder (with its subfolders), or the whole library if no folder is selected", "Bibliothèque COPO (.json) : fusionnée dans les dossiers de même nom, sans doublons · bibliothèque Aspire / VCarve (.vtdb)": "COPO library (.json): merged into the folders of the same name, without duplicates · Aspire / VCarve library (.vtdb)"});
+Object.assign(I18N_EN, {"Ctrl+Maj+S": "Ctrl+Shift+S", "Cube d’orientation": "View cube"});
 Object.assign(I18N_EN, {"Visite rapide": "Quick tour", "Réafficher les astuces": "Show tips again", "Astuces réactivées : elles s’afficheront à l’ouverture de chaque onglet.": "Tips turned back on: they will show when you open each tab."});
 Object.assign(I18N_EN, {"Aligner sur": "Align to", "La sélection": "The selection", "Le premier vecteur sélectionné": "The first selected vector", "Le brut": "The stock", "Espacement (mm)": "Spacing (mm)", "Perçage": "Drilling", "Sélectionnez au moins deux vecteurs : le premier sert de référence.": "Select at least two vectors: the first one is the reference.", "Sélectionnez au moins deux vecteurs : le premier sert de point de départ.": "Select at least two vectors: the first one is the starting point.", "Les vecteurs sont plus grands que le brut.": "The vectors are larger than the stock.", "Profil sur la ligne 1": "On-line profile 1", "Profil sur la ligne 2": "On-line profile 2", "Poche 1": "Pocket 1", "F2 · Poche 2": "F2 · Pocket 2", "V-carving 2": "V-carving 2", "Foret 4 mm": "4 mm drill"});
 Object.assign(I18N_EN, {"Largeur au sillet / frette zéro (mm)": "Width at the nut / zero fret (mm)"});
@@ -2911,10 +2952,9 @@ function buildRelief(p, tool, shapes, M) {
   let c = Math.max(0.05, Math.min(0.3, D / 16, step / 2)); while ((st.w / c + 1) * (st.h / c + 1) > 7e6) c *= 1.25;
   const sel = Array.isArray(p.rlItems) ? p.rlItems.filter(id => S.relief.items.some(i => i.id === id && i.visible)) : null; if (sel && !sel.length) throw new Error(tr('Cochez au moins un relief à usiner.'));
   const R = reliefCompose(c, true, sel), { nx, ny, cx, cy } = R, H = R.H;
-  const K = toolKernel(tool, cx, cy), memo = new Float32Array(nx * ny).fill(NaN), floor = -st.t, warns = [];
+  const floor = -st.t, warns = [];
   if (-R.min > st.t + 1e-6) warns.push(trf('Le relief ({d} mm) est plus épais que le brut ({t} mm) : le bas sera coupé. Augmentez l’épaisseur du brut.', { d: fr(-R.min, 1), t: fr(st.t, 1) }));
-  const hc = (i, j) => { const q = j * nx + i; let v = memo[q]; if (v === v) return v; v = -Infinity; const { di, dj, dz, n } = K; for (let k = 0; k < n; k++) { const a = i + di[k], b = j + dj[k]; if (a < 0 || b < 0 || a >= nx || b >= ny) continue; const h = H[b * nx + a] - dz[k]; if (h > v) v = h; } if (v === -Infinity) v = floor; memo[q] = v; return v; };
-  const zAt = (x, y) => { const X = Math.max(0, Math.min(nx - 1.000001, x / cx)), Y = Math.max(0, Math.min(ny - 1.000001, y / cy)), i = Math.floor(X), j = Math.floor(Y), a = X - i, b = Y - j; return (hc(i, j) * (1 - a) + hc(i + 1, j) * a) * (1 - b) + (hc(i, j + 1) * (1 - a) + hc(i + 1, j + 1) * a) * b; };
+  const { hc, zAt } = toolOnRelief(R, H, tool, floor);
   // limite d'usinage : masque sur la grille (contour du modèle, du brut ou tracés sélectionnés), puis décalage
   const bound = p.rlBound || (shapes.some(sh => sh.closed) ? 'sel' : 'model'), N = nx * ny; let Bm = new Uint8Array(N);
   if (bound === 'stock') Bm.fill(1);
@@ -3326,7 +3366,7 @@ function makeGcodeVP(tps, tools, stock, M, d) {
       if (/^\d{1,3}$/.test(raw)) return String.fromCharCode(+raw); if (/^[0-9a-f]{1,2}$/i.test(raw) && /\d/.test(raw)) return String.fromCharCode(parseInt(raw, 16));
       return m; });
     return { s, core: nTok ? s.split(nTok).join('') : s, n: !!nTok, empty: nv > 0 && nvOut === 0 }; };
-  let lastCore = null; const emit = (b, mv) => { for (const t of (B[b] || [])) { if (t === '') { L.push(''); lastCore = null; continue; } const r = rend(t); if (!r.core.trim()) continue; if (mv && (r.core === lastCore || r.empty)) continue; L.push(r.s); lastCore = r.core; if (r.n) { ln += d.ln.inc; if (ln > d.ln.max) ln = d.ln.start; } } }; // mv : mouvement identique au précédent (machine sans Z) non répété
+  let lastCore = null, footF = null; const emit = (b, mv) => { for (const t of ((b === 'FOOTER' && footF) || B[b] || [])) { if (t === '') { L.push(''); lastCore = null; continue; } const r = rend(t); if (!r.core.trim()) continue; if (mv && (r.core === lastCore || r.empty)) continue; L.push(r.s); lastCore = r.core; if (r.n) { ln += d.ln.inc; if (ln > d.ln.max) ln = d.ln.start; } } }; // mv : mouvement identique au précédent (machine sans Z) non répété
   const spin = vpSpindle(B); const arcsOK = M.arcs !== false && !(stock.rotary && stock.rotary.on && d.wrap) && (B.CW_ARC_MOVE || B.FIRST_CW_ARC_MOVE) && (B.CCW_ARC_MOVE || B.FIRST_CCW_ARC_MOVE);
   const list = tps.map(tp => ({ tp, tool: tools.find(t => t.id === tp.toolId) })).filter(o => o.tool && o.tp.moves && o.tp.moves.length); if (!list.length) return '';
   ctx = { tool: list[0].tool, tp: list[0].tp, tpName: list[0].tp.name, f: +list[0].tool.feed || 0, x: 0, y: 0, z: M.safeZ + oz };
@@ -3368,7 +3408,7 @@ function makeGcodeVP(tps, tools, stock, M, d) {
     }
     jet(false);
   }
-  reset(); lastCore = null; ctx.f = ctx.lastFeed || +ctx.tool.feed || 0; emit('FOOTER');
+  reset(); lastCore = null; ctx.f = ctx.lastFeed || +ctx.tool.feed || 0; if (M.endHome === false && B.FOOTER) footF = B.FOOTER.filter(t => !/\[(XH|YH)\]/.test(t) || /\[(ZH|SAFEZ)\]/.test(t)); /* sans retour à l'origine XY : lignes qui ne font que revenir en XH YH retirées */ emit('FOOTER');
   return L.join(d.eol) + d.eol;
 }
 const POSTS = {
@@ -3408,6 +3448,8 @@ const VPOSTS = {"tormach_mm": "+================================================
 for (const [k, t] of Object.entries(VPOSTS)) { const d = vpParse(t); POSTS['vp_' + k] = { label: d.name, short: d.name.replace(/\s*\(\*\.\w+\)\s*$/, ''), tc: 'vp', vp: t, ext: d.ext, group: 'vp' }; }
 const vpUserList = () => { try { const a = JSON.parse(LS.get('copo.vposts') || '[]'); return Array.isArray(a) ? a : []; } catch { return []; } };
 const postOf = M => { if (M.post && String(M.post).startsWith('vpu:') && M.vpText) { const d = vpGet(M.vpText); return { label: M.vpName || d.name || 'Post-processeur importé', short: (M.vpName || d.name || 'Importé').replace(/\s*\(\*\.\w+\)\s*$/, ''), tc: 'vp', vp: M.vpText, ext: d.ext, group: 'vpu' }; } return POSTS[M.post] || POSTS.grbl; };
+/* ligne de retour à l'origine XY en fin de programme (« G0 X0 Y0 », « G00 X0. Y0. »…), retirée si la machine est réglée pour rester au-dessus de la pièce */
+const isHomeXY = l => /^\s*(N\d+\s+)?G0?0\s+X-?0(\.0*)?\s+Y-?0(\.0*)?\s*$/i.test(String(l));
 function makeGcode(tps, tools, stock, M, faceMode) {
   { const P0 = postOf(M); if (P0.vp) return makeGcodeVP(tps, tools, stock, M, vpGet(P0.vp)); }
   const RT = stock.rotary || {}, ROT = !!RT.on && +stock.t > 0, Dw = +stock.t || 0, angA = v => { const t = nf(v / (Math.PI * Dw) * 360); return postOf(M).tc === 'iso' && !/\./.test(t) ? t + '.' : t; };
@@ -3481,10 +3523,10 @@ function makeGcode(tps, tools, stock, M, faceMode) {
     endCyc();
   }
   if (st.z === null || nx(st.z) !== nx(M.safeZ + oz)) L.push('G0 Z' + nx(M.safeZ + oz));
-  if (ISO) { if (ISOP.cool) L.push('M9'); L.push('M5'); L.push(...RET()); if (ISOP.ret === 'g53') L.push(IS.endY ? 'G53 G0 Y0.' : 'G53 G0 X0. Y0.'); else L.push(IS.endY ? 'G28 G91 Y0.' : 'G28 G91 X0. Y0.', 'G90'); L.push('M30');
+  if (ISO) { if (ISOP.cool) L.push('M9'); L.push('M5'); L.push(...RET()); if (M.endHome !== false) { if (ISOP.ret === 'g53') L.push(IS.endY ? 'G53 G0 Y0.' : 'G53 G0 X0. Y0.'); else L.push(IS.endY ? 'G28 G91 Y0.' : 'G28 G91 X0. Y0.', 'G90'); } L.push('M30');
     const on = Math.max(1, Math.min(IS.o === 5 ? 99999 : 9999, Math.round(+ISOP.o || 1000))); let k = 0; const B = ISOP.n ? L.map(x => /^[(%]/.test(x) ? x : 'N' + (10 + 5 * k++) + ' ' + x) : L;
     return ['%', ...(IS.o ? ['O' + String(on).padStart(IS.o, '0')] : []), ...B, '%'].join('\n') + '\n'; }
-  if (CUS) L.push(...tpl(CP.foot)); else { L.push('M5'); if (MAN) L.push(G53); L.push('G0 ' + cX(0) + ' ' + cY(0)); L.push('M30'); }
+  if (CUS) L.push(...tpl(CP.foot).filter(l => M.endHome !== false || !isHomeXY(l))); else { L.push('M5'); if (MAN) L.push(G53); if (M.endHome !== false) L.push('G0 ' + cX(0) + ' ' + cY(0)); L.push('M30'); }
   return L.join('\n') + '\n';
 }
 function moveStats(moves, rapid) { let t = 0, cut = 0, px = null, py, pz; for (const m of moves) { if (m.g === 4) { t += (m.p || 0) / 60; continue; } if (px !== null) { const d = Math.hypot(m.x - px, m.y - py, m.z - pz); if (m.g === 0) t += d / rapid; else { t += d / m.f; cut += d; } } px = m.x; py = m.y; pz = m.z; } return { min: t, cut }; }
@@ -3793,6 +3835,16 @@ const TPN_FN = { fr: { 'profile:out': 'profil-ext', 'profile:in': 'profil-int', 
   en: { 'profile:out': 'profile-out', 'profile:in': 'profile-in', 'profile:on': 'profile-on', pocket: 'pocket', vcarve: 'vcarve', drill: 'drill', thread: 'thread', clr: 'clearance', rough: 'roughing', rest: 'rest', 'relief:rough': 'relief-rough', 'relief:finish': 'relief-finish' } };
 function tpnTool(t) { if (!t) return '?'; const n = v => String(+(+v).toFixed(3)).replace('.', LANG === 'fr' ? ',' : '.'); return t.type === 'v' ? n(t.angle) + 'deg' : n(t.dia) + 'mm'; }
 function tpnLayer(ids, rids) { const sh = (ids || []).map(id => S.shapes.find(x => x.id === id)).find(Boolean); if (sh) { const l = S.layers.find(x => x.id === sh.layer); if (l) return l.name.trim().replace(/\s+/g, '-'); } const r = (rids || []).map(id => S.relief.items.find(x => x.id === id)).find(Boolean); return r ? String(r.name || 'relief').trim().replace(/\s+/g, '-') : (LANG === 'fr' ? 'calque' : 'layer'); }
+/* copie d'un parcours (et de ses parcours liés : dégagement, reprise), placée juste après, ouverte pour changer quelques réglages */
+function tpDuplicate(tp) {
+  const src = tp.vclrOf ? S.tps.find(x => x.id === tp.vclrOf) || tp : tp, kids = S.tps.filter(x => x.vclrOf === src.id), names = new Set(S.tps.map(x => x.name));
+  const nm = n => { let k = 2, b = String(n).replace(/ \(\d+\)$/, ''), o = b + ' (' + k + ')'; while (names.has(o)) o = b + ' (' + ++k + ')'; names.add(o); return o; };
+  const cp = x => { const c = JSON.parse(JSON.stringify({ ...x, moves: undefined })); c.moves = x.moves ? x.moves.map(m => ({ ...m })) : x.moves; c.id = uid(); c.name = nm(x.name); c.nameAuto = false; delete c.ownShapes; return c; };
+  const c = cp(src), cs = kids.map(k => { const q = cp(k); q.vclrOf = c.id; return q; }), last = Math.max(...[src, ...kids].map(x => S.tps.indexOf(x)));
+  S.tps.splice(last + 1, 0, c, ...cs); S.activeTp = c.id; commit(false); gcDirty = true; renderTpList();
+  S.editTp = c.id; S.form = { ...newForm(), ...clone(c.p), type: c.type, toolId: c.toolId, name: c.name, face: String(c.face === 2 ? 2 : 1) }; S.sel = new Set(c.shapeIds.filter(id => shapeById(id))); S.tpRels = new Set(c.relIds || []);
+  renderSel(); renderForm(); renderTpList(); draw(); fwOpen('tpWin'); toast(trf('Parcours dupliqué : « {n} ». Changez l’outil ou les réglages, puis appliquez.', { n: c.name }));
+}
 function tpAutoName(fn, layer, tool, face, except) { const F = TPN_FN[LANG === 'fr' ? 'fr' : 'en']; let b = (face === 2 ? 'F2_' : '') + layer + '_' + (F[fn] || fn) + '_' + tpnTool(tool), nm = b, k = 2; while (S.tps.some(x => x !== except && x.name === nm)) nm = b + '_' + k++; return nm; }
 function tpFn(type, p) { return type === 'profile' ? 'profile:' + (p.side || 'out') : type === 'relief' ? 'relief:' + (p.rlOp === 'finish' ? 'finish' : 'rough') : type === 'pocket' && p.rest ? 'rest' : type; }
 const TYPE_LBL = { profile: 'Profil', pocket: 'Poche', vcarve: 'V-carving', drill: 'Perçage', thread: 'Filetage', relief: 'Relief' };
@@ -3811,11 +3863,13 @@ const DEFAULT_TOOLS = () => [
   { id: 't5', num: 5, name: tr('Fraise hémisphérique 3 mm'), type: 'ball', dia: 3, flutes: 2, angle: 90, rpm: 18000, feed: 1000, plunge: 300, pass: 1, over: 50 },
 ];
 const DEFAULT_LAYERS = () => [{ id: 'l1', name: tr('Calque 1'), visible: true, locked: false }];
+/* réglages par défaut d'une machine (une seule définition : état de départ et bibliothèque de machines) */
+var MACH_DEF = { tcZ: -10, post: 'grbl', safeZ: 10, clearZ: 2, rapid: 3000, maxFeed: 2000, comments: true, arcs: true };
 const S = {
   stock: { w: 300, h: 200, t: 18, originXY: 'bl', originZ: 'top', offX: 0, offY: 0, mat: 'softwood' },
   shapes: [], sel: new Set(), tools: DEFAULT_TOOLS(), tps: [],
   images: [], imgSel: null, relief: { items: [], show: true, res: 0.3 }, relSel: null, layers: DEFAULT_LAYERS(), layerActive: 'l1', guides: { x: [], y: [] }, dims: [], selDim: null,
-  machine: { tcZ: -10, post: 'grbl', safeZ: 10, clearZ: 2, rapid: 3000, maxFeed: 2000, comments: true, arcs: true },
+  machine: { ...MACH_DEF },
   ui: {
     tool: 'select', chamfer: 3, fillet: 5, offDist: 3, offSide: 'out', offSharp: true, offDel: false, text: 'COPO', textH: 30, textOff: 0, showTP: true, showCut: true, showOver: true, showEnds: true, snapGrid: true, gridStep: 1, snapVert: true, snapEnd: true, snapMid: true, snapInt: true, snapCen: true, snapTan: true, snapOn: true, textMode: 'line', textSide: 'up', textSpace: 0,
     rectCorner: 'none', rectR: 5, polyN: 6, polyStar: false, polyInner: 50, joinTol: 0.5, joinMode: 'line', fitType: 'arc', fitTol: 0.1, fitCorner: true, fitAng: 60, fitRepl: true, dsec: null, alignRef: 'sel', distGap: 10, dogKind: 'dogbone', dogDia: 6,
@@ -6157,11 +6211,13 @@ function act(a, btn) {
     case 'libUse': { const t = libTool(libSel); if (!t || !libPick || !libFits(libPick.ftype, t)) return; const pt = libToProject(t, projMat()); if (libPick.cb) { const cb = libPick.cb; libClose(); cb(pt); commit(false); return; } S.form.toolId = pt.id; S.form.pass = pt.pass; commit(false); libClose(); renderForm(); toast(trf('Outil « {n} » choisi ; profondeur de passe {p} mm.', { n: t.name, p: fr(pt.pass) })); return; }
     case 'libAdd': { const g = libCurGroup(), t = { id: 'u' + uid(), group: g, order: LIB.tools.length, type: 'flat', units: 'mm', dia: 6, angle: 0, flat: 0, flutes: 2, num: null, notes: '', cut: {} }; t.name = libToolName(t); LIB.tools.push(t); if (g) libOpenG.add(g); libSel = t.id; libSave(); libRender(); return; }
     case 'libFolder': { const t = libTool(libSel), parent = t ? (t.group || null) : (LIB.groups.some(g => g.id === libSel) ? libSel : null), g = { id: 'g' + uid(), name: tr('Nouveau dossier'), parent, order: LIB.groups.length }; LIB.groups.push(g); if (parent) libOpenG.add(parent); libSel = g.id; libSave(); libRender(); return; }
-    case 'libDup': { const t = libTool(libSel); if (!t) return toast(tr('Choisissez un outil.')); const n = { ...JSON.parse(JSON.stringify(t)), id: 'u' + uid(), name: t.name + ' ' + tr('(copie)'), order: (t.order || 0) + 0.5 }; LIB.tools.push(n); libSel = n.id; libSave(); libRender(); return; }
-    case 'libDel': { const t = libTool(libSel); if (t) { if (S.tools.some(x => x.libId === t.id && S.tps.some(tp => tp.toolId === x.id))) return toast(tr('Cet outil sert à un parcours du projet : changez d’outil dans ces parcours d’abord.')); LIB.tools = LIB.tools.filter(x => x !== t); S.tools.forEach(x => { if (x.libId === t.id) delete x.libId; }); libSel = null; libSave(); libRender(); return; } const g = LIB.groups.find(x => x.id === libSel); if (!g) return toast(tr('Choisissez un outil ou un dossier.')); if (LIB.tools.some(x => x.group === g.id) || LIB.groups.some(x => x.parent === g.id)) return toast(tr('Videz d’abord ce dossier.')); LIB.groups = LIB.groups.filter(x => x !== g); libSel = null; libSave(); libRender(); return; }
+    case 'libDup': { const t = libTool(libSel), gg = !t && LIB.groups.find(x => x.id === libSel); if (gg) { libDupGroup(gg); return; } if (!t) return toast(tr('Choisissez un outil ou un dossier.')); const n = { ...JSON.parse(JSON.stringify(t)), id: 'u' + uid(), name: t.name + ' ' + tr('(copie)'), order: (t.order || 0) + 0.5 }; LIB.tools.push(n); libSel = n.id; libSave(); libRender(); return; }
+    case 'libDel': { const t = libTool(libSel); if (t) { if (S.tools.some(x => x.libId === t.id && S.tps.some(tp => tp.toolId === x.id))) return toast(tr('Cet outil sert à un parcours du projet : changez d’outil dans ces parcours d’abord.')); LIB.tools = LIB.tools.filter(x => x !== t); S.tools.forEach(x => { if (x.libId === t.id) delete x.libId; }); libSel = null; libSave(); libRender(); return; } const g = LIB.groups.find(x => x.id === libSel); if (!g) return toast(tr('Choisissez un outil ou un dossier.')); { const ids = new Set(libSub(g.id)), ts = LIB.tools.filter(x => ids.has(x.group)); if (ts.some(t => S.tools.some(x => x.libId === t.id && S.tps.some(tp => tp.toolId === x.id)))) return toast(tr('Un outil de ce dossier sert à un parcours du projet : changez d’outil dans ces parcours d’abord.'));
+      if (ts.length || ids.size > 1) { if (Date.now() - (libDel.arm || 0) > 3000) { libDel.arm = Date.now(); return toast(trf('Le dossier « {g} » contient {n} outil(s) : cliquez encore une fois sur Supprimer pour tout effacer.', { g: tr(g.name), n: ts.length })); } libDel.arm = 0; }
+      LIB.tools = LIB.tools.filter(x => !ids.has(x.group)); LIB.groups = LIB.groups.filter(x => !ids.has(x.id)); S.tools.forEach(x => { if (x.libId && !libTool(x.libId)) delete x.libId; }); } libSel = null; libSave(); libRender(); return; }
     case 'libOrig': { const t = libTool(libSel); if (!t) return; const mat = projMat(), o = libOrigCut(t, mat); if (!o) return; if (o.est) delete t.cut[mat]; else t.cut[mat] = o; libChanged(t); libRender(); toast(trf('Réglages d’origine rétablis pour {m}.', { m: libMatName(mat) })); return; }
     case 'libImport': $('#fLib').click(); return;
-    case 'libExport': saveFile('bibliotheque-outils-copo.json', JSON.stringify(LIB, null, 1), tr('Bibliothèque d’outils')); return;
+    case 'libExport': libExportSel(); return;
     case 'libReset': { if (Date.now() - libResetArm > 3000) { libResetArm = Date.now(); toast(tr('Cliquez encore une fois pour revenir à la bibliothèque par défaut (vos modifications seront perdues).')); return; } libResetArm = 0; LIB = DEFAULT_LIB(); libSel = null; libSave(); libLinkProject(); libSyncProject(); libRender(); toast(tr('Bibliothèque par défaut rétablie.')); return; }
     case 'libMatAdd': { const nm = (window.prompt && window.prompt(tr('Nom du nouveau matériau'), '')) || ''; if (!nm.trim()) return; const id = 'm_' + uid(); LIB.materials.push({ id, name: nm.trim() }); libSave(); libSetMat(id); return; }
     case 'tabGcode': setTab('gcode'); return;
@@ -7465,7 +7521,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.352', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.354', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -7590,10 +7646,12 @@ function renderTpList() { if (typeof libCardSync === 'function') libCardSync();
       + '<button class="iconbtn" data-a="up" title="Monter" aria-label="Monter"' + (idx ? '' : ' disabled') + '><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 15 6-6 6 6"/></svg></button>'
       + '<button class="iconbtn" data-a="down" title="Descendre" aria-label="Descendre"' + (idx < S.tps.length - 1 ? '' : ' disabled') + '><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button>'
       + '<button class="iconbtn" data-a="vis" title="' + (tp.visible ? 'Masquer et exclure du G-code' : 'Afficher et inclure') + '" aria-label="Visibilité"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>' + (tp.visible ? '' : '<path d="M4 4l16 16"/>') + '</svg></button>'
+      + '<button class="iconbtn" data-a="dup" title="' + escHtml(tr('Dupliquer (par exemple une ébauche, puis une finition)')) + '" aria-label="' + escHtml(tr('Dupliquer')) + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button>'
       + '<button class="iconbtn" data-a="del" title="Supprimer" aria-label="Supprimer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div>';
     li.querySelector('b').textContent = tp.name; li.querySelector('.tpt').dataset.tip = [tp.name, sub, tr('Double-clic sur le nom pour le renommer.'), tp.err ? '⚠ ' + tp.err : '', ...wl.map(w => '⚠ ' + w)].filter(Boolean).join('\n'); // titre seul, détails au survol
     li.onclick = e => {
       const a = e.target.closest('[data-a]'); if (a) { e.stopPropagation();
+        if (a.dataset.a === 'dup') { tpDuplicate(tp); return; }
         if (a.dataset.a === 'del' && S.tps.some(x => x.vclrOf === tp.id) && !a.dataset.go) { const n = S.tps.filter(x => x.vclrOf === tp.id).length, kind = tr(tp.type === 'pocket' ? 'ébauche' : 'dégagement');
           notice(trf('« {n} » a {k} parcours de {t} lié(s).', { n: tp.name, k: n, t: kind }), [{ t: tr('Les garder (indépendants)'), primary: 1, fn: () => { vclrDetach(tp); a.dataset.go = 1; a.click(); } }, { t: tr('Les supprimer aussi'), fn: () => { a.dataset.go = 1; a.click(); } }]); return; }
         if (a.dataset.a === 'del') { S.tps = S.tps.filter(x => x !== tp && x.vclrOf !== tp.id); if (tp.ownShapes) { const used = new Set(S.tps.flatMap(x => x.shapeIds)), ids = new Set(tp.shapeIds.filter(id => !used.has(id))); if (ids.size) { const lids = new Set(S.shapes.filter(x => ids.has(x.id)).map(x => x.layer)); S.shapes = S.shapes.filter(x => !ids.has(x.id)); for (const id of ids) S.sel.delete(id); S.layers = S.layers.filter(l => !lids.has(l.id) || S.shapes.some(x => x.layer === l.id) || S.layers.length < 2); if (!S.layers.some(l => l.id === S.layerActive) && S.layers[0]) S.layerActive = S.layers[0].id; renderLayers(); renderSel(); toast(tr('Parcours supprimé avec les contours qu’il avait créés.')); } } if (S.editTp === tp.id) { S.editTp = null; S.form = newForm(); fwClose('tpWin'); } commit(false); gcDirty = true; renderTpList(); renderForm(); draw(); }
@@ -8063,8 +8121,8 @@ function libRender() {
   const hasMatch = gid => toolsIn(gid).length || kids(gid).some(g => hasMatch(g.id));
   const add = (html, cls, dep, onclick) => { const li = document.createElement('li'); li.className = cls; li.style.paddingLeft = (6 + dep * 16) + 'px'; li.innerHTML = html; li.onclick = onclick; ul.appendChild(li); return li; };
   const walk = (pid, dep) => {
-    for (const g of kids(pid)) { if (q && !hasMatch(g.id)) continue; const open = q || libOpenG.has(g.id); const li = add('<span class="tw">' + (open ? '▾' : '▸') + '</span><svg viewBox="0 0 24 24">' + GRP_ICO + '</svg><span></span>', 'grp' + (libSel === g.id ? ' on' : ''), dep, () => { if (libOpenG.has(g.id)) libOpenG.delete(g.id); else libOpenG.add(g.id); try { LS.set('copo.libOpen', JSON.stringify([...libOpenG])); } catch { } libSel = g.id; libRender(); }); li.querySelector('span:last-child').textContent = tr(g.name); li.ondblclick = e => { e.stopPropagation(); const nm = window.prompt && window.prompt(tr('Nom du dossier'), tr(g.name)); if (nm && nm.trim()) { g.name = nm.trim(); libSave(); libRender(); } }; if (open) walk(g.id, dep + 1); }
-    for (const t of toolsIn(pid)) { const li = add('<svg viewBox="0 0 24 24">' + (LIB_ICO[t.type] || LIB_ICO.flat) + '</svg><span></span>' + (used.has(t.id) ? '<span class="used">' + tr('utilisé') + '</span>' : ''), (libSel === t.id ? 'on' : '') + (ft && !libFits(ft, t) ? ' off' : ''), dep, () => { libSel = t.id; libRender(); }); li.querySelector('span').textContent = t.name; li.ondblclick = () => { if (libPick) act('libUse'); }; }
+    for (const g of kids(pid)) { if (q && !hasMatch(g.id)) continue; const open = q || libOpenG.has(g.id); const li = add('<span class="tw">' + (open ? '▾' : '▸') + '</span><svg viewBox="0 0 24 24">' + GRP_ICO + '</svg><span></span>', 'grp' + (libSel === g.id ? ' on' : ''), dep, () => { if (libOpenG.has(g.id)) libOpenG.delete(g.id); else libOpenG.add(g.id); try { LS.set('copo.libOpen', JSON.stringify([...libOpenG])); } catch { } libSel = g.id; libRender(); }); li.querySelector('span:last-child').textContent = tr(g.name); libDnd(li, 'g', g.id, g.id); li.ondblclick = e => { e.stopPropagation(); const nm = window.prompt && window.prompt(tr('Nom du dossier'), tr(g.name)); if (nm && nm.trim()) { g.name = nm.trim(); libSave(); libRender(); } }; if (open) walk(g.id, dep + 1); }
+    for (const t of toolsIn(pid)) { const li = add('<svg viewBox="0 0 24 24">' + (LIB_ICO[t.type] || LIB_ICO.flat) + '</svg><span></span>' + (used.has(t.id) ? '<span class="used">' + tr('utilisé') + '</span>' : ''), (libSel === t.id ? 'on' : '') + (ft && !libFits(ft, t) ? ' off' : ''), dep, () => { libSel = t.id; libRender(); }); li.querySelector('span').textContent = t.name; libDnd(li, 't', t.id, t.group || null); li.ondblclick = () => { if (libPick) act('libUse'); }; }
   };
   walk(null, 0);
   const t = libTool(libSel), form = $('#toolForm'); form.hidden = !t; $('#libEmpty').hidden = !!t;
@@ -8119,7 +8177,45 @@ $('#libSearch').addEventListener('input', () => libRender());
 $('#libMat').addEventListener('change', e => libSetMat(e.target.value));
 document.getElementById('pjLibMat').addEventListener('change', e => libSetMat(e.target.value));
 function libCurGroup() { const t = libTool(libSel); if (t) return t.group || null; if (LIB.groups.some(g => g.id === libSel)) return libSel; return (LIB.groups.find(g => !g.parent) || {}).id || null; }
-function libImportLib(src, label) { // fusionne une bibliothèque dans un dossier racine
+/* glisser-déposer dans l'arbre : un outil ou un dossier se dépose sur un dossier (un dossier déposé sur un outil rejoint le dossier de cet outil) */
+let libDragId = null;
+function libDnd(li, kind, id, target) {
+  li.draggable = !$('#libSearch').value; li.addEventListener('dragstart', e => { libDragId = kind + ':' + id; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', libDragId); } catch { } });
+  li.addEventListener('dragend', () => { libDragId = null; $$('#libTree .drop').forEach(x => x.classList.remove('drop')); });
+  li.addEventListener('dragover', e => { if (!libDragId || !libDropOk(libDragId, target)) return; e.preventDefault(); li.classList.add('drop'); });
+  li.addEventListener('dragleave', () => li.classList.remove('drop'));
+  li.addEventListener('drop', e => { e.preventDefault(); li.classList.remove('drop'); if (libDragId) libMoveTo(libDragId, target); });
+}
+const libSub = gid => { const o = [gid]; for (let k = 0; k < o.length; k++) for (const g of LIB.groups) if (g.parent === o[k]) o.push(g.id); return o; }; // dossier et ses sous-dossiers
+function libDropOk(drag, gid) { const [k, id] = drag.split(':'); if (k === 't') return !!gid && (libTool(id) || {}).group !== gid; return !libSub(id).includes(gid) && ((LIB.groups.find(g => g.id === id) || {}).parent || null) !== (gid || null); }
+function libMoveTo(drag, gid) { if (!libDropOk(drag, gid)) return; const [k, id] = drag.split(':');
+  if (k === 't') { const t = libTool(id); t.group = gid; t.order = LIB.tools.length; } else { const g = LIB.groups.find(x => x.id === id); g.parent = gid || null; g.order = LIB.groups.length; }
+  if (gid) libOpenG.add(gid); libSel = id; libSave(); libRender(); }
+/* clé d'identité d'un outil (géométrie et nom) : sert à repérer les doublons à l'import */
+const libKey = t => [t.type, t.units || 'mm', +(+t.dia || 0).toFixed(4), +(+t.angle || 0).toFixed(3), +(+t.flat || 0).toFixed(4), +(+t.tipR || 0).toFixed(4), +(+t.flen || 0).toFixed(3), +t.flutes || 0, String(t.name || '').trim().toLowerCase()].join('|');
+const libPath = gid => { const o = []; let g = LIB.groups.find(x => x.id === gid); while (g) { o.unshift(String(g.name).trim().toLowerCase()); g = LIB.groups.find(x => x.id === g.parent); } return o.join('/'); };
+/* export d'un dossier seul (avec ses sous-dossiers), ou de toute la bibliothèque */
+function libExportSel() { const g = LIB.groups.find(x => x.id === libSel);
+  if (!g) return saveFile('bibliotheque-outils-copo.json', JSON.stringify(LIB, null, 1), tr('Bibliothèque d’outils'));
+  const ids = new Set(libSub(g.id)), groups = LIB.groups.filter(x => ids.has(x.id)).map(x => x.id === g.id ? { ...x, parent: null } : x), tools = LIB.tools.filter(t => ids.has(t.group));
+  const used = new Set(tools.flatMap(t => Object.keys(t.cut || {}))), out = { v: LIB.v, source: 'COPO', materials: LIB.materials.filter(m => used.has(m.id)), groups, tools };
+  saveFile('outils-' + String(tr(g.name)).replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '').toLowerCase() + '.json', JSON.stringify(out, null, 1), tr('Bibliothèque d’outils'));
+  toast(trf('Dossier « {g} » exporté : {n} outil(s).', { g: tr(g.name), n: tools.length })); }
+/* copie d'un dossier avec ses sous-dossiers et ses outils */
+function libDupGroup(g) { const map = new Map(), ids = libSub(g.id); for (const id of ids) map.set(id, 'g' + uid());
+  for (const id of ids) { const o = LIB.groups.find(x => x.id === id); LIB.groups.push({ ...o, id: map.get(id), parent: id === g.id ? o.parent : map.get(o.parent), name: id === g.id ? tr(o.name) + ' ' + tr('(copie)') : o.name }); }
+  for (const t of LIB.tools.filter(t => map.has(t.group))) LIB.tools.push({ ...JSON.parse(JSON.stringify(t)), id: 'u' + uid(), group: map.get(t.group) });
+  libSel = map.get(g.id); libOpenG.add(libSel); libSave(); libRender(); }
+const libDel = {};
+function libImportLib(src, label, merge) { // fusionne une bibliothèque : dans un dossier racine (import Aspire), ou dans les dossiers de même nom, sans doublons (import COPO)
+  if (merge) { const map = new Map(), byPath = new Map(LIB.groups.map(g => [libPath(g.id), g.id])), keys = new Map(LIB.tools.map(t => [libKey(t), t])); let n = 0, upd = 0, dup = 0;
+    const sp = gid => { const o = []; let g = src.groups.find(x => x.id === gid); while (g) { o.unshift(String(g.name).trim().toLowerCase()); g = src.groups.find(x => x.id === g.parent); } return o.join('/'); };
+    for (const g of [...src.groups].sort((a, b) => sp(a.id).split('/').length - sp(b.id).split('/').length)) { const path = sp(g.id); if (byPath.has(path)) { map.set(g.id, byPath.get(path)); continue; } const ng = { ...g, id: 'g' + uid(), parent: g.parent ? map.get(g.parent) || null : null, order: LIB.groups.length }; LIB.groups.push(ng); byPath.set(path, ng.id); map.set(g.id, ng.id); }
+    for (const m of src.materials || []) if (!LIB.materials.some(x => x.id === m.id)) LIB.materials.push(m);
+    for (const t of src.tools) { const k = libKey(t), ex = keys.get(k);
+      if (ex) { if (JSON.stringify(ex.cut || {}) === JSON.stringify(t.cut || {})) { dup++; continue; } ex.cut = { ...(ex.cut || {}), ...JSON.parse(JSON.stringify(t.cut || {})) }; upd++; continue; }
+      const nt = { ...JSON.parse(JSON.stringify(t)), id: 't' + uid(), group: map.get(t.group) || null }; LIB.tools.push(nt); keys.set(k, nt); n++; }
+    for (const id of map.values()) libOpenG.add(id); libSave(); libLinkProject(); libSyncProject(); libRender(); return { n, upd, dup }; }
   const root = { id: 'g' + uid(), name: label, parent: null, order: Math.max(0, ...LIB.groups.filter(g => !g.parent).map(g => g.order || 0)) + 1 }, map = new Map();
   LIB.groups.push(root); for (const g of src.groups) { const ng = { ...g, id: 'g' + uid() }; map.set(g.id, ng.id); LIB.groups.push(ng); }
   for (const g of LIB.groups) if (map.has(g.parent)) g.parent = map.get(g.parent); for (const g of src.groups) { const ng = LIB.groups.find(x => x.id === map.get(g.id)); if (!g.parent) ng.parent = root.id; }
@@ -8130,7 +8226,7 @@ function libImportLib(src, label) { // fusionne une bibliothèque dans un dossie
 function libDoImportDb(db, mac) { const { lib, skipped } = vtdbToLib(db, mac); const n = libImportLib(lib, trf('Import Aspire {d}', { d: new Date().toLocaleDateString(LANG === 'fr' ? 'fr-FR' : 'en-GB') })); $('#libMach').hidden = true; toast(trf('{n} outils importés', { n }) + (skipped.length ? ' · ' + trf('{k} ignorés (outils de forme, pointe diamant)', { k: skipped.length }) : '') + '.'); }
 readFile($('#fLib'), (data, f) => {
   if (/\.json$/i.test(f.name)) { const o = JSON.parse(new TextDecoder().decode(data));
-    if (o && o.tools && o.groups) { const n = libImportLib(o, f.name.replace(/\.json$/i, '')); toast(trf('{n} outils importés', { n }) + '.'); return; }
+    if (o && o.tools && o.groups) { const R = libImportLib(o, f.name.replace(/\.json$/i, ''), true); toast(trf('{n} outil(s) ajouté(s), {u} mis à jour, {d} déjà présent(s).', { n: R.n, u: R.upd, d: R.dup })); return; }
     if (Array.isArray(o) && o.every(t => t && t.dia > 0)) { const mat = projMat(), lib = { groups: [], tools: o.map((t, i) => ({ id: t.id || uid(), group: null, order: i, type: t.type || 'flat', units: 'mm', dia: t.dia, angle: t.angle || 0, flat: 0, flutes: t.flutes || 2, num: t.num || null, notes: '', name: t.name || libToolName(t), cut: { [mat]: { rpm: t.rpm, feed: t.feed, plunge: t.plunge, pass: t.pass, step: +(t.dia * Math.max(0.05, 1 - (+t.over || 40) / 100)).toFixed(3) } } })) }; const n = libImportLib(lib, f.name.replace(/\.json$/i, '')); toast(trf('{n} outils importés', { n }) + '.'); return; }
     throw new Error(tr('Bibliothèque invalide.')); }
   const db = sqliteRead(data), mats = db.rows('material'), macs = db.rows('machine'), ent = db.rows('tool_entity'), withData = macs.filter(m => ent.some(e => e.machine_id === m.id && e.material_id));
@@ -8171,7 +8267,7 @@ function syncMachine() {
   postSelFill(); tcSync();
   if (!POSTS[S.machine.post] && !(String(S.machine.post).startsWith('vpu:') && S.machine.vpText)) S.machine.post = 'grbl';
   const cp = { ...CUSTOM_POST(), ...(S.machine.custom || {}) }; $('#mcHead').value = cp.head; $('#mcTc').value = cp.tc; $('#mcFoot').value = cp.foot; $('#mcExt').value = cp.ext; $('#mcG911').checked = !!cp.g911; $('#mCustom').hidden = S.machine.post !== 'custom';
-  cycSync(); $('#mPost').value = S.machine.post; $('#mRapid').value = S.machine.rapid; $('#mMaxFeed').value = S.machine.maxFeed || 2000; $('#mSafe').value = S.machine.safeZ; $('#mClear').value = S.machine.clearZ; $('#mComments').checked = S.machine.comments; $('#mArcs').checked = S.machine.arcs !== false; $('#mTcZ').value = S.machine.tcZ === undefined ? -10 : S.machine.tcZ; $('#mTcRow').hidden = S.machine.post !== 'grblm' && S.machine.post !== 'custom'; $('#mTcOn').checked = !!S.machine.tcOn; $('#mTcZRow').hidden = !S.machine.tcOn; }
+  cycSync(); $('#mPost').value = S.machine.post; $('#mRapid').value = S.machine.rapid; $('#mMaxFeed').value = S.machine.maxFeed || 2000; $('#mSafe').value = S.machine.safeZ; $('#mClear').value = S.machine.clearZ; $('#mComments').checked = S.machine.comments; $('#mEndHome').checked = S.machine.endHome !== false; $('#mArcs').checked = S.machine.arcs !== false; $('#mTcZ').value = S.machine.tcZ === undefined ? -10 : S.machine.tcZ; $('#mTcRow').hidden = S.machine.post !== 'grblm' && S.machine.post !== 'custom'; $('#mTcOn').checked = !!S.machine.tcOn; $('#mTcZRow').hidden = !S.machine.tcOn; }
 [['#mPost', 'post', 0], ['#mRapid', 'rapid', 1], ['#mSafe', 'safeZ', 1], ['#mClear', 'clearZ', 1]].forEach(([id, k, n]) => $(id).addEventListener('change', e => { const v = n ? +e.target.value : e.target.value; if (n && !(v > 0)) return; S.machine[k] = v; autosave(); if (k === 'post') { $('#mTcRow').hidden = v !== 'grblm' && v !== 'custom'; $('#mCustom').hidden = v !== 'custom'; pjSummary(); gcDirty = true; renderGcode(); } else recomputeAll(); }));
 $('#gcFace').onchange = () => { gcDirty = true; renderGcode(); };
 [['#mcHead', 'head'], ['#mcTc', 'tc'], ['#mcFoot', 'foot'], ['#mcExt', 'ext'], ['#mcG911', 'g911']].forEach(([id, k]) => $(id).addEventListener('change', e => { S.machine.custom = { ...CUSTOM_POST(), ...(S.machine.custom || {}), [k]: e.target.type === 'checkbox' ? e.target.checked : (k === 'ext' ? e.target.value.replace(/[^\w]/g, '') || 'nc' : e.target.value) }; autosave(); gcDirty = true; renderGcode(); }));
@@ -8185,6 +8281,7 @@ $('#fVp').onchange = e => { const f = e.target.files[0]; e.target.value = ''; if
   toast(trf('Post-processeur « {n} » importé.', { n: name }) + (d.ignored.length ? ' ' + trf('Blocs non gérés, ignorés : {b}.', { b: d.ignored.join(', ') }) : '')); }); };
 $('#mArcs').onchange = e => { S.machine.arcs = e.target.checked; autosave(); gcDirty = true; renderGcode(); };
 $('#mComments').onchange = e => { S.machine.comments = e.target.checked; autosave(); gcDirty = true; renderGcode(); };
+$('#mEndHome').onchange = e => { S.machine.endHome = e.target.checked; autosave(); gcDirty = true; renderGcode(); };
 function gcTps() { const m = $('#gcFace').value, all = S.tps.filter(t => t.visible && !t.err && t.moves && t.moves.length); const f1 = all.filter(t => t.face !== 2), f2 = all.filter(t => t.face === 2); return m === '1' ? f1 : m === '2' ? f2 : f1.concat(f2); }
 // deux outils différents du programme avec le même numéro : la machine prendrait le mauvais
 function gcTcWarn(tps) { const P = postOf(S.machine); if (!P.vp) return ''; const B = vpGet(P.vp).blocks; if (B.TOOLCHANGE) return ''; const ids = new Set(tps.filter(t => t.moves && t.moves.length).map(t => t.toolId)); if (ids.size < 2) return '';
@@ -8206,13 +8303,21 @@ function toolProf(tool) {
   if (tool.type === 'v' || tool.type === 'drill') return d => d / th;
   return () => 0;
 }
-// hauteur de la pointe de l'outil posé sur le relief en (x, y) : maximum du relief moins le profil de la fraise sur son empreinte
+/* fraise posée sur le relief (une seule fonction pour l'ébauche, la finition et la projection des parcours) :
+   hc(i, j) = hauteur de la pointe au nœud (maximum du relief moins le profil de la fraise sur son empreinte), zAt(x, y) = la même, interpolée.
+   Le bord de la fraise ne compte qu'à une maille près (grille de calcul + grille du relief) : une fraise qui longe une paroi verticale ne saute plus d'une maille à l'autre entre le haut et le bas de la paroi.
+   fb : hauteur quand l'empreinte sort de la grille. */
+function toolOnRelief(R, H, tool, fb) {
+  const { nx, ny, cx, cy } = R, gc = Math.max(0, ...S.relief.items.filter(i => i.visible && relGrid[i.id]).map(i => Math.max(i.w / relGrid[i.id].nx, i.h / relGrid[i.id].ny)));
+  const K = toolKernel(tool, cx, cy, Math.min(0.3, Math.max(cx, cy) * 0.75 + gc)), memo = new Float32Array(nx * ny).fill(NaN);
+  const hc = (i, j) => { const q = j * nx + i; let v = memo[q]; if (v === v) return v; v = -Infinity; const { di, dj, dz, n } = K; for (let k = 0; k < n; k++) { const a = i + di[k], b = j + dj[k]; if (a < 0 || b < 0 || a >= nx || b >= ny) continue; const h = H[b * nx + a] - dz[k]; if (h > v) v = h; } if (v === -Infinity) v = fb; memo[q] = v; return v; };
+  const zAt = (x, y) => { const X = Math.max(0, Math.min(nx - 1.000001, x / cx)), Y = Math.max(0, Math.min(ny - 1.000001, y / cy)), i = Math.floor(X), j = Math.floor(Y), a = X - i, b = Y - j; return (hc(i, j) * (1 - a) + hc(i + 1, j) * a) * (1 - b) + (hc(i, j + 1) * (1 - a) + hc(i + 1, j + 1) * a) * b; };
+  return { hc, zAt };
+}
+// hauteur de la pointe de l'outil posé sur le relief en (x, y), pour projeter un parcours
 function relProjector(tool) {
   const st = S.stock; let c = Math.max(0.05, Math.min(0.2, tool.dia / 30)); while ((st.w / c + 1) * (st.h / c + 1) > 6e6) c *= 1.2;
-  // le bord de la fraise ne compte qu'à une maille près (grille de calcul + grille du relief) : une fraise qui longe une paroi verticale (contour du relief) ne saute plus d'une maille à l'autre entre le haut et le bas de la paroi
-  const R = reliefCompose(c, true), { nx, ny, cx, cy, M } = R, H = R.H.map((v, q) => M[q] ? v : 0), gc = Math.max(0, ...S.relief.items.filter(i => i.visible && relGrid[i.id]).map(i => Math.max(i.w / relGrid[i.id].nx, i.h / relGrid[i.id].ny))), K = toolKernel(tool, cx, cy, Math.min(0.3, Math.max(cx, cy) * 0.75 + gc)), memo = new Float32Array(nx * ny).fill(NaN); // hors du relief : dessus du brut (jamais plus profond par surprise)
-  const hc = (i, j) => { const q = j * nx + i; let v = memo[q]; if (v === v) return v; v = -Infinity; const { di, dj, dz, n } = K; for (let k = 0; k < n; k++) { const a = i + di[k], b = j + dj[k]; if (a < 0 || b < 0 || a >= nx || b >= ny) continue; const h = H[b * nx + a] - dz[k]; if (h > v) v = h; } if (v === -Infinity) v = R.base; memo[q] = v; return v; };
-  const f = (x, y) => { const X = Math.max(0, Math.min(nx - 1.000001, x / cx)), Y = Math.max(0, Math.min(ny - 1.000001, y / cy)), i = Math.floor(X), j = Math.floor(Y), a = X - i, b = Y - j; return (hc(i, j) * (1 - a) + hc(i + 1, j) * a) * (1 - b) + (hc(i, j + 1) * (1 - a) + hc(i + 1, j + 1) * a) * b; };
+  const R = reliefCompose(c, true), H = R.H.map((v, q) => R.M[q] ? v : 0), f = toolOnRelief(R, H, tool, R.base).zAt; // hors du relief : dessus du brut (jamais plus profond par surprise)
   f.step = Math.max(0.1, Math.min(0.5, c * 1.5)); return f;
 }
 // les points sous le dessus du brut (z < 0) descendent de la hauteur du relief ; les segments sont redécoupés pour suivre la surface
@@ -10235,7 +10340,6 @@ setTimeout(showCurFile, 0);
 let projDirtyV = false; function projDirty(v) { if (projDirtyV === v) return; projDirtyV = v; showCurFile(); const b = document.getElementById('tbSave'); if (b) { b.classList.toggle('dirty', v); b.dataset.tip = v ? tr('Enregistrer le projet (Ctrl+S) : modifications non enregistrées') : tr('Enregistrer le projet (Ctrl+S)'); } }
 
 // ---------- bibliothèque de machines : plusieurs profils (nom, post-processeur, vitesses, Z, course, broche, notes) ----------
-var MACH_DEF = { tcZ: -10, post: 'grbl', safeZ: 10, clearZ: 2, rapid: 3000, maxFeed: 2000, comments: true, arcs: true };
 const MACH = { list: [], id: null };
 function machStore() { const it = MACH.list.find(x => x.id === MACH.id); if (it) it.m = JSON.parse(JSON.stringify(S.machine)); LS.set('copo.machines', JSON.stringify(MACH.list)); LS.set('copo.machineId', MACH.id || ''); machUi(); if (typeof pjModeSync === 'function' && document.getElementById('stRotWarn')) pjModeSync(); }
 function machLoad() {
@@ -10413,16 +10517,16 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 const say = (m) => { try { toast(m); } catch { } };
 
 /* ---------------- réglages (gardés dans le navigateur) ---------------- */
-const DEF = { on: false, steps: [0.1, 1, 10, 50], step: 1, jogF: 1500, plate: 15, blockOff: 10, probeF: 100, probeDist: 30, retract: 5, sim: 10, baud: 115200, m3: true,
+const DEF = { pos: [], on: false, steps: [0.1, 1, 10, 50], step: 1, jogF: 1500, plate: 15, blockOff: 10, probeF: 100, probeDist: 30, retract: 5, sim: 10, baud: 115200, m3: true,
   macros: [{ n: 'Parking', g: 'G53 G0 Z-5\nG53 G0 X-5 Y-5' }, { n: 'Aspiration ON', g: 'M8' }, { n: 'Aspiration OFF', g: 'M9' }, { n: 'Au-dessus de X0 Y0', g: 'G90 G0 Z5\nG0 X0 Y0' }, { n: 'Lever Z', g: 'G53 G0 Z-5' }, { n: 'Infos ($I)', g: '$I' }],
   probe: false, shim: 0.1, guide: true,
-  gp: { on: true, lock: 4, fn: -1, a: { 0: 'stepP', 1: 'stepN', 2: 'stepR', 3: 'home', 5: 'zeroZ', 9: 'start', 8: 'hold' }, a2: {}, invX: false, invY: false, invZ: false, thr: 25 } };
-const cfMerge = o => { o = o || {}; const g = o.gp && !o.gp.btn ? o.gp : {}; return { ...DEF, ...o, steps: Array.isArray(o.steps) && o.steps.length === 4 ? o.steps.map(Number) : DEF.steps.slice(), macros: Array.isArray(o.macros) ? o.macros : DEF.macros.map(m => ({ ...m })), gp: { ...DEF.gp, ...g, a: { ...(g.a || DEF.gp.a) }, a2: { ...(g.a2 || {}) } } }; };
+  gp: { on: true, sa: { 0: 'x', 1: 'y', 2: '', 3: 'z' }, si: {}, lock: 4, fn: -1, a: { 0: 'stepP', 1: 'stepN', 2: 'stepR', 3: 'home', 5: 'zeroZ', 9: 'start', 8: 'hold' }, a2: {}, invX: false, invY: false, invZ: false, thr: 25 } };
+const cfMerge = o => { o = o || {}; const g = o.gp && !o.gp.btn ? o.gp : {}; return { ...DEF, ...o, steps: Array.isArray(o.steps) && o.steps.length === 4 ? o.steps.map(Number) : DEF.steps.slice(), macros: Array.isArray(o.macros) ? o.macros : DEF.macros.map(m => ({ ...m })), gp: { ...DEF.gp, ...g, a: { ...(g.a || DEF.gp.a) }, a2: { ...(g.a2 || {}) }, sa: { ...(g.sa || DEF.gp.sa) }, si: { ...(g.si || { 0: !!g.invX, 1: !!g.invY, 3: !!g.invZ }) } } }; };
 let CF = (() => { try { return cfMerge(JSON.parse(LS.get('copo.cnc') || '{}')); } catch { return cfMerge({}); } })();
 const cfSave = () => { try { LS.set('copo.cnc', JSON.stringify(CF)); } catch { } };
 
 /* ---------------- état de la machine ---------------- */
-const K = { T: null, kind: '', name: '', st: 'Off', sub: '', ctrl: '', fluid: false, hal: false, mpos: [0, 0, 0], wco: [0, 0, 0], fs: [0, 0], ov: [100, 100, 100], pn: '',
+const K = { wcs: 1, acc: '', T: null, kind: '', name: '', st: 'Off', sub: '', ctrl: '', fluid: false, hal: false, mpos: [0, 0, 0], wco: [0, 0, 0], fs: [0, 0], ov: [100, 100, 100], pn: '',
   set: {}, g54: null, homed: false, homeSkip: false, noLim: null, lostPos: false, originLost: false, ws: { x: false, y: false, z: false }, alarm: null, alarmN: 0,
   out: [], fly: [], flyLen: 0, prog: null, tool: null, trail: [], prb: null, idleW: [], finished: false, air: false, busy: '', lastSt: 0, cap: null, sim: null };
 const RX = 127;
@@ -10450,11 +10554,11 @@ async function serialOpen(port) {
 class SimGrbl {
   constructor(o) {
     this.fluid = !!o.fluid; this.lim = o.limits !== false; const st = S.stock || { w: 200, h: 150, t: 18 };
-    this.trav = [400, 300, 80]; this.table = -78; this.sx = 60; this.sy = 40; this.sw = +st.w || 200; this.sh = +st.h || 150; this.top = this.table + (+st.t || 18);
+    this.trav = [500, 500, 150]; this.table = -120; this.sx = 60; this.sy = 40; this.sw = +st.w || 200; this.sh = +st.h || 150; this.top = this.table + (+st.t || 18);
     this.PL = 15; this.OFF = 10; const t0 = (S.tools || []).find(t => t.dia) || { dia: 6 }; this.r = (+t0.dia || 6) / 2;
     this.mpos = [190, 150, -22]; this.pe = this.mpos.slice(); const oo = (() => { try { const o = stockO(); return o; } catch { return { ox: 0, oy: 0, oz: 0 }; } })(); this.wco = [this.sx + oo.ox, this.sy + oo.oy, this.top - oo.oz]; this.g92 = [0, 0, 0]; this.prb = [0, 0, 0];
     this.state = this.lim ? 'Alarm' : 'Idle'; this.q = []; this.pend = 0; this.abs = true; this.mode = 0; this.f = 0; this.ov = [100, 100, 100]; this.spin = 0; this.S = 0; this.hold = false; this.lb = ''; this.touch = 0;
-    this.set = { 0: 10, 1: 25, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 10: 1, 11: 0.01, 12: 0.002, 13: 0, 20: this.lim ? 1 : 0, 21: 0, 22: this.lim ? 1 : 0, 23: 0, 24: 25, 25: 500, 26: 250, 27: 1, 30: 24000, 31: 0, 32: 0, 100: 800, 101: 800, 102: 800, 110: 5000, 111: 5000, 112: 1500, 120: 500, 121: 500, 122: 200, 130: 400, 131: 300, 132: 80 };
+    this.set = { 0: 10, 1: 25, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 10: 1, 11: 0.01, 12: 0.002, 13: 0, 20: this.lim ? 1 : 0, 21: 0, 22: this.lim ? 1 : 0, 23: 0, 24: 25, 25: 500, 26: 250, 27: 1, 30: 24000, 31: 0, 32: 0, 100: 800, 101: 800, 102: 800, 110: 5000, 111: 5000, 112: 1500, 120: 500, 121: 500, 122: 200, 130: 500, 131: 500, 132: 150 }; this.wa = [null, [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; this.wi = 0; this.cool = '';
     this.T = { kind: 'sim', write: s => this.rx(s), close: () => { clearInterval(this.tm); } };
     let last = performance.now(); this.tm = setInterval(() => { const n = performance.now(); this.tick(Math.min(0.1, (n - last) / 1000)); last = n; }, 20);
     setTimeout(() => this.boot(), 350);
@@ -10477,7 +10581,7 @@ class SimGrbl {
   }
   ovr(c) { const o = this.ov, cl = (v, a, b) => Math.max(a, Math.min(b, v)); if (c === 0x90) o[0] = 100; if (c === 0x91) o[0] = cl(o[0] + 10, 10, 200); if (c === 0x92) o[0] = cl(o[0] - 10, 10, 200); if (c === 0x93) o[0] = cl(o[0] + 1, 10, 200); if (c === 0x94) o[0] = cl(o[0] - 1, 10, 200); if (c === 0x95) o[1] = 100; if (c === 0x96) o[1] = 50; if (c === 0x97) o[1] = 25; if (c === 0x99) o[2] = 100; if (c === 0x9a) o[2] = cl(o[2] + 10, 10, 200); if (c === 0x9b) o[2] = cl(o[2] - 10, 10, 200); }
   report() { const p = this.mpos, w = [0, 1, 2].map(i => this.wco[i] + this.g92[i]); const pn = (this.touch > performance.now() || this.inContact()) ? '|Pn:P' : '';
-    const fd = this.cur ? Math.round(this.cur) : 0; this.emit('<' + (this.state === 'Hold' ? 'Hold:0' : this.state) + '|MPos:' + p.map(v => v.toFixed(3)).join(',') + '|FS:' + fd + ',' + (this.spin ? Math.round(this.S * this.ov[2] / 100) : 0) + '|WCO:' + w.map(v => v.toFixed(3)).join(',') + '|Ov:' + this.ov.join(',') + pn + '>'); }
+    const fd = this.cur ? Math.round(this.cur) : 0, acc = (this.spin ? 'S' : '') + this.cool; this.emit('<' + (this.state === 'Hold' ? 'Hold:0' : this.state) + '|MPos:' + p.map(v => v.toFixed(3)).join(',') + '|FS:' + fd + ',' + (this.spin ? Math.round(this.S * this.ov[2] / 100) : 0) + '|WCO:' + w.map(v => v.toFixed(3)).join(',') + '|Ov:' + this.ov.join(',') + (acc ? '|A:' + acc : '') + pn + '>'); }
   inContact() { return false; }
   reset() { const moving = this.q.length > 0 && !this.hold || ['Run', 'Jog', 'Home'].includes(this.state) && this.q.length; this.q = []; this.pend = 0; this.hold = false; this.spin = 0; this.g92 = [0, 0, 0]; this.abs = true; this.pe = this.mpos.slice(); this.homeOk = 0;
     if (moving) { this.state = 'Alarm'; this.emit('ALARM:3'); } else if (this.state !== 'Alarm') this.state = 'Idle';
@@ -10497,8 +10601,9 @@ class SimGrbl {
     if (W.F !== undefined) this.f = W.F; if (W.S !== undefined) this.S = W.S;
     let g53 = false, g38 = false, g10 = false, g92 = false, g4 = false;
     for (const g of G) { if ([0, 1, 2, 3].includes(g)) this.mode = g; else if (g === 90) this.abs = true; else if (g === 91) this.abs = false; else if (g === 53) g53 = true; else if (g === 38.2) g38 = true; else if (g === 10) g10 = true; else if (g === 92) g92 = true; else if (g === 92.1) this.g92 = [0, 0, 0]; else if (g === 4) g4 = true; }
-    for (const mm of Ms) { if (mm === 3 || mm === 4) this.spin = 1; if (mm === 5) this.spin = 0; if (mm === 0) this.q.push({ m0: 1 }); }
-    if (g10) { if (W.L === 20) AX.forEach((a, i) => { const k = a.toUpperCase(); if (W[k] !== undefined) this.wco[i] = this.pe[i] - this.g92[i] - W[k]; }); else if (W.L === 2) AX.forEach((a, i) => { const k = a.toUpperCase(); if (W[k] !== undefined) this.wco[i] = W[k]; }); return this.ok(); }
+    for (const g of G) if (g >= 54 && g <= 59) { this.wa[this.wi] = this.wco.slice(); this.wi = g - 54; this.wco = (this.wa[this.wi] || [0, 0, 0]).slice(); }
+    for (const mm of Ms) { if (mm === 8) this.cool = 'F'; if (mm === 7) this.cool = 'M'; if (mm === 9) this.cool = ''; if (mm === 3 || mm === 4) this.spin = 1; if (mm === 5) this.spin = 0; if (mm === 0) this.q.push({ m0: 1 }); }
+    if (g10) { if (W.L === 20) { const pi = W.P ? W.P - 1 : this.wi; const tg = pi === this.wi ? this.wco : (this.wa[pi] = this.wa[pi] || [0, 0, 0]); AX.forEach((a, i) => { const k = a.toUpperCase(); if (W[k] !== undefined) tg[i] = this.pe[i] - this.g92[i] - W[k]; }); } else if (W.L === 2) AX.forEach((a, i) => { const k = a.toUpperCase(); if (W[k] !== undefined) this.wco[i] = W[k]; }); return this.ok(); }
     if (g92) { AX.forEach((a, i) => { const k = a.toUpperCase(); if (W[k] !== undefined) this.g92[i] = this.pe[i] - this.wco[i] - W[k]; }); return this.ok(); }
     if (g4) { this.q.push({ dw: (W.P || 0) }); if (!this.hold) this.state = 'Run'; return this.ok(); }
     const has = 'XYZ'.split('').some(k => W[k] !== undefined);
@@ -10514,8 +10619,8 @@ class SimGrbl {
   dollar(u) {
     if (u === '$$') { for (const [k, v] of Object.entries(this.set)) this.emit('$' + k + '=' + v); return this.emit('ok'); }
     if (u === '$I') { this.emit(this.fluid ? '[VER:3.9 FluidNC v3.9.1:]' : '[VER:1.1h.20190825:]'); this.emit('[OPT:V,15,128]'); return this.emit('ok'); }
-    if (u === '$#') { const w = this.wco; this.emit('[G54:' + w.map(v => v.toFixed(3)).join(',') + ']'); this.emit('[G55:0.000,0.000,0.000]'); this.emit('[G92:' + this.g92.map(v => v.toFixed(3)).join(',') + ']'); this.emit('[TLO:0.000]'); this.emit('[PRB:' + this.prb.map(v => v.toFixed(3)).join(',') + ':0]'); return this.emit('ok'); }
-    if (u === '$G') { this.emit('[GC:G' + this.mode + ' G54 G17 G21 ' + (this.abs ? 'G90' : 'G91') + ' G94 M' + (this.spin ? 3 : 5) + ' M9 T0 F' + this.f + ' S' + this.S + ']'); return this.emit('ok'); }
+    if (u === '$#') { this.wa[this.wi] = this.wco.slice(); for (let i = 0; i < 6; i++) this.emit('[G5' + (4 + i) + ':' + (this.wa[i] || [0, 0, 0]).map(v => v.toFixed(3)).join(',') + ']'); this.emit('[G92:' + this.g92.map(v => v.toFixed(3)).join(',') + ']'); this.emit('[TLO:0.000]'); this.emit('[PRB:' + this.prb.map(v => v.toFixed(3)).join(',') + ':0]'); return this.emit('ok'); }
+    if (u === '$G') { this.emit('[GC:G' + this.mode + ' G5' + (4 + this.wi) + ' G17 G21 ' + (this.abs ? 'G90' : 'G91') + ' G94 M' + (this.spin ? 3 : 5) + ' M9 T0 F' + this.f + ' S' + this.S + ']'); return this.emit('ok'); }
     if (u === '$X') { if (this.state === 'Alarm') { this.state = 'Idle'; this.emit('[MSG:Caution: Unlocked]'); } return this.emit('ok'); }
     if (/^\$H[XYZ]?$/.test(u)) { if (!this.lim) return this.err(5); if (u.length > 2 && !this.fluid) return this.err(3); if (!['Idle', 'Alarm'].includes(this.state)) return this.err(8);
       const ax = u.length > 2 ? u.slice(2).toLowerCase() : 'xyz'; this.state = 'Home'; this.q = []; if (ax.includes('z')) this.q.push({ to: [this.mpos[0], this.mpos[1], -1], f: 1500, home: 1 }); const t = [ax.includes('x') ? 1 : this.mpos[0], ax.includes('y') ? 1 : this.mpos[1], ax.includes('z') ? -1 : this.mpos[2]]; this.q.push({ to: t, f: 2500, home: 1, last: 1 }); this.pe = t.slice(); return; }
@@ -10577,6 +10682,7 @@ function onLine(l) {
     const N = K.alarmN; setTimeout(() => { if (K.alarmN === N && K.fly.length) flush('alarm', true); }, 1500);
     ui(); return; }
   if (/^\[PRB:/.test(l)) { const m = /PRB:([-\d.]+),([-\d.]+),([-\d.]+)(?:,[-\d.]+)*:(\d)/.exec(l); if (m) K.prb = { p: [+m[1], +m[2], +m[3]], ok: m[4] === '1' }; log(l); return; }
+  if (/^\[GC:/.test(l)) { const m = /G5([4-9])/.exec(l); if (m) K.wcs = +m[1] - 3; log(l, 'm'); return; }
   if (/^\[G54:/.test(l)) { const m = /G54:([-\d.]+),([-\d.]+),([-\d.]+)/.exec(l); if (m) K.g54 = [+m[1], +m[2], +m[3]]; log(l, 'm'); return; }
   if (/^\[VER:/.test(l)) { K.ver = l.slice(5, -1); if (/fluidnc/i.test(l)) K.fluid = true; log(l); return; }
   { const m = /^\$(\d+)=(-?[\d.]+)/.exec(l); if (m) { K.set[+m[1]] = +m[2]; log(l, 'm'); return; } }
@@ -10587,7 +10693,7 @@ function status(l) {
   const f = l.slice(1, -1).split('|'); K.sub = f[0]; const st = f[0].split(':')[0]; let wp = null;
   for (const x of f.slice(1)) { const i = x.indexOf(':'), k = x.slice(0, i), v = x.slice(i + 1).split(',').map(Number);
     if (k === 'MPos') K.mpos = v; else if (k === 'WPos') wp = v; else if (k === 'WCO') K.wco = v; else if (k === 'FS') K.fs = v; else if (k === 'F') K.fs = [v[0], 0]; else if (k === 'Ov') K.ov = v; }
-  K.pn = (f.find(x => x.startsWith('Pn:')) || '').slice(3); if (wp) K.mpos = wp.map((v, i) => v + K.wco[i]);
+  K.pn = (f.find(x => x.startsWith('Pn:')) || '').slice(3); K.acc = (f.find(x => x.startsWith('A:')) || '').slice(2); if (wp) K.mpos = wp.map((v, i) => v + K.wco[i]);
   const prev = K.st; K.st = st; K.lastSt = performance.now();
   if (st !== 'Alarm' && K.alarm && prev === 'Alarm') K.alarm = null;
   if (K.prog && (st === 'Run' || st === 'Hold' || st === 'Idle')) trackPath();
@@ -10595,6 +10701,8 @@ function status(l) {
   if (prev !== st) { ui(); if (K.prog && st === 'Idle') progFeed(); if (K.prog && st === 'Run' && K.prog.m0) K.prog.m0 = ''; } else live();
   if (curTab === 'usiner' && typeof rvReq === 'function') rvReq();
 }
+const spinOn = () => (U.spinT && Date.now() - U.spinT < 700) ? !!U.spin : (/[SC]/.test(K.acc) || K.fs[1] > 0);
+const coolOn = () => (U.coolT && Date.now() - U.coolT < 700) ? !!U.cool : /[FM]/.test(K.acc);
 const wpos = () => K.mpos.map((v, i) => v - K.wco[i]);
 const allSet = () => K.ws.x && K.ws.y && K.ws.z;
 const limOn = () => K.noLim === null ? (K.set[22] !== undefined ? !!K.set[22] : K.fluid ? true : !!K.homed) : !K.noLim;
@@ -10608,6 +10716,13 @@ function trackPath() { // retrouve où en est l'outil sur le trajet du programme
   const lim = Math.min(pts.length - 1, k0 + 3000), maxLi = P.i;
   for (let k = k0; k <= lim; k++) { const b = pts[k]; if (b.li > maxLi) break; const a = k ? pts[k - 1].p : b.p, q = b.p, d = [q[0] - a[0], q[1] - a[1], q[2] - a[2]], L2 = d[0] * d[0] + d[1] * d[1] + d[2] * d[2]; let u = L2 ? ((w[0] - a[0]) * d[0] + (w[1] - a[1]) * d[1] + (w[2] - a[2]) * d[2]) / L2 : 0; u = Math.max(0, Math.min(1, u)); const e = Math.hypot(a[0] + d[0] * u - w[0], a[1] + d[1] * u - w[1], a[2] + d[2] * u - w[2]); if (e < bd - 1e-6) { bd = e; best = k - 1; } if (bd < 0.02 && k > best + 40) break; }
   if (best >= K.doneK && bd < 2) K.doneK = best;
+}
+
+async function goTo(t, mach) { // Z d'abord si la fraise monte, en dernier si elle descend
+  if (!canJog()) return; const cur = mach ? K.mpos : wpos(), pre = mach ? 'G53 G0 ' : 'G0 ', xy = ['x', 'y'].filter(a => t[a] !== undefined).map(a => a.toUpperCase() + n3(t[a])).join(' '), L = mach ? [] : ['G90'];
+  const zl = t.z !== undefined ? pre + 'Z' + n3(t.z) : '', up = t.z !== undefined && t.z >= cur[2];
+  if (zl && up) L.push(zl); if (xy) L.push(pre + xy); if (zl && !up) L.push(zl);
+  K.busy = 'goto'; ui(); try { await seq(L); await waitIdle(); } catch (e) { if (e !== 'alarm') say('Déplacement refusé (' + e + ').'); } K.busy = ''; ui();
 }
 
 /* ---------------- connexion ---------------- */
@@ -10629,6 +10744,7 @@ async function connect(kind, port) {
   try { await cmd('$I'); } catch { }
   try { await cmd('$$'); } catch { }
   try { await cmd('$#'); } catch { }
+  try { await cmd('$G'); } catch { }
   if (K.fluid) { try { const L = await capture('$Config/Dump'); let inP = false, pin = ''; for (const l of L) { if (/^probe:\s*$/.test(l)) { inP = true; continue; } if (inP && /^\S/.test(l)) inP = false; const m = inP && /^\s+pin:\s*(\S+)/.exec(l); if (m) pin = m[1]; }
     K.fProbe = !!pin && !/no_pin/i.test(pin); log('config.yaml : palpeur ' + (K.fProbe ? 'déclaré (' + pin + ')' : 'non déclaré'), 'm');
     if (K.fProbe && !CF.probe) { CF.probe = true; cfSave(); U.pmode = 'probe'; const c2 = q('#cfgCncProbe'); if (c2) c2.checked = true; setTimeout(() => say('FluidNC : palpeur déclaré dans config.yaml (' + pin + '), palpeur activé.'), 800); } } catch { } }
@@ -10650,8 +10766,8 @@ async function home(ax) {
 async function unlock() { if (!conn()) return; try { await cmd('$X'); await cmd('G90'); } catch { } if (limOn() && !K.homed) K.homeSkip = true; K.alarm = null; ui(); }
 
 /* ---------------- origine pièce ---------------- */
-async function setZero(a, v) { if (!conn() || moving()) return; v = +v || 0; try { await cmd('G10 L20 P1 ' + a.toUpperCase() + n3(v)); K.ws[a] = true; K.originLost = false; } catch (e) { say('Refusé par la machine : ' + e); } ui(); }
-async function zeroAll() { if (!conn() || moving()) return; try { await cmd('G10 L20 P1 X0 Y0'); K.ws.x = true; K.ws.y = true; K.originLost = false; } catch (e) { say('Refusé : ' + e); } ui(); }
+async function setZero(a, v) { if (!conn() || moving()) return; v = +v || 0; try { await cmd('G10 L20 P' + K.wcs + ' ' + a.toUpperCase() + n3(v)); K.ws[a] = true; K.originLost = false; if (a === 'z' && K.prog && K.prog.tc && K.prog.tc.ready) K.prog.tc.probed = true; } catch (e) { say('Refusé par la machine : ' + e); } ui(); }
+async function zeroAll() { if (!conn() || moving()) return; try { await cmd('G10 L20 P' + K.wcs + ' X0 Y0'); K.ws.x = true; K.ws.y = true; K.originLost = false; } catch (e) { say('Refusé : ' + e); } ui(); }
 function keepG54() { K.ws = { x: true, y: true, z: true }; K.originLost = false; ui(); say('Origine pièce enregistrée dans la machine reprise. Vérifiez-la.'); }
 async function gotoOrigin() { if (!conn() || moving() || !allSet()) return; const z = Math.max(wpos()[2], 5); K.busy = 'goto'; ui(); try { await seq(['G90', 'G0 Z' + n3(z), 'G0 X0 Y0']); await waitIdle(); } catch { } K.busy = ''; ui(); }
 const toolR = () => { const d = +U.dia || curToolDia(); return d / 2; };
@@ -10660,9 +10776,9 @@ const toolByNum = n => (S.tools || []).find(t => (t.num || 1) === n);
 async function probe() {
   if (!conn()) return; if (!(K.st === 'Idle' || K.st === 'Hold' && K.prog && K.prog.tc)) { say('La machine doit être à l’arrêt pour palper.'); return; }
   const a = U.paxis, o = stockO(), r = toolR(), PL = +CF.plate, OFF = +CF.blockOff, F = +CF.probeF, D = +CF.probeDist, RET = +CF.retract, c = 10, sd = Math.max(2, Math.min(8, PL - 3));
-  const Zp = () => ['G91', 'G38.2 Z-' + n3(D) + ' F' + n3(F * 2), ckP, 'G0 Z2', 'G38.2 Z-5 F' + n3(F / 2), ckP, 'G90', 'G10 L20 P1 Z' + n3(PL + o.oz), () => { K.ws.z = true; }, 'G91', 'G0 Z' + n3(RET), 'G90'];
-  const Xp = () => ['G91', 'G38.2 X' + n3(c + r + 12) + ' F' + n3(F), ckP, 'G90', 'G10 L20 P1 X' + n3(-(r + OFF + o.ox)), () => { K.ws.x = true; }, 'G91', 'G0 X-2', 'G90'];
-  const Yp = () => ['G91', 'G38.2 Y' + n3(c + r + 12) + ' F' + n3(F), ckP, 'G90', 'G10 L20 P1 Y' + n3(-(r + OFF + o.oy)), () => { K.ws.y = true; }, 'G91', 'G0 Y-2', 'G90'];
+  const Zp = () => ['G91', 'G38.2 Z-' + n3(D) + ' F' + n3(F * 2), ckP, 'G0 Z2', 'G38.2 Z-5 F' + n3(F / 2), ckP, 'G90', 'G10 L20 P' + K.wcs + ' Z' + n3(PL + o.oz), () => { K.ws.z = true; }, 'G91', 'G0 Z' + n3(RET), 'G90'];
+  const Xp = () => ['G91', 'G38.2 X' + n3(c + r + 12) + ' F' + n3(F), ckP, 'G90', 'G10 L20 P' + K.wcs + ' X' + n3(-(r + OFF + o.ox)), () => { K.ws.x = true; }, 'G91', 'G0 X-2', 'G90'];
+  const Yp = () => ['G91', 'G38.2 Y' + n3(c + r + 12) + ' F' + n3(F), ckP, 'G90', 'G10 L20 P' + K.wcs + ' Y' + n3(-(r + OFF + o.oy)), () => { K.ws.y = true; }, 'G91', 'G0 Y-2', 'G90'];
   const toSideX = ['G91', 'G0 X-' + n3(c + r + 3), 'G0 Z-' + n3(RET + sd), 'G90'], backX = ['G91', 'G0 Z' + n3(RET + sd), 'G0 X' + n3(c + r + 5), 'G90'];
   const toSideY = ['G91', 'G0 Y-' + n3(c + r + 3), 'G0 Z-' + n3(RET + sd), 'G90'], backY = ['G91', 'G0 Z' + n3(RET + sd), 'G0 Y' + n3(c + r + 5), 'G90'];
   let L;
@@ -10777,20 +10893,7 @@ async function tcResume() {
   const P = K.prog; if (!P || !P.tc) return; K.tool = P.tc.tool; P.tc = null; tcClose(); const o = stockO(), sz = (+S.machine.safeZ || 5) + o.oz;
   try { await seq(['G90', 'G0 Z' + n3(sz)]); } catch { } ui(); progFeed();
 }
-function tcRender() {
-  let el = q('#cncTc'); const P = K.prog; if (!P || !P.tc) { if (el) el.remove(); return; }
-  if (!el) { el = document.createElement('div'); el.id = 'cncTc'; el.className = 'cnc-modal side'; el.setAttribute('data-notr', ''); document.body.appendChild(el); }
-  const t = toolByNum(P.tc.tool), nm = esc(t ? t.name : 'outil ' + P.tc.tool), rd = P.tc.ready;
-  el.innerHTML = '<div class="cnc-mb" style="width:min(470px,92vw)"><div class="cnc-mh"><h2>🔧 Changement d’outil</h2></div><div class="cnc-mbody">' +
-    (rd ? '<p>Le programme demande : <b>' + nm + '</b> (T' + P.tc.tool + '). La broche est arrêtée et le Z relevé.</p>' : '<p class="cnc-m">Fin des mouvements en cours, arrêt de la broche et remontée du Z…</p>') +
-    '<label class="cnc-chk"><input type="checkbox" data-tc="mounted" ' + (P.tc.mounted ? 'checked' : '') + (rd ? '' : ' disabled') + '><span><b>1.</b> Attendez l’arrêt complet de la broche, puis montez la <b>' + nm + '</b>. Serrez bien la pince.</span></label>' +
-    (CF.probe ? '<div style="padding:6px 0 6px 24px"><b>2.</b> Refaites le zéro Z : posez la plaque sous la fraise (descendez avec le pavé du panneau), branchez la pince, puis :<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn pri" data-c="tcProbe" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>Palper Z (plaque ' + f2(CF.plate, 1) + ' mm)</button>' + (P.tc.probed ? '<span style="color:#2e9b5c;font-weight:600">✓ Z refait</span>' : '') + '<span class="cnc-s"><span class="cnc-led ' + (/P/.test(K.pn) ? 'on' : '') + '" data-live="led"></span>contact</span></div>' +
-      '<div class="cnc-s" style="margin-top:9px;padding-top:7px;border-top:1px dashed var(--line)"><b>Ou à la main</b> : feuille ou cale de <input type="number" step="0.01" min="0" value="' + CF.shim + '" data-cf="shim" style="width:62px"> mm sur la pièce, descendez avec le pavé jusqu’à la pincer, puis <button class="cnc-btn sm" data-c="tcPaper" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>Zéro Z ici</button> ou, fraise posée sur la plaque, <button class="cnc-btn sm" data-c="tcPlate" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>Zéro Z sur plaque ' + f2(CF.plate, 1) + ' mm</button></div>' :
-      '<div style="padding:6px 0 6px 24px"><b>2.</b> Refaites le zéro Z à la main : posez la feuille ou la cale (' + f2(CF.shim) + ' mm) sur la pièce, descendez la fraise avec le pavé (pas de 0,1 mm à la fin) jusqu’à la pincer légèrement, puis :<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn pri" data-c="tcPaper" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>Zéro Z ici (cale ' + f2(CF.shim) + ' mm)</button><button class="cnc-btn" data-c="tcPlate" ' + (P.tc.mounted && rd && !K.busy ? '' : 'disabled') + '>sur plaque ' + f2(CF.plate, 1) + ' mm</button>' + (P.tc.probed ? '<span style="color:#2e9b5c;font-weight:600">✓ Z refait</span>' : '') + '</div>') + '<p class="cnc-s cnc-m" style="margin:6px 0 0">Ne touchez pas à X et Y : ils restent valables.</p></div>' +
-    '<div style="padding-left:24px"><b>3.</b> ' + (CF.probe ? 'Rangez la plaque et la pince (ou la cale)' : 'Retirez la feuille ou la cale') + (CF.m3 ? '.' : ', rallumez la défonceuse.') + '</div>' +
-    '<div class="cnc-row" style="margin-top:14px;justify-content:space-between"><button class="cnc-btn" data-c="stop">Arrêter l’usinage</button><button class="cnc-btn pri" data-c="tcResume" ' + (P.tc.probed ? '' : 'disabled') + '>▶ Reprendre l’usinage</button></div>' +
-    '<p class="cnc-s cnc-m" style="margin-top:9px">Le pavé de déplacement (en bas du panneau) reste utilisable.</p></div></div>';
-}
+function tcRender() { const el = q('#cncTc'); if (el) el.remove(); if (K.prog && K.prog.tc && !K.prog.tc.shown) { K.prog.tc.shown = true; U.probeOpen = true; U.floatMin = false; const rv = q('#rv3'); if (rv) rv.classList.remove('cnc-fmin'); } if (curTab === 'usiner') ovRender(); }
 function tcClose() { const el = q('#cncTc'); if (el) el.remove(); }
 
 /* ---------------- interface : onglet et panneau ---------------- */
@@ -10813,7 +10916,7 @@ window.cncOnTab = t => {
   if (on) { if (!U.prevViews) U.prevViews = { d2: VIEWS.d2, d3: VIEWS.d3 }; VIEWS.d2 = false; VIEWS.d3 = true; viewsApply(); RV.showTp = true; rv.classList.add('cnc-on'); rv.classList.toggle('cnc-fmin', !!U.floatMin); setTimeout(() => { if (typeof rvFit === 'function') rvFit(true); rvReq(); }, 60); ov.hidden = false; PI_ = null; ui(); }
   else if (U.prevViews) { VIEWS.d2 = U.prevViews.d2; VIEWS.d3 = U.prevViews.d3; U.prevViews = null; viewsApply(); rv.classList.remove('cnc-on'); ov.hidden = true; }
 };
-function ui() { if (!pane) return; tabBtn.classList.toggle('cnc-conn', !!K.T && K.st !== 'Alarm'); tabBtn.classList.toggle('cnc-alarm', K.st === 'Alarm'); if (curTab === 'usiner') { topRender(); ovRender(); } live(); tcRender(); }
+function ui() { if (!pane) return; tabBtn.classList.toggle('cnc-conn', !!K.T && K.st !== 'Alarm'); tabBtn.classList.toggle('cnc-alarm', K.st === 'Alarm'); if (curTab === 'usiner') { topRender(); } tcRender(); live(); }
 
 function stat() { return {
   s1: conn() ? 'done' : '',
@@ -10863,14 +10966,35 @@ function alarmBanner() { // alarmes en haut de la vue 3D
   else if (K.st === 'Door') { k = 'warn'; t = '<b>Porte ouverte</b> — fermez la porte (ou le capteur) puis reprenez.'; }
   return t ? '<div id="cncAlarm" class="cnc-box ' + k + '">' + t + '</div>' : '';
 }
+function tcCard() {
+  const P = K.prog; if (!P || !P.tc) return ''; const t = toolByNum(P.tc.tool), nm = esc(t ? t.name : 'outil ' + P.tc.tool), rd = P.tc.ready;
+  return '<div class="cnc-card2 cnc-tc"><div class="cnc-ch"><span>🔧 Changement d’outil</span></div>' + (rd ? '<p style="margin:0 0 6px">Le programme demande : <b>' + nm + '</b> (T' + P.tc.tool + '). Broche arrêtée, Z relevé.</p>' +
+    '<label class="cnc-chk"><input type="checkbox" data-tc="mounted" ' + (P.tc.mounted ? 'checked' : '') + '><span><b>1.</b> Attendez l’arrêt de la broche, montez la <b>' + nm + '</b>, serrez la pince.</span></label>' +
+    '<p class="cnc-s" style="margin:4px 0"><b>2.</b> Refaites le zéro Z ci-dessous (palpeur ou à la main). Ne touchez pas à X et Y. ' + (P.tc.probed ? '<b style="color:#2e9b5c">✓ Z refait</b>' : '') + '</p>' +
+    '<div class="cnc-row" style="justify-content:space-between;margin-top:8px"><button class="cnc-btn sm" data-c="stop">Arrêter l’usinage</button><button class="cnc-btn pri" data-c="tcResume" ' + (P.tc.probed ? '' : 'disabled') + '>▶ Reprendre l’usinage</button></div>'
+    : '<p class="cnc-m" style="margin:0">Fin des mouvements en cours, arrêt de la broche et remontée du Z…</p>') + '</div>';
+}
+function probeCard() {
+  const c = conn(), P = K.prog, tc = !!(P && P.tc), lock = tc && !(P.tc.ready && P.tc.mounted), dis = !c || K.st === 'Alarm' || !!K.busy || (moving() && !tc) || lock, st = S.stock, o = stockO();
+  if (tc) U.paxis = 'Z';
+  let h = '<div class="cnc-card2 cnc-pc"><div class="cnc-ch"><span>⌖ Palpage et zéro</span>' + (tc ? '' : '<button data-c="probeT" title="Fermer">✕</button>') + '</div>';
+  if (CF.probe) {
+    h += '<div class="cnc-seg">' + ['Z', 'XYZ', 'XY', 'X', 'Y'].map(a => '<button class="' + (U.paxis === a ? 'on' : '') + '" data-c="paxis" data-v="' + a + '" ' + (tc && a !== 'Z' ? 'disabled' : '') + '>' + a + '</button>').join('') + '</div>' + illu(U.paxis) + '<p class="cnc-s" style="margin:0 0 6px">' + PTXT[U.paxis] + '</p>';
+    if (U.paxis !== 'Z' && typeof originKey === 'function' && originKey(st) !== 'bl') h += '<div class="cnc-box warn cnc-s">Le bloc se pose au coin avant gauche ; COPO décale X0 et Y0 jusqu’à l’origine du projet (' + esc(tr(originLabel(st))) + ').</div>';
+    h += '<div class="cnc-row wrap" style="gap:10px"><label class="cnc-s cnc-il">Plaque <input type="number" step="0.1" value="' + CF.plate + '" data-cf="plate" style="width:66px"> mm</label>' + (U.paxis !== 'Z' ? '<label class="cnc-s cnc-il">Outil Ø <input type="number" step="0.01" value="' + (U.dia || curToolDia()) + '" data-u2="dia" style="width:66px"> mm</label>' : '') + '<span class="cnc-s"><span class="cnc-led ' + (/P/.test(K.pn) ? 'on' : '') + '" data-live="led"></span>contact <b data-live="ledt">' + (/P/.test(K.pn) ? 'fermé' : 'ouvert') + '</b>' + (K.kind === 'sim' ? ' <button class="cnc-btn lnk" data-c="simTouch">simuler</button>' : '') + '</span></div>' +
+      '<button class="cnc-btn pri big" style="margin-top:8px" data-c="probe" ' + (dis ? 'disabled' : '') + '>' + (K.busy === 'probe' ? 'Palpage…' : 'Palper ' + U.paxis) + '</button>';
+  } else h += '<p class="cnc-s cnc-m" style="margin:0 0 4px">Pas de palpeur déclaré (Édition › Paramètres › Pilotage de la machine).</p>';
+  h += '<div class="cnc-lbl">Zéro Z à la main</div><p class="cnc-s" style="margin:0 0 6px">Descendez la fraise avec le pavé (pas de 0,1 mm à la fin) jusqu’à pincer la cale, ou toucher la plaque, posée sur ' + (st.originZ === 'bottom' ? 'le brut (Z0 sur la table : COPO ajoute l’épaisseur du brut)' : 'la pièce') + '.</p>' +
+    '<div class="cnc-zm"><input type="number" step="0.01" min="0" value="' + CF.shim + '" data-cf="shim"><span>mm</span><button class="cnc-btn sm pri" data-c="zShim" ' + (dis ? 'disabled' : '') + '>Zéro Z sur la cale</button>' +
+    '<input type="number" step="0.1" min="0" value="' + CF.plate + '" data-cf="plate"><span>mm</span><button class="cnc-btn sm pri" data-c="zPlate" ' + (dis ? 'disabled' : '') + '>Zéro Z sur la plaque</button></div>' +
+    (tc ? '' : '<p class="cnc-s cnc-m" style="margin:6px 0 0">X et Y à la main : boutons ↺ du panneau, ou tapez une cote dans la colonne « Pièce ».</p>') + '</div>';
+  return h;
+}
 function liteBody() { // sans étapes guidées : seulement les outils prise d'origine et palpage
   const c = conn(), dis = !c || moving() || !!K.prog; let h = '';
   if (K.prog && K.prog.err) h += '<div class="cnc-box err"><b class="t">Erreur de la machine, ligne ' + (K.prog.err.idx + 1) + '</b><code>' + esc(K.prog.err.line) + '</code> → ' + esc(K.prog.err.e) + '<div class="cnc-row" style="margin-top:7px"><button class="cnc-btn sm" data-c="errGo">Ignorer et reprendre</button><button class="cnc-btn sm" data-c="stop">Arrêter</button></div></div>';
   if (K.prog && K.st === 'Hold' && !K.prog.tc && !K.prog.err && K.prog.m0) h += '<div class="cnc-box warn"><b class="t">Pause demandée par le programme</b>' + esc(K.prog.m0) + '</div>';
   h += '<div class="cnc-card2"><div class="cnc-ch"><span>Prise d’origine machine</span></div><div class="cnc-row wrap"><button class="cnc-btn pri" data-c="home" ' + (c && limOn() && !dis ? '' : 'disabled') + '>⌂ Tous les axes' + (K.homed ? ' ✓' : '') + '</button>' + (K.fluid || K.hal ? AX.map(a => '<button class="cnc-btn sm" data-c="homeAx" data-a="' + a + '" ' + (c && !dis ? '' : 'disabled') + '>' + a.toUpperCase() + '</button>').join('') : '') + '</div>' + (c && !limOn() ? '<p class="cnc-s cnc-m" style="margin:5px 0 0">Pas de fins de course sur cette machine.</p>' : '') + '</div>';
-  if (CF.probe) h += '<div class="cnc-card2"><div class="cnc-ch"><span>Palpeur</span><span class="cnc-s" style="font-weight:400"><span class="cnc-led ' + (/P/.test(K.pn) ? 'on' : '') + '" data-live="led"></span><span data-live="ledt">' + (/P/.test(K.pn) ? 'fermé' : 'ouvert') + '</span></span></div><div class="cnc-seg">' + ['Z', 'XYZ', 'XY', 'X', 'Y'].map(a => '<button class="' + (U.paxis === a ? 'on' : '') + '" data-c="paxis" data-v="' + a + '">' + a + '</button>').join('') + '</div>' +
-    '<div class="cnc-row wrap" style="gap:10px;margin-top:7px"><label class="cnc-s cnc-il">Plaque <input type="number" step="0.1" value="' + CF.plate + '" data-cf="plate" style="width:66px"> mm</label>' + (U.paxis !== 'Z' ? '<label class="cnc-s cnc-il">Outil Ø <input type="number" step="0.01" value="' + (U.dia || curToolDia()) + '" data-u2="dia" style="width:66px"> mm</label>' : '') + '</div>' +
-    '<button class="cnc-btn pri big" style="margin-top:8px" data-c="probe" ' + (c && K.st !== 'Alarm' && !K.busy && !(moving() && !(K.prog && K.prog.tc)) ? '' : 'disabled') + '>' + (K.busy === 'probe' ? 'Palpage…' : 'Palper ' + U.paxis) + '</button></div>';
   const has2 = S.tps.some(t => t.visible && t.face === 2), has1 = S.tps.some(t => t.visible && t.face !== 2);
   if (has1 && has2) h += '<div class="cnc-card2"><div class="cnc-ch"><span>Double face</span></div><div class="cnc-seg"><button class="' + (U.face !== 2 ? 'on' : '') + '" data-c="face" data-v="1" ' + (K.prog ? 'disabled' : '') + '>Face 1</button><button class="' + (U.face === 2 ? 'on' : '') + '" data-c="face" data-v="2" ' + (K.prog ? 'disabled' : '') + '>Face 2</button></div></div>';
   h += '<label class="cnc-chk cnc-s" style="margin-top:2px"><input type="checkbox" data-k="airWant" ' + (K.airWant ? 'checked' : '') + (K.prog ? ' disabled' : '') + '><span><b>Essai dans l’air</b> (+10 mm)</span></label>';
@@ -10893,20 +11017,8 @@ function originBody() {
   if (K.prog && K.prog.tc) h += '<div class="cnc-box warn"><b class="t">Changement d’outil en cours</b>Refaites seulement le <b>Z</b> (fenêtre de droite).</div>';
   if (K.originLost) h += '<div class="cnc-box warn"><b class="t">Origine pièce à refaire</b>Sans fins de course, un arrêt pendant un mouvement fait perdre la position.</div>';
   if (K.g54 && K.g54.some(v => Math.abs(v) > 0.001) && !allSet() && !K.originLost) h += '<div class="cnc-box"><b class="t">Origine enregistrée dans la machine</b>G54 : X ' + f2(K.g54[0]) + ' · Y ' + f2(K.g54[1]) + ' · Z ' + f2(K.g54[2]) + '<div style="margin-top:6px"><button class="cnc-btn sm" data-c="keepG54">La reprendre (même pièce, même fraise)</button></div></div>';
-  if (!CF.probe) U.pmode = 'hand';
-  if (CF.probe) h += '<div class="cnc-seg" style="margin:4px 0"><button class="' + (U.pmode === 'probe' ? 'on' : '') + '" data-c="pmode" data-v="probe">Avec palpeur</button><button class="' + (U.pmode === 'hand' ? 'on' : '') + '" data-c="pmode" data-v="hand">À la main</button></div>';
-  else h += '<p class="cnc-s cnc-m" style="margin:2px 0 6px">Réglage à la main. Vous avez une plaque ou un bloc de palpage ? <button class="cnc-btn lnk" data-c="msetProbe">Activer le palpeur</button></p>';
-  if (U.pmode === 'probe') {
-    const tc = K.prog && K.prog.tc;
-    h += '<div class="cnc-lbl">Que voulez-vous palper ?</div><div class="cnc-seg">' + ['Z', 'XYZ', 'XY', 'X', 'Y'].map(a => '<button class="' + (U.paxis === a ? 'on' : '') + '" data-c="paxis" data-v="' + a + '" ' + (tc && a !== 'Z' ? 'disabled' : '') + '>' + a + '</button>').join('') + '</div>' + illu(U.paxis) + '<p class="cnc-s" style="margin:0 0 6px">' + PTXT[U.paxis] + '</p>';
-    if (U.paxis !== 'Z' && !bl) h += '<div class="cnc-box warn cnc-s">Le bloc se pose au coin avant gauche ; COPO décale X0 et Y0 jusqu’à l’origine du projet en se fiant aux dimensions du brut (' + f2(st.w, 1) + ' × ' + f2(st.h, 1) + ' mm).</div>';
-    h += '<div class="cnc-row wrap" style="gap:12px"><label class="cnc-s">Épaisseur de la plaque<br><input type="number" step="0.1" value="' + CF.plate + '" data-cf="plate" style="width:80px"> mm</label>' + (U.paxis !== 'Z' ? '<label class="cnc-s">Diamètre de l’outil<br><input type="number" step="0.01" value="' + (U.dia || curToolDia()) + '" data-u2="dia" style="width:80px"> mm</label>' : '') + '</div>' +
-      '<p class="cnc-s" style="margin:8px 0 0"><span class="cnc-led ' + (/P/.test(K.pn) ? 'on' : '') + '" data-live="led"></span>Contact du palpeur : <b data-live="ledt">' + (/P/.test(K.pn) ? 'fermé' : 'ouvert') + '</b> — touchez la plaque avec la fraise pour vérifier.' + (K.kind === 'sim' ? ' <button class="cnc-btn lnk" data-c="simTouch">simuler</button>' : '') + '</p>' +
-      '<button class="cnc-btn pri big" style="margin-top:9px" data-c="probe" ' + (dis || K.st === 'Alarm' || K.busy ? 'disabled' : '') + '>' + (K.busy === 'probe' ? 'Palpage…' : 'Palper ' + U.paxis) + '</button>';
-  } else {
-    h += '<p class="cnc-s" style="margin-top:0">Approchez la fraise du point d’origine avec le pavé (pas de 0,1 mm à la fin), jusqu’à pincer légèrement une feuille ou une cale, puis utilisez les boutons <b>↺ Zéro</b> du panneau (colonne « Pièce » : on peut aussi y taper une cote). Pour X et Y, tenez compte du rayon de la fraise.</p>';
-    h += '<div class="cnc-box cnc-row wrap" style="gap:8px"><span class="cnc-s">Z sur une cale de</span><input type="number" step="0.01" min="0" value="' + CF.shim + '" data-cf="shim" style="width:70px"><span class="cnc-s">mm</span><button class="cnc-btn sm pri" data-c="zShim" ' + (dis ? 'disabled' : '') + '>Zéro Z sur la cale</button><span class="cnc-s cnc-m" style="flex-basis:100%">La fraise touche la cale posée sur ' + (S.stock.originZ === 'bottom' ? 'le dessus du brut (Z0 sur la table : COPO ajoute l’épaisseur du brut)' : 'la pièce') + '.</span></div>';
-  }
+  h += U.probeOpen ? '<p class="cnc-s" style="margin:4px 0">Le menu <b>⌖ Palpage et zéro</b> est ouvert en haut de ce panneau : palpeur, ou zéro Z à la main sur cale ou plaque.</p>' : '<button class="cnc-btn pri big" style="margin:4px 0" data-c="probeT">⌖ Ouvrir le palpage et zéro Z</button>';
+  h += '<p class="cnc-s" style="margin:6px 0">X et Y à la main : approchez la fraise avec le pavé, puis <b>↺</b> dans le panneau (ou tapez une cote dans la colonne « Pièce » : elle devient la nouvelle référence, la machine ne bouge pas).</p>';
   h += '<div class="cnc-chips">' + AX.map(a => '<span class="cnc-chip ' + (K.ws[a] ? 'ok' : '') + '">' + (K.ws[a] ? '✓' : '○') + ' ' + a.toUpperCase() + '</span>').join('') + '</div>';
   if (allSet() && !(K.prog && K.prog.tc)) h += '<div class="cnc-box ok cnc-s"><b class="t">Vérifiez avant de continuer</b>Envoyez la fraise au-dessus de X0 Y0 et regardez si elle est bien à l’origine de la pièce.</div><div class="cnc-row"><button class="cnc-btn" data-c="goto" ' + (canJog() ? '' : 'disabled') + '>Aller au-dessus de X0 Y0</button><button class="cnc-btn pri" style="flex:1" data-c="go4">Continuer →</button></div>';
   return h;
@@ -10934,12 +11046,12 @@ function launchBody() {
 function ctlRender() {
   if (!ctl) return;
   ctl.innerHTML = '<div class="cnc-cg"><div class="cnc-pad">' +
-    [[-1, 1, '↖', 1], [0, 1, 'Y+'], [1, 1, '↗', 1], [-1, 0, 'X−'], null, [1, 0, 'X+'], [-1, -1, '↙', 1], [0, -1, 'Y−'], [1, -1, '↘', 1]].map(b => b ? '<button class="cnc-pb' + (b[3] ? ' dg' : '') + '" data-j="' + b[0] + ',' + b[1] + ',0">' + b[2] + '</button>' : '<button class="cnc-pb" data-c="padHome" title="Aller au-dessus de l’origine pièce (X0 Y0)">' + (U.homeConfirm ? 'OK ?' : '⌖') + '</button>').join('') +
-    '</div><div class="cnc-zpad"><button class="cnc-pb" data-j="0,0,1">Z+</button><span style="text-align:center;font-size:11px;color:var(--muted);align-self:center">Z</span><button class="cnc-pb" data-j="0,0,-1">Z−</button></div>' +
+    [[-1, 1, '↖', 1], [0, 1, '<b class="cy">Y</b>+'], [1, 1, '↗', 1], [-1, 0, '<b class="cx">X</b>−'], null, [1, 0, '<b class="cx">X</b>+'], [-1, -1, '↙', 1], [0, -1, '<b class="cy">Y</b>−'], [1, -1, '↘', 1]].map(b => b ? '<button class="cnc-pb' + (b[3] ? ' dg' : '') + '" data-j="' + b[0] + ',' + b[1] + ',0">' + b[2] + '</button>' : '<button class="cnc-pb xy0" data-c="padHome" title="Remonte si besoin, puis va au-dessus de X0 Y0 (cliquer deux fois)">' + (U.homeConfirm ? 'OK ?' : '<b class="cx">X</b><b class="cy">Y</b>0') + '</button>').join('') +
+    '</div><div class="cnc-zpad"><button class="cnc-pb" data-j="0,0,1"><b class="cz">Z</b>+</button><span></span><button class="cnc-pb" data-j="0,0,-1"><b class="cz">Z</b>−</button></div>' +
     '<div><div class="cnc-s cnc-m" style="margin-bottom:3px">Pas (mm)</div><div class="cnc-seg">' + CF.steps.map(s => '<button class="' + (+CF.step === +s ? 'on' : '') + '" data-c="step" data-v="' + s + '">' + f2(s, s < 1 ? 1 : 0) + '</button>').join('') + '</div>' +
     '<div class="cnc-s cnc-m" style="margin:7px 0 1px">Vitesse <b data-live="jf">' + CF.jogF + '</b> mm/min</div><input type="range" min="100" max="6000" step="100" value="' + CF.jogF + '" data-cf="jogF" style="width:100%;accent-color:var(--accent)">' +
     '<div class="cnc-s cnc-m" style="margin-top:3px"><span class="cnc-kbd">←→↑↓</span> <span class="cnc-kbd">PgUp</span> <span class="cnc-kbd">PgDn</span> souris sur la vue · maintenir = continu</div></div></div>' +
-    '<div class="cnc-row" style="margin-top:9px;gap:6px"><button class="cnc-btn' + ((K.fs[1] > 0 || U.spin) ? ' pri' : '') + '" style="flex:1" data-c="spin" data-live="bspin">' + ((K.fs[1] > 0 || U.spin) ? '■ Broche (M5)' : '↻ Broche (M3)') + '</button><button class="cnc-btn' + (U.cool ? ' pri' : '') + '" style="flex:1" data-c="cool">' + (U.cool ? '■ Arrosage (M9)' : '💧 Arrosage (M8)') + '</button></div>' +
+    '<div class="cnc-row" style="margin-top:9px;gap:6px"><button class="cnc-btn" style="flex:1" data-c="spin" data-live="bspin">↻ Broche (M3)</button><button class="cnc-btn" style="flex:1" data-c="cool" data-live="bcool">💧 Arrosage (M8)</button></div>' +
     '<div class="cnc-run"><button class="cnc-rb go" data-c="start" data-live="bstart">▶ Démarrer</button><button class="cnc-rb pa" data-c="pause" data-live="bpause">⏸ Pause</button><button class="cnc-rb st" data-c="stop" data-live="bstop" title="Échap">■ Arrêt</button></div>' +
     '<div class="cnc-ovr"><span>Avance</span><input type="range" min="10" max="200" step="10" value="100" data-ovr="f"><b data-live="ovf">100 %</b></div>' +
     '<div class="cnc-ovr"><span>Broche</span><input type="range" min="10" max="200" step="10" value="100" data-ovr="s"><b data-live="ovs">100 %</b></div>';
@@ -10957,8 +11069,8 @@ function ovrSet(k, v) { if (!K.T) return; const cur = k === 'f' ? K.ov[0] : K.ov
 /* ---------------- cartouches de la vue 3D ---------------- */
 function ovRender() {
   if (!ov || curTab !== 'usiner') return; const P = progInfo(), old = q('#cncFloat'), sc = old ? old.scrollTop : 0;
-  ov.innerHTML = '<div id="cncPill"></div>' + alarmBanner() + '<div id="cncFloat" class="cnc-float' + (U.floatMin ? ' min' : '') + '"><div class="cnc-fh"><b>' + (CF.guide ? 'Données et vérifications' : 'Données') + '</b><button class="cnc-btn sm" data-c="floatT" title="' + (U.floatMin ? 'Déplier' : 'Replier') + '">' + (U.floatMin ? '▸' : '▾') + '</button></div>' + (U.floatMin ? '' :
-    '<div class="cnc-test"><b>Version test.</b> Pilotage d’une vraie machine : restez près de l’arrêt d’urgence et faites d’abord un essai dans l’air.</div>' +
+  ov.innerHTML = '<div id="cncPill"></div>' + alarmBanner() + '<div id="cncFloat" class="cnc-float' + (U.floatMin ? ' min' : '') + '"><div class="cnc-fh"><b>' + (CF.guide ? 'Données et vérifications' : 'Données') + '</b><label class="cnc-sw2" title="Étapes guidées et vérifications avant le démarrage"><input type="checkbox" data-cfb="guide" ' + (CF.guide ? 'checked' : '') + (K.prog ? ' disabled' : '') + '><span></span>Vérifications</label><button class="cnc-btn sm" data-c="floatT" title="' + (U.floatMin ? 'Déplier' : 'Replier') + '">' + (U.floatMin ? '▸' : '▾') + '</button></div>' + (U.floatMin ? '' :
+    '<div class="cnc-test"><b>Version test.</b> Pilotage d’une vraie machine : restez près de l’arrêt d’urgence et faites d’abord un essai dans l’air.</div>' + tcCard() + ((U.probeOpen || (K.prog && K.prog.tc)) && conn() ? probeCard() : '') +
     '<div class="cnc-card2"><div class="cnc-ch"><span>Encombrement du programme (mm)</span><button data-c="posT">' + (U.posOpen ? '–' : '+') + '</button></div>' + (U.posOpen ? '<table class="cnc-bb"><tr><th></th><th>min</th><th>max</th><th>taille</th></tr>' + AX.map((a, i) => '<tr><th>' + a.toUpperCase() + '</th><td data-live="bn' + a + '">' + (P.tps.length ? f2(P.mn[i]) : '–') + '</td><td data-live="bx' + a + '">' + (P.tps.length ? f2(P.mx[i]) : '–') + '</td><td>' + (P.tps.length ? f2(P.mx[i] - P.mn[i], 1) : '–') + '</td></tr>').join('') + '</table>' : '') + '</div>' +
     '<div class="cnc-card2"><div class="cnc-ch"><span>Usinage</span><button data-c="runT">' + (U.runOpen ? '–' : '+') + '</button></div>' + (U.runOpen ? '<div class="cnc-kv"><span>Écoulé</span><span data-live="tel">0:00</span><span>Restant</span><span data-live="trest"></span></div><div class="cnc-prog"><i data-live="pbar"></i></div><div class="cnc-kv"><span>Avance réelle</span><span data-live="fcur"></span><span>Broche</span><span data-live="scur"></span><span>Outil</span><span data-live="tcur"></span><span>Suivant</span><span data-live="tnext"></span></div><div class="cnc-gl" data-live="gl"></div>' : '') + '</div>' +
     '<div id="cncVols"></div>') + '</div>';
@@ -10977,8 +11089,19 @@ function topRender() {
   else h += '<button class="cnc-btn big cnc-conn" data-c="conMenu">' + (K.st === 'Conn' ? 'Connexion…' : '<span class="cnc-cdot ' + (K.st === 'Alarm' ? 'al' : '') + '"></span>' + esc(K.ctrl || 'Connectée') + ' · ' + esc(K.kind === 'sim' ? 'simulée' : 'USB')) + ' ▾</button><div class="cnc-cmenu"><div class="cnc-ct">' + esc(K.name) + '</div><button class="cnc-ci" data-c="disc"><span class="ic">⏏</span><span><b>Déconnecter</b></span></button></div>';
   h += '</div><button class="cnc-btn cnc-gear" data-c="mset" title="Paramètres machine : réglages $$, déplacements, palpeur, manette, macros, console">⚙</button></div>';
   h += '<button class="cnc-btn cnc-gozero' + (c && limOn() && !K.homed && CF.guide ? ' pri' : '') + '" data-c="home" ' + (c && limOn() && !moving() && !K.prog && ['Idle', 'Alarm'].includes(K.st) ? '' : 'disabled') + ' title="' + (c && !limOn() ? 'Pas de fins de course sur cette machine' : 'Envoie chaque axe sur son fin de course ($H)') + '">⌂ Prise d’origine machine' + (K.homed ? ' ✓' : '') + '</button>';
-  h += '<button class="cnc-btn cnc-gozero" data-c="goHome" ' + (c && K.homed && canJog() ? '' : 'disabled') + ' title="' + (K.homed ? 'Remonte Z, puis va à l’origine machine (G53)' : 'Faites d’abord la prise d’origine') + '">⤒ Aller à l’origine machine</button>';
-  h += '<div class="cnc-coord"><div class="cnc-crow cnc-chd"><span></span><span>Zéro</span><span>Pièce <span class="cnc-badge">G54</span></span><span>Machine</span><span>Aller</span></div>' +
+  const jd = !(c && canJog());
+  h += '<div class="cnc-icons"><select class="cnc-wcs" data-wcs="1" ' + (c && !K.prog && !moving() ? '' : 'disabled') + ' title="Repère de travail actif">' + [1, 2, 3, 4, 5, 6].map(n => '<option value="' + n + '" ' + (K.wcs === n ? 'selected' : '') + '>G5' + (3 + n) + '</option>').join('') + '</select>' +
+    '<button class="cnc-btn cnc-ib" data-c="goHome" ' + (c && K.homed && canJog() ? '' : 'disabled') + ' title="' + (K.homed ? 'Aller à l’origine machine : Z d’abord, puis X Y' : 'Aller à l’origine machine (faites d’abord la prise d’origine)') + '">🏠</button>' +
+    '<button class="cnc-btn cnc-ib' + (U.menu === 'goto' ? ' pri' : '') + '" data-c="menu" data-v="goto" ' + (c ? '' : 'disabled') + ' title="Aller à… (coordonnées, coins et centre de la pièce)">✈</button>' +
+    '<button class="cnc-btn cnc-ib' + (U.menu === 'pos' ? ' pri' : '') + '" data-c="menu" data-v="pos" ' + (c ? '' : 'disabled') + ' title="Positions enregistrées">📚</button>' +
+    '<button class="cnc-btn cnc-ib cnc-pr' + (U.probeOpen ? ' pri' : '') + '" data-c="probeT" ' + (c ? '' : 'disabled') + ' title="Palpage et zéro Z à la main (panneau de droite)">⌖ Palper</button></div>';
+  if (U.menu === 'goto' && c) { const g = U.go || (U.go = { x: '', y: '', z: '', m: false }); h += '<div class="cnc-menu"><div class="cnc-row" style="justify-content:space-between"><b>Aller à…</b><div class="cnc-seg"><button class="' + (!g.m ? 'on' : '') + '" data-c="goM" data-v="0">Pièce</button><button class="' + (g.m ? 'on' : '') + '" data-c="goM" data-v="1">Machine</button></div></div>' +
+    '<div class="cnc-gor">' + AX.map(a => '<label><b class="cnc-axl ' + a + '">' + a.toUpperCase() + '</b><input type="number" step="0.1" data-go="' + a + '" value="' + esc(g[a]) + '" placeholder="="></label>').join('') + '<button class="cnc-btn pri" data-c="goGo" ' + (jd ? 'disabled' : '') + '>Aller</button></div><p class="cnc-s cnc-m" style="margin:4px 0 6px">Case vide : l’axe ne bouge pas. Si la fraise doit monter, Z part en premier ; si elle doit descendre, Z part en dernier.</p>' +
+    '<div class="cnc-lbl" style="margin-top:4px">Repères de la pièce (fraise à la hauteur de sécurité)</div><div class="cnc-gq">' + [['XY0', 'X0 Y0'], ['c', 'Centre'], ['fl', '↙ Avant gauche'], ['fr', '↘ Avant droit'], ['bl', '↖ Arrière gauche'], ['br', '↗ Arrière droit'], ['zs', 'Z sécurité']].map(x => '<button class="cnc-btn sm" data-c="goQ" data-v="' + x[0] + '" ' + (jd ? 'disabled' : '') + '>' + x[1] + '</button>').join('') + '</div></div>'; }
+  if (U.menu === 'pos' && c) { const P = CF.pos || []; h += '<div class="cnc-menu"><b>Positions enregistrées</b>' + (K.homed ? '' : '<p class="cnc-s" style="color:var(--warn);margin:4px 0">Sans prise d’origine, une position enregistrée n’est pas fiable d’une session à l’autre.</p>') +
+    (P.length ? P.map((x, i) => '<div class="cnc-pos"><span><b>' + esc(x.n) + '</b><small>X ' + f2(x.m[0], 1) + ' · Y ' + f2(x.m[1], 1) + ' · Z ' + f2(x.m[2], 1) + ' (machine)</small></span><button class="cnc-btn sm pri" data-c="posGo" data-i="' + i + '" ' + (jd ? 'disabled' : '') + '>Aller</button><button class="cnc-btn sm" data-c="posDel" data-i="' + i + '" title="Supprimer">✕</button></div>').join('') : '<p class="cnc-s cnc-m" style="margin:5px 0">Aucune position. Exemples : changement d’outil, aspiration, chargement de la pièce.</p>') +
+    '<div class="cnc-row" style="margin-top:6px"><input id="cncPosN" placeholder="Nom de la position actuelle" style="flex:1"><button class="cnc-btn sm" data-c="posAdd">Enregistrer ici</button></div></div>'; }
+  h += '<div class="cnc-coord"><div class="cnc-crow cnc-chd"><span></span><span>Zéro</span><span>Pièce <span class="cnc-badge">G5' + (3 + K.wcs) + '</span></span><span>Machine</span><span>Aller</span></div>' +
     AX.map((a, i) => '<div class="cnc-crow"><b class="cnc-axl ' + a + '">' + a.toUpperCase() + '</b><button class="cnc-btn sm" data-c="zero" data-a="' + a + '" ' + (dis ? 'disabled' : '') + ' title="Zéro ' + a.toUpperCase() + ' ici (G10 L20 P1 ' + a.toUpperCase() + '0)">↺</button><input class="cnc-wsin ' + a + (K.ws[a] ? ' set' : '') + '" type="number" step="0.01" data-wsin="' + a + '" title="Tapez une cote puis Entrée : la position actuelle prend cette valeur" ' + (dis ? 'disabled' : '') + '><span class="cnc-mv" data-live="m' + a + '">–</span><button class="cnc-btn sm" data-c="goAx" data-a="' + a + '" ' + (c && K.ws[a] && canJog() ? '' : 'disabled') + ' title="Aller à ' + a.toUpperCase() + '0">⌂</button></div>').join('') +
     '<button class="cnc-btn" style="width:100%;margin-top:6px" data-c="zeroAll" ' + (dis ? 'disabled' : '') + ' title="X et Y seulement : le Z se règle à part">↺ Zéro X Y</button>' +
     '<div class="cnc-zz"><span class="cnc-s cnc-m">Zéro Z à la main :</span><button class="cnc-btn sm" data-c="zShim" ' + (dis ? 'disabled' : '') + ' title="La fraise pince la feuille ou la cale posée sur la pièce">cale ' + String(+CF.shim).replace('.', ',') + ' mm</button><button class="cnc-btn sm" data-c="zPlate" ' + (dis ? 'disabled' : '') + ' title="Descendez la fraise jusqu’à toucher la plaque posée sur la pièce">plaque ' + String(+CF.plate).replace('.', ',') + ' mm</button></div></div>';
@@ -11004,7 +11127,7 @@ function live() {
   const bs = L$('bstart')[0]; if (bs) { const hold = P && K.st === 'Hold' && !P.tc && !P.err; bs.disabled = !(canStart() || hold); bs.textContent = hold ? '▶ Reprendre' : '▶ Démarrer'; }
   const bp = L$('bpause')[0]; if (bp) bp.disabled = !(K.st === 'Run' || K.st === 'Jog' || K.st === 'Home');
   const bt = L$('bstop')[0]; if (bt) bt.disabled = !K.T;
-  const jd = !canJog() && !jogging; if (ctl) { qa('.cnc-pb', ctl).forEach(b => b.disabled = jd); qa('[data-c=spin],[data-c=cool]', ctl).forEach(b => b.disabled = !conn() || !!K.prog); }
+  const jd = !canJog() && !jogging; if (ctl) { qa('.cnc-pb', ctl).forEach(b => b.disabled = jd); qa('[data-c=spin],[data-c=cool]', ctl).forEach(b => b.disabled = !conn() || (!!K.prog && b.dataset.c === 'spin')); const so = spinOn(), co = coolOn(); for (const b of L$('bspin')) { b.textContent = so ? '■ Arrêter la broche (M5)' : '↻ Broche (M3)'; b.classList.toggle('pri', so); } for (const b of L$('bcool')) { b.textContent = co ? '■ Arrosage (M9)' : '💧 Arrosage (M8)'; b.classList.toggle('pri', co); } }
   setL('jf', String(CF.jogF));
 }
 setInterval(() => { if (curTab === 'usiner') live(); }, 250);
@@ -11012,6 +11135,11 @@ setInterval(() => { if (curTab === 'usiner') live(); }, 250);
 /* outil dans la vue 3D (appelé par rvOverlay) */
 window.cncOverlay = g => {
   if (curTab !== 'usiner' || !K.T || typeof rvProj !== 'function' || !RV.mvp) return;
+  if (K.homed && K.set[130] && K.set[131] && K.set[132]) { // course de la machine, en pointillés
+    const tv = [K.set[130], K.set[131], K.set[132]], R = AX.map((a, i) => K.mpos[i] > 0.5 ? [0, tv[i]] : [-tv[i], 0]), m2i = (x, y, z) => rvProj(toInt([x - K.wco[0], y - K.wco[1], z - K.wco[2]]));
+    const C = [0, 1, 2, 3, 4, 5, 6, 7].map(k => m2i(R[0][k & 1], R[1][(k >> 1) & 1], R[2][(k >> 2) & 1])), E = [[0, 1], [2, 3], [4, 5], [6, 7], [0, 2], [1, 3], [4, 6], [5, 7], [0, 4], [1, 5], [2, 6], [3, 7]];
+    g.save(); g.setLineDash([6, 5]); g.strokeStyle = 'rgba(217,72,15,.75)'; g.lineWidth = 1.3; g.beginPath(); for (const [a, b] of E) { g.moveTo(C[a][0], C[a][1]); g.lineTo(C[b][0], C[b][1]); } g.stroke(); g.setLineDash([]);
+    g.fillStyle = 'rgba(217,72,15,.9)'; g.font = '600 11px system-ui'; g.fillText('Course machine ' + tv[0] + ' × ' + tv[1] + ' × ' + tv[2] + ' mm', C[6][0] + 6, C[6][1] - 6); g.restore(); }
   const pts = K.pts; if (pts && K.doneK >= 0 && allSet()) { g.strokeStyle = 'rgba(150,150,150,.95)'; g.lineWidth = 2.2; g.lineJoin = 'round'; g.beginPath(); for (let k = 0; k <= K.doneK && k < pts.length; k++) { const s = rvProj(toInt(pts[k].p)); k ? g.lineTo(s[0], s[1]) : g.moveTo(s[0], s[1]); } if (K.prog) { const s = rvProj(toInt(wpos())); g.lineTo(s[0], s[1]); } g.stroke(); }
   const p = toInt(wpos()), d = curToolDia(), a = rvProj(p), b = rvProj([p[0], p[1], p[2] + 25]), c = rvProj([p[0], p[1], p[2] + 40]), e = rvProj([p[0], p[1], p[2] + 110]), u = rvProj([p[0] + 10, p[1], p[2]]), v = rvProj([p[0], p[1] + 10, p[2]]);
   const k = Math.max(Math.hypot(u[0] - a[0], u[1] - a[1]), Math.hypot(v[0] - a[0], v[1] - a[1])) / 10;
@@ -11045,7 +11173,7 @@ function msetOpen(t) {
       '<div class="cnc-row wrap" style="gap:18px;margin:8px 0"><label class="cnc-s">Bouton de sécurité (à maintenir pour bouger) ' + bsel('lock', G.lock) + '</label><label class="cnc-s">Bouton « 2ᵉ action » (comme une touche Fn) ' + bsel('fn', G.fn) + '</label></div>' +
       '<div class="cnc-row" style="align-items:flex-start;gap:18px;flex-wrap:wrap"><table class="cnc-set" style="width:auto" id="cncGpT"><tr><th>Bouton</th><th>Action</th><th>2ᵉ action (avec le bouton 2ᵉ action)</th></tr>' +
       Array.from({ length: N }, (_, i) => '<tr data-gprow="' + i + '"><td><b>' + i + '</b>' + (+G.lock === i ? ' <span class="cnc-chip">sécurité</span>' : +G.fn === i ? ' <span class="cnc-chip">2ᵉ action</span>' : '') + '</td><td><select data-gpa="' + i + '">' + opt(G.a[i] || '') + '</select></td><td><select data-gpa2="' + i + '">' + opt(G.a2[i] || '') + '</select></td></tr>').join('') + '</table>' +
-      '<div><table class="cnc-set" style="width:auto"><tr><th>Stick</th><th>Axe</th><th>Inverser</th><th></th></tr>' + [['Stick 1 gauche / droite', 'X', 'invX', 0], ['Stick 1 haut / bas', 'Y', 'invY', 1], ['Stick 2 haut / bas', 'Z', 'invZ', 3]].map(r => '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td><input type="checkbox" data-gpi="' + r[2] + '" ' + (G[r[2]] ? 'checked' : '') + '></td><td><span class="cnc-bar"><i data-gpax="' + r[3] + '"></i></span></td></tr>').join('') +
+      '<div><table class="cnc-set" style="width:auto"><tr><th>Stick</th><th>Action</th><th>Inverser</th><th></th></tr>' + [['Stick 1 gauche / droite', 0], ['Stick 1 haut / bas', 1], ['Stick 2 gauche / droite', 2], ['Stick 2 haut / bas', 3]].map(r => '<tr><td>' + r[0] + '</td><td><select data-gps="' + r[1] + '">' + [['', '—'], ['x', 'Jog X'], ['y', 'Jog Y'], ['z', 'Jog Z'], ['feed', 'Avance ±10 %'], ['spin', 'Broche ±10 %'], ['step', 'Pas suivant / précédent']].map(o => '<option value="' + o[0] + '" ' + ((G.sa[r[1]] || '') === o[0] ? 'selected' : '') + '>' + o[1] + '</option>').join('') + '</select></td><td><input type="checkbox" data-gpinv="' + r[1] + '" ' + (G.si[r[1]] ? 'checked' : '') + '></td><td><span class="cnc-bar"><i data-gpax="' + r[1] + '"></i></span></td></tr>').join('') +
       '<tr><td>Zone morte</td><td colspan="3"><input type="number" value="' + G.thr + '" data-gpt="thr" style="width:64px"> %</td></tr></table><p class="cnc-s cnc-m" style="max-width:300px">Les sticks déplacent la machine seulement en maintenant le bouton de sécurité. Les déplacements suivent la vitesse réglée sous le pavé.</p>' +
       '<div class="cnc-row"><button class="cnc-btn sm" data-c="gpReset">Valeurs par défaut</button></div></div></div>';
   } else if (U.mtab === 'macros') {
@@ -11071,10 +11199,19 @@ async function onClick(e) {
     case 'vol': U.vol = U.vol === +b.dataset.n ? 0 : +b.dataset.n; panel(); break;
     case 'conMenu': U.conOpen = !U.conOpen; if (U.conOpen && !K.T && 'serial' in navigator) { try { U.ports = await navigator.serial.getPorts(); } catch { U.ports = []; } } topRender(); break;
     case 'goHome': { if (!K.homed || !canJog()) break; const po = +K.set[27] || 1, v = i => K.mpos[i] > 0.5 ? po : -po; K.busy = 'goto'; ui(); try { await seq(['G53 G0 Z' + n3(v(2)), 'G53 G0 X' + n3(v(0)) + ' Y' + n3(v(1))]); await waitIdle(); } catch { } K.busy = ''; ui(); break; }
+    case 'menu': U.menu = U.menu === b.dataset.v ? null : b.dataset.v; topRender(); break;
+    case 'probeT': U.probeOpen = !U.probeOpen; if (U.probeOpen && U.floatMin) { U.floatMin = false; q('#rv3').classList.remove('cnc-fmin'); } ovRender(); topRender(); break;
+    case 'goM': U.go.m = b.dataset.v === '1'; topRender(); break;
+    case 'goGo': { const g = U.go, t = {}; AX.forEach(a => { if (String(g[a]).trim() !== '' && isFinite(+g[a])) t[a] = +g[a]; }); if (Object.keys(t).length) goTo(t, g.m); break; }
+    case 'goQ': { const st = S.stock, o = stockO(), w = wpos(), sz = Math.max(w[2], (+S.machine.safeZ || 5) + o.oz), v = b.dataset.v, X = { XY0: [0, 0], c: [st.w / 2 - o.ox, st.h / 2 - o.oy], fl: [-o.ox, -o.oy], fr: [st.w - o.ox, -o.oy], bl: [-o.ox, st.h - o.oy], br: [st.w - o.ox, st.h - o.oy] }[v];
+      if (v === 'zs') goTo({ z: (+S.machine.safeZ || 5) + o.oz }, false); else goTo({ x: X[0], y: X[1], z: sz }, false); break; }
+    case 'posAdd': { const i = q('#cncPosN'), n = (i && i.value.trim()) || 'Position ' + ((CF.pos || []).length + 1); CF.pos = (CF.pos || []).concat([{ n, m: K.mpos.slice() }]); cfSave(); topRender(); say('Position « ' + n + ' » enregistrée.'); break; }
+    case 'posDel': CF.pos.splice(+b.dataset.i, 1); cfSave(); topRender(); break;
+    case 'posGo': { const x = CF.pos[+b.dataset.i]; if (x) goTo({ x: x.m[0], y: x.m[1], z: x.m[2] }, true); break; }
     case 'floatT': U.floatMin = !U.floatMin; q('#rv3').classList.toggle('cnc-fmin', !!U.floatMin); ovRender(); rvReq(); break;
     case 'goAx': { const a = b.dataset.a, z = Math.max(wpos()[2], 5); if (!canJog()) break; K.busy = 'goto'; ui(); try { await seq(a === 'z' ? ['G90', 'G0 Z0'] : ['G90', 'G0 Z' + n3(z), 'G0 ' + a.toUpperCase() + '0']); await waitIdle(); } catch { } K.busy = ''; ui(); break; }
-    case 'spin': if (!conn() || K.prog) break; if (K.fs[1] > 0 || U.spin) { cmd('M5').catch(() => { }); U.spin = false; } else { const t = toolByNum(K.tool) || toolByNum(progInfo().tools[0]) || (S.tools || [])[0]; cmd('M3 S' + Math.round(+(t && t.rpm) || 12000)).catch(() => { }); U.spin = true; } ctlRender(); break;
-    case 'cool': if (!conn()) break; U.cool = !U.cool; cmd(U.cool ? 'M8' : 'M9').catch(() => { }); ctlRender(); break;
+    case 'spin': if (!conn() || K.prog) break; if (spinOn()) { cmd('M5').catch(() => { }); U.spin = false; } else { const t = toolByNum(K.tool) || toolByNum(progInfo().tools[0]) || (S.tools || [])[0]; cmd('M3 S' + Math.round(+(t && t.rpm) || 12000)).catch(() => { }); U.spin = true; } U.spinT = Date.now(); live(); break;
+    case 'cool': if (!conn()) break; { const on = coolOn(); cmd(on ? 'M9' : 'M8').catch(() => { }); U.cool = !on; U.coolT = Date.now(); live(); } break;
     case 'conPort': connect('serial', (U.ports || [])[+b.dataset.i]); break;
     case 'conSerial': connect('serial'); break;
     case 'conSim': connect(b.dataset.k); break;
@@ -11137,8 +11274,10 @@ async function onChange(e) {
   if (d.tc) { if (K.prog && K.prog.tc) K.prog.tc[d.tc] = t.checked; tcRender(); return; }
   if (d.k === 'airWant') { K.airWant = t.checked; panel(); return; }
   if (d.cf) { CF[d.cf] = +t.value; cfSave(); if (d.cf === 'jogF') setL('jf', String(CF.jogF)); if (d.cf === 'plate') { topRender(); tcRender(); } if (d.cf === 'shim') { CF.shim = Math.max(0, +t.value || 0); cfSave(); qa('[data-cf="shim"]').forEach(x => { if (x !== t) x.value = CF.shim; }); tcRender(); topRender(); } return; }
-  if (d.cfb) { CF[d.cfb] = t.checked; cfSave(); if (d.cfb === 'guide') { ui(); return; } if (d.cfb === 'probe') { U.pmode = CF.probe ? 'probe' : 'hand'; const c2 = q('#cfgCncProbe'); if (c2) c2.checked = CF.probe; if (q('#cncMset')) msetOpen(); ui(); } return; }
+  if (d.cfb) { CF[d.cfb] = t.checked; cfSave(); if (d.cfb === 'guide') { const g2 = q('#cfgCncGuide'); if (g2) g2.checked = CF.guide; ui(); return; } if (d.cfb === 'probe') { U.pmode = CF.probe ? 'probe' : 'hand'; const c2 = q('#cfgCncProbe'); if (c2) c2.checked = CF.probe; if (q('#cncMset')) msetOpen(); ui(); } return; }
   if (d.step !== undefined) { CF.steps[+d.step] = +t.value || CF.steps[+d.step]; cfSave(); ctlRender(); return; }
+  if (d.go) { U.go[d.go] = t.value; return; }
+  if (d.wcs) { const n = +t.value; try { await cmd('G5' + (3 + n)); K.wcs = n; await cmd('$#', true).catch(() => { }); } catch (er) { say('Refusé : ' + er); } ui(); return; }
   if (d.wsin) { const a = d.wsin, v = t.value.trim(); t.blur(); if (v !== '' && isFinite(+v)) await setZero(a, +v); return; }
   if (d.ax) { const a = d.ax; U.edit = null; await setZero(a, +t.value); return; }
   if (d.set) { const k = d.set; try { await cmd('$' + k + '=' + t.value); K.set[k] = +t.value; say('$' + k + ' = ' + t.value + ' envoyé.'); } catch (er) { say('Refusé par la machine : ' + er); t.value = K.set[k]; } return; }
@@ -11148,6 +11287,8 @@ async function onChange(e) {
   if (d.gpo) { CF.gp[d.gpo] = t.checked; cfSave(); return; }
   if (t.id === 'cncImp') { const f = t.files && t.files[0]; t.value = ''; if (f) f.text().then(cfImportText); return; }
   if (d.gpi) { CF.gp[d.gpi] = t.checked; cfSave(); return; }
+  if (d.gps !== undefined) { CF.gp.sa[d.gps] = t.value; cfSave(); return; }
+  if (d.gpinv !== undefined) { CF.gp.si[d.gpinv] = t.checked; cfSave(); return; }
   if (d.gpt) { CF.gp.thr = +t.value; cfSave(); return; }
   if (d.mn !== undefined) { CF.macros[+d.mn].n = t.value; cfSave(); return; }
   if (d.mg !== undefined) { CF.macros[+d.mg].g = t.value; cfSave(); return; }
@@ -11170,7 +11311,7 @@ window.addEventListener('beforeunload', e => { if (K.prog) { e.preventDefault();
 
 /* ---------------- manette ---------------- */
 const GPA = [
-  { c: 'Déplacements', i: [['stepR', 'Pas rapide'], ['stepN', 'Pas normal'], ['stepP', 'Pas précis'], ['stepC', 'Changer de pas (cycle)'], ['jX+', 'Jog X+ (droite)'], ['jX-', 'Jog X− (gauche)'], ['jY+', 'Jog Y+ (arrière)'], ['jY-', 'Jog Y− (avant)'], ['jZ+', 'Jog Z+ (haut)'], ['jZ-', 'Jog Z− (bas)'], ['jX+Y+', 'Jog X+ Y+'], ['jX+Y-', 'Jog X+ Y−'], ['jX-Y+', 'Jog X− Y+'], ['jX-Y-', 'Jog X− Y−']] },
+  { c: 'Déplacements', i: [['stepP', 'Pas 1 (le plus fin)'], ['stepN', 'Pas 2'], ['stepM', 'Pas 3'], ['stepR', 'Pas 4 (le plus grand)'], ['stepC', 'Pas suivant (cycle)'], ['jX+', 'Jog X+ (droite)'], ['jX-', 'Jog X− (gauche)'], ['jY+', 'Jog Y+ (arrière)'], ['jY-', 'Jog Y− (avant)'], ['jZ+', 'Jog Z+ (haut)'], ['jZ-', 'Jog Z− (bas)'], ['jX+Y+', 'Jog X+ Y+'], ['jX+Y-', 'Jog X+ Y−'], ['jX-Y+', 'Jog X− Y+'], ['jX-Y-', 'Jog X− Y−']] },
   { c: 'Positions', i: [['park', 'Parking (1ʳᵉ macro)'], ['zeroX', 'Zéro X'], ['zeroY', 'Zéro Y'], ['zeroZ', 'Zéro Z'], ['zeroAll', 'Zéro X Y'], ['goXY', 'Aller à X0 Y0'], ['goX', 'Aller à X0'], ['goY', 'Aller à Y0'], ['goZ', 'Aller à Z0'], ['cBL', 'Coin arrière gauche'], ['cBR', 'Coin arrière droit'], ['cFL', 'Coin avant gauche'], ['cFR', 'Coin avant droit'], ['home', 'Prise d’origine']] },
   { c: 'Palpage', i: [['probe', 'Lancer le palpage'], ['pNext', 'Palpage suivant (Z, XYZ…)'], ['pPrev', 'Palpage précédent'], ['diaUp', 'Diamètre d’outil +'], ['diaDn', 'Diamètre d’outil −']] },
   { c: 'Broche', i: [['spOn', 'Broche marche (M3)'], ['spOff', 'Broche arrêt (M5)']] },
@@ -11187,7 +11328,7 @@ async function gpDo(id, lk) {
   const corner = (bx, by) => { if (!K.homed || !trv[0]) { say('Coins : prise d’origine et courses ($130, $131) nécessaires.'); return; } const ps = i => K.mpos[i] > 0.5, cx = ps(0) ? (bx ? trv[0] - 5 : 5) : (bx ? -5 : -trv[0] + 5), cy = ps(1) ? (by ? trv[1] - 5 : 5) : (by ? -5 : -trv[1] + 5); seq(['G53 G0 Z' + n3(K.mpos[2] > 0.5 ? trv[2] - 5 : -5), 'G53 G0 X' + n3(cx) + ' Y' + n3(cy)]).catch(() => { }); };
   const view = (y, p) => { RV.yaw = y; RV.pitch = p; rvReq(); };
   switch (id) {
-    case 'stepR': st(3); break; case 'stepN': st(1); break; case 'stepP': st(0); break; case 'stepC': { const k = CF.steps.indexOf(+CF.step); st((k + 1) % 4); break; }
+    case 'stepR': st(3); break; case 'stepM': st(2); break; case 'stepN': st(1); break; case 'stepP': st(0); break; case 'stepC': { const k = CF.steps.indexOf(+CF.step); st((k + 1) % 4); break; }
     case 'park': runMacro(0); break; case 'zeroX': setZero('x', 0); break; case 'zeroY': setZero('y', 0); break; case 'zeroZ': setZero('z', 0); break; case 'zeroAll': zeroAll(); break;
     case 'goXY': gotoOrigin(); break; case 'goX': if (allSet()) seq(['G90', 'G0 X0']).catch(() => { }); break; case 'goY': if (allSet()) seq(['G90', 'G0 Y0']).catch(() => { }); break; case 'goZ': if (allSet()) seq(['G90', 'G0 Z' + n3(o.oz + 1)]).catch(() => { }); break;
     case 'cBL': corner(0, 1); break; case 'cBR': corner(1, 1); break; case 'cFL': corner(0, 0); break; case 'cFR': corner(1, 0); break; case 'home': home(); break;
@@ -11220,7 +11361,9 @@ function gpLoop() {
   // boutons de déplacement maintenus, puis sticks
   let jv = null;
   g.buttons.forEach((b, i) => { if (i === +G.lock || i === +G.fn) return; const id = (fn ? G.a2[i] : G.a[i]) || ''; const v = gpJog(id); if (v && b.pressed && lk) jv = v; });
-  if (!jv && lk) { const v = [ax(0) * (G.invX ? -1 : 1), -ax(1) * (G.invY ? -1 : 1), -ax(3) * (G.invZ ? -1 : 1)]; if (v.some(Boolean)) jv = v; }
+  if (!jv && lk) { const v = [0, 0, 0]; for (let i = 0; i < 4; i++) { const a = G.sa[i] || '', k = 'xyz'.indexOf(a); if (k < 0 || !a) continue; v[k] = ax(i) * (i % 2 ? -1 : 1) * (G.si[i] ? -1 : 1) || v[k]; } if (v.some(Boolean)) jv = v; }
+  { const now = Date.now(); for (let i = 0; i < 4; i++) { const a = G.sa[i] || '', d = ax(i) * (i % 2 ? -1 : 1) * (G.si[i] ? -1 : 1); if (!['feed', 'spin', 'step'].includes(a) || !d) { gpPrev['s' + i] = 0; continue; } if (now - (gpPrev['s' + i] || 0) < 350) continue; gpPrev['s' + i] = now;
+    if (a === 'feed') rt(d > 0 ? '\x91' : '\x92'); else if (a === 'spin') rt(d > 0 ? '\x9a' : '\x9b'); else { const k = CF.steps.indexOf(+CF.step); CF.step = CF.steps[Math.max(0, Math.min(3, k + (d > 0 ? 1 : -1)))]; cfSave(); ctlRender(); } } }
   const key = jv ? jv.join(',') : '';
   if (key !== (gpJ || '')) { if (gpJ) jogStop(); gpJ = key || null; if (jv) setTimeout(() => { if (gpJ === key) jogStart(jv); }, gpJ ? 60 : 0); }
   g.buttons.forEach((b, i) => { if (b.pressed && !gpPrev['b' + i] && i !== +G.lock && i !== +G.fn) { const id = (fn ? G.a2[i] : G.a[i]) || ''; if (!gpJog(id)) gpDo(id, lk); } gpPrev['b' + i] = b.pressed; });
