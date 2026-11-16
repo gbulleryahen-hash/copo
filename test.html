@@ -3920,6 +3920,7 @@ const DEFAULT_TOOLS = () => [
 ];
 const DEFAULT_LAYERS = () => [{ id: 'l1', name: tr('Calque 1'), visible: true, locked: false }];
 /* réglages par défaut d'une machine (une seule définition : état de départ et bibliothèque de machines) */
+const POS_DEF = () => ({ posS: { m: 'work', z: 10 }, posE: { m: 'work', z: 10 }, posF: { m: 'work', z: 10 }, endHome: true });
 var MACH_DEF = { tcZ: -10, post: 'grbl', safeZ: 10, clearZ: 2, rapid: 3000, maxFeed: 2000, comments: true, arcs: true };
 const S = {
   stock: { w: 300, h: 200, t: 18, originXY: 'bl', originZ: 'top', offX: 0, offY: 0, mat: 'softwood' },
@@ -10399,9 +10400,10 @@ const MACH = { list: [], id: null };
 function machStore() { const it = MACH.list.find(x => x.id === MACH.id); if (it) it.m = JSON.parse(JSON.stringify(S.machine)); LS.set('copo.machines', JSON.stringify(MACH.list)); LS.set('copo.machineId', MACH.id || ''); machUi(); if (typeof pjModeSync === 'function' && document.getElementById('stRotWarn')) pjModeSync(); }
 function machLoad() {
   try { MACH.list = JSON.parse(LS.get('copo.machines') || '[]') || []; } catch { MACH.list = []; }
-  if (!MACH.list.length) { const def = { id: 'm' + Date.now().toString(36), m: { ...MACH_DEF, name: 'Machine par défaut' } }; MACH.list = [def]; const old = S.machine; if (old && old.post && old.post !== 'grbl') { const it = { id: 'm' + (Date.now() + 1).toString(36), m: { ...JSON.parse(JSON.stringify(old)), name: old.name || 'Ma machine (réglages précédents)' } }; MACH.list.push(it); MACH.id = it.id; LS.set('copo.machineId', it.id); } }
+  if (!MACH.list.length) { const def = { id: 'm' + Date.now().toString(36), m: { ...MACH_DEF, name: 'Machine par défaut', ...POS_DEF() } }; MACH.list = [def]; const old = S.machine; if (old && old.post && old.post !== 'grbl') { const it = { id: 'm' + (Date.now() + 1).toString(36), m: { ...JSON.parse(JSON.stringify(old)), name: old.name || 'Ma machine (réglages précédents)' } }; MACH.list.push(it); MACH.id = it.id; LS.set('copo.machineId', it.id); } }
   else if (!LS.get('copo.machFix1')) { const d = MACH.list.find(x => /^(Machine par défaut|Default machine)$/.test(x.m.name || '')); if (d && d.m.post !== 'grbl') { d.m.name = 'Ma machine (réglages précédents)'; MACH.list.unshift({ id: 'm' + Date.now().toString(36), m: { ...MACH_DEF, name: 'Machine par défaut' } }); } } LS.set('copo.machFix1', '1');
   for (const x of MACH.list) { if (x.m.name === 'Default machine') x.m.name = 'Machine par défaut'; else if (x.m.name === 'My machine (previous settings)') x.m.name = 'Ma machine (réglages précédents)'; } /* noms enregistrés en français, traduits à l'affichage */
+  if (!LS.get('copo.posDef1')) { for (const x of MACH.list) if (x.m.name === 'Machine par défaut' && x.m.post === 'grbl' && !x.m.posS && !x.m.posE && !x.m.posF) Object.assign(x.m, POS_DEF()); LS.set('copo.posDef1', '1'); }
   MACH.id = LS.get('copo.machineId'); if (!MACH.list.some(x => x.id === MACH.id)) MACH.id = MACH.list[0].id;
   S.machine = { ...MACH_DEF, ...JSON.parse(JSON.stringify(MACH.list.find(x => x.id === MACH.id).m)) }; syncMachine(); machStore();
 }
