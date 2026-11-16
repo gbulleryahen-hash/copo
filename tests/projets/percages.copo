@@ -1,0 +1,702 @@
+{
+ "meta": {
+  "name": "Perçages",
+  "material": "Test"
+ },
+ "stock": {
+  "offX": 0,
+  "offY": 0,
+  "originXY": "bl",
+  "originZ": "top",
+  "mat": "softwood",
+  "w": 200,
+  "h": 100,
+  "t": 18
+ },
+ "shapes": [
+  {
+   "id": "h1",
+   "closed": true,
+   "layer": "l1",
+   "g": null,
+   "nodes": [
+    {
+     "x": 33,
+     "y": 30,
+     "i": [
+      0,
+      -1.6568542494923806
+     ],
+     "o": [
+      0,
+      1.6568542494923806
+     ],
+     "sm": true
+    },
+    {
+     "x": 30,
+     "y": 33,
+     "i": [
+      1.6568542494923806,
+      0
+     ],
+     "o": [
+      -1.6568542494923806,
+      0
+     ],
+     "sm": true
+    },
+    {
+     "x": 27,
+     "y": 30,
+     "i": [
+      0,
+      1.6568542494923806
+     ],
+     "o": [
+      0,
+      -1.6568542494923806
+     ],
+     "sm": true
+    },
+    {
+     "x": 30,
+     "y": 27,
+     "i": [
+      -1.6568542494923806,
+      0
+     ],
+     "o": [
+      1.6568542494923806,
+      0
+     ],
+     "sm": true
+    }
+   ]
+  },
+  {
+   "id": "h2",
+   "closed": true,
+   "layer": "l1",
+   "g": null,
+   "nodes": [
+    {
+     "x": 63,
+     "y": 30,
+     "i": [
+      0,
+      -1.6568542494923806
+     ],
+     "o": [
+      0,
+      1.6568542494923806
+     ],
+     "sm": true
+    },
+    {
+     "x": 60,
+     "y": 33,
+     "i": [
+      1.6568542494923806,
+      0
+     ],
+     "o": [
+      -1.6568542494923806,
+      0
+     ],
+     "sm": true
+    },
+    {
+     "x": 57,
+     "y": 30,
+     "i": [
+      0,
+      1.6568542494923806
+     ],
+     "o": [
+      0,
+      -1.6568542494923806
+     ],
+     "sm": true
+    },
+    {
+     "x": 60,
+     "y": 27,
+     "i": [
+      -1.6568542494923806,
+      0
+     ],
+     "o": [
+      1.6568542494923806,
+      0
+     ],
+     "sm": true
+    }
+   ]
+  },
+  {
+   "id": "h3",
+   "closed": true,
+   "layer": "l1",
+   "g": null,
+   "nodes": [
+    {
+     "x": 93,
+     "y": 30,
+     "i": [
+      0,
+      -1.6568542494923806
+     ],
+     "o": [
+      0,
+      1.6568542494923806
+     ],
+     "sm": true
+    },
+    {
+     "x": 90,
+     "y": 33,
+     "i": [
+      1.6568542494923806,
+      0
+     ],
+     "o": [
+      -1.6568542494923806,
+      0
+     ],
+     "sm": true
+    },
+    {
+     "x": 87,
+     "y": 30,
+     "i": [
+      0,
+      1.6568542494923806
+     ],
+     "o": [
+      0,
+      -1.6568542494923806
+     ],
+     "sm": true
+    },
+    {
+     "x": 90,
+     "y": 27,
+     "i": [
+      -1.6568542494923806,
+      0
+     ],
+     "o": [
+      1.6568542494923806,
+      0
+     ],
+     "sm": true
+    }
+   ]
+  },
+  {
+   "id": "h4",
+   "closed": true,
+   "layer": "l1",
+   "g": null,
+   "nodes": [
+    {
+     "x": 33,
+     "y": 70,
+     "i": [
+      0,
+      -1.6568542494923806
+     ],
+     "o": [
+      0,
+      1.6568542494923806
+     ],
+     "sm": true
+    },
+    {
+     "x": 30,
+     "y": 73,
+     "i": [
+      1.6568542494923806,
+      0
+     ],
+     "o": [
+      -1.6568542494923806,
+      0
+     ],
+     "sm": true
+    },
+    {
+     "x": 27,
+     "y": 70,
+     "i": [
+      0,
+      1.6568542494923806
+     ],
+     "o": [
+      0,
+      -1.6568542494923806
+     ],
+     "sm": true
+    },
+    {
+     "x": 30,
+     "y": 67,
+     "i": [
+      -1.6568542494923806,
+      0
+     ],
+     "o": [
+      1.6568542494923806,
+      0
+     ],
+     "sm": true
+    }
+   ]
+  },
+  {
+   "id": "h5",
+   "closed": true,
+   "layer": "l1",
+   "g": null,
+   "nodes": [
+    {
+     "x": 63,
+     "y": 70,
+     "i": [
+      0,
+      -1.6568542494923806
+     ],
+     "o": [
+      0,
+      1.6568542494923806
+     ],
+     "sm": true
+    },
+    {
+     "x": 60,
+     "y": 73,
+     "i": [
+      1.6568542494923806,
+      0
+     ],
+     "o": [
+      -1.6568542494923806,
+      0
+     ],
+     "sm": true
+    },
+    {
+     "x": 57,
+     "y": 70,
+     "i": [
+      0,
+      1.6568542494923806
+     ],
+     "o": [
+      0,
+      -1.6568542494923806
+     ],
+     "sm": true
+    },
+    {
+     "x": 60,
+     "y": 67,
+     "i": [
+      -1.6568542494923806,
+      0
+     ],
+     "o": [
+      1.6568542494923806,
+      0
+     ],
+     "sm": true
+    }
+   ]
+  },
+  {
+   "id": "h6",
+   "closed": true,
+   "layer": "l1",
+   "g": null,
+   "nodes": [
+    {
+     "x": 150,
+     "y": 50,
+     "i": [
+      0,
+      -5.522847498307936
+     ],
+     "o": [
+      0,
+      5.522847498307936
+     ],
+     "sm": true
+    },
+    {
+     "x": 140,
+     "y": 60,
+     "i": [
+      5.522847498307936,
+      0
+     ],
+     "o": [
+      -5.522847498307936,
+      0
+     ],
+     "sm": true
+    },
+    {
+     "x": 130,
+     "y": 50,
+     "i": [
+      0,
+      5.522847498307936
+     ],
+     "o": [
+      0,
+      -5.522847498307936
+     ],
+     "sm": true
+    },
+    {
+     "x": 140,
+     "y": 40,
+     "i": [
+      -5.522847498307936,
+      0
+     ],
+     "o": [
+      5.522847498307936,
+      0
+     ],
+     "sm": true
+    }
+   ]
+  },
+  {
+   "id": "h7",
+   "closed": true,
+   "layer": "l1",
+   "g": null,
+   "nodes": [
+    {
+     "x": 181,
+     "y": 50,
+     "i": [
+      0,
+      -3.313708498984761
+     ],
+     "o": [
+      0,
+      3.313708498984761
+     ],
+     "sm": true
+    },
+    {
+     "x": 175,
+     "y": 56,
+     "i": [
+      3.313708498984761,
+      0
+     ],
+     "o": [
+      -3.313708498984761,
+      0
+     ],
+     "sm": true
+    },
+    {
+     "x": 169,
+     "y": 50,
+     "i": [
+      0,
+      3.313708498984761
+     ],
+     "o": [
+      0,
+      -3.313708498984761
+     ],
+     "sm": true
+    },
+    {
+     "x": 175,
+     "y": 44,
+     "i": [
+      -3.313708498984761,
+      0
+     ],
+     "o": [
+      3.313708498984761,
+      0
+     ],
+     "sm": true
+    }
+   ]
+  }
+ ],
+ "tools": [
+  {
+   "id": "t1",
+   "num": 1,
+   "name": "Fraise droite 3,175 mm",
+   "type": "flat",
+   "dia": 3.175,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 1200,
+   "plunge": 300,
+   "pass": 1.5,
+   "over": 40
+  },
+  {
+   "id": "t2",
+   "num": 2,
+   "name": "Fraise droite 6 mm",
+   "type": "flat",
+   "dia": 6,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 2000,
+   "plunge": 500,
+   "pass": 3,
+   "over": 40
+  },
+  {
+   "id": "t3",
+   "num": 3,
+   "name": "Fraise V 90° Ø12",
+   "type": "v",
+   "dia": 12,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 1500,
+   "plunge": 500,
+   "pass": 3,
+   "over": 20
+  },
+  {
+   "id": "t5",
+   "num": 5,
+   "name": "Fraise hémisphérique 3 mm",
+   "type": "ball",
+   "dia": 3,
+   "flutes": 2,
+   "angle": 90,
+   "rpm": 18000,
+   "feed": 1000,
+   "plunge": 300,
+   "pass": 1,
+   "over": 50
+  },
+  {
+   "id": "t6",
+   "num": 6,
+   "name": "Foret 6 mm",
+   "type": "drill",
+   "dia": 6,
+   "flutes": 2,
+   "angle": 118,
+   "rpm": 8000,
+   "feed": 1000,
+   "plunge": 400,
+   "pass": 3,
+   "over": 0
+  }
+ ],
+ "tps": [
+  {
+   "id": "tp11",
+   "name": "Foret, d’un trait",
+   "nameAuto": false,
+   "type": "drill",
+   "toolId": "t6",
+   "shapeIds": [
+    "h1",
+    "h2",
+    "h3"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "out",
+    "depth": 10,
+    "pass": "",
+    "allow": 0,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "plunge",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "on",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "rings",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  },
+  {
+   "id": "tp12",
+   "name": "Foret, débourrage et temporisation",
+   "nameAuto": false,
+   "type": "drill",
+   "toolId": "t6",
+   "shapeIds": [
+    "h4",
+    "h5"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "out",
+    "depth": 18,
+    "pass": "",
+    "allow": 0,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "plunge",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 4,
+    "dwell": 0.5,
+    "openSide": "on",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "rings",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": "",
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  },
+  {
+   "id": "tp13",
+   "name": "Fraise, trous en hélice",
+   "nameAuto": false,
+   "type": "drill",
+   "toolId": "t2",
+   "shapeIds": [
+    "h6",
+    "h7"
+   ],
+   "relIds": [],
+   "p": {
+    "side": "out",
+    "depth": 8,
+    "pass": "",
+    "allow": 0,
+    "finish": "last",
+    "dir": "climb",
+    "entry": "plunge",
+    "rlEntry": "plunge",
+    "rampLen": "",
+    "arcR": 5,
+    "vstep": 0.1,
+    "clrTools": [],
+    "clrTool": "",
+    "clrExt": false,
+    "vstart": 0,
+    "zrel": 1,
+    "peck": 0,
+    "dwell": 0,
+    "openSide": "on",
+    "tabs": false,
+    "proj": false,
+    "tabN": 4,
+    "tabL": 8,
+    "tabH": 2,
+    "tabShape": "rect",
+    "tabMode": "auto",
+    "tabPts": null,
+    "strategy": "rings",
+    "rasterAng": 0,
+    "rest": false,
+    "roughTool": "",
+    "restFrom": "",
+    "restTool": "",
+    "restDia": 0,
+    "helixPitch": 1,
+    "helixD": "",
+    "helixHoles": true,
+    "thSide": "in",
+    "thPitch": 1.25,
+    "thD": 0,
+    "thHand": "R",
+    "thPasses": 2
+   },
+   "visible": true,
+   "face": 1
+  }
+ ],
+ "layers": [
+  {
+   "id": "l1",
+   "name": "Calque 1",
+   "visible": true,
+   "locked": false
+  }
+ ],
+ "layerActive": "l1",
+ "guides": {
+  "x": [],
+  "y": []
+ },
+ "dims": [],
+ "images": []
+}
