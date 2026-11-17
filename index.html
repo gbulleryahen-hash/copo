@@ -279,8 +279,8 @@ table.cnc-set input{width:110px;text-align:right}
 #cncGuide:empty{display:none}
 #rv3.cnc-fmin #cncGuide{left:50%;max-width:min(620px,calc(100% - 40px))}
 .cnc-gn{flex:none;font:700 11px var(--f-mono);background:var(--accent);color:#fff;border-radius:10px;padding:2px 7px}
-@keyframes cncPulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 70%,transparent)}50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 0%,transparent)}}
-.cnc-next{outline:2px solid var(--accent)!important;outline-offset:2px;animation:cncPulse 1.4s ease-in-out infinite}
+@keyframes cncPulse{0%,100%{filter:brightness(1.3);outline-color:var(--accent);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 55%,transparent),inset 0 0 0 200px color-mix(in srgb,var(--accent) 38%,transparent)}50%{filter:brightness(.8);outline-color:transparent;box-shadow:0 0 0 0 transparent,inset 0 0 0 200px transparent}}
+.cnc-next{outline:2px solid var(--accent)!important;outline-offset:2px;animation:cncPulse 1s ease-in-out infinite} /* le bouton à utiliser clignote nettement */
 .cnc-gimg{display:flex;gap:4px;flex:none;background:var(--raised);border-radius:7px;padding:2px 4px}
 .cnc-gimg svg{display:block}
 #cncGuide{max-width:min(720px,calc(100% - 420px))}
@@ -1648,7 +1648,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.365</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.366</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -7638,7 +7638,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.365', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.366', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -11163,7 +11163,7 @@ function zSvg() { // zéro Z : capteur sur la plaque, ou fraise sur la cale
   return '<svg width="96" height="66" viewBox="0 0 96 66">' + block + plate + tool + '<path d="M60 8 v12" stroke="var(--danger)" stroke-width="2" marker-end="url(#cncAr2)"/><defs><marker id="cncAr2" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0 0 L5 2.5 L0 5 Z" fill="var(--danger)"/></marker></defs><text x="64" y="14" font-size="7.5" fill="var(--ink)">Z</text><text x="2" y="9" font-size="7.5" fill="var(--muted)">' + lbl + '</text></svg>';
 }
 function guideRender() {
-  const el = q('#cncGuide'), ns = nextStep(); qa('.cnc-next').forEach(e => { if (!ns || !ns.sel || !e.matches(ns.sel)) e.classList.remove('cnc-next'); });
+  const el = q('#cncGuide'), ns = nextStep(); qa('.cnc-next').forEach(e => { if (e.closest('.cnc-modal') || e.dataset.hl) return; if (!ns || !ns.sel || !e.matches(ns.sel)) e.classList.remove('cnc-next'); });
   if (!el) return; if (!ns) { if (el.innerHTML) el.innerHTML = ''; el.className = ''; return; }
   const h = '<span class="cnc-gn">' + ns.n + '/5</span>' + (ns.img ? '<span class="cnc-gimg">' + ns.img + '</span>' : '') + '<span>' + ns.t + '</span>' + (ns.btn || '');
   if (el.dataset.h !== h) { el.innerHTML = h; el.dataset.h = h; } el.className = 'cnc-box info';
