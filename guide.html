@@ -546,6 +546,7 @@ X74.36 A14.181</pre>
       <li>Mettez les vecteurs de la face du dessous sur un calque réglé sur <strong>F2</strong> (bouton F1/F2 dans la liste des calques). Dessinez-les vus du dessus, par transparence.</li>
       <li>Choisissez le retournement : autour de l'axe X (haut ↔ bas) ou de l'axe Y (gauche ↔ droite).</li>
       <li>Les parcours de la face 2 sont calculés sur la géométrie retournée ; le sens de coupe est conservé.</li>
+      <li><strong>Reliefs</strong> : chaque élément de relief a lui aussi son bouton <strong>F1/F2</strong> dans la liste de l’onglet Relief. Un relief créé à partir de vecteurs d’un calque F2 est mis en F2 d’office. Sur la face 2, « Dessus du brut → dessus du relief » se mesure depuis la face du dessous. Les parcours de relief (ébauche, finition) et la projection sur le relief usinent la face de leurs reliefs ; la liste <span class="ui">Faces affichées</span> (onglet Projet) montre les reliefs d’une seule face.</li>
       <li>Dans le G-code, la face 1 est suivie d'une pause <code>M0</code> : retournez la pièce, refaites X0 Y0 Z0 au même point et relancez.</li>
     </ol>
     <p>L'aperçu 3D montre les deux faces ; l'option <span class="ui">Face 2 en haut</span> présente la pièce retournée.</p>
@@ -1130,6 +1131,7 @@ X74.36 A14.181</pre>
       <li>Put the vectors of the bottom side on a layer set to <strong>F2</strong> (F1/F2 button in the layer list). Draw them as seen from above, see-through.</li>
       <li>Choose the flip: around the X axis (top ↔ bottom) or the Y axis (left ↔ right).</li>
       <li>Side 2 toolpaths are calculated on the flipped geometry; the cut direction is kept.</li>
+      <li><strong>Reliefs</strong>: each relief item also has its <strong>F1/F2</strong> button in the Relief tab list. A relief created from vectors on an F2 layer is set to F2 automatically. On side 2, “Stock top → relief top” is measured from the bottom face. Relief toolpaths (roughing, finishing) and projection on the relief machine the side of their reliefs; the <span class="ui">Sides shown</span> list (Project tab) shows the reliefs of a single side.</li>
       <li>In the G-code, side 1 is followed by an <code>M0</code> pause: turn the part over, set X0 Y0 Z0 again at the same point and resume.</li>
     </ol>
     <p>The 3D preview shows both sides; the <span class="ui">Side 2 up</span> option shows the part flipped.</p>
