@@ -189,7 +189,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.360</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.361</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -666,7 +666,7 @@ M30</pre>
       <li><span class="ui">Broche (M3)</span> et <span class="ui">Arrosage (M8)</span>, puis <span class="ui">▶ Démarrer</span>, <span class="ui">⏸ Pause</span> et <span class="ui">■ Arrêt</span> (arrêt immédiat et remise à zéro de la commande). Les curseurs <strong>Avance</strong> et <strong>Broche</strong> modifient la vitesse pendant l’usinage (10 à 200 %).</li>
       <li>En bas, <span class="ui">Console et macros</span> (utilisateurs avancés) : boutons de G-code personnalisés et console pour envoyer des commandes (<code>$$</code>, <code>?</code>, <code>G0 Z5</code>…).</li>
     </ul>
-    <p>Une <strong>alarme</strong> s’affiche en bandeau en haut de la vue 3D, avec son explication et le bouton <span class="ui">Déverrouiller ($X)</span>. La vue 3D montre aussi la course de la machine (cadre en pointillés), la trace de l’usinage et la fraise avec sa vraie forme : cylindre pour une fraise droite, bout arrondi pour une hémisphérique, cône pour une fraise en V ou un foret.</p>
+    <p>Une <strong>alarme</strong> s’affiche en bandeau en haut de la vue 3D, avec son explication et le bouton <span class="ui">Déverrouiller ($X)</span>. La vue 3D montre aussi la course de la machine (cadre en pointillés), la trace de l’usinage et la fraise avec sa vraie forme : cylindre pour une fraise droite, bout arrondi pour une hémisphérique, cône pour une fraise en V ou un foret. Elle ne dessine que la face choisie, telle qu’elle est sur la machine : en face 2, les parcours sont retournés et placés sur le dessus, avec l’origine pièce en haut. Le dessin est caché par défaut dans cet onglet ; le bouton du dessin de la vue 3D le remet.</p>
 
     <h3>Origine pièce et palpage</h3>
     <p><span class="ui">⌖ Palper</span> ouvre la carte de palpage dans le panneau Données, avec deux modes :</p>
@@ -733,7 +733,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC), acorn (MIT, pour les calculs en tâche de fond).</p>
-    <footer><p>COPO 1.360 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.361 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -772,7 +772,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.360</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.361</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -1249,7 +1249,7 @@ M30</pre>
       <li><span class="ui">Spindle (M3)</span> and <span class="ui">Coolant (M8)</span>, then <span class="ui">▶ Start</span>, <span class="ui">⏸ Pause</span> and <span class="ui">■ Stop</span> (immediate stop and controller reset). The <strong>Feed</strong> and <strong>Spindle</strong> sliders change the speed while machining (10 to 200 %).</li>
       <li>At the bottom, <span class="ui">Console and macros</span> (advanced users): custom G-code buttons and a console to send commands (<code>$$</code>, <code>?</code>, <code>G0 Z5</code>…).</li>
     </ul>
-    <p>An <strong>alarm</strong> shows as a banner at the top of the 3D view, with its explanation and the <span class="ui">Unlock ($X)</span> button. The 3D view also shows the machine travel (dashed box), the machining trail and the bit with its real shape: a cylinder for a flat end mill, a rounded tip for a ball nose, a cone for a V-bit or a drill.</p>
+    <p>An <strong>alarm</strong> shows as a banner at the top of the 3D view, with its explanation and the <span class="ui">Unlock ($X)</span> button. The 3D view also shows the machine travel (dashed box), the machining trail and the bit with its real shape: a cylinder for a flat end mill, a rounded tip for a ball nose, a cone for a V-bit or a drill. It only draws the selected side, as it sits on the machine: on side 2, the toolpaths are flipped and placed on top, with the work origin at the top. The drawing is hidden by default in this tab; the 3D view’s drawing button brings it back.</p>
 
     <h3>Work origin and probing</h3>
     <p><span class="ui">⌖ Probe</span> opens the probing card in the Data panel, with two modes:</p>
@@ -1316,7 +1316,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC), acorn (MIT, for background calculations).</p>
-    <footer><p>COPO 1.360 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.361 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
