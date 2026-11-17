@@ -10809,7 +10809,8 @@ const conn = () => !!K.T && K.st !== 'Conn';
 const moving = () => ['Run', 'Jog', 'Home'].includes(K.st) || !!K.busy;
 function stockO() { const st = S.stock, RT = st.rotary || {}; const [ox, oy] = originOf(st); const oz = RT.on ? (RT.z0 === 'axis' ? st.t / 2 : 0) : st.originZ === 'bottom' ? +st.t : 0; return { ox, oy, oz, rot: !!RT.on }; }
 function toInt(w) { const o = stockO(); return [w[0] + o.ox, w[1] + o.oy, w[2] - o.oz]; }
-const toV = toInt; // point du G-code → vue 3D (dans l'onglet Usiner, la vue montre la face usinée telle qu'elle est sur la machine : voir cncFace)
+const toV = toInt;
+function view3d() { if (typeof RV !== 'undefined') RV.lsig = ''; if (typeof rvSync === 'function') rvSync(); if (typeof rvReq === 'function') rvReq(); } // la vue 3D de COPO ne se redessine pas seule quand la face change // point du G-code → vue 3D (dans l'onglet Usiner, la vue montre la face usinée telle qu'elle est sur la machine : voir cncFace)
 window.cncFace = () => curTab === 'usiner' && pane ? (U.face === 2 ? 2 : 1) : 0; // lu par la vue 3D de COPO : face 2 dessinée retournée, sur le dessus, seule
 
 function trackPath() { // retrouve où en est l'outil sur le trajet du programme (pas de raccourcis entre deux relevés)
@@ -10982,7 +10983,7 @@ function progError(idx, e) { const P = K.prog; if (!P) return; rt('!'); P.err = 
 function progResumeErr() { const P = K.prog; if (!P || !P.err) return; P.err = null; rt('~'); progFeed(); ui(); }
 async function progDone() { const P = K.prog; K.prog = null; if (K.pts) K.doneK = K.pts.length - 1; K.finished = true; log('— Programme terminé (' + fmtT((Date.now() - P.t0) / 1000) + ') —', 'm');
   if (U.face !== 2 && S.tps.some(t => t.visible && t.face === 2) && S.tps.some(t => t.visible && t.face !== 2)) { // double face : la face 2 reste à faire
-    U.face = 2; K.flipTodo = true; K.pieceFixed = false; K.ws.x = K.ws.y = K.ws.z = false; K.finished = false; K.pts = null; ui(); flipOpen(); say('Face 1 terminée : retournez la pièce, puis refaites l’origine pièce.'); return; }
+    U.face = 2; K.flipTodo = true; K.pieceFixed = false; K.ws.x = K.ws.y = K.ws.z = false; K.finished = false; K.pts = null; ui(); view3d(); flipOpen(); say('Face 1 terminée : retournez la pièce, puis refaites l’origine pièce.'); return; }
   ui(); say('Usinage terminé. Attendez l’arrêt de la broche avant de toucher la pièce.'); }
 function progAbort(why) { const P = K.prog; if (!P) return; K.prog = null; flush('abort', false); tcClose(); log('— Programme arrêté (' + why + ') —', 'e'); ui(); }
 function pause() { if (K.st === 'Run' || K.st === 'Jog' || K.st === 'Home') rt('!'); }
@@ -11471,7 +11472,7 @@ async function onClick(e) {
     case 'keepG54': keepG54(); break;
     case 'goto': gotoOrigin(); break;
     case 'go4': U.vol = 4; panel(); break;
-    case 'face': U.face = +b.dataset.v; PI_ = null; ui(); rvReq(); break;
+    case 'face': U.face = +b.dataset.v; PI_ = null; ui(); view3d(); break;
     case 'start': progStart(); break;
     case 'pause': pause(); break;
     case 'stop': stopAll(); break;
