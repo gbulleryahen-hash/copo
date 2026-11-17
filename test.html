@@ -10715,7 +10715,7 @@ class SimGrbl {
   }
   dollar(u) {
     if (u === '$$') { for (const [k, v] of Object.entries(this.set)) this.emit('$' + k + '=' + v); return this.emit('ok'); }
-    if (u === '$I') { this.emit(this.fluid ? '[VER:3.9 FluidNC v3.9.1:]' : '[VER:1.1h.20190825:]'); this.emit('[OPT:V,15,128]'); return this.emit('ok'); }
+    if (u === '$I') { this.emit(this.fluid ? '[VER:3.9 FluidNC v3.9.1:]' : '[VER:1.1h.20190825:]'); this.emit(this.fluid ? '[OPT:MPHS]' : '[OPT:V,15,128]'); return this.emit('ok'); } /* FluidNC ne donne pas la taille du tampon : COPO garde 127 */
     if (u === '$#') { this.wa[this.wi] = this.wco.slice(); for (let i = 0; i < 6; i++) this.emit('[G5' + (4 + i) + ':' + (this.wa[i] || [0, 0, 0]).map(v => v.toFixed(3)).join(',') + ']'); this.emit('[G92:' + this.g92.map(v => v.toFixed(3)).join(',') + ']'); this.emit('[TLO:0.000]'); this.emit('[PRB:' + this.prb.map(v => v.toFixed(3)).join(',') + ':0]'); return this.emit('ok'); }
     if (u === '$G') { this.emit('[GC:G' + this.mode + ' G5' + (4 + this.wi) + ' G17 G21 ' + (this.abs ? 'G90' : 'G91') + ' G94 M' + (this.spin ? 3 : 5) + ' M9 T0 F' + this.f + ' S' + this.S + ']'); return this.emit('ok'); }
     if (u === '$X') { if (this.state === 'Alarm') { this.state = 'Idle'; this.emit('[MSG:Caution: Unlocked]'); } return this.emit('ok'); }
