@@ -1653,7 +1653,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.379</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.380</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -7647,7 +7647,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.379', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.380', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -9154,7 +9154,25 @@ function v3Open() {
 /* pendant le calcul en tâche de fond : lecture et déplacement dans le temps désactivés */
 function v3Busy(on) { for (const id of ['v3First', 'v3Prev', 'v3Play', 'v3Next', 'v3Last', 'v3Pos', 'v3Q']) { const e = $('#' + id); if (e) e.disabled = !!on; } }
 function v3Close() { v3Play(false); $('#v3d').hidden = true; }
+// tablette (vues 3D) : 1 doigt = tourner (gestion normale) ; 2 doigts = déplacer la vue et pincer pour zoomer ; double tape = cadrer
+function touch3d(c, ST, req, fit, dmin, dmax) {
+  const T = new Map(); let two = null, tap = null, used = false;
+  const mid = () => { const [a, b] = [...T.values()]; return { x: (a[0] + b[0]) / 2, y: (a[1] + b[1]) / 2, d: Math.max(1, Math.hypot(a[0] - b[0], a[1] - b[1])) }; };
+  c.addEventListener('pointerdown', e => { if (e.pointerType !== 'touch') return; T.set(e.pointerId, [e.clientX, e.clientY]);
+    if (T.size === 1) { used = false; } if (T.size >= 2) { e.stopImmediatePropagation(); try { c.setPointerCapture(e.pointerId); } catch (_) {} two = mid(); used = true; } }, true);
+  c.addEventListener('pointermove', e => { if (e.pointerType !== 'touch' || !T.has(e.pointerId)) return; T.set(e.pointerId, [e.clientX, e.clientY]); if (T.size < 2 || !two) return; e.stopImmediatePropagation();
+    const m = mid(), dx = m.x - two.x, dy = m.y - two.y, k = ST.dist / c.clientHeight * 0.75, cy = Math.cos(ST.yaw), sy = Math.sin(ST.yaw), sp = Math.sin(ST.pitch), right = [-sy, cy, 0], up = [-cy * sp, -sy * sp, Math.cos(ST.pitch)];
+    for (let i = 0; i < 3; i++) ST.tgt[i] += (-dx * right[i] + dy * up[i]) * k;
+    if (ST.mvp) camZoom(ST, { clientX: m.x, clientY: m.y }, c, ST.mvp, two.d / m.d, dmin, dmax); else ST.dist = Math.max(dmin, Math.min(dmax, ST.dist * two.d / m.d));
+    two = m; req(); }, true);
+  const up = e => { if (e.pointerType !== 'touch' || !T.has(e.pointerId)) return; const p0 = T.get(e.pointerId); T.delete(e.pointerId);
+    if (used) { e.stopImmediatePropagation(); if (T.size < 2) two = null; if (e.type === 'pointerup') c.dispatchEvent(new PointerEvent('pointercancel', { pointerId: e.pointerId, pointerType: 'touch', clientX: e.clientX, clientY: e.clientY })); /* la vue oublie le doigt sans le prendre pour un clic */ return; }
+    if (e.type === 'pointerup' && T.size === 0) { const now = performance.now(); if (tap && now - tap.t < 320 && Math.hypot(e.clientX - tap.x, e.clientY - tap.y) < 30) { tap = null; e.stopImmediatePropagation(); fit(); return; } tap = { t: now, x: p0[0], y: p0[1] }; } };
+  c.addEventListener('pointerup', up, true); c.addEventListener('pointercancel', up, true);
+  c.addEventListener('pointermove', e => { if (e.pointerType === 'touch' && used && T.size === 1) e.stopImmediatePropagation(); }, true); // après un geste à deux doigts : pas de rotation avec le dernier doigt
+}
 function v3Events(c) {
+  touch3d(c, V3, () => v3Req(), () => v3ResetView(), 5, 20000);
   let drag = null; const pts = new Map(); let pinch = null;
   c.addEventListener('contextmenu', e => e.preventDefault());
   c.addEventListener('pointerdown', e => { c.setPointerCapture(e.pointerId); pts.set(e.pointerId, [e.clientX, e.clientY]); if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), dist: V3.dist }; drag = null; return; } const act = nav3dAct(e), r = c.getBoundingClientRect(); drag = act ? { x: e.clientX, y: e.clientY, pan: act === 'pan', sg: Math.cos(V3.pitch) < 0 ? -1 : 1 } : null; if (act === 'rot' && V3.S3) { const S3 = V3.S3, [ox, oy] = originOf(S.stock), RT = S.stock.rotary || {}, oz = RT.on ? (RT.z0 === 'axis' ? -S3.t / 2 : 0) : S.stock.originZ === 'bottom' ? -S3.t : 0, Wr = wrapInfo(); drag.P = orbitPivot(V3, V3.mvp, c.clientWidth, c.clientHeight, e.clientX - r.left, e.clientY - r.top, { planes: !Wr, x0: 0, x1: S3.w, y0: 0, y1: S3.h, z0: -S3.t, z1: 0, org: Wr ? wrapPt([ox, oy, oz]) : [ox, oy, oz] }, null); } });
@@ -9766,6 +9784,7 @@ function rvInit() {
   c.addEventListener('pointerup', end); c.addEventListener('pointercancel', () => { drag = null; });
   c.addEventListener('wheel', e => { e.preventDefault(); RV.touched = true; camZoom(RV, e, c, RV.mvp, Math.exp(e.deltaY * 0.0012), 5, 1e5); rvReq(); }, { passive: false });
   c.addEventListener('dblclick', () => rvFit(true));
+  touch3d(c, RV, () => { RV.touched = true; rvReq(); }, () => rvFit(true), 5, 1e5);
   const cv = $('#rvcube'), pos = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
   cv.addEventListener('pointermove', e => { const h = v3CubeHit(...pos(e), RV), k = h ? h.k : null; if (k !== RV.cubeHover) { RV.cubeHover = k; v3Cube(cv, RV); } });
   cv.addEventListener('pointerleave', () => { RV.cubeHover = null; v3Cube(cv, RV); });
