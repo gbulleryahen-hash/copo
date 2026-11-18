@@ -1652,7 +1652,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.376</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.377</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -7646,7 +7646,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.376', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.377', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -9781,7 +9781,7 @@ function rvBuf(attrs, data, idx) { const gl = RV.gl, vao = gl.createVertexArray(
 // reconstruit le maillage quand le relief ou le brut change, et les traits quand le dessin change
 function rvSync() {
   if (!VIEWS.d3 || !RV.gl) return; const st = S.stock; relSyncLinks();
-  const dr = RELDRAG, sig = JSON.stringify([st.w, st.h, st.t, S.relief.items.map(i => [i.id, dr && i.id === dr.id ? dr.x0 : i.x, dr && i.id === dr.id ? dr.y0 : i.y, i.w, i.h, i.rot, i.zH, dr && i.id === dr.id ? dr.t0 : i.top, i.rx, i.ry, i.mode, i.visible, i.smooth, i.invert, i.cut, relGid(relGrid[i.id]), relGrid[i.id] && relGrid[i.id].nx, relClipSig(i), relFace(i)]), S.ui.faceView || 'all']);
+  const dr = RELDRAG, sig = JSON.stringify([st.w, st.h, st.t, S.relief.items.map(i => [i.id, dr && i.id === dr.id ? dr.x0 : i.x, dr && i.id === dr.id ? dr.y0 : i.y, i.w, i.h, i.rot, i.zH, dr && i.id === dr.id ? dr.t0 : i.top, i.rx, i.ry, i.mode, i.visible, i.smooth, i.invert, i.cut, relGid(relGrid[i.id]), relGrid[i.id] && relGrid[i.id].nx, relClipSig(i), relFace(i), i.mode]), S.ui.faceView || 'all']);
   if (sig !== RV.sig) { const now = performance.now(), wait = Math.max(60, RV.cost || 0) - (now - (RV.lastEnd || 0)); if (RV.sig && wait > 0) { clearTimeout(RV.thT); RV.thT = setTimeout(() => { rvSync(); rvReq(); }, wait + 5); } else { RV.sig = sig; rvBuildMesh(); RV.lastEnd = performance.now(); RV.cost = RV.lastEnd - now; rvReq(); } } /* pendant une manipulation : maillage refait au plus une fois par intervalle */
   if (dr && !RV.dm) { const b = dr.q ? [80000, 150000, 250000][relLevel()] : 30000; RV.dm = { a: relOnly(i => i.id !== dr.id, () => rvMakeMesh(b)), b: relOnly(i => i.id === dr.id, () => rvMakeMesh(b)) }; rvReq(); } /* déplacement : deux maillages, l'élément déplacé est décalé à l'affichage */
   if (!RV.fitted && $('#rvc').clientWidth > 10) { rvFit(true); RV.fitted = true; }
@@ -9798,7 +9798,12 @@ function rvBuildMesh() {
 }
 function rvMakeMesh(budget) { // reliefs des deux faces : ceux de la face 2 sont posés sous le brut (Z retourné), vus du dessus par transparence
   const fv = S.ui.faceView === '1' || S.ui.faceView === '2' ? +S.ui.faceView : 0, t = S.stock.t, parts = [];
-  for (const f of [1, 2]) { if (fv && fv !== f) continue; if (!S.relief.items.some(i => i.visible && relGrid[i.id] && relFace(i) === f)) continue; const d = relWith(f, false, () => rvMeshOne(budget)); if (!d) continue;
+  const has = f => S.relief.items.some(i => i.visible && relGrid[i.id] && relFace(i) === f), both = !fv && has(1) && has(2);
+  let under = null; if (both) { const R2 = relWith(2, false, () => reliefCompose((w, h) => Math.max(0.05, Math.sqrt(w * h / budget)), true, null, true, true));
+    under = (x, y) => { const fx = (x - R2.ox) / R2.cx, fy = (y - R2.oy) / R2.cy, i = Math.floor(fx), j = Math.floor(fy), W = R2.nx, z = q => -t - Math.max(-t, R2.H[q]); if (i < 0 || j < 0 || i >= W || j >= R2.ny) return null; const q = j * W + i;
+      if (i + 1 < W && j + 1 < R2.ny && R2.M[q] && R2.M[q + 1] && R2.M[q + W] && R2.M[q + W + 1]) { const u = fx - i, v = fy - j; return (z(q) * (1 - u) + z(q + 1) * u) * (1 - v) + (z(q + W) * (1 - u) + z(q + W + 1) * u) * v; } /* bilinéaire : pas de moiré */
+      const r = Math.round(fy) * W + Math.round(fx); return R2.M[r] ? z(r) : R2.M[q] ? z(q) : null; }; }
+  for (const f of [1, 2]) { if (fv && fv !== f) continue; if (!has(f)) continue; if (both && f === 2) continue; /* les deux faces : une seule pièce, le dessous de la face 1 suit le creux de la face 2 */ const d = relWith(f, false, () => rvMeshOne(budget, f === 1 ? under : null)); if (!d) continue;
     if (f === 2) { const a = d.all, x = d.idx; for (let k = 0; k < a.length; k += 6) { a[k + 2] = -t - a[k + 2]; a[k + 5] = -a[k + 5]; } for (let k = 0; k < x.length; k += 3) { const u = x[k + 1]; x[k + 1] = x[k + 2]; x[k + 2] = u; } }
     parts.push(d); }
   if (!parts.length) return null;
@@ -9806,7 +9811,7 @@ function rvMakeMesh(budget) { // reliefs des deux faces : ceux de la face 2 sont
   if (parts.length > 1) { const [A, B] = parts, nA = A.all.length / 6; all = new Float32Array(A.all.length + B.all.length); all.set(A.all, 0); all.set(B.all, A.all.length); idx = new Uint32Array(A.idx.length + B.idx.length); idx.set(A.idx, 0); for (let k = 0; k < B.idx.length; k++) idx[A.idx.length + k] = B.idx[k] + nA; }
   return { vao: rvBuf([[RV.prog, 3, 'aP'], [RV.prog, 3, 'aN']], all, idx), n: idx.length, depth: Math.max(...parts.map(d => d.depth)), R: parts[0].R };
 }
-function rvMeshOne(budget) {
+function rvMeshOne(budget, under) { // under(x, y) : dessous de la matière laissé par la face 2 (coque), sinon la base du relief
   const gl = RV.gl; if (!S.relief.items.some(i => i.visible && relGrid[i.id])) return null;
   const st = S.stock, R = reliefCompose((w, h) => Math.max(0.02, Math.sqrt(w * h / budget)), true, null, true, true), { nx, ny, cx, cy, H, M, ox, oy } = R, N = nx * ny, vb = new Float32Array(N * 6);
   for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, z = Math.max(-st.t, H[q]), ir = i + 1 < nx && M[q + 1] ? i + 1 : i, il = i > 0 && M[q - 1] ? i - 1 : i, ju = j + 1 < ny && M[q + nx] ? j + 1 : j, jd = j > 0 && M[q - nx] ? j - 1 : j, hx = ir > il ? (H[j * nx + ir] - H[j * nx + il]) / ((ir - il) * cx) : 0, hy = ju > jd ? (H[ju * nx + i] - H[jd * nx + i]) / ((ju - jd) * cy) : 0, n = v3n([-hx, -hy, 1]); /* au bord : différence d'un seul côté (pas de liseré sombre en dents de scie) */ vb.set([ox + i * cx, oy + j * cy, z, n[0], n[1], n[2]], q * 6); }
@@ -9816,6 +9821,8 @@ function rvMeshOne(budget) {
   const ix = new Uint32Array(nt * 6), zb = Math.max(-st.t, R.base), ex = []; let p = 0;
   const T = (u, v, w) => { ix[p++] = u; ix[p++] = v; ix[p++] = w; ix[p++] = N + u; ix[p++] = N + w; ix[p++] = N + v; }; // dessus et dessous (dessous à la base du relief)
   const bot = new Float32Array(N * 6); for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) bot.set([ox + i * cx, oy + j * cy, zb, 0, 0, -1], (j * nx + i) * 6);
+  const BZ = new Float32Array(N).fill(zb); if (under) { for (let q = 0; q < N; q++) { if (!M[q]) continue; const u = under(ox + (q % nx) * cx, oy + Math.floor(q / nx) * cy); if (u !== null) BZ[q] = Math.min(Math.max(-st.t, H[q]), Math.max(zb, u)); bot[q * 6 + 2] = BZ[q]; }
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i; if (!M[q]) continue; const i0 = i > 0 && M[q - 1] ? i - 1 : i, i1 = i + 1 < nx && M[q + 1] ? i + 1 : i, j0 = j > 0 && M[q - nx] ? j - 1 : j, j1 = j + 1 < ny && M[q + nx] ? j + 1 : j, gx = i1 > i0 ? (BZ[j * nx + i1] - BZ[j * nx + i0]) / ((i1 - i0) * cx) : 0, gy = j1 > j0 ? (BZ[j1 * nx + i] - BZ[j0 * nx + i]) / ((j1 - j0) * cy) : 0, n = v3n([gx, gy, -1]); bot[q * 6 + 3] = n[0]; bot[q * 6 + 4] = n[1]; bot[q * 6 + 5] = n[2]; } }
   const wix = []; let nv = 0, base = N * 2;
   const WL = [], NA = new Map(), acc = (v, x, y) => { const o = NA.get(v); if (o) { o[0] += x; o[1] += y; } else NA.set(v, [x, y]); };
   const wall = (a, b) => { const dx = ((b % nx) - (a % nx)) * cx, dy = (Math.floor(b / nx) - Math.floor(a / nx)) * cy, l = Math.hypot(dx, dy) || 1, x = dy / l, y = -dx / l; WL.push(a, b); acc(a, x, y); acc(b, x, y); }; // parois : normales moyennées aux sommets (rendu lisse, sans facettes)
@@ -9832,7 +9839,7 @@ function rvMeshOne(budget) {
     const gx = (at(vi + 1, vj) - at(vi - 1, vj)) / cx, gy = (at(vi, vj + 1) - at(vi, vj - 1)) / cy; let l = Math.hypot(gx, gy), out;
     if (l < 1e-9) { const o = NA.get(v); l = Math.hypot(o[0], o[1]) || 1; out = [o[0] / l, o[1] / l, 0, 0]; } else { const c0 = Math.min(cx, cy), d = Math.max(-c0, Math.min(c0, (at(vi, vj) - 0.5) / l)); out = [-gx / l, -gy / l, 0, d]; } NC.set(v, out); return out; };
   const XY = v => { const n = nrm(v); return [ox + (v % nx) * cx + n[0] * n[3], oy + Math.floor(v / nx) * cy + n[1] * n[3]]; }; /* bord recalé sur le contour lissé : plus d'escalier */
-  for (let w = 0; w < WL.length; w += 2) { const a = WL[w], b = WL[w + 1], za = Math.max(-st.t, H[a]), zq = Math.max(-st.t, H[b]), A = XY(a), B = XY(b), na = nrm(a).slice(0, 3), nb = nrm(b).slice(0, 3), k = base + nv; ex.push(A[0], A[1], za, ...na, B[0], B[1], zq, ...nb, B[0], B[1], zb, ...nb, A[0], A[1], zb, ...na); nv += 4; wix.push(k, k + 1, k + 2, k, k + 2, k + 3); }
+  for (let w = 0; w < WL.length; w += 2) { const a = WL[w], b = WL[w + 1], za = Math.max(-st.t, H[a]), zq = Math.max(-st.t, H[b]), A = XY(a), B = XY(b), na = nrm(a).slice(0, 3), nb = nrm(b).slice(0, 3), k = base + nv; ex.push(A[0], A[1], za, ...na, B[0], B[1], zq, ...nb, B[0], B[1], BZ[b], ...nb, A[0], A[1], BZ[a], ...na); nv += 4; wix.push(k, k + 1, k + 2, k, k + 2, k + 3); }
   for (const v of NC.keys()) { const p = XY(v); vb[v * 6] = bot[v * 6] = p[0]; vb[v * 6 + 1] = bot[v * 6 + 1] = p[1]; } /* sommets du dessus et du dessous suivent le bord recalé */
   const all = new Float32Array(N * 12 + ex.length); all.set(vb, 0); all.set(bot, N * 6); all.set(ex, N * 12);
   const idx = new Uint32Array(ix.length + wix.length); idx.set(ix, 0); idx.set(wix, ix.length);
