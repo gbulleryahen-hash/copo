@@ -1650,7 +1650,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.374</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.375</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -7644,7 +7644,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.374', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.375', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -9641,8 +9641,15 @@ function relSweepMulti(G, polys) {
 function relSecOf(pr) {
   const a = pr[0], b = pr[pr.length - 1], L = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1, ux = (b[0] - a[0]) / L, uy = (b[1] - a[1]) / L;
   const pts = pr.map(q => [((q[0] - a[0]) * ux + (q[1] - a[1]) * uy) / L, (q[0] - a[0]) * -uy + (q[1] - a[1]) * ux]); let sg = 0; for (const q of pts) sg += q[1]; if (sg < 0) for (const q of pts) q[1] = -q[1];
-  const N = 128, sec = new Array(N + 1).fill(0); let mx = 0;
-  for (let k = 0; k <= N; k++) { const u = k / N; let bst = null; for (let i = 0; i + 1 < pts.length; i++) { const p0 = pts[i], p1 = pts[i + 1]; if ((p0[0] - u) * (p1[0] - u) <= 0 && p1[0] !== p0[0]) { const y = p0[1] + (p1[1] - p0[1]) * (u - p0[0]) / (p1[0] - p0[0]); if (bst === null || y > bst) bst = y; } } sec[k] = Math.max(0, bst ?? 0); if (sec[k] > mx) mx = sec[k]; }
+  return relSecSample(pts);
+}
+// échantillonne la section (u de 0 à 1, hauteur au-dessus de la corde) ; le point le plus bas du profil devient le bas du relief :
+// un profil qui passe des deux côtés de sa corde (sinusoïde, S) garde ses creux au lieu d'être coupé à plat
+function relSecSample(pts) {
+  const N = 128, raw = new Array(N + 1).fill(null);
+  for (let k = 0; k <= N; k++) { const u = k / N; let best = null; for (let i = 0; i + 1 < pts.length; i++) { const p0 = pts[i], p1 = pts[i + 1]; if ((p0[0] - u) * (p1[0] - u) <= 0 && p1[0] !== p0[0]) { const y = p0[1] + (p1[1] - p0[1]) * (u - p0[0]) / (p1[0] - p0[0]); if (best === null || y > best) best = y; } } raw[k] = best; }
+  let mn = 0; for (const v of raw) if (v !== null && v < mn) mn = v;
+  const sec = raw.map(v => (v === null ? 0 : v - mn)); let mx = 0; for (const v of sec) if (v > mx) mx = v;
   return { sec: sec.map(v => mx > 0 ? v / mx : 0), h: mx };
 }
 function relSweepRoles(G, si) {
@@ -9652,12 +9659,10 @@ function relSweepRoles(G, si) {
   const a = pr[0], b = pr[pr.length - 1], L = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1, ux = (b[0] - a[0]) / L, uy = (b[1] - a[1]) / L;
   const pts = pr.map(q => [((q[0] - a[0]) * ux + (q[1] - a[1]) * uy) / L, (q[0] - a[0]) * -uy + (q[1] - a[1]) * ux]);
   let sg = 0; for (const q of pts) sg += q[1]; if (sg < 0) for (const q of pts) q[1] = -q[1]; // le côté où est la courbe = le haut
-  const N = 128, sec = new Array(N + 1).fill(0); let mx = 0;
-  for (let k = 0; k <= N; k++) { const u = k / N; let best = null; for (let i = 0; i + 1 < pts.length; i++) { const p0 = pts[i], p1 = pts[i + 1]; if ((p0[0] - u) * (p1[0] - u) <= 0 && p1[0] !== p0[0]) { const y = p0[1] + (p1[1] - p0[1]) * (u - p0[0]) / (p1[0] - p0[0]); if (best === null || y > best) best = y; } } sec[k] = Math.max(0, best ?? 0); if (sec[k] > mx) mx = sec[k]; }
-  G.sec = sec.map(v => mx > 0 ? v / mx : 0); if (G.secFlip) G.sec.reverse(); G.secH = mx; G.secW = L;
+  const r = relSecSample(pts); G.sec = r.sec; if (G.secFlip) G.sec.reverse(); G.secH = r.h; G.secW = L;
 }
-const REL_GEN_V = 2; // version du générateur de formes (2 : transition douce entre profils)
-function relRegenOld() { let n = 0; for (const it of S.relief.items) if (it.kind === 'gen' && it.gen && (it.gen.gv || 0) < REL_GEN_V) { try { it.gen.gv = REL_GEN_V; relRegen(it); n++; } catch (e) { } } if (n) { relDirty = true; relSm.clear(); } return n; }
+const REL_GEN_V = 3; // version du générateur de formes (2 : transition douce entre profils ; 3 : profils qui passent sous leur corde)
+function relRegenOld() { let n = 0; for (const it of S.relief.items) if (it.kind === 'gen' && it.gen && (it.gen.gv || 0) < REL_GEN_V) { try { if ((it.gen.gv || 0) < 3 && it.gen.type === 'sweep' && it.gen.all && it.gen.secIdx != null) relSweepRoles(it.gen, it.gen.secIdx); it.gen.gv = REL_GEN_V; relRegen(it); n++; } catch (e) { } } if (n) { relDirty = true; relSm.clear(); } return n; }
 function relRegen(it) { it.gen.gv = REL_GEN_V; relSm.delete(it.id); const R = relGenGrid(it.gen), ow = it.w || 1, k = it.gen.box ? ow / (it.gen.box[2] - it.gen.box[0]) : 1; it.w = (R.box[2] - R.box[0]) * k; it.h = (R.box[3] - R.box[1]) * k; it.gen.box = R.box; relStore(it.id, R.g); }
 function relFromDrawing(type) {
   const sh = selShapes().filter(x => x.pts && x.pts.length > 1), lbl = { dome: 'Dôme', extrude: 'Extrusion', sweep: 'Lissage' }[type];
