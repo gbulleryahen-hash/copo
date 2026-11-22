@@ -1654,7 +1654,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.390</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.391</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -3009,7 +3009,8 @@ function buildRelief(p, tool, shapes, M) {
   const floor = -st.t - under, warns = warnsF;
   if (under > 0) for (let q = 0; q < H.length; q++) if (H[q] <= -st.t + 0.01) H[q] = floor; if (under > 0) warns.push(trf('Finition des bords : la fraise descend jusqu’à {d} mm sous le brut, dans le martyr.', { d: fr(under, 2) })); // fond du brut et autour du relief : la fraise peut descendre jusqu'à floor
   if (-R.min > st.t + 1e-6) warns.push(trf('Le relief ({d} mm) est plus épais que le brut ({t} mm) : le bas sera coupé. Augmentez l’épaisseur du brut.', { d: fr(-R.min, 1), t: fr(st.t, 1) }));
-  const TR = toolOnRelief(R, H, tool, floor), hc = TR.hc, zAt = fin ? TR.zAtFine : TR.zAt; // finition : outil posé exactement (pas de festons sur les pentes)
+  const Hf = fin && relOutlines(its.filter(i => relFace(i) === fc), fc === 2) ? relHeightFn(S.relief.items.filter(i => relIn(i) && relGrid[i.id] && (!sel || sel.includes(i.id)) && relFace(i) === fc), fc === 2) : null; // reliefs générés : hauteur lue sans la grille du calcul
+  const TR = toolOnRelief(R, H, tool, floor, Hf), hc = TR.hc, zAt = fin ? TR.zAtFine : TR.zAt; // finition : outil posé exactement (pas de festons sur les pentes)
   // limite d'usinage : masque sur la grille (contour du modèle, du brut ou tracés sélectionnés), puis décalage
   const bound = p.rlBound || (shapes.some(sh => sh.closed) ? 'sel' : 'model'), N = nx * ny; let Bm = new Uint8Array(N);
   if (bound === 'stock') Bm.fill(1);
@@ -3099,12 +3100,18 @@ function buildRelief(p, tool, shapes, M) {
         for (const dir of [1, 0]) { let kk = dir ? ks[1] : ks[0]; while (true) { const nxt = (key.get(kk) || []).find(id => !used[id]); if (nxt === undefined) break; used[nxt] = 1; const sg = segs[nxt], fwd = sg[0] === kk; const e = fwd ? sg[3] : sg[2]; kk = fwd ? sg[1] : sg[0]; if (dir) ch.push(e); else ch.unshift(e); } }
         out.push(ch.map(e => Pt(e, v))); }
       return out; };
+    // contour exact connu (vecteurs, brut, relief généré) : décalages géométriques (cercle = cercles parfaits), sinon courbes de niveau de la grille
+    const EXP = bound === 'sel' ? shapes.filter(sh => sh.closed && sh.pts.length > 2).map(sh => sh.pts) : bound === 'stock' ? [[[0, 0], [st.w, 0], [st.w, st.h], [0, st.h]]] : relOutlines(its.filter(i => relFace(i) === fc), fc === 2);
+    let exact = null; if (EXP && window.ClipperLib) { try { const base = cUnion(EXP.map(toCP)), ds = Math.max(0.05, Math.min(0.3, cx)); exact = [];
+      for (let k = 0; k < 4000; k++) { const d = 0.5 * cx + k * step - off, co = new ClipperLib.ClipperOffset(2, 0.002 * SC); co.AddPaths(base, ClipperLib.JoinType.jtRound, ClipperLib.EndType.etClosedPolygon); const sol = []; co.Execute(sol, -d * SC);
+        const L = sol.map(fromCP).filter(l => l.length > 2); if (!L.length) break;
+        exact.push(L.map(l => { const o = []; const a2 = [...l, l[0]]; for (let q = 0; q + 1 < a2.length; q++) { const A = a2[q], B = a2[q + 1], n = Math.max(1, Math.ceil(Math.hypot(B[0] - A[0], B[1] - A[1]) / ds)); for (let t = 0; t < n; t++) o.push([A[0] + (B[0] - A[0]) * t / n, A[1] + (B[1] - A[1]) * t / n]); } o.push(o[0].slice()); return o; })); } } catch (e) { exact = null; } }
     let last = null;
-    for (let k = 0; k < lv.length; k++) { const loops = iso(k);
+    for (let k = 0; k < (exact ? exact.length : lv.length); k++) { const loops = exact ? exact[k] : iso(k);
       for (let pl of loops) { if (pl.length < 2) continue; const closed = Math.hypot(pl[0][0] - pl[pl.length - 1][0], pl[0][1] - pl[pl.length - 1][1]) < cx * 1.5; let ar = 0; for (let k = 0; k + 1 < pl.length; k++) ar += pl[k][0] * pl[k + 1][1] - pl[k + 1][0] * pl[k][1];
         if (closed && ((p.rlDir !== 'conv') === (ar > 0))) pl = pl.reverse(); // avalant : sens horaire
         if (closed && last) { let bi = 0, bd = Infinity; for (let k = 0; k < pl.length; k++) { const d = Math.hypot(pl[k][0] - last[0], pl[k][1] - last[1]); if (d < bd) { bd = d; bi = k; } } pl = [...pl.slice(bi), ...pl.slice(1, bi + 1)]; }
-        pl = isoSmooth(pl, closed); // courbe de niveau lissée (sinon marches de la grille : micro-vagues, fraise freinée)
+        if (!exact) pl = isoSmooth(pl, closed); // courbe de niveau lissée (sinon marches de la grille : micro-vagues, fraise freinée)
         const Pz = simp(zSmooth(pl.map(q => [q[0], q[1], Math.max(floor, Math.min(0, zAt(q[0], q[1])))]))); nl++;
         link(last, Pz[0], zSurf); for (let k = 1; k < Pz.length; k++) mb.g1(Pz[k][0], Pz[k][1], Pz[k][2], feed); last = Pz[Pz.length - 1]; }
     }
@@ -7676,7 +7683,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.390', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.391', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -8473,21 +8480,40 @@ function toolProf(tool) {
    hc(i, j) = hauteur de la pointe au nœud (maximum du relief moins le profil de la fraise sur son empreinte), zAt(x, y) = la même, interpolée.
    Le bord de la fraise ne compte qu'à une maille près (grille de calcul + grille du relief) : une fraise qui longe une paroi verticale ne saute plus d'une maille à l'autre entre le haut et le bas de la paroi.
    fb : hauteur quand l'empreinte sort de la grille. */
-function toolOnRelief(R, H, tool, fb) {
+function toolOnRelief(R, H, tool, fb, Hf) {
   const { nx, ny, cx, cy } = R, gc = Math.max(0, ...S.relief.items.filter(i => i.visible && relGrid[i.id]).map(i => Math.max(i.w / relGrid[i.id].nx, i.h / relGrid[i.id].ny)));
   const K = toolKernel(tool, cx, cy, Math.min(0.3, Math.max(cx, cy) * 0.75 + gc)), memo = new Float32Array(nx * ny).fill(NaN);
   const hc = (i, j) => { const q = j * nx + i; let v = memo[q]; if (v === v) return v; v = -Infinity; const { di, dj, dz, n } = K; for (let k = 0; k < n; k++) { const a = i + di[k], b = j + dj[k]; if (a < 0 || b < 0 || a >= nx || b >= ny) continue; const h = H[b * nx + a] - dz[k]; if (h > v) v = h; } if (v === -Infinity) v = fb; memo[q] = v; return v; };
   const zAt = (x, y) => { const X = Math.max(0, Math.min(nx - 1.000001, x / cx)), Y = Math.max(0, Math.min(ny - 1.000001, y / cy)), i = Math.floor(X), j = Math.floor(Y), a = X - i, b = Y - j; return (hc(i, j) * (1 - a) + hc(i + 1, j) * a) * (1 - b) + (hc(i, j + 1) * (1 - a) + hc(i + 1, j + 1) * a) * b; };
   // finition : outil posé directement au point (x, y), empreinte en cercles concentriques réguliers et surface interpolée
   // (l'empreinte en carrés de la grille donne des festons sur les pentes raides : 8 bosses par tour sur un dôme)
-  let PK = null; const zAtFine = (x, y) => { if (!PK) { const r = Math.max(0.01, tool.dia / 2 - Math.min(0.05, Math.max(cx, cy) * 0.25)), pf = toolProf(tool), st = Math.min(cx, cy) * 0.7, nr = Math.max(2, Math.ceil(r / st)), ox = [], oy = [], dz = [];
+  const fb0 = -S.stock.t; let PK = null; const zAtFine = (x, y) => { if (!PK) { const r = Math.max(0.01, tool.dia / 2 - Math.min(0.05, Math.max(cx, cy) * 0.25)), pf = toolProf(tool), st = Math.min(cx, cy) * 0.7, nr = Math.max(2, Math.ceil(r / st)), ox = [], oy = [], dz = [];
       for (let k = 0; k <= nr; k++) { const rr = r * k / nr, m = k ? Math.max(6, Math.ceil(2 * Math.PI * rr / st)) : 1; for (let q = 0; q < m; q++) { const a = 2 * Math.PI * q / m + (k % 2) * Math.PI / m; ox.push(rr * Math.cos(a)); oy.push(rr * Math.sin(a)); dz.push(pf(rr)); } } PK = { ox, oy, dz, n: ox.length }; }
     let v = -Infinity; for (let k = 0; k < PK.n; k++) { const X = (x + PK.ox[k]) / cx, Y = (y + PK.oy[k]) / cy; if (X < 0 || Y < 0 || X > nx - 1 || Y > ny - 1) continue; const i = Math.min(nx - 2, Math.floor(X)), j = Math.min(ny - 2, Math.floor(Y)), a = X - i, b = Y - j, q = j * nx + i, h00 = H[q], h10 = H[q + 1], h01 = H[q + nx], h11 = H[q + nx + 1];
-      const h = (h00 * (1 - a) + h10 * a) * (1 - b) + (h01 * (1 - a) + h11 * a) * b; if (h === h && h - PK.dz[k] > v) v = h - PK.dz[k]; }
+      let h = (h00 * (1 - a) + h10 * a) * (1 - b) + (h01 * (1 - a) + h11 * a) * b; if (Hf) { let e = Hf(x + PK.ox[k], y + PK.oy[k]); if (e !== e) e = R.base; /* hors des reliefs : leur base, sans les marches du masque */ h = Math.max(fb, e <= fb0 + 0.01 ? fb : e); } if (h === h && h - PK.dz[k] > v) v = h - PK.dz[k]; }
     return v === -Infinity ? zAt(x, y) : v; };
   return { hc, zAt, zAtFine };
 }
 // hauteur de la pointe de l'outil posé sur le relief en (x, y), pour projeter un parcours
+// contour exact (vecteurs d'origine) des reliefs générés (dôme, raccord), dans le repère du calcul ; null si un relief n'en a pas
+function relOutlines(items, f2) {
+  const out = [];
+  for (const it of items) { if (it.mode === 'sub') continue; const G = it.gen; if (it.kind !== 'gen' || !G || !G.box || it.clip || it.mode === 'min') return null;
+    const P = G.type === 'dome' ? G.polys : G.type === 'loft' ? [G.polys[0]] : null; if (!P) return null;
+    const [x0, y0, x1, y1] = G.box, W = x1 - x0, Hh = y1 - y0, r = (it.rot || 0) * Math.PI / 180, cs = Math.cos(r), sn = Math.sin(r);
+    for (const pl of P) { if (pl.closed === false) return null; out.push(pl.pts.map(q => { const lu = ((q[0] - x0) / W - 0.5) * it.w, lv = (0.5 - (y1 - q[1]) / Hh) * it.h, w = [it.x + lu * cs - lv * sn, it.y + lu * sn + lv * cs]; return f2 ? flipPt(w) : w; })); } }
+  return out.length ? out : null;
+}
+// hauteur du relief en un point quelconque, lue directement dans les grilles fines des reliefs (finition précise) ; NaN hors des reliefs
+function relHeightFn(items, f2) {
+  const L = items.map(it => { const g = relGrid[it.id], f = relSrc(it), r = (it.rot || 0) * Math.PI / 180; return g && f ? { it, g, f, cs: Math.cos(r), sn: Math.sin(r), hw: it.w / 2, hh: it.h / 2, zH: +it.zH || 0, topZ: -(+it.top || 0), inv: !!it.invert, mode: it.mode || 'add', fe: Math.max(1e-6, 0.2 * Math.min(it.w / 2, it.h / 2)) } : null; }).filter(Boolean);
+  return (x, y) => { if (f2) [x, y] = flipPt([x, y]); let cur = NaN;
+    for (const o of L) { const dx = x - o.it.x, dy = y - o.it.y, lu = dx * o.cs + dy * o.sn, lv = -dx * o.sn + dy * o.cs; if (Math.abs(lu) > o.hw || Math.abs(lv) > o.hh) continue;
+      const v = relSample(o.f, o.g.nx, o.g.ny, lu / o.it.w + 0.5, 0.5 - lv / o.it.h); if (v !== v) continue; const h = o.zH * (o.inv ? 1 - v : v), bot = o.topZ - o.zH, m = o.mode;
+      let w = 0; if (m === 'blend') { const t = Math.min(1, Math.min(o.hw - Math.abs(lu), o.hh - Math.abs(lv)) / o.fe); w = 0.5 * t * t * (3 - 2 * t); }
+      cur = cur !== cur ? (m === 'sub' ? o.topZ - h : bot + h) : m === 'sub' ? cur - h : m === 'max' ? Math.max(cur, bot + h) : m === 'min' ? Math.min(cur, bot + h) : m === 'blend' ? cur + (bot + h - cur) * w : cur + h; }
+    return cur; };
+}
 function relProjector(tool, face = 1) {
   const st = S.stock; let c = Math.max(0.05, Math.min(0.2, tool.dia / 30)); while ((st.w / c + 1) * (st.h / c + 1) > 6e6) c *= 1.2;
   const R = relWith(face, face === 2, () => reliefCompose(c, true)), H = R.H.map((v, q) => R.M[q] ? v : 0), f = toolOnRelief(R, H, tool, R.base).zAt; // hors du relief : dessus du brut (jamais plus profond par surprise)
@@ -9672,7 +9698,7 @@ function relGenGrid(G) {
   // distance exacte aux segments des vecteurs (la distance sur la grille fait des marches : sur une pente raide, elles deviennent des vagues)
   const segIdx = pls => { const B = c * 8, M = new Map(), key = (a, b) => a + ',' + b;
     for (const pl of pls) { const a = pl.closed !== false ? [...pl.pts, pl.pts[0]] : pl.pts; for (let k = 0; k + 1 < a.length; k++) { const A = a[k], Bq = a[k + 1], sg = [A[0], A[1], Bq[0], Bq[1]]; const i0 = Math.floor(Math.min(A[0], Bq[0]) / B), i1 = Math.floor(Math.max(A[0], Bq[0]) / B), j0 = Math.floor(Math.min(A[1], Bq[1]) / B), j1 = Math.floor(Math.max(A[1], Bq[1]) / B); for (let i = i0; i <= i1; i++) for (let j = j0; j <= j1; j++) { const kk = key(i, j); if (!M.has(kk)) M.set(kk, []); M.get(kk).push(sg); } } }
-    return (x, y, r) => { let best = Infinity; const i0 = Math.floor((x - r) / B), i1 = Math.floor((x + r) / B), j0 = Math.floor((y - r) / B), j1 = Math.floor((y + r) / B);
+    return (x, y, r, qx = x, qy = y) => { let best = Infinity; const i0 = Math.floor((qx - r) / B), i1 = Math.floor((qx + r) / B), j0 = Math.floor((qy - r) / B), j1 = Math.floor((qy + r) / B);
       for (let i = i0; i <= i1; i++) for (let j = j0; j <= j1; j++) { const L = M.get(key(i, j)); if (!L) continue; for (const [ax, ay, bx, by] of L) { const dx = bx - ax, dy = by - ay, l2 = dx * dx + dy * dy, t = l2 > 0 ? Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / l2)) : 0, ex = ax + dx * t - x, ey = ay + dy * t - y, d = ex * ex + ey * ey; if (d < best) best = d; } }
       return Math.sqrt(best); }; };
   const exactBand = (f, dist, band, scale = 1) => { for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, v = f[q]; if (!(v < band)) continue; const d = dist(X(i), Y(j), (v + 1.5) * c); if (d < Infinity) f[q] = d / c * scale; } };
@@ -9681,7 +9707,14 @@ function relGenGrid(G) {
     for (let j = 0; j < ny; j++) { const y = Y(j), xs = []; for (const pl of P) { const a = pl.pts; for (let k = 0; k < a.length; k++) { const A = a[k], B = a[(k + 1) % a.length]; if ((A[1] <= y) !== (B[1] <= y)) xs.push(A[0] + (y - A[1]) * (B[0] - A[0]) / (B[1] - A[1])); } } xs.sort((a, b) => a - b); for (let k = 0; k + 1 < xs.length; k += 2) { const i0 = Math.max(0, Math.ceil((xs[k] - x0) / c)), i1 = Math.min(nx - 1, Math.floor((xs[k + 1] - x0) / c)); for (let i = i0; i <= i1; i++) ins[j * nx + i] = 1; } }
     const f = new Float64Array(N); for (let i = 0; i < N; i++) f[i] = ins[i] ? Infinity : 0; relEDT(f, nx, ny);
     for (let i = 0; i < N; i++) if (ins[i]) f[i] -= 0.5; // distance au bord (en mailles) : le bord est à mi-chemin entre deux mailles
-    exactBand(f, segIdx(P), 24); // près du bord : distance exacte au contour
+    { const SG = []; for (const pl of P) { const a = pl.closed !== false ? [...pl.pts, pl.pts[0]] : pl.pts; for (let k = 0; k + 1 < a.length; k++) SG.push(a[k][0], a[k][1], a[k + 1][0], a[k + 1][1]); }
+      let nin = 0; for (let i = 0; i < N; i++) if (ins[i]) nin++;
+      if (SG.length / 4 * nin <= 2.5e8) { // distance exacte partout (petit contour) : surface sans facettes de la grille
+        const ns = SG.length; for (let j = 0; j < ny; j++) { const y = Y(j); for (let i = 0; i < nx; i++) { const q = j * nx + i; if (!ins[q]) continue; const x = X(i); let b = Infinity; for (let k = 0; k < ns; k += 4) { const ax = SG[k], ay = SG[k + 1], dx = SG[k + 2] - ax, dy = SG[k + 3] - ay, l2 = dx * dx + dy * dy, t = l2 > 0 ? Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / l2)) : 0, ex = ax + dx * t - x, ey = ay + dy * t - y, d = ex * ex + ey * ey; if (d < b) b = d; } f[q] = Math.sqrt(b) / c; } } }
+      else { // grand contour : on cherche les segments près du point du bord le plus proche (estimé par la pente de la distance)
+        const g0 = Float64Array.from(f), dist = segIdx(P);
+        for (let j = 1; j < ny - 1; j++) for (let i = 1; i < nx - 1; i++) { const q = j * nx + i; if (!ins[q]) continue; const d = g0[q], gx = (g0[q + 1] - g0[q - 1]) / 2, gy = -(g0[q + nx] - g0[q - nx]) / 2, gn = Math.hypot(gx, gy); if (!(gn > 0.3) || d !== d || d === Infinity) continue;
+          const x = X(i), y = Y(j), qx = x - gx / gn * d * c, qy = y - gy / gn * d * c, e = dist(x, y, 3 * c, qx, qy); if (e < Infinity && Math.abs(e / c - d) < 1.5) f[q] = e / c; } } }
     let dm = 0; for (let i = 0; i < N; i++) if (ins[i] && f[i] > dm) dm = f[i]; const Wd = +G.W > 0 ? +G.W / c : dm; if (!dm) throw new Error(tr('Forme trop petite.'));
     for (let i = 0; i < N; i++) if (ins[i]) h[i] = relProf(G.prof, f[i] / Math.max(0.5, Wd));
   } else if (G.type === 'loft') { // raccord : haut (1) dans le contour intérieur, bas (0) sur le contour extérieur, pente entre les deux
