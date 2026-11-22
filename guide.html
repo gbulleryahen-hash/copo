@@ -190,7 +190,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.414</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.415</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -553,7 +553,7 @@ X74.36 A14.181</pre>
     <p>Chaque couche va sur son calque « PCB · … ». Le <strong>cuivre</strong> devient des contours fermés : pistes, pastilles et zones fusionnées, au vrai bord du cuivre. Le <strong>contour</strong> et la <strong>sérigraphie</strong> deviennent les lignes médianes des traits. Les <strong>perçages</strong> sont des cercles, groupés par diamètre : un clic sur un trou sélectionne tous ceux du même foret. Le <strong>dessous</strong> va sur des calques <strong>F2</strong>, dessinés vus du dessus par transparence comme dans KiCad : le projet devient double face. Quand le logiciel répète le contour de la carte dans chaque couche (Proteus), COPO le retire du cuivre et de la sérigraphie : la liste l’indique par « contour retiré ».</p>
     <h3>Créer les parcours</h3>
     <figure><img src="img/fr-32-circuit-parcours.webp" alt="Parcours d’une carte double face : piges de centrage, isolation, sérigraphie, perçages par diamètre, isolation du dessous et détourage, en 2D et en 3D." width="1800" height="1125" loading="lazy"><figcaption>Les parcours créés pour une carte double face, dans l’ordre d’usinage : deux piges de centrage de part et d’autre de la carte.</figcaption></figure>
-    <p>La partie <span class="ui">Parcours du circuit</span> de la même fenêtre crée des parcours COPO ordinaires, modifiables ensuite comme les autres. <span class="ui">Ajouter les outils de circuit imprimé à la bibliothèque</span> range dans le dossier « Circuit imprimé » des fraises de gravure (20° et 30° pointe 0,1 mm, 60° pointe 0,2 mm), des forets de 0,4 à 1,3 mm et des fraises maïs de 1 et 2 mm. Les vitesses pour le FR4 sont copiées sur les outils du projet, quel que soit le matériau choisi.</p>
+    <p>La partie <span class="ui">Parcours du circuit</span> de la même fenêtre crée des parcours COPO ordinaires, modifiables ensuite comme les autres. Dès le premier import, COPO range dans votre bibliothèque d’outils un dossier « Circuit imprimé » : des fraises de gravure (20° et 30° pointe 0,1 mm, 60° pointe 0,2 mm), des forets de 0,3 à 3,2 mm et des fraises maïs de 1 et 2 mm (le bouton <span class="ui">Ajouter les outils de circuit imprimé à la bibliothèque</span> rajoute ceux qui auraient été supprimés). Les vitesses pour le FR4 sont copiées sur les outils du projet, quel que soit le matériau choisi.</p>
     <ul>
       <li><strong>Isolation des pistes</strong> : un profil extérieur à la fraise conique, à la profondeur choisie (0,1 mm par défaut), en passes côte à côte qui se recouvrent. La fenêtre affiche la largeur de coupe à cette profondeur et la largeur isolée autour du cuivre. Là où deux pistes sont plus proches que la largeur de coupe, la fraise ne passe pas entre elles : prenez une fraise plus fine ou moins profonde.</li>
       <li><strong>Enlever le cuivre inutile</strong> (option) : une poche à la fraise droite retire le cuivre restant autour des pistes isolées.</li>
@@ -766,7 +766,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC), acorn (MIT, pour les calculs en tâche de fond).</p>
-    <footer><p>COPO 1.414 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.415 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -806,7 +806,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.414</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.415</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -1169,7 +1169,7 @@ X74.36 A14.181</pre>
     <p>Each layer goes on its own “PCB · …” layer. The <strong>copper</strong> becomes closed outlines: tracks, pads and zones merged, at the true copper edge. The <strong>outline</strong> and the <strong>silkscreen</strong> become the centerlines of the strokes. <strong>Holes</strong> are circles, grouped by diameter: clicking one hole selects all the holes of the same drill. The <strong>bottom side</strong> goes on <strong>F2</strong> layers, drawn as seen from the top through the board, as in KiCad: the project becomes double-sided. When the program repeats the board outline in every layer (Proteus), COPO removes it from the copper and the silkscreen: the list shows “outline removed”.</p>
     <h3>Creating the toolpaths</h3>
     <figure><img src="img/en-32-circuit-parcours.webp" alt="Toolpaths of a double-sided board: registration pins, isolation, silkscreen, drilling by diameter, bottom isolation and cutout, in 2D and 3D." width="1800" height="1125" loading="lazy"><figcaption>The toolpaths created for a double-sided board, in machining order: two registration pins on either side of the board.</figcaption></figure>
-    <p>The <span class="ui">Circuit board toolpaths</span> part of the same window creates ordinary COPO toolpaths, which you can then edit like any other. <span class="ui">Add circuit board tools to the library</span> puts engraving bits (20° and 30° with a 0.1 mm tip, 60° with a 0.2 mm tip), 0.4 to 1.3 mm drills and 1 and 2 mm corn mills in a “Circuit board” folder. FR4 speeds and feeds are copied to the project tools, whatever the chosen material.</p>
+    <p>The <span class="ui">Circuit board toolpaths</span> part of the same window creates ordinary COPO toolpaths, which you can then edit like any other. On the first import, COPO adds a “Circuit board” folder to your tool library: engraving bits (20° and 30° with a 0.1 mm tip, 60° with a 0.2 mm tip), 0.3 to 3.2 mm drills and 1 and 2 mm corn mills (the <span class="ui">Add circuit board tools to the library</span> button adds back any that were deleted). FR4 speeds and feeds are copied to the project tools, whatever the chosen material.</p>
     <ul>
       <li><strong>Track isolation</strong>: an outside profile with a tapered bit at the chosen depth (0.1 mm by default), in overlapping side-by-side passes. The window shows the cut width at that depth and the isolation width around the copper. Where two tracks are closer than the cut width, the bit does not pass between them: use a finer bit or a shallower depth.</li>
       <li><strong>Remove unused copper</strong> (option): an end mill pocket removes the remaining copper around the isolated tracks.</li>
@@ -1382,7 +1382,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC), acorn (MIT, for background calculations).</p>
-    <footer><p>COPO 1.414 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.415 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
