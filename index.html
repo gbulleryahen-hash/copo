@@ -5508,6 +5508,43 @@ function pcbHull(P) { /* enveloppe convexe (chaîne monotone), points Clipper */
   for (let i = p.length - 1; i >= 0; i--) { const q = p[i]; while (up.length > 1 && cr(up[up.length - 2], up[up.length - 1], q) <= 0) up.pop(); up.push(q); }
   lo.pop(); up.pop(); return lo.concat(up);
 }
+/* paquets voisins (triés par X du premier point) ; key : abscisse minimale d'un élément */
+const pcbMinX = p => { let x = Infinity; for (const q of p) if (q.X < x) x = q.X; return x; };
+function pcbChunks(items, n, key = pcbMinX) {
+  if (items.length <= n) return [items];
+  const s = items.map(p => [key(p), p]).sort((a, b) => a[0] - b[0]).map(a => a[1]), out = [];
+  for (let i = 0; i < s.length; i += n) out.push(s.slice(i, i + n)); return out;
+}
+/* union de nombreux groupes de polygones (un contour et ses trous restent ensemble) : par paquets voisins,
+   puis deux à deux ; évite le coût quadratique de Clipper au-delà de quelques centaines de chemins */
+function pcbUnionMany(groups) {
+  let parts = pcbChunks(groups, 200, g => pcbMinX(g[0])).map(ch => pcbUnion([].concat(...ch)));
+  while (parts.length > 1) { const nx = []; for (let i = 0; i < parts.length; i += 2) nx.push(i + 1 < parts.length ? pcbUnion(parts[i], parts[i + 1]) : parts[i]); parts = nx; }
+  return parts[0] || [];
+}
+/* Clipper plus rapide pour les gros fichiers (zones hachurées de Proteus…) : clipper.js range minima locaux et
+   lignes de balayage dans des listes chaînées triées, en temps quadratique. Pendant la lecture d'une couche seulement,
+   on les remplace par un tableau trié une fois et un tas : même ordre, donc même résultat. */
+function pcbFast(fn) {
+  const PR = [ClipperLib.ClipperBase.prototype, ClipperLib.Clipper.prototype], K = ['InsertLocalMinima', 'Reset', 'DisposeLocalMinimaList', 'InsertScanbeam', 'PopScanbeam'], keep = PR.map(B => K.map(k => B[k])), O = keep[0];
+  const F = {
+    InsertLocalMinima(lm) { (this._lmA || (this._lmA = [])).push(lm); },
+    DisposeLocalMinimaList() { this._lmA = null; return O[2].call(this); },
+    Reset() {
+      if (this._lmA && this._lmA.length) { /* même ordre que l'insertion triée : Y décroissant, et à Y égal le dernier ajouté d'abord */
+        const a = this._lmA.map((lm, i) => [lm, i]); a.sort((u, v) => v[0].Y - u[0].Y || v[1] - u[1]);
+        let head = this.m_MinimaList; this.m_MinimaList = null;
+        for (let i = a.length - 1; i >= 0; i--) { a[i][0].Next = this.m_MinimaList; this.m_MinimaList = a[i][0]; }
+        while (head) { const nx = head.Next; head.Next = null; O[0].call(this, head); head = nx; }
+        this._lmA = null; }
+      this._sbH = []; this._sbS = new Set(); return O[1].call(this);
+    },
+    InsertScanbeam(Y) { const S = this._sbS || (this._sbS = new Set()), H = this._sbH || (this._sbH = []); if (S.has(Y)) return; S.add(Y); H.push(Y); let i = H.length - 1; while (i > 0) { const p = (i - 1) >> 1; if (H[p] >= H[i]) break; const t = H[p]; H[p] = H[i]; H[i] = t; i = p; } },
+    PopScanbeam(Y) { const H = this._sbH; if (!H || !H.length) { Y.v = 0; return false; } const top = H[0], last = H.pop(); if (H.length) { H[0] = last; let i = 0; for (;;) { const l = 2 * i + 1, r = l + 1; let m = i; if (l < H.length && H[l] > H[m]) m = l; if (r < H.length && H[r] > H[m]) m = r; if (m === i) break; const t = H[m]; H[m] = H[i]; H[i] = t; i = m; } } this._sbS.delete(top); Y.v = top; return true; }
+  };
+  for (const B of PR) Object.assign(B, F);
+  try { return fn(); } finally { PR.forEach((B, j) => K.forEach((k, i) => { B[k] = keep[j][i]; })); }
+}
 /* points d'un arc (sans le point de départ) */
 function pcbArcPts(cx, cy, r, a0, sw) { const n = pcbArcN(r, sw), o = []; for (let i = 1; i <= n; i++) { const a = a0 + sw * i / n; o.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); } return o; }
 
@@ -5624,26 +5661,44 @@ function gbrXf(cp, T) { /* LM / LR / LS sur l'ouverture */
 /* --- image remplie d'une couche (points Clipper) ; only : filtre des objets --- */
 function gbrImage(G, only) {
   const batches = []; let cur = null;
+  /* beaucoup de lignes fines droites = zones remplies par balayage : on les traitera en rectangles */
+  let nThin = 0; for (const o of G.objs) if (o.k === 'stroke' && !o.seg.C) { const d = gbrRound(o.ap); if (d > 0 && d <= 0.1 && (o.seg.a[0] === o.seg.b[0] || o.seg.a[1] === o.seg.b[1])) nThin++; }
+  const scan = nThin > 2000;
   for (const o of G.objs) {
     if (only && !only(o)) continue;
-    if (!cur || cur.pol !== o.pol) { cur = { pol: o.pol, polys: [], open: new Map() }; batches.push(cur); }
-    if (o.k === 'flash') { const P = gbrXf(gbrApPolys(G, o.ap), o.T), X = Math.round(o.x * SC), Y = Math.round(o.y * SC); for (const pp of P) cur.polys.push(pp.map(q => ({ X: q.X + X, Y: q.Y + Y }))); }
-    else if (o.k === 'region') { for (const c of o.cs) for (const pp of ClipperLib.Clipper.SimplifyPolygon(pcbCP(c), ClipperLib.PolyFillType.pftEvenOdd)) cur.polys.push(pp); }
+    if (!cur || cur.pol !== o.pol) { cur = { pol: o.pol, polys: [], open: new Map(), fill: new Map() }; batches.push(cur); }
+    if (o.k !== 'stroke') cur.lastK = null;
+    if (o.k === 'flash') { const P = gbrXf(gbrApPolys(G, o.ap), o.T), X = Math.round(o.x * SC), Y = Math.round(o.y * SC); if (P.length) cur.polys.push(P.map(pp => pp.map(q => ({ X: q.X + X, Y: q.Y + Y })))); }
+    else if (o.k === 'region') { for (const c of o.cs) { const g = ClipperLib.Clipper.SimplifyPolygon(pcbCP(c), ClipperLib.PolyFillType.pftEvenOdd); if (g.length) cur.polys.push(g); } }
     else if (o.k === 'stroke') {
       const s = o.seg, d = gbrRound(o.ap);
-      if (d != null) { if (!(d > 0)) continue; const pts = [s.a]; if (s.C) pts.push(...pcbArcPts(s.C[0], s.C[1], s.r, s.a0, s.sw)); else pts.push(s.b);
-        if (Math.hypot(s.b[0] - s.a[0], s.b[1] - s.a[1]) < 1e-6 && !(s.C && Math.abs(s.sw) > 1e-6)) { cur.polys.push(pcbOrient(pcbCircleCP(s.a[0], s.a[1], d / 2))); continue; }
-        const key = Math.round(d * 1e4); (cur.open.get(key) || cur.open.set(key, []).get(key)).push(pcbCP(pts)); }
+      if (d != null) { if (!(d > 0)) continue;
+        /* remplissage par lignes fines horizontales ou verticales (zones de Proteus, Eagle…) : rectangles, fusionnés ligne à ligne plus bas */
+        if (scan && d <= 0.1 && !s.C && (Math.abs(s.a[1] - s.b[1]) < 1e-9 || Math.abs(s.a[0] - s.b[0]) < 1e-9) && Math.hypot(s.b[0] - s.a[0], s.b[1] - s.a[1]) > 1e-6) {
+          const hz = Math.abs(s.a[1] - s.b[1]) < 1e-9, u0 = Math.round(Math.min(hz ? s.a[0] : s.a[1], hz ? s.b[0] : s.b[1]) * SC), u1 = Math.round(Math.max(hz ? s.a[0] : s.a[1], hz ? s.b[0] : s.b[1]) * SC), v = Math.round((hz ? s.a[1] : s.a[0]) * SC), k = (hz ? 'h' : 'v') + Math.round(d * SC) + ',' + u0 + ',' + u1;
+          (cur.fill.get(k) || cur.fill.set(k, []).get(k)).push(v); cur.lastK = null; continue; }
+        const pts = [s.a]; if (s.C) pts.push(...pcbArcPts(s.C[0], s.C[1], s.r, s.a0, s.sw)); else pts.push(s.b);
+        if (Math.hypot(s.b[0] - s.a[0], s.b[1] - s.a[1]) < 1e-6 && !(s.C && Math.abs(s.sw) > 1e-6)) { cur.polys.push([pcbOrient(pcbCircleCP(s.a[0], s.a[1], d / 2))]); continue; }
+        const key = Math.round(d * 1e4), L = cur.open.get(key) || cur.open.set(key, []).get(key), last = cur.lastK === key ? L[L.length - 1] : null, cp = pcbCP(pts);
+        /* trait qui prolonge le précédent (même ouverture) : une seule polyligne, bien plus rapide à décaler */
+        if (last && last[last.length - 1].X === cp[0].X && last[last.length - 1].Y === cp[0].Y) { for (let q = 1; q < cp.length; q++) last.push(cp[q]); } else L.push(cp);
+        cur.lastK = key; continue; }
       else { const A = gbrApPolys(G, o.ap); if (!A.length) continue; const pts = s.C ? [s.a, ...pcbArcPts(s.C[0], s.C[1], s.r, s.a0, s.sw)] : [s.a, s.b]; const flat = [].concat(...A);
-        for (let j = 1; j < pts.length; j++) { const p0 = pts[j - 1], p1 = pts[j], X0 = Math.round(p0[0] * SC), Y0 = Math.round(p0[1] * SC), X1 = Math.round(p1[0] * SC), Y1 = Math.round(p1[1] * SC); cur.polys.push(pcbOrient(pcbHull(flat.map(q => ({ X: q.X + X0, Y: q.Y + Y0 })).concat(flat.map(q => ({ X: q.X + X1, Y: q.Y + Y1 })))))); } }
+        for (let j = 1; j < pts.length; j++) { const p0 = pts[j - 1], p1 = pts[j], X0 = Math.round(p0[0] * SC), Y0 = Math.round(p0[1] * SC), X1 = Math.round(p1[0] * SC), Y1 = Math.round(p1[1] * SC); cur.polys.push([pcbOrient(pcbHull(flat.map(q => ({ X: q.X + X0, Y: q.Y + Y0 })).concat(flat.map(q => ({ X: q.X + X1, Y: q.Y + Y1 })))))]); } }
     }
   }
   let img = [];
   for (const b of batches) {
     let P = b.polys;
-    for (const [key, paths] of b.open) { const co = new ClipperLib.ClipperOffset(2, PCB_TOL * SC); co.AddPaths(paths, ClipperLib.JoinType.jtRound, ClipperLib.EndType.etOpenRound); const r = []; co.Execute(r, key / 1e4 / 2 * SC); P = P.concat(r); }
+    for (const [k, vs] of b.fill) { /* lignes de même étendue, espacées de moins que leur largeur : un seul rectangle */
+      const [w, u0, u1] = k.slice(1).split(',').map(Number), r = Math.round(w / 2), hz = k[0] === 'h'; vs.sort((a, c) => a - c);
+      for (let i = 0; i < vs.length;) { let j = i; while (j + 1 < vs.length && vs[j + 1] - vs[j] <= w) j++;
+        const a0 = u0 - r, a1 = u1 + r, b0 = vs[i] - r, b1 = vs[j] + r; P.push([hz ? [{ X: a0, Y: b0 }, { X: a1, Y: b0 }, { X: a1, Y: b1 }, { X: a0, Y: b1 }] : [{ X: b0, Y: a0 }, { X: b0, Y: a1 }, { X: b1, Y: a1 }, { X: b1, Y: a0 }]].map(pcbOrient)); i = j + 1; } }
+    for (const [key, paths] of b.open) { /* décalage par paquets voisins : Clipper ralentit beaucoup au-delà de quelques centaines de chemins */
+      for (const ch of pcbChunks(paths, 300)) { const co = new ClipperLib.ClipperOffset(2, PCB_TOL * SC); co.AddPaths(ch, ClipperLib.JoinType.jtRound, ClipperLib.EndType.etOpenRound); const r = []; co.Execute(r, key / 1e4 / 2 * SC); if (r.length) P.push(r); } }
     if (!P.length) continue;
-    img = b.pol === 'D' ? pcbUnion(img, P) : pcbDiff(img, pcbUnion(P));
+    const U = pcbUnionMany(P);
+    img = b.pol === 'D' ? (img.length ? pcbUnion(img, U) : U) : pcbDiff(img, U);
   }
   return img;
 }
@@ -5684,21 +5739,35 @@ function exParse(text) {
 
 /* --- rôle d'un fichier : attribut X2, sinon nom de fichier --- */
 function pcbRole(name, text) {
-  const nm = name.toLowerCase();
   if (/^\s*(M48|;)/.test(text) && /\bT\d+.*C[\d.]+/.test(text) && !/%FS/.test(text)) return 'drill';
   if (!/%FS|%MO|%ADD|G04/.test(text)) return null;
+  /* 1. attribut X2 (KiCad 5+, Altium, …) */
   const f = /TF\.?FileFunction,([^*%\n]*)/i.exec(text);
   if (f) { const a = f[1].split(',').map(s => s.trim().toLowerCase());
     if (a[0] === 'copper') return a.includes('top') ? 'cuTop' : a.includes('bot') ? 'cuBot' : 'cuIn';
     if (a[0] === 'profile') return 'edge'; if (a[0] === 'legend') return a.includes('bot') ? 'silkBot' : 'silkTop';
     if (a[0] === 'soldermask') return 'mask'; if (a[0] === 'paste') return 'paste'; return 'other'; }
-  if (/(^|[-_.])(edge[._]cuts|outline|profile|board[._]?outline)|\.(gko|gm1|gml|gm|oln)$/.test(nm)) return 'edge';
-  if (/mask|\.(gts|gbs|stc|sts)$/.test(nm)) return 'mask'; if (/paste|\.(gtp|gbp|crc|crs)$/.test(nm)) return 'paste';
-  if (/f[._]silk|\.(gto|plc)$|silk.*top|top.*silk/.test(nm)) return 'silkTop'; if (/b[._]silk|\.(gbo|pls)$|silk.*bot|bot.*silk/.test(nm)) return 'silkBot';
-  if (/f[._]cu|\.(gtl|cmp)$|top[._-]?(copper|layer)/.test(nm)) return 'cuTop'; if (/b[._]cu|\.(gbl|sol)$|bot(tom)?[._-]?(copper|layer)/.test(nm)) return 'cuBot';
-  if (/in\d+[._]cu|\.g\d+$|\.gp\d$/.test(nm)) return 'cuIn';
+  /* 2. extension usuelle (Altium, Eagle, EasyEDA, Fritzing…) */
+  const ext = ((/\.([a-z0-9]+)$/i.exec(name) || [, ''])[1]).toLowerCase();
+  const E = { gtl: 'cuTop', cmp: 'cuTop', gbl: 'cuBot', sol: 'cuBot', gko: 'edge', gm1: 'edge', gml: 'edge', gm: 'edge', oln: 'edge', gto: 'silkTop', plc: 'silkTop', gbo: 'silkBot', pls: 'silkBot', gts: 'mask', gbs: 'mask', stc: 'mask', sts: 'mask', gtp: 'paste', gbp: 'paste', crc: 'paste', crs: 'paste' };
+  if (E[ext]) return E[ext]; if (/^(g|gp)\d+$/.test(ext)) return 'cuIn'; if (/^gm\d+$/.test(ext)) return 'mech';
+  /* 3. mots du nom de fichier (KiCad « F_Cu », Proteus « Top Copper », DipTrace « TopSilk »…) */
+  const w = ' ' + name.replace(/\.[^.]*$/, '').replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase().replace(/[^a-z0-9]+/g, ' ') + ' ', has = re => re.test(w);
+  const bot = has(/ (bottom|bot|back|b|lower|underside|solder side) /), top = has(/ (top|front|f|upper|component side) /);
+  if (has(/ (paste|pastes|cream|stencil) /)) return 'paste';
+  if (has(/ (mask|masks|resist|stop|soldermask|soldermasks) /)) return 'mask';
+  if (has(/ (silk|silks|silkscreen|legend|overlay|screen|ident) /)) return bot && !top ? 'silkBot' : 'silkTop';
+  if (has(/ (edge|cuts|outline|outlines|contour|profile|border|dimension|boardoutline) /)) return 'edge';
+  if (has(/ (mech|mechanical) /)) return 'mech';
+  if (has(/ (fab|crt|crtyd|courtyard|adhes|adhesive|glue|user|drawing|drawings|comments|eco1|eco2|margin|assembly|keepout|carbon|peelable|gbrjob|drill|drills|nc) /)) return 'other';
+  if (has(/ (in\d+|inner|mid|internal|inner\d+) /)) return 'cuIn';
+  if (top !== bot) return top ? 'cuTop' : 'cuBot';
   return 'other';
 }
+/* contour de carte répété dans les autres couches (option de Proteus, d'Eagle…) : traits à retirer du cuivre et de la sérigraphie */
+const pcbSegKey = s => { const r = v => Math.round(v * 1000), a = r(s.a[0]) + ',' + r(s.a[1]), b = r(s.b[0]) + ',' + r(s.b[1]); return (a < b ? a + ';' + b : b + ';' + a) + (s.C ? '@' + r(s.C[0]) + ',' + r(s.C[1]) : ''); };
+let PCB_EDGE = null;
+function pcbEdgeKeys(texts) { const K = new Set(); for (const t of texts) for (const o of gbrParse(t).objs) if (o.k === 'stroke') K.add(pcbSegKey(o.seg)); return K; }
 
 /* --- ZIP (stocké ou deflate), lu avec DecompressionStream --- */
 async function pcbUnzip(buf) {
@@ -5718,10 +5787,12 @@ async function pcbUnzip(buf) {
 }
 
 /* --- lecture complète d'une couche : géométrie prête à placer --- */
-function pcbLayerGeo(F) {
-  if (F.geo) return F.geo; let g = null;
+function pcbLayerGeo(F) { if (F.geo) return F.geo; return pcbFast(() => pcbLayerGeo0(F)); }
+function pcbLayerGeo0(F) {
+  let g = null;
   if (F.role === 'drill') { const E = exParse(F.text); g = { holes: E.holes, slots: E.slots, warn: E.warn, unit: E.unit }; }
-  else { const G = gbrParse(F.text); F.G = G;
+  else { const G = gbrParse(F.text); F.G = G; F.dup = 0;
+    if (F.role !== 'edge' && PCB_EDGE && PCB_EDGE.size) { const n = G.objs.length; G.objs = G.objs.filter(o => !(o.k === 'stroke' && PCB_EDGE.has(pcbSegKey(o.seg)))); F.dup = n - G.objs.length; }
     if (F.role === 'edge') g = { lines: dxfChain(gbrCenterlines(G), 0.01), fill: gbrImage(G, o => o.k !== 'stroke' || gbrRound(o.ap) == null) };
     else if (F.role === 'silkTop' || F.role === 'silkBot') g = { lines: dxfChain(gbrCenterlines(G), 0.01), fill: gbrImage(G, o => o.k !== 'stroke' || gbrRound(o.ap) == null) };
     else g = { fill: gbrImage(G) };
@@ -5740,7 +5811,7 @@ function pcbGeoBB(g) {
 /* --- fenêtre « Circuit imprimé (Gerber, Excellon) » --- */
 const PCB = { files: [], busy: false };
 const PCB_USE = [['cuTop', 'Cuivre dessus'], ['cuBot', 'Cuivre dessous'], ['edge', 'Contour de la carte'], ['drill', 'Perçages'], ['silkTop', 'Sérigraphie dessus'], ['silkBot', 'Sérigraphie dessous']];
-const PCB_SEEN = { cuIn: 'cuivre intérieur', mask: 'vernis épargne', paste: 'pâte à braser', other: 'autre couche' };
+const PCB_SEEN = { cuIn: 'cuivre intérieur', mask: 'vernis épargne', paste: 'pâte à braser', mech: 'couche mécanique', other: 'autre couche' };
 const PCB_COL = { cuTop: '#d0503c', cuBot: '#3c6ed0', edge: '#d8b400', drill: '#8a9099', silkTop: '#e6e6e6', silkBot: '#b18cff' };
 const PCB_ORDER = ['cuBot', 'cuTop', 'silkBot', 'silkTop', 'edge', 'drill'];
 const PCB_NAME = r => 'PCB · ' + tr((PCB_USE.find(u => u[0] === r) || [, r])[1]);
@@ -5759,25 +5830,37 @@ async function pcbAdd(files) {
     PCB.files = PCB.files.filter(F => F.name !== z.name);
     PCB.files.push({ name: z.name, text: z.text, role, use: PCB_USE.some(u => u[0] === role) ? role : '' });
   }
+  /* pas de contour reconnu : une couche mécanique (Proteus, Altium…) le contient presque toujours */
+  if (!PCB.files.some(F => F.use === 'edge')) { const m = PCB.files.filter(F => F.role === 'mech').sort((a, b) => /1\b/.test(b.name) - /1\b/.test(a.name))[0]; if (m) { m.role = 'edge'; m.use = 'edge'; m.promo = true; } }
   PCB.files.sort((a, b) => (PCB_ORDER.indexOf(a.role) + 1 || 99) - (PCB_ORDER.indexOf(b.role) + 1 || 99) || a.name.localeCompare(b.name));
-  await new Promise(r => setTimeout(r, 20));
-  for (const F of PCB.files) { if (F.geo || !F.use) continue; try { pcbLayerGeo(F); if (!F.geo.bb) F.use = ''; } catch (e) { F.err = e.message || String(e); F.use = ''; } await new Promise(r => setTimeout(r, 0)); }
+  await pcbGeoAll();
   PCB.busy = false; pcbRender();
   if (!PCB.files.length) toast('Aucun fichier Gerber ou Excellon reconnu.');
   else if (skipped) toast(trf('{n} fichier(s) ignoré(s) : ni Gerber, ni Excellon.', { n: skipped }));
 }
+/* contour de carte (à retirer des autres couches), puis géométrie des couches à importer, avec l'avancement */
+async function pcbGeoAll() {
+  const ed = PCB.files.filter(F => F.use === 'edge' && F.role !== 'drill'), sig = ed.map(F => F.name).join('|');
+  if (sig !== PCB.edgeSig) { PCB.edgeSig = sig; PCB_EDGE = ed.length ? pcbEdgeKeys(ed.map(F => F.text)) : null; for (const F of PCB.files) if (F.role !== 'drill' && F.use !== 'edge') { F.geo = null; F.err = null; } }
+  const todo = PCB.files.filter(F => !F.geo && F.use);
+  for (let i = 0; i < todo.length; i++) { const F = todo[i], L = $('#pcbList');
+    if (L && todo.length > 1) { L.innerHTML = '<p class="hint">' + trf('Lecture de {f} ({i}/{n})…', { f: pcbShort(F.name).replace(/</g, '&lt;'), i: i + 1, n: todo.length }) + '</p>'; await new Promise(r => setTimeout(r, 30)); }
+    try { pcbLayerGeo(F); if (!F.geo.bb) F.use = ''; } catch (e) { F.err = e.message || String(e); F.use = ''; } }
+}
+/* nom affiché sans le début commun à tous les fichiers (« projet - CADCAM … » de Proteus, « projet- » de KiCad) */
+function pcbShort(n) { const N = PCB.files.map(F => F.name); if (N.length < 2) return n; let p = N[0]; for (const m of N) while (p && !m.startsWith(p)) p = p.slice(0, -1); p = p.replace(/[^ _.-]*$/, ''); return p.length >= 4 && n.length > p.length + 2 ? n.slice(p.length) : n; }
 function pcbRender() {
   const L = $('#pcbList'); if (!L) return;
   if (PCB.busy) L.innerHTML = '<p class="hint">' + tr('Lecture des fichiers…') + '</p>';
   else if (!PCB.files.length) L.innerHTML = '<p class="hint">' + tr('Aucun fichier. Choisissez le ZIP de fabrication ou les fichiers Gerber et Excellon, ou déposez-les ici.') + '</p>';
   else L.innerHTML = PCB.files.map((F, i) => {
-    const g = F.geo, info = F.err ? tr('illisible') : !g ? tr(PCB_SEEN[F.role] || '') : !g.bb ? tr('couche vide') : F.role === 'drill' ? trf('{n} trou(s)', { n: g.holes.length }) + (g.slots.length ? ', ' + trf('{n} fente(s)', { n: g.slots.length }) : '') : '';
-    return '<div class="pcb-row"><span class="pcb-sw" style="background:' + (F.use ? PCB_COL[F.use] : 'transparent') + '"></span><span class="pcb-fn" title="' + F.name.replace(/"/g, '&quot;') + '">' + F.name.replace(/</g, '&lt;') + (info ? ' <i>' + info + '</i>' : '') + '</span><select data-i="' + i + '" aria-label="' + tr('Couche') + '"><option value="">' + tr('Ne pas importer') + '</option>' + PCB_USE.map(u => '<option value="' + u[0] + '"' + (F.use === u[0] ? ' selected' : '') + '>' + tr(u[1]) + '</option>').join('') + '</select></div>';
+    const g = F.geo, info = F.err ? tr('illisible') : !g ? tr(PCB_SEEN[F.role] || '') : !g.bb ? tr('couche vide') : F.role === 'drill' ? trf('{n} trou(s)', { n: g.holes.length }) + (g.slots.length ? ', ' + trf('{n} fente(s)', { n: g.slots.length }) : '') : F.promo ? tr('couche mécanique') : F.dup ? tr('contour retiré') : '';
+    return '<div class="pcb-row"><span class="pcb-sw" style="background:' + (F.use ? PCB_COL[F.use] : 'transparent') + '"></span><span class="pcb-fn" title="' + F.name.replace(/"/g, '&quot;') + '">' + pcbShort(F.name).replace(/</g, '&lt;') + (info ? ' <i>' + info + '</i>' : '') + '</span><select data-i="' + i + '" aria-label="' + tr('Couche') + '"><option value="">' + tr('Ne pas importer') + '</option>' + PCB_USE.map(u => '<option value="' + u[0] + '"' + (F.use === u[0] ? ' selected' : '') + '>' + tr(u[1]) + '</option>').join('') + '</select></div>';
   }).join('');
   L.querySelectorAll('select').forEach(s => s.onchange = async () => { const F = PCB.files[+s.dataset.i], r = s.value;
     if (r && (r === 'drill') !== (F.role === 'drill')) { toast(r === 'drill' ? 'Ce fichier est un Gerber : il ne peut pas servir de perçages.' : 'Ce fichier est un Excellon : il ne contient que des perçages.'); s.value = F.use; return; }
     if (r && r !== 'drill' && F.role !== r) { F.role = r; F.geo = null; F.err = null; }
-    F.use = r; if (r && !F.geo) { try { pcbLayerGeo(F); } catch (e) { F.err = e.message; F.use = ''; } } pcbRender(); });
+    F.use = r; F.promo = false; PCB.busy = true; await pcbGeoAll(); PCB.busy = false; if (r && F.geo && !F.geo.bb) F.use = ''; pcbRender(); });
   const on = PCB.files.filter(F => F.use && F.geo && F.geo.bb);
   $('#pcbMakeB').disabled = PCB.busy || !on.length; $('#pcbClear').disabled = PCB.busy || !PCB.files.length;
   $('#pcbF2').hidden = !on.some(F => F.use === 'cuBot' || F.use === 'silkBot');
@@ -5834,7 +5917,7 @@ function pcbCut(t) {
 }
 /* outils de circuit imprimé ajoutés à la bibliothèque sur demande (dossier « Circuit imprimé ») */
 const PCB_LIBT = [['pcb-v20-01', 'engrave', 3.175, 20, 0.1, 'Gravure circuit (20°, pointe 0,1 mm)'], ['pcb-v30-01', 'engrave', 3.175, 30, 0.1, 'Gravure circuit (30°, pointe 0,1 mm)'], ['pcb-v60-02', 'engrave', 3.175, 60, 0.2, 'Gravure circuit (60°, pointe 0,2 mm)'],
-  ...[0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3].map(d => ['pcb-drill-' + d, 'drill', d, 118, 0, 'Foret circuit (' + String(d).replace('.', ',') + ' mm)']), ['pcb-corn-1', 'flat', 1, 0, 0, 'Fraise maïs circuit (1 mm)'], ['pcb-corn-2', 'flat', 2, 0, 0, 'Fraise maïs circuit (2 mm)']];
+  ...[0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3].map(d => ['pcb-drill-' + d, 'drill', d, 118, 0, 'Foret circuit (' + String(d).replace('.', ',') + ' mm)']), ['pcb-corn-1', 'flat', 1, 0, 0, 'Fraise maïs circuit (1 mm)'], ['pcb-corn-2', 'flat', 2, 0, 0, 'Fraise maïs circuit (2 mm)']];
 function pcbLibAdd() {
   let g = LIB.groups.find(x => x.id === 'pcb-group'); if (!g) { g = { id: 'pcb-group', name: 'Circuit imprimé', parent: null, order: 9 }; LIB.groups.push(g); }
   let n = 0;
@@ -5969,8 +6052,8 @@ $('#fPcb').onchange = e => { const f = [...e.target.files]; e.target.value = '';
   w.addEventListener('dragleave', e => { if (!w.contains(e.relatedTarget)) w.classList.remove('pcb-drop'); });
   w.addEventListener('drop', e => { w.classList.remove('pcb-drop'); const f = [...(e.dataTransfer.files || [])]; if (!f.length) return; e.preventDefault(); e.stopPropagation(); pcbAdd(f); }); }
 
-Object.assign(I18N_EN, {"Importer un circuit imprimé (Gerber, Excellon)…": "Import a circuit board (Gerber, Excellon)…", "Circuit imprimé (Gerber)…": "Circuit board (Gerber)…", "Circuit imprimé (Gerber, Excellon)": "Circuit board (Gerber, Excellon)", "Cuivre dessus": "Top copper", "Cuivre dessous": "Bottom copper", "Contour de la carte": "Board outline", "Perçages": "Drill holes", "Sérigraphie dessus": "Top silkscreen", "Sérigraphie dessous": "Bottom silkscreen", "cuivre intérieur": "inner copper", "vernis épargne": "solder mask", "pâte à braser": "solder paste", "autre couche": "other layer", "illisible": "unreadable", "couche vide": "empty layer", "{n} trou(s)": "{n} hole(s)", "{n} fente(s)": "{n} slot(s)", "Couche": "Layer", "Ne pas importer": "Don’t import", "Lecture des fichiers…": "Reading the files…", "Aucun fichier. Choisissez le ZIP de fabrication ou les fichiers Gerber et Excellon, ou déposez-les ici.": "No files yet. Choose the fabrication ZIP or the Gerber and Excellon files, or drop them here.", "Aucun fichier Gerber ou Excellon reconnu.": "No Gerber or Excellon file recognized.", "{n} fichier(s) ignoré(s) : ni Gerber, ni Excellon.": "{n} file(s) skipped: neither Gerber nor Excellon.", "Ce fichier est un Gerber : il ne peut pas servir de perçages.": "This file is a Gerber: it can’t be used as drill holes.", "Ce fichier est un Excellon : il ne contient que des perçages.": "This file is an Excellon: it only contains drill holes.", "Carte {w} × {h} mm": "Board {w} × {h} mm", "{n} trou(s), {d} diamètre(s)": "{n} hole(s), {d} diameter(s)", "Circuit importé : {c} couche(s), {n} vecteur(s) dont {h} trou(s).": "Circuit board imported: {c} layer(s), {n} vector(s) including {h} hole(s).", "Calques du dessous en F2 : projet double face.": "Bottom layers on F2: double-sided project.", "Fichiers de fabrication exportés par KiCad ou un autre logiciel : Gerber des couches et Excellon des perçages, un par un ou dans un ZIP. Chaque couche va sur son calque.": "Fabrication files exported from KiCad or another program: Gerber files for the layers and Excellon files for the holes, one by one or in a ZIP. Each layer goes on its own layer.", "Vider la liste": "Clear the list", "Choisir les fichiers…": "Choose files…", "Aperçu du circuit": "Circuit board preview", "Centrée sur le brut": "Centered on the stock", "Coin bas gauche en X0 Y0": "Bottom-left corner at X0 Y0", "Importer les couches": "Import the layers", "Le dessous va sur des calques F2, dessinés vus du dessus par transparence comme dans KiCad : le projet devient double face.": "The bottom side goes on F2 layers, drawn as seen from the top through the board, as in KiCad: the project becomes double-sided.", "Cuivre : contours fusionnés des pistes, pastilles et zones. Contour et sérigraphie : lignes médianes des traits. Perçages : un groupe par diamètre.": "Copper: merged outlines of tracks, pads and zones. Outline and silkscreen: centerlines of the strokes. Holes: one group per diameter."});
-Object.assign(I18N_EN, {"Brut à la taille de la carte (+ 5 mm)": "Stock sized to the board (+ 5 mm)", "Épaisseur de la plaque (mm)": "Board thickness (mm)", "Parcours du circuit": "Circuit board toolpaths", "Crée les parcours à partir des calques « PCB » du projet. Les recréer remplace ceux d’avant. Réglages de coupe pour le FR4 (bakélite, époxy) copiés sur les outils du projet.": "Creates the toolpaths from the project’s “PCB” layers. Creating them again replaces the previous ones. FR4 (epoxy glass) cutting settings are copied to the project tools.", "Ajouter les outils de circuit imprimé à la bibliothèque": "Add circuit board tools to the library", "Isolation des pistes": "Track isolation", "Fraise conique": "Tapered bit", "Recouvrement (%)": "Overlap (%)", "Fraise droite": "End mill", "Ponts (0 = aucun)": "Tabs (0 = none)", "Détourage": "Board cutout", "Pas de contour fermé sur le calque « Contour de la carte ».": "No closed outline on the “Board outline” layer.", "Perçage, fentes et détourage traversent la plaque de 0,2 à 0,3 mm : posez-la sur une planche martyre. En double face, le détourage se fait en face 2, après le dessous.": "Drilling and cutout go 0.2 to 0.3 mm through the board: lay it on a spoilboard. With a bottom side, the cutout runs on side 2, after the bottom isolation.", "Créer les parcours": "Create the toolpaths", "Pas d’isolation": "No isolation", "Pas de détourage": "No cutout", "Ne pas percer": "Don’t drill", "Aucun cuivre importé.": "No copper imported.", "Aucun perçage importé.": "No holes imported.", "Largeur de coupe {w} mm à {d} mm de profondeur ; isolation de {t} mm autour du cuivre.": "Cut width {w} mm at {d} mm depth; {t} mm isolation around the copper.", "Dessus en face 1, dessous en face 2.": "Top on side 1, bottom on side 2.", "en hélice": "helical", "foret de {d}": "{d} drill", "Outil": "Tool", "{n} outil(s) ajouté(s) à la bibliothèque, dossier « Circuit imprimé ».": "{n} tool(s) added to the library, “Circuit board” folder.", "Les outils de circuit imprimé sont déjà dans la bibliothèque.": "The circuit board tools are already in the library.", "{n} parcours créé(s) : isolation, perçages et détourage, dans cet ordre.": "{n} toolpath(s) created: isolation, drilling and cutout, in that order.", "Le détourage passe en face 2, après le dessous.": "The cutout runs on side 2, after the bottom side.", "À vérifier : {l}.": "Check: {l}.", "Circuit imprimé": "Circuit board", "Gravure circuit (20°, pointe 0,1 mm)": "PCB engraving (20°, 0.1 mm tip)", "Gravure circuit (30°, pointe 0,1 mm)": "PCB engraving (30°, 0.1 mm tip)", "Gravure circuit (60°, pointe 0,2 mm)": "PCB engraving (60°, 0.2 mm tip)", "Fraise maïs circuit (1 mm)": "PCB corn mill (1 mm)", "Fraise maïs circuit (2 mm)": "PCB corn mill (2 mm)", "Fraise conique : décaler de la demi-largeur de coupe à la profondeur (isolation de circuit, chanfrein)": "Tapered bit: offset by half the cut width at depth (PCB isolation, chamfer)", "Sans cette option, le contour est décalé du rayon de la queue de la fraise": "Without this option, the outline is offset by the bit’s shank radius", "Passes côte à côte": "Side-by-side passes", "Recouvrement des passes (%)": "Pass overlap (%)", "largeur de coupe {w} mm": "cut width {w} mm", "Foret circuit (0,6 mm)": "PCB drill (0.6 mm)", "Foret circuit (0,7 mm)": "PCB drill (0.7 mm)", "Foret circuit (0,8 mm)": "PCB drill (0.8 mm)", "Foret circuit (0,9 mm)": "PCB drill (0.9 mm)", "Foret circuit (1 mm)": "PCB drill (1 mm)", "Foret circuit (1,1 mm)": "PCB drill (1.1 mm)", "Foret circuit (1,2 mm)": "PCB drill (1.2 mm)", "Foret circuit (1,3 mm)": "PCB drill (1.3 mm)"});
+Object.assign(I18N_EN, {"Importer un circuit imprimé (Gerber, Excellon)…": "Import a circuit board (Gerber, Excellon)…", "Circuit imprimé (Gerber)…": "Circuit board (Gerber)…", "Circuit imprimé (Gerber, Excellon)": "Circuit board (Gerber, Excellon)", "Cuivre dessus": "Top copper", "Cuivre dessous": "Bottom copper", "Contour de la carte": "Board outline", "Perçages": "Drill holes", "Sérigraphie dessus": "Top silkscreen", "Sérigraphie dessous": "Bottom silkscreen", "cuivre intérieur": "inner copper", "vernis épargne": "solder mask", "pâte à braser": "solder paste", "autre couche": "other layer", "illisible": "unreadable", "couche vide": "empty layer", "couche mécanique": "mechanical layer", "contour retiré": "outline removed", "Lecture de {f} ({i}/{n})…": "Reading {f} ({i}/{n})…", "{n} trou(s)": "{n} hole(s)", "{n} fente(s)": "{n} slot(s)", "Couche": "Layer", "Ne pas importer": "Don’t import", "Lecture des fichiers…": "Reading the files…", "Aucun fichier. Choisissez le ZIP de fabrication ou les fichiers Gerber et Excellon, ou déposez-les ici.": "No files yet. Choose the fabrication ZIP or the Gerber and Excellon files, or drop them here.", "Aucun fichier Gerber ou Excellon reconnu.": "No Gerber or Excellon file recognized.", "{n} fichier(s) ignoré(s) : ni Gerber, ni Excellon.": "{n} file(s) skipped: neither Gerber nor Excellon.", "Ce fichier est un Gerber : il ne peut pas servir de perçages.": "This file is a Gerber: it can’t be used as drill holes.", "Ce fichier est un Excellon : il ne contient que des perçages.": "This file is an Excellon: it only contains drill holes.", "Carte {w} × {h} mm": "Board {w} × {h} mm", "{n} trou(s), {d} diamètre(s)": "{n} hole(s), {d} diameter(s)", "Circuit importé : {c} couche(s), {n} vecteur(s) dont {h} trou(s).": "Circuit board imported: {c} layer(s), {n} vector(s) including {h} hole(s).", "Calques du dessous en F2 : projet double face.": "Bottom layers on F2: double-sided project.", "Fichiers de fabrication exportés par KiCad ou un autre logiciel : Gerber des couches et Excellon des perçages, un par un ou dans un ZIP. Chaque couche va sur son calque.": "Fabrication files exported from KiCad or another program: Gerber files for the layers and Excellon files for the holes, one by one or in a ZIP. Each layer goes on its own layer.", "Vider la liste": "Clear the list", "Choisir les fichiers…": "Choose files…", "Aperçu du circuit": "Circuit board preview", "Centrée sur le brut": "Centered on the stock", "Coin bas gauche en X0 Y0": "Bottom-left corner at X0 Y0", "Importer les couches": "Import the layers", "Le dessous va sur des calques F2, dessinés vus du dessus par transparence comme dans KiCad : le projet devient double face.": "The bottom side goes on F2 layers, drawn as seen from the top through the board, as in KiCad: the project becomes double-sided.", "Cuivre : contours fusionnés des pistes, pastilles et zones. Contour et sérigraphie : lignes médianes des traits. Perçages : un groupe par diamètre.": "Copper: merged outlines of tracks, pads and zones. Outline and silkscreen: centerlines of the strokes. Holes: one group per diameter."});
+Object.assign(I18N_EN, {"Brut à la taille de la carte (+ 5 mm)": "Stock sized to the board (+ 5 mm)", "Épaisseur de la plaque (mm)": "Board thickness (mm)", "Parcours du circuit": "Circuit board toolpaths", "Crée les parcours à partir des calques « PCB » du projet. Les recréer remplace ceux d’avant. Réglages de coupe pour le FR4 (bakélite, époxy) copiés sur les outils du projet.": "Creates the toolpaths from the project’s “PCB” layers. Creating them again replaces the previous ones. FR4 (epoxy glass) cutting settings are copied to the project tools.", "Ajouter les outils de circuit imprimé à la bibliothèque": "Add circuit board tools to the library", "Isolation des pistes": "Track isolation", "Fraise conique": "Tapered bit", "Recouvrement (%)": "Overlap (%)", "Fraise droite": "End mill", "Ponts (0 = aucun)": "Tabs (0 = none)", "Détourage": "Board cutout", "Pas de contour fermé sur le calque « Contour de la carte ».": "No closed outline on the “Board outline” layer.", "Perçage, fentes et détourage traversent la plaque de 0,2 à 0,3 mm : posez-la sur une planche martyre. En double face, le détourage se fait en face 2, après le dessous.": "Drilling and cutout go 0.2 to 0.3 mm through the board: lay it on a spoilboard. With a bottom side, the cutout runs on side 2, after the bottom isolation.", "Créer les parcours": "Create the toolpaths", "Pas d’isolation": "No isolation", "Pas de détourage": "No cutout", "Ne pas percer": "Don’t drill", "Aucun cuivre importé.": "No copper imported.", "Aucun perçage importé.": "No holes imported.", "Largeur de coupe {w} mm à {d} mm de profondeur ; isolation de {t} mm autour du cuivre.": "Cut width {w} mm at {d} mm depth; {t} mm isolation around the copper.", "Dessus en face 1, dessous en face 2.": "Top on side 1, bottom on side 2.", "en hélice": "helical", "foret de {d}": "{d} drill", "Outil": "Tool", "{n} outil(s) ajouté(s) à la bibliothèque, dossier « Circuit imprimé ».": "{n} tool(s) added to the library, “Circuit board” folder.", "Les outils de circuit imprimé sont déjà dans la bibliothèque.": "The circuit board tools are already in the library.", "{n} parcours créé(s) : isolation, perçages et détourage, dans cet ordre.": "{n} toolpath(s) created: isolation, drilling and cutout, in that order.", "Le détourage passe en face 2, après le dessous.": "The cutout runs on side 2, after the bottom side.", "À vérifier : {l}.": "Check: {l}.", "Circuit imprimé": "Circuit board", "Gravure circuit (20°, pointe 0,1 mm)": "PCB engraving (20°, 0.1 mm tip)", "Gravure circuit (30°, pointe 0,1 mm)": "PCB engraving (30°, 0.1 mm tip)", "Gravure circuit (60°, pointe 0,2 mm)": "PCB engraving (60°, 0.2 mm tip)", "Fraise maïs circuit (1 mm)": "PCB corn mill (1 mm)", "Fraise maïs circuit (2 mm)": "PCB corn mill (2 mm)", "Fraise conique : décaler de la demi-largeur de coupe à la profondeur (isolation de circuit, chanfrein)": "Tapered bit: offset by half the cut width at depth (PCB isolation, chamfer)", "Sans cette option, le contour est décalé du rayon de la queue de la fraise": "Without this option, the outline is offset by the bit’s shank radius", "Passes côte à côte": "Side-by-side passes", "Recouvrement des passes (%)": "Pass overlap (%)", "largeur de coupe {w} mm": "cut width {w} mm", "Foret circuit (0,4 mm)": "PCB drill (0.4 mm)", "Foret circuit (0,5 mm)": "PCB drill (0.5 mm)", "Foret circuit (0,6 mm)": "PCB drill (0.6 mm)", "Foret circuit (0,7 mm)": "PCB drill (0.7 mm)", "Foret circuit (0,8 mm)": "PCB drill (0.8 mm)", "Foret circuit (0,9 mm)": "PCB drill (0.9 mm)", "Foret circuit (1 mm)": "PCB drill (1 mm)", "Foret circuit (1,1 mm)": "PCB drill (1.1 mm)", "Foret circuit (1,2 mm)": "PCB drill (1.2 mm)", "Foret circuit (1,3 mm)": "PCB drill (1.3 mm)"});
 Object.assign(I18N_EN, {"Brut à la taille de la carte (marge 5 mm, 12 mm en double face)": "Stock sized to the board (5 mm margin, 12 mm if double-sided)", "Enlever le cuivre inutile (en poche, autour des pistes isolées)": "Remove unused copper (pocket around the isolated tracks)", "Sérigraphie": "Silkscreen", "Graver la sérigraphie (lettres et repères)": "Engrave the silkscreen (lettering and markings)", "Seulement hors du cuivre (une lettre gravée sur une piste la couperait)": "Only outside the copper (a letter engraved on a track would cut it)", "Centrage du double face": "Double-sided registration", "Trous de centrage pour retourner la plaque": "Registration holes to flip the board", "Diamètre des piges (mm)": "Pin diameter (mm)", "Deux trous sur l’axe de retournement, hors de la carte, percés à travers la plaque et 3 mm dans la martyre. Avant de retourner la plaque, plantez-y deux piges (tiges ou queues de foret du même diamètre) : elle retombe exactement à sa place, sans toucher au zéro X Y.": "Two holes on the flip axis, outside the board, drilled through the board and 3 mm into the spoilboard. Before flipping the board, push two pins into them (rods or drill shanks of the same diameter): it drops back exactly into place, without touching the X Y zero.", "Perçage, fentes et détourage traversent la plaque de 0,2 à 0,3 mm : posez-la sur une planche martyre. En double face, le détourage se fait en face 2, après le dessous.": "Drilling, slots and cutout go 0.2 to 0.3 mm through the board: lay it on a spoilboard. When double-sided, the cutout runs on side 2, after the bottom side.", "Axe de retournement {a} : piges en {p}.": "Flip axis {a}: pins at {p}.", "Pas assez de place sur le brut pour les piges : agrandissez le brut (marge de 12 mm conseillée) ou réduisez leur diamètre.": "Not enough room on the stock for the pins: enlarge the stock (12 mm margin recommended) or reduce their diameter.", "Fente de {d} mm": "{d} mm slot", "{n} fente(s)": "{n} slot(s)", "fraisée en poche": "milled as a pocket", "Centrage": "Registration", "Cuivre à enlever": "Copper to remove", "Sérigraphie à graver": "Silkscreen to engrave", "Piges : choisissez un outil.": "Pins: choose a tool.", "Piges : pas assez de place sur le brut.": "Pins: not enough room on the stock.", "Sérigraphie presque entièrement sur le cuivre : peu de lignes gravées.": "Silkscreen almost entirely over copper: few lines engraved.", "Aucun parcours à créer : choisissez au moins un outil.": "No toolpath to create: choose at least one tool.", "{n} parcours créé(s), dans l’ordre d’usinage.": "{n} toolpath(s) created, in machining order.", "Face 1 : centrage, dessus et perçages ; face 2 : dessous et détourage.": "Side 1: registration, top and drilling; side 2: bottom and cutout."});
 // ---------- souris / tactile ----------
 let penCont = null, drag = null, pen = [], arcSt = [], dimSt = [], hover = null, hoverCorner = null, hoverEdge = null; const pointers = new Map(); let pinch = null, spaceDown = false;
@@ -8286,7 +8369,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.413', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.414', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
