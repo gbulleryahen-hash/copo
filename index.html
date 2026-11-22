@@ -11144,7 +11144,18 @@ EXT_C.hal = { g: EXT_C.grbl.g.concat([5, 5.1, 50, 51, 59.1, 59.2, 59.3, 73, 81, 
 const EXT_D = { G41: 'compensation de rayon', G42: 'compensation de rayon', G43: 'correction de longueur d’outil, mot H', G64: 'lissage de trajectoire', G15: 'coordonnées polaires', G16: 'coordonnées polaires', G68: 'rotation du repère', G69: 'rotation du repère', G51: 'mise à l’échelle', G50: 'mise à l’échelle', G5: 'courbe spline', G33: 'filetage', G76: 'cycle de filetage', G95: 'avance par tour', G96: 'vitesse de coupe constante', G97: 'vitesse de coupe constante', G98: 'retrait des cycles', G99: 'retrait des cycles', 'G90.1': 'centres d’arc en absolu', M98: 'sous-programme', M99: 'sous-programme', M60: 'changement de palette' };
 CYC.forEach(g => EXT_D['G' + g] = 'cycle de perçage');
 const extCtl = () => K.hal ? 'hal' : K.fluid ? 'fluid' : 'grbl';
-const tTidy = c => c.replace(/\s*-?\s*\bZMIN\s*=\s*[-+\d.]+/ig, '').replace(/\bCR\s*=\s*0(?:\.0+)?\b\s*/ig, '').replace(/(\s*-\s*){2,}/g, ' - ').replace(/^[\s-]+|[\s-]+$/g, '').slice(0, 60); // étiquette d'outil des commentaires (Fusion : « D=6 CR=0 - ZMIN=-3 - flat end mill »)
+// étiquette d'outil des commentaires (Fusion : « D=6 CR=0 - ZMIN=-3 - flat end mill »)
+// Expressions sans quantificateurs imbriqués ni parties qui se chevauchent : l'ancienne /(\s*-\s*){2,}/ et le début /\s*-?\s*\bZMIN/
+// pouvaient bloquer l'onglet sur une longue suite d'espaces (plusieurs secondes pour quelques milliers). Mêmes résultats qu'avant.
+const tTidy = c => {
+  let s = /\bZMIN/i.test(c) ? c.replace(/(?:\s*-)?\s*\bZMIN\s*=\s*[-+\d.]+/ig, '') : c; // sans ZMIN, rien à retirer
+  s = s.replace(/\bCR\s*=\s*0(?:\.0+)?\b\s*/ig, '');
+  if (s.indexOf('-') !== s.lastIndexOf('-')) s = s.replace(/\s*-(?:\s*-)+\s*/g, ' - '); // au moins deux tirets, sinon rien à regrouper
+  let a = 0, b = s.length; // retire espaces et tirets au début et à la fin
+  while (a < b && /[\s-]/.test(s[a])) a++;
+  while (b > a && /[\s-]/.test(s[b - 1])) b--;
+  return s.slice(a, b).slice(0, 60);
+};
 function parseExt(text) { // trajet, encombrement (mm), temps, outils et commandes utilisées
   const RAP = Math.min(+K.set[110] || 3000, +K.set[111] || 3000), L = [], tools = [], tname = {}, tdia = {}, mn = [1e9, 1e9, 1e9], mx = [-1e9, -1e9, -1e9], cum = [], pts = [];
   const codes = new Map(), words = new Map(), wcs = new Set(), g92 = [], noF = [], m6noT = [], lens = [], noSpin = [], note = (m, k, ln) => { let a = m.get(k); if (!a) m.set(k, a = []); a.push(ln); };
