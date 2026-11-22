@@ -1654,7 +1654,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.392</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.393</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -7683,7 +7683,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.392', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.393', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -9916,7 +9916,8 @@ function rvMakeMesh(budget) { // reliefs des deux faces : ceux de la face 2 sont
     under = (x, y) => { const fx = (x - R2.ox) / R2.cx, fy = (y - R2.oy) / R2.cy, i = Math.floor(fx), j = Math.floor(fy), W = R2.nx, z = q => -t - Math.max(-t, R2.H[q]); if (i < 0 || j < 0 || i >= W || j >= R2.ny) return null; const q = j * W + i;
       if (i + 1 < W && j + 1 < R2.ny && R2.M[q] && R2.M[q + 1] && R2.M[q + W] && R2.M[q + W + 1]) { const u = fx - i, v = fy - j; return (z(q) * (1 - u) + z(q + 1) * u) * (1 - v) + (z(q + W) * (1 - u) + z(q + W + 1) * u) * v; } /* bilinéaire : pas de moiré */
       const r = Math.round(fy) * W + Math.round(fx); return R2.M[r] ? z(r) : R2.M[q] ? z(q) : null; }; }
-  for (const f of [1, 2]) { if (fv && fv !== f) continue; if (!has(f)) continue; if (both && f === 2) continue; /* les deux faces : une seule pièce, le dessous de la face 1 suit le creux de la face 2 */ const d = relWith(f, false, () => rvMeshOne(budget, f === 1 ? under : null)); if (!d) continue;
+  let keep2 = null; if (both) { const R1 = relWith(1, false, () => reliefCompose((w, h) => Math.max(0.05, Math.sqrt(w * h / budget)), true, null, true, true)); keep2 = (x, y) => { const i = Math.round((x - R1.ox) / R1.cx), j = Math.round((y - R1.oy) / R1.cy); return !(i >= 0 && j >= 0 && i < R1.nx && j < R1.ny && R1.M[j * R1.nx + i]); }; }
+  for (const f of [1, 2]) { if (fv && fv !== f) continue; if (!has(f)) continue; /* les deux faces : sous un relief du dessus, le creux de la face 2 devient le dessous de la pièce ; ailleurs, la face 2 est dessinée seule */ const d = relWith(f, false, () => rvMeshOne(budget, f === 1 ? under : null, f === 2 ? keep2 : null)); if (!d) continue;
     if (f === 2) { const a = d.all, x = d.idx; for (let k = 0; k < a.length; k += 6) { a[k + 2] = -t - a[k + 2]; a[k + 5] = -a[k + 5]; } for (let k = 0; k < x.length; k += 3) { const u = x[k + 1]; x[k + 1] = x[k + 2]; x[k + 2] = u; } }
     parts.push(d); }
   if (!parts.length) return null;
@@ -9924,10 +9925,11 @@ function rvMakeMesh(budget) { // reliefs des deux faces : ceux de la face 2 sont
   if (parts.length > 1) { const [A, B] = parts, nA = A.all.length / 6; all = new Float32Array(A.all.length + B.all.length); all.set(A.all, 0); all.set(B.all, A.all.length); idx = new Uint32Array(A.idx.length + B.idx.length); idx.set(A.idx, 0); for (let k = 0; k < B.idx.length; k++) idx[A.idx.length + k] = B.idx[k] + nA; }
   return { vao: rvBuf([[RV.prog, 3, 'aP'], [RV.prog, 3, 'aN']], all, idx), n: idx.length, depth: Math.max(...parts.map(d => d.depth)), R: parts[0].R };
 }
-function rvMeshOne(budget, under) { // under(x, y) : dessous de la matière laissé par la face 2 (coque), sinon la base du relief
+function rvMeshOne(budget, under, keep) { // keep(x, y) : seulement ces endroits (face 2 hors de la face 1) // under(x, y) : dessous de la matière laissé par la face 2 (coque), sinon la base du relief
   const gl = RV.gl; if (!S.relief.items.some(i => i.visible && relGrid[i.id])) return null;
   const st = S.stock, R = reliefCompose((w, h) => Math.max(0.02, Math.sqrt(w * h / budget)), true, null, true, true), { nx, ny, cx, cy, H, M, ox, oy } = R, N = nx * ny, vb = new Float32Array(N * 6);
   for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const q = j * nx + i, z = Math.max(-st.t, H[q]), ir = i + 1 < nx && M[q + 1] ? i + 1 : i, il = i > 0 && M[q - 1] ? i - 1 : i, ju = j + 1 < ny && M[q + nx] ? j + 1 : j, jd = j > 0 && M[q - nx] ? j - 1 : j, hx = ir > il ? (H[j * nx + ir] - H[j * nx + il]) / ((ir - il) * cx) : 0, hy = ju > jd ? (H[ju * nx + i] - H[jd * nx + i]) / ((ju - jd) * cy) : 0, n = v3n([-hx, -hy, 1]); /* au bord : différence d'un seul côté (pas de liseré sombre en dents de scie) */ vb.set([ox + i * cx, oy + j * cy, z, n[0], n[1], n[2]], q * 6); }
+  if (keep) for (let q = 0; q < N; q++) if (M[q] && !keep(ox + (q % nx) * cx, oy + Math.floor(q / nx) * cy)) M[q] = 0;
   const CW = nx - 1, CH = ny - 1, has = new Uint8Array(CW * CH); let nt = 0;
   for (let j = 0; j < CH; j++) for (let i = 0; i < CW; i++) { const a = j * nx + i, k = M[a] + M[a + 1] + M[a + nx + 1] + M[a + nx]; if (k >= 3) { has[j * CW + i] = k; nt += k === 4 ? 2 : 1; } } // 3 coins : un triangle (bord en diagonale au lieu d'escaliers)
   if (!nt) return null;
