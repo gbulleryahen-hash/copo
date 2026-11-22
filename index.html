@@ -1656,7 +1656,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.399</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.400</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -2219,6 +2219,7 @@ Object.assign(I18N_EN, {"ponts à casser": "tabs to break"});
 Object.assign(I18N_EN, {"Utiliser une fraise de dégagement (vide les fonds plats)": "Use a clearance tool (clears flat areas)", "Fraise de dégagement": "Clearance tool", "Créer les parcours d’outils": "Create the toolpaths", "Créer l’incrustation": "Create the inlay", "mâle retourné": "flipped male", "femelle": "female", "mâle": "male", "Incrustation V": "V inlay", "Choisissez la fraise de dégagement.": "Choose the clearance tool.", "Incrustation · dégagement": "Inlay · clearance", "femelle, dégagement": "female, clearance", "mâle, dégagement": "male, clearance", "Pas de fond plat assez large pour la fraise de dégagement : seule la fraise en V travaille.": "No flat area wide enough for the clearance tool: only the V-bit cuts.", "Incrustation créée : parcours femelle (visibles) et mâle (masqués).": "Inlay created: female toolpaths (visible) and male (hidden).", "Incrustation créée : pièce mâle dessinée, sans parcours.": "Inlay created: male piece drawn, no toolpaths."});
 Object.assign(I18N_EN, {"Pièce mâle sur support (à araser après collage)": "Male piece on a backing board (flush off after gluing)", "Pièce mâle sur support : le motif est usiné en miroir, en relief, sur un support épais (pièce placée à droite, sur un calque à part). Collez-la retournée dans la poche, puis sciez ou rabotez le support le long du trait rouge.": "Male piece on a backing board: the design is machined mirrored, raised, on a thick board (placed to the right, on its own layer). Glue it upside down into the pocket, then saw or plane off the backing along the red line.", "Pièce mâle sans support : le motif est découpé dans une planchette, avec des ponts d’attache (pièce placée à droite, sur un calque à part). Cassez les ponts, poncez, puis collez la pièce dans la poche.": "Male piece without backing: the design is cut out of a thin board, with holding tabs (placed to the right, on its own layer). Break the tabs, sand, then glue the piece into the pocket."});
 Object.assign(I18N_EN, {"Écart entre la pièce et le support (b) (mm)": "Gap between the piece and the backing (b) (mm)", "Distance entre le dessus de la pièce femelle et le support du mâle, une fois le mâle en place : l’épaisseur du trait de scie, plus un peu de marge": "Distance between the top of the female piece and the male backing once the male is in place: the saw kerf, plus a little margin", "Indiquez l’écart entre la pièce et le support (b) : au moins l’épaisseur du trait de scie.": "Enter the gap between the piece and the backing (b): at least the saw kerf.", "Le mâle s’enfonce de {s} mm et laisse {g} mm de jeu au fond ; il reste {p} mm entre la pièce et le support (hauteur totale du mâle : {h} mm).": "The plug goes {s} mm deep and leaves a {g} mm gap at the bottom; {p} mm remain between the piece and the backing (total plug height: {h} mm)."});
+Object.assign(I18N_EN, {"⤼ Reprendre là où l’usinage s’est arrêté": "⤼ Resume where machining stopped", "⤼ Démarrer à partir d’une ligne…": "⤼ Start from a line…", "⤼ Démarrer à partir d’une ligne": "⤼ Start from a line", "Reprendre un usinage interrompu, ou ne faire que la fin du programme": "Resume an interrupted job, or run only the end of the program", "Bouton Arrêt": "Stop button", "Liaison coupée": "Connection lost", ", pendant la ligne ": ", during line ", ". COPO reprend au début de ce mouvement.": ". COPO resumes at the start of this move.", "Vérifiez que la fraise montée est bien ": "Check that the mounted bit is ", " changement(s) d’outil)": " tool change(s))", "(après ": "(after ", ", et que le zéro Z est toujours bon.": ", and that the Z zero is still right.", "Après une alarme de fin de course, refaites d’abord la prise d’origine (⌂) : l’origine pièce est gardée par la carte.": "After a limit switch alarm, home the machine first (⌂): the controller keeps the work origin.", "Montée à Z ": "Up to Z ", " et 3 s d’attente, ": " and 3 s wait, ", "allumez la défonceuse avant (le programme envoie ": "switch the router on first (the program sends ", "puis au-dessus de X ": "then above X ", "Descente lente à Z ": "Slow descent to Z ", ", là où était la fraise au début de ce mouvement.": ", where the bit was at the start of this move.", "Le programme continue à partir de cette ligne": "The program continues from this line", ", avance F": ", feed F", "▶ Reprendre à la ligne ": "▶ Resume at line ", "Oublier": "Dismiss", "déjà fait ≈ ": "done ≈ ", " · reste ": " · left ", " (fichier en pouces, cotes converties)": " (inch file, values converted)", "La machine doit être à l’arrêt, déverrouillée, l’origine faite, avec des parcours à jour.": "The machine must be idle, unlocked and homed, with up-to-date toolpaths."});
 Object.assign(I18N_EN, {"Départ": "Start", "Du bord": "From the edge", "Du centre (haut du relief)": "From the center (top of the relief)", "Du centre : la fraise commence en haut du relief et descend contour après contour ; elle n’entre jamais d’un coup dans la matière laissée par l’ébauche au pied du relief": "From the center: the bit starts at the top of the relief and goes down ring after ring; it never plunges into the material left by roughing at the foot of the relief"});
 Object.assign(I18N_EN, {"Profondeur de poche (a) (mm)": "Pocket depth (a) (mm)", "Hauteur du mâle sous le support (b) (mm)": "Male height below the backing (b) (mm)", "Débord du support (c) (mm)": "Backing overhang (c) (mm)", "Épaisseur de la pièce mâle (b) (mm)": "Male piece thickness (b) (mm)", "Jeu au fond (g) (mm)": "Bottom gap (g) (mm)", "La hauteur du mâle sous le support (b) doit dépasser la profondeur de poche (a).": "The male height below the backing (b) must exceed the pocket depth (a).", "Indiquez l’épaisseur de la pièce mâle (b).": "Enter the male piece thickness (b).", "Le débord du support (c) doit être plus grand que le diamètre de la fraise ({d} mm).": "The backing overhang (c) must be larger than the tool diameter ({d} mm).", "La hauteur du mâle (b) doit dépasser la profondeur de poche moins le jeu (a − g), pour qu’il reste un écart à raboter.": "The male height (b) must exceed the pocket depth minus the gap (a − g), so there is something left to plane off."});
 Object.assign(I18N_EN, {"Fraise de dégagement (fonds plats)": "Clearance tool (flat areas)", "Aucune (la fraise en V vide les fonds plats)": "None (the V-bit clears flat areas)", "Les fonds plats sont d’abord vidés à la fraise droite (parcours « dégagement » ajouté avant celui-ci) ; la fraise en V ne reprend que le bord.": "Flat areas are first cleared with the end mill (a “clearance” toolpath added before this one); the V-bit only finishes the edge.", "Fonds plats vidés à la fraise « {n} » (parcours de dégagement).": "Flat areas cleared with “{n}” (clearance toolpath).", "Pas de fond plat assez large : rien à dégager.": "No flat area wide enough: nothing to clear.", "Parcours de dégagement lié : réglez-le dans le V-carve.": "Linked clearance toolpath: set it up in the V-carve.", "dégagement": "clearance"});
@@ -7708,7 +7709,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.399', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.400', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -11337,7 +11338,54 @@ async function progDone() { const P = K.prog; K.prog = null; if (K.pts) K.doneK 
   if (!P.ext && U.face !== 2 && S.tps.some(t => t.visible && t.face === 2) && S.tps.some(t => t.visible && t.face !== 2)) { // double face : la face 2 reste à faire
     U.face = 2; K.flipTodo = true; K.pieceFixed = false; K.ws.x = K.ws.y = K.ws.z = false; K.finished = false; K.pts = null; ui(); view3d(); flipOpen(); say('Face 1 terminée : retournez la pièce, puis refaites l’origine pièce.'); return; }
   ui(); say('Usinage terminé. Attendez l’arrêt de la broche avant de toucher la pièce.'); }
-function progAbort(why) { const P = K.prog; if (!P) return; K.prog = null; flush('abort', false); tcClose(); log('— Programme arrêté (' + why + ') —', 'e'); ui(); }
+function progAbort(why) { const P = K.prog; if (!P) return; resumeMark(P, why); K.prog = null; flush('abort', false); tcClose(); log('— Programme arrêté (' + why + ') —', 'e'); ui(); }
+// ---------- reprise après un arrêt (alarme, fin de course, arrêt, câble) ou à partir d'une ligne ----------
+function resumeMark(P, why) { // ligne du mouvement en cours au moment de l'arrêt (suivi de position) : on reprendra au début de ce mouvement
+  if (!P.moved || !K.pts || !K.pts.length) return; const k = Math.max(0, K.doneK), seg = K.pts[Math.min(K.pts.length - 1, k + 1)];
+  const li = Math.max(0, Math.min(seg ? seg.li : P.acked, P.L.length - 1)); K.resume = { li, sig: progInfo().sig, why: String(why || ''), t: Date.now() }; U.fromOpen = true; U.fromLn = lnOf(P.L, li); U.floatMin = false; setTimeout(() => { if (curTab === 'usiner') ovRender(); }, 50);
+}
+const lnOf = (L, i) => (L[i] && L[i].ln) || i + 1;
+function resumePlan(li) { // état de la machine juste avant la ligne li (unités, repère, avance, broche, arrosage, outil, mode) et point de départ
+  const P = progInfo(), L = P.L; let inch = false, wcs = '', F = 0, S = 0, spin = '', cool = '', mode = 1, tool = P.tools[0] || null, tcs = 0;
+  for (let i = 0; i < li && i < L.length; i++) { const it = L[i]; if (it.tc !== null && it.tc !== undefined) { tool = it.tc; tcs++; continue; } const u = (it.t || '').toUpperCase(); if (!u) continue; let m; const re = /([A-Z])\s*(-?\d*\.?\d+)/g;
+    while ((m = re.exec(u))) { const k = m[1], v = +m[2]; if (k === 'G') { if (v === 20) inch = true; else if (v === 21) inch = false; else if (v >= 54 && v <= 59 && Number.isInteger(v)) wcs = 'G' + v; else if ([0, 1, 2, 3].includes(v)) mode = v; } else if (k === 'F') F = v; else if (k === 'S') S = v; else if (k === 'M') { if (v === 3 || v === 4) spin = 'M' + v; else if (v === 5 || v === 30 || v === 2) spin = ''; else if (v === 7 || v === 8) cool = 'M' + v; else if (v === 9) cool = ''; } else if (k === 'T') tool = v; } }
+  let at = null; for (const q of P.pts) { if (q.li >= li) break; at = q.p; } const fst = P.pts.find(q => q.li >= li);
+  return { li, ln: lnOf(L, li), inch, wcs, F, S, spin, cool, mode, tool, tcs, at, first: !at && fst ? fst.p : null, zs: Math.max(P.mx[2], at ? at[2] + 2 : 0), pct: P.t ? Math.round(100 * (P.cum[Math.max(0, li - 1)] || 0) / P.t) : 0, rest: Math.max(0, P.t - (P.cum[Math.max(0, li - 1)] || 0)) };
+}
+function resumeIdx(ln) { const L = progInfo().L; ln = Math.max(1, Math.round(+ln || 1)); for (let i = 0; i < L.length; i++) if (lnOf(L, i) >= ln) return i; return L.length - 1; }
+function resumeCard() { // carte « reprendre » dans l'étape Lancer
+  if (K.prog || !conn()) return ''; const P = progInfo(); if (!P.has || !P.L.length) return '';
+  const R = K.resume && K.resume.sig === P.sig ? K.resume : null;
+  if (!R && !U.fromOpen) return '<div class="cnc-card2"><div class="cnc-row"><button class="cnc-btn sm" data-c="fromOpen" title="Reprendre un usinage interrompu, ou ne faire que la fin du programme">⤼ Démarrer à partir d’une ligne…</button></div></div>';
+  const li = resumeIdx(U.fromLn || (R ? lnOf(P.L, R.li) : 1)), Q = resumePlan(li), f = v => f2(v, 2), mm = Q.inch ? ' (fichier en pouces, cotes converties)' : '';
+  const tl = Q.tool ? tName(Q.tool) : '', ok = canStart();
+  return '<div class="cnc-card2"><div class="cnc-box ' + (R ? 'warn' : '') + '" style="margin:0"><b class="t">' + (R ? '⤼ Reprendre là où l’usinage s’est arrêté' : '⤼ Démarrer à partir d’une ligne') + '</b>' +
+    (R ? '<span class="cnc-s">' + ({ alarm: 'Alarme' + (K.alarm && K.alarm.n ? ' ' + K.alarm.n : ''), 'arrêt': 'Bouton Arrêt', off: 'Liaison coupée' }[R.why] || esc(R.why)) + ', pendant la ligne <b>' + lnOf(P.L, R.li) + '</b>. COPO reprend au début de ce mouvement.</span>' : '') +
+    '<div class="cnc-row" style="margin:6px 0;gap:6px;align-items:center"><span class="cnc-s">Ligne</span><input type="number" min="1" max="' + lnOf(P.L, P.L.length - 1) + '" value="' + Q.ln + '" data-c="fromLn" style="width:90px"><span class="cnc-s cnc-m">sur ' + lnOf(P.L, P.L.length - 1) + ' · déjà fait ≈ ' + Q.pct + ' % · reste ' + fmtT(Q.rest) + '</span></div>' +
+    '<code class="cnc-s" style="display:block;margin-bottom:6px">' + esc((P.L[li] && (P.L[li].raw || P.L[li].t)) || '') + '</code>' +
+    '<ol class="cnc-s" style="margin:0 0 6px;padding-left:18px;line-height:1.5">' +
+    (tl ? '<li>Vérifiez que la fraise montée est bien <b>' + esc(tl) + '</b>' + (Q.tcs ? ' (après ' + Q.tcs + ' changement(s) d’outil)' : '') + ', et que le zéro Z est toujours bon.</li>' : '') +
+    (limOn() ? '<li>Après une alarme de fin de course, refaites d’abord la prise d’origine (⌂) : l’origine pièce est gardée par la carte.</li>' : '') +
+    '<li>Montée à Z ' + f(Q.zs) + ', ' + (Q.spin ? (CF.m3 ? 'broche ' + Q.spin + ' S' + Q.S + ' et 3 s d’attente, ' : 'allumez la défonceuse avant (le programme envoie ' + Q.spin + '), ') : '') + 'puis au-dessus de X ' + f((Q.at || Q.first || [0, 0])[0]) + ' Y ' + f((Q.at || Q.first || [0, 0])[1]) + mm + '.</li>' +
+    (Q.at ? '<li>Descente lente à Z ' + f(Q.at[2]) + ', là où était la fraise au début de ce mouvement.</li>' : '') +
+    '<li>Le programme continue à partir de cette ligne' + (Q.F ? ', avance F' + Q.F : '') + '.</li></ol>' +
+    '<div class="cnc-row" style="gap:6px"><button class="cnc-btn pri' + (ok && R ? ' cnc-next' : '') + '" data-c="fromGo" ' + (ok ? '' : 'disabled') + '>▶ Reprendre à la ligne ' + Q.ln + '</button><button class="cnc-btn sm" data-c="fromClose">' + (R ? 'Oublier' : 'Fermer') + '</button></div>' +
+    (ok ? '' : '<p class="cnc-s cnc-m" style="margin:5px 0 0">La machine doit être à l’arrêt, déverrouillée, l’origine faite, avec des parcours à jour.</p>') + '</div></div>';
+}
+async function progFrom(li) {
+  if (!canStart()) { say('La machine doit être prête (à l’arrêt) avec des parcours à jour.'); return; }
+  const P = progInfo(), Q = resumePlan(li), u = v => n3(v), at = Q.at || Q.first; K.finished = false; K.trail = []; K.pts = P.pts; K.tool = Q.tool;
+  K.doneK = -1; for (let k = 0; k < P.pts.length && P.pts[k].li < li; k++) K.doneK = k;
+  const pre = ['G21', 'G90']; if (Q.wcs) pre.push(Q.wcs); pre.push('G0 Z' + u(Q.zs)); if (Q.spin) { pre.push(Q.spin + ' S' + Q.S); pre.push('G4 P3'); } if (Q.cool) pre.push(Q.cool);
+  if (at) { pre.push('G0 X' + u(at[0]) + ' Y' + u(at[1])); if (Q.at) pre.push('G1 Z' + u(Q.at[2]) + ' F' + Math.max(50, Math.round((Q.F || 600) * (Q.inch ? 25.4 : 1) * 0.5))); }
+  if (Q.inch) pre.push('G20'); if (Q.F) pre.push('F' + Q.F); // F seul : avance rétablie sans mouvement
+  const L = P.L.slice(), it0 = L[li], u0 = ((it0 && it0.t) || '').toUpperCase(); if (it0 && /[XYZ]/.test(u0) && !/G0*[0-3](?![\d.])/.test(u0)) L[li] = { ...it0, t: 'G' + Q.mode + ' ' + it0.t }; // ligne modale : on y remet le mode (G0, G1, G2, G3) d'avant
+  K.prog = { L, i: li, acked: li, moved: true, tcSeen: true, all: false, tc: null, err: null, t0: Date.now(), cum: P.cum, tot: P.t, ext: !!P.ext };
+  const G = K.prog; K.resume = null; U.fromOpen = false; ovRender();
+  log('— Reprise à la ligne ' + Q.ln + ' : ' + pre.join(' | ') + ' —', 'm'); U.vol = 4;
+  for (const l of pre) enqueue(l, e => { if (e && /^error/.test(e) && K.prog === G) { log('Reprise refusée : ' + l + ' → ' + e, 'e'); progAbort('erreur de reprise'); } }, false);
+  ui(); progFeed();
+}
 function pause() { if (K.st === 'Run' || K.st === 'Jog' || K.st === 'Home') { K.uHold = true; rt('!'); } }
 function stopAll() {
   if (!K.T) return; log('> ! puis remise à zéro (0x18)', 'e'); const wasProg = !!K.prog; jogging = null;
@@ -11644,7 +11692,7 @@ function ovrSet(k, v) { if (!K.T) return; const cur = k === 'f' ? K.ov[0] : K.ov
 function ovRender() {
   if (!ov || curTab !== 'usiner') return; const P = progInfo(), old = q('#cncFloat'), sc = old ? old.scrollTop : 0;
   ov.innerHTML = '<div id="cncPill"></div>' + (alarmBanner() || '<div id="cncGuide"></div>') + '<div id="cncFloat" class="cnc-float' + (U.floatMin ? ' min' : '') + '"><div class="cnc-fh"><b>Données</b><label class="cnc-sw2" title="Étapes guidées et vérifications avant le démarrage"><input type="checkbox" data-cfb="guide" ' + (CF.guide ? 'checked' : '') + (K.prog ? ' disabled' : '') + '><span></span>Vérifications</label><button class="cnc-btn sm" data-c="floatT" title="' + (U.floatMin ? 'Déplier' : 'Replier') + '">' + (U.floatMin ? '▸' : '▾') + '</button></div>' + (U.floatMin ? '' :
-    extCard() + (EXT ? '' : faceCard()) + (false ? '<div class="cnc-test"><b>Version test.</b> Pilotage d’une vraie machine : restez près de l’arrêt d’urgence.</div>' : '') + tcCard() + ((U.probeOpen || (K.prog && K.prog.tc)) && conn() ? probeCard() : '') +
+    extCard() + resumeCard() + (EXT ? '' : faceCard()) + (false ? '<div class="cnc-test"><b>Version test.</b> Pilotage d’une vraie machine : restez près de l’arrêt d’urgence.</div>' : '') + tcCard() + ((U.probeOpen || (K.prog && K.prog.tc)) && conn() ? probeCard() : '') +
     '<div class="cnc-card2"><div class="cnc-ch"><span>Encombrement du programme (mm)</span><button data-c="posT">' + (U.posOpen ? '–' : '+') + '</button></div>' + (U.posOpen ? '<table class="cnc-bb"><tr><th></th><th>min</th><th>max</th><th>taille</th></tr>' + AX.map((a, i) => '<tr><th>' + a.toUpperCase() + '</th><td data-live="bn' + a + '">' + (P.has ? f2(P.mn[i]) : '–') + '</td><td data-live="bx' + a + '">' + (P.has ? f2(P.mx[i]) : '–') + '</td><td>' + (P.has ? f2(P.mx[i] - P.mn[i], 1) : '–') + '</td></tr>').join('') + '</table>' : '') + '</div>' +
     '<div class="cnc-card2"><div class="cnc-ch"><span>Usinage</span><button data-c="runT">' + (U.runOpen ? '–' : '+') + '</button></div>' + (U.runOpen ? '<div class="cnc-kv"><span>Écoulé</span><span data-live="tel">0:00</span><span>Restant</span><span data-live="trest"></span></div><div class="cnc-prog"><i data-live="pbar"></i></div><div class="cnc-kv"><span>Avance réelle</span><span data-live="fcur"></span><span>Broche</span><span data-live="scur"></span><span>Outil</span><span data-live="tcur"></span><span>Suivant</span><span data-live="tnext"></span></div><div class="cnc-gl" data-live="gl"></div>' : '') + '</div>' +
     '<div id="cncVols"></div>') + '</div>';
@@ -11845,6 +11893,9 @@ async function onClick(e) {
     case 'pause': pause(); break;
     case 'stop': stopAll(); break;
     case 'errGo': progResumeErr(); break;
+    case 'fromOpen': U.fromOpen = true; U.fromLn = 1; ui(); ovRender(); break;
+    case 'fromClose': U.fromOpen = false; K.resume = null; ui(); ovRender(); break;
+    case 'fromGo': { const inp = q('[data-c=fromLn]'); if (inp) U.fromLn = +inp.value || 1; progFrom(resumeIdx(U.fromLn)); break; }
     case 'tcResume': tcResume(); break;
     case 'step': CF.step = +b.dataset.v; cfSave(); ctlRender(); break;
     case 'padHome': if (!allSet()) { say('Définissez d’abord l’origine pièce.'); break; } if (!U.homeConfirm) { U.homeConfirm = true; ctlRender(); setTimeout(() => { U.homeConfirm = false; ctlRender(); }, 2500); break; } U.homeConfirm = false; ctlRender(); gotoOrigin(); break;
@@ -11865,6 +11916,7 @@ async function onClick(e) {
 }
 async function onChange(e) {
   const t = e.target, d = t.dataset;
+  if (d.c === 'fromLn') { U.fromLn = +t.value || 1; ovRender(); return; }
   if (d.u) { const [g, k] = d.u.split('.'); if (k) U[g][k] = t.checked; else U[g] = t.checked; if (d.u === 'hideOk') conRender(); else { panel(); live(); } return; }
   if (d.u2) { U[d.u2] = +t.value; return; }
   if (d.tc) { if (K.prog && K.prog.tc) K.prog.tc[d.tc] = t.checked; tcRender(); return; }
@@ -11993,7 +12045,7 @@ function cfgHook() {
 
 function init() { build(); cfgHook(); const rv = q('#rv3'); if (rv) { rv.addEventListener('pointerenter', () => over = true); rv.addEventListener('pointerleave', () => over = false); } if (ctl) { ctl.addEventListener('pointerenter', () => over = true); ctl.addEventListener('pointerleave', () => over = false); } requestAnimationFrame(gpLoop); }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
-window.COPO_CNC = { K, CF, U, connect, progInfo, checks, LOG, driversOpen, progDone, extLoad, extClose, ext: () => EXT }; // pour les tests
+window.COPO_CNC = { K, CF, U, connect, progInfo, checks, LOG, driversOpen, progDone, extLoad, extClose, ext: () => EXT, progStart, stopAll, progFrom, resumePlan, cmd, wpos }; // pour les tests
 })();
 </script>
 
