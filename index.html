@@ -744,7 +744,7 @@ label.inl input{width:70px}
 .optbar .fp-mini{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
 .coordin{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.tpt{min-width:0;display:flex;align-items:center;gap:6px}.tpt b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tpren{flex:1;min-width:0;font:inherit;font-weight:600;padding:1px 4px}.tpbad{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;font:700 10px/1 sans-serif;font-style:normal;color:#111}.newhat{flex-basis:100%;font-size:12.5px;color:var(--muted)}.newhat b{color:#ff9f1c;font-weight:600}
 .tcmode{display:grid;gap:6px}.tcmode .tcl{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.tcmode input[type=text]{width:90px;font-family:var(--f-mono)}.tcmode .tcs{display:flex;align-items:center;gap:6px}.tcmode .tcfull{flex-basis:100%}.tcmode .tcind{margin-left:26px}
-.busyp{position:fixed;z-index:9000;left:50%;top:56px;transform:translateX(-50%);display:flex;align-items:center;gap:9px;padding:7px 14px 7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--ink);box-shadow:0 8px 24px rgb(0 0 0 / .35);font-size:12.5px;pointer-events:none}.busyp[hidden]{display:none}.busyp i{width:16px;height:16px;border-radius:50%;border:2.5px solid color-mix(in srgb,var(--accent) 25%,transparent);border-top-color:var(--accent);animation:busyspin .8s linear infinite;will-change:transform}@keyframes busyspin{to{transform:rotate(360deg)}}
+.busyp{position:fixed;z-index:9000;left:50%;top:56px;transform:translateX(-50%);display:flex;align-items:center;gap:9px;padding:7px 14px 7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--ink);box-shadow:0 8px 24px rgb(0 0 0 / .35);font-size:12.5px;pointer-events:none}.busyp[hidden]{display:none}.busyp button{pointer-events:auto;margin-left:4px;padding:3px 10px;border:1px solid var(--line);border-radius:999px;background:transparent;color:inherit;font:inherit;cursor:pointer}.busyp button:hover{border-color:#e5484d;color:#e5484d}.busyp button[hidden]{display:none}.busyp i{width:16px;height:16px;border-radius:50%;border:2.5px solid color-mix(in srgb,var(--accent) 25%,transparent);border-top-color:var(--accent);animation:busyspin .8s linear infinite;will-change:transform}@keyframes busyspin{to{transform:rotate(360deg)}}
 .tpbad.stale{background:var(--accent);color:var(--accent-ink);font-size:11px}.tpprog{position:absolute;z-index:30;left:50%;top:44px;transform:translateX(-50%);width:min(420px,80%);padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);box-shadow:0 8px 24px rgb(0 0 0 / .35);display:grid;gap:6px;font-size:12.5px}.tpprog[hidden]{display:none}.tpprog i{display:block;position:relative;height:6px;border-radius:3px;background:var(--raised);overflow:hidden}.tpprog b{position:absolute;left:0;top:0;bottom:0;background:var(--accent);transition:width .2s}.tpprog b::after{content:'';position:absolute;left:100%;top:0;bottom:0;width:var(--w,10%);background:repeating-linear-gradient(45deg,var(--accent) 0 6px,transparent 6px 12px);opacity:.55;animation:tpst 1s linear infinite}@keyframes tpst{to{background-position:24px 0}}.tprecalc{width:100%;margin:6px 0}
 .tpbad.err{background:var(--danger)}.tpbad.wrn{background:#e8a33a}#relSum.bad{color:var(--danger);font-weight:500}.rlclip{display:grid;gap:6px;margin:8px 0}.ptb button:disabled{opacity:.45;cursor:default}.nebtn{display:inline-flex;align-items:center;gap:6px}.neico{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.neico .nf{fill:var(--accent);stroke:none}.neico .nh{stroke:var(--accent);stroke-width:1.3}.ptnext{display:grid;gap:8px}.ptnext>b{font-size:12.5px}.ptg{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px}.ptg label{display:grid;grid-template-columns:42px 1fr;align-items:center;gap:6px;font-size:12px;color:var(--muted)}.ptg input{width:100%;min-width:0}.ptb{display:flex;flex-wrap:wrap;gap:6px}
 .coordin input{width:80px}
@@ -1025,7 +1025,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
       <div class="optbar" id="optbar"></div>
       <div class="toast" id="toast" hidden></div>
       <div class="toast note" id="note" role="status" hidden><span></span><div class="nb"></div></div>
-      <div class="busyp" id="busyPill" role="status" aria-live="polite" hidden><i aria-hidden="true"></i><span></span></div>
+      <div class="busyp" id="busyPill" role="status" aria-live="polite" hidden><i aria-hidden="true"></i><span></span><button type="button" id="busyStop" hidden title="Arrêter ce calcul : le parcours garde son ancien résultat et reste à mettre à jour">Abandonner</button></div>
       <div class="tpprog" id="tpProg" role="progressbar" aria-live="polite" hidden><span id="tpProgT"></span><i><b></b></i></div>
       <div class="views v" id="views"><div class="vsplit" id="vsplit" role="separator" aria-label="Séparation entre la vue 2D et la vue 3D" title="Glissez pour agrandir une des deux vues (double-clic : moitié-moitié)" hidden></div>
       <div class="canvaswrap" id="cw"><canvas id="cv" tabindex="0" aria-label="Plan de travail"></canvas><div class="cvinfo" aria-live="off"><span id="coords">X     0,00  Y     0,00</span><span id="coordsx"></span></div>
@@ -1522,6 +1522,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
           <div class="g2">
             <label>Z de sécurité (mm)<input data-u="len" type="number" id="mSafe" step="0.5" min="0.5"></label>
             <label>Z de dégagement (mm)<input data-u="len" type="number" id="mClear" step="0.5" min="0.2"></label>
+            <label title="Entre deux passes de la même poche ou du même trou, la fraise remonte seulement de cette hauteur au-dessus du fond déjà vidé, au lieu du Z de dégagement. Le Z de dégagement reste utilisé pour aller d’une forme à l’autre. 0 : toujours au Z de dégagement.">Retrait entre passes (mm)<input data-u="len" type="number" id="mRetr" step="0.5" min="0"></label>
           </div>
           <div class="row"><button data-act="vpImport" title="Charge un post-processeur .pp au format Vectric (Aspire, VCarve, Cut2D)">Importer un post-processeur (.pp)…</button><button data-act="vpRemove" id="vpRemove" hidden>Retirer ce post-processeur</button></div>
           <p class="hint" id="mVpHint" hidden></p>
@@ -1659,7 +1660,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.406</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.407</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -2260,6 +2261,8 @@ Object.assign(I18N_EN, {"Écart entre la pièce et le support (b) (mm)": "Gap be
 Object.assign(I18N_EN, {"⤼ Reprendre là où l’usinage s’est arrêté": "⤼ Resume where machining stopped", "⤼ Démarrer à partir d’une ligne…": "⤼ Start from a line…", "⤼ Démarrer à partir d’une ligne": "⤼ Start from a line", "Reprendre un usinage interrompu, ou ne faire que la fin du programme": "Resume an interrupted job, or run only the end of the program", "Bouton Arrêt": "Stop button", "Liaison coupée": "Connection lost", ", pendant la ligne ": ", during line ", ". COPO reprend au début de ce mouvement.": ". COPO resumes at the start of this move.", "Vérifiez que la fraise montée est bien ": "Check that the mounted bit is ", " changement(s) d’outil)": " tool change(s))", "(après ": "(after ", ", et que le zéro Z est toujours bon.": ", and that the Z zero is still right.", "Après une alarme de fin de course, refaites d’abord la prise d’origine (⌂) : l’origine pièce est gardée par la carte.": "After a limit switch alarm, home the machine first (⌂): the controller keeps the work origin.", "Montée à Z ": "Up to Z ", " et 3 s d’attente, ": " and 3 s wait, ", "allumez la défonceuse avant (le programme envoie ": "switch the router on first (the program sends ", "puis au-dessus de X ": "then above X ", "Descente lente à Z ": "Slow descent to Z ", ", là où était la fraise au début de ce mouvement.": ", where the bit was at the start of this move.", "Le programme continue à partir de cette ligne": "The program continues from this line", ", avance F": ", feed F", "▶ Reprendre à la ligne ": "▶ Resume at line ", "Oublier": "Dismiss", "déjà fait ≈ ": "done ≈ ", " · reste ": " · left ", " (fichier en pouces, cotes converties)": " (inch file, values converted)", "La machine doit être à l’arrêt, déverrouillée, l’origine faite, avec des parcours à jour.": "The machine must be idle, unlocked and homed, with up-to-date toolpaths."});
 Object.assign(I18N_EN, {"{n} paliers depuis le dessus du brut avant le départ": "{n} levels from the stock top before the start depth"});
 Object.assign(I18N_EN, {"Forme du support": "Backing shape", "Suit le motif": "Follows the design", "Rectangle autour du motif, éloigné de c : simple à scier": "Rectangle around the design, c away: easy to saw", "Contour qui suit le motif à la distance c, coins arrondis : moins de matière à vider, détourage qui suit la forme": "Outline following the design at distance c, rounded corners: less material to clear, cut-out that follows the shape"});
+Object.assign(I18N_EN, {"Abandonner": "Abort", "Arrêter ce calcul : le parcours garde son ancien résultat et reste à mettre à jour": "Stop this computation: the toolpath keeps its previous result and stays to be updated", "Calcul abandonné : les parcours concernés restent à mettre à jour.": "Computation aborted: the toolpaths concerned remain to be updated."});
+Object.assign(I18N_EN, {"Retrait entre passes (mm)": "Retract between passes (mm)", "Entre deux passes de la même poche ou du même trou, la fraise remonte seulement de cette hauteur au-dessus du fond déjà vidé, au lieu du Z de dégagement. Le Z de dégagement reste utilisé pour aller d’une forme à l’autre. 0 : toujours au Z de dégagement.": "Between two passes of the same pocket or hole, the bit only goes up this far above the floor already cleared, instead of the clearance Z. The clearance Z is still used to go from one shape to another. 0: always to the clearance Z."});
 Object.assign(I18N_EN, {"Départ": "Start", "Du bord": "From the edge", "Du centre (haut du relief)": "From the center (top of the relief)", "Du centre : la fraise commence en haut du relief et descend contour après contour ; elle n’entre jamais d’un coup dans la matière laissée par l’ébauche au pied du relief": "From the center: the bit starts at the top of the relief and goes down ring after ring; it never plunges into the material left by roughing at the foot of the relief"});
 Object.assign(I18N_EN, {"Profondeur de poche (a) (mm)": "Pocket depth (a) (mm)", "Hauteur du mâle sous le support (b) (mm)": "Male height below the backing (b) (mm)", "Débord du support (c) (mm)": "Backing overhang (c) (mm)", "Épaisseur de la pièce mâle (b) (mm)": "Male piece thickness (b) (mm)", "Jeu au fond (g) (mm)": "Bottom gap (g) (mm)", "La hauteur du mâle sous le support (b) doit dépasser la profondeur de poche (a).": "The male height below the backing (b) must exceed the pocket depth (a).", "Indiquez l’épaisseur de la pièce mâle (b).": "Enter the male piece thickness (b).", "Le débord du support (c) doit être plus grand que le diamètre de la fraise ({d} mm).": "The backing overhang (c) must be larger than the tool diameter ({d} mm).", "La hauteur du mâle (b) doit dépasser la profondeur de poche moins le jeu (a − g), pour qu’il reste un écart à raboter.": "The male height (b) must exceed the pocket depth minus the gap (a − g), so there is something left to plane off."});
 Object.assign(I18N_EN, {"Fraise de dégagement (fonds plats)": "Clearance tool (flat areas)", "Aucune (la fraise en V vide les fonds plats)": "None (the V-bit clears flat areas)", "Les fonds plats sont d’abord vidés à la fraise droite (parcours « dégagement » ajouté avant celui-ci) ; la fraise en V ne reprend que le bord.": "Flat areas are first cleared with the end mill (a “clearance” toolpath added before this one); the V-bit only finishes the edge.", "Fonds plats vidés à la fraise « {n} » (parcours de dégagement).": "Flat areas cleared with “{n}” (clearance toolpath).", "Pas de fond plat assez large : rien à dégager.": "No flat area wide enough: nothing to clear.", "Parcours de dégagement lié : réglez-le dans le V-carve.": "Linked clearance toolpath: set it up in the V-carve.", "dégagement": "clearance"});
@@ -2454,7 +2457,7 @@ class MB {
   up(h) { if (this.x !== null && this.z < h - 1e-9) this.g0(this.x, this.y, h); }
   approach(x, y, zTop, plunge) {
     if (this.x === null) { this.m.push({ g: 0, x, y, z: this.z }); this.x = x; this.y = y; }
-    else { this.up(this.M.clearZ); this.g0(x, y, this.z); }
+    else { this.up(this.lift ? this.lift(this.x, this.y, x, y) : this.M.clearZ); this.g0(x, y, this.z); } // lift : hauteur de retrait dans une zone déjà vidée (même poche, même trou)
     const zz = zTop + 0.5; if (zz < this.z) this.g0(x, y, zz);
     this.g1(x, y, zTop, plunge);
   }
@@ -2592,6 +2595,10 @@ function sideOffset(pts, d, side, sharp) {
 }
 function orderNN(items, ptOf, start) { const rem = items.slice(), out = []; let cur = start || [0, 0]; while (rem.length) { let bi = 0, bd = Infinity; rem.forEach((it, i) => { const d = hyp(ptOf(it, cur), cur); if (d < bd) { bd = d; bi = i; } }); const it = rem.splice(bi, 1)[0]; out.push(it); cur = ptOf(it, cur); } return out; }
 const nearestPt = (loop, cur) => loop[nearestIdx(loop, cur[0], cur[1])];
+// retrait entre passes (réglage machine, 1 mm par défaut ; 0 : toujours au Z de dégagement) : au-dessus du fond déjà vidé, si tout le trajet reste dans la zone des centres d'outil
+const retrOf = M => { const r = M.retr; return r === undefined || r === null || r === '' ? 1 : Math.max(0, +r || 0); };
+function segIn(x0, y0, x1, y1, region) { for (let i = 0; i <= 16; i++) { const t = i / 16; if (!pipSet([x0 + (x1 - x0) * t, y0 + (y1 - y0) * t], region)) return false; } return true; }
+function liftIn(M, region, zc) { const rt = retrOf(M); if (!(rt > 0)) return null; const h = Math.min(M.clearZ, zc + rt); return (x0, y0, x1, y1) => segIn(x0, y0, x1, y1, region) ? h : M.clearZ; }
 function linkOK(a, b, region, maxLen) { if (hyp(a, b) > maxLen) return false; for (let i = 1; i < 16; i++) { const t = i / 16; if (!pipSet([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t], region)) return false; } return true; }
 
 // longueur de rampe : celle saisie, sinon (champ vide) calculée pour descendre la passe sous l'angle conseillé pour le matériau des outils :
@@ -2776,13 +2783,15 @@ function buildPocket(p, tool, shapes, M) {
     const regionF = cmode !== 'round' ? region.map(l => fix(l)).map(l => CR(l, R, allow > 0 ? crn : null)) : region.map(fix), workF = cmode !== 'round' ? work.map(fix).map(l => CR(l, R + allow, raster && !(allow > 0) ? crn : null)) : work.map(fix);
     levels.forEach((z, i) => {
       const zTop = i ? levels[i - 1] : 0;
-      if (mb.x !== null) mb.up(M.clearZ);
+      mb.lift = work.length ? liftIn(M, work, zTop) : null; /* entre deux passes de la même poche : retrait au-dessus du fond de la passe précédente, pas au Z de dégagement */
+      if (mb.x !== null && !mb.lift) mb.up(M.clearZ);
       if (raster) {
         emitRaster(mb, work, step, +p.rasterAng || 0, zTop, z, oR, region, tool.dia);
         if (contour) for (const l of workF) { const cont = mb.x !== null && mb.z <= z + 1e-9 && linkOK([mb.x, mb.y], nearestPt(l, [mb.x, mb.y]), region, tool.dia * 2.5); emitLoop(mb, l, zTop, z, { ...oR, entry: 'plunge' }, cont); }
       } else emitRings(mb, rings, zTop, z, oR, region, tool.dia, inward);
       if (allow > 0 && p.finish === 'last' && i === last) for (const l of regionF) { const cont = mb.x !== null && mb.z <= z + 1e-9 && linkOK([mb.x, mb.y], nearestPt(l, [mb.x, mb.y]), region, tool.dia * 2.5); emitLoop(mb, l, zTop, z, { ...oR, entry: 'plunge' }, cont); }
     });
+    mb.lift = null;
     if (allow > 0 && p.finish === 'full') for (const l of regionF) emitLoop(mb, l, 0, levels[last], oF, false);
   }
   if (rest && !mb.m.length) warns.push('Aucune matière à reprendre : la fraise précédente atteint déjà tous les coins.');
@@ -3281,14 +3290,14 @@ function buildDrill(p, tool, shapes, M) {
     const [x, y] = h.c;
     if (helOK(h)) {
       nHel++; const rF = h.d / 2 - R, radii = []; for (let r = rF; r > 1e-6; r -= stepH) radii.unshift(r); if (radii[0] > R * 0.9) radii.unshift(Math.min(R * 0.5, radii[0] / 2));
-      const sg = climb ? 1 : -1;
+      const sg = climb ? 1 : -1, disk = []; for (let k = 0; k < 48; k++) { const a = 2 * Math.PI * k / 48; disk.push([x + (rF + 0.01) * Math.cos(a), y + (rF + 0.01) * Math.sin(a)]); } mb.lift = liftIn(M, [disk], 0); /* d'un rayon au suivant dans le même trou : retrait juste au-dessus du brut */
       for (const r of radii) {
         mb.approach(x + r, y, 0, tool.plunge); const pitch = helixPitchOf(p, r), turns = Math.max(1, Math.ceil(depth / pitch)), n = turns * 36;
         for (let i = 1; i <= n; i++) { const a = sg * 2 * Math.PI * i / 36; mb.g1(x + r * Math.cos(a), y + r * Math.sin(a), -depth * i / n, tool.feed); }
         for (let i = 1; i <= 36; i++) { const a = sg * 2 * Math.PI * i / 36; mb.g1(x + r * Math.cos(a), y + r * Math.sin(a), -depth, tool.feed); }
         mb.g1(x + r * 0.5, y, -depth, tool.feed);
       }
-      mb.up(M.clearZ); continue;
+      mb.lift = null; mb.up(M.clearZ); continue;
     }
     const s0 = mb.m.length; mb.approach(x, y, 0, tool.plunge); let cur = 0;
     while (cur > -depth + 1e-9) {
@@ -4874,6 +4883,10 @@ function wkBoot() {
   };
   onmessage = e => { const m = e.data; let r = null, err = null; try { r = ops[m.op](m); } catch (x) { err = (x && (x.stack || x.message)) || String(x); } const tr = r && r.H && r.B ? [r.H.buffer, r.B.buffer] : []; postMessage({ id: m.id, r, err }, tr); };
 }
+/* bouton « Abandonner » : arrête le travailleur (calcul en tâche de fond), il redémarre au prochain calcul ; la page n'est jamais bloquée */
+function wkAbort() { if (!WK.w) return; const cbs = [...WK.cb.values()]; WK.cb.clear(); try { WK.w.terminate(); } catch { } WK.w = null; WK.ready = null; WK.sent = new WeakSet(); TP_BUSY = 0; const bar = document.getElementById('tpProg'); if (bar) bar.hidden = true;
+  for (const c of cbs) c.rej(new Error('abort')); BUSY_N = 1; busyOff(); toast(tr('Calcul abandonné : les parcours concernés restent à mettre à jour.')); if (typeof tpStaleUi === 'function') tpStaleUi(); renderTpList(); }
+document.getElementById('busyStop').addEventListener('click', wkAbort);
 function wkFail(why) { WK.off = true; WK.ready = null; for (const c of WK.cb.values()) c.rej(new Error(why || 'worker')); WK.cb.clear(); try { WK.w && WK.w.terminate(); } catch { } WK.w = null; }
 function wkStart() {
   if (WK.ready || WK.off) return WK.ready;
@@ -4895,21 +4908,21 @@ const wkStrip = t => { const o = {}; for (const k in t) if (!TPC_K.includes(k) &
 /* calcule un parcours en tâche de fond ; résultat appliqué seulement si ses données n'ont pas changé entre-temps */
 // indicateur « calcul en cours » (roue qui tourne) : affiché avant un calcul long, la roue continue de tourner même si la page est occupée
 let BUSY_N = 0, BUSY_T = 0;
-function busyOn(t) { BUSY_N++; const b = document.getElementById('busyPill'); if (!b) return; b.querySelector('span').textContent = t || tr('Calcul en cours…'); clearTimeout(BUSY_T); b.hidden = false; }
+function busyOn(t, stop) { BUSY_N++; const b = document.getElementById('busyPill'); if (!b) return; b.querySelector('span').textContent = t || tr('Calcul en cours…'); b.querySelector('#busyStop').hidden = !stop; clearTimeout(BUSY_T); b.hidden = false; }
 function busyOff() { BUSY_N = Math.max(0, BUSY_N - 1); if (!BUSY_N) { clearTimeout(BUSY_T); BUSY_T = setTimeout(() => { const b = document.getElementById('busyPill'); if (b && !BUSY_N) b.hidden = true; }, 150); } }
 function busyRun(t, fn) { busyOn(t); return new Promise(res => requestAnimationFrame(() => setTimeout(() => { try { fn(); } finally { busyOff(); res(); } }, 30))); } // laisse le temps d'afficher la roue avant le calcul
 function tpRunWorker(tp) {
   const sig = tpSig(tp), h = tpHit(tp, sig); if (h) { tpRun(tp); return Promise.resolve(); }
   const had = !!tp.moves, par = tp.vclrOf, gridIds = Object.keys(relGrid), grids = {}; for (const id of gridIds) { const g = relGrid[id]; if (g && typeof g === 'object' && !WK.sent.has(g)) grids[id] = g; }
   const S2 = {}; for (const k of ['stock', 'shapes', 'tools', 'images', 'relief', 'layers', 'machine', 'ui', 'meta', 'font', 'guides']) S2[k] = S[k]; S2.tps = S.tps.map(t => t === tp || t.id !== par ? wkStrip(t) : t);
-  busyOn(trf('Calcul du parcours « {n} »…', { n: tp.name || '' })); const done = () => busyOff();
+  busyOn(trf('Calcul du parcours « {n} »…', { n: tp.name || '' }), true); const done = () => busyOff();
   return wkCall('tp', { S: S2, lang: LANG, gridIds, grids, tid: tp.id, keys: TPC_K.concat(['p', 'toolId', 'face']) }).finally(done).then(res => {
     for (const id in grids) WK.sent.add(grids[id]);
     if (!S.tps.includes(tp)) return;
     if (tpSig(tp) !== sig) { tp.stale = true; if (!tpManual()) tpLater(); return; } /* modifié pendant le calcul : refait plus tard */
     const r = res.r; for (const k of TPC_K) tp[k] = r[k]; tp.toolId = r.toolId; tp.face = r.face; if (tp.vclrOf) tp.p = r.p; else Object.assign(tp.p, r.p);
     const sg = tpSig(tp), o = {}; for (const k of TPC_K) o[k] = tp[k]; const c = TPC.get(tp.id) || { list: [], ms: 0 }; c.ms = res.ms; c.list = [{ sig: sg, r: o }, ...c.list.filter(x => x.sig !== sg)].slice(0, 6); TPC.set(tp.id, c); tp.stale = false; tp._sig = sg; if (had) tpSlowNote(tp, c.ms);
-  }, e => { if (e && e.message !== 'off') console.warn('COPO : calcul en tâche de fond impossible, calcul direct', e.message); if (S.tps.includes(tp)) tpRun(tp); });
+  }, e => { if (e && e.message === 'abort') { tp.stale = true; return; } if (e && e.message !== 'off') console.warn('COPO : calcul en tâche de fond impossible, calcul direct', e.message); if (S.tps.includes(tp)) tpRun(tp); });
 }
 function tpRunAsync(todo) { const run = ++TP_BUSY, bar = $('#tpProg'), tot = todo.reduce((a, tp) => a + Math.max(30, (TPC.get(tp.id) || {}).ms || 300), 0); let done = 0, k = 0; bar.hidden = false;
   const step = () => { if (run !== TP_BUSY) return; if (k >= todo.length) { bar.hidden = true; TP_BUSY = 0; recomputeDone(); return; } const tp = todo[k], w = Math.max(30, (TPC.get(tp.id) || {}).ms || 300);
@@ -7143,7 +7156,7 @@ function act(a, btn) {
       else { if (nes.nodes.length < 3) return toast('Il faut au moins trois nœuds pour fermer.'); const f = nes.nodes[0], l = nes.nodes[nes.nodes.length - 1]; if (Math.hypot(f.x - l.x, f.y - l.y) < 1e-3) { f.i = l.i; nes.nodes.pop(); } nes.closed = true; refresh(nes); }
       commit(); renderSel(); draw(); return;
     }
-    case 'tpApply': busyRun(tr('Calcul du parcours…'), applyForm); return;
+    case 'tpApply': if (!WK.off) applyForm(); else busyRun(tr('Calcul du parcours…'), applyForm); return;
     case 'view2d': case 'view3d': viewToggle(a === 'view2d' ? 'd2' : 'd3'); return;
     case 'splitV': case 'splitH': VIEWS.split = a === 'splitV' ? 'v' : 'h'; viewsApply(); return;
     case 'rvDraw': RV.showDraw = !RV.showDraw; rvSave(); rvReq(); return;
@@ -8248,7 +8261,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.406', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.407', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -8538,13 +8551,16 @@ function applyForm() {
     if (same && !tp.stale) { if (typed && typed !== tp.name) { tp.name = typed; commit(false); gcDirty = true; renderTpList(); toast(tr('Parcours renommé (rien n’est recalculé).')); } else toast(tr('Rien n’a changé.')); return; }
     tp.face = nf; tp.type = F.type; tp.toolId = F.toolId; tp.p = p; if (ids.length || rids.length) { tp.shapeIds = ids; tp.relIds = rids; }
     if (typed && tp.nameAuto === false) tp.name = typed; else if (tp.nameAuto) { tp.name = tpAutoName(tpFn(tp.type, p), tpnLayer(tp.shapeIds, tp.relIds), S.tools.find(t => t.id === tp.toolId), tp.face, tp); S.form.name = tp.name; }
-    computeTP(tp); vclrSync(tp); restLink(tp); commit(false); gcDirty = true; renderTpList(); draw();
-    toast(tp.err ? tp.err : 'Parcours mis à jour.'); return; }
+    const fin = () => { vclrSync(tp); restLink(tp); commit(false); gcDirty = true; renderTpList(); draw(); toast(tp.stale ? tr('Calcul abandonné : les parcours concernés restent à mettre à jour.') : tp.err ? tp.err : 'Parcours mis à jour.'); };
+    if (!WK.off) { tp.stale = true; renderTpList(); tpRunWorker(tp).then(fin); return; } /* en tâche de fond : la page reste utilisable, bouton « Abandonner » */
+    computeTP(tp); fin(); return; }
   if (!ids.length && !rids.length && (F.type !== 'relief' || F.rlBound === 'sel')) { toast(F.type === 'relief' ? tr('Limite « Vecteurs sélectionnés » : sélectionnez d’abord les formes fermées dans la vue 2D.') : 'Sélectionnez d’abord les vecteurs à usiner dans la vue 2D.'); return; }
   const n = S.tps.filter(t => t.type === F.type).length + 1;
   const fc = faceFor(F.type === 'relief' ? [] : ids), tp = { id: uid(), name: F.name || tpAutoName(tpFn(F.type, p), tpnLayer(ids, rids), S.tools.find(t => t.id === F.toolId), fc), nameAuto: !F.name, type: F.type, toolId: F.toolId, shapeIds: ids, relIds: rids, p, visible: true, face: fc };
-  computeTP(tp); S.tps.push(tp); vclrSync(tp); restLink(tp); S.activeTp = tp.id; S.editTp = tp.id; S.form.name = tp.name; commit(false); gcDirty = true; renderTpList(); renderForm(); draw();
-  toast(tp.err ? tp.err : 'Parcours calculé' + (tp.stats && tp.stats.min ? ' · ' + fmtTime(tp.stats.min) : '') + '.');
+  const fin = () => { if (!S.tps.includes(tp)) return; vclrSync(tp); restLink(tp); commit(false); gcDirty = true; renderTpList(); renderForm(); draw(); toast(tp.stale ? tr('Calcul abandonné : les parcours concernés restent à mettre à jour.') : tp.err ? tp.err : 'Parcours calculé' + (tp.stats && tp.stats.min ? ' · ' + fmtTime(tp.stats.min) : '') + '.'); };
+  S.tps.push(tp); S.activeTp = tp.id; S.editTp = tp.id; S.form.name = tp.name;
+  if (!WK.off) { tp.stale = true; renderTpList(); tpRunWorker(tp).then(fin); return; }
+  computeTP(tp); fin();
 }
 
 // ---------- panneau Outils ----------
@@ -9004,8 +9020,9 @@ function syncMachine() {
   postSelFill(); tcSync();
   if (!POSTS[S.machine.post] && !(String(S.machine.post).startsWith('vpu:') && S.machine.vpText)) S.machine.post = 'grbl';
   const cp = { ...CUSTOM_POST(), ...(S.machine.custom || {}) }; $('#mcHead').value = cp.head; $('#mcTc').value = cp.tc; $('#mcFoot').value = cp.foot; $('#mcExt').value = cp.ext; $('#mcG911').checked = !!cp.g911; $('#mCustom').hidden = S.machine.post !== 'custom';
-  cycSync(); $('#mPost').value = S.machine.post; $('#mRapid').value = S.machine.rapid; $('#mMaxFeed').value = S.machine.maxFeed || 2000; $('#mSafe').value = S.machine.safeZ; $('#mClear').value = S.machine.clearZ; $('#mComments').checked = S.machine.comments; if (typeof posSync === 'function') posSync(); $('#mArcs').checked = S.machine.arcs !== false; $('#mTcZ').value = S.machine.tcZ === undefined ? -10 : S.machine.tcZ; $('#mTcRow').hidden = S.machine.post !== 'grblm' && S.machine.post !== 'custom'; $('#mTcOn').checked = !!S.machine.tcOn; $('#mTcZRow').hidden = !S.machine.tcOn; }
+  cycSync(); $('#mPost').value = S.machine.post; $('#mRapid').value = S.machine.rapid; $('#mMaxFeed').value = S.machine.maxFeed || 2000; $('#mSafe').value = S.machine.safeZ; $('#mClear').value = S.machine.clearZ; $('#mRetr').value = retrOf(S.machine); $('#mComments').checked = S.machine.comments; if (typeof posSync === 'function') posSync(); $('#mArcs').checked = S.machine.arcs !== false; $('#mTcZ').value = S.machine.tcZ === undefined ? -10 : S.machine.tcZ; $('#mTcRow').hidden = S.machine.post !== 'grblm' && S.machine.post !== 'custom'; $('#mTcOn').checked = !!S.machine.tcOn; $('#mTcZRow').hidden = !S.machine.tcOn; }
 [['#mPost', 'post', 0], ['#mRapid', 'rapid', 1], ['#mSafe', 'safeZ', 1], ['#mClear', 'clearZ', 1]].forEach(([id, k, n]) => $(id).addEventListener('change', e => { const v = n ? +e.target.value : e.target.value; if (n && !(v > 0)) return; S.machine[k] = v; autosave(); if (k === 'post') { $('#mTcRow').hidden = v !== 'grblm' && v !== 'custom'; $('#mCustom').hidden = v !== 'custom'; pjSummary(); gcDirty = true; renderGcode(); } else recomputeAll(); }));
+$('#mRetr').addEventListener('change', e => { const v = +e.target.value; if (!(v >= 0)) return; S.machine.retr = v; autosave(); recomputeAll(); });
 $('#gcFace').onchange = () => { gcDirty = true; renderGcode(); };
 [['#mcHead', 'head'], ['#mcTc', 'tc'], ['#mcFoot', 'foot'], ['#mcExt', 'ext'], ['#mcG911', 'g911']].forEach(([id, k]) => $(id).addEventListener('change', e => { S.machine.custom = { ...CUSTOM_POST(), ...(S.machine.custom || {}), [k]: e.target.type === 'checkbox' ? e.target.checked : (k === 'ext' ? e.target.value.replace(/[^\w]/g, '') || 'nc' : e.target.value) }; autosave(); gcDirty = true; renderGcode(); }));
 $('#mMaxFeed').addEventListener('change', e => { const v = +e.target.value; if (!(v > 0)) return; S.machine.maxFeed = v; autosave(); libSyncProject(); libRender(); gcDirty = true; });
@@ -9779,7 +9796,7 @@ function v3Open() {
   if (!WK.off && S3.segs.length > 20000) {
     const n = S3.segs.length, A = new Float64Array(n * 6), KI = new Int32Array(n), F = new Uint8Array(n), Ks = [];
     for (let i = 0; i < n; i++) { const g = S3.segs[i], o = i * 6; A[o] = g.a[0]; A[o + 1] = g.a[1]; A[o + 2] = g.a[2]; A[o + 3] = g.b[0]; A[o + 4] = g.b[1]; A[o + 5] = g.b[2]; let k = Ks.indexOf(g.K); if (k < 0) { k = Ks.length; Ks.push(g.K); } KI[i] = k; F[i] = g.face; }
-    busyOn(tr('Calcul de la simulation…')); V3.busy = true; v3Busy(true); V3.cur = simTo(S3, 0); V3.dirty = true; v3Play(false); v3Ui(); v3Req(); $('#v3Info').textContent = tr('Calcul de la simulation…');
+    busyOn(tr('Calcul de la simulation…'), true); V3.busy = true; v3Busy(true); V3.cur = simTo(S3, 0); V3.dirty = true; v3Play(false); v3Ui(); v3Req(); $('#v3Info').textContent = tr('Calcul de la simulation…');
     wkCall('sim', { w: S3.w, h: S3.h, t: S3.t, nx: S3.nx, ny: S3.ny, cx: S3.cx, cy: S3.cy, ox: S3.ox, oy: S3.oy, floor: S3.floor, A, KI, F, Ks: Ks.map(K => ({ di: K.di, dj: K.dj, dz: K.dz, n: K.n })) }, [A.buffer, KI.buffer, F.buffer])
       .finally(() => busyOff()).then(r => { if (V3.S3 !== S3) return; S3.H.set(r.H); S3.B.set(r.B); S3.idx = S3.segs.length; S3.frac = 0; S3.last = null; fin(); }, () => { if (V3.S3 === S3) fin(); });
     return;
