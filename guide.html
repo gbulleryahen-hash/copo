@@ -172,6 +172,7 @@ footer p{max-width:none}
       <li><a href="#fr-lutherie">Lutherie</a></li>
       <li><a href="#fr-boite">Boîte à entures</a></li>
       <li><a href="#fr-graduations">Graduations rotatives</a></li>
+      <li><a href="#fr-circuit">Circuit imprimé (Gerber)</a></li>
       <li><a href="#fr-imbrication">Imbrication</a></li>
       <li><a href="#fr-double">Double face</a></li>
       <li><a href="#fr-vues">Vues 2D et 3D</a></li>
@@ -189,7 +190,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.368</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.404</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -207,6 +208,7 @@ footer p{max-width:none}
       <div><b>Imbrication</b><span>Place plusieurs pièces sur le panneau selon leur forme réelle, avec rotations.</span></div>
       <div><b>Polices à trait unique</b><span>Une soixantaine fournies (Hershey, EMS, Relief…) pour graver vite en une seule passe.</span></div>
       <div><b>Double face</b><span>Calques par face, retournement en X ou en Y, pause pour retourner la pièce.</span></div>
+      <div><b>Circuit imprimé</b><span>Fichiers Gerber et Excellon de KiCad : isolation, perçage, sérigraphie, centrage et détourage.</span></div>
       <div><b>Aperçu 3D</b><span>Simulation de l'enlèvement de matière, face 1 et face 2, avec lecture animée.</span></div>
       <div><b>G-code</b><span>GRBL, grblHAL, FluidNC, GRBL manuel (G53), Carbide Motion, Onefinity, LinuxCNC, Mach3/4, UCCNC, MASSO, Estlcam, TinyG, WinCNC, WinPC-NC, Stepcraft, commandes industrielles ISO (Haas, Fanuc, Hurco, Syntec, Makino, Centroid…), Heidenhain TNC (Klartext), post-processeur personnalisé, une soixantaine de machines au format .pp (Haas, Tormach PathPilot, Axyz, Isel, Kuka, laser, HPGL…) et import de vos fichiers .pp. Arcs G2/G3.</span></div>
       <div><b>Fiche de gamme</b><span>Fiche d'atelier imprimable : vues 2D et 3D, origine, outils, parcours, vitesses, contrôles.</span></div>
@@ -461,6 +463,7 @@ X74.36 A14.181</pre>
     <h3>Passes, surépaisseur et sens de coupe</h3>
     <p><strong>Prof. départ (D)</strong> et <strong>Prof. coupe (C)</strong>, comme dans Aspire : l'usinage commence à la profondeur D sous la surface (par exemple au fond d'une poche déjà usinée) et descend de C à partir de là ; le fond est donc à D + C. Pour un profil ou une poche, C peut valoir 0 : une seule passe à la profondeur D (surfaçage, ou fraise posée sur le relief avec la projection). Laissez D à 0 pour partir de la surface. Une valeur <em>négative</em> fait commencer au-dessus de la surface : les premières passes se font à vide, utile si le brut est plus épais que prévu ou sa surface irrégulière (D = −2 et C = 5 : départ 2 mm au-dessus, fond à 3 mm de profondeur). En V-carving, la fraise calcule le motif comme si la surface était à D, ce qui sert notamment à l'incrustation. Le petit schéma à côté des champs rappelle ce que sont D et C.</p>
     <p><strong>Projeter sur le relief</strong> (profil, poche, V-carving) : le parcours suit la surface de tous les reliefs visibles de l’onglet Relief au lieu du dessus plat du brut (inutile de sélectionner le relief : sélectionnez seulement les vecteurs du parcours) ; les profondeurs D et C se mesurent alors depuis le relief. La hauteur de contact tient compte de la forme de la fraise (en V, hémisphérique, droite), pour graver un motif ou une lettre sur une surface bombée. En dehors du relief, le parcours reste mesuré depuis le dessus du brut. Face 1 seulement ; si le relief change, la liste signale qu’il faut recalculer le parcours.</p>
+    <p><strong>Fraise conique</strong> (profil, options avancées) : avec une fraise en V ou de gravure, le contour est décalé de la demi-largeur de coupe à la profondeur, et non du rayon de la queue, pour une isolation de circuit ou un chanfrein. <strong>Passes côte à côte</strong> élargit la coupe par des passes qui s’éloignent du contour, avec le <strong>recouvrement</strong> choisi.</p>
     <figure><img src="img/projection-relief.webp" alt="Texte Hello COPO en trait unique, projeté sur un lissage : à gauche le dessin en 2D, à droite le parcours qui suit la surface en 3D." width="1000" height="327" loading="lazy"><figcaption>Un texte à trait unique gravé <em>sur</em> un lissage : le parcours (en orange) épouse la surface du relief.</figcaption></figure>
     <p>La profondeur de coupe est répartie en passes de la profondeur choisie. Une <strong>surépaisseur</strong> laisse un peu de matière sur les parois pendant l'ébauche ; elle est retirée à la dernière passe ou par une passe de finition sur toute la hauteur, ou laissée en place (<em>Ne pas enlever la surépaisseur</em>) pour la retirer avec un autre parcours de finition, par exemple avec une autre fraise. Le sens de coupe est <em>avalant</em> ou en <em>opposition</em>.</p>
     <h3>Entrée de l'outil</h3>
@@ -536,6 +539,31 @@ X74.36 A14.181</pre>
       <li><strong>Traits plus longs</strong> : un trait moyen tous les <em>n</em> traits et un trait long tous les <em>m</em> traits, chacun avec sa longueur ; ils partent du même point de référence. <em>Numéro du premier trait</em> décale ce comptage.</li>
     </ul>
     <p>L’aperçu montre la feuille déroulée et le pas, en degrés et en millimètres sur la surface. <span class="ui">Créer les traits</span> les pose en groupe sur le calque actif ; usinez-les en V-carving ou en profil « sur la ligne ».</p>
+
+    <h2 id="fr-circuit">Circuit imprimé (Gerber, Excellon)</h2>
+    <figure><img src="img/fr-31-circuit.webp" alt="Fenêtre Circuit imprimé : liste des fichiers Gerber et Excellon d’un ZIP KiCad avec leur couche, aperçu coloré de la carte, placement et épaisseur de la plaque." width="1800" height="1125" loading="lazy"><figcaption>Le ZIP de fabrication d’une carte KiCad : chaque fichier reçoit sa couche, l’aperçu montre la carte telle qu’elle sera importée.</figcaption></figure>
+    <p><span class="ui">Fichier › Importer un circuit imprimé (Gerber, Excellon)…</span> (ou <span class="ui">Extensions › Circuit imprimé (Gerber)…</span>) usine une carte électronique à l’anglaise : la fraise isole les pistes dans la plaque cuivrée, perce les trous et découpe la carte. COPO lit les fichiers de fabrication de KiCad ou d’un autre logiciel, sans rien installer.</p>
+    <h3>Importer la carte</h3>
+    <ol>
+      <li>Dans KiCad, exportez les <strong>Gerber</strong> (format X2, en mm) et le <strong>fichier de perçage</strong> Excellon, avec la <strong>même origine</strong> pour tous.</li>
+      <li>Choisissez le ZIP de fabrication ou les fichiers un par un (<span class="ui">Choisir les fichiers…</span>), ou glissez-les dans la fenêtre ou dans la vue 2D.</li>
+      <li>Chaque fichier reçoit sa couche : cuivre dessus, cuivre dessous, contour de la carte, perçages, sérigraphie dessus ou dessous. Vernis, pâte à braser et couches intérieures ne sont pas importés. Changez la couche dans la liste si besoin.</li>
+      <li>Réglez le <strong>placement</strong> : <em>Brut à la taille de la carte</em> (par défaut sur un projet vide : marge de 5 mm, 12 mm en double face, et l’épaisseur de la plaque), centrée sur le brut, ou coin bas gauche en X0 Y0. Puis <span class="ui">Importer les couches</span>.</li>
+    </ol>
+    <p>Chaque couche va sur son calque « PCB · … ». Le <strong>cuivre</strong> devient des contours fermés : pistes, pastilles et zones fusionnées, au vrai bord du cuivre. Le <strong>contour</strong> et la <strong>sérigraphie</strong> deviennent les lignes médianes des traits. Les <strong>perçages</strong> sont des cercles, groupés par diamètre : un clic sur un trou sélectionne tous ceux du même foret. Le <strong>dessous</strong> va sur des calques <strong>F2</strong>, dessinés vus du dessus par transparence comme dans KiCad : le projet devient double face.</p>
+    <h3>Créer les parcours</h3>
+    <figure><img src="img/fr-32-circuit-parcours.webp" alt="Parcours d’une carte double face : piges de centrage, isolation, sérigraphie, perçages par diamètre, isolation du dessous et détourage, en 2D et en 3D." width="1800" height="1125" loading="lazy"><figcaption>Les parcours créés pour une carte double face, dans l’ordre d’usinage : deux piges de centrage de part et d’autre de la carte.</figcaption></figure>
+    <p>La partie <span class="ui">Parcours du circuit</span> de la même fenêtre crée des parcours COPO ordinaires, modifiables ensuite comme les autres. <span class="ui">Ajouter les outils de circuit imprimé à la bibliothèque</span> range dans le dossier « Circuit imprimé » des fraises de gravure (20° et 30° pointe 0,1 mm, 60° pointe 0,2 mm), des forets de 0,6 à 1,3 mm et des fraises maïs de 1 et 2 mm. Les vitesses pour le FR4 sont copiées sur les outils du projet, quel que soit le matériau choisi.</p>
+    <ul>
+      <li><strong>Isolation des pistes</strong> : un profil extérieur à la fraise conique, à la profondeur choisie (0,1 mm par défaut), en passes côte à côte qui se recouvrent. La fenêtre affiche la largeur de coupe à cette profondeur et la largeur isolée autour du cuivre. Là où deux pistes sont plus proches que la largeur de coupe, la fraise ne passe pas entre elles : prenez une fraise plus fine ou moins profonde.</li>
+      <li><strong>Enlever le cuivre inutile</strong> (option) : une poche à la fraise droite retire le cuivre restant autour des pistes isolées.</li>
+      <li><strong>Sérigraphie</strong> (option) : les lettres et repères sont gravés à la fraise conique sur leur ligne médiane. <em>Seulement hors du cuivre</em> coupe les lignes qui toucheraient une piste de la même face : une lettre gravée sur une piste la couperait.</li>
+      <li><strong>Centrage du double face</strong> : deux trous sur l’axe de retournement, de part et d’autre de la carte, percés à travers la plaque et 3 mm dans la martyre. Avant de retourner la plaque, plantez-y deux piges (tiges ou queues de foret du même diamètre) : la plaque retombe exactement à sa place, sans toucher au zéro X Y.</li>
+      <li><strong>Perçages</strong> : un parcours par diamètre, avec le foret le plus proche (à 0,15 mm près) ou, pour un trou d’au moins 1,5 mm, une fraise droite en hélice. Les <strong>fentes</strong> (trous oblongs) sont fraisées en poche. Choisissez l’outil de chaque diamètre dans la liste, ou <em>Ne pas percer</em>.</li>
+      <li><strong>Détourage</strong> : un profil extérieur à la fraise droite sur le contour, avec des ponts. Perçages, fentes et détourage traversent la plaque de 0,2 à 0,3 mm : posez-la sur une planche martyre.</li>
+    </ul>
+    <p>Ordre d’usinage : face 1 (centrage, isolation, nettoyage, sérigraphie, perçages, fentes), puis face 2 (isolation, nettoyage et sérigraphie du dessous, détourage). Il n’y a donc qu’un retournement, et la carte n’est découpée qu’à la fin. <span class="ui">Créer les parcours</span> une seconde fois remplace les parcours du circuit et retire ceux des options décochées.</p>
+    <div class="note"><p>À 0,1 mm de profondeur, la largeur de coupe d’une fraise conique change beaucoup avec la hauteur : fixez la plaque bien à plat (adhésif double face sur une martyre surfacée) et faites le zéro Z sur le cuivre. Vérifiez la largeur des isolations sur un premier essai avant d’usiner une vraie carte.</p></div>
 
     <h2 id="fr-imbrication">Imbrication</h2>
     <figure><img src="img/fr-07-imbrication.webp" alt="Douze pièces imbriquées sur un panneau de 1000 × 600 mm, avec leurs parcours de détourage." width="1800" height="1125" loading="lazy"><figcaption>Quatre pièces en trois exemplaires sur un panneau de 1000 × 600 mm. Les L s'emboîtent, les copies reprennent les parcours des pièces d'origine.</figcaption></figure>
@@ -738,7 +766,7 @@ M30</pre>
     <h2 id="fr-licence">Licence</h2>
     <p>COPO est un logiciel libre © 2026 g.bulleryahen, distribué sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source. COPO est fourni sans aucune garantie.</p>
     <p>Bibliothèques utilisées, fournies dans le dossier <code>lib</code> : Clipper (Boost Software License), opentype.js (MIT), d3-delaunay et delaunator (ISC), acorn (MIT, pour les calculs en tâche de fond).</p>
-    <footer><p>COPO 1.368 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.404 · Mode d'emploi · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
@@ -760,6 +788,7 @@ M30</pre>
       <li><a href="#en-lutherie">Lutherie</a></li>
       <li><a href="#en-box">Finger-joint box</a></li>
       <li><a href="#en-graduations">Rotary graduations</a></li>
+      <li><a href="#en-circuit">Circuit board (Gerber)</a></li>
       <li><a href="#en-nesting">Nesting</a></li>
       <li><a href="#en-double">Double-sided</a></li>
       <li><a href="#en-views">2D and 3D views</a></li>
@@ -777,7 +806,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.368</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.404</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -795,6 +824,7 @@ M30</pre>
       <div><b>Nesting</b><span>Places several parts on the sheet following their true shape, with rotations.</span></div>
       <div><b>Single-line fonts</b><span>About sixty included (Hershey, EMS, Relief…) for fast one-pass engraving.</span></div>
       <div><b>Double-sided</b><span>Layers per side, flip around X or Y, pause to turn the part over.</span></div>
+      <div><b>Circuit boards</b><span>KiCad Gerber and Excellon files: isolation, drilling, silkscreen, registration and cutout.</span></div>
       <div><b>3D preview</b><span>Material removal simulation, side 1 and side 2, with animated playback.</span></div>
       <div><b>G-code</b><span>GRBL, grblHAL, FluidNC, manual GRBL (G53), Carbide Motion, Onefinity, LinuxCNC, Mach3/4, UCCNC, MASSO, Estlcam, TinyG, WinCNC, WinPC-NC, Stepcraft, industrial ISO controls (Haas, Fanuc, Hurco, Syntec, Makino, Centroid…), Heidenhain TNC (Klartext), a custom post-processor, about sixty .pp-format machines (Haas, Tormach PathPilot, Axyz, Isel, Kuka, laser, HPGL…) and import of your own .pp files. G2/G3 arcs.</span></div>
       <div><b>Setup sheet</b><span>Printable workshop sheet: 2D and 3D views, origin, tools, toolpaths, speeds, checks.</span></div>
@@ -1049,6 +1079,7 @@ X74.36 A14.181</pre>
     <h3>Passes, allowance and cut direction</h3>
     <p><strong>Start depth (D)</strong> and <strong>Cut depth (C)</strong>, as in Aspire: machining starts at depth D below the surface (for example at the bottom of a pocket already cut) and goes down by C from there, so the bottom is at D + C. For a profile or a pocket, C can be 0: a single pass at depth D (surfacing, or the tool resting on the relief with projection). Leave D at 0 to start from the surface. In V-carving, the pattern is computed as if the surface were at D, which is what inlays use. The small diagram next to the fields shows what D and C are. A <em>negative</em> value starts above the surface: the first passes cut air, useful when the stock is thicker than planned or its surface uneven (D = −2 and C = 5: start 2 mm above, bottom 3 mm deep).</p>
     <p><strong>Project onto the relief</strong> (profile, pocket, V-carving): the toolpath follows the surface of all visible reliefs of the Relief tab instead of the flat stock top (no need to select the relief: only select the toolpath’s vectors); depths D and C are then measured from the relief. The contact height takes the tool shape into account (V, ball nose, flat), to carve a pattern or lettering on a domed surface. Outside the relief, the toolpath stays measured from the stock top. Side 1 only; if the relief changes, the list flags that the toolpath must be recalculated.</p>
+    <p><strong>Tapered bit</strong> (profile, advanced options): with a V-bit or an engraving bit, the outline is offset by half the cut width at depth instead of the shank radius, for PCB isolation or a chamfer. <strong>Side-by-side passes</strong> widens the cut with passes that move away from the outline, with the chosen <strong>overlap</strong>.</p>
     <figure><img src="img/projection-relief.webp" alt="Single-line text Hello COPO projected onto a sweep: the 2D drawing on the left, the toolpath following the surface in 3D on the right." width="1000" height="327" loading="lazy"><figcaption>Single-line text engraved <em>on</em> a sweep: the toolpath (orange) follows the relief surface.</figcaption></figure>
     <p>The cut depth is split into passes of the chosen depth. An <strong>allowance</strong> leaves a little material on the walls while roughing; it is removed on the last pass or by a full-depth finishing pass, or left in place (<em>Do not remove the allowance</em>) to remove it with another finishing toolpath, for example with another tool. The cut direction is <em>climb</em> or <em>conventional</em>.</p>
     <h3>Tool entry</h3>
@@ -1124,6 +1155,31 @@ X74.36 A14.181</pre>
       <li><strong>Longer lines</strong>: a medium line every <em>n</em> lines and a long line every <em>m</em> lines, each with its own length; they start from the same reference point. <em>First line number</em> shifts this count.</li>
     </ul>
     <p>The preview shows the unrolled sheet and the pitch, in degrees and in millimeters on the surface. <span class="ui">Create the lines</span> places them as a group on the active layer; machine them with V-carving or an “on the line” profile.</p>
+
+    <h2 id="en-circuit">Circuit board (Gerber, Excellon)</h2>
+    <figure><img src="img/en-31-circuit.webp" alt="Circuit board window: list of the Gerber and Excellon files of a KiCad ZIP with their layer, colored board preview, placement and board thickness." width="1800" height="1125" loading="lazy"><figcaption>The fabrication ZIP of a KiCad board: each file gets its layer, and the preview shows the board as it will be imported.</figcaption></figure>
+    <p><span class="ui">File › Import a circuit board (Gerber, Excellon)…</span> (or <span class="ui">Extensions › Circuit board (Gerber)…</span>) mills a circuit board by isolation routing: the bit isolates the tracks in the copper-clad board, drills the holes and cuts the board out. COPO reads the fabrication files of KiCad or any other program, with nothing to install.</p>
+    <h3>Importing the board</h3>
+    <ol>
+      <li>In KiCad, export the <strong>Gerbers</strong> (X2 format, in mm) and the Excellon <strong>drill file</strong>, all with the <strong>same origin</strong>.</li>
+      <li>Choose the fabrication ZIP or the files one by one (<span class="ui">Choose files…</span>), or drop them on the window or the 2D view.</li>
+      <li>Each file gets its layer: top copper, bottom copper, board outline, drill holes, top or bottom silkscreen. Solder mask, solder paste and inner layers are not imported. Change the layer in the list if needed.</li>
+      <li>Set the <strong>placement</strong>: <em>Stock sized to the board</em> (the default on an empty project: 5 mm margin, 12 mm if double-sided, and the board thickness), centered on the stock, or bottom-left corner at X0 Y0. Then <span class="ui">Import the layers</span>.</li>
+    </ol>
+    <p>Each layer goes on its own “PCB · …” layer. The <strong>copper</strong> becomes closed outlines: tracks, pads and zones merged, at the true copper edge. The <strong>outline</strong> and the <strong>silkscreen</strong> become the centerlines of the strokes. <strong>Holes</strong> are circles, grouped by diameter: clicking one hole selects all the holes of the same drill. The <strong>bottom side</strong> goes on <strong>F2</strong> layers, drawn as seen from the top through the board, as in KiCad: the project becomes double-sided.</p>
+    <h3>Creating the toolpaths</h3>
+    <figure><img src="img/en-32-circuit-parcours.webp" alt="Toolpaths of a double-sided board: registration pins, isolation, silkscreen, drilling by diameter, bottom isolation and cutout, in 2D and 3D." width="1800" height="1125" loading="lazy"><figcaption>The toolpaths created for a double-sided board, in machining order: two registration pins on either side of the board.</figcaption></figure>
+    <p>The <span class="ui">Circuit board toolpaths</span> part of the same window creates ordinary COPO toolpaths, which you can then edit like any other. <span class="ui">Add circuit board tools to the library</span> puts engraving bits (20° and 30° with a 0.1 mm tip, 60° with a 0.2 mm tip), 0.6 to 1.3 mm drills and 1 and 2 mm corn mills in a “Circuit board” folder. FR4 speeds and feeds are copied to the project tools, whatever the chosen material.</p>
+    <ul>
+      <li><strong>Track isolation</strong>: an outside profile with a tapered bit at the chosen depth (0.1 mm by default), in overlapping side-by-side passes. The window shows the cut width at that depth and the isolation width around the copper. Where two tracks are closer than the cut width, the bit does not pass between them: use a finer bit or a shallower depth.</li>
+      <li><strong>Remove unused copper</strong> (option): an end mill pocket removes the remaining copper around the isolated tracks.</li>
+      <li><strong>Silkscreen</strong> (option): lettering and markings are engraved with a tapered bit along their centerline. <em>Only outside the copper</em> cuts the lines that would touch a track on the same side: a letter engraved on a track would cut it.</li>
+      <li><strong>Double-sided registration</strong>: two holes on the flip axis, on either side of the board, drilled through the board and 3 mm into the spoilboard. Before flipping the board, push two pins into them (rods or drill shanks of the same diameter): the board drops back exactly into place, without touching the X Y zero.</li>
+      <li><strong>Drilling</strong>: one toolpath per diameter, with the closest drill (within 0.15 mm) or, for holes of 1.5 mm and more, a helical end mill. <strong>Slots</strong> (oblong holes) are milled as pockets. Choose the tool for each diameter in the list, or <em>Don’t drill</em>.</li>
+      <li><strong>Cutout</strong>: an outside profile along the outline with an end mill, with tabs. Drilling, slots and cutout go 0.2 to 0.3 mm through the board: lay it on a spoilboard.</li>
+    </ul>
+    <p>Machining order: side 1 (registration, isolation, clearing, silkscreen, drilling, slots), then side 2 (bottom isolation, clearing and silkscreen, cutout). So there is only one flip, and the board is cut out last. Clicking <span class="ui">Create the toolpaths</span> again replaces the circuit board toolpaths and removes those of unchecked options.</p>
+    <div class="note"><p>At 0.1 mm depth, the cut width of a tapered bit changes a lot with height: hold the board perfectly flat (double-sided tape on a surfaced spoilboard) and set Z zero on the copper. Check the isolation width on a test piece before milling a real board.</p></div>
 
     <h2 id="en-nesting">Nesting</h2>
     <figure><img src="img/en-07-imbrication.webp" alt="Twelve parts nested on a 1000 × 600 mm sheet, with their cut-out toolpaths." width="1800" height="1125" loading="lazy"><figcaption>Four parts in three copies on a 1000 × 600 mm sheet. The L shapes interlock and the copies join the toolpaths of the original parts.</figcaption></figure>
@@ -1326,7 +1382,7 @@ M30</pre>
     <h2 id="en-licence">Licence</h2>
     <p>COPO is free software © 2026 g.bulleryahen, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL version 3</a>. You may use, study, modify and redistribute it, including for commercial use. Any modified version you distribute must stay under the same licence, with its source code. COPO comes with no warranty.</p>
     <p>Libraries used, bundled in the <code>lib</code> folder: Clipper (Boost Software License), opentype.js (MIT), d3-delaunay and delaunator (ISC), acorn (MIT, for background calculations).</p>
-    <footer><p>COPO 1.368 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
+    <footer><p>COPO 1.404 · User guide · © 2026 g.bulleryahen · GPL v3</p></footer>
   </main>
 </div>
 
