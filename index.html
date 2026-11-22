@@ -1656,7 +1656,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.398</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.399</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -7708,7 +7708,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.398', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.399', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -9716,7 +9716,7 @@ function relEDT(f, nx, ny) {
 }
 const relProf = (pr, t) => { t = Math.max(0, Math.min(1, t)); return pr === 'concave' ? 1 - Math.sqrt(1 - t * t) : pr === 'angular' ? t : pr === 'flat' ? 1 : pr === 'ogee' ? (t < 0.5 ? 2 * t * t : 1 - 2 * (1 - t) * (1 - t)) : Math.sqrt(1 - (1 - t) * (1 - t)); };
 function relGenGrid(G) {
-  const P = G.polys, pad = G.type === 'extrude' ? (+G.W || 1) / 2 + 0.5 : 0.5; let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  const P = G.polys, pad = G.type === 'extrude' ? (+G.W || 1) / 2 + 0.5 : G.tight ? 0 : 0.5; /* dôme, raccord récents : cadre du relief = cadre du dessin (cercle de 50 → relief de 50 × 50) */ let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
   for (const pl of P) for (const q of pl.pts) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); }
   x0 -= pad; y0 -= pad; x1 += pad; y1 += pad; const W = x1 - x0, Hh = y1 - y0, c = Math.max(0.04, Math.max(W, Hh) / 1023), nx = Math.max(2, Math.round(W / c) + 1), ny = Math.max(2, Math.round(Hh / c) + 1), N = nx * ny;
   const X = i => x0 + i * c, Y = j => y1 - j * c, h = new Float32Array(N).fill(NaN);
@@ -9823,7 +9823,7 @@ function relFromDrawing(type) {
     const ar = x => { let a = 0; const P = x.pts; for (let k = 0; k < P.length; k++) { const A = P[k], B = P[(k + 1) % P.length]; a += A[0] * B[1] - B[0] * A[1]; } return Math.abs(a / 2); }; cl.sort((a, b) => ar(b) - ar(a)); polys = cl.map(x => ({ pts: x.pts.map(q => [q[0], q[1]]), closed: true })); }
   else if (type === 'extrude') { polys = sh.map(x => ({ pts: x.pts.map(q => [q[0], q[1]]), closed: !!x.closed })); if (!polys.length) { toast(tr('Sélectionnez un ou plusieurs vecteurs.')); return; } }
   else { const op = sh.filter(x => !x.closed); if (op.length < 2) { toast(tr('Sélectionnez deux rails et, si vous voulez, un ou plusieurs profils dessinés en travers des rails (vecteurs ouverts).')); return; } polys = op.map(x => ({ pts: x.pts.map(q => [q[0], q[1]]), closed: false })); }
-  const G = { type, polys, prof: type === 'loft' ? 'concave' : 'round', W: type === 'extrude' ? 10 : 0, end: 100, prop: false, gv: REL_GEN_V };
+  const G = { type, polys, prof: type === 'loft' ? 'concave' : 'round', W: type === 'extrude' ? 10 : 0, end: 100, prop: false, gv: REL_GEN_V, ...(type === 'dome' || type === 'loft' ? { tight: true } : {}) };
   if (type === 'sweep' && polys.length > 3) { if (!relSweepMulti(G, polys)) return; }
   if (type === 'sweep' && polys.length === 3) { // profil : le vecteur qui relie les deux autres, sinon le dernier sélectionné
     G.all = polys; const dd = (p, pl) => Math.min(...pl.map(q => Math.hypot(p[0] - q[0], p[1] - q[1]))), score = k => { const o = polys.filter((x, i) => i !== k), e = polys[k].pts; return Math.min(dd(e[0], o[0].pts) + dd(e[e.length - 1], o[1].pts), dd(e[0], o[1].pts) + dd(e[e.length - 1], o[0].pts)); };
