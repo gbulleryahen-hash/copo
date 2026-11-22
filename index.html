@@ -8371,7 +8371,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.415', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.416', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -8857,8 +8857,21 @@ const VBR_CAT = [[0.25, 15, 3.175], [0.5, 15, 3.175], [0.75, 15, 3.175], [1, 15,
 const VBR_CUT = [[0.5, 16000, 600, 500], [1, 14000, 800, 600], [1.5, 14000, 1000, 800], [2, 14000, 1100, 800], [2.5, 14000, 1200, 800], [3.1, 14000, 1400, 900], [4, 14000, 2000, 1200]];
 function vbrCut(R) { const d = 2 * R; let r = VBR_CUT[0]; for (const x of VBR_CUT) if (d >= x[0] - 1e-9) r = x; const rpm = Math.min(18000, r[1]), w = r[2], al = r[3], pw = +Math.min(2, 2 * R).toFixed(2), pa = +Math.min(1, R).toFixed(2), st = +(2 * R * 0.15).toFixed(3), C = (feed, pass) => ({ rpm, feed, plunge: Math.round(feed / 3 / 10) * 10, pass, step: st });
   return { softwood: C(w, pw), mdf: C(w, pw), hardwood: C(Math.round(w * 0.8 / 10) * 10, +(pw * 0.8).toFixed(2)), acrylic: C(Math.round(w * 0.8 / 10) * 10, +(pw * 0.6).toFixed(2)), pvc: C(Math.round(w * 0.8 / 10) * 10, +(pw * 0.6).toFixed(2)), hdpe: C(Math.round(w * 0.9 / 10) * 10, +(pw * 0.8).toFixed(2)), alu: C(al, pa), brass: C(Math.round(al * 0.8 / 10) * 10, pa) }; }
+// bibliothèque v9 : petits forets (0,4 / 0,8 / 0,9 mm) et leurs équivalents en pouces (1/64", 1/32", n° 65 = 0,035")
+function libUpgrade9(o) {
+  if ((+o.v || 0) >= 9) return o;
+  const root = u => (o.groups.find(g => !g.parent && (u === 'in' ? /imp[ée]ri|pouce/i : /m[ée]tri/i).test(g.name)) || {}).id || null;
+  const grp = u => { const r = root(u); let g = o.groups.find(x => x.parent === r && /^forets$/i.test(x.name)); if (!g) { g = { id: 'grp-drill-' + u, name: 'Forets', parent: r, order: 9 }; o.groups.push(g); } return g.id; };
+  const L = [['mm', 0.4], ['mm', 0.8], ['mm', 0.9], ['in', 0.396875, '1/64"'], ['in', 0.79375, '1/32"'], ['in', 0.889, 'n° 65 – 0,035"']];
+  L.forEach(([u, d, nm], i) => { const t = { id: 'std-drill-' + u + '-' + String(+d.toFixed(4)).replace('.', '_'), group: grp(u), order: -10 + i, type: 'drill', units: u, dia: d, angle: 118, flat: 0, flutes: 2, notes: '', num: null, cut: {} };
+    const ref = o.tools.filter(x => x.type === 'drill' && x.cut && Object.keys(x.cut).length && x.dia >= 0.9).sort((a, b) => a.dia - b.dia)[0]; // réglages du plus petit foret existant, avance et débourrage proportionnels au diamètre
+    if (ref) { const k = d / ref.dia; for (const [m, c] of Object.entries(ref.cut)) if (c) t.cut[m] = { rpm: c.rpm, feed: Math.max(30, Math.round(c.feed * k)), plunge: Math.max(30, Math.round((c.plunge || c.feed) * k)), pass: +Math.max(0.5, (+c.pass || 1) * k).toFixed(2), step: 0, est: 1 }; }
+    t.name = nm ? 'Foret (118° - ' + nm + ')' : libToolName(t);
+    if (!o.tools.some(x => x.id === t.id || (x.type === 'drill' && x.units === u && Math.abs(x.dia - d) < 0.005))) o.tools.push(t); });
+  o.v = 9; return o;
+}
 function libUpgrade8(o) {
-  if ((+o.v || 0) >= 8) return o;
+  if ((+o.v || 0) >= 8) return libUpgrade9(o);
   const root = (o.groups.find(g => !g.parent && /m[ée]tri/i.test(g.name)) || {}).id || null;
   let gid = (o.groups.find(g => g.parent === root && /^fraises v à bout rond$/i.test(g.name)) || {}).id; if (!gid) { gid = 'grp-taper-' + root; o.groups.push({ id: gid, name: 'Fraises V à bout rond', parent: root, order: 4 }); }
   o.tools = o.tools.filter(t => !(/^std-vbr-/.test(t.id) && !Object.values(t.cut || {}).some(c => c && c.user))); // les trois fraises provisoires de la 1.308
@@ -8866,7 +8879,7 @@ function libUpgrade8(o) {
     t.angle = +(2 * taperHalfAngle(D, R, L)).toFixed(3); t.name = libToolName(t);
     if (!o.tools.some(x => x.id === t.id || (x.type === 'taper' && Math.abs(x.dia - D) < 0.01 && Math.abs((+x.tipR || 0) - R) < 0.01 && Math.abs((+x.flen || 0) - L) < 0.05))) o.tools.push(t); });
   for (const t of o.tools) if (t.type === 'taper' && /^Fraise (V à bout rond \d|conique à bout)/.test(t.name || '')) t.name = libToolName(t);
-  o.v = 8; return o;
+  o.v = 8; return libUpgrade9(o);
 }
 function libUpgrade6(o) {
   if ((+o.v || 0) >= 6) return libUpgrade7(o);
@@ -8912,7 +8925,7 @@ const DEFAULT_LIB_JSON = "{\"v\":4,\"source\":\"Aspire \u00b7 workbee\",\"materi
 let LIB = (() => { try { const o = JSON.parse(LS.get('copo.toollib') || 'null'); if (o && o.tools && o.groups) { if ((+o.v || 0) < 4) { const D = DEFAULT_LIB(), ids = new Set(o.tools.map(t => t.id)), gids = new Set(o.groups.map(g => g.id)); for (const t of D.tools) if (/^std-/.test(t.id) && !ids.has(t.id) && gids.has(t.group)) o.tools.push(t); o.v = 4; try { LS.set('copo.toollib', JSON.stringify(o)); } catch { } } return o; } } catch { } return DEFAULT_LIB(); })(); // v4 : fraises et forets standard ajoutés aux bibliothèques existantes
 for (const [id, name] of LIB_MATS) if (!LIB.materials.some(m => m.id === id)) LIB.materials.push({ id, name });
 if ((LIB.v || 1) < 3) { for (const t of LIB.tools) for (const m of ['softwood', 'hardwood', 'mdf', 'acrylic', 'alu', 'brass', 'pvc']) if (!t.cut[m] || t.cut[m].est) { const es = libEstimate(t, m, t.cut); if (es) t.cut[m] = es; } LIB.v = 3; try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { } }
-if ((+LIB.v || 0) < 8) { libUpgrade(LIB); try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { } } // v5 : PEHD, javelots, carving en V
+if ((+LIB.v || 0) < 9) { libUpgrade(LIB); try { LS.set('copo.toollib', JSON.stringify(LIB)); } catch { } } // v5 : PEHD, javelots, carving en V
 let libSel = null, libPick = null, libOpenG = new Set((() => { try { return JSON.parse(LS.get('copo.libOpen') || '[]'); } catch { return []; } })()), libResetArm = 0, libPendingDb = null;
 if (!LIB.thr) {
   const par = (LIB.groups.find(g => !g.parent && /m[ée]tri/i.test(g.name)) || {}).id || null, gid = 'grp-thread';
