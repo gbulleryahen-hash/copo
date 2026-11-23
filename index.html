@@ -1465,7 +1465,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
         <section class="blk"><h3>Outils</h3>
           <button type="button" class="libcard" data-act="libOpen"><span class="lc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h4v5l-2 2-2-2z"/><path d="M9 10v11"/><path d="M15 3h3v9l-1.5 3-1.5-3z"/><path d="M16.5 15v6"/></svg></span><span class="lc-t"><b>Bibliothèque d’outils</b><small id="libCardSub"></small></span><span class="lc-go" aria-hidden="true">›</span></button>
         </section>
-        <section class="blk"><h3>Parcours d'outils</h3>
+        <section class="blk"><h3>Parcours d'outils<button class="iconbtn" id="tpAllVis" data-act="tpAllVis" style="margin-left:auto" hidden></button></h3>
           <ul class="tplist" id="tpList"></ul>
           <button class="tprecalc" id="tpRecalc" data-act="tpRecalc" title="Recalcule les parcours d’outils (tous, ou ceux dont le dessin a changé)"><span>Recalculer tous les parcours</span></button>
           <p class="hint" id="tpTotal"></p>
@@ -2272,6 +2272,7 @@ Object.assign(I18N_EN, {"Mâle d’incrustation : la pente de la paroi est régl
 Object.assign(I18N_EN, {"Dossier de la bibliothèque inaccessible": "Library folder not accessible", "COPO n’a plus l’autorisation d’ouvrir le dossier « {d} » de votre bibliothèque (le navigateur la redemande après chaque redémarrage).": "COPO is no longer allowed to open your library folder “{d}” (the browser asks again after each restart).", "Aucun dossier choisi pour votre bibliothèque.": "No folder chosen for your library.", "Autoriser l’accès à « {d} »": "Allow access to “{d}”", "Choisir un autre dossier…": "Choose another folder…", "Garder la bibliothèque dans ce navigateur": "Keep the library in this browser", "La bibliothèque COPO, plus bas dans la liste, reste disponible.": "The COPO library, further down the list, is still available.", "Accès refusé par le navigateur.": "Access denied by the browser."});
 Object.assign(I18N_EN, {"🧹 Effacer le tracé usiné": "🧹 Clear machined trace", "Efface le tracé gris des parcours déjà usinés dans la vue 3D": "Clears the grey trace of already machined toolpaths in the 3D view"});
 Object.assign(I18N_EN, {"Effacer le tracé gris des parcours déjà usinés": "Clear the grey trace of already machined toolpaths", "Effacer le tracé usiné": "Clear machined trace", "Usinage en cours : le tracé s’effacera à la fin.": "Machining in progress: clear the trace when it is finished."});
+Object.assign(I18N_EN, {"Masquer tous les parcours (et les exclure du G-code)": "Hide all toolpaths (and leave them out of the G-code)", "Afficher tous les parcours": "Show all toolpaths"});
 Object.assign(I18N_EN, {"Départ": "Start", "Du bord": "From the edge", "Du centre (haut du relief)": "From the center (top of the relief)", "Du centre : la fraise commence en haut du relief et descend contour après contour ; elle n’entre jamais d’un coup dans la matière laissée par l’ébauche au pied du relief": "From the center: the bit starts at the top of the relief and goes down ring after ring; it never plunges into the material left by roughing at the foot of the relief"});
 Object.assign(I18N_EN, {"Profondeur de poche (a) (mm)": "Pocket depth (a) (mm)", "Hauteur du mâle sous le support (b) (mm)": "Male height below the backing (b) (mm)", "Débord du support (c) (mm)": "Backing overhang (c) (mm)", "Épaisseur de la pièce mâle (b) (mm)": "Male piece thickness (b) (mm)", "Jeu au fond (g) (mm)": "Bottom gap (g) (mm)", "La hauteur du mâle sous le support (b) doit dépasser la profondeur de poche (a).": "The male height below the backing (b) must exceed the pocket depth (a).", "Indiquez l’épaisseur de la pièce mâle (b).": "Enter the male piece thickness (b).", "Le débord du support (c) doit être plus grand que le diamètre de la fraise ({d} mm).": "The backing overhang (c) must be larger than the tool diameter ({d} mm).", "La hauteur du mâle (b) doit dépasser la profondeur de poche moins le jeu (a − g), pour qu’il reste un écart à raboter.": "The male height (b) must exceed the pocket depth minus the gap (a − g), so there is something left to plane off."});
 Object.assign(I18N_EN, {"Fraise de dégagement (fonds plats)": "Clearance tool (flat areas)", "Aucune (la fraise en V vide les fonds plats)": "None (the V-bit clears flat areas)", "Les fonds plats sont d’abord vidés à la fraise droite (parcours « dégagement » ajouté avant celui-ci) ; la fraise en V ne reprend que le bord.": "Flat areas are first cleared with the end mill (a “clearance” toolpath added before this one); the V-bit only finishes the edge.", "Fonds plats vidés à la fraise « {n} » (parcours de dégagement).": "Flat areas cleared with “{n}” (clearance toolpath).", "Pas de fond plat assez large : rien à dégager.": "No flat area wide enough: nothing to clear.", "Parcours de dégagement lié : réglez-le dans le V-carve.": "Linked clearance toolpath: set it up in the V-carve.", "dégagement": "clearance"});
@@ -7277,6 +7278,7 @@ function act(a, btn) {
     case 'rvStock': RV.showStock = !RV.showStock; rvSave(); rvReq(); return;
     case 'rvTp': RV.showTp = !RV.showTp; rvSave(); rvReq(); return;
     case 'rvFit': rvFit(false); return;
+    case 'tpAllVis': { const any = S.tps.some(t => t.visible); S.tps.forEach(t => t.visible = !any); commit(false); gcDirty = true; renderTpList(); draw(); return; }
     case 'cncClean': if (typeof window.cncCleanTrail === 'function') window.cncCleanTrail(); return;
     case 'rvMove': case 'rvRotate': case 'rvScale': { const t = { rvMove: 'move', rvRotate: 'rotate', rvScale: 'scale' }[a]; RV.tool = RV.tool === t ? null : t; rvToolsSync(); rvReq(); return; }
     case 'rvDropB': case 'rvDropT': { const it = relCur(); if (!it) { toast(tr('Sélectionnez un relief (clic dans la vue 3D, dans la vue 2D ou dans la liste).')); return; } it.top = a === 'rvDropT' ? 0 : S.stock.t - (+it.zH || 0); relAfterXf(it, true); return; }
@@ -8377,7 +8379,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.420', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.421', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -8491,6 +8493,7 @@ function tpRenameInline(tp, b) { const inp = document.createElement('input'); in
   inp.onkeydown = e => { e.stopPropagation(); if (e.key === 'Enter') fin(true); if (e.key === 'Escape') fin(false); }; inp.onblur = () => fin(true); inp.onclick = e => e.stopPropagation(); }
 var tpDragId = null;
 function renderTpList() { if (typeof libCardSync === 'function') libCardSync();
+  { const b = document.getElementById('tpAllVis'); if (b) { const any = S.tps.some(t => t.visible); b.hidden = !S.tps.length; b.title = tr(any ? 'Masquer tous les parcours (et les exclure du G-code)' : 'Afficher tous les parcours'); b.setAttribute('aria-label', b.title); b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>' + (any ? '' : '<path d="M4 4l16 16"/>') + '</svg>'; } } // œil général : tout afficher / tout masquer
   const ul = $('#tpList'); if (!S.tps.length) { ul.innerHTML = '<li class="empty">Aucun parcours. Sélectionnez des vecteurs dans la vue 2D, réglez le formulaire ci-dessous puis cliquez sur Calculer.</li>'; $('#tpTotal').textContent = ''; $('#topstats').textContent = ''; return; }
   ul.innerHTML = ''; let tot = 0;
   S.tps.forEach((tp, idx) => {
