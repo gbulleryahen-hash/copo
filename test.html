@@ -300,7 +300,9 @@ table.cnc-set input{width:110px;text-align:right}
 .testbadge{margin-left:8px;padding:2px 7px;border-radius:5px;background:#d9480f;color:#fff;font:700 11px/1.4 inherit;letter-spacing:.06em;align-self:center}
 .ci{display:inline-block;vertical-align:-3px;margin-right:6px;flex:none}.cnc-ib .ci,.cnc-gear .ci,[data-c=goAx] .ci,[data-c=zero] .ci,.cnc-pb .ci{margin:0;vertical-align:middle}.cnc-ci .ic .ci{margin:0}
 .cnc-icons .ci{margin-right:3px}.cnc-icons .cnc-z0,.cnc-icons .cnc-pr{font-size:12.5px;padding-left:2px;padding-right:2px}
-.cnc-sec{font:600 13.5px var(--f-ui);color:var(--ink);margin:14px 0 7px;padding-top:12px;border-top:1px solid var(--line)}.cnc-sec.first{margin-top:0;padding-top:0;border-top:0}
+.cnc-sec{font:600 11px var(--f-ui);text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:9px 0 5px;padding-top:7px;border-top:1px solid var(--line)}
+.cnc-runbox{position:sticky;bottom:0;z-index:3;background:var(--panel);margin:8px -8px 0;padding:0 8px 8px;border-top:1px solid var(--line);box-shadow:0 -6px 12px -8px var(--shadow)}.cnc-runbox .cnc-sec{border-top:0;margin-top:0}.cnc-runbox .cnc-run{margin-top:7px}
+.cnc-pane .cnc-pad{grid-template-columns:repeat(3,44px);grid-template-rows:repeat(3,44px);gap:4px}.cnc-pane .cnc-pb{width:44px;height:44px}.cnc-sec.first{margin-top:0;padding-top:0;border-top:0}
 .cnc-rb,.cnc-btn:has(>.ci){display:inline-flex;align-items:center;justify-content:center}.cnc-btn.big:has(>.ci){display:flex}
 .cnc-prg{display:flex;align-items:center;gap:8px}.cnc-prg>span{font-size:12px;color:var(--muted)}.cnc-prg select{flex:1;min-width:0}
 .cnc-segbar{display:flex;gap:3px;height:10px;margin:9px 0 6px}.cnc-segbar i{position:relative;min-width:6px;border-radius:3px;background:var(--line);overflow:hidden;cursor:default}.cnc-segbar i b{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--accent)}.cnc-segbar i.ok{background:#2e9b5c}.cnc-segbar i.ok b{background:#2e9b5c}.cnc-segbar i.cur{outline:1px solid var(--accent);outline-offset:1px}
@@ -8396,7 +8398,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.422', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.423', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -12403,10 +12405,10 @@ function ctlRender() {
     '</div><div class="cnc-stepl"><div><div class="cnc-s cnc-m">Pas (mm)</div><div class="cnc-seg">' + CF.steps.map(s => '<button class="' + (+CF.step === +s ? 'on' : '') + '" data-c="step" data-v="' + s + '">' + f2(s, s < 1 ? 1 : 0) + '</button>').join('') + '</div></div>' +
     '<div class="cnc-jf"><div class="cnc-s cnc-m">Vitesse <b data-live="jf">' + CF.jogF + '</b> mm/min</div><input type="range" min="100" max="6000" step="100" value="' + CF.jogF + '" data-cf="jogF"></div></div>' +
     '<div class="cnc-s cnc-m" style="margin-top:5px"><span class="cnc-kbd">←→↑↓</span> <span class="cnc-kbd">PgUp</span> <span class="cnc-kbd">PgDn</span> souris sur la vue · maintenir = continu</div>' +
-    '<div class="cnc-sec">Usinage</div><div class="cnc-row" style="gap:6px"><button class="cnc-btn" style="flex:1" data-c="spin" data-live="bspin">' + ci('spin') + '<span>Broche (M3)</span></button><button class="cnc-btn" style="flex:1" data-c="cool" data-live="bcool">' + ci('drop') + '<span>Arrosage (M8)</span></button></div>' +
+    '<div class="cnc-runbox"><div class="cnc-sec">Usinage</div><div class="cnc-row" style="gap:6px"><button class="cnc-btn" style="flex:1" data-c="spin" data-live="bspin">' + ci('spin') + '<span>Broche (M3)</span></button><button class="cnc-btn" style="flex:1" data-c="cool" data-live="bcool">' + ci('drop') + '<span>Arrosage (M8)</span></button></div>' +
     '<div class="cnc-run"><button class="cnc-rb go" data-c="start" data-live="bstart">' + ci('play') + '<span>Démarrer</span></button><button class="cnc-rb pa" data-c="pause" data-live="bpause">' + ci('pause') + '<span>Pause</span></button><button class="cnc-rb st" data-c="stop" data-live="bstop" title="Échap">' + ci('stop') + '<span>Arrêt</span></button></div>' +
     '<div class="cnc-ovr"><span>Avance</span><input type="range" min="10" max="200" step="10" value="100" data-ovr="f"><b data-live="ovf">100 %</b></div>' +
-    '<div class="cnc-ovr"><span>Broche</span><input type="range" min="10" max="200" step="10" value="100" data-ovr="s"><b data-live="ovs">100 %</b></div>';
+    '<div class="cnc-ovr"><span>Broche</span><input type="range" min="10" max="200" step="10" value="100" data-ovr="s"><b data-live="ovs">100 %</b></div></div>';
   qa('[data-j]', ctl).forEach(b => {
     const v = b.dataset.j.split(',').map(Number); let tm = 0, cont = false;
     b.onpointerdown = e => { e.preventDefault(); try { b.setPointerCapture(e.pointerId); } catch { } cont = false; tm = setTimeout(() => { cont = true; jogStart(v); }, 350); };
