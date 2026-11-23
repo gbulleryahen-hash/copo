@@ -312,8 +312,9 @@ table.cnc-set input{width:110px;text-align:right}
 .cnc-sec{font-size:0!important;height:0;margin:8px 0!important;padding:0!important;border-top:1px solid var(--line)}.cnc-sec.first,.cnc-runbox .cnc-sec{display:none}
 .cnc-top .cnc-gozero{width:auto;margin:0;position:relative}.cnc-top .cnc-gozero .cnc-ok{position:absolute;right:2px;top:0;font-style:normal;font-size:11px;color:#2e9b5c}.cnc-top{margin-bottom:6px}.cnc-pane .cnc-btn.big{padding:7px 10px}
 .cnc-pane .cnc-wsin{padding:3px 7px;font-size:15px}.cnc-crow{margin:2px 0}.cnc-coord{padding:4px 8px 5px}
-.cnc-jog{display:flex;gap:10px;align-items:flex-start}.cnc-pane .cnc-padw{grid-template-columns:repeat(4,42px);grid-template-rows:repeat(3,42px);gap:4px;margin:0;flex:none}.cnc-pane .cnc-pb{width:42px;height:42px}
-.cnc-jog .cnc-stepl{flex-direction:column;align-items:stretch;gap:8px;flex:1;min-width:0}.cnc-jog .cnc-seg{grid-template-columns:1fr 1fr}.cnc-jog .cnc-jf input{width:100%}
+.cnc-jog{display:block}.cnc-pane .cnc-padw{display:grid;grid-template-columns:repeat(4,46px);grid-template-rows:repeat(3,46px);gap:10px 16px;justify-content:center;margin:2px 0 8px}.cnc-pane .cnc-pb{width:46px;height:46px}
+.cnc-jog .cnc-stepl{display:flex;flex-direction:row;align-items:flex-end;gap:12px}.cnc-jog .cnc-stepl>div:first-child{flex:0 0 52%}.cnc-jog .cnc-seg{grid-template-columns:repeat(4,1fr)}.cnc-jog .cnc-jf{flex:1;min-width:0}.cnc-jog .cnc-jf input{width:100%}
+.cnc-coord{border:0!important;padding:0!important;background:transparent!important}
 .cnc-runbox{display:grid;grid-template-columns:1fr 1fr;column-gap:12px;margin-top:8px;padding-top:8px}.cnc-runbox>*{grid-column:1/-1}.cnc-runbox>.cnc-ovr{grid-column:auto;grid-template-columns:auto minmax(0,1fr) auto;gap:4px;margin-top:6px}
 </style>
 </head>
@@ -8404,7 +8405,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.424', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.425', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
