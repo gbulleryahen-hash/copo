@@ -309,6 +309,12 @@ table.cnc-set input{width:110px;text-align:right}
 .cnc-segl{display:flex;justify-content:space-between;gap:8px;font-size:12px}.cnc-segl span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cnc-segl span:last-child{color:var(--muted);white-space:nowrap}
 .cnc-float.min{width:auto;bottom:auto;padding:4px}.cnc-float.min .cnc-fh{padding:0}.cnc-rail{display:flex;flex-direction:column;gap:6px;padding:8px 6px;margin:0}.cnc-rail .ci{margin:0}.cnc-rail span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:12px}
 .tab-usiner .toast{top:auto;bottom:72px}
+.cnc-sec{font-size:0!important;height:0;margin:8px 0!important;padding:0!important;border-top:1px solid var(--line)}.cnc-sec.first,.cnc-runbox .cnc-sec{display:none}
+.cnc-top .cnc-gozero{width:auto;margin:0;position:relative}.cnc-top .cnc-gozero .cnc-ok{position:absolute;right:2px;top:0;font-style:normal;font-size:11px;color:#2e9b5c}.cnc-top{margin-bottom:6px}.cnc-pane .cnc-btn.big{padding:7px 10px}
+.cnc-pane .cnc-wsin{padding:3px 7px;font-size:15px}.cnc-crow{margin:2px 0}.cnc-coord{padding:4px 8px 5px}
+.cnc-jog{display:flex;gap:10px;align-items:flex-start}.cnc-pane .cnc-padw{grid-template-columns:repeat(4,42px);grid-template-rows:repeat(3,42px);gap:4px;margin:0;flex:none}.cnc-pane .cnc-pb{width:42px;height:42px}
+.cnc-jog .cnc-stepl{flex-direction:column;align-items:stretch;gap:8px;flex:1;min-width:0}.cnc-jog .cnc-seg{grid-template-columns:1fr 1fr}.cnc-jog .cnc-jf input{width:100%}
+.cnc-runbox{display:grid;grid-template-columns:1fr 1fr;column-gap:12px;margin-top:8px;padding-top:8px}.cnc-runbox>*{grid-column:1/-1}.cnc-runbox>.cnc-ovr{grid-column:auto;grid-template-columns:auto minmax(0,1fr) auto;gap:4px;margin-top:6px}
 </style>
 </head>
 <body>
@@ -8398,7 +8404,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.423', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.424', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -12015,7 +12021,7 @@ function progInfo() {
 function checks() { // chaque point non conforme dit ce qui ne va pas (fix) et propose le bouton qui corrige (go)
   const P = progInfo(), c = [], o = stockO(), st = S.stock, oriL = esc(tr(originLabel(st)));
   c.push(conn() ? { ok: true, t: 'Machine connectée' } : { ok: false, t: 'Machine non connectée', fix: 'Branchez la machine en USB, allumez-la, puis cliquez sur 🔌 Connecter.', go: { sel: '#cncScroll [data-c=conMenu]', l: '🔌 Connecter' } });
-  c.push(!limOn() || K.homed ? { ok: true, t: limOn() ? 'Prise d’origine faite' : 'Prise d’origine (pas de fins de course)' } : { ok: false, t: 'Prise d’origine machine pas faite', fix: 'Sans elle, la machine ne sait pas où elle est. Retirez tout de la table, placez la fraise au-dessus de la pièce, puis lancez la prise d’origine.', go: { sel: '.cnc-top ~ [data-c=home]', l: '⌂ Prise d’origine' } });
+  c.push(!limOn() || K.homed ? { ok: true, t: limOn() ? 'Prise d’origine faite' : 'Prise d’origine (pas de fins de course)' } : { ok: false, t: 'Prise d’origine machine pas faite', fix: 'Sans elle, la machine ne sait pas où elle est. Retirez tout de la table, placez la fraise au-dessus de la pièce, puis lancez la prise d’origine.', go: { sel: '.cnc-top [data-c=home]', l: '⌂ Prise d’origine' } });
   if (allSet()) c.push({ ok: true, t: 'Origine pièce définie (X, Y et Z)' });
   else { const m = AX.filter(a => !K.ws[a]).map(a => a.toUpperCase()); c.push({ ok: false, t: 'Origine pièce incomplète : ' + m.join(', ') + ' à faire', fix: (!K.ws.z ? 'Z : descendez la fraise sur le dessus de la pièce (⌖ Palper, manuel ou capteur). ' : '') + (m.some(a => a !== 'Z') ? (EXT ? 'X et Y : amenez la fraise sur le X0 Y0 du fichier, puis ↺ sur la ligne de l’axe.' : 'X et Y : amenez la fraise sur l’origine du projet (' + oriL + '), puis ↺ sur la ligne de l’axe.') : ''), go: !K.ws.z ? { sel: '#cncScroll [data-c=probeT]', l: '⌖ Palper' } : { sel: '#cncScroll [data-c=zero][data-a=' + AX.find(a => !K.ws[a]) + ']', l: '↺ ' + AX.find(a => !K.ws[a]).toUpperCase() } }); }
   if (P.ext) extChecks(P).forEach(x => c.push(x)); else {
@@ -12212,7 +12218,7 @@ function nextStep() {
     if (!P.tc.probed) return { n: 5, img: zSvg(), t: 'Changement d’outil, <b>zéro Z seulement</b> : amenez la fraise au-dessus de la pièce avec ' + kb(X + '−') + kb(X + '+') + kb(Y + '+') + kb(Y + '−') + ', approchez du dessus avec ' + kb(Z + '−') + ', puis ' + kb('Zéro Z ici') + ' (ou le capteur). Ne refaites pas X et Y.', sel: '#cncCtl [data-j="-1,0,0"], #cncCtl [data-j="1,0,0"], #cncCtl [data-j="0,1,0"], #cncCtl [data-j="0,-1,0"], #cncCtl [data-j="0,0,-1"]' };
     return { n: 5, t: 'Zéro Z refait : <b>▶ Reprendre l’usinage</b>.', sel: '#cncFloat [data-c=tcResume]' }; }
   if (!K.T) return { n: 1, t: 'Connectez la machine : <b>Connecter</b> (USB, ou machine simulée pour essayer).', btn: '<button class="cnc-btn sm" data-c="drivers">Pilotes USB</button>', sel: '#cncScroll [data-c=conMenu]' };
-  if (limOn() && !K.homed && !K.homeSkip) return { n: 2, t: 'Faites la <b>prise d’origine machine</b>. Avant : rien sur la table, fraise au-dessus de la pièce.', sel: '.cnc-top ~ [data-c=home]' };
+  if (limOn() && !K.homed && !K.homeSkip) return { n: 2, t: 'Faites la <b>prise d’origine machine</b>. Avant : rien sur la table, fraise au-dessus de la pièce.', sel: '.cnc-top [data-c=home]' };
   if (!K.pieceFixed) return { n: 3, t: K.flipTodo ? flipHead() + flipTxt().replace(/^R/, 'r') + ' Bridez-la de nouveau, à plat (schéma à droite).' : 'Fixez la pièce : bridée, à plat, brides hors du trajet de l’outil.', btn: '<button class="cnc-btn sm pri" data-c="fixed">C’est fait</button>' };
   if (!allSet()) { const m = AX.filter(a => !K.ws[a]).map(a => a.toUpperCase()).join(' '), kb = x => '<span class="cnc-kb">' + x + '</span>', X = '<b class="cx">X</b>', Y = '<b class="cy">Y</b>', Z = '<b class="cz">Z</b>', ol = '<b>' + (EXT ? esc(tr(originLabel(S.stock))) + ', X0 Y0 du fichier' : esc(tr(originLabel(S.stock)))) + '</b>';
     if (!K.ws.x || !K.ws.y) return { n: 4, img: origSvg(), t: 'Origine pièce (' + m + ' à faire). <b>① X Y</b> : amenez la fraise au-dessus de l’origine du projet (' + ol + ') avec ' + kb(X + '−') + kb(X + '+') + kb(Y + '+') + kb(Y + '−') + ', puis ' + kb(X + Y + '0 ici') + '. <b>② Z</b> ensuite.', sel: '#cncCtl [data-j="-1,0,0"], #cncCtl [data-j="1,0,0"], #cncCtl [data-j="0,1,0"], #cncCtl [data-j="0,-1,0"], #cncScroll .cnc-icons [data-c=zeroAll]' };
@@ -12399,12 +12405,11 @@ function launchBody() {
 /* ---------------- commandes du bas ---------------- */
 function ctlRender() {
   if (!ctl) return;
-  ctl.innerHTML = '<div class="cnc-sec">Déplacements</div><div class="cnc-padw"><div class="cnc-pad">' +
+  ctl.innerHTML = '<div class="cnc-sec">Déplacements</div><div class="cnc-jog" title="Clavier : flèches, PgUp, PgDn (souris sur la vue) · maintenir = continu"><div class="cnc-padw"><div class="cnc-pad">' +
     [[-1, 1, ci('arrow', 18, -90), 1], [0, 1, '<b class="cy">Y</b>+'], [1, 1, ci('arrow', 18), 1], [-1, 0, '<b class="cx">X</b>−'], null, [1, 0, '<b class="cx">X</b>+'], [-1, -1, ci('arrow', 18, 180), 1], [0, -1, '<b class="cy">Y</b>−'], [1, -1, ci('arrow', 18, 90), 1]].map(b => b ? '<button class="cnc-pb' + (b[3] ? ' dg' : '') + '" data-j="' + b[0] + ',' + b[1] + ',0">' + b[2] + '</button>' : '<button class="cnc-pb xy0" data-c="padHome" title="Remonte si besoin, puis va au-dessus de X0 Y0 (cliquer deux fois)">' + (U.homeConfirm ? 'OK ?' : '<b class="cx">X</b><b class="cy">Y</b>0') + '</button>').join('') +
     '</div><div class="cnc-zpad"><button class="cnc-pb" data-j="0,0,1"><b class="cz">Z</b>+</button><span></span><button class="cnc-pb" data-j="0,0,-1"><b class="cz">Z</b>−</button></div>' +
     '</div><div class="cnc-stepl"><div><div class="cnc-s cnc-m">Pas (mm)</div><div class="cnc-seg">' + CF.steps.map(s => '<button class="' + (+CF.step === +s ? 'on' : '') + '" data-c="step" data-v="' + s + '">' + f2(s, s < 1 ? 1 : 0) + '</button>').join('') + '</div></div>' +
-    '<div class="cnc-jf"><div class="cnc-s cnc-m">Vitesse <b data-live="jf">' + CF.jogF + '</b> mm/min</div><input type="range" min="100" max="6000" step="100" value="' + CF.jogF + '" data-cf="jogF"></div></div>' +
-    '<div class="cnc-s cnc-m" style="margin-top:5px"><span class="cnc-kbd">←→↑↓</span> <span class="cnc-kbd">PgUp</span> <span class="cnc-kbd">PgDn</span> souris sur la vue · maintenir = continu</div>' +
+    '<div class="cnc-jf"><div class="cnc-s cnc-m">Vitesse <b data-live="jf">' + CF.jogF + '</b> mm/min</div><input type="range" min="100" max="6000" step="100" value="' + CF.jogF + '" data-cf="jogF"></div></div></div>' +
     '<div class="cnc-runbox"><div class="cnc-sec">Usinage</div><div class="cnc-row" style="gap:6px"><button class="cnc-btn" style="flex:1" data-c="spin" data-live="bspin">' + ci('spin') + '<span>Broche (M3)</span></button><button class="cnc-btn" style="flex:1" data-c="cool" data-live="bcool">' + ci('drop') + '<span>Arrosage (M8)</span></button></div>' +
     '<div class="cnc-run"><button class="cnc-rb go" data-c="start" data-live="bstart">' + ci('play') + '<span>Démarrer</span></button><button class="cnc-rb pa" data-c="pause" data-live="bpause">' + ci('pause') + '<span>Pause</span></button><button class="cnc-rb st" data-c="stop" data-live="bstop" title="Échap">' + ci('stop') + '<span>Arrêt</span></button></div>' +
     '<div class="cnc-ovr"><span>Avance</span><input type="range" min="10" max="200" step="10" value="100" data-ovr="f"><b data-live="ovf">100 %</b></div>' +
@@ -12447,8 +12452,9 @@ function topRender() {
     '<div class="cnc-ct">Wi-Fi</div><button class="cnc-ci" disabled><span class="ic">' + ci('wifi') + '</span><span><b>FluidNC Wi-Fi</b><small>Pas encore disponible</small></span></button>' +
     '<div class="cnc-ct">Aide</div><button class="cnc-ci" data-c="drivers"><span class="ic">' + ci('info') + '</span><span><b>La machine n’apparaît pas ?</b><small>Pilotes USB (Arduino, ESP32, FluidNC…)</small></span></button></div>';
   else h += '<button class="cnc-btn big cnc-conn" data-c="conMenu">' + (K.st === 'Conn' ? 'Connexion…' : '<span class="cnc-cdot ' + (K.st === 'Alarm' ? 'al' : '') + '"></span>' + esc(K.ctrl || 'Connectée') + ' · ' + esc(K.kind === 'sim' ? 'simulée' : 'USB')) + ' ' + ci('chev', 14) + '</button><div class="cnc-cmenu"><div class="cnc-ct">' + esc(K.name) + '</div><button class="cnc-ci" data-c="disc"><span class="ic">' + ci('eject') + '</span><span><b>Déconnecter</b></span></button></div>';
-  h += '</div><button class="cnc-btn cnc-gear" data-c="mset" title="Paramètres machine : réglages $$, déplacements, capteur, manette, macros, console" aria-label="Paramètres machine">' + ci('gear', 18) + '</button></div>';
-  h += '<button class="cnc-btn cnc-gozero' + (c && limOn() && !K.homed && CF.guide ? ' pri' : '') + '" data-c="home" ' + (c && limOn() && !moving() && !K.prog && ['Idle', 'Alarm'].includes(K.st) ? '' : 'disabled') + ' title="' + (c && !limOn() ? 'Pas de fins de course sur cette machine' : 'Envoie chaque axe sur son fin de course ($H)') + '">' + ci('home') + 'Prise d’origine machine' + (K.homed ? ' ✓' : '') + '</button>';
+  const homeB = '<button class="cnc-btn cnc-gear cnc-gozero' + (c && limOn() && !K.homed && CF.guide ? ' pri' : '') + '" data-c="home" ' + (c && limOn() && !moving() && !K.prog && ['Idle', 'Alarm'].includes(K.st) ? '' : 'disabled') + ' title="Prise d’origine machine : ' + (c && !limOn() ? 'Pas de fins de course sur cette machine' : 'Envoie chaque axe sur son fin de course ($H)') + '" aria-label="Prise d’origine machine">' + ci('home', 18) + (K.homed ? '<i class="cnc-ok">✓</i>' : '') + '</button>';
+  h += '</div>' + homeB + '<button class="cnc-btn cnc-gear" data-c="mset" title="Paramètres machine : réglages $$, déplacements, capteur, manette, macros, console" aria-label="Paramètres machine">' + ci('gear', 18) + '</button></div>';
+
   const jd = !(c && canJog());
   h += '<div class="cnc-icons"><select class="cnc-wcs" data-wcs="1" ' + (c && !K.prog && !moving() ? '' : 'disabled') + ' title="Repère de travail actif">' + [1, 2, 3, 4, 5, 6].map(n => '<option value="' + n + '" ' + (K.wcs === n ? 'selected' : '') + '>G5' + (3 + n) + '</option>').join('') + '</select>' +
     '<button class="cnc-btn cnc-ib" data-c="goHome" ' + (c && K.homed && canJog() ? '' : 'disabled') + ' title="' + (K.homed ? 'Aller à l’origine machine : Z d’abord, puis X Y' : 'Aller à l’origine machine (faites d’abord la prise d’origine)') + '" aria-label="Aller à l’origine machine">' + ci('corner', 18) + '</button>' +
