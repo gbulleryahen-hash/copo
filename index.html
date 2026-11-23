@@ -1681,7 +1681,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.428</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.429</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -3132,7 +3132,7 @@ function buildRelief(p, tool, shapes, M) {
   if (under > 0) for (let q = 0; q < H.length; q++) if (H[q] <= -st.t + 0.01) H[q] = floor; if (under > 0) warns.push(trf('Finition des bords : la fraise descend jusqu’à {d} mm sous le brut, dans le martyr.', { d: fr(under, 2) })); // fond du brut et autour du relief : la fraise peut descendre jusqu'à floor
   if (-R.min > st.t + 1e-6) warns.push(trf('Le relief ({d} mm) est plus épais que le brut ({t} mm) : le bas sera coupé. Augmentez l’épaisseur du brut.', { d: fr(-R.min, 1), t: fr(st.t, 1) }));
   const Hf = fin && relOutlines(its.filter(i => relFace(i) === fc), fc === 2) ? relHeightFn(S.relief.items.filter(i => relIn(i) && relGrid[i.id] && (!sel || sel.includes(i.id)) && relFace(i) === fc), fc === 2) : null; // reliefs générés : hauteur lue sans la grille du calcul
-  const TR = toolOnRelief(R, H, tool, floor, Hf), hc = TR.hc, zAt = fin ? TR.zAtFine : TR.zAt; // finition : outil posé exactement (pas de festons sur les pentes)
+  const alw0 = fin ? 0 : Math.max(0, +p.rlAllow || 0), TR = toolOnRelief(R, H, alw0 > 0 ? { ...tool, dia: D + 2 * alw0 } : tool, floor, Hf), hc = TR.hc, zAt = fin ? TR.zAtFine : TR.zAt; // finition : outil posé exactement (pas de festons sur les pentes)
   // limite d'usinage : masque sur la grille (contour du modèle, du brut ou tracés sélectionnés), puis décalage
   const bound = p.rlBound || (shapes.some(sh => sh.closed) ? 'sel' : 'model'), N = nx * ny; let Bm = new Uint8Array(N);
   if (bound === 'stock') Bm.fill(1);
@@ -3297,13 +3297,21 @@ function buildRelief(p, tool, shapes, M) {
       const zrz = (x, y) => Math.max(zk, Math.min(0, zAt(x, y) + allow)); let lastR = null;
       const topAt = (x, y) => { const s2 = Math.min(0, zAt(x, y) + allow); if (s2 < zk - 1e-6) return zPrev; return Math.min(0, Math.max(zPrev, -pass * Math.floor(-s2 / pass + 1e-9))); }; // haut de la matière restante (déjà vidé jusqu'au niveau précédent)
       const zlink = (from, to, run) => { const L = Math.hypot(to[0] - from[0], to[1] - from[1]), n = Math.max(1, Math.ceil(L / c)); let ok = L <= Lmax, hm = Math.max(zPrev, from[2]);
-        for (let i = 1; i < n; i++) { const x = from[0] + (to[0] - from[0]) * i / n, y = from[1] + (to[1] - from[1]) * i / n; if (ok && (!inB(x, y) || zAt(x, y) + allow > zk + 1e-6)) ok = false; hm = Math.max(hm, topAt(x, y)); }
+        for (let i = 1; i < n; i++) { const x = from[0] + (to[0] - from[0]) * i / n, y = from[1] + (to[1] - from[1]) * i / n; if (ok && (!inB(x, y) || zAt(x, y) + allow > zk + Math.max(0.02, allow * 0.5))) ok = false; hm = Math.max(hm, topAt(x, y)); }
         if (ok) { mb.g1(to[0], to[1], to[2], feed); return; } const h = Math.min(M.clearZ, hm + 1); mb.up(h); mb.lift = () => h; link(null, to, zrz, Math.min(0, zPrev), run); mb.lift = null; nlift++; };
-      for (const r of rows) for (const P of r) {
-        // tronçons où la surface (plus surépaisseur) est sous le niveau, coupés dès qu'elle dépasse
-        let run = null; const flush = () => { if (!run || run.length < 2) { run = null; return; } nl++; if (lastR) zlink(lastR, run[0], run); else link(null, run[0], zrz, Math.min(0, zPrev), run); for (let i = 1; i < run.length; i++) mb.g1(run[i][0], run[i][1], run[i][2], feed); lastR = run[run.length - 1]; run = null; };
-        for (const q of P) { if (q[2] < zk - 1e-6) (run = run || []).push([q[0], q[1], zk]); else flush(); }
-        flush();
+      // tronçons où la surface (plus surépaisseur) est sous le niveau, coupés dès qu'elle dépasse ; puis enchaînés au plus proche (zigzag sur le même niveau, sans remonter)
+      const runs = []; for (const r of rows) for (const P of r) { let run = null; for (const q of P) { if (q[2] < zk - 1e-6) (run = run || []).push([q[0], q[1], zk]); else { if (run && run.length >= 2) runs.push(run); run = null; } } if (run && run.length >= 2) runs.push(run); }
+      const tolZ = Math.max(0.02, allow * 0.5), direct = (a, b) => { const L = Math.hypot(b[0] - a[0], b[1] - a[1]); if (L > Lmax) return false; const n = Math.max(1, Math.ceil(L / c)); for (let i = 1; i < n; i++) { const x = a[0] + (b[0] - a[0]) * i / n, y = a[1] + (b[1] - a[1]) * i / n; if (!inB(x, y) || zAt(x, y) + allow > zk + tolZ) return false; } return true; };
+      const used = new Uint8Array(runs.length);
+      for (let left = runs.length; left > 0; left--) {
+        let pick = -1, rev = false;
+        if (lastR) { const cand = []; for (let k = 0; k < runs.length; k++) if (!used[k]) { const A = runs[k][0], B = runs[k][runs[k].length - 1], da = Math.hypot(A[0] - lastR[0], A[1] - lastR[1]), db = Math.hypot(B[0] - lastR[0], B[1] - lastR[1]); cand.push([Math.min(da, db), k, db < da]); }
+          cand.sort((u, v) => u[0] - v[0]); for (let t = 0; t < Math.min(10, cand.length) && cand[t][0] <= Lmax; t++) { const rr = runs[cand[t][1]], q0 = cand[t][2] ? rr[rr.length - 1] : rr[0]; if (direct(lastR, q0)) { pick = cand[t][1]; rev = cand[t][2]; break; } }
+          if (pick < 0) { pick = cand[0][1]; rev = cand[0][2]; } }
+        else pick = used.indexOf(0);
+        used[pick] = 1; const run = rev ? runs[pick].slice().reverse() : runs[pick]; nl++;
+        if (lastR) zlink(lastR, run[0], run); else link(null, run[0], zrz, Math.min(0, zPrev), run);
+        for (let i = 1; i < run.length; i++) mb.g1(run[i][0], run[i][1], run[i][2], feed); lastR = run[run.length - 1];
       }
       if (zk <= zmin) break;
     }
@@ -8452,7 +8460,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.428', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.429', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
