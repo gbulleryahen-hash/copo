@@ -1683,7 +1683,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.451</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.452</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1991,7 +1991,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
     <div id="pcbTp" hidden>
       <div class="gr-sub" id="pcbTpH">Parcours du circuit</div>
       <p class="hint">Crée les parcours à partir des calques « PCB » du projet. Les recréer remplace ceux d’avant. Réglages de coupe pour le FR4 (bakélite, époxy) copiés sur les outils du projet.</p>
-      <div class="row" id="pcbLibAddB" hidden><button data-act="pcbLibAdd">Ajouter les outils de circuit imprimé à la bibliothèque</button></div>
+      <div class="row" id="pcbLibAddB" hidden><button data-act="pcbLibAdd">Ajouter les outils manquants</button></div>
       <div id="pcbIsoRow"><b class="pcb-h">Isolation des pistes</b>
         <div class="g2"><label>Fraise conique<select id="pcbIsoT"></select></label><label>Profondeur (mm)<input data-u="len" type="number" id="pcbIsoD" step="0.01" min="0.01"></label><label>Passes côte à côte<input type="number" id="pcbIsoN" step="1" min="1" max="10"></label><label>Recouvrement (%)<input type="number" id="pcbIsoO" step="5" min="0" max="90"></label></div>
         <p class="hint mono" id="pcbIsoInfo"></p></div>
@@ -2302,6 +2302,7 @@ Object.assign(I18N_EN, {"Recalcul automatique des parcours activé.": "Automatic
 Object.assign(I18N_EN, {"Alt+clic : seulement ce calque (encore : tous)": "Alt+click: this layer only (again: all)", "Alt+clic : seulement ce parcours (encore : tous)": "Alt+click: this toolpath only (again: all)", "Seul le calque « {n} » est affiché (Alt+clic encore : tous).": "Only layer “{n}” is shown (Alt+click again: all).", "Tous les calques sont affichés.": "All layers are shown.", "Seul le parcours « {n} » est affiché et exporté (Alt+clic encore : tous).": "Only toolpath “{n}” is shown and exported (Alt+click again: all).", "Tous les parcours sont affichés.": "All toolpaths are shown."});
 Object.assign(I18N_EN, {"Aller-retour (pente par pente)": "Back and forth (slope by slope)", "Ordre des passes": "Pass order", "Par zone (pente par pente)": "By area (slope by slope)", "Par niveau (tout un Z, puis le suivant)": "By level (a whole Z, then the next)"});
 Object.assign(I18N_EN, {"Direction des passes ": "Pass direction ", "Direction des passes": "Pass direction", "Angle": "Angle", "Le long du relief": "Along the relief", "Uniquement pour les reliefs faits par Extrusion ou Lissage (moulures) : chaque passe suit le rail en gardant la même place sur le profil, donc à hauteur presque constante. Les autres reliefs ne sont pas usinés par ce parcours : choisissez « Angle » pour eux.": "Only for reliefs made with Extrusion or Sweep (moldings): each pass follows the rail at the same place on the profile, so at an almost constant height. Other reliefs are not machined by this toolpath: choose “Angle” for them.", "« Le long du relief » : aucun relief fait par extrusion ou lissage parmi les reliefs usinés. Choisissez « Angle ».": "“Along the relief”: no relief made by extrusion or sweep among the machined reliefs. Choose “Angle”."});
+Object.assign(I18N_EN, {"Centrage (piges Ø{d})": "Alignment (Ø{d} pins)", "Cuivre dessus – isolation des pistes": "Top copper – trace isolation", "Cuivre dessous – isolation des pistes": "Bottom copper – trace isolation", "Cuivre dessus – cuivre inutile enlevé": "Top copper – unused copper removal", "Cuivre dessous – cuivre inutile enlevé": "Bottom copper – unused copper removal", "Sérigraphie dessus": "Top silkscreen", "Sérigraphie dessous": "Bottom silkscreen", "Perçage Ø{d} ({n} trous)": "Drilling Ø{d} ({n} holes)", "Perçage Ø{d} ({n} trous, en hélice)": "Drilling Ø{d} ({n} holes, helical)", "Perçage Ø{d} (1 trou)": "Drilling Ø{d} (1 hole)", "Perçage Ø{d} (1 trou, en hélice)": "Drilling Ø{d} (1 hole, helical)", "Fentes de {d} mm ({n})": "{d} mm slots ({n})", "Contour – détourage de la carte": "Outline – board cut-out", "Outils manquants dans votre bibliothèque : {l} (bouton « Ajouter les outils manquants »).": "Tools missing from your library: {l} (“Add missing tools” button).", "Ajouter les outils manquants : {l}": "Add missing tools: {l}", "Aucun outil ne manque : votre bibliothèque convient.": "No tool is missing: your library is fine."});
 Object.assign(I18N_EN, {"Départ": "Start", "Du bord": "From the edge", "Du centre (haut du relief)": "From the center (top of the relief)", "Du centre : la fraise commence en haut du relief et descend contour après contour ; elle n’entre jamais d’un coup dans la matière laissée par l’ébauche au pied du relief": "From the center: the bit starts at the top of the relief and goes down ring after ring; it never plunges into the material left by roughing at the foot of the relief"});
 Object.assign(I18N_EN, {"Profondeur de poche (a) (mm)": "Pocket depth (a) (mm)", "Hauteur du mâle sous le support (b) (mm)": "Male height below the backing (b) (mm)", "Débord du support (c) (mm)": "Backing overhang (c) (mm)", "Épaisseur de la pièce mâle (b) (mm)": "Male piece thickness (b) (mm)", "Jeu au fond (g) (mm)": "Bottom gap (g) (mm)", "La hauteur du mâle sous le support (b) doit dépasser la profondeur de poche (a).": "The male height below the backing (b) must exceed the pocket depth (a).", "Indiquez l’épaisseur de la pièce mâle (b).": "Enter the male piece thickness (b).", "Le débord du support (c) doit être plus grand que le diamètre de la fraise ({d} mm).": "The backing overhang (c) must be larger than the tool diameter ({d} mm).", "La hauteur du mâle (b) doit dépasser la profondeur de poche moins le jeu (a − g), pour qu’il reste un écart à raboter.": "The male height (b) must exceed the pocket depth minus the gap (a − g), so there is something left to plane off."});
 Object.assign(I18N_EN, {"Fraise de dégagement (fonds plats)": "Clearance tool (flat areas)", "Aucune (la fraise en V vide les fonds plats)": "None (the V-bit clears flat areas)", "Les fonds plats sont d’abord vidés à la fraise droite (parcours « dégagement » ajouté avant celui-ci) ; la fraise en V ne reprend que le bord.": "Flat areas are first cleared with the end mill (a “clearance” toolpath added before this one); the V-bit only finishes the edge.", "Fonds plats vidés à la fraise « {n} » (parcours de dégagement).": "Flat areas cleared with “{n}” (clearance toolpath).", "Pas de fond plat assez large : rien à dégager.": "No flat area wide enough: nothing to clear.", "Parcours de dégagement lié : réglez-le dans le V-carve.": "Linked clearance toolpath: set it up in the V-carve.", "dégagement": "clearance"});
@@ -6026,10 +6027,10 @@ function pcbMake() {
     for (const lp of loopsOf(g.fill || [])) if (mkShape(nodesFromPts(lp.map(p => [p[0] + dx, p[1] + dy])), true, { g: grp, layer })) n++;
     for (const it of g.lines || []) if (mkShape(it.nodes.map(mv), it.closed, { g: grp, layer })) n++;
   }
-  /* outils de circuit imprimé (forets de 0,3 à 3,2 mm, gravure, fraises maïs) ajoutés d'office à la bibliothèque s'il en manque */
-  const nLib = PCB_LIBT.every(x => LIB.tools.some(t => t.id === x[0])) ? 0 : pcbLibAdd(true);
-  commit(); renderLayers(); renderSel(); fit(); setTool('select'); pcbTpRender(); requestAnimationFrame(() => { const t = $('#pcbTpH'); if (t) t.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
-  toast(trf('Circuit importé : {c} couche(s), {n} vecteur(s) dont {h} trou(s).', { c: roles.size, n, h: nh }) + (roles.has('cuBot') || roles.has('silkBot') ? ' ' + tr('Calques du dessous en F2 : projet double face.') : '') + (nLib ? ' ' + trf('{n} outil(s) de circuit imprimé ajouté(s) à la bibliothèque, dossier « Circuit imprimé ».', { n: nLib }) : ''));
+  /* les outils de la bibliothèque de l'utilisateur sont pris en priorité ; ceux qui manquent sont seulement proposés (bouton « Ajouter les outils manquants ») */
+  const nLib = 0;
+  commit(); renderLayers(); renderSel(); fit(); setTool('select'); pcbTpRender(); const miss = pcbMissing(); requestAnimationFrame(() => { const t = $('#pcbTpH'); if (t) t.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
+  toast(trf('Circuit importé : {c} couche(s), {n} vecteur(s) dont {h} trou(s).', { c: roles.size, n, h: nh }) + (roles.has('cuBot') || roles.has('silkBot') ? ' ' + tr('Calques du dessous en F2 : projet double face.') : '') + (miss.length ? ' ' + trf('Outils manquants dans votre bibliothèque : {l} (bouton « Ajouter les outils manquants »).', { l: miss.map(x => x[5]).join(', ') }) : ''));
 }
 
 /* --- parcours du circuit : isolation (fraise conique), perçage par diamètre, détourage avec ponts --- */
@@ -6046,13 +6047,20 @@ function pcbCut(t) {
 /* outils de circuit imprimé ajoutés à la bibliothèque sur demande (dossier « Circuit imprimé ») */
 const PCB_LIBT = [['pcb-v20-01', 'engrave', 3.175, 20, 0.1, 'Gravure circuit (20°, pointe 0,1 mm)'], ['pcb-v30-01', 'engrave', 3.175, 30, 0.1, 'Gravure circuit (30°, pointe 0,1 mm)'], ['pcb-v60-02', 'engrave', 3.175, 60, 0.2, 'Gravure circuit (60°, pointe 0,2 mm)'],
   ...[0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.8, 2, 2.5, 3, 3.2].map(d => ['pcb-drill-' + d, 'drill', d, 118, 0, 'Foret circuit (' + String(d).replace('.', ',') + ' mm)']), ['pcb-corn-1', 'flat', 1, 0, 0, 'Fraise maïs circuit (1 mm)'], ['pcb-corn-2', 'flat', 2, 0, 0, 'Fraise maïs circuit (2 mm)']];
-function pcbLibAdd(quiet) {
+/* outils de circuit imprimé qui manquent vraiment : un foret par diamètre de trou sans foret à ± 0,15 mm (ni fraise pour l'hélice), une fraise de gravure s'il n'y a aucune fraise conique, une fraise droite de 1 à 2 mm s'il n'y en a pas */
+function pcbMissing() { const need = [], hav = id => LIB.tools.some(t => t.id === id);
+  for (const h of pcbHoles()) if (!pcbDrillFor(h.d)) { const best = PCB_LIBT.filter(x => x[1] === 'drill').sort((a, b) => Math.abs(a[2] - h.d) - Math.abs(b[2] - h.d))[0]; if (best && !hav(best[0]) && !need.includes(best) && Math.abs(best[2] - h.d) <= 0.15) need.push(best); }
+  if (S.layers.some(l => l.pcb === 'cuTop' || l.pcb === 'cuBot') && !pcbLib(pcbCone).length) need.push(PCB_LIBT[0]);
+  if (!pcbLib(t => t.type === 'flat' && t.dia >= 0.9 && t.dia <= 2.5).length) need.push(PCB_LIBT.find(x => x[0] === 'pcb-corn-2'));
+  return need.filter(Boolean); }
+function pcbLibAdd(quiet, only) {
+  if (!(only || pcbMissing()).length) { if (!quiet) toast(tr('Aucun outil ne manque : votre bibliothèque convient.')); return 0; }
   let g = LIB.groups.find(x => x.id === 'pcb-group'); if (!g) { g = { id: 'pcb-group', name: 'Circuit imprimé', parent: null, order: 9 }; LIB.groups.push(g); }
   let n = 0;
-  PCB_LIBT.forEach(([id, type, dia, angle, flat, name], i) => { if (LIB.tools.some(t => t.id === id)) return; const t = { id, group: g.id, order: i, type, units: 'mm', dia, angle: angle || (type === 'drill' ? 118 : 90), flat, flutes: type === 'flat' ? 6 : type === 'drill' ? 2 : 1, notes: '', num: null, name, cut: {} };
+  const list = only || pcbMissing(); PCB_LIBT.forEach(([id, type, dia, angle, flat, name], i) => { if (LIB.tools.some(t => t.id === id) || !list.some(x => x[0] === id)) return; const t = { id, group: g.id, order: i, type, units: 'mm', dia, angle: angle || (type === 'drill' ? 118 : 90), flat, flutes: type === 'flat' ? 6 : type === 'drill' ? 2 : 1, notes: '', num: null, name, cut: {} };
     const c = pcbCut(t); for (const m of LIB.materials) t.cut[m.id] = { rpm: c.rpm, feed: c.feed, plunge: c.plunge, pass: c.pass, step: +(dia * 0.4).toFixed(3), ...(type === 'drill' ? { peck: 0 } : {}) }; LIB.tools.push(t); n++; });
-  PCB_TP.iso = ''; PCB_TP.edge = ''; PCB_TP.skT = ''; PCB_TP.clrT = ''; PCB_TP.pinT = ''; PCB_TP.drill = {}; PCB_TP.slot = {}; libSave(); if (typeof libRender === 'function' && $('#libModal') && !$('#libModal').hidden) libRender();
-  if (!quiet) toast(n ? trf('{n} outil(s) ajouté(s) à la bibliothèque, dossier « Circuit imprimé ».', { n }) : tr('Les outils de circuit imprimé sont déjà dans la bibliothèque.')); pcbTpRender(); return n;
+  for (const m of [PCB_TP.drill, PCB_TP.slot]) for (const k of Object.keys(m)) if (!m[k]) delete m[k]; /* les trous sans outil reprennent le nouveau foret ; les choix déjà faits restent */ for (const k of ['iso', 'edge', 'skT', 'clrT', 'pinT']) if (!PCB_TP[k]) PCB_TP[k] = ''; libSave(); if (typeof libRender === 'function' && $('#libModal') && !$('#libModal').hidden) libRender();
+  if (!quiet) toast(n ? trf('{n} outil(s) ajouté(s) à la bibliothèque, dossier « Circuit imprimé ».', { n }) : tr('Aucun outil ne manque : votre bibliothèque convient.')); pcbTpRender(); return n;
 }
 const pcbLayer = r => S.layers.find(l => l.pcb === r);
 const pcbShapes = r => { const l = pcbLayer(r); return l ? S.shapes.filter(s => s.layer === l.id) : []; };
@@ -6062,11 +6070,14 @@ function pcbHoles() { /* trous ronds du calque Perçages, rangés par diamètre 
   return [...by.entries()].map(([k, ids]) => ({ d: +k, k, ids })).sort((a, b) => a.d - b.d);
 }
 function pcbDrillFor(d) { /* foret le plus proche (± 0,15 mm), sinon fraise droite en hélice pour un grand trou */
-  const dr = pcbLib(t => t.type === 'drill' && Math.abs(t.dia - d) <= 0.15).sort((a, b) => Math.abs(a.dia - d) - Math.abs(b.dia - d) || (/^pcb-/.test(b.id) - /^pcb-/.test(a.id)) || (a.dia >= d ? -1 : 1))[0]; if (dr) return dr.id;
+  const dr = pcbLib(t => t.type === 'drill' && Math.abs(t.dia - d) <= 0.15).sort((a, b) => Math.abs(a.dia - d) - Math.abs(b.dia - d) || (/^pcb-/.test(a.id) - /^pcb-/.test(b.id)) || (a.dia >= d ? -1 : 1))[0]; if (dr) return dr.id; /* à égalité : les forets de l'utilisateur avant ceux du dossier « Circuit imprimé » */
   if (d >= 1.5) { const m = pcbLib(t => t.type === 'flat' && t.dia <= d * 0.75 && t.dia >= 0.5).pop(); if (m) return m.id; }
   return '';
 }
 const PCB_TP = { iso: '', isoD: 0.1, isoN: 2, isoO: 40, edge: '', tabN: 4, drill: {}, slot: {}, sk: false, skT: '', skD: 0.15, skClip: true, pin: true, pinD: 3, pinT: '', clr: false, clrT: '' };
+/* choix de l'utilisateur gardés d'une fois sur l'autre (outils, profondeurs, options ; forets par diamètre) */
+try { const o = JSON.parse(LS.get('copo.pcbTp') || 'null'); if (o) for (const k of Object.keys(PCB_TP)) if (o[k] !== undefined) PCB_TP[k] = o[k]; } catch { }
+const pcbTpSave = () => { try { LS.set('copo.pcbTp', JSON.stringify(PCB_TP)); } catch { } };
 /* fentes (perçages oblongs) du calque Perçages, rangées par largeur */
 function pcbSlots() {
   const by = new Map();
@@ -6088,14 +6099,14 @@ function pcbPins() {
 function pcbTpRender() {
   const box = $('#pcbTp'); if (!box) return; const has = S.layers.some(l => l.pcb); box.hidden = !has; if (!has) return;
   const cones = pcbLib(pcbCone), flats = pcbLib(t => t.type === 'flat'), opt = (list, sel, none) => (none ? '<option value="">' + tr(none) + '</option>' : '') + list.map(t => '<option value="' + t.id + '"' + (t.id === sel ? ' selected' : '') + '>' + (t.name || '').replace(/</g, '&lt;') + '</option>').join('');
-  if (!PCB_TP.iso || !cones.some(t => t.id === PCB_TP.iso)) { /* largeur de coupe la plus proche de 0,15 mm ; à égalité, les outils « circuit » */ const sc = t => Math.abs(pcbConeW(t, PCB_TP.isoD) - 0.15) - (/^pcb-/.test(t.id) ? 0.02 : 0), c = cones.slice().sort((a, b) => sc(a) - sc(b))[0]; PCB_TP.iso = c ? c.id : ''; }
+  if (!PCB_TP.iso || !cones.some(t => t.id === PCB_TP.iso)) { /* largeur de coupe la plus proche de 0,15 mm ; à égalité, les outils « circuit » */ const sc = t => Math.abs(pcbConeW(t, PCB_TP.isoD) - 0.15) + (/^pcb-/.test(t.id) ? 0.02 : 0) /* à égalité, les outils de l'utilisateur */, c = cones.slice().sort((a, b) => sc(a) - sc(b))[0]; PCB_TP.iso = c ? c.id : ''; }
   if (!PCB_TP.skT || !cones.some(t => t.id === PCB_TP.skT)) PCB_TP.skT = PCB_TP.iso;
-  if (!PCB_TP.edge || !flats.some(t => t.id === PCB_TP.edge)) { const f = flats.filter(t => t.dia >= 0.9 && t.dia <= 2.5).sort((a, b) => (/^pcb-/.test(b.id) - /^pcb-/.test(a.id)) || Math.abs(a.dia - 1.5) - Math.abs(b.dia - 1.5))[0] || flats[0]; PCB_TP.edge = f ? f.id : ''; }
+  if (!PCB_TP.edge || !flats.some(t => t.id === PCB_TP.edge)) { const f = flats.filter(t => t.dia >= 0.9 && t.dia <= 2.5).sort((a, b) => Math.abs(a.dia - 1.5) - Math.abs(b.dia - 1.5) || (/^pcb-/.test(a.id) - /^pcb-/.test(b.id)))[0] || flats[0]; PCB_TP.edge = f ? f.id : ''; }
   if (!PCB_TP.clrT || !flats.some(t => t.id === PCB_TP.clrT)) { const f = flats.filter(t => t.dia >= 0.5 && t.dia <= 1.6).sort((a, b) => Math.abs(a.dia - 1) - Math.abs(b.dia - 1))[0] || flats[0]; PCB_TP.clrT = f ? f.id : ''; }
   if (!PCB_TP.pinT || !pcbLib(t => t.id === PCB_TP.pinT).length) PCB_TP.pinT = pcbDrillFor(PCB_TP.pinD);
   const cu = ['cuTop', 'cuBot'].filter(r => pcbShapes(r).length), holes = pcbHoles(), slots = pcbSlots(), edge = pcbShapes('edge').some(s => s.closed), silk = ['silkTop', 'silkBot'].some(r => pcbShapes(r).length), two = pcbShapes('cuBot').length > 0;
   const isoT = cones.find(t => t.id === PCB_TP.iso), w = isoT ? pcbConeW(isoT, PCB_TP.isoD) : 0, tot = pcbIsoTot();
-  const lacking = !PCB_LIBT.every(x => LIB.tools.some(t => t.id === x[0]));
+  const miss = pcbMissing();
   $('#pcbIsoT').innerHTML = opt(cones, PCB_TP.iso, 'Pas d’isolation'); $('#pcbEdT').innerHTML = opt(flats, PCB_TP.edge, 'Pas de détourage'); $('#pcbSkT').innerHTML = opt(cones, PCB_TP.skT); $('#pcbClrT').innerHTML = opt(flats, PCB_TP.clrT);
   $('#pcbIsoInfo').textContent = !cu.length ? tr('Aucun cuivre importé.') : isoT ? trf('Largeur de coupe {w} mm à {d} mm de profondeur ; isolation de {t} mm autour du cuivre.', { w: pcbF(w, 3), d: pcbF(PCB_TP.isoD), t: pcbF(tot, 3) }) + (cu.length > 1 ? ' ' + tr('Dessus en face 1, dessous en face 2.') : '') : '';
   $('#pcbIsoRow').hidden = !cu.length; $('#pcbClrRow').hidden = !cu.length; $('#pcbClrOpt').hidden = !PCB_TP.clr; $('#pcbClrOn').checked = PCB_TP.clr;
@@ -6103,13 +6114,14 @@ function pcbTpRender() {
   $('#pcbSkRow').hidden = !silk; $('#pcbSkOpt').hidden = !PCB_TP.sk; $('#pcbSkOn').checked = PCB_TP.sk; $('#pcbSkClip').checked = PCB_TP.skClip; $('#pcbSkD').value = PCB_TP.skD;
   $('#pcbPinRow').hidden = !two; $('#pcbPinOpt').hidden = !PCB_TP.pin; $('#pcbPinOn').checked = PCB_TP.pin; $('#pcbPinD').value = PCB_TP.pinD;
   if (two) { const pp = pcbPins(), dl = pcbLib(t => t.type === 'drill' || (t.type === 'flat' && t.dia < PCB_TP.pinD)); $('#pcbPinT').innerHTML = opt(dl, PCB_TP.pinT, 'Ne pas percer'); $('#pcbPinInfo').textContent = !pp ? '' : pp.ok ? trf('Axe de retournement {a} : piges en {p}.', { a: S.stock.flip === 'y' ? 'Y' : 'X', p: pp.P.map(q => '(' + pcbF(q[0], 1) + ' ; ' + pcbF(q[1], 1) + ')').join(LANG === 'fr' ? ' et ' : ' and ') }) : tr('Pas assez de place sur le brut pour les piges : agrandissez le brut (marge de 12 mm conseillée) ou réduisez leur diamètre.'); }
-  $('#pcbLibAddB').hidden = !lacking;
+  $('#pcbLibAddB').hidden = !miss.length; if (miss.length) $('#pcbLibAddB button').textContent = trf('Ajouter les outils manquants : {l}', { l: miss.map(x => tr(x[5])).join(', ') });
   const row = (k, d, n, sel, list, extra, slot) => '<div class="pcb-row"><span class="pcb-sw" style="background:' + PCB_COL.drill + '"></span><span class="pcb-fn">' + (slot ? trf('Fente de {d} mm', { d: pcbF(d) }) : 'Ø ' + pcbF(d) + ' mm') + ' <i>' + (slot ? trf('{n} fente(s)', { n }) : trf('{n} trou(s)', { n })) + extra + '</i></span><select data-' + (slot ? 's' : 'k') + '="' + k + '" aria-label="' + tr('Outil') + '">' + opt(list, sel, 'Ne pas percer') + '</select></div>';
+  for (const m of [PCB_TP.drill, PCB_TP.slot]) for (const k of Object.keys(m)) if (m[k] && !LIB.tools.some(t => t.id === m[k])) delete m[k]; /* outil choisi qui n'existe plus : on repropose */
   $('#pcbDrList').innerHTML = holes.length || slots.length ? holes.map(h => { if (PCB_TP.drill[h.k] === undefined) PCB_TP.drill[h.k] = pcbDrillFor(h.d); const sel = PCB_TP.drill[h.k], list = pcbLib(t => t.type === 'drill' || (t.type === 'flat' && t.dia < h.d)), t = list.find(x => x.id === sel);
       return row(h.k, h.d, h.ids.length, sel, list, !t ? ' · ' + tr('aucun foret à ± 0,15 mm') : t.type === 'flat' ? ' · ' + tr('en hélice') : Math.abs(t.dia - h.d) > 0.051 ? ' · ' + trf('foret de {d}', { d: pcbF(t.dia) }) : ''); }).join('')
     + slots.map(h => { const list = pcbLib(t => t.type === 'flat' && t.dia <= h.d - 0.04); if (PCB_TP.slot[h.k] === undefined) { const m = list[list.length - 1]; PCB_TP.slot[h.k] = m ? m.id : ''; } return row(h.k, h.d, h.ids.length, PCB_TP.slot[h.k], list, ' · ' + tr('fraisée en poche'), true); }).join('') : '<p class="hint">' + tr('Aucun perçage importé.') + '</p>';
   $('#pcbDrList').querySelectorAll('select').forEach(s => s.onchange = () => { if (s.dataset.s) PCB_TP.slot[s.dataset.s] = s.value; else PCB_TP.drill[s.dataset.k] = s.value; pcbTpRender(); });
-  $('#pcbTpB').disabled = !(cu.length && isoT) && !holes.some(h => PCB_TP.drill[h.k]) && !slots.some(h => PCB_TP.slot[h.k]) && !(edge && PCB_TP.edge) && !(silk && PCB_TP.sk);
+  pcbTpSave(); $('#pcbTpB').disabled = !(cu.length && isoT) && !holes.some(h => PCB_TP.drill[h.k]) && !slots.some(h => PCB_TP.slot[h.k]) && !(edge && PCB_TP.edge) && !(silk && PCB_TP.sk);
 }
 /* calque de calcul (vecteurs refaits à chaque création des parcours) */
 function pcbWork(r, name, color, face) {
@@ -6127,44 +6139,44 @@ function pcbClipOpen(paths, zone) {
 function pcbTpMake() {
   const th = Math.max(0.2, +$('#pcbTh').value || 1.6), two = pcbShapes('cuBot').length > 0, made = [], lt = id => LIB.tools.find(t => t.id === id), notes = [];
   const proj = t => { const pt = libToProject(t); Object.assign(pt, pcbCut(t)); return pt; };
-  const mk = (key, type, ids, t, face, base, extra, ord) => { const tool = proj(t), p = { ...newForm(), type, vstart: 0, zrel: 1, ...extra, pcb: key }; const tp = { id: uid(), name: tpAutoName(tpFn(type, p), base, tool, face), nameAuto: false, type, toolId: tool.id, shapeIds: ids, p, visible: true, face, _o: ord }; made.push(tp); };
+  const mk = (key, type, ids, t, face, base, extra, ord, label) => { const tool = proj(t), p = { ...newForm(), type, vstart: 0, zrel: 1, ...extra, pcb: key }; const tp = { id: uid(), name: label || tpAutoName(tpFn(type, p), base, tool, face), nameAuto: false, type, toolId: tool.id, shapeIds: ids, p, visible: true, face, _o: ord, _l: label }; made.push(tp); };
   const B = LANG === 'fr' ? { cu: 'pcb-cuivre', clr: 'pcb-nettoyage', sk: 'pcb-serigraphie', hole: 'pcb-trous-', slot: 'pcb-fentes-', pin: 'pcb-centrage', edge: 'pcb-contour' } : { cu: 'pcb-copper', clr: 'pcb-clearing', sk: 'pcb-silkscreen', hole: 'pcb-holes-', slot: 'pcb-slots-', pin: 'pcb-pins', edge: 'pcb-outline' };
   const keep = new Set(); /* clés des parcours à remplacer, même s'ils ne sont pas recréés (option décochée) */
   /* 1. piges de centrage (double face), percées en premier */
   const pinL = S.layers.find(l => l.pcb === 'pins'); if (pinL) { S.shapes = S.shapes.filter(s => s.layer !== pinL.id); } keep.add('pins');
   if (two && PCB_TP.pin) { const pp = pcbPins(), t = lt(PCB_TP.pinT);
-    if (pp && pp.ok && t) { const l = pcbWork('pins', 'Centrage', '#e8590c', 1), ids = pp.P.map(q => mkShape(ellipseNodes(q, pp.r, pp.r), true, { layer: l.id })).filter(Boolean).map(s => s.id); mk('pins', 'drill', ids, t, 1, B.pin, { depth: +(th + 3).toFixed(2), helixHoles: t.type === 'flat', peck: t.type === 'drill' ? 1 : 0, dwell: 0 }, 0); }
+    if (pp && pp.ok && t) { const l = pcbWork('pins', 'Centrage', '#e8590c', 1), ids = pp.P.map(q => mkShape(ellipseNodes(q, pp.r, pp.r), true, { layer: l.id })).filter(Boolean).map(s => s.id); mk('pins', 'drill', ids, t, 1, B.pin, { depth: +(th + 3).toFixed(2), helixHoles: t.type === 'flat', peck: t.type === 'drill' ? 1 : 0, dwell: 0 }, 0, trf('Centrage (piges Ø{d})', { d: pcbF(PCB_TP.pinD, 1) })); }
     else notes.push(tr(!t ? 'Piges : choisissez un outil.' : 'Piges : pas assez de place sur le brut.')); }
   else if (pinL) S.layers = S.layers.filter(l => l !== pinL);
   /* 2. isolation, nettoyage du cuivre, gravure de la sérigraphie, par face */
   const isoT = lt(PCB_TP.iso), tot = pcbIsoTot(), edgeL = baseLoops(pcbShapes('edge'));
   for (const [r, f, sr] of [['cuTop', 1, 'silkTop'], ['cuBot', 2, 'silkBot']]) {
     const sh = pcbShapes(r), ids = sh.map(s => s.id), tag = r === 'cuTop' ? 'Top' : 'Bot'; keep.add('iso-' + r).add('clr-' + r).add('silk-' + sr);
-    if (isoT && ids.length) mk('iso-' + r, 'profile', ids, isoT, f, B.cu, { side: 'out', coneW: true, npass: Math.max(1, Math.round(PCB_TP.isoN)), over: PCB_TP.isoO, depth: PCB_TP.isoD, pass: PCB_TP.isoD, allow: 0, tabs: false }, 1);
+    if (isoT && ids.length) mk('iso-' + r, 'profile', ids, isoT, f, B.cu, { side: 'out', coneW: true, npass: Math.max(1, Math.round(PCB_TP.isoN)), over: PCB_TP.isoO, depth: PCB_TP.isoD, pass: PCB_TP.isoD, allow: 0, tabs: false }, 1, tr(f === 1 ? 'Cuivre dessus – isolation des pistes' : 'Cuivre dessous – isolation des pistes'));
     const clrT = lt(PCB_TP.clrT);
     if (PCB_TP.clr && clrT && ids.length) { /* tout le cuivre sauf pistes et pastilles (+ un peu moins que l'isolation, pour que les deux se recouvrent) */
       const cu = pcbCuCP(r), keepZ = cOffset(cu, Math.max(0.02, (tot || 0.1) * 0.7)), area0 = edgeL.length ? cOffset(edgeL.map(toCP), -0.05) : cOffset(cu, 1.5), zone = loopsOf(cBool(ClipperLib.ClipType.ctDifference, area0, keepZ));
       const l = pcbWork('clr' + tag, 'Cuivre à enlever', '#b08968', f), zids = zone.map(lp => mkShape(nodesFromPts(lp), true, { layer: l.id })).filter(Boolean).map(s => s.id);
-      if (zids.length) mk('clr-' + r, 'pocket', zids, clrT, f, B.clr, { depth: PCB_TP.isoD, pass: PCB_TP.isoD, allow: 0, strategy: 'rings', dir: 'climb' }, 2);
+      if (zids.length) mk('clr-' + r, 'pocket', zids, clrT, f, B.clr, { depth: PCB_TP.isoD, pass: PCB_TP.isoD, allow: 0, strategy: 'rings', dir: 'climb' }, 2, tr(f === 1 ? 'Cuivre dessus – cuivre inutile enlevé' : 'Cuivre dessous – cuivre inutile enlevé'));
     } else { const l = S.layers.find(x => x.pcb === 'clr' + tag); if (l) { S.shapes = S.shapes.filter(s => s.layer !== l.id); S.layers = S.layers.filter(x => x !== l); } }
     const skT = lt(PCB_TP.skT), ssh = pcbShapes(sr);
     if (PCB_TP.sk && skT && ssh.length) { /* sérigraphie : lignes médianes, coupées là où la gravure toucherait le cuivre de la même face */
       const lines = ssh.filter(s => s.pts.length > 1).map(s => s.closed ? [...s.pts, s.pts[0]] : s.pts), wS = pcbConeW(skT, PCB_TP.skD);
       const kept = PCB_TP.skClip && ids.length ? pcbClipOpen(lines, cOffset(pcbCuCP(r), wS / 2 + 0.1)) : lines;
       const l = pcbWork('sk' + tag, 'Sérigraphie à graver', '#cfd4da', f), sids = kept.map(pl => mkShape(nodesFromPts(pl), false, { layer: l.id })).filter(Boolean).map(s => s.id);
-      if (sids.length) mk('silk-' + sr, 'profile', sids, skT, f, B.sk, { side: 'on', openSide: 'on', depth: PCB_TP.skD, pass: PCB_TP.skD, allow: 0, tabs: false }, 3);
+      if (sids.length) mk('silk-' + sr, 'profile', sids, skT, f, B.sk, { side: 'on', openSide: 'on', depth: PCB_TP.skD, pass: PCB_TP.skD, allow: 0, tabs: false }, 3, tr(f === 1 ? 'Sérigraphie dessus' : 'Sérigraphie dessous'));
       if (PCB_TP.skClip && ids.length && kept.length < lines.length * 0.3) notes.push(tr('Sérigraphie presque entièrement sur le cuivre : peu de lignes gravées.'));
     } else { const l = S.layers.find(x => x.pcb === 'sk' + tag); if (l) { S.shapes = S.shapes.filter(s => s.layer !== l.id); S.layers = S.layers.filter(x => x !== l); } }
   }
   /* 3. perçages par diamètre, puis fentes en poche */
-  for (const h of pcbHoles()) { keep.add('drill-' + h.k); const t = lt(PCB_TP.drill[h.k]); if (!t) continue; mk('drill-' + h.k, 'drill', h.ids, t, 1, B.hole + h.k.replace('.', '_'), { depth: +(th + (t.type === 'flat' ? 0.2 : 0.3)).toFixed(2), helixHoles: t.type === 'flat', peck: 0, dwell: 0 }, 4); }
-  for (const h of pcbSlots()) { keep.add('slot-' + h.k); const t = lt(PCB_TP.slot[h.k]); if (!t) continue; mk('slot-' + h.k, 'pocket', h.ids, t, 1, B.slot + h.k.replace('.', '_'), { depth: +(th + 0.2).toFixed(2), allow: 0, strategy: 'rings', dir: 'climb' }, 5); }
+  for (const h of pcbHoles()) { keep.add('drill-' + h.k); const t = lt(PCB_TP.drill[h.k]); if (!t) continue; mk('drill-' + h.k, 'drill', h.ids, t, 1, B.hole + h.k.replace('.', '_'), { depth: +(th + (t.type === 'flat' ? 0.2 : 0.3)).toFixed(2), helixHoles: t.type === 'flat', peck: 0, dwell: 0 }, 4, trf(h.ids.length > 1 ? (t.type === 'flat' ? 'Perçage Ø{d} ({n} trous, en hélice)' : 'Perçage Ø{d} ({n} trous)') : (t.type === 'flat' ? 'Perçage Ø{d} (1 trou, en hélice)' : 'Perçage Ø{d} (1 trou)'), { d: pcbF(h.d), n: h.ids.length })); }
+  for (const h of pcbSlots()) { keep.add('slot-' + h.k); const t = lt(PCB_TP.slot[h.k]); if (!t) continue; mk('slot-' + h.k, 'pocket', h.ids, t, 1, B.slot + h.k.replace('.', '_'), { depth: +(th + 0.2).toFixed(2), allow: 0, strategy: 'rings', dir: 'climb' }, 5, trf('Fentes de {d} mm ({n})', { d: pcbF(h.d), n: h.ids.length })); }
   /* 4. détourage, en dernier (face 2 s'il y a un dessous) */
   const edT = lt(PCB_TP.edge), eIds = pcbShapes('edge').filter(s => s.closed).map(s => s.id), tN = Math.max(0, Math.round(+$('#pcbTabN').value || 0)); keep.add('edge');
-  if (edT && eIds.length) mk('edge', 'profile', eIds, edT, two ? 2 : 1, B.edge, { side: 'out', depth: +(th + 0.2).toFixed(2), allow: 0, tabs: tN > 0, tabN: tN || 4, tabL: 2.5, tabH: +Math.min(0.6, th / 2).toFixed(2), tabMode: 'auto', tabShape: 'rect' }, 9);
+  if (edT && eIds.length) mk('edge', 'profile', eIds, edT, two ? 2 : 1, B.edge, { side: 'out', depth: +(th + 0.2).toFixed(2), allow: 0, tabs: tN > 0, tabN: tN || 4, tabL: 2.5, tabH: +Math.min(0.6, th / 2).toFixed(2), tabMode: 'auto', tabShape: 'rect' }, 9, tr('Contour – détourage de la carte'));
   S.tps = S.tps.filter(t => !(t.p && t.p.pcb && keep.has(t.p.pcb)));
   if (!made.length) { commit(); renderLayers(); draw(); toast(tr('Aucun parcours à créer : choisissez au moins un outil.')); return; }
-  made.sort((a, b) => a.face - b.face || a._o - b._o); made.forEach(t => delete t._o); /* face 1 puis face 2 : un seul retournement */
+  made.sort((a, b) => a.face - b.face || a._o - b._o); made.forEach((t, i) => { if (t._l) t.name = (i + 1) + ' · PCB ' + t._l + (two ? ' · F' + t.face : ''); delete t._o; delete t._l; }); /* noms numérotés dans l'ordre d'usinage */ /* face 1 puis face 2 : un seul retournement */
   S.tps.push(...made); made.forEach(computeTP);
   commit(); gcDirty = true; renderTools(); renderLayers(); renderTpList(); draw(); if (typeof rvReq === 'function') rvReq();
   const bad = made.filter(t => t.err);
@@ -8502,7 +8514,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.451', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.452', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
