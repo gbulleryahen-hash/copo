@@ -1683,7 +1683,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.450</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.451</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -4891,7 +4891,7 @@ function restore(s) {
 }
 function undo() { if (hi > 0) { hi--; restore(histText(hist[hi])); } }
 function redo() { if (hi < hist.length - 1) { hi++; restore(histText(hist[hi])); } }
-let asT = 0; function autosave() { clearTimeout(asT); asT = setTimeout(() => { LS.set('copeau.project', snapState()); LS.set('copeau.machine', JSON.stringify(S.machine)); if (typeof machStore === 'function') machStore(); }, 400); }
+let asT = 0; function autosave() { clearTimeout(asT); asT = setTimeout(() => { LS.set('copeau.project', snapState()); tpIdbSave(); LS.set('copeau.machine', JSON.stringify(S.machine)); if (typeof machStore === 'function') machStore(); }, 400); }
 
 // ---------- calcul des parcours ----------
 function flipPt(q, st) { st = st || S.stock; return st.flip === 'y' ? [st.w - q[0], q[1]] : [q[0], st.h - q[1]]; }
@@ -4960,13 +4960,16 @@ function tpRun(tp) { const had = !!tp.moves, sig = tpSig(tp), h = tpHit(tp, sig)
 const tpTodo = force => S.tps.filter(tp => force || !tp.moves || tp._sig !== tpSig(tp));
 const tpManual = () => LS.get('copo.tpAuto') === 'manual';
 let TP_BUSY = 0;
-function recomputeDone() { gcDirty = true; renderTpList(); draw(); if (curTab === 'gcode') renderGcode(); tpStaleUi(); }
+function recomputeDone() { gcDirty = true; renderTpList(); draw(); if (curTab === 'gcode') renderGcode(); tpStaleUi(); if (!TP_BUSY) tpIdbSave(); }
+let tpBoot = false, tpIdbKey = '';
 function recomputeAll(force) {
+  if (tpBoot && !force) { recomputeDone(); return; } /* démarrage : attendre les reliefs et les parcours gardés par le navigateur */
   let todo = tpTodo(force); if (!todo.length) { if (S.tps.some(t => t.stale)) S.tps.forEach(t => t.stale = false); recomputeDone(); return; }
-  if (tpManual() && !force && !recomputeAll.now) { for (const tp of todo) { const c = TPC.get(tp.id); if (tp.moves && c && !tpHit(tp, tpSig(tp))) tp.stale = true; else tpRun(tp); } recomputeDone(); return; }
+  if (tpManual() && !force && !recomputeAll.now) { for (const tp of todo) { const c = TPC.get(tp.id), h = tpHit(tp, tpSig(tp)); if (h || !(recomputeAll.boot || (tp.moves && c))) tpRun(tp); else tp.stale = true; } recomputeDone(); return; } /* au démarrage en manuel : rien n'est calculé, les parcours sont marqués ⟳ */
   /* automatique : un parcours long (plus de 0,5 s au dernier calcul) attend une pause de 1,5 s sans modification ; en attendant il est marqué ⟳ */
   if (!force && !recomputeAll.now && !recomputeAll.idle) { const slow = todo.filter(tp => { const c = TPC.get(tp.id); return tp.moves && c && c.ms > 500 && !tpHit(tp, tpSig(tp)); }); if (slow.length) { for (const tp of slow) tp.stale = true; tpLater(); todo = todo.filter(tp => !slow.includes(tp)); if (!todo.length) { recomputeDone(); return; } } }
   const est = todo.reduce((a, tp) => { if (tpHit(tp, tpSig(tp))) return a; const c = TPC.get(tp.id); return a + (c && c.ms ? c.ms : (tp.type === 'relief' || tp.type === 'vcarve' || (tp.p && tp.p.proj)) ? 400 : 0); }, 0); /* parcours jamais calculé ici (fichier qui vient d'être ouvert) : un relief ou un V-carve est supposé long, donc calculé en tâche de fond */
+  if (recomputeAll.boot) { const hit = todo.filter(tp => tpHit(tp, tpSig(tp))); for (const tp of hit) tpRun(tp); todo = todo.filter(tp => !hit.includes(tp)); if (!todo.length) { recomputeDone(); return; } tpRunAsync(todo); return; } /* démarrage : tout en tâche de fond */
   if (est < 350 || typeof requestAnimationFrame !== 'function') { for (const tp of todo) tpRun(tp); recomputeDone(); return; }
   tpRunAsync(todo);
 }
@@ -8499,7 +8502,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.450', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.451', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -8559,6 +8562,8 @@ const COPO_TYPES = [{ description: 'Projet COPO', accept: { 'application/x-copo'
 const mvPack = M => { if (!Array.isArray(M) || !M.length || typeof M[0] !== 'object') return M; const K = []; for (const m of M) for (const k in m) if (!K.includes(k)) K.push(k); const r4 = v => typeof v === 'number' ? Math.round(v * 1e4) / 1e4 : v; return { _mv: 1, k: K, v: M.map(m => K.map(k => m[k] === undefined ? null : r4(m[k]))) }; };
 const mvUnpack = P => { if (!P || !P._mv) return P; return P.v.map(a => { const m = {}; P.k.forEach((k, i) => { if (a[i] !== null) m[k] = a[i]; }); return m; }); };
 function tpPackAll() { const out = {}; for (const tp of S.tps) { if (!tp.moves || tp.err || !tp._sig || tp.stale || tp._sig !== tpSig(tp)) continue; const r = {}; for (const k of TPC_K) if (tp[k] !== undefined) r[k] = k === 'moves' || k === 'dmoves' ? mvPack(tp[k]) : tp[k]; out[tp.id] = { sig: tp._sig, r }; } return Object.keys(out).length ? out : null; }
+// parcours calculés gardés aussi par le navigateur avec le projet en cours (repris au prochain démarrage sans recalcul) ; écrits seulement s'ils ont changé
+function tpIdbSave() { if (tpBoot || TP_BUSY) return; const key = S.tps.map(t => t.id + ':' + (t.moves ? t.moves.length : 0) + ':' + (t._sig ? t._sig.length : 0) + ':' + (t.stale ? 1 : 0)).join('|'); if (key === tpIdbKey) return; tpIdbKey = key; clearTimeout(tpIdbSave.t); tpIdbSave.t = setTimeout(async () => { try { const d = tpPackAll() || {}; const db = await idb(); const tx = db.transaction('images', 'readwrite'); tx.objectStore('images').put({ id: 'tp_data', src: d, key }); } catch { } }, 1500); }
 function tpUnpackAll(D) { if (!D) return; for (const [id, e] of Object.entries(D)) { if (!e || !e.r || !e.sig) continue; const r = {}; for (const k of TPC_K) r[k] = k === 'moves' || k === 'dmoves' ? mvUnpack(e.r[k]) : e.r[k]; TPC.set(id, { list: [{ sig: e.sig, r }], ms: 0 }); } }
 function projJSON() { const o = JSON.parse(snapState()); { const td = tpPackAll(); if (td) o.tpData = td; } const d = {}; for (const im of S.images) if (imgData[im.id]) d[im.id] = imgData[im.id]; if (Object.keys(d).length) o.imgData = d; { const rd = {}; for (const it of S.relief.items) if (relGrid[it.id]) rd[it.id] = relPack(relGrid[it.id]); if (Object.keys(rd).length) o.relData = rd; const rm = {}; for (const it of S.relief.items) if (it.kind === 'stl' && relMesh[it.id]) rm[it.id] = f32ToB64(relMesh[it.id]); if (Object.keys(rm).length) o.relMesh = rm; } return JSON.stringify(o); } // le maillage STL voyage avec le projet
 async function projSave(as) {
@@ -11239,7 +11244,9 @@ function bindImgPanel() {
 }
 async function idbPutImg(id, src) { const db = await idb(); return new Promise((res, rej) => { const tx = db.transaction('images', 'readwrite'); tx.objectStore('images').put({ id, src }); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); }
 async function idbGetImgs() { const db = await idb(); return new Promise((res, rej) => { const q = db.transaction('images').objectStore('images').getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => rej(q.error); }); }
-async function loadImgData() { try { for (const r of await idbGetImgs()) { if (r.id.startsWith('rel_')) relGrid[r.id.slice(4)] = relUnpack(r.src); else if (r.id.startsWith('relm_')) relMesh[r.id.slice(5)] = r.src; else if (r.id !== 'send_dir' && r.id !== 'proj_handle') imgData[r.id] = r.src; } } catch (e) { } relRegenOld(); relDirty = true; { const T = S.tps.filter(t => t.type === 'relief' || (t.p && t.p.proj) || (t.relIds && t.relIds.length)); if (T.length) { T.forEach(computeTP); gcDirty = true; renderTpList(); } } relPanel(); renderImgPanel(); draw(); } // au démarrage, les reliefs arrivent après le calcul des parcours : on recalcule ceux qui en dépendent
+async function loadImgData() { try { for (const r of await idbGetImgs()) { if (r.id.startsWith('rel_')) relGrid[r.id.slice(4)] = relUnpack(r.src); else if (r.id.startsWith('relm_')) relMesh[r.id.slice(5)] = r.src; else if (r.id === 'tp_data') { try { tpUnpackAll(r.src); tpIdbKey = r.key || ''; } catch { } } else if (r.id !== 'send_dir' && r.id !== 'proj_handle') imgData[r.id] = r.src; } } catch (e) { } relRegenOld(); relDirty = true;
+  /* démarrage : les parcours n'ont pas été calculés pendant la reprise du projet ; ils le sont maintenant (reliefs chargés), repris de la mémoire du navigateur s'ils n'ont pas changé, sinon en tâche de fond (jamais de page figée), ou seulement marqués ⟳ en mode manuel */
+  if (tpBoot) { tpBoot = false; recomputeAll.boot = 1; try { recomputeAll(); } finally { recomputeAll.boot = 0; } } relPanel(); renderImgPanel(); draw(); } // au démarrage, les reliefs arrivent après le calcul des parcours : on recalcule ceux qui en dépendent
 function imgAct(a) {
   if (a === 'relImg') { $('#fRelImg').click(); return true; }
   if (a === 'relStl') { $('#fRelStl').click(); return true; }
@@ -11297,9 +11304,9 @@ function loadSample(rot) {
   try { const m = JSON.parse(LS.get('copeau.machine') || 'null'); if (m) S.machine = { ...S.machine, ...m }; } catch { }
   S.ui.arrCx = S.stock.w / 2; S.ui.arrCy = S.stock.h / 2;
   syncMachine(); bindK(); setTool('select'); resize();
-  let loaded = false; const saved = LS.get('copeau.project');
+  let loaded = false; const saved = LS.get('copeau.project'); tpBoot = true;
   if (saved) { try { const o = JSON.parse(saved); if (o.shapes && o.shapes.length) { restore(saved); hist = [histEntry(null)]; delete hist[0].full; hi = 0; S.form = newForm(); renderForm(); loaded = true; } } catch (e) { console.warn(e); } }
-  if (!loaded) loadSample();
+  if (!loaded) { tpBoot = false; loadSample(); }
   bindImgPanel(); bindRelPanel(); relPanel(); loadImgData(); viewsApply(); dgInit(); icoInit(); dRefresh();
   renderTools(); renderSel(); renderLayers(); renderGuides(); renderImgPanel(); trStart(); requestAnimationFrame(fit);
 })();
