@@ -1683,7 +1683,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.448</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.449</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -3311,15 +3311,16 @@ function buildRelief(p, tool, shapes, M) {
     warns.push(tr('Niveaux Z : les replats horizontaux (fond, plateaux) ne sont pas usinés. Complétez par une finition en balayage si besoin.'));
   } else if (fin && p.rlAlong) {
     // balayage le long du relief (extrusion, lissage) : chaque passe garde la même place sur le profil et suit le rail ; écart entre passes = pas mesuré sur la surface
-    const PL = relAlongPasses(its.filter(i => relFace(i) === fc), fc === 2, (x, y) => Math.max(floor, Math.min(0, zAt(x, y))), step, D);
+    const exA = bound === 'model' ? (+p.rlOff || 0) + (under > 0 || p.rlEdge === 'outside' ? D / 2 : p.rlEdge === 'inside' ? -D / 2 : 0) : null; /* limite « modèle » : bornes des passes calculées exactement sur le profil (pas de coupure en escalier par la grille) */
+    const PL = relAlongPasses(its.filter(i => relFace(i) === fc), fc === 2, (x, y) => Math.max(floor, Math.min(0, zAt(x, y))), step, D, exA);
     if (!PL.length) throw new Error(tr('« Le long du relief » : aucun relief fait par extrusion ou lissage parmi les reliefs usinés. Choisissez « Angle ».'));
     const runs = [];
     for (const pl of PL) { let cur = []; const put = () => { if (cur.length >= 2) runs.push(simp(cur)); cur = []; };
-      for (let k = 0; k + 1 < pl.length; k++) { const A = pl[k], B = pl[k + 1], n = Math.max(1, Math.ceil(Math.hypot(B[0] - A[0], B[1] - A[1]) / c)); for (let s2 = k ? 1 : 0; s2 <= n; s2++) { const x = A[0] + (B[0] - A[0]) * s2 / n, y = A[1] + (B[1] - A[1]) * s2 / n; if (inB(x, y)) cur.push([x, y, Math.max(floor, Math.min(0, zAt(x, y)))]); else put(); } } put(); }
+      for (let k = 0; k + 1 < pl.length; k++) { const A = pl[k], B = pl[k + 1], n = Math.max(1, Math.ceil(Math.hypot(B[0] - A[0], B[1] - A[1]) / c)); for (let s2 = k ? 1 : 0; s2 <= n; s2++) { const x = A[0] + (B[0] - A[0]) * s2 / n, y = A[1] + (B[1] - A[1]) * s2 / n; if (exA !== null || inB(x, y)) cur.push([x, y, Math.max(floor, Math.min(0, zAt(x, y)))]); else put(); } } put(); }
     const used = new Uint8Array(runs.length); let last = null;
     for (let left = runs.length; left > 0; left--) { let bi = -1, bd = Infinity, rv = false; const at = last || [0, 0];
       for (let k = 0; k < runs.length; k++) { if (used[k]) continue; const P = runs[k], d0 = Math.hypot(P[0][0] - at[0], P[0][1] - at[1]), d1 = Math.hypot(P[P.length - 1][0] - at[0], P[P.length - 1][1] - at[1]); if (d0 < bd) { bd = d0; bi = k; rv = false; } if (d1 < bd) { bd = d1; bi = k; rv = true; } }
-      used[bi] = 1; const P = rv ? runs[bi].slice().reverse() : runs[bi]; nl++; link(last, P[0], zSurf); for (let i = 1; i < P.length; i++) mb.g1(P[i][0], P[i][1], P[i][2], feed); last = P[P.length - 1]; }
+      used[bi] = 1; const P = rv ? runs[bi].slice().reverse() : runs[bi]; nl++; if (last && exA !== null && bd <= Math.max(3 * step, D)) { const n = Math.max(1, Math.ceil(bd / c)); for (let i = 1; i <= n; i++) { const x = last[0] + (P[0][0] - last[0]) * i / n, y = last[1] + (P[0][1] - last[1]) * i / n; mb.g1(x, y, i === n ? P[0][2] : zSurf(x, y), feed); } } /* passe voisine au bout de la moulure : on y glisse sur la surface, sans remonter */ else link(last, P[0], zSurf); for (let i = 1; i < P.length; i++) mb.g1(P[i][0], P[i][1], P[i][2], feed); last = P[P.length - 1]; }
   } else if (fin) {
     for (const ang of p.rlCross ? [+p.rlAng || 0, (+p.rlAng || 0) + 90] : [+p.rlAng || 0]) {
       const L = lines(ang); let last = null;
@@ -8498,7 +8499,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.448', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.449', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -9350,7 +9351,7 @@ function toolOnRelief(R, H, tool, fb, Hf) {
 // contour exact (vecteurs d'origine) des reliefs générés (dôme, raccord), dans le repère du calcul ; null si un relief n'en a pas
 // passes « le long du relief » des reliefs générés par extrusion ou lissage, dans le repère du calcul : courbes à position fixe sur le profil (u en travers pour le lissage,
 // décalage d du trait pour l'extrusion), espacées pour un pas régulier mesuré sur la surface (hauteur de l'outil zf) ; un peu au-delà des bords, la limite d'usinage coupe le reste
-function relAlongPasses(items, f2, zf, step, D) {
+function relAlongPasses(items, f2, zf, step, D, exA = null) {
   const out = [];
   for (const it of items) { const G = it.gen; if (it.kind !== 'gen' || !G || !G.box || it.mode === 'sub' || (G.type !== 'sweep' && G.type !== 'extrude')) continue;
     const [x0, y0, x1, y1] = G.box, W = x1 - x0, Hh = y1 - y0, r = (it.rot || 0) * Math.PI / 180, cs = Math.cos(r), sn = Math.sin(r), sc = Math.max(it.w / W, it.h / Hh);
@@ -9361,9 +9362,9 @@ function relAlongPasses(items, f2, zf, step, D) {
     if (G.type === 'sweep') { if (!G.polys || G.polys.length < 2) continue; let A = G.polys[0].pts, B = G.polys[1].pts; const dd = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1]); if (dd(A[0], B[0]) + dd(A[A.length - 1], B[B.length - 1]) > dd(A[0], B[B.length - 1]) + dd(A[A.length - 1], B[0])) B = B.slice().reverse();
       const rs = pts => { const L = [0]; for (let k = 1; k < pts.length; k++) L.push(L[k - 1] + dd(pts[k], pts[k - 1])); return { pts, L, T: L[L.length - 1] }; }, at = (rr, t) => { const s2 = t * rr.T; let k = 1; while (k < rr.L.length - 1 && rr.L[k] < s2) k++; const a = rr.pts[k - 1], b = rr.pts[k], u = (s2 - rr.L[k - 1]) / ((rr.L[k] - rr.L[k - 1]) || 1); return [a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u]; };
       const ra = rs(A), rb = rs(B), M = Math.max(2, Math.ceil(Math.max(ra.T, rb.T) * sc / 0.25)), SA = [], SB = []; for (let k = 0; k <= M; k++) { SA.push(at(ra, k / M)); SB.push(at(rb, k / M)); }
-      let kw = 0, wm = 0; for (let k = 0; k <= M; k++) { const w = dd(SA[k], SB[k]); if (w > wm) { wm = w; kw = k; } } const e = (D / 2 + 0.5) / Math.max(1e-6, wm * sc);
+      let kw = 0, wm = 0; for (let k = 0; k <= M; k++) { const w = dd(SA[k], SB[k]); if (w > wm) { wm = w; kw = k; } } const e = (exA === null ? D / 2 + 0.5 : exA) / Math.max(1e-6, wm * sc);
       for (const u of params(-e, 1 + e, u => map([SA[kw][0] + (SB[kw][0] - SA[kw][0]) * u, SA[kw][1] + (SB[kw][1] - SA[kw][1]) * u]))) out.push(SA.map((a, k) => map([a[0] + (SB[k][0] - a[0]) * u, a[1] + (SB[k][1] - a[1]) * u])));
-    } else { const hw = Math.max(1e-3, (+G.W || 1) / 2), e = (D / 2 + 0.5) / sc;
+    } else { const hw = Math.max(1e-3, (+G.W || 1) / 2), e = (exA === null ? D / 2 + 0.5 : exA) / sc;
       for (const pl of G.polys || []) { const P = pl.pts; if (!P || P.length < 2) continue; const closed = pl.closed !== false && P.length > 2; let L = 0, km = 0; for (let k = 1; k < P.length; k++) { const l = Math.hypot(P[k][0] - P[k - 1][0], P[k][1] - P[k - 1][1]); if (l > L) { L = l; km = k; } } if (!(L > 0)) continue;
         const a = P[km - 1], b = P[km], mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, nxv = -(b[1] - a[1]) / L, nyv = (b[0] - a[0]) / L; /* coupe au milieu du plus long segment */
         for (const d of params(-hw - e, hw + e, d => map([mx + nxv * d, my + nyv * d]))) { if (Math.abs(d) < 1e-6) { out.push((closed ? [...P, P[0]] : P).map(map)); continue; }
