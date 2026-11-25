@@ -190,7 +190,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.454</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.455</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -380,7 +380,7 @@ X74.36 A14.181</pre>
         <tr><td>Vitesse de broche</td><td>En tr/min, écrite avec <code>M3</code>.</td></tr>
         <tr><td>Avance, vitesse de descente</td><td>En mm/min, pour la coupe et pour la plongée ou la rampe.</td></tr>
         <tr><td>Profondeur de passe</td><td>Profondeur maximale par passe ; elle remplit la profondeur de passe du parcours quand vous choisissez l'outil.</td></tr>
-        <tr><td>Pas latéral</td><td>Distance entre deux passes de poche, en mm ou en % du diamètre (comme dans Aspire). Absent pour les forets.</td></tr>
+        <tr><td>Pas latéral</td><td>Distance entre deux passes de poche, en mm ou en % du diamètre (comme dans Aspire) ; pour une fraise de gravure ou conique à bout rond, en % du diamètre de la <b>pointe</b> (plat, ou 2 × rayon) et non de la queue. Absent pour les forets.</td></tr>
         <tr><td>Nombre de dents</td><td>Nombre de tranchants de la fraise.</td></tr>
         <tr><td>Ne coupe pas au centre</td><td>Pour les fraises droites ou hémisphériques dont le bout ne coupe pas : les parcours n'y plongent jamais droit (rampe aller-retour à la place) et le formulaire du parcours le rappelle.</td></tr>
         <tr><td>Avance par dent</td><td>Calculée : avance ÷ (vitesse de broche × nombre de dents). Saisissez-la pour recalculer l'avance. Le commentaire en dessous, sur fond orange quand les conditions ne sont pas optimales, dit si elle est faible (la fraise frotte et chauffe) ou élevée (risque de casse), par rapport aux repères pour CNC de loisir du matériau selon le diamètre, signale une profondeur de passe trop forte, et prévient si l'avance dépasse l'avance maximale de la machine ; les données du fabricant priment. Pour un foret, COPO donne l'avance par tour.</td></tr>
@@ -808,7 +808,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.454</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.455</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -998,7 +998,7 @@ X74.36 A14.181</pre>
         <tr><td>Spindle speed</td><td>In rpm, written with <code>M3</code>.</td></tr>
         <tr><td>Feed, plunge rate</td><td>In mm/min, for cutting and for plunging or ramping.</td></tr>
         <tr><td>Pass depth</td><td>Maximum depth per pass; it fills the toolpath's pass depth when you choose the tool.</td></tr>
-        <tr><td>Stepover</td><td>Distance between two pocket passes, in mm or % of the diameter (as in Aspire). Not shown for drills.</td></tr>
+        <tr><td>Stepover</td><td>Distance between two pocket passes, in mm or % of the diameter (as in Aspire); for an engraving bit or a tapered ball nose, in % of the <b>tip</b> diameter (flat, or 2 × radius), not the shank. Not shown for drills.</td></tr>
         <tr><td>Number of flutes</td><td>Number of cutting edges of the tool.</td></tr>
         <tr><td>Not center-cutting</td><td>For end mills or ball nose bits whose end does not cut: toolpaths never plunge straight down with them (back-and-forth ramp instead) and the toolpath form says so.</td></tr>
         <tr><td>Feed per tooth</td><td>Calculated: feed ÷ (spindle speed × number of flutes). Type a value to recalculate the feed. The comment below, on an orange background when conditions are not optimal, says whether it is low (the tool rubs and heats up) or high (risk of breakage), against the hobby-CNC reference range of the material by diameter, flags a pass depth that is too deep, and warns when the feed exceeds the machine's maximum feed; the tool maker's data come first. For a drill, COPO gives the feed per revolution.</td></tr>
