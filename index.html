@@ -1683,7 +1683,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.455</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.456</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -1994,7 +1994,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
       <div class="row" id="pcbLibAddB" hidden><button data-act="pcbLibAdd">Ajouter les outils manquants</button></div>
       <div id="pcbIsoRow"><b class="pcb-h">Isolation des pistes</b>
         <div class="g2"><label>Fraise conique<select id="pcbIsoT"></select></label><label>Profondeur (mm)<input data-u="len" type="number" id="pcbIsoD" step="0.01" min="0.01"></label><label>Passes côte à côte<input type="number" id="pcbIsoN" step="1" min="1" max="10"></label><label>Recouvrement (%)<input type="number" id="pcbIsoO" step="5" min="0" max="90"></label></div>
-        <p class="hint mono" id="pcbIsoInfo"></p></div>
+        <p class="hint mono" id="pcbIsoInfo"></p><p class="hint warn" id="pcbIsoWarn" hidden style="color:#d9534f"></p></div>
       <div id="pcbClrRow"><label class="chk"><input type="checkbox" id="pcbClrOn"> Enlever le cuivre inutile (en poche, autour des pistes isolées)</label><div class="g2" id="pcbClrOpt"><label>Fraise droite<select id="pcbClrT"></select></label></div></div>
       <div id="pcbSkRow"><b class="pcb-h">Sérigraphie</b><label class="chk"><input type="checkbox" id="pcbSkOn"> Graver la sérigraphie (lettres et repères)</label>
         <div id="pcbSkOpt"><div class="g2"><label>Fraise conique<select id="pcbSkT"></select></label><label>Profondeur (mm)<input data-u="len" type="number" id="pcbSkD" step="0.05" min="0.02"></label></div>
@@ -2305,6 +2305,7 @@ Object.assign(I18N_EN, {"Direction des passes ": "Pass direction ", "Direction d
 Object.assign(I18N_EN, {"Centrage (piges Ø{d})": "Alignment (Ø{d} pins)", "Cuivre dessus – isolation des pistes": "Top copper – trace isolation", "Cuivre dessous – isolation des pistes": "Bottom copper – trace isolation", "Cuivre dessus – cuivre inutile enlevé": "Top copper – unused copper removal", "Cuivre dessous – cuivre inutile enlevé": "Bottom copper – unused copper removal", "Sérigraphie dessus": "Top silkscreen", "Sérigraphie dessous": "Bottom silkscreen", "Perçage Ø{d} ({n} trous)": "Drilling Ø{d} ({n} holes)", "Perçage Ø{d} ({n} trous, en hélice)": "Drilling Ø{d} ({n} holes, helical)", "Perçage Ø{d} (1 trou)": "Drilling Ø{d} (1 hole)", "Perçage Ø{d} (1 trou, en hélice)": "Drilling Ø{d} (1 hole, helical)", "Fentes de {d} mm ({n})": "{d} mm slots ({n})", "Contour – détourage de la carte": "Outline – board cut-out", "Outils manquants dans votre bibliothèque : {l} (bouton « Ajouter les outils manquants »).": "Tools missing from your library: {l} (“Add missing tools” button).", "Ajouter les outils manquants : {l}": "Add missing tools: {l}", "Aucun outil ne manque : votre bibliothèque convient.": "No tool is missing: your library is fine."});
 Object.assign(I18N_EN, {"Un fichier par parcours…": "One file per toolpath…", "Un fichier G-code par parcours": "One G-code file per toolpath", "Parcours": "Toolpaths", "Tous, même les parcours masqués": "All, even hidden toolpaths", "Seulement les parcours affichés": "Only visible toolpaths", "Regrouper": "Group", "Un fichier par parcours": "One file per toolpath", "Un fichier par outil (parcours qui se suivent avec la même fraise)": "One file per tool (consecutive toolpaths with the same bit)", "{n} fichier(s), par exemple « {f} ». {w}": "{n} file(s), for example “{f}”. {w}", "Vous choisirez le dossier où les écrire.": "You will choose the folder to write them to.", "Ils seront réunis dans un fichier ZIP.": "They will be bundled in a ZIP file.", "Aucun parcours calculé à enregistrer.": "No computed toolpath to save.", "{n} fichier(s) G-code enregistré(s) dans « {d} ».": "{n} G-code file(s) saved in “{d}”.", "Enregistrement impossible dans ce dossier.": "Cannot save in this folder."});
 Object.assign(I18N_EN, {"Pas latéral (% du Ø utile)": "Stepover (% of useful Ø)", "Fraise droite ou hémisphérique : % du diamètre. Fraise de gravure ou conique à bout rond : % du diamètre de la pointe (plat, ou 2 × rayon), comme dans Aspire.": "End mill or ball nose: % of the diameter. Engraving bit or tapered ball nose: % of the tip diameter (flat, or 2 × radius), as in Aspire."});
+Object.assign(I18N_EN, {"La fraise coupe {w} mm, mais {n} endroit(s) du circuit ont moins de {w} mm entre deux zones de cuivre (marqués en rouge) : le cuivre n’y sera pas séparé (risque de court-circuit). Écart le plus petit : {m} mm. Choisissez une pointe plus fine ou gravez moins profond.": "The bit cuts {w} mm, but {n} place(s) on the board have less than {w} mm between two copper areas (marked in red): the copper will not be separated there (risk of short circuit). Smallest gap: {m} mm. Choose a finer tip or engrave shallower."});
 Object.assign(I18N_EN, {"Départ": "Start", "Du bord": "From the edge", "Du centre (haut du relief)": "From the center (top of the relief)", "Du centre : la fraise commence en haut du relief et descend contour après contour ; elle n’entre jamais d’un coup dans la matière laissée par l’ébauche au pied du relief": "From the center: the bit starts at the top of the relief and goes down ring after ring; it never plunges into the material left by roughing at the foot of the relief"});
 Object.assign(I18N_EN, {"Profondeur de poche (a) (mm)": "Pocket depth (a) (mm)", "Hauteur du mâle sous le support (b) (mm)": "Male height below the backing (b) (mm)", "Débord du support (c) (mm)": "Backing overhang (c) (mm)", "Épaisseur de la pièce mâle (b) (mm)": "Male piece thickness (b) (mm)", "Jeu au fond (g) (mm)": "Bottom gap (g) (mm)", "La hauteur du mâle sous le support (b) doit dépasser la profondeur de poche (a).": "The male height below the backing (b) must exceed the pocket depth (a).", "Indiquez l’épaisseur de la pièce mâle (b).": "Enter the male piece thickness (b).", "Le débord du support (c) doit être plus grand que le diamètre de la fraise ({d} mm).": "The backing overhang (c) must be larger than the tool diameter ({d} mm).", "La hauteur du mâle (b) doit dépasser la profondeur de poche moins le jeu (a − g), pour qu’il reste un écart à raboter.": "The male height (b) must exceed the pocket depth minus the gap (a − g), so there is something left to plane off."});
 Object.assign(I18N_EN, {"Fraise de dégagement (fonds plats)": "Clearance tool (flat areas)", "Aucune (la fraise en V vide les fonds plats)": "None (the V-bit clears flat areas)", "Les fonds plats sont d’abord vidés à la fraise droite (parcours « dégagement » ajouté avant celui-ci) ; la fraise en V ne reprend que le bord.": "Flat areas are first cleared with the end mill (a “clearance” toolpath added before this one); the V-bit only finishes the edge.", "Fonds plats vidés à la fraise « {n} » (parcours de dégagement).": "Flat areas cleared with “{n}” (clearance toolpath).", "Pas de fond plat assez large : rien à dégager.": "No flat area wide enough: nothing to clear.", "Parcours de dégagement lié : réglez-le dans le V-carve.": "Linked clearance toolpath: set it up in the V-carve.", "dégagement": "clearance"});
@@ -4389,6 +4390,7 @@ function render() {
   drawFitPrev(C);
   // cotes
   dimsSync(); for (const d of S.dims) drawDim(d, d.id === S.selDim ? C.acc : C.drawMuted, C.mono);
+  if (PCB_GAP.n && $('#pcbWin') && !$('#pcbWin').hidden) { ctx.save(); ctx.strokeStyle = '#e5322d'; ctx.lineWidth = 2; for (const [x, y] of PCB_GAP.pts) { ctx.beginPath(); ctx.arc(sx(x), sy(y), 9, 0, 7); ctx.stroke(); } ctx.restore(); } // circuit imprimé : écarts trop étroits pour la fraise d'isolation
   // édition des nœuds
   if (S.ui.tool === 'nodes' && S.ne) drawNodeEdit(C);
   if (S.ui.tool === 'nodes') syncNe();
@@ -6100,6 +6102,27 @@ function pcbPins() {
   const ok = P.every(([x, y]) => x - r >= 0.5 && y - r >= 0.5 && x + r <= st.w - 0.5 && y + r <= st.h - 0.5);
   return { P, ok, r };
 }
+/* écarts trop étroits pour la fraise d'isolation : îlots de cuivre (contour + trous) élargis de la demi-largeur de coupe ; là où deux îlots élargis se recouvrent,
+   la fraise ne passe pas et le cuivre reste relié (court-circuit). Renvoie les endroits (centres) et le plus petit écart trouvé */
+let PCB_GAP = { key: '', pts: [], min: Infinity, n: 0 };
+function pcbGapCheck(roles, w) {
+  const sh = roles.flatMap(r => pcbShapes(r).filter(s => s.closed && s.pts && s.pts.length > 2).map(s => [r, s]));
+  const key = roles.join() + '|' + w.toFixed(4) + '|' + sh.length + '|' + sh.reduce((a, [, s]) => a + s.pts.length, 0) + '|' + (sh[0] ? sh[0][1].id : '');
+  if (PCB_GAP.key === key) return PCB_GAP; const res = { key, pts: [], min: Infinity, n: 0 }; PCB_GAP = res; if (!(w > 0) || !sh.length) return res;
+  for (const role of roles) { const L = sh.filter(x => x[0] === role).map(x => x[1].pts); if (!L.length) continue;
+    const outer = [], holes = []; for (const l of L) (area(l) >= 0 ? outer : holes).push(l); if (!outer.length) { outer.push(...holes.splice(0)); }
+    const isl = outer.map(o => ({ o, h: [], bb: gapBB(o) })); for (const h of holes) { let best = null, ba = Infinity; for (const I of isl) { const a = Math.abs(area(I.o)); if (a < ba && pip(h[0], I.o)) { best = I; ba = a; } } if (best) best.h.push(h); }
+    const r = w / 2 - 1e-3, T0 = performance.now(); for (const I of isl) { I.off = offLoops([I.o, ...I.h], r); I.ob = [I.bb[0] - r, I.bb[1] - r, I.bb[2] + r, I.bb[3] + r]; }
+    isl.sort((a, b) => a.ob[0] - b.ob[0]);
+    for (let i = 0; i < isl.length; i++) { if (performance.now() - T0 > 2500) { res.partial = true; break; } const A = isl[i]; for (let j = i + 1; j < isl.length; j++) { const B = isl[j]; if (B.ob[0] > A.ob[2]) break; if (B.ob[1] > A.ob[3] || B.ob[3] < A.ob[1]) continue;
+      const X = cInterEO(A.off, B.off); if (!X.length) continue;
+      for (const l of X) { if (Math.abs(area(l)) < 1e-6) continue; let cx = 0, cy = 0; for (const q of l) { cx += q[0]; cy += q[1]; } res.pts.push([cx / l.length, cy / l.length, role]); res.n++; }
+      // plus petit écart entre ces deux îlots (sommets de l'un contre segments de l'autre)
+      const sd = (p, P) => { let m = Infinity; for (const Q of P) for (let k = 0; k < Q.length; k++) { const a = Q[k], b = Q[(k + 1) % Q.length], dx = b[0] - a[0], dy = b[1] - a[1], l2 = dx * dx + dy * dy, t = l2 > 0 ? Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / l2)) : 0; m = Math.min(m, Math.hypot(a[0] + dx * t - p[0], a[1] + dy * t - p[1])); } return m; };
+      const PA = [A.o, ...A.h], PB = [B.o, ...B.h]; for (const Q of PA) for (const p of Q) res.min = Math.min(res.min, sd(p, PB)); for (const Q of PB) for (const p of Q) res.min = Math.min(res.min, sd(p, PA)); } } }
+  return res;
+}
+const gapBB = l => { let a = Infinity, b = Infinity, c = -Infinity, d = -Infinity; for (const q of l) { if (q[0] < a) a = q[0]; if (q[1] < b) b = q[1]; if (q[0] > c) c = q[0]; if (q[1] > d) d = q[1]; } return [a, b, c, d]; };
 function pcbTpRender() {
   const box = $('#pcbTp'); if (!box) return; const has = S.layers.some(l => l.pcb); box.hidden = !has; if (!has) return;
   const cones = pcbLib(pcbCone), flats = pcbLib(t => t.type === 'flat'), opt = (list, sel, none) => (none ? '<option value="">' + tr(none) + '</option>' : '') + list.map(t => '<option value="' + t.id + '"' + (t.id === sel ? ' selected' : '') + '>' + (t.name || '').replace(/</g, '&lt;') + '</option>').join('');
@@ -6113,6 +6136,7 @@ function pcbTpRender() {
   const miss = pcbMissing();
   $('#pcbIsoT').innerHTML = opt(cones, PCB_TP.iso, 'Pas d’isolation'); $('#pcbEdT').innerHTML = opt(flats, PCB_TP.edge, 'Pas de détourage'); $('#pcbSkT').innerHTML = opt(cones, PCB_TP.skT); $('#pcbClrT').innerHTML = opt(flats, PCB_TP.clrT);
   $('#pcbIsoInfo').textContent = !cu.length ? tr('Aucun cuivre importé.') : isoT ? trf('Largeur de coupe {w} mm à {d} mm de profondeur ; isolation de {t} mm autour du cuivre.', { w: pcbF(w, 3), d: pcbF(PCB_TP.isoD), t: pcbF(tot, 3) }) + (cu.length > 1 ? ' ' + tr('Dessus en face 1, dessous en face 2.') : '') : '';
+  { const G = isoT && cu.length ? pcbGapCheck(cu, w) : { n: 0 }, el = $('#pcbIsoWarn'); if (el) { el.hidden = !G.n; if (G.n) el.textContent = '⚠ ' + trf('La fraise coupe {w} mm, mais {n} endroit(s) du circuit ont moins de {w} mm entre deux zones de cuivre (marqués en rouge) : le cuivre n’y sera pas séparé (risque de court-circuit). Écart le plus petit : {m} mm. Choisissez une pointe plus fine ou gravez moins profond.', { w: pcbF(w, 3), n: G.n, m: pcbF(G.min, 3) }); } draw(); }
   $('#pcbIsoRow').hidden = !cu.length; $('#pcbClrRow').hidden = !cu.length; $('#pcbClrOpt').hidden = !PCB_TP.clr; $('#pcbClrOn').checked = PCB_TP.clr;
   $('#pcbEdRow').hidden = !edge; $('#pcbEdNone').hidden = edge;
   $('#pcbSkRow').hidden = !silk; $('#pcbSkOpt').hidden = !PCB_TP.sk; $('#pcbSkOn').checked = PCB_TP.sk; $('#pcbSkClip').checked = PCB_TP.skClip; $('#pcbSkD').value = PCB_TP.skD;
@@ -8519,7 +8543,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.455', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.456', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });

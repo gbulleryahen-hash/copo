@@ -190,7 +190,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.455</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.456</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -563,6 +563,7 @@ X74.36 A14.181</pre>
       <li><strong>Perçages</strong> : un parcours par diamètre, avec le foret le plus proche (à 0,15 mm près) ou, pour un trou d’au moins 1,5 mm, une fraise droite en hélice. Les <strong>fentes</strong> (trous oblongs) sont fraisées en poche. Choisissez l’outil de chaque diamètre dans la liste, ou <em>Ne pas percer</em>.</li>
       <li><strong>Détourage</strong> : un profil extérieur à la fraise droite sur le contour, avec des ponts. Perçages, fentes et détourage traversent la plaque de 0,2 à 0,3 mm : posez-la sur une planche martyre.</li>
     </ul>
+    <p><strong>Fraise trop large</strong> : COPO compare la largeur de coupe aux écarts entre les zones de cuivre. Là où deux pistes ou pastilles sont plus proches que la largeur de coupe, la fraise ne passe pas et le cuivre reste relié (court-circuit) : un avertissement donne le nombre d’endroits et l’écart le plus petit, et ces endroits sont entourés en rouge dans la vue 2D tant que la fenêtre est ouverte. Choisissez alors une pointe plus fine ou gravez moins profond.</p>
     <p>Ordre d’usinage : face 1 (centrage, isolation, nettoyage, sérigraphie, perçages, fentes), puis face 2 (isolation, nettoyage et sérigraphie du dessous, détourage). Il n’y a donc qu’un retournement, et la carte n’est découpée qu’à la fin. <span class="ui">Créer les parcours</span> une seconde fois remplace les parcours du circuit et retire ceux des options décochées.</p>
     <div class="note"><p>À 0,1 mm de profondeur, la largeur de coupe d’une fraise conique change beaucoup avec la hauteur : fixez la plaque bien à plat (adhésif double face sur une martyre surfacée) et faites le zéro Z sur le cuivre. Vérifiez la largeur des isolations sur un premier essai avant d’usiner une vraie carte.</p></div>
 
@@ -808,7 +809,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.455</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.456</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -1181,6 +1182,7 @@ X74.36 A14.181</pre>
       <li><strong>Drilling</strong>: one toolpath per diameter, with the closest drill (within 0.15 mm) or, for holes of 1.5 mm and more, a helical end mill. <strong>Slots</strong> (oblong holes) are milled as pockets. Choose the tool for each diameter in the list, or <em>Don’t drill</em>.</li>
       <li><strong>Cutout</strong>: an outside profile along the outline with an end mill, with tabs. Drilling, slots and cutout go 0.2 to 0.3 mm through the board: lay it on a spoilboard.</li>
     </ul>
+    <p><strong>Bit too wide</strong>: COPO compares the cut width with the gaps between copper areas. Where two tracks or pads are closer than the cut width, the bit cannot pass and the copper stays connected (short circuit): a warning gives the number of places and the smallest gap, and these places are circled in red in the 2D view while the window is open. Then choose a finer tip or engrave shallower.</p>
     <p>Machining order: side 1 (registration, isolation, clearing, silkscreen, drilling, slots), then side 2 (bottom isolation, clearing and silkscreen, cutout). So there is only one flip, and the board is cut out last. Clicking <span class="ui">Create the toolpaths</span> again replaces the circuit board toolpaths and removes those of unchecked options.</p>
     <div class="note"><p>At 0.1 mm depth, the cut width of a tapered bit changes a lot with height: hold the board perfectly flat (double-sided tape on a surfaced spoilboard) and set Z zero on the copper. Check the isolation width on a test piece before milling a real board.</p></div>
 
