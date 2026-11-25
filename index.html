@@ -710,6 +710,7 @@ details.blk>summary:hover{color:var(--ink)}
 .layer.on{border-color:var(--accent)}
 .layer input[type=text]{border:0;background:transparent;padding:4px 2px}
 .layer input[type=radio]{accent-color:var(--accent);margin:0}
+.layer .chip.lsel{box-shadow:0 0 0 1.5px var(--ink);font-weight:700}
 .imglist{list-style:none;margin:0;padding:0;display:grid;gap:4px}
 .imgrow{display:grid;grid-template-columns:40px minmax(0,1fr) auto auto;gap:6px;align-items:center;background:var(--raised);border:1px solid var(--line);border-radius:5px;padding:3px 3px 3px 4px;cursor:pointer}
 .imgrow.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
@@ -1683,7 +1684,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.458</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.459</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -2353,7 +2354,7 @@ function trBuild() {
   const keys = Object.keys(I18N_EN).filter(k => k.length >= 3 && /[A-Za-zÀ-ÿ]{2}/.test(k)).sort((a, b) => b.length - a.length);
   trRe = new RegExp(keys.map(k => (isL(k[0]) ? '(?<!' + L + ')' : '') + esc(k) + (isL(k[k.length - 1]) ? '(?!' + L + ')' : '')).join('|'), 'g');
 }
-Object.assign(I18N_EN, {"Gravure bout rond": "Round-tip engraving", "La Carvera C1 n’a que 6 places (T1 à T6) : {l} hors du changeur. Donnez à ces outils un numéro de 1 à 6 dans la bibliothèque (Carvera Air : changement à la main, tout numéro convient)": "The Carvera C1 has only 6 slots (T1 to T6): {l} outside the tool changer. Give these tools a number from 1 to 6 in the tool library (Carvera Air: manual change, any number works)", "Changer l’outil": "Change tool", "Ce post-processeur ne gère pas le changement d’outil : COPO arrête la broche (M5) et met en pause (M0) à chaque nouvel outil": "This post-processor has no tool change: COPO stops the spindle (M5) and pauses (M0) at each new tool", "Ce post-processeur ne gère pas le changement d’outil : enregistrez un fichier par outil": "This post-processor has no tool change: save one file per tool", "Machine Fusion non importée : ce n’est pas une fraiseuse ({c}).": "Fusion machine not imported: it is not a milling machine ({c}).", "Machine Fusion non importée : « {m} » a {n} axes rotatifs (5 axes). COPO usine en 3 axes, avec un 4ᵉ axe enroulé au plus.": "Fusion machine not imported: “{m}” has {n} rotary axes (5-axis). COPO machines in 3 axes, with at most a wrapped 4th axis.", "Machine FreeCAD non importée : « {m} » est une machine à fil (électroérosion).": "FreeCAD machine not imported: “{m}” is a wire EDM machine.", "Machine FreeCAD non importée : « {m} » a {n} axes rotatifs (5 axes). COPO usine en 3 axes, avec un 4ᵉ axe enroulé au plus.": "FreeCAD machine not imported: “{m}” has {n} rotary axes (5-axis). COPO machines in 3 axes, with at most a wrapped 4th axis.", "post-processeur « {p} » inconnu de COPO : GRBL choisi, à changer": "post-processor “{p}” unknown to COPO: GRBL selected, change it", "axe rotatif {a} non repris (COPO enroule en A ou B)": "rotary axis {a} not kept (COPO wraps on A or B)", "Importée de Fusion 360 ({f}).": "Imported from Fusion 360 ({f}).", "Post-processeur Fusion : {p}.": "Fusion post-processor: {p}.", "Magasin : {n} outils.": "Tool magazine: {n} tools.", "course non trouvée": "travel not found", "Importée de FreeCAD ({f}).": "Imported from FreeCAD ({f}).", "Post-processeur FreeCAD : {p}.": "FreeCAD post-processor: {p}.", "Fabricant : {m}.": "Manufacturer: {m}.", "Changeur d’outil automatique.": "Automatic tool changer.", "Tête {t} : choisir un post-processeur laser, plasma ou jet d’eau (groupe .pp).": "{t} head: choose a laser, plasma or waterjet post-processor (.pp group).", "tête {t}": "{t} head", "Machine « {m} » importée ({p}) et choisie.": "Machine “{m}” imported ({p}) and selected.", "À vérifier :": "To check:", "Industrie (ISO type Fanuc)": "Industrial (Fanuc-style ISO)", "Industrie (Heidenhain)": "Industrial (Heidenhain)", "Autres contrôleurs CNC": "Other CNC controllers", "Haas (commande classique, avant NGC)": "Haas (classic control, pre-NGC)", "Hurco WinMax (programme ISO)": "Hurco WinMax (ISO program)", "Programme ISO (commande industrielle)": "ISO program (industrial control)", "Numéro de programme (O)": "Program number (O)", "Arrosage": "Coolant", "Aucun": "None", "Arrosage (M8)": "Flood (M8)", "Brouillard (M7)": "Mist (M7)", "Arrosage centre broche (M88)": "Through-spindle coolant (M88)", "Dégagement en Z": "Z retract", "G28 G91 Z0 : retour au point de référence": "G28 G91 Z0: return to reference point", "G53 G0 Z0 : Z machine": "G53 G0 Z0: machine Z", "Arrêt optionnel (M1) avant chaque changement d’outil": "Optional stop (M1) before each tool change", "Préparer l’outil suivant dans le magasin (T… après M6)": "Pre-stage the next tool in the magazine (T… after M6)", "Numéros de ligne (N10, N15…)": "Line numbers (N10, N15…)", "Chaque outil est appelé par T… M6, puis la machine se place en G54 et applique G43 H… (correcteur de longueur du même numéro que l’outil). Les coordonnées sont toujours écrites avec un point décimal (X10.), comme l’exigent ces commandes.": "Each tool is called with T… M6, then the machine moves in G54 and applies G43 H… (length offset with the same number as the tool). Coordinates are always written with a decimal point (X10.), as these controls require.", "Catalogue de machines…": "Machine catalog…", "← Mes machines": "← My machines", "Rechercher : Haas, Hurco, VF-2…": "Search: Haas, Hurco, VF-2…", "Machines déjà réglées (course, broche, post-processeur), reprises de la bibliothèque Fusion 360": "Ready-made machines (travel, spindle, post-processor) from the Fusion 360 library", "déjà dans vos machines": "already in your machines", "Aucune machine ne correspond.": "No matching machine.", "Machine « {m} » ajoutée depuis le catalogue et choisie.": "Machine “{m}” added from the catalog and selected."});
+Object.assign(I18N_EN, {"Gravure bout rond": "Round-tip engraving", "Sans calque": "No layer", "{l} calques": "{l} layers", "{k} forme(s) sélectionnée(s) sur {n} dans ce calque": "{k} of {n} shape(s) selected in this layer", "{n} forme(s) dans ce calque": "{n} shape(s) in this layer", "La Carvera C1 n’a que 6 places (T1 à T6) : {l} hors du changeur. Donnez à ces outils un numéro de 1 à 6 dans la bibliothèque (Carvera Air : changement à la main, tout numéro convient)": "The Carvera C1 has only 6 slots (T1 to T6): {l} outside the tool changer. Give these tools a number from 1 to 6 in the tool library (Carvera Air: manual change, any number works)", "Changer l’outil": "Change tool", "Ce post-processeur ne gère pas le changement d’outil : COPO arrête la broche (M5) et met en pause (M0) à chaque nouvel outil": "This post-processor has no tool change: COPO stops the spindle (M5) and pauses (M0) at each new tool", "Ce post-processeur ne gère pas le changement d’outil : enregistrez un fichier par outil": "This post-processor has no tool change: save one file per tool", "Machine Fusion non importée : ce n’est pas une fraiseuse ({c}).": "Fusion machine not imported: it is not a milling machine ({c}).", "Machine Fusion non importée : « {m} » a {n} axes rotatifs (5 axes). COPO usine en 3 axes, avec un 4ᵉ axe enroulé au plus.": "Fusion machine not imported: “{m}” has {n} rotary axes (5-axis). COPO machines in 3 axes, with at most a wrapped 4th axis.", "Machine FreeCAD non importée : « {m} » est une machine à fil (électroérosion).": "FreeCAD machine not imported: “{m}” is a wire EDM machine.", "Machine FreeCAD non importée : « {m} » a {n} axes rotatifs (5 axes). COPO usine en 3 axes, avec un 4ᵉ axe enroulé au plus.": "FreeCAD machine not imported: “{m}” has {n} rotary axes (5-axis). COPO machines in 3 axes, with at most a wrapped 4th axis.", "post-processeur « {p} » inconnu de COPO : GRBL choisi, à changer": "post-processor “{p}” unknown to COPO: GRBL selected, change it", "axe rotatif {a} non repris (COPO enroule en A ou B)": "rotary axis {a} not kept (COPO wraps on A or B)", "Importée de Fusion 360 ({f}).": "Imported from Fusion 360 ({f}).", "Post-processeur Fusion : {p}.": "Fusion post-processor: {p}.", "Magasin : {n} outils.": "Tool magazine: {n} tools.", "course non trouvée": "travel not found", "Importée de FreeCAD ({f}).": "Imported from FreeCAD ({f}).", "Post-processeur FreeCAD : {p}.": "FreeCAD post-processor: {p}.", "Fabricant : {m}.": "Manufacturer: {m}.", "Changeur d’outil automatique.": "Automatic tool changer.", "Tête {t} : choisir un post-processeur laser, plasma ou jet d’eau (groupe .pp).": "{t} head: choose a laser, plasma or waterjet post-processor (.pp group).", "tête {t}": "{t} head", "Machine « {m} » importée ({p}) et choisie.": "Machine “{m}” imported ({p}) and selected.", "À vérifier :": "To check:", "Industrie (ISO type Fanuc)": "Industrial (Fanuc-style ISO)", "Industrie (Heidenhain)": "Industrial (Heidenhain)", "Autres contrôleurs CNC": "Other CNC controllers", "Haas (commande classique, avant NGC)": "Haas (classic control, pre-NGC)", "Hurco WinMax (programme ISO)": "Hurco WinMax (ISO program)", "Programme ISO (commande industrielle)": "ISO program (industrial control)", "Numéro de programme (O)": "Program number (O)", "Arrosage": "Coolant", "Aucun": "None", "Arrosage (M8)": "Flood (M8)", "Brouillard (M7)": "Mist (M7)", "Arrosage centre broche (M88)": "Through-spindle coolant (M88)", "Dégagement en Z": "Z retract", "G28 G91 Z0 : retour au point de référence": "G28 G91 Z0: return to reference point", "G53 G0 Z0 : Z machine": "G53 G0 Z0: machine Z", "Arrêt optionnel (M1) avant chaque changement d’outil": "Optional stop (M1) before each tool change", "Préparer l’outil suivant dans le magasin (T… après M6)": "Pre-stage the next tool in the magazine (T… after M6)", "Numéros de ligne (N10, N15…)": "Line numbers (N10, N15…)", "Chaque outil est appelé par T… M6, puis la machine se place en G54 et applique G43 H… (correcteur de longueur du même numéro que l’outil). Les coordonnées sont toujours écrites avec un point décimal (X10.), comme l’exigent ces commandes.": "Each tool is called with T… M6, then the machine moves in G54 and applies G43 H… (length offset with the same number as the tool). Coordinates are always written with a decimal point (X10.), as these controls require.", "Catalogue de machines…": "Machine catalog…", "← Mes machines": "← My machines", "Rechercher : Haas, Hurco, VF-2…": "Search: Haas, Hurco, VF-2…", "Machines déjà réglées (course, broche, post-processeur), reprises de la bibliothèque Fusion 360": "Ready-made machines (travel, spindle, post-processor) from the Fusion 360 library", "déjà dans vos machines": "already in your machines", "Aucune machine ne correspond.": "No matching machine.", "Machine « {m} » ajoutée depuis le catalogue et choisie.": "Machine “{m}” added from the catalog and selected."});
 function tr(s) {
   if (LANG === 'fr' || s == null) return s; s = String(s); if (!/[A-Za-zÀ-ÿ]{2}|\sà\s/.test(s)) return s; // « 2 à 3 × Ø » : à traduire aussi
   const n = s.replace(/\s+/g, ' ').trim(), hit = I18N_EN[n];
@@ -5445,6 +5446,11 @@ function elementNodes(el) {
   if (tag === 'polyline' || tag === 'polygon') { const v = (el.getAttribute('points') || '').trim().split(/[\s,]+/).map(parseFloat), nodes = []; for (let i = 0; i + 1 < v.length; i += 2) nodes.push(NODE(v[i], v[i + 1])); return nodes.length > 1 ? [{ nodes, closed: tag === 'polygon' }] : []; }
   return [];
 }
+const INK_NS = 'http://www.inkscape.org/namespaces/inkscape';
+const svgIsLayer = (g, root) => g.getAttributeNS(INK_NS, 'groupmode') === 'layer' || g.getAttribute('inkscape:groupmode') === 'layer' || (g.parentNode === root && g.hasAttribute('data-name'));
+function svgLayerOf(el, root) { for (let g = el.parentNode; g && g !== root; g = g.parentNode) if (g.nodeName.toLowerCase() === 'g' && svgIsLayer(g, root)) return g; return null; }
+const svgLayerName = g => (g.getAttributeNS(INK_NS, 'label') || g.getAttribute('inkscape:label') || g.getAttribute('data-name') || g.id || 'Calque').trim();
+const svgLayerCol = g => { const c = g.getAttribute('stroke'); return c && /^#[0-9a-f]{6}$/i.test(c) ? c : null; };
 function importSVG(text) {
   const doc = new DOMParser().parseFromString(text, 'image/svg+xml'); const svg = doc.querySelector('svg'); if (!svg) throw new Error('Fichier SVG illisible.');
   const host = document.createElement('div'); host.style.cssText = 'position:absolute;left:-20000px;top:0;width:10px;height:10px;overflow:hidden;visibility:hidden';
@@ -5456,17 +5462,27 @@ function importSVG(text) {
   try {
     node.querySelectorAll('path,rect,circle,ellipse,line,polyline,polygon').forEach(el => {
       if (el.closest('defs,clipPath,mask,symbol,pattern,marker')) return;
-      const m = el.getCTM(); if (!m) return;
-      for (const sp of elementNodes(el)) { const s = { nodes: sp.nodes, closed: sp.closed }; transformShape(s, ([x, y]) => [(m.a * x + m.c * y + m.e) * k, -(m.b * x + m.d * y + m.f) * k]); if (s.pts.length > 1) out.push(s); }
+      const m = el.getCTM(); if (!m) return; const lg = svgLayerOf(el, node);
+      for (const sp of elementNodes(el)) { const s = { nodes: sp.nodes, closed: sp.closed, lg }; transformShape(s, ([x, y]) => [(m.a * x + m.c * y + m.e) * k, -(m.b * x + m.d * y + m.f) * k]); if (s.pts.length > 1) out.push(s); }
     });
   } finally { host.remove(); }
   if (!out.length) throw new Error('Aucun vecteur trouvé dans ce SVG.');
+  /* calques Inkscape (groupes « layer ») ou Illustrator / COPO (groupes de premier niveau avec data-name) → calques COPO */
+  const gs = [...new Set(out.map(s => s.lg))];
+  if (gs.length > 1) { const nm = g => g ? svgLayerName(g) : tr('Sans calque'), map = impLayers(gs.map(g => ({ name: nm(g), color: g && svgLayerCol(g), hidden: !!g && /display\s*:\s*none/.test(g.getAttribute('style') || '') })));
+    for (const s of out) s.layer = map[nm(s.lg)]; }
   return placeImported(out);
 }
+const IMP_PAL = ['#161616', '#c0392b', '#1f6fe0', '#12935a', '#9b3ad1', '#d35400', '#00838f', '#7f8c8d'];
+/* calques d'un fichier importé → calques COPO (seulement s'il y en a plusieurs) ; un calque COPO de même nom est réutilisé. L : [{ name, color, hidden }] */
+function impLayers(L, pre) { const map = {}; if (L.length < 2) return map;
+  for (const q of L) { const nm = (pre || '') + q.name; let l = S.layers.find(x => x.name === nm); if (!l) { l = { id: uid(), name: nm, visible: !q.hidden, locked: false, color: q.color || IMP_PAL[S.layers.length % IMP_PAL.length] }; S.layers.push(l); } map[q.name] = l.id; }
+  return map; }
 function placeImported(out) {
   const bb = bbox(out), st = S.stock, fits = bb.w <= st.w && bb.h <= st.h;
   const dx = fits ? (st.w - bb.w) / 2 - bb.x0 : -bb.x0, dy = fits ? (st.h - bb.h) / 2 - bb.y0 : -bb.y0, g = out.length > 1 ? uid() : null;
-  S.sel.clear(); for (const s of out) { transformShape(s, q => [q[0] + dx, q[1] + dy]); const n = mkShape(s.nodes, s.closed, { g }); if (n) S.sel.add(n.id); }
+  S.sel.clear(); for (const s of out) { transformShape(s, q => [q[0] + dx, q[1] + dy]); const n = mkShape(s.nodes, s.closed, { g, layer: s.layer }); if (n && layerOf(n).visible) S.sel.add(n.id); }
+  if (out.some(s => s.layer)) renderLayers();
   return out.length;
 }
 
@@ -5479,13 +5495,17 @@ function dxfPairs(text) {
 function dxfParse(text) {
   if (/^AutoCAD Binary DXF/.test(text)) throw new Error('DXF binaire non pris en charge : réenregistrez-le en DXF ASCII (texte).');
   const P = dxfPairs(text), hdr = {}, blocks = {}, ents = [];
-  let sec = null, i = 0, cur = null, blk = null, var_ = null, list = ents;
+  let sec = null, i = 0, cur = null, blk = null, var_ = null, list = ents, lay = null; const lays = {};
   const flush = () => { if (cur) { (blk ? blk.ents : list).push(cur); cur = null; } };
   for (; i < P.length; i++) {
     const [c, v] = P[i];
     if (c === 0 && v === 'SECTION') { flush(); const n = P[i + 1]; sec = n && n[0] === 2 ? n[1] : null; i++; continue; }
     if (c === 0 && v === 'ENDSEC') { flush(); sec = null; continue; }
     if (sec === 'HEADER') { if (c === 9) var_ = v; else if (var_ && hdr[var_] === undefined) hdr[var_] = v; continue; }
+    if (sec === 'TABLES') { /* table LAYER : couleur (62 = index AutoCAD, 420 = RVB) et calque éteint (62 < 0) */
+      if (c === 0) lay = v === 'LAYER' ? { n: null } : null; else if (lay) { if (c === 2) lay.n = v; else if (c === 62) { const a = +v; lay.off = a < 0; lay.aci = Math.abs(a); } else if (c === 420) lay.rgb = '#' + ((+v) & 0xffffff).toString(16).padStart(6, '0');
+        if (lay.n != null) lays[lay.n] = lay; }
+      continue; }
     if (sec === 'BLOCKS') {
       if (c === 0 && v === 'BLOCK') { flush(); blk = { name: '', bx: 0, by: 0, ents: [], head: true }; continue; }
       if (c === 0 && v === 'ENDBLK') { flush(); if (blk) blocks[blk.name] = blk; blk = null; continue; }
@@ -5496,7 +5516,9 @@ function dxfParse(text) {
     if (cur) cur.g.push([c, v]);
   }
   flush();
-  return { hdr, blocks, ents };
+  const ACI = { 1: '#d62728', 2: '#b59a00', 3: '#2ca02c', 4: '#00838f', 5: '#1f6fe0', 6: '#c2185b', 7: '#161616', 8: '#7f8c8d', 9: '#a0a0a0' }, lcol = {}, lhid = {};
+  for (const [n, q] of Object.entries(lays)) { const c = q.rgb || ACI[q.aci]; if (c) lcol[n] = c; if (q.off) lhid[n] = true; }
+  return { hdr, blocks, ents, lcol, lhid };
 }
 const dxfGet = (e, c, d) => { const p = e.g.find(x => x[0] === c); return p ? (isNaN(+p[1]) ? p[1] : +p[1]) : d; };
 const dxfAll = (e, c) => e.g.filter(x => x[0] === c).map(x => +x[1]);
@@ -5610,14 +5632,13 @@ function importDXF(text) {
   const items = dxfChain(raw, 0.01);
   // calques DXF → calques COPO (si le fichier en a plusieurs)
   const names = [...new Set(items.map(it => it.layer))], lmap = {};
-  if (names.length > 1) { const pal = ['#161616', '#c0392b', '#1f6fe0', '#12935a', '#9b3ad1', '#d35400', '#00838f', '#7f8c8d'];
-    for (const n of names) { let l = S.layers.find(x => x.name === 'DXF · ' + n); if (!l) { l = { id: uid(), name: 'DXF · ' + n, visible: true, locked: false, color: pal[S.layers.length % pal.length] }; S.layers.push(l); } lmap[n] = l.id; } }
+  Object.assign(lmap, impLayers(names.map(n => ({ name: n, color: D.lcol[n], hidden: D.lhid[n] })), 'DXF · '));
   const shapes = items.map(it => ({ nodes: it.nodes, closed: it.closed, layer: lmap[it.layer] })).filter(s => s.nodes.length > 1);
   shapes.forEach(s => refresh(s));
   const bb = bbox(shapes), st = S.stock, fits = bb.w <= st.w && bb.h <= st.h;
   const dx = fits ? (st.w - bb.w) / 2 - bb.x0 : -bb.x0, dy = fits ? (st.h - bb.h) / 2 - bb.y0 : -bb.y0, g = shapes.length > 1 ? uid() : null;
   S.sel.clear(); let n = 0, nc = 0;
-  for (const s of shapes) { transformShape(s, q => [q[0] + dx, q[1] + dy]); const m = mkShape(s.nodes, s.closed, { g, layer: s.layer }); if (m) { S.sel.add(m.id); n++; if (m.closed) nc++; } }
+  for (const s of shapes) { transformShape(s, q => [q[0] + dx, q[1] + dy]); const m = mkShape(s.nodes, s.closed, { g, layer: s.layer }); if (m) { if (layerOf(m).visible) S.sel.add(m.id); n++; if (m.closed) nc++; } }
   if (names.length > 1) renderLayers();
   return { n, nc, unit: { 1: 'in', 2: 'ft', 4: 'mm', 5: 'cm', 6: 'm' }[iu] || null, skip: D.skip, w: bb.w, h: bb.h, layers: names.length };
 }
@@ -6667,12 +6688,12 @@ function shapeToSvgD(s, X, Y) {
 }
 function exportSVG(onlySel) { const svg = svgString(onlySel); if (svg) { const b = projBase(); saveFile(onlySel ? (b ? b + '-selection' : 'selection-copo') + '.svg' : (b || 'dessin-copo') + '.svg', svg, 'SVG'); } }
 function svgString(onlySel) {
-  const list = onlySel ? selShapes() : S.shapes.filter(shown); if (!list.length) { toast(onlySel ? 'Sélectionnez d’abord des vecteurs.' : 'Aucun vecteur à exporter.'); return null; }
+  const list = onlySel ? selShapes() : S.shapes.slice(); /* calques masqués : exportés masqués (display:none), comme dans COPO */ if (!list.length) { toast(onlySel ? 'Sélectionnez d’abord des vecteurs.' : 'Aucun vecteur à exporter.'); return null; }
   const b = bbox(list), x0 = onlySel ? b.x0 : Math.min(0, b.x0), y0 = onlySel ? b.y0 : Math.min(0, b.y0), x1 = onlySel ? b.x1 : Math.max(S.stock.w, b.x1), y1 = onlySel ? b.y1 : Math.max(S.stock.h, b.y1);
   const W = Math.max(0.01, x1 - x0), H = Math.max(0.01, y1 - y0), X = x => x - x0, Y = y => y1 - y, f = v => String(Math.round(v * 10000) / 10000), esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   let body = '';
-  for (const l of S.layers) { const ss = list.filter(sh => (sh.layer || S.layers[0].id) === l.id); if (!ss.length) continue; body += '  <g id="' + esc(l.name.replace(/\s+/g, '_')) + '" data-name="' + esc(l.name) + '" fill="none" stroke="' + esc(l.color || '#000000') + '" stroke-width="0.25">\n' + ss.map(sh => '    <path d="' + shapeToSvgD(sh, X, Y) + '"/>').join('\n') + '\n  </g>\n'; }
-  return '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="' + f(W) + 'mm" height="' + f(H) + 'mm" viewBox="0 0 ' + f(W) + ' ' + f(H) + '">\n  <title>COPO</title>\n' + body + '</svg>\n';
+  for (const l of S.layers) { const ss = list.filter(sh => (sh.layer || S.layers[0].id) === l.id); if (!ss.length) continue; body += '  <g id="' + esc(l.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w-]+/g, '_')) + '" data-name="' + esc(l.name) + '" inkscape:groupmode="layer" inkscape:label="' + esc(l.name) + '"' + (l.visible === false && !onlySel ? ' style="display:none"' : '') + ' fill="none" stroke="' + esc(l.color || '#000000') + '" stroke-width="0.25">\n' + ss.map(sh => '    <path d="' + shapeToSvgD(sh, X, Y) + '"/>').join('\n') + '\n  </g>\n'; }
+  return '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="' + f(W) + 'mm" height="' + f(H) + 'mm" viewBox="0 0 ' + f(W) + ' ' + f(H) + '">\n  <title>COPO</title>\n' + body + '</svg>\n';
 }
 var textPick = null;
 // texte déformé pour remplir l'espace entre une courbe du bas et une courbe du haut (enveloppe)
@@ -6868,7 +6889,7 @@ $('#stOZ').onchange = e => { S.stock.originZ = e.target.value; illRefresh(); com
 function renderSel() {
   const ss = selShapes(), ids = ['#selX', '#selY', '#selW', '#selH']; $('#selCount').textContent = ss.length + (ss.length && units(ss).length !== ss.length ? ' · ' + units(ss).length + ' obj.' : '');
   if (!S.editTp) $('#tpApply').textContent = 'Calculer sur la sélection (' + S.sel.size + ')';
-  tpSelInfo(); rotSync(); fitSoon(); draw();
+  tpSelInfo(); rotSync(); fitSoon(); layerSelSync(); draw();
   $$('#selAnchor button').forEach(b => b.setAttribute('aria-pressed', b.dataset.a === S.ui.selAnchor));
   { const a = $('#selRot'); if (a) a.disabled = !ss.length; if (!ss.length && a) a.value = ''; }
   if (!ss.length) { ids.forEach(i => { $(i).value = ''; $(i).disabled = true; }); $('#selHint').textContent = ''; { const b = $('#cfEditB'); if (b) b.hidden = true; } if (CF_T.includes(S.ui.tool)) cfBtns(S.ui.tool); return; }
@@ -6915,8 +6936,13 @@ function soloVis(list, it) { const alone = it.visible && list.every(x => x === i
 const soloKey = e => !!(e && (e.altKey || e.ctrlKey || e.metaKey));
 function longPress(b, fn) { if (!b) return; let t = 0; b.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse') return; clearTimeout(t); t = setTimeout(() => { b._lp = true; fn(); }, 550); }); for (const k of ['pointerup', 'pointercancel', 'pointerleave']) b.addEventListener(k, () => clearTimeout(t)); b.addEventListener('contextmenu', e => { if (b._lp) e.preventDefault(); }); }
 function layerVis(l, solo) { if (solo) { const so = soloVis(S.layers, l); toast(so ? trf('Seul le calque « {n} » est affiché (Alt+clic encore : tous).', { n: l.name }) : tr('Tous les calques sont affichés.')); } else l.visible = !l.visible; const hid = new Set(S.layers.filter(x => !x.visible).map(x => x.id)); S.shapes.filter(s => hid.has(s.layer)).forEach(s => S.sel.delete(s.id)); commit(false); renderLayers(); renderSel(); draw(); }
+/* pastille de chaque calque : « sélectionnés/total » encadrée quand une forme du calque est sélectionnée (indépendant de la couleur et du calque actif) */
+function layerSelSync() { const ul = document.getElementById('layerList'); if (!ul) return; const tot = new Map(), sel = new Map(), l0 = S.layers[0] && S.layers[0].id;
+  for (const sh of S.shapes) { const k = sh.layer || l0; tot.set(k, (tot.get(k) || 0) + 1); if (S.sel.has(sh.id)) sel.set(k, (sel.get(k) || 0) + 1); }
+  for (const li of ul.querySelectorAll('li.layer')) { const c = li.querySelector('.chip'); if (!c) continue; const n = tot.get(li.dataset.lid) || 0, k = sel.get(li.dataset.lid) || 0, t = k ? k + '/' + n : String(n);
+    if (c.textContent !== t) c.textContent = t; c.classList.toggle('lsel', k > 0); c.title = k ? trf('{k} forme(s) sélectionnée(s) sur {n} dans ce calque', { k, n }) : trf('{n} forme(s) dans ce calque', { n }); } }
 function renderLayers() { snapVer++;
-  const ul = $('#layerList'); ul.innerHTML = '';
+  const ul = $('#layerList'); ul.innerHTML = ''; setTimeout(layerSelSync, 0);
   for (const l of S.layers) {
     const n = S.shapes.filter(s => s.layer === l.id).length, li = document.createElement('li'); li.className = 'layer' + (l.id === S.layerActive ? ' on' : '');
     li.innerHTML = '<input type="radio" name="actLayer" aria-label="Calque actif"><input type="color" class="lcol" title="Couleur des traits du calque" aria-label="Couleur des traits du calque"><input type="text" aria-label="Nom du calque"><span class="chip mono"></span>'
@@ -6925,7 +6951,7 @@ function renderLayers() { snapVer++;
       + '<button class="iconbtn" data-l="lock" title="' + (l.locked ? 'Déverrouiller' : 'Verrouiller') + '" aria-label="Verrou"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="9" rx="1.5"/>' + (l.locked ? '<path d="M8 11V8a4 4 0 0 1 8 0v3"/>' : '<path d="M8 11V8a4 4 0 0 1 7.5-2"/>') + '</svg></button>'
       + '<button class="iconbtn" data-l="del" title="Supprimer le calque" aria-label="Supprimer"' + (S.layers.length > 1 ? '' : ' disabled') + '><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>';
     const rad = li.querySelector('input[type=radio]'), name = li.querySelector('input[type=text]'), col = li.querySelector('input[type=color]'); rad.checked = l.id === S.layerActive; name.value = l.name;
-    col.value = l.color || '#161616'; col.oninput = () => { l.color = col.value; draw(); }; col.onchange = () => { l.color = col.value; commit(false); draw(); }; li.querySelector('.chip').textContent = n;
+    col.value = l.color || '#161616'; col.oninput = () => { l.color = col.value; draw(); }; col.onchange = () => { l.color = col.value; commit(false); draw(); }; li.dataset.lid = l.id; li.querySelector('.chip').textContent = n;
     rad.onchange = () => { S.layerActive = l.id; renderLayers(); autosave(); };
     name.onchange = () => { l.name = name.value.trim() || l.name; commit(false); };
     li.querySelectorAll('[data-l]').forEach(b => b.onclick = ev => {
@@ -8543,7 +8569,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.458', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.459', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -11600,13 +11626,13 @@ async function importPdfFile(f) {
     toast('Lecture du fichier…');
     const lib = await pdfjsLoad(), doc = await lib.getDocument({ data: new Uint8Array(buf), isEvalSupported: false }).promise;
     const r = await importPDFDoc(doc, lib); commit(); renderSel(); fit(); setTool('select');
-    toast(trf('{n} vecteur(s) importé(s) en mm, courbes conservées', { n: r.n }) + (r.pages > 1 ? ' (' + trf('page 1 sur {p}', { p: r.pages }) + ')' : '') + (r.text ? '. ' + tr('Les textes non vectorisés sont ignorés : vectorisez-les avant l’export.') : '.'));
+    toast(trf('{n} vecteur(s) importé(s) en mm, courbes conservées', { n: r.n }) + (r.layers > 1 ? ', ' + trf('{l} calques', { l: r.layers }) : '') + (r.pages > 1 ? ' (' + trf('page 1 sur {p}', { p: r.pages }) + ')' : '') + (r.text ? '. ' + tr('Les textes non vectorisés sont ignorés : vectorisez-les avant l’export.') : '.'));
   } catch (e) { toast(e.message || 'Fichier illisible.'); }
 }
 async function importPDFDoc(doc, lib) {
   const page = await doc.getPage(1), ol = await page.getOperatorList(), O = lib.OPS, k = 25.4 / 72, out = [];
   const mul = (a, b) => [a[0] * b[0] + a[2] * b[1], a[1] * b[0] + a[3] * b[1], a[0] * b[2] + a[2] * b[3], a[1] * b[2] + a[3] * b[3], a[0] * b[4] + a[2] * b[5] + a[4], a[1] * b[4] + a[3] * b[5] + a[5]];
-  let M = [1, 0, 0, 1, 0, 0], text = false; const stack = [], PAINT = new Set([O.stroke, O.closeStroke, O.fill, O.eoFill, O.fillStroke, O.eoFillStroke, O.closeFillStroke, O.closeEOFillStroke].filter(v => v !== undefined));
+  let M = [1, 0, 0, 1, 0, 0], text = false; const stack = [], mc = [], ocNow = () => { for (let q = mc.length - 1; q >= 0; q--) if (mc[q]) return mc[q]; return null; }, PAINT = new Set([O.stroke, O.closeStroke, O.fill, O.eoFill, O.fillStroke, O.eoFillStroke, O.closeFillStroke, O.closeEOFillStroke].filter(v => v !== undefined));
   let pend = null;
   const build = (ops, c, T) => { // sous-chemins en nœuds de Bézier, en mm
     const P = (x, y) => [(T[0] * x + T[2] * y + T[4]) * k, (T[1] * x + T[3] * y + T[5]) * k], subs = []; let cur = null, j = 0, cx = 0, cy = 0, sx = 0, sy = 0;
@@ -11634,14 +11660,21 @@ async function importPDFDoc(doc, lib) {
     else if (fn === O.paintFormXObjectBegin) { stack.push(M); if (a && a[0]) M = mul(M, a[0]); }
     else if (fn === O.paintFormXObjectEnd) M = stack.pop() || [1, 0, 0, 1, 0, 0];
     else if (fn === O.constructPath) pend = build(a[0], a[1], M); // le tracé n'est gardé que s'il est peint (pas les masques de détourage)
-    else if (PAINT.has(fn)) { if (pend) for (const sp of pend) { const sh = { nodes: sp.nodes, closed: sp.closed }; refresh(sh); if (sh.pts && sh.pts.length > 1) out.push(sh); } pend = null; }
+    else if (fn === O.beginMarkedContent) mc.push(null);
+    else if (fn === O.beginMarkedContentProps) { const d = a && a[0] === 'OC' ? a[1] : null; mc.push(d ? (d.type === 'OCG' ? d.id : d.ids && d.ids[0]) || null : null); } /* calque PDF (groupe de contenu optionnel) */
+    else if (fn === O.endMarkedContent) mc.pop();
+    else if (PAINT.has(fn)) { const oc = ocNow(); if (pend) for (const sp of pend) { const sh = { nodes: sp.nodes, closed: sp.closed, oc }; refresh(sh); if (sh.pts && sh.pts.length > 1) out.push(sh); } pend = null; }
     else if (fn === O.endPath || fn === O.clip || fn === O.eoClip) { if (fn === O.endPath) pend = null; }
     else if (fn === O.showText || fn === O.showSpacedText) text = true;
   }
   // un même tracé peint deux fois (fond + contour) n'est gardé qu'une fois
-  const key = s => s.nodes.length + ':' + s.nodes.map(n => n.x.toFixed(3) + ',' + n.y.toFixed(3)).join(';'), seen = new Set(), uniq = out.filter(s => { const q = key(s); if (seen.has(q)) return false; seen.add(q); return true; });
+  const key = s => (s.oc || '') + '|' + s.nodes.length + ':' + s.nodes.map(n => n.x.toFixed(3) + ',' + n.y.toFixed(3)).join(';'), seen = new Set(), uniq = out.filter(s => { const q = key(s); if (seen.has(q)) return false; seen.add(q); return true; });
   if (!uniq.length) throw new Error(text ? 'Aucun vecteur dans ce fichier, seulement du texte : vectorisez les textes (Illustrator : Texte › Vectoriser) puis réexportez.' : 'Aucun vecteur trouvé (le fichier ne contient peut-être qu’une image).');
-  const n = placeImported(uniq); return { n, pages: doc.numPages, text };
+  let cfg = null; try { cfg = await doc.getOptionalContentConfig(); } catch { }
+  const ids = [...new Set(uniq.map(s => s.oc).filter(Boolean))], gname = id => { try { const g = cfg && cfg.getGroup(id); return (g && g.name) || id; } catch { return id; } };
+  if (ids.length + (uniq.some(s => !s.oc) ? 1 : 0) > 1) { const L = ids.map(id => { let h = false; try { const g = cfg && cfg.getGroup(id); h = !!(g && g.visible === false); } catch { } return { name: gname(id), hidden: h }; });
+    if (uniq.some(s => !s.oc)) L.unshift({ name: tr('Sans calque') }); const map = impLayers(L); for (const s of uniq) s.layer = map[s.oc ? gname(s.oc) : tr('Sans calque')]; }
+  const n = placeImported(uniq); return { n, pages: doc.numPages, text, layers: ids.length };
 }
 
 
