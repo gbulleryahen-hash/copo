@@ -190,7 +190,7 @@ footer p{max-width:none}
       <span class="eyebrow">FAO 2D pour CNC · dans le navigateur</span>
       <h1>COPO</h1>
       <p class="lede">COPO dessine vos pièces en vectoriel, calcule les parcours d'outils (profil, poche, V-carving, perçage) et écrit le G-code pour votre machine. Tout se passe dans le navigateur, sans installation et sans compte.</p>
-      <ul class="meta"><li>Version 1.453</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.454</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Ouvrir l'application</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>Dépôt GitHub (code, téléchargement)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -224,7 +224,7 @@ footer p{max-width:none}
       <li><div><b>Vérifiez vos outils</b>Choisissez le matériau dans l'onglet Projet, puis vérifiez dans la <span class="ui">Bibliothèque d'outils</span> (onglet Parcours) la vitesse, l'avance, la profondeur de passe et le pas latéral de chaque fraise.</div></li>
       <li><div><b>Créez les parcours</b>Sélectionnez les vecteurs dans la vue 2D, ouvrez l'onglet <span class="ui">Parcours</span>, choisissez Profil, Poche, V-carve ou Perçage, réglez puis cliquez sur <span class="ui">Calculer</span>.</div></li>
       <li><div><b>Contrôlez en 3D</b>Le bouton <span class="ui">Simulation de l’usinage</span> (onglet Parcours) ou <span class="ui">Usinage › Aperçu 3D de l’usinage</span> montre le brut usiné. Rejouez l'usinage pour repérer une erreur de profondeur ou d'outil.</div></li>
-      <li><div><b>Enregistrez le G-code</b>Onglet <span class="ui">G-code</span> : choisissez le post-processeur, puis <span class="ui">Enregistrer le G-code</span>. Faites toujours un passage à vide avant d'usiner.</div></li>
+      <li><div><b>Enregistrez le G-code</b>Onglet <span class="ui">G-code</span> : choisissez le post-processeur, puis <span class="ui">Enregistrer le G-code</span>. Faites toujours un passage à vide avant d'usiner. <span class="ui">Un fichier par parcours…</span> enregistre d’un coup un G-code par parcours (même masqué, au choix) ou par outil, nommés <em>projet_01_parcours_outil.nc</em> : dans un dossier choisi (Chrome, Edge) ou dans un ZIP (autres navigateurs).</div></li>
     </ol>
 
     <h2 id="fr-interface" class="pb">L'interface</h2>
@@ -808,7 +808,7 @@ M30</pre>
       <span class="eyebrow">2D CAM for CNC · in the browser</span>
       <h1>COPO</h1>
       <p class="lede">COPO draws your parts as vectors, calculates toolpaths (profile, pocket, V-carving, drilling) and writes the G-code for your machine. Everything runs in the browser, with no installation and no account.</p>
-      <ul class="meta"><li>Version 1.453</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
+      <ul class="meta"><li>Version 1.454</li><li>GPL v3</li><li>Windows · macOS · Linux</li><li>Chrome · Edge · Firefox</li><li>Français · English</li></ul>
       <div class="links">
         <a href="https://gbulleryahen-hash.github.io/copo/"><b>Open the app</b><span>https://gbulleryahen-hash.github.io/copo/</span></a>
         <a href="https://github.com/gbulleryahen-hash/copo"><b>GitHub repository (code, download)</b><span>https://github.com/gbulleryahen-hash/copo</span></a>
@@ -842,7 +842,7 @@ M30</pre>
       <li><div><b>Check your tools</b>Choose the material in the Project tab, then check in the <span class="ui">Tool library</span> (Toolpaths tab) the speed, feed, pass depth and stepover of each tool.</div></li>
       <li><div><b>Create the toolpaths</b>Select vectors in the 2D view, open the <span class="ui">Toolpaths</span> tab, choose Profile, Pocket, V-carve or Drilling, adjust, then click <span class="ui">Calculate</span>.</div></li>
       <li><div><b>Check in 3D</b>The <span class="ui">Machining simulation</span> button (Toolpaths tab) or <span class="ui">Machining › 3D machining preview</span> shows the machined stock. Play the job back to spot a wrong depth or tool.</div></li>
-      <li><div><b>Save the G-code</b><span class="ui">G-code</span> tab: choose the post-processor, then <span class="ui">Save G-code</span>. Always do a dry run before cutting.</div></li>
+      <li><div><b>Save the G-code</b><span class="ui">G-code</span> tab: choose the post-processor, then <span class="ui">Save G-code</span>. Always do a dry run before cutting. <span class="ui">One file per toolpath…</span> saves one G-code per toolpath (hidden ones too, if you wish) or per tool in one go, named <em>project_01_toolpath_tool.nc</em>: into a chosen folder (Chrome, Edge) or a ZIP (other browsers).</div></li>
     </ol>
 
     <h2 id="en-interface" class="pb">The interface</h2>
