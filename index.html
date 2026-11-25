@@ -1688,7 +1688,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.461</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.462</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -8594,7 +8594,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.461', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.462', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -9548,15 +9548,21 @@ function relExactFn(it) {
   const key = it.id + '|' + JSON.stringify([G.type, G.prof, G.W, G.end, G.prop, G.sec, G.profs, G.smoothT, G.box]) + '|' + g.nx + 'x' + g.ny; const k0 = REX.get(it.id); if (k0 && k0.key === key) return k0.f;
   const [x0, , , y1] = G.box, W = G.box[2] - x0, Hh = y1 - G.box[1], c = Math.max(0.04, Math.max(W, Hh) / 1023);
   // index des segments (cases de B) : distance exacte au plus proche, recherche en anneaux
+  /* distance exacte au contour le plus proche : grille de cases ; chaque case garde seulement les segments qui peuvent être les plus proches d'un point de la case
+     (distance au rectangle de la case ≤ plus courte distance depuis son centre + demi-diagonale). Une requête ne parcourt que cette petite liste, même loin du contour. */
   const segIndex = (pls, strict) => { const SG = []; for (const pl of pls) { const a = (strict ? pl.closed : pl.closed !== false) ? [...pl.pts, pl.pts[0]] : pl.pts; for (let k = 0; k + 1 < a.length; k++) SG.push([a[k][0], a[k][1], a[k + 1][0], a[k + 1][1]]); }
-    let L = 0; for (const q of SG) L += Math.hypot(q[2] - q[0], q[3] - q[1]); const B = Math.max(0.5, Math.min(5, L / Math.max(1, SG.length) * 2)), M = new Map(), key2 = (i, j) => i * 100003 + j;
-    for (const q of SG) { const i0 = Math.floor(Math.min(q[0], q[2]) / B), i1 = Math.floor(Math.max(q[0], q[2]) / B), j0 = Math.floor(Math.min(q[1], q[3]) / B), j1 = Math.floor(Math.max(q[1], q[3]) / B); for (let i = i0; i <= i1; i++) for (let j = j0; j <= j1; j++) { const kk = key2(i, j); let A = M.get(kk); if (!A) M.set(kk, A = []); A.push(q); } }
-    const maxR = Math.ceil(Math.hypot(W, Hh) / B) + 2;
-    return (x, y, lim = Infinity) => { const ci = Math.floor(x / B), cj = Math.floor(y / B); let best = Infinity; const rMax = Math.min(maxR, Math.ceil(lim / B) + 1); /* lim : au-delà, la distance exacte ne sert plus (Infinity) */
-      for (let r = 0; r <= rMax; r++) { for (let i = ci - r; i <= ci + r; i++) for (let j = cj - r; j <= cj + r; j++) { if (r && i > ci - r && i < ci + r && j > cj - r && j < cj + r) continue; const A = M.get(key2(i, j)); if (!A) continue;
-          for (const [ax, ay, bx, by] of A) { const dx = bx - ax, dy = by - ay, l2 = dx * dx + dy * dy, t = l2 > 0 ? Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / l2)) : 0, ex = ax + dx * t - x, ey = ay + dy * t - y, d = ex * ex + ey * ey; if (d < best) best = d; } }
-        if (best < Infinity && Math.sqrt(best) <= r * B) break; }
-      return Math.sqrt(best); }; };
+    const n = SG.length; if (!n) return () => Infinity;
+    const gx0 = x0 - 1, gy0 = G.box[1] - 1, CB = Math.max(0.5, Math.max(W, Hh) / 96), CX = Math.ceil((W + 2) / CB) + 1, CY = Math.ceil((Hh + 2) / CB) + 1, cand = new Array(CX * CY), hd = CB * Math.SQRT1_2;
+    const d2seg = (x, y, q) => { const dx = q[2] - q[0], dy = q[3] - q[1], l2 = dx * dx + dy * dy, t = l2 > 0 ? Math.max(0, Math.min(1, ((x - q[0]) * dx + (y - q[1]) * dy) / l2)) : 0, ex = q[0] + dx * t - x, ey = q[1] + dy * t - y; return ex * ex + ey * ey; };
+    const segRect = (q, ax, ay, bx, by) => { /* distance segment ↔ rectangle (0 si ils se touchent) : minimum des distances aux 4 côtés et des extrémités */
+      const inR = (x, y) => x >= ax && x <= bx && y >= ay && y <= by; if (inR(q[0], q[1]) || inR(q[2], q[3])) return 0;
+      const cl = (v, a, b) => v < a ? a : v > b ? b : v; let m = Infinity; for (const [x, y] of [[q[0], q[1]], [q[2], q[3]]]) { const ex = x - cl(x, ax, bx), ey = y - cl(y, ay, by); m = Math.min(m, ex * ex + ey * ey); }
+      for (const e of [[ax, ay, bx, ay], [bx, ay, bx, by], [bx, by, ax, by], [ax, by, ax, ay]]) { m = Math.min(m, d2seg(e[0], e[1], q), d2seg(e[2], e[3], q), segSeg(q, e)); } return Math.sqrt(m); };
+    const segSeg = (p, e) => { const o = (ax, ay, bx, by, cx2, cy2) => (bx - ax) * (cy2 - ay) - (by - ay) * (cx2 - ax); const d1 = o(p[0], p[1], p[2], p[3], e[0], e[1]), d2 = o(p[0], p[1], p[2], p[3], e[2], e[3]), d3 = o(e[0], e[1], e[2], e[3], p[0], p[1]), d4 = o(e[0], e[1], e[2], e[3], p[2], p[3]); return (d1 > 0) !== (d2 > 0) && (d3 > 0) !== (d4 > 0) ? 0 : Infinity; };
+    const build = (ci, cj) => { const ax = gx0 + ci * CB, ay = gy0 + cj * CB, mx = ax + CB / 2, my = ay + CB / 2; let dc = Infinity; for (const q of SG) { const d = d2seg(mx, my, q); if (d < dc) dc = d; } const lim = Math.sqrt(dc) + hd + 1e-9, L = []; for (const q of SG) if (segRect(q, ax, ay, ax + CB, ay + CB) <= lim) L.push(q); return L; };
+    return (x, y) => { let ci = Math.floor((x - gx0) / CB), cj = Math.floor((y - gy0) / CB), L;
+      if (ci < 0 || cj < 0 || ci >= CX || cj >= CY) L = SG; else { const k = cj * CX + ci; L = cand[k] || (cand[k] = build(ci, cj)); }
+      let best = Infinity; for (const q of L) { const d = d2seg(x, y, q); if (d < best) best = d; } return Math.sqrt(best); }; };
   // intérieur (pair-impair) : arêtes rangées par bandes horizontales
   const insideFn = pls => { const E = []; for (const pl of pls) { const a = pl.pts; for (let k = 0; k < a.length; k++) { const A = a[k], Bq = a[(k + 1) % a.length]; if (A[1] !== Bq[1]) E.push([A[0], A[1], Bq[0], Bq[1]]); } }
     let ya = Infinity, yb = -Infinity; for (const e of E) { ya = Math.min(ya, e[1], e[3]); yb = Math.max(yb, e[1], e[3]); } const nb = Math.max(1, Math.min(4096, Math.ceil((yb - ya) / 0.5))), bh = (yb - ya) / nb || 1, BN = Array.from({ length: nb }, () => []);
