@@ -1689,7 +1689,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.468</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.469</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -3026,10 +3026,16 @@ function buildVcarve(p, tool, shapes, M) {
     /* passages étroits (pièces à moins de 2W l'une de l'autre) et coins rentrants : l'anneau à W n'y passe pas et la fraise de dégagement non plus ; on y suit l'axe médian de l'extérieur du motif, à la profondeur donnée par la largeur (comme le V-carve normal du mâle) */
     const SGb = []; for (const L of base) for (let i = 0; i < L.length; i++) { const a = L[i], b = L[(i + 1) % L.length]; SGb.push(a[0], a[1], b[0], b[1]); }
     const dBb = (x, y) => { let m = Infinity; for (let i = 0; i < SGb.length; i += 4) { const ax = SGb[i], ay = SGb[i + 1], dx = SGb[i + 2] - ax, dy = SGb[i + 3] - ay, l2 = dx * dx + dy * dy; let t = l2 ? ((x - ax) * dx + (y - ay) * dy) / l2 : 0; t = t < 0 ? 0 : t > 1 ? 1 : t; const ex = ax + t * dx - x, ey = ay + t * dy - y, d = ex * ex + ey * ey; if (d < m) m = d; } return Math.sqrt(m); };
+    const VXb = []; for (const L of base) for (let i = 0; i < L.length; i++) { const a = L[(i + L.length - 1) % L.length], b = L[i], c = L[(i + 1) % L.length], u = [a[0] - b[0], a[1] - b[1]], v = [c[0] - b[0], c[1] - b[1]], nu = Math.hypot(...u), nv = Math.hypot(...v); VXb.push([b[0], b[1], nu && nv ? Math.acos(Math.max(-1, Math.min(1, (u[0] * v[0] + u[1] * v[1]) / (nu * nv)))) : Math.PI]); }
     const gaps = []; if (Del && W > 0.05) { try { for (const cp of comps(cDiffEO(offLoops(base, 2 * W + 1), base))) { const ma = medialAxis([cp.outer, ...cp.holes], h, Del);
-      for (const c of ma) { let run = []; const flush = () => { if (run.length > 1) gaps.push(rdp3(run, 0.01)); run = []; };
+      /* « poils » de l'axe médian : branches qui finissent sur un sommet presque plat du motif (courbe découpée en segments) ; ce n'est ni un passage étroit ni un coin, l'anneau à W suffit */
+      const hairM = c => { const e = [c[0], c[c.length - 1]].find(q => dBb(q[0], q[1]) < 0.05); if (!e) return false; let bd = Infinity, an = Math.PI; for (const v of VXb) { const d = Math.hypot(v[0] - e[0], v[1] - e[1]); if (d < bd) { bd = d; an = v[2]; } } if (!(bd < 0.15 && an > 150 * Math.PI / 180)) return false;
+        let L = 0, R = 0; for (let i = 0; i < c.length; i++) { if (i) L += hyp(c[i - 1], c[i]); R = Math.max(R, dBb(c[i][0], c[i][1])); } return L < 3 * Math.max(0.2, R); };
+      /* vrai passage étroit ou coin rentrant : le point est à égale distance de deux parties du bord qui se font face (pieds écartés de plus de 60°) ; sur une courbe découpée en segments, l'axe médian a des « poils » qui ne touchent qu'un côté */
+      const twoSided = (x, y, r) => { let a0 = null, sp = 0; const lim = r + Math.max(0.02, 0.03 * r); for (let i = 0; i < SGb.length; i += 4) { const ax = SGb[i], ay = SGb[i + 1], dx = SGb[i + 2] - ax, dy = SGb[i + 3] - ay, l2 = dx * dx + dy * dy; let t = l2 ? ((x - ax) * dx + (y - ay) * dy) / l2 : 0; t = t < 0 ? 0 : t > 1 ? 1 : t; const ex = ax + t * dx - x, ey = ay + t * dy - y; if (ex * ex + ey * ey > lim * lim) continue; const an = Math.atan2(ey, ex); if (a0 === null) a0 = an; else { let d = Math.abs(an - a0); if (d > Math.PI) d = 2 * Math.PI - d; if (d > sp) sp = d; } } return sp > Math.PI / 3; };
+      for (const c of ma) { if (hairM(c)) continue; let run = []; const flush = () => { if (run.length > 1) gaps.push(rdp3(run, 0.01)); run = []; };
         for (let i = 0; i < c.length; i++) { const a = i ? c[i - 1] : c[0], b = c[i], n = i ? Math.max(1, Math.ceil(hyp(a, b) / 0.25)) : 1;
-          for (let j = i ? 1 : 0; j <= (i ? n : 0); j++) { const x = a[0] + (b[0] - a[0]) * (i ? j / n : 0), y = a[1] + (b[1] - a[1]) * (i ? j / n : 0), r = dBb(x, y); if (r < 0.97 * W) run.push([x, y, -(S1 + g.h(r))]); else flush(); } }
+          for (let j = i ? 1 : 0; j <= (i ? n : 0); j++) { const x = a[0] + (b[0] - a[0]) * (i ? j / n : 0), y = a[1] + (b[1] - a[1]) * (i ? j / n : 0), r = dBb(x, y); if (r < 0.97 * W && twoSided(x, y, r)) run.push([x, y, -(S1 + g.h(r))]); else flush(); } }
         flush(); } } } catch (e) { console.warn('COPO : passages étroits du mâle', e); } }
     for (const z of zs) { for (const l of orderNN(ring(W), nearestPt, mbc.x === null ? [0, 0] : [mbc.x, mbc.y])) emitLoop(mbc, l, 0, z, oc, false);
       for (const c of orderNN(gaps, (c, cur) => hyp(c[0], cur) <= hyp(c[c.length - 1], cur) ? c[0] : c[c.length - 1], mbc.x === null ? [0, 0] : [mbc.x, mbc.y])) { const cur = [mbc.x, mbc.y], P = hyp(c[0], cur) <= hyp(c[c.length - 1], cur) ? c : c.slice().reverse(), zz = q => Math.max(z, q[2]);
@@ -8666,7 +8672,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.468', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.469', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
