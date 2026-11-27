@@ -2368,7 +2368,7 @@ Object.assign(I18N_EN, {"Diamètre D (mm)": "Diameter D (mm)", "Angle du V α (�
 Object.assign(I18N_EN, {"Dossier introuvable.": "Folder not found.", "La bibliothèque COPO est en lecture seule : copiez l’élément dans « Ma bibliothèque » pour le modifier.": "The COPO library is read-only: copy the item to “My library” to change it.", "La bibliothèque COPO est en lecture seule.": "The COPO library is read-only.", "Fichier indisponible : vérifiez la connexion.": "File unavailable: check your connection.", "Dessins et reliefs libres fournis avec COPO (lecture seule)": "Free drawings and reliefs supplied with COPO (read-only)", "Dessins et reliefs libres fournis avec COPO, rangés par catégorie. Ouvrez un dossier.": "Free drawings and reliefs supplied with COPO, sorted by category. Open a folder.", "« {n} » copié dans Ma bibliothèque.": "“{n}” copied to My library.", "Copier dans ma bibliothèque": "Copy to my library"});
 const langOf = k => COPO_LANGS.find(l => l.k === k), langOk = k => { const L = langOf(k); return !!L && (!L.file || !!LDICT[k]); };
 let LANG = (() => { try { const v = localStorage.getItem('copo.lang'); if (langOk(v)) return v; } catch { } const nav = (navigator.language || 'fr').toLowerCase(), L = COPO_LANGS.find(l => nav.startsWith(l.k)); return L && langOk(L.k) ? L.k : 'en'; })();
-const LD = () => (LANG !== 'fr' && LANG !== 'en' && LDICT[LANG]) || null; /* dictionnaire de la langue chargée (hors français et anglais) */
+const LD = () => (LANG !== 'fr' && LANG !== 'en' && typeof LDICT !== 'undefined' && LDICT[LANG]) || null; /* dictionnaire de la langue chargée (hors français et anglais) */
 let trRe = null, trReL = null;
 function trBuild() { trReL = LANG; const X = LD();
   const L = '[A-Za-zÀ-ÿŒœ]', isL = c => /[A-Za-zÀ-ÿŒœ]/.test(c), esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -5125,9 +5125,9 @@ function wkBoot() {
       else if (st.type === 'VariableDeclaration') { out += 'var ' + r.names.join(', ') + ';\n'; for (const d of st.declarations) if (d.init) out += 'try { (' + src.slice(d.id.start, d.id.end) + ' = ' + src.slice(d.init.start, d.init.end) + '); } catch (e) { }\n'; } }
     return out; };
   const ops = {
-    init(m) { importScripts(...m.libs, m.acorn); (0, eval)(build(m.src, m.roots)); return true; },
+    init(m) { importScripts(...m.libs, m.acorn); self.LDICT = m.LDICT || {}; (0, eval)(build(m.src, m.roots)); return true; },
     tp(m) { /* état du projet, langue, grilles de relief (seulement celles qui ont changé) ; le parcours est calculé dans la copie du projet */
-      S = m.S; LANG = m.lang; for (const id of Object.keys(relGrid)) if (!m.gridIds.includes(id)) delete relGrid[id];
+      self.LDICT = m.LDICT || {}; S = m.S; LANG = m.lang; for (const id of Object.keys(relGrid)) if (!m.gridIds.includes(id)) delete relGrid[id];
       for (const id in m.grids) { relGrid[id] = m.grids[id]; relSm.delete(id); } relDirty = true; relCache = null;
       const tp = S.tps.find(t => t.id === m.tid), t0 = performance.now(); computeTP(tp); const r = {}; for (const k of m.keys) r[k] = tp[k]; return { r, ms: performance.now() - t0 }; },
     sim(m) { /* segments reçus sous forme compacte (extrémités, outil, face) ; même passage complet que simTo jusqu'à la fin */
@@ -5151,7 +5151,7 @@ function wkStart() {
     const url = URL.createObjectURL(new Blob(['(' + wkBoot.toString() + ')();'], { type: 'text/javascript' })), w = new Worker(url); setTimeout(() => URL.revokeObjectURL(url), 30000);
     WK.w = w; w.onmessage = e => { const m = e.data, c = WK.cb.get(m.id); if (!c) return; WK.cb.delete(m.id); if (m.err) c.rej(new Error(m.err)); else c.res(m.r); };
     w.onerror = e => { if (e && e.preventDefault) e.preventDefault(); wkFail(e && e.message); };
-    WK.ready = new Promise((res, rej) => WK.cb.set(0, { res, rej })); w.postMessage({ id: 0, op: 'init', src, libs, acorn: new URL('lib/acorn.min.js', location.href).href, roots: WK_ROOTS });
+    WK.ready = new Promise((res, rej) => WK.cb.set(0, { res, rej })); w.postMessage({ id: 0, op: 'init', src, libs, acorn: new URL('lib/acorn.min.js', location.href).href, roots: WK_ROOTS, LDICT: window.LDICT || {} });
     WK.ready.catch(e => { console.warn('COPO : calculs en tâche de fond indisponibles', e && e.message); wkFail(); });
   } catch (e) { WK.off = true; WK.ready = null; }
   return WK.ready;
@@ -5171,7 +5171,7 @@ function tpRunWorker(tp) {
   const had = !!tp.moves, par = tp.vclrOf, gridIds = Object.keys(relGrid), grids = {}; for (const id of gridIds) { const g = relGrid[id]; if (g && typeof g === 'object' && !WK.sent.has(g)) grids[id] = g; }
   const S2 = {}; for (const k of ['stock', 'shapes', 'tools', 'images', 'relief', 'layers', 'machine', 'ui', 'meta', 'font', 'guides']) S2[k] = S[k]; S2.tps = S.tps.map(t => t === tp || t.id !== par ? wkStrip(t) : t);
   const pill = !TP_BUSY; if (pill) busyOn(trf('Calcul du parcours « {n} »…', { n: tp.name || '' }), true); const done = () => { if (pill) busyOff(); }; /* pendant « Calcul des parcours : n / t », la barre suffit (pas de roue en plus) */
-  return wkCall('tp', { S: S2, lang: LANG, gridIds, grids, tid: tp.id, keys: TPC_K.concat(['p', 'toolId', 'face']) }).finally(done).then(res => {
+  return wkCall('tp', { S: S2, lang: LANG, LDICT: window.LDICT || {}, gridIds, grids, tid: tp.id, keys: TPC_K.concat(['p', 'toolId', 'face']) }).finally(done).then(res => {
     for (const id in grids) WK.sent.add(grids[id]);
     if (!S.tps.includes(tp)) return;
     if (tpSig(tp) !== sig) { tp.stale = true; if (!tpManual()) tpLater(); return; } /* modifié pendant le calcul : refait plus tard */
