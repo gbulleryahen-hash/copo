@@ -1690,7 +1690,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.472</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.473</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -2312,6 +2312,7 @@ Object.assign(I18N_EN, {"mâle : paroi calée pour s’enfoncer de {d} mm": "plu
 Object.assign(I18N_EN, {"Mâle d’incrustation : la pente de la paroi est réglée par l’extension Incrustation en V pour que le mâle s’enfonce de {d} mm dans la femelle. Prof. coupe = hauteur totale du mâle.": "Inlay plug: the wall slope is set by the V-carve inlay extension so the plug goes {d} mm into the female. Cut depth = total plug height."});
 Object.assign(I18N_EN, {"Dossier de la bibliothèque inaccessible": "Library folder not accessible", "COPO n’a plus l’autorisation d’ouvrir le dossier « {d} » de votre bibliothèque (le navigateur la redemande après chaque redémarrage).": "COPO is no longer allowed to open your library folder “{d}” (the browser asks again after each restart).", "Aucun dossier choisi pour votre bibliothèque.": "No folder chosen for your library.", "Autoriser l’accès à « {d} »": "Allow access to “{d}”", "Choisir un autre dossier…": "Choose another folder…", "Garder la bibliothèque dans ce navigateur": "Keep the library in this browser", "La bibliothèque COPO, plus bas dans la liste, reste disponible.": "The COPO library, further down the list, is still available.", "Accès refusé par le navigateur.": "Access denied by the browser."});
 Object.assign(I18N_EN, {"🧹 Effacer le tracé usiné": "🧹 Clear machined trace", "Efface le tracé gris des parcours déjà usinés dans la vue 3D": "Clears the grey trace of already machined toolpaths in the 3D view"});
+Object.assign(I18N_EN, {"Descendez la fraise avec": "Lower the bit with", "− (pas de 0,1 mm à la fin) jusqu’à toucher la pièce ou la cale, indiquez son épaisseur (0 sans cale), puis :": "− (0.1 mm steps at the end) until it touches the part or the shim, enter its thickness (0 without a shim), then:", "Ne refaites pas X et Y.": "Do not redo X and Y.", "Cochez d’abord l’étape 1.": "Tick step 1 first.", "(à monter)": "(to mount)", "Palper Z": "Probe Z"});
 Object.assign(I18N_EN, {"Effacer le tracé gris des parcours déjà usinés": "Clear the grey trace of already machined toolpaths", "Effacer le tracé usiné": "Clear machined trace", "Usinage en cours : le tracé s’effacera à la fin.": "Machining in progress: clear the trace when it is finished."});
 Object.assign(I18N_EN, {"Masquer tous les parcours (et les exclure du G-code)": "Hide all toolpaths (and leave them out of the G-code)", "Afficher tous les parcours": "Show all toolpaths"});
 Object.assign(I18N_EN, {"Arrêt broche (M5)": "Spindle off (M5)", "Arrêt arrosage (M9)": "Coolant off (M9)"});
@@ -8683,7 +8684,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.472', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.473', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
@@ -12358,7 +12359,7 @@ function toolRad(t, h) { // rayon (mm) de la partie coupante à la hauteur h au-
   if (ty === 'ball' || ty === 'engball') { const r0 = ty === 'engball' ? Math.min(+t.tipR || R, R) : R; return h >= r0 ? Math.min(R, r0 + (ty === 'engball' ? (h - r0) * Math.tan((+t.angle || 30) * Math.PI / 360) : 0)) : Math.sqrt(Math.max(0, r0 * r0 - (r0 - h) * (r0 - h))); }
   if (ty === 'v' || ty === 'engrave' || ty === 'taper' || ty === 'drill') { const a = (+t.angle || (ty === 'drill' ? 118 : 90)) * Math.PI / 360, f = ty === 'engrave' ? (+t.flat || 0) / 2 : ty === 'taper' ? +t.tipR || 0 : 0; return Math.min(R, f + h * Math.tan(a)); }
   return R; }
-const toolByNum = n => (S.tools || []).find(t => (t.num || 1) === n);
+const toolByNum = n => { const L = (S.tools || []).filter(t => (t.num || 1) === n); if (L.length < 2) return L[0]; const tps = S.tps || [], use = id => tps.some(p => p.toolId === id && p.visible !== false) ? 2 : tps.some(p => p.toolId === id) ? 1 : 0; return L.slice().sort((a, b) => use(b.id) - use(a.id))[0]; }; // deux outils de la bibliothèque avec le même numéro : celui des parcours
 async function probe() {
   if (!conn()) return; if (!(K.st === 'Idle' || K.st === 'Hold' && K.prog && K.prog.tc)) { say('La machine doit être à l’arrêt pour palper.'); return; }
   const a = U.paxis, o = stockO(), r = toolR(), PL = +CF.plate, OFF = +CF.blockOff, F = +CF.probeF, D = +CF.probeDist, RET = +CF.retract, c = 10, sd = Math.max(2, Math.min(8, PL - 3));
@@ -12484,11 +12485,11 @@ function tName(n) { if (EXT) return extName(n); const t = toolByNum(n); return t
 function extLoad(file) {
   if (!file) return; if (file.size > 60e6) { say('Fichier trop gros (' + Math.round(file.size / 1e6) + ' Mo, 60 Mo au plus).'); return; }
   const r = new FileReader(); r.onload = () => { const tx = String(r.result || ''); if (/\0/.test(tx.slice(0, 4000))) { say('Ce fichier n’est pas un G-code (texte).'); return; }
-    EXT = { name: file.name, text: tx, id: Date.now() }; PI_ = null; XD = null; K.finished = false; K.pts = null; K.doneK = -1; U.posOpen = true; const P = progInfo();
+    EXT = { name: file.name, text: tx, id: Date.now() }; PI_ = null; XD = null; K.finished = false; K.pts = null; K.doneK = -1; K.trail0 = 0; U.posOpen = true; const P = progInfo();
     log('— G-code ouvert : ' + file.name + ' (' + P.nLines + ' lignes) —', 'm'); view3d(); ui(); ovRender(); say(P.has ? 'G-code ouvert : ' + file.name : 'Aucun déplacement trouvé dans ' + file.name + '.'); };
   r.onerror = () => say('Lecture du fichier impossible.'); r.readAsText(file);
 }
-function extClose() { if (K.prog) return; EXT = null; PI_ = null; XD = null; K.finished = false; K.pts = null; K.doneK = -1; view3d(); ui(); ovRender(); }
+function extClose() { if (K.prog) return; EXT = null; PI_ = null; XD = null; K.finished = false; K.pts = null; K.doneK = -1; K.trail0 = 0; view3d(); ui(); ovRender(); }
 function segBar() { // une case par parcours, largeur selon le temps : vert fait, bleu en cours, gris à faire ; le nom au survol
   const P = progInfo(); if (!P.segs || !P.segs.length) return '';
   return '<div class="cnc-segbar">' + P.segs.map((g, i) => { const tl = (S.tools || []).find(x => x.id === g.tp.toolId); return '<i data-seg="' + i + '" style="flex:' + Math.max(0.6, g.t1 - g.t0).toFixed(1) + ' 1 0" title="' + esc((i + 1) + '. ' + g.tp.name + (tl ? ' · ' + tl.name : '') + ' · ' + fmtT(g.t1 - g.t0)) + '"><b></b></i>'; }).join('') + '</div><div class="cnc-segl"><span data-live="segcur"></span><span data-live="segrest"></span></div>';
@@ -12570,7 +12571,7 @@ async function progStart() {
   if (K.prog && K.st === 'Hold') { rt('~'); return; }
   if (!canStart()) { say('La machine doit être prête (à l’arrêt) avec des parcours à jour.'); return; }
   if ((CF.guide || (EXT && !checks().every(c => c.ok))) && !U.launchOk) { startCheck(); return; } U.launchOk = false; // fichier G-code : commandes refusées signalées même sans les vérifications
-  const P = progInfo(); K.finished = false; K.trail = []; K.doneK = -1; K.pts = P.pts; K.tool = P.tools[0] || null;
+  const P = progInfo(); K.finished = false; K.trail = []; K.doneK = -1; K.trail0 = 0; K.pts = P.pts; K.tool = P.tools[0] || null;
   K.prog = { L: P.L, i: 0, acked: 0, moved: false, all: false, tc: null, err: null, t0: Date.now(), cum: P.cum, tot: P.t, ext: !!P.ext };
   log('— Envoi du programme' + (P.ext ? ' « ' + EXT.name + ' »' : '') + ' : ' + P.L.length + ' lignes —', 'm'); U.vol = 4;
   ui(); progFeed();
@@ -12631,7 +12632,7 @@ function resumeCard() { // carte « reprendre » dans l'étape Lancer
 async function progFrom(li) {
   if (!canStart()) { say('La machine doit être prête (à l’arrêt) avec des parcours à jour.'); return; }
   const P = progInfo(), Q = resumePlan(li), u = v => n3(v), at = Q.at || Q.first; K.finished = false; K.trail = []; K.pts = P.pts; K.tool = Q.tool;
-  K.doneK = -1; for (let k = 0; k < P.pts.length && P.pts[k].li < li; k++) K.doneK = k;
+  K.doneK = -1; K.trail0 = 0; for (let k = 0; k < P.pts.length && P.pts[k].li < li; k++) K.doneK = k;
   const pre = ['G21', 'G90']; if (Q.wcs) pre.push(Q.wcs); pre.push('G0 Z' + u(Q.zs)); if (Q.spin) { pre.push(Q.spin + ' S' + Q.S); pre.push('G4 P3'); } if (Q.cool) pre.push(Q.cool);
   if (at) { pre.push('G0 X' + u(at[0]) + ' Y' + u(at[1])); if (Q.at) pre.push('G1 Z' + u(Q.at[2]) + ' F' + Math.max(50, Math.round((Q.F || 600) * (Q.inch ? 25.4 : 1) * 0.5))); }
   if (Q.inch) pre.push('G20'); if (Q.F) pre.push('F' + Q.F); // F seul : avance rétablie sans mouvement
@@ -12658,10 +12659,10 @@ async function tcStart() {
 }
 const tcSafeZ = tc => tc && K.prog && K.prog.ext ? Math.max(tc.zb !== undefined && tc.zb > -1e8 ? tc.zb : 0, +S.machine.safeZ || 5) : (+S.machine.safeZ || 5) + stockO().oz; // fichier : la hauteur où il était avant le M6
 async function tcResume() {
-  const P = K.prog; if (!P || !P.tc) return; const sz = tcSafeZ(P.tc); K.tool = P.tc.tool; P.tc = null; tcClose();
+  const P = K.prog; if (!P || !P.tc) return; const sz = tcSafeZ(P.tc); K.tool = P.tc.tool; P.tc = null; tcClose(); K.trail0 = Math.max(0, K.doneK); /* nouvelle fraise : le tracé gris des parcours précédents s'efface */
   try { await seq(['G90', 'G0 Z' + n3(sz)]); } catch { } ui(); progFeed();
 }
-function tcRender() { const el = q('#cncTc'); if (el) el.remove(); if (K.prog && K.prog.tc && !K.prog.tc.shown) { K.prog.tc.shown = true; U.probeOpen = true; U.floatMin = false; const rv = q('#rv3'); if (rv) rv.classList.remove('cnc-fmin'); } if (curTab === 'usiner') ovRender(); }
+function tcRender() { const el = q('#cncTc'); if (el) el.remove(); if (K.prog && K.prog.tc && !K.prog.tc.shown) { K.prog.tc.shown = true; U.fTop = true; U.floatMin = false; const rv = q('#rv3'); if (rv) rv.classList.remove('cnc-fmin'); } if (curTab === 'usiner') ovRender(); }
 function tcClose() { const el = q('#cncTc'); if (el) el.remove(); }
 
 /* ---------------- interface : onglet et panneau ---------------- */
@@ -12681,7 +12682,7 @@ function build() {
 }
 function tabVis() { if (tabBtn) tabBtn.hidden = !CF.on; if (!CF.on && curTab === 'usiner') setTab('parcours'); }
 window.cncOpenGcode = () => { if (curTab !== 'usiner' && tabBtn) tabBtn.click(); if (K.prog) { toast(tr('Usinage en cours.')); return; } if (extInp) extInp.click(); };
-window.cncCleanTrail = () => { if (K.prog) { toast(tr('Usinage en cours : le tracé s’effacera à la fin.')); return; } K.doneTps = new Set(); K.pts = null; K.doneK = -1; K.trail = []; K.finished = false; view3d(); ovRender(); };
+window.cncCleanTrail = () => { if (K.prog) { K.trail0 = Math.max(0, K.doneK); K.trail = []; view3d(); ovRender(); return; } /* pendant l'usinage : le tracé repart d'ici */ K.doneTps = new Set(); K.pts = null; K.doneK = -1; K.trail0 = 0; K.trail = []; K.finished = false; view3d(); ovRender(); };
 window.cncOnTab = t => {
   if (!tabBtn) return; const on = t === 'usiner', rv = q('#rv3'); document.body.classList.toggle('tab-usiner', on);
   const cb = document.getElementById('cncClean'); if (cb) cb.hidden = !on; // balai à côté de « Tout voir », seulement dans l'onglet Usiner
@@ -12849,10 +12850,19 @@ function tcCard() {
   const P = K.prog; if (!P || !P.tc) return ''; const nm = esc(tName(P.tc.tool)), rd = P.tc.ready;
   return '<div class="cnc-card2 cnc-tc"><div class="cnc-ch"><span>🔧 Changement d’outil</span></div>' + (rd ? '<p style="margin:0 0 6px">Outil demandé : <b>' + nm + '</b>' + (EXT ? '' : ' (T' + P.tc.tool + ')') + '. Besoin de place : remontez avec <b class="cz">Z</b>+.</p>' +
     '<label class="cnc-chk"><input type="checkbox" data-tc="mounted" ' + (P.tc.mounted ? 'checked' : '') + '><span><b>1.</b> Broche arrêtée : montez la <b>' + nm + '</b>, serrez la pince.</span></label>' +
-    '<p class="cnc-s" style="margin:4px 0"><b>2.</b> Fraise au-dessus de la pièce (flèches X Y), puis <b>zéro Z seulement</b>, ci-dessous. Ne refaites pas X et Y. ' + (P.tc.probed ? '<b style="color:#2e9b5c">✓ Z refait</b>' : '') + '</p>' +
+    '<p class="cnc-s" style="margin:4px 0"><b>2.</b> Fraise au-dessus de la pièce (flèches X Y), puis <b>zéro Z seulement</b> : ' + (P.tc.probed ? '<b style="color:#2e9b5c">✓ Z refait</b>' : '') + '</p>' + tcZCtl() + '<p class="cnc-s cnc-m" style="margin:2px 0 4px">Ne refaites pas X et Y.</p>' +
     '<p class="cnc-s" style="margin:4px 0"><b>3.</b> ▶ Reprendre : remontée au Z de sécurité (Z' + f2(tcSafeZ(P.tc), 1) + '), puis le programme continue.</p>' +
     '<div class="cnc-row" style="justify-content:space-between;margin-top:8px"><button class="cnc-btn sm" data-c="stop">Arrêter l’usinage</button><button class="cnc-btn pri" data-c="tcResume" ' + (P.tc.probed ? '' : 'disabled') + '>▶ Reprendre l’usinage</button></div>'
     : '<p class="cnc-m" style="margin:0">Fin des mouvements en cours et arrêt de la broche…</p>') + '</div>';
+}
+function tcZCtl() { // zéro Z pendant le changement d'outil, directement dans la carte (plus besoin de chercher la carte Palpage plus bas)
+  const c = conn(), P = K.prog, lock = !(P.tc.ready && P.tc.mounted), dis = !c || K.st === 'Alarm' || !!K.busy || lock; U.paxis = 'Z';
+  if (!CF.probe) U.pmode = 'hand'; const auto = U.pmode === 'probe';
+  let h = '<div class="cnc-tcz">' + (CF.probe ? '<div class="cnc-seg cnc-pm"><button class="' + (!auto ? 'on' : '') + '" data-c="pmode" data-v="hand">✋ Manuel (Z)</button><button class="' + (auto ? 'on' : '') + '" data-c="pmode" data-v="probe">⚡ Automatique (capteur)</button></div>' : '');
+  if (auto) h += '<div class="cnc-row wrap" style="gap:10px;margin-top:6px"><label class="cnc-s cnc-il">Plaque <input type="number" step="0.1" value="' + CF.plate + '" data-cf="plate" style="width:66px"> mm</label><span class="cnc-s"><span class="cnc-led ' + (/P/.test(K.pn) ? 'on' : '') + '" data-live="led"></span>contact <b data-live="ledt">' + (/P/.test(K.pn) ? 'fermé' : 'ouvert') + '</b>' + (K.kind === 'sim' ? ' <button class="cnc-btn lnk" data-c="simTouch">simuler</button>' : '') + '</span></div>' +
+    '<button class="cnc-btn pri big" style="margin-top:6px" data-c="probe" ' + (dis ? 'disabled' : '') + '>' + (K.busy === 'probe' ? 'Palpage…' : 'Palper Z') + '</button>';
+  else h += '<p class="cnc-s cnc-m" style="margin:6px 0 4px">Descendez la fraise avec <b class="cz">Z</b>− (pas de 0,1 mm à la fin) jusqu’à toucher la pièce ou la cale, indiquez son épaisseur (0 sans cale), puis :</p><div class="cnc-zm"><input type="number" step="0.01" min="0" value="' + CF.shim + '" data-cf="shim" title="Épaisseur de la cale ou de la plaque posée sous la fraise (0 = la fraise touche directement la pièce)"><span>mm</span><button class="cnc-btn sm pri" data-c="zShim" ' + (dis ? 'disabled' : '') + '>Zéro Z ici</button></div>';
+  return h + (lock && P.tc.ready ? '<p class="cnc-s cnc-m" style="margin:4px 0 0">Cochez d’abord l’étape 1.</p>' : '') + '</div>';
 }
 function probeCard() {
   const c = conn(), P = K.prog, tc = !!(P && P.tc), lock = tc && !(P.tc.ready && P.tc.mounted), dis = !c || K.st === 'Alarm' || !!K.busy || (moving() && !tc) || lock, st = S.stock, o = stockO();
@@ -12952,11 +12962,11 @@ function ovrSet(k, v) { if (!K.T) return; const cur = k === 'f' ? K.ov[0] : K.ov
 function ovRender() {
   if (!ov || curTab !== 'usiner') return; const P = progInfo(), old = q('#cncFloat'), sc = old ? old.scrollTop : 0;
   ov.innerHTML = '<div id="cncPill"></div>' + (alarmBanner() || '<div id="cncGuide"></div>') + '<div id="cncFloat" class="cnc-float' + (U.floatMin ? ' min' : '') + '">' + (U.floatMin ? '<div class="cnc-fh"><button class="cnc-btn sm cnc-rail" data-c="floatT" title="Déplier le panneau Données" aria-label="Déplier le panneau Données">' + ci('panel', 18) + '<span>Données</span></button></div>' : '') + '<div class="cnc-fh"' + (U.floatMin ? ' hidden' : '') + '><b>Données</b><label class="cnc-sw2" title="Étapes guidées et vérifications avant le démarrage"><input type="checkbox" data-cfb="guide" ' + (CF.guide ? 'checked' : '') + (K.prog ? ' disabled' : '') + '><span></span>Vérifications</label><button class="cnc-btn sm" data-c="floatT" title="Replier le panneau Données" aria-label="Replier le panneau Données">' + ci('panel', 16) + '</button></div>' + (U.floatMin ? '' :
-    extCard() + resumeCard() + (EXT ? '' : faceCard()) + (false ? '<div class="cnc-test"><b>Version test.</b> Pilotage d’une vraie machine : restez près de l’arrêt d’urgence.</div>' : '') + tcCard() + ((U.probeOpen || (K.prog && K.prog.tc)) && conn() ? probeCard() : '') +
+    extCard() + resumeCard() + (EXT ? '' : faceCard()) + (false ? '<div class="cnc-test"><b>Version test.</b> Pilotage d’une vraie machine : restez près de l’arrêt d’urgence.</div>' : '') + tcCard() + (U.probeOpen && !(K.prog && K.prog.tc) && conn() ? probeCard() : '') +
     '<div class="cnc-card2"><div class="cnc-ch"><span>Encombrement du programme (mm)</span><button data-c="posT">' + (U.posOpen ? '–' : '+') + '</button></div>' + (U.posOpen ? '<table class="cnc-bb"><tr><th></th><th>min</th><th>max</th><th>taille</th></tr>' + AX.map((a, i) => '<tr><th>' + a.toUpperCase() + '</th><td data-live="bn' + a + '">' + (P.has ? f2(P.mn[i]) : '–') + '</td><td data-live="bx' + a + '">' + (P.has ? f2(P.mx[i]) : '–') + '</td><td>' + (P.has ? f2(P.mx[i] - P.mn[i], 1) : '–') + '</td></tr>').join('') + '</table>' : '') + '</div>' +
     '<div class="cnc-card2"><div class="cnc-ch"><span>Usinage</span><button data-c="runT">' + (U.runOpen ? '–' : '+') + '</button></div>' + (U.runOpen ? '<div class="cnc-kv"><span>Écoulé</span><span data-live="tel">0:00</span><span>Restant</span><span data-live="trest"></span></div><div class="cnc-prog"><i data-live="pbar"></i></div><div class="cnc-kv"><span>Avance réelle</span><span data-live="fcur"></span><span>Broche</span><span data-live="scur"></span><span>Outil</span><span data-live="tcur"></span><span>Suivant</span><span data-live="tnext"></span></div><div class="cnc-gl" data-live="gl"></div>' : '') + '</div>' +
     '<div id="cncVols"></div>') + '</div>';
-  panel(); const f = q('#cncFloat'); if (f) f.scrollTop = sc; live();
+  panel(); const f = q('#cncFloat'); if (f) f.scrollTop = U.fTop ? 0 : sc; U.fTop = false; live();
 }
 
 /* ---------------- panneau Usiner : connexion, coordonnées ---------------- */
@@ -13009,7 +13019,7 @@ function live() {
     if (I) { const tot = I.t, done = P ? (I.cum[Math.max(0, P.acked - 1)] || 0) : K.finished ? tot : 0, el = P ? (Date.now() - P.t0) / 1000 : 0; setL('tel', fmtT(el)); setL('trest', fmtT(Math.max(0, tot - done) / ((K.ov[0] || 100) / 100))); for (const e of L$('pbar')) e.style.width = (tot ? Math.min(100, done / tot * 100) : 0) + '%';
       let nx = '—'; if (P) { for (let i = P.i; i < P.L.length; i++) if (P.L[i].tc !== null) { nx = tName(P.L[i].tc); break; } } else if ((new Set(I.tools)).size > 1) nx = tName(I.tools[1]);
       segLive(); setL('tnext', nx); setL('gl', P && P.L[P.acked] ? 'N' + (P.L[P.acked].ln || P.acked + 1) + '  ' + (P.L[P.acked].t || P.L[P.acked].raw) : ''); }
-    setL('fcur', Math.round(K.fs[0] || 0) + ' mm/min'); setL('scur', K.fs[1] ? Math.round(K.fs[1]) + ' tr/min' : 'arrêtée'); setL('tcur', K.tool !== null && K.tool !== undefined ? tName(K.tool) : '—');
+    setL('fcur', Math.round(K.fs[0] || 0) + ' mm/min'); setL('scur', K.fs[1] ? Math.round(K.fs[1]) + ' tr/min' : 'arrêtée'); { const t0 = !P && I && I.tools && I.tools.length ? I.tools[0] : K.tool; setL('tcur', t0 !== null && t0 !== undefined ? tName(t0) + (!P && t0 !== K.tool ? ' ' + tr('(à monter)') : '') : '—'); } // avant le départ : la première fraise du programme
     setL('ovf', (K.ov[0] || 100) + ' %'); setL('ovs', (K.ov[2] || 100) + ' %');
     for (const r of qa('[data-ovr]', ctl)) if (document.activeElement !== r) r.value = r.dataset.ovr === 'f' ? K.ov[0] || 100 : K.ov[2] || 100;
   }
@@ -13029,8 +13039,8 @@ window.cncOverlay = g => {
     const C = [0, 1, 2, 3, 4, 5, 6, 7].map(k => m2i(R[0][k & 1], R[1][(k >> 1) & 1], R[2][(k >> 2) & 1])), E = [[0, 1], [2, 3], [4, 5], [6, 7], [0, 2], [1, 3], [4, 6], [5, 7], [0, 4], [1, 5], [2, 6], [3, 7]];
     g.save(); g.setLineDash([6, 5]); g.strokeStyle = 'rgba(217,72,15,.75)'; g.lineWidth = 1.3; g.beginPath(); for (const [a, b] of E) { g.moveTo(C[a][0], C[a][1]); g.lineTo(C[b][0], C[b][1]); } g.stroke(); g.setLineDash([]);
     g.fillStyle = 'rgba(217,72,15,.9)'; g.font = '600 11px system-ui'; g.fillText('Course machine ' + tv[0] + ' × ' + tv[1] + ' × ' + tv[2] + ' mm', C[6][0] + 6, C[6][1] - 6); g.restore(); }
-  const pts = K.pts, curP = K.prog || !pts ? null : progInfo(); if (pts && !K.prog && curP && curP.pts !== pts) { K.pts = null; K.doneK = -1; K.finished = false; } // autre programme choisi (parcours, face) : le tracé gris du précédent disparaît
-  if (K.pts && K.doneK >= 0 && allSet()) { g.strokeStyle = 'rgba(150,150,150,.95)'; g.lineWidth = 2.2; g.lineJoin = 'round'; g.beginPath(); const xy = EXT && XD && XD.pts === pts ? XD.xy : null; for (let k = 0; k <= K.doneK && k < pts.length; k++) { const s = xy ? [xy[2 * k], xy[2 * k + 1]] : rvProj(toV(pts[k].p)); k ? g.lineTo(s[0], s[1]) : g.moveTo(s[0], s[1]); } if (K.prog) { const s = rvProj(toV(wpos())); g.lineTo(s[0], s[1]); } g.stroke(); }
+  const pts = K.pts, curP = K.prog || !pts ? null : progInfo(); if (pts && !K.prog && curP && curP.pts !== pts) { K.pts = null; K.doneK = -1; K.trail0 = 0; K.finished = false; } // autre programme choisi (parcours, face) : le tracé gris du précédent disparaît
+  if (K.pts && K.doneK >= 0 && allSet()) { g.strokeStyle = 'rgba(150,150,150,.95)'; g.lineWidth = 2.2; g.lineJoin = 'round'; g.beginPath(); const xy = EXT && XD && XD.pts === pts ? XD.xy : null; const k0 = Math.min(K.trail0 || 0, K.doneK); for (let k = k0; k <= K.doneK && k < pts.length; k++) { const s = xy ? [xy[2 * k], xy[2 * k + 1]] : rvProj(toV(pts[k].p)); k > k0 ? g.lineTo(s[0], s[1]) : g.moveTo(s[0], s[1]); } if (K.prog) { const s = rvProj(toV(wpos())); g.lineTo(s[0], s[1]); } g.stroke(); }
   const p = wpos(), d = curToolDia(), a = rvProj(toV(p)), b = rvProj(toV([p[0], p[1], p[2] + 25])), c = rvProj(toV([p[0], p[1], p[2] + 40])), e = rvProj(toV([p[0], p[1], p[2] + 110])), u = rvProj(toV([p[0] + 10, p[1], p[2]])), v = rvProj(toV([p[0], p[1] + 10, p[2]]));
   const k = Math.max(Math.hypot(u[0] - a[0], u[1] - a[1]), Math.hypot(v[0] - a[0], v[1] - a[1])) / 10;
   g.lineCap = 'butt'; g.globalAlpha = .4; g.strokeStyle = '#4a4f57'; g.lineWidth = Math.max(8, 46 * k); g.beginPath(); g.moveTo(c[0], c[1]); g.lineTo(e[0], e[1]); g.stroke(); g.globalAlpha = 1;
