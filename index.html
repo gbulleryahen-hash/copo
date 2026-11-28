@@ -1690,7 +1690,7 @@ details.vz[open]{display:block}.vz .vz2{display:grid;grid-template-columns:minma
 </div>
 <div class="about" id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutT">
   <div class="about-card">
-    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.473</span> · © 2026 g.bulleryahen</span></div></div>
+    <div class="about-head"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24h12"/><path d="M15 24c4.5 0 8-2.4 8.8-6 .8-3.7-1.6-7-5.2-7-3 0-5.2 2.4-4.8 5.1.3 2.3 2.5 3.6 4.5 2.8 1.7-.7 2.3-2.6 1.4-4"/><path d="M24 24h5"/></svg><div><b id="aboutT">COPO — FAO 2D pour CNC</b><span class="mono">Version <span id="aboutVer" data-notr>1.474</span> · © 2026 g.bulleryahen</span></div></div>
     <p><b>Logiciel libre sous licence GNU GPL version 3.</b></p>
     <p>Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer, y compris pour un usage commercial. Toute version modifiée diffusée doit rester sous la même licence, avec son code source.</p>
     <p>COPO est fourni sans aucune garantie. Vérifiez toujours le G-code par un passage à vide avant d'usiner.</p>
@@ -3633,6 +3633,20 @@ function fitArcs(mv, tol) {
     if (best >= 0) { const e = mv[best]; out.push({ g: bc.dir, x: e.x, y: e.y, z: e.z, f: m.f, i: bc.cx - p.x, j: bc.cy - p.y }); i = best + 1; }
     else { out.push(m); i++; }
   }
+  return arcTanSnap(out);
+}
+// raccord ligne / arc au point de tangence exact : quand la ligne voisine est tangente au cercle (à 2 µm près), l'arc commence ou finit là où la ligne le touche (X-88 et non X-88,033 pour un coin de rayon 15), comme un arc dessiné
+function arcTanSnap(out) {
+  const plan = (a, b) => a && b && a.g === 1 && Math.abs(a.z - b.z) < 1e-9, tan = (A, B, cx, cy, r) => {
+    const dx = B.x - A.x, dy = B.y - A.y, l2 = dx * dx + dy * dy; if (l2 < 0.01) return null;
+    const t = ((cx - A.x) * dx + (cy - A.y) * dy) / l2, tx = A.x + dx * t, ty = A.y + dy * t;
+    return t >= 0 && t <= 1 && Math.abs(Math.hypot(cx - tx, cy - ty) - r) < 2e-3 ? { x: tx, y: ty } : null; };
+  for (let k = 2; k < out.length; k++) {
+    const a = out[k]; if (a.g !== 2 && a.g !== 3) continue; const p = out[k - 1]; if (p.x === undefined || Math.abs(p.z - a.z) > 1e-9) continue;
+    const cx = p.x + a.i, cy = p.y + a.j, r = Math.hypot(a.i, a.j);
+    if (plan(p, out[k - 2])) { const T = tan(out[k - 2], p, cx, cy, r); if (T && Math.hypot(T.x - p.x, T.y - p.y) < 0.2) { out[k - 1] = { ...p, x: T.x, y: T.y }; a.i = cx - T.x; a.j = cy - T.y; } } // copie : les mouvements du parcours restent intacts
+    const n = out[k + 1]; if (plan(n, a)) { const T = tan(a, n, cx, cy, r); if (T && Math.hypot(T.x - a.x, T.y - a.y) < 0.2) { a.x = T.x; a.y = T.y; } }
+  }
   return out;
 }
 
@@ -4015,13 +4029,29 @@ function splitSeg(g, t) {
 }
 function subSeg(g, t0, t1) { if (t1 < 1 - 1e-12) g = splitSeg(g, t1)[0]; else t1 = 1; if (t0 > 1e-12) g = splitSeg(g, t0 / t1)[1]; return g; }
 // aplatit la forme en polyligne (s.pts) et garde le paramètre u = segment + t de chaque point (s.map)
+// segment de Bézier qui représente un arc de cercle (cercles, coins arrondis, arcs, arcs importés : poignées de longueur 4/3·tan(θ/4)·r) : aplati sur le cercle exact, pas sur la Bézier (qui bombe de 0,027 % du rayon), pour des parcours et des G2/G3 exacts
+function bezArc(g) {
+  const ax = g.c1[0] - g.p0[0], ay = g.c1[1] - g.p0[1], bx = g.c2[0] - g.p3[0], by = g.c2[1] - g.p3[1], la = Math.hypot(ax, ay), lb = Math.hypot(bx, by);
+  if (la < 1e-9 || lb < 1e-9 || Math.abs(la - lb) > 2e-3 * la) return null;
+  const den = ax * by - ay * bx; if (Math.abs(den) < 1e-12 * la * lb) return null; // poignées parallèles : pas un arc
+  // centre : intersection des normales aux deux extrémités (p0 + s·(-ay, ax) = p3 + u·(-by, bx))
+  const dx = g.p3[0] - g.p0[0], dy = g.p3[1] - g.p0[1], t = (dx * bx + dy * by) / den;
+  const cx = g.p0[0] - ay * t, cy = g.p0[1] + ax * t, r = Math.hypot(g.p0[0] - cx, g.p0[1] - cy), r3 = Math.hypot(g.p3[0] - cx, g.p3[1] - cy);
+  if (!(r > 1e-6) || Math.abs(r - r3) > 1e-6 * Math.max(1, r) + 1e-9 || r > 1e5) return null;
+  const a0 = Math.atan2(g.p0[1] - cy, g.p0[0] - cx); let sw = Math.atan2(g.p3[1] - cy, g.p3[0] - cx) - a0;
+  const turn = Math.sign(ax * dy - ay * dx); while (sw <= -Math.PI) sw += 2 * Math.PI; while (sw > Math.PI) sw -= 2 * Math.PI;
+  if (!turn || Math.sign(sw) !== turn) return null;
+  if (Math.abs(sw) < 1e-6 || Math.abs(sw) > Math.PI * 0.75) return null; // une Bézier ne représente bien qu'un arc de 135° au plus
+  const h = 4 / 3 * Math.tan(Math.abs(sw) / 4) * r; if (Math.abs(la - h) > 2e-3 * h) return null;
+  return { x: cx, y: cy, r, a0, sw };
+}
 function refresh(s) {
   const pts = [], map = [], ns = nseg(s);
   for (let k = 0; k < ns; k++) {
     const g = segOf(s, k);
     if (g.line) { pts.push(g.p0); map.push(k); continue; }
-    const L = hyp(g.p0, g.c1) + hyp(g.c1, g.c2) + hyp(g.c2, g.p3), m = Math.max(4, Math.min(400, Math.ceil(L / 0.3)));
-    for (let j = 0; j < m; j++) { pts.push(bez(g, j / m)); map.push(k + j / m); }
+    const L = hyp(g.p0, g.c1) + hyp(g.c1, g.c2) + hyp(g.c2, g.p3), m = Math.max(4, Math.min(400, Math.ceil(L / 0.3))), ca = bezArc(g);
+    for (let j = 0; j < m; j++) { pts.push(ca ? [ca.x + ca.r * Math.cos(ca.a0 + ca.sw * j / m), ca.y + ca.r * Math.sin(ca.a0 + ca.sw * j / m)] : bez(g, j / m)); map.push(k + j / m); }
   }
   if (!s.closed && s.nodes.length) { const l = s.nodes[s.nodes.length - 1]; pts.push([l.x, l.y]); map.push(ns); }
   const P = [], U = [];
@@ -8684,7 +8714,7 @@ function ipMake() {
   toast(err ? err : tr(wantTp ? 'Incrustation créée : poche femelle et pièce rapportée (calque à part), les deux parcours sont visibles.' : 'Incrustation créée : contours de la poche et de la pièce rapportée, sans parcours (calques « Incrustation en poche »).') + (mb.x1 > S.stock.w ? ' ' + tr('La pièce rapportée dépasse du brut : déplacez-la si besoin.') : ''));
 }
 // ---------- signaler un bug ----------
-const COPO_VERSION = '1.473', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
+const COPO_VERSION = '1.474', BUG_REPO = 'https://github.com/gbulleryahen-hash/copo';
 const ERRLOG = [];
 window.addEventListener('error', e => { ERRLOG.push((e.message || 'Erreur') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '')); if (ERRLOG.length > 5) ERRLOG.shift(); });
 window.addEventListener('unhandledrejection', e => { ERRLOG.push('Promise : ' + ((e.reason && e.reason.message) || e.reason)); if (ERRLOG.length > 5) ERRLOG.shift(); });
